@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:diagctl="com.kapit.diagram.controls.*" 
+	xmlns:diagview="com.kapit.diagram.view.*"
+	xmlns:kefed="edu.isi.bmkeg.kefed.elements.*"
+	layout="absolute" preinitialize="init();">
+	
+<mx:XML xmlns="" id="svglib" source="kefed.svg"/>
+	
+<mx:XML xmlns="" id="diagramMappings">
+	<mappings>
+		<sprite id="Experimental Object" proxyclass="edu.isi.bmkeg.kefed.elements.KefedObjectProxy" />
+		<sprite id="Independent Variable Data" proxyclass="edu.isi.bmkeg.kefed.elements.KefedObjectProxy" />
+		<sprite id="Dependent Variable Data" proxyclass="edu.isi.bmkeg.kefed.elements.KefedObjectProxy" />
+		<sprite id="Activity" proxyclass="edu.isi.bmkeg.kefed.elements.KefedObjectProxy" />
+		<sprite id="Fork" proxyclass="edu.isi.bmkeg.kefed.elements.KefedObjectProxy" />
+		<sprite id="Branch" proxyclass="edu.isi.bmkeg.kefed.elements.KefedObjectProxy" />
+		<lane proxyclass="" />
+		<panel proxyclass="" />
+		<lanelink proxyclass="edu.isi.bmkeg.kefed.elements.KefedLinkProxy" />
+		<panellink proxyclass="edu.isi.bmkeg.kefed.elements.KefedLinkProxy" />
+		<viewlink proxyclass="edu.isi.bmkeg.kefed.elements.KefedLinkProxy" />
+	</mappings>
+</mx:XML>
+
+<mx:Script>
+	<![CDATA[
+		import flare.data.DataUtil;
+		import flare.data.DataField;
+		import flare.data.DataSchema;
+		import flare.vis.data.Data;
+		import flare.vis.data.DataList;
+		import flare.data.DataTable;
+		import mx.controls.TextInput;
+		import mx.events.DataGridEvent;
+		import mx.events.FlexEvent;
+		import mx.events.ListEvent;
+		import com.kapit.diagram.IDiagramElement;
+		import com.kapit.diagram.DiagramEvent;
+		import com.kapit.diagram.view.DiagramObject;
+		import com.kapit.diagram.view.DiagramSprite;
+		import mx.collections.ArrayCollection;
+		import com.kapit.diagram.layouts.utils.Constants;
+		import com.kapit.diagram.library.SVGAssetLibrary;
+		import com.kapit.diagram.proxies.KDLProxy;
+		import com.kapit.diagram.model.DiagramModel;
+		import edu.isi.bmkeg.kefed.elements.KefedObjectProxy;
+		import edu.isi.bmkeg.kefed.elements.KefedObject;
+		import edu.isi.bmkeg.kefed.elements.KefedModel;
+		import edu.isi.bmkeg.kefed.elements.KefedLinkProxy;
+		
+		[Bindable]
+		public var myObjects:ArrayCollection;
+
+		[Bindable]
+		public var myLinks:ArrayCollection;
+
+		[Bindable]
+		public var myObject:KefedObject;
+
+		[Bindable]
+		public var dataTable:ArrayCollection;
+
+		[Bindable]
+		public var graph:KefedModel = new KefedModel(true);
+
+		private var proxy:KDLProxy;
+
+		public function init():void
+		{
+			var lib:SVGAssetLibrary=new SVGAssetLibrary(svglib);
+		}
+		
+		public function initDiagram():void
+		{
+				diagram.multipanel=false;
+				diagram.selectionenabled=true;
+				diagram.keyboardenabled=true;
+				diagram.dragenabled=true;
+				diagram.dropenabled=true;		
+				
+				KefedObjectProxy._graph = graph;
+				KefedLinkProxy._graph = graph;
+				
+				myObjects = graph.bNodes;
+				myLinks = graph.bEdges;
+				
+				var model:DiagramModel = new DiagramModel(diagramMappings);
+				diagram.model=model;
+				diagram.addEventListener(DiagramEvent.DIAGRAM_MODIFIED,
+						handleDiagramModified);
+				diagram.addEventListener(DiagramEvent.ELEMENT_CREATED,
+						handleDiagramElementCreated);
+				diagram.addEventListener(DiagramEvent.SELECTION_CHANGED,
+						handleDiagramSelectionChanged);
+				proxy = new KDLProxy(diagram);
+				proxy.importGraph();
+				
+		}
+		
+		public function doRadialLayout():void
+		{
+			proxy.exportGraph(Constants.RADIAL_LAYOUT);
+		}
+		
+		public function doAnimatedLayout():void
+		{
+			proxy.exportGraph(Constants.ANIMATED_FORCEDIRECTED_LAYOUT);
+		}		
+		
+		private function handlePanelCreationRequest(e:Event):void 
+		{
+			var temp:int = 0;
+		}
+		
+		private function handleDiagramElementCreated(de:DiagramEvent):void {
+			
+			// This function makes sure that when a
+			// new item is added to the diagram, 
+			// it is immediately selected.
+			if( de.diagramelement is DiagramSprite ) {
+				var uid:String = DiagramSprite(de.diagramelement).dataobjectid;
+				var dob:DiagramObject = DiagramObject(diagram.getElementByDataObjectId(uid));
+	            diagram.deselectAll();
+	            diagram.selectObject(dob);
+			}
+			
+        }
+		
+		private function handleDiagramModified(e:Event):void
+		{	
+			var arr:Array=diagram.getSelectedObjects();
+		}
+		
+		private function handleDiagramSelectionChanged(e:Event):void
+		{
+			var arr:Array=diagram.getSelectedObjects();
+			
+			var uid:String = null;
+			var type:String = null;
+			if( arr && arr.length == 1 ) { 
+				var dObj:DiagramObject = DiagramObject(arr[0]);
+				uid = dObj.dataobjectid;
+			}
+			
+			if(uid && objectsGrid != null)
+			{
+				var found:Boolean=false;
+				for(var i:int=0;i<myObjects.length;i++)
+				{
+					if (myObjects.getItemAt(i).uid == uid)
+					{
+						objectsGrid.selectedIndex = i;
+						found = true;
+				
+						myObject = KefedObject(myObjects.getItemAt(i));
+						dataTable = myObject.dataTable;
+						
+						type = myObject.spriteid;
+						currentState = (type.split(" ")).join("") + "_State";
+						
+						break;	
+
+					}
+				}
+				if (!found)
+				{
+					for(i=0;i<myLinks.length;i++)
+					{
+						if (myLinks.getItemAt(i).uid == uid)
+						{
+							linksGrid.selectedIndex = i;
+							found = true;
+							break;	
+						}
+					}	
+				}	
+							
+			} else {
+				
+				currentState = "";
+						
+			}
+		}
+        
+        private function handleEditIndependentVariableData(event:DataGridEvent):void {
+
+            var edit:TextInput = TextInput(event.currentTarget.itemEditorInstance);
+            var dataValue:String = edit.text;
+                                 	
+        }
+
+        private function handleAddRowEditIndependentVariableData(event:MouseEvent):void {
+        	
+			var dg:DataGrid = DataGrid(this.objectsGrid2);
+            var ac:ArrayCollection = ArrayCollection(dg.dataProvider);
+            var o:Object = {value: "..."};
+            ac.addItem(o);
+            
+        }
+
+        private function handleRemoveRowEditIndependentVariableData(event:MouseEvent):void {
+        	
+			var dg:DataGrid = DataGrid(this.objectsGrid2);
+			var ac:ArrayCollection = ArrayCollection(dg.dataProvider);
+            var i:int = dg.selectedIndex;
+            if( i == -1 ) {
+            	i = ac.length - 1;
+            }
+            ac.removeItemAt(i);
+            
+        }
+        				        
+        private function handleObjectNameChanged(event:FlexEvent):void {
+
+            var edit:TextInput = TextInput(event.currentTarget);
+            var name:String = edit.text;        	
+            
+            var uid:String = myObject.uid;        	
+            
+            var dob:DiagramObject = DiagramObject(diagram.getElementByDataObjectId(uid));
+            if (dob.annotation)
+            	dob.annotation.text = name;
+            else
+            	diagram.createAnnotation(dob, name);
+
+        }        
+        
+        private function handleObjectSelectedInGrid(event:ListEvent):void {
+            var uid:String = myObjects.getItemAt(event.rowIndex).uid;
+            var dob:DiagramObject = DiagramObject(diagram.getElementByDataObjectId(uid));
+            diagram.deselectAll();
+            diagram.selectObject(dob);
+        }
+        				
+        private function handleLinkSelectedInGrid(event:ListEvent):void {
+            var uid:String = myLinks.getItemAt(event.rowIndex).uid;
+            var dob:DiagramObject = DiagramObject(diagram.getElementByDataObjectId(uid));
+            diagram.deselectAll();
+            diagram.selectObject(dob);
+        }
+        
+        private function handleEditEnd(event:DataGridEvent):void {
+        	
+            var edit:TextInput = TextInput(event.currentTarget.itemEditorInstance);
+            var name:String = edit.text;        	
+            
+            var uid:String = myObjects.getItemAt(event.rowIndex).uid;        	
+            
+            var dob:DiagramObject = DiagramObject(diagram.getElementByDataObjectId(uid));
+            if (dob.annotation)
+            	dob.annotation.text = name;
+            else
+            	diagram.createAnnotation(dob, name);
+        }        
+        
+	]]>
+</mx:Script>
+
+<mx:states>
+	<mx:State name="ExperimentalObject_State">
+		<mx:AddChild relativeTo="{activeObjectForm}">
+			<mx:Form width="100%">
+				<mx:FormHeading label="Experimental Object Details"/>
+				<mx:FormItem label="Name" direction="horizontal" width="100%">
+					<mx:TextInput id="experimentalObjectNameControl" 
+							width="100%" text="{myObject.nameValue}" 
+							valueCommit="handleObjectNameChanged(event)" />
+				</mx:FormItem>
+			</mx:Form>
+		</mx:AddChild>
+	</mx:State>
+	<mx:State name="Activity_State">
+		<mx:AddChild relativeTo="{activeObjectForm}">
+			<mx:Form width="100%">
+				<mx:FormHeading label="Activity Details"/>
+				<mx:FormItem label="Name" direction="horizontal" width="100%">
+					<mx:TextInput id="activityNameControl" width="100%" 
+							text="{myObject.nameValue}" 
+							valueCommit="handleObjectNameChanged(event)" />
+				</mx:FormItem>
+			</mx:Form>
+		</mx:AddChild>
+	</mx:State>
+	<mx:State name="IndependentVariableData_State">
+		<mx:AddChild relativeTo="{activeObjectForm}">
+			<mx:Form width="100%" >			
+				<mx:FormHeading label="Independent Variable Data Details"/>
+				<mx:FormItem label="Name" direction="horizontal" width="100%">
+					<mx:TextInput id="independentVariableDataNameControl" width="100%" 
+							text="{myObject.nameValue}" 
+							valueCommit="handleObjectNameChanged(event)"/>
+				</mx:FormItem>
+				<mx:FormItem label="Data" direction="horizontal" width="100%">
+					<mx:DataGrid id="objectsGrid2" 
+							dataProvider="{dataTable}"
+							dragEnabled="true" 
+							itemEditEnd="handleEditIndependentVariableData(event);" 
+							width="100%" 
+							height="100%" 
+							editable="true" >
+						<mx:columns>
+							<mx:DataGridColumn headerText="value" dataField="value" editable="true"/>
+						</mx:columns>			
+					</mx:DataGrid>				
+				</mx:FormItem>
+				<mx:FormItem>
+					<mx:HBox width="100%">
+						<mx:Button label="Add Row" 
+							click="handleAddRowEditIndependentVariableData(event)"/>
+						<mx:Button label="Remove Row"
+							click="handleRemoveRowEditIndependentVariableData(event)"/>
+					</mx:HBox>
+				</mx:FormItem>
+			</mx:Form>
+		</mx:AddChild>
+	</mx:State>
+	<mx:State name="DependentVariableData_State">
+		<mx:AddChild relativeTo="{activeObjectForm}">
+			<mx:Form width="100%">
+				<mx:FormHeading label="Dependent Variable Data Details"/>
+				<mx:FormItem label="Name" direction="horizontal" width="100%">
+					<mx:TextInput id="dependentVariableDataNameControl" width="100%" 
+							text="{myObject.nameValue}" 
+							valueCommit="handleObjectNameChanged(event)"/>
+				</mx:FormItem>
+				<mx:FormItem label="Data" direction="horizontal" width="100%">
+					<mx:DataGrid id="objectsGrid3" 
+							dataProvider="{myObjects}" 
+							itemEditEnd="handleEditEnd(event);" 
+							itemClick="handleObjectSelectedInGrid(event);" 
+							width="100%" 
+							height="100%" 
+							editable="true" >
+						<mx:columns>
+							<mx:DataGridColumn headerText="#" dataField="spriteid" editable="false"/>
+							<mx:DataGridColumn headerText="Value" dataField="did" editable="false"/>
+						</mx:columns>			
+					</mx:DataGrid>				
+				</mx:FormItem>
+			</mx:Form>		
+		</mx:AddChild>
+	</mx:State>
+	<mx:State name="Branch_State">
+		<mx:AddChild relativeTo="{activeObjectForm}">
+			<mx:Form width="100%">
+				<mx:FormHeading label="Branch Details"/>
+				<mx:FormItem label="Condition" direction="horizontal" width="100%">
+					<mx:TextInput id="branchConditionControl" width="100%" />
+				</mx:FormItem>
+				<mx:FormItem label="outputEdges" direction="horizontal" width="100%">
+					<mx:DataGrid id="objectsGrid4" 
+							dataProvider="{myObjects}" 
+							itemEditEnd="handleEditEnd(event);" 
+							itemClick="handleObjectSelectedInGrid(event);" 
+							width="100%" 
+							height="100%" 
+							editable="true" >
+						<mx:columns>
+							<mx:DataGridColumn headerText="#" dataField="spriteid" editable="false"/>
+							<mx:DataGridColumn headerText="Value" dataField="did" editable="false"/>
+						</mx:columns>			
+					</mx:DataGrid>				
+				</mx:FormItem>
+			</mx:Form>		
+		</mx:AddChild>
+	</mx:State>
+	<mx:State name="Fork_State">
+		<mx:AddChild relativeTo="{activeObjectForm}">
+			<mx:Form width="100%">
+				<mx:FormHeading label="Fork Details"/>
+				<mx:FormItem label="" direction="horizontal" width="100%">
+					<mx:Label text="No additional information required"/>
+				</mx:FormItem>
+			</mx:Form>			
+		</mx:AddChild>
+	</mx:State>
+</mx:states>
+
+<mx:ControlBar  width="100%" height="40" horizontalAlign="left">
+		<diagctl:SVGAssetLibraryGroupTile
+			width="250" 
+			groupid="Basic"  
+			cornerRadius="8" 
+			paddingLeft="8" 
+			paddingBottom="3" 
+			paddingTop="3" 
+			useHandCursor="true" 
+			toolTip="Drag &amp; drop" 
+			textAlign="left"/>
+</mx:ControlBar>
+
+<mx:HDividedBox width="100%" top="50" bottom="10" right="10" horizontalGap="10">
+
+	<mx:Panel width="50%" height="100%" layout="absolute" 
+			title="Diagram" id="diagramPanel">
+		<kefed:KefedDiagramView id="diagram" creationComplete="initDiagram();" />
+	</mx:Panel>
+	
+	<mx:TabNavigator width="50%" height="100%">        
+<!--		<mx:VBox label="All Models" width="50%" height="100%">
+			<mx:DataGrid id="modelsGrid" 
+				dataProvider="{myModels}" 
+				itemEditEnd="handleModelEditEnd(event);" 
+				itemClick="handleModelSelected(event);" 
+				width="100%" 
+				height="100%" 
+				editable="true" >
+				<mx:columns>
+					<mx:DataGridColumn headerText="id" dataField="id" editable="false"/>
+					<mx:DataGridColumn headerText="Name" dataField="nameValue" editable="true"/>
+					<mx:DataGridColumn headerText="Description" dataField="decription" editable="true"/>
+					<mx:DataGridColumn headerText="Source" dataField="source" editable="true"/>
+				</mx:columns>
+			</mx:DataGrid>
+		</mx:VBox>	-->
+		<mx:VBox label="Active Model" width="50%" height="100%">
+			<mx:Panel id="objectPanel" width="100%" height="50%"  title="Objects">
+				<mx:DataGrid id="objectsGrid" 
+						dataProvider="{myObjects}" 
+						itemEditEnd="handleEditEnd(event);" 
+						itemClick="handleObjectSelectedInGrid(event);" 
+						width="100%" 
+						height="100%" 
+						editable="true" >
+					<mx:columns>
+						<mx:DataGridColumn headerText="Type" dataField="spriteid" editable="false"/>
+						<mx:DataGridColumn headerText="Sprite" dataField="did" editable="false"/>
+						<mx:DataGridColumn headerText="ID" dataField="uid" editable="false"/>
+						<mx:DataGridColumn headerText="Name" dataField="nameValue" editable="true"/>
+					</mx:columns>
+				</mx:DataGrid>
+			</mx:Panel>
+			<mx:Panel id="linksPanel" width="100%" height="50%"  title="Links">
+				<mx:DataGrid id="linksGrid" 
+						dataProvider="{myLinks}" 
+						itemClick="handleLinkSelectedInGrid(event);" 
+						width="100%" 
+						height="100%" >
+					<mx:columns>
+						<mx:DataGridColumn headerText="Start" dataField="start"/>
+						<mx:DataGridColumn headerText="End" dataField="end"/>
+					</mx:columns>
+				</mx:DataGrid>
+			</mx:Panel>
+		</mx:VBox>	
+		<mx:VBox id="activeObjectForm" label="Active Object" width="50%" height="100%">
+			
+		</mx:VBox>	
+	</mx:TabNavigator>        
+	
+</mx:HDividedBox>
+
+</mx:Application>

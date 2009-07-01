@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Form xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" >
+	<mx:FormHeading label="Independent Variable Data Details"/>
+	<mx:FormItem label="Name" direction="horizontal" width="100%">
+		<mx:TextInput id="independentVariableDataNameControl" width="100%" 
+				text="{myObject.nameValue}" 
+				valueCommit="handleObjectNameChanged(event)"/>
+	</mx:FormItem>
+	<mx:FormItem label="Data" direction="horizontal" width="100%">
+		<mx:DataGrid id="objectsGrid2" 
+				dataProvider="{myObjects}" 
+				itemEditEnd="handleEditEnd(event);" 
+				itemClick="handleObjectSelectedInGrid(event);" 
+				width="100%" 
+				height="100%" 
+				editable="true" >
+			<mx:columns>
+				<mx:DataGridColumn headerText="#" dataField="spriteid" editable="false"/>
+				<mx:DataGridColumn headerText="Value" dataField="did" editable="false"/>
+			</mx:columns>			
+		</mx:DataGrid>				
+	</mx:FormItem>
+</mx:Form>

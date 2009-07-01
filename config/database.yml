@@ -1,0 +1,14 @@
+# Persevere 1.0 beta
+#  gem install persevere
+#  gem install dm-persevere-adapter
+
+development: &defaults
+  :adapter: persevere
+  :host: localhost
+  :port: 8080
+  
+test: 
+  <<: *defaults
+  
+production:
+  <<: *defaults
