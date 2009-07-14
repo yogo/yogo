@@ -12,12 +12,12 @@ Scientists are generating an ever increasing amount of data, however, the resour
 
 To use the code from the github repository you will need to add the github gem repository and the datamapper gem repository to your gem sources:
 
-gem sources --add http://gems.datamapper.org
-gem sources --add http://gems.github.com
++gem sources --add http://gems.datamapper.org+
++gem sources --add http://gems.github.com+
 
 === Persevere
 
-You will also need to have a copy of Persevere running somewhere for development. The easiest way is to download it from the persevere project and run it locally. Details can be found here: http://www.persvr.org/index.htm
+You will also need to have a copy of Persevere running somewhere for development. The easiest way is to download it from the persevere project and run it locally. Details can be found at the {Persevere Project Site}[http://www.persvr.org/index.htm]
 
 === Ruby Gem:
 
