@@ -12,9 +12,8 @@ Scientists are generating an ever increasing amount of data, however, the resour
 
 To use the code from the github repository you will need to add the github gem repository and the datamapper gem repository to your gem sources:
 
-<tt>gem sources --add http://gems.datamapper.org</tt>
-
-<tt>gem sources --add http://gems.github.com</tt>
+* <tt>gem sources --add http://gems.datamapper.org</tt>
+* <tt>gem sources --add http://gems.github.com</tt>
 
 === Persevere
 
