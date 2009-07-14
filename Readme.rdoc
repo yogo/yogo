@@ -33,7 +33,7 @@ Checkout the latest code from the {github repository}[http://www.persvr.org/inde
 
 == LICENSE:
 
-<em>This is the standard OSI approved MIT license.</em>
+<b><em>This is the standard OSI approved MIT license.</em></b>
 
 Copyright (c) 2009 Montana State University
 
