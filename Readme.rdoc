@@ -4,8 +4,6 @@
 
 Scientists are generating an ever increasing amount of data, however, the resources available to help them manage that data have never been able to keep pace. The Yogo Data Management Toolkit provides the much needed tools for scientists to do complex data management tasks with a minimum of effort. The toolkit is designed to be simple for novice users, yet still harnesses powerful functionality for large scale, long term data management. It also provides intuitive and adaptable tools for technical users wanting to use only a part of the toolkit, or integrate it into their existing work flow. Scientists know what data is relevant to their research, Yogo takes advantage of this by providing an intuitive way to express that knowledge to create a system that allows the end user to collect, analyze and publish data. Some of the cutting edge features of Yogo include i. users to evolve data models, ii. user designed data collection forms, iii. a robust annotation tool that allows annotations from preselected ontologies or the development of an ontology dynamically through tag tracking and curation, and iv. a pervasive revision control system that catalogs every modification to a project including models, data collection forms, collected data, annotations, and publication sets.
 
-# == FEATURES:
-
 == INSTALL:
 
 === Development Requirements
@@ -26,10 +24,6 @@ You will also need to have a copy of Persevere running somewhere for development
 === Git:
 
 Checkout the latest code from the {github repository}[http://www.persvr.org/index.htm].
-
-# == TODO:
-#
-# == SYNOPSIS:
 
 == LICENSE:
 
