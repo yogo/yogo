@@ -12,8 +12,8 @@ Scientists are generating an ever increasing amount of data, however, the resour
 
 To use the code from the github repository you will need to add the github gem repository and the datamapper gem repository to your gem sources:
 
-* <tt>gem sources --add http://gems.datamapper.org</tt>
-* <tt>gem sources --add http://gems.github.com</tt>
+  gem sources --add http://gems.datamapper.org
+  gem sources --add http://gems.github.com
 
 === Persevere
 
@@ -25,7 +25,7 @@ You will also need to have a copy of Persevere running somewhere for development
 
 === Git:
 
-Checkout the latest code from the github repository: http://github.com/yogo
+Checkout the latest code from the {github repository}[http://www.persvr.org/index.htm].
 
 == TODO:
 
