@@ -19,7 +19,7 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
-  config.gem "dm-core"
+  config.gem "dm-core", :version => '0.10.0'
   config.gem "rails_datamapper", :version => '0.10.0'
   config.gem "irjudson-dm-persevere-adapter", :lib => "persevere_adapter"
   config.gem "irjudson-persevere", :lib => "persevere"
