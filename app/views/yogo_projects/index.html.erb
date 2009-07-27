@@ -1,0 +1,17 @@
+<h1>Yogo Projects</h1>
+
+<table>
+  <tr>
+  </tr>
+<% @yogo_projects.each do |yogo_project| %>
+  <tr>
+    <td><%= link_to 'Show', yogo_project_path(yogo_project.id) %></td>
+    <td><%= link_to 'Edit', edit_yogo_project_path(yogo_project.id) %></td>
+    <td><%= link_to 'Destroy', yogo_project_path(yogo_project.id), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Yogo Project', new_yogo_project_path %>

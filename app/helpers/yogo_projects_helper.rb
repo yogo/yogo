@@ -1,0 +1,2 @@
+module YogoProjectsHelper
+end
