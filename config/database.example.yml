@@ -1,14 +1,20 @@
+development: &defaults
+  :adapter: sqlite3
+  :database: db/yogo_development.db
+
+test:
+  <<: *defaults
+  :database: db/yogo_test.db
+
+production:
+  <<: *defaults
+  :database: db/yogo_production.db
+
 # Persevere 1.0 beta
 #  gem install persevere
 #  gem install dm-persevere-adapter
 
-development: &defaults
+yogo:
   :adapter: persevere
   :host: localhost
   :port: 8080
-  
-test: 
-  <<: *defaults
-  
-production:
-  <<: *defaults
