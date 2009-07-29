@@ -5,6 +5,7 @@
   </tr>
 <% @yogo_projects.each do |yogo_project| %>
   <tr>
+    <td><%= yogo_project.name %></td>
     <td><%= link_to 'Show', yogo_project_path(yogo_project.id) %></td>
     <td><%= link_to 'Edit', edit_yogo_project_path(yogo_project.id) %></td>
     <td><%= link_to 'Destroy', yogo_project_path(yogo_project.id), :confirm => 'Are you sure?', :method => :delete %></td>

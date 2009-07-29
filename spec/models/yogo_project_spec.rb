@@ -2,7 +2,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
 describe "A YogoProject" do
   it "should not be created without a name" do
-    YogoProject.create.should_not be_new
+    YogoProject.create.valid?.should == false
   end
 
   it "should be created with a name" do

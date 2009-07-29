@@ -15,6 +15,8 @@ class YogoProjectsController < ApplicationController
   def show
     @yogo_project = YogoProject.get(params[:id])
 
+    puts #{@yogo_project.inspect}
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @yogo_project }

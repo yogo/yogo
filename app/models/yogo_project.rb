@@ -6,8 +6,8 @@ class YogoProject
   property :id, Serial
   property :name, String, :nullable => false
   property :prefix, String, :nullable => false
-  property :created_at, DateTime, :nullable => false
-  property :updated_at, DateTime, :nullable => false
+  property :created_at, DateTime
+  property :updated_at, DateTime
 
   #
   # Override this so when a name is set the prefix is generated.
@@ -19,3 +19,4 @@ class YogoProject
     attribute_set(:prefix, [@@basename, temp_name].join("_"))
   end
 end
+
