@@ -21,8 +21,8 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem "dm-core", :version => '0.10.0'
   config.gem "rails_datamapper", :version => '0.10.0'
-  config.gem "irjudson-dm-persevere-adapter", :lib => "persevere_adapter"
-  config.gem "irjudson-persevere", :lib => "persevere"
+  config.gem "yogo-dm-persevere-adapter", :lib => "persevere_adapter"
+  config.gem "yogo-persevere", :lib => "persevere"
   config.gem "dm-timestamps"
   config.gem "dm-validations"
   config.gem "json"

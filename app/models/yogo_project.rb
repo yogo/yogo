@@ -1,5 +1,8 @@
 class YogoProject
   include DataMapper::Resource
+  def self.default_repository_name
+    :yogo
+  end
 
   @@basename = "Yogo"
 
