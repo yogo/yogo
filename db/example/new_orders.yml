@@ -1,0 +1,71 @@
+--- 
+new_orders_0000010: 
+  :order_id: 23
+  :district_id: 3
+  :warehouse_id: 1
+  :id: 10
+new_orders_0000011: 
+  :order_id: 26
+  :district_id: 3
+  :warehouse_id: 1
+  :id: 11
+new_orders_0000012: 
+  :order_id: 27
+  :district_id: 3
+  :warehouse_id: 1
+  :id: 12
+new_orders_0000001: 
+  :order_id: 2
+  :district_id: 1
+  :warehouse_id: 1
+  :id: 1
+new_orders_0000013: 
+  :order_id: 28
+  :district_id: 3
+  :warehouse_id: 1
+  :id: 13
+new_orders_0000002: 
+  :order_id: 3
+  :district_id: 1
+  :warehouse_id: 1
+  :id: 2
+new_orders_0000014: 
+  :order_id: 29
+  :district_id: 3
+  :warehouse_id: 1
+  :id: 14
+new_orders_0000003: 
+  :order_id: 4
+  :district_id: 1
+  :warehouse_id: 1
+  :id: 3
+new_orders_0000004: 
+  :order_id: 11
+  :district_id: 2
+  :warehouse_id: 1
+  :id: 4
+new_orders_0000005: 
+  :order_id: 13
+  :district_id: 2
+  :warehouse_id: 1
+  :id: 5
+new_orders_0000006: 
+  :order_id: 14
+  :district_id: 2
+  :warehouse_id: 1
+  :id: 6
+new_orders_0000007: 
+  :order_id: 15
+  :district_id: 2
+  :warehouse_id: 1
+  :id: 7
+new_orders_0000008: 
+  :order_id: 18
+  :district_id: 2
+  :warehouse_id: 1
+  :id: 8
+new_orders_0000009: 
+  :order_id: 20
+  :district_id: 2
+  :warehouse_id: 1
+  :id: 9
