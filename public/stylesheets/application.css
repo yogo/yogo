@@ -1,0 +1,25 @@
+body{
+  padding: 0px;
+  margin:  0px;
+  font-family: Arial,Sans-Serif;
+}
+
+#welcome{
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  margin: 0px auto;
+  text-align: center;
+  padding: 20px;
+  background-color: #505050;
+}
+
+#welcome h1{
+  color: white;
+  font-weight: normal;
+  height: 60px;
+  background:transparent url(../images/logobg.gif) no-repeat scroll center bottom;
+}
+
