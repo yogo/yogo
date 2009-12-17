@@ -14,6 +14,7 @@ Warbler::Config.new do |config|
 
   # Additional files/directories to exclude
   # config.excludes = FileList["lib/tasks/*"]
+  config.excludes = FileList["lib/glassfish"]
 
   # Additional Java .jar files to include.  Note that if .jar files are placed
   # in lib (and not otherwise excluded) then they need not be mentioned here.
@@ -33,7 +34,7 @@ Warbler::Config.new do |config|
   # Gems to be included. You need to tell Warbler which gems your application needs
   # so that they can be packaged in the war file.
   # The Rails gems are included by default unless the vendor/rails directory is present.
-  config.gems += ['do_sqlite3', 'do_jdbc', 'jdbc-sqlite3' "jruby-openssl"]
+  config.gems += ['do_sqlite3', 'do_jdbc', 'jdbc-sqlite3', 'jruby-openssl']
   # config.gems << "tzinfo"
 
   # Uncomment this if you don't want to package rails gem.
