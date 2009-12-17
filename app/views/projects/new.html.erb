@@ -1,0 +1,4 @@
+<% form_for(@project) do |form| %>
+  <%= render :partial => 'projects/form', :locals => {:f => form} %>
+  <%= form.submit 'Create' %>
+<% end %>
