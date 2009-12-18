@@ -1,5 +1,5 @@
 class User
-  include YogoAuthz::YogoUser
+  include Yogo::YogoUser
 
   # A useful method
   def puts_moo

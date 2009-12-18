@@ -3,6 +3,7 @@ class Project
 
   property :id, Serial
   property :name, String
+  
 
 
   def to_param
