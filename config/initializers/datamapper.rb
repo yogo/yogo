@@ -10,3 +10,7 @@ DataMapper.setup(:yogo, config["yogo"])
 
 # Map the datamapper logging to rails logging
 DataMapper.logger = Rails.logger
+DataObjects::Postgres.logger  = Rails.logger if DataObjects.const_defined?(:Postgres)
+DataObjects::Sqlserver.logger = Rails.logger if DataObjects.const_defined?(:Sqlserver)
+DataObjects::Mysql.logger     = Rails.logger if DataObjects.const_defined?(:Mysql)
+DataObjects::Sqlite.logger    = Rails.logger if DataObjects.const_defined?(:Sqlite)
