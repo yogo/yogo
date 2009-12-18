@@ -21,7 +21,7 @@ Rails::Initializer.run do |config|
   config.gem "dm-validations"
   config.gem "dm-is-nested_set"
   config.gem "dm-ar-finders"
-  config.gem "dm-serializer"
+  # config.gem "dm-serializer"  # => this causes a CSV Row Superclass error?! 
   config.gem "do_sqlite3",      :lib => false
   config.gem "authlogic",       :version => '>=2.1.3'
   config.gem "json",            :version => '>=1.2.0', :lib => false unless defined?(JRUBY_VERSION)

@@ -2,9 +2,7 @@ class Project
   include DataMapper::Resource
 
   property :id, Serial
-  property :name, String
-  
-
+  property :name, String, :required => true
 
   def to_param
     id.to_s
