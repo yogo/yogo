@@ -22,6 +22,8 @@ begin # Yogo  initialization
   user = User.first(:login => 'sysadmin')
 
   default_group = Yogo::Group.create(:name => 'default')
+  
+  Yogo::Group.create(:name => Yogo::Settings[:anonymous_user_group], :foreign_id => -1)
 
   Yogo::Group.create(:parent      => default_group, 
                           :name        => 'sysadmin',
