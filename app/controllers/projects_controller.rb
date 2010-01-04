@@ -14,8 +14,8 @@ class ProjectsController < ApplicationController
       flash[:notice] = "Project \"#{@project.name}\" has been created."
       redirect_to projects_url
     else
-      flash[:error] = "Project \"#{@project.name}\" could not be created."
-      render :action => new
+      flash[:error] = "Project could not be created."
+      render :action => :new
     end
   end
   
@@ -30,8 +30,8 @@ class ProjectsController < ApplicationController
       flash[:notice] = "Project \"#{@project.name}\" has been updated."
       redirect_to projects_url
     else
-      flash[:error] = "Project \"#{@project.name}\" could not be updated."
-      render :action => edit
+      flash[:error] = "Project could not be updated."
+      render :action => :edit
     end
   end
   
