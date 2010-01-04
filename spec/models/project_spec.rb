@@ -14,4 +14,24 @@ describe "A Project" do
     p = Project.create(:name => "Test Project")
     count.should == Project.all.count - 1
   end
+  
+  it "should respond to to_param with the id as a string" do
+    p = Project.create(:name => "Test Project")
+    p.to_param.should == p.id.to_s
+  end
+  
+  it "should respond to new_record? with its new? value" do
+    p = Project.new
+    p.should be_new
+    p.should be_new_record
+    p.name = 'Test Project'
+    p.save
+    p.should_not be_new
+    p.should_not be_new_record
+  end
+  
+  # This is a joke and could be removed
+  it "should implement a useful method" do
+    Project.new.should respond_to(:puts_moo)
+  end
 end
