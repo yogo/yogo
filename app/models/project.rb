@@ -1,5 +1,6 @@
 class Project
   include DataMapper::Resource
+  include Yogo::Pagination
 
   property :id, Serial
   property :name, String, :required => true
