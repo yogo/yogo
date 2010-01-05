@@ -15,18 +15,24 @@ Rails::Initializer.run do |config|
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
 
   # Required Gems (Install with `rake gems:install`)
-  config.gem "dm-core",         :version => '>=0.10.2'
+  config.gem "dm-core",              :version => '>=0.10.2'
   config.gem "rails_datamapper"
   config.gem "dm-timestamps"
   config.gem "dm-validations"
   config.gem "dm-is-nested_set"
   config.gem "dm-ar-finders"
+  config.gem "dm-persevere-adapter", :version => '>=0.15'
   # config.gem "dm-serializer"  # => this causes a CSV Row Superclass error?! 
-  config.gem "do_sqlite3",      :lib => false
-  config.gem "authlogic",       :version => '>=2.1.3'
-  config.gem "json",            :version => '>=1.2.0', :lib => false unless defined?(JRUBY_VERSION)
-  config.gem "json_pure",       :version => '>=1.2.0', :lib => false if     defined?(JRUBY_VERSION)
+  config.gem "do_sqlite3",           :lib => false
+  config.gem "authlogic",            :version => '>=2.1.3'
   
+  # JRUBY sensitive gems
+  if defined?(JRUBY_VERSION)
+    config.gem "json_pure",          :version => '>=1.2.0', :lib => false
+    config.gem "glassfish",          :version => '>=1.2.0', :lib => false
+  else
+    config.gem "json",               :version => '>=1.2.0', :lib => false
+  end
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
