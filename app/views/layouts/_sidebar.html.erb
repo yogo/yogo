@@ -1,0 +1,35 @@
+<div id="sidebar">
+    <div id="nav-home" class="nav-group">
+      <h3 class="nav-title" id='home-title'><%= link_to("Home", "/") %></h3>
+    </div>
+    <div id="nav-projects" class="nav-group">
+      <h3 class="nav-title" id='projects-title'>Projects</h3>
+        <div class="nav-items">
+            <ul>
+                <% @projects.each do |project|%>
+                <%= add_menu_item(project.name, project_path(project))%>
+                <% end %>
+            </ul>
+        </div>
+    </div>
+    <% if @project %> 
+    <div id="nav-tools" class="nav-group">
+      <h3 class="nav-title" id='tools-title'>Tools <%= " - #{@project.name}" if @project %></h3>
+        <div class="nav-items">
+            <ul>
+                <% if logged_in? && current_user.has_group?(:sysadmin) %>
+                    <%= add_menu_item("Manage Users", yogo_project_users_path(@project)) unless @project.nil? %>
+                    <%= add_menu_item("Manage Roles", yogo_project_roles_path(@project)) unless @project.nil? %>
+                    <%= add_menu_item("Manage Permissions", yogo_project_permissions_path(@project)) unless @project.nil? %>
+                <% end %>
+                <% if logged_in? && current_user.has_group?(:pi) %>
+                    <%= add_menu_item("New Project", new_yogo_project_path) %>
+                <% end %>
+                <% if logged_in? && current_user.has_group?(:data_manager) %>
+                    <%= add_menu_item("Data Management", new_yogo_project_path) %>
+                <% end %>                
+            </ul>
+        </div>
+    </div>
+    <% end %>
+</div>
