@@ -29,7 +29,7 @@ Rails::Initializer.run do |config|
   # JRUBY sensitive gems
   if defined?(JRUBY_VERSION)
     config.gem "json_pure",          :version => '>=1.2.0', :lib => false
-    config.gem "glassfish",          :version => '>=1.2.0', :lib => false
+    config.gem "glassfish",          :version => '>=1.0.2', :lib => false
   else
     config.gem "json",               :version => '>=1.2.0', :lib => false
   end
