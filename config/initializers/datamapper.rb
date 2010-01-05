@@ -8,6 +8,9 @@ DataMapper.setup(:default, config[Rails.env])
 # Setup the persevere repository for cool fun research!
 DataMapper.setup(:yogo, config["yogo"])
 
+# Setup the persevere repository for cool fun research!
+DataMapper.setup(:example, config["example"])
+
 # Map the datamapper logging to rails logging
 DataMapper.logger = Rails.logger
 DataObjects::Postgres.logger  = Rails.logger if DataObjects.const_defined?(:Postgres)

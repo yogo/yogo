@@ -1,14 +1,14 @@
-development: &defaults
-  :adapter: sqlite3
-  :database: db/yogo_development.db
+development:
+  adapter: sqlite3
+  database: db/yogo_development.sqlite3
 
-test: &TEST
-  <<: *defaults
-  :database: db/yogo_test.db
+test:
+  adapter: sqlite3
+  database: db/yogo_test.sqlite3
 
 production:
-  <<: *defaults
-  :database: db/yogo_production.db
+  adapter: sqlite3
+  database: db/yogo_production.sqlite3
 
 # Legacy DB Support
 # gem install your do_<adapter>
@@ -24,9 +24,7 @@ production:
 #
 example:
   adapter: sqlite3
-  adapter: db/example/example.sqlite3
-  pool: 5
-  timeout: 5000
+  database: db/example/example.sqlite3
 
 # Persevere 1.0 beta
 #  gem install persevere
@@ -36,6 +34,3 @@ yogo:
   :adapter: persevere
   :host: localhost
   :port: 8080
-
-cucumber:
-  <<: *TEST
