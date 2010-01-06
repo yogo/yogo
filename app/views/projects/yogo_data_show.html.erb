@@ -1,0 +1,7 @@
+<%= @data %>
+
+<%#= render_yogo_data(@data)%>
+
+<%- @data.attributes.each do |c|%>
+  <%= c %>: <%= @data.send(c) %>
+<%- end %>

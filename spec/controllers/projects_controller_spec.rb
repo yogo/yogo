@@ -6,6 +6,10 @@ describe ProjectsController do
     @mock_project ||= mock_model(Project, stubs)
   end
 
+  def mock_yogo_collection(stubs={})
+    @mock_yogo_collection ||= mock_model(Yogo::Collection, stubs)
+  end
+
   describe "GET projects/" do
   
     it "assigns all projects as @projects" do
@@ -17,14 +21,14 @@ describe ProjectsController do
   
   end
 
-  # There is no projects#show action at this time.
-  # describe "GET projects/:id" do
-  #   it "assigns the requested project as @project" do
-  #    Project.stub!(:get).with("37").and_return(mock_project)
-  #    get :show, :id => "37"
-  #    assigns[:project].should equal(mock_project)
-  #   end
-  # end
+  #There is no projects#show action at this time.
+  describe "GET projects/:id" do
+    it "assigns the requested project as @project" do
+     Project.stub!(:get).with("37").and_return(mock_project)
+     get :show, :id => "37"
+     assigns[:project].should equal(mock_project)
+    end
+  end
 
   describe "GET projects/new"   do
     it "assigns a new project as @project" do
@@ -46,15 +50,20 @@ describe ProjectsController do
 
     describe "with valid params" do
       it "assigns a newly created project as @project, flashes a notice" do
-        Project.stub!(:new).with({'name' => 'Test Project'}).and_return(mock_project(:save => true, :name => 'Test Project'))
+        Project.stub!(:new).with({'name' => 'Test Project'}).and_return(
+          mock_project(:save => true, :name => 'Test Project')
+        )
         Project.should_receive(:new).with('name'=> 'Test Project')
+        mock_project.should_receive(:yogo_collection=)
         post :create, :project => {:name => 'Test Project'}
         assigns[:project].should equal(mock_project)
         response.flash[:notice].should =~ /has been created/i      
       end
 
       it "redirects to the project list" do
-        Project.stub!(:new).and_return(mock_project(:save => true, :name => 'Test Project'))
+        Project.stub!(:new).and_return(
+          mock_project(:save => true, :name => 'Test Project', :yogo_collection= => true)
+        )
         post :create, :yogo => {}
         response.should redirect_to(projects_url)
       end
@@ -62,13 +71,15 @@ describe ProjectsController do
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved project as @project" do
-        Project.stub!(:new).with({'name' => 'Test Project'}).and_return(mock_project(:save => true, :name => 'Test Project'))
+        Project.stub!(:new).with({'name' => 'Test Project'}).and_return(
+          mock_project(:save => true, :name => 'Test Project', :yogo_collection= => true)
+        )
         post :create, :project => {:name => 'Test Project'}
         assigns[:project].should equal(mock_project)
       end
 
       it "re-renders the 'new' template, flashes an error" do
-        Project.stub!(:new).and_return(mock_project(:save => false))
+        Project.stub!(:new).and_return(mock_project(:save => false, :yogo_collection= => true))
         post :create, :project => {}
         response.should render_template('new')
         response.flash[:error].should =~ /could not be created/i      

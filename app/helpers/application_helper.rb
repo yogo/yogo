@@ -8,4 +8,8 @@ module ApplicationHelper
       link_to(name, url, html_options) +
     "</li>"
   end
+  
+  def all_projects
+    @projects = Project.all
+  end
 end

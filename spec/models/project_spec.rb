@@ -36,12 +36,16 @@ describe "A Project" do
     Project.new.should respond_to(:puts_moo)
   end
   
+  it "should be paginated" do
+    Project.should respond_to(:page_count)
+    Project.should respond_to(:paginate)
+  end
+  
   describe "uses a yogo Data Store" do
     
     it "should have a yogo_collection of data" do
       p = Project.create(:name => "Test Project")
-      p.yogo_collection.should_not be_nil
+      p.should respond_to(:yogo_collection)
     end
-
   end
 end

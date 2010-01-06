@@ -6,7 +6,7 @@
       <h3 class="nav-title" id='projects-title'>Projects</h3>
         <div class="nav-items">
             <ul>
-                <% @projects.each do |project|%>
+                <% all_projects.each do |project|%>
                 <%= add_menu_item(project.name, project_path(project))%>
                 <% end %>
             </ul>

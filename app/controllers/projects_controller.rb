@@ -4,12 +4,17 @@ class ProjectsController < ApplicationController
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
   
+  def show
+    @project = Project.get(params[:id])
+  end
+  
   def new
     @project = Project.new
   end
   
   def create
     @project = Project.new(params[:project])
+    @project.yogo_collection = Yogo::Collection.new
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
       redirect_to projects_url
