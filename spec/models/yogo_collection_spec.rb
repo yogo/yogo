@@ -2,7 +2,9 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
 describe "A Yogo::Collection" do
   
-  @valid_yogo_collection = YogoCollection.new
+  before(:each) do
+    @valid_yogo_collection = Yogo::Collection.new
+  end
   
   it "should return an array of schemas with #yogo_schema" do
     yc = @valid_yogo_collection
@@ -13,8 +15,7 @@ describe "A Yogo::Collection" do
   end
   
   it "should have data for the schema" do
-    yc = Yogo::Collection.new
-    ys = yc.yogo_schema.first
+    ys = @valid_yogo_collection.yogo_schema.first
     ys.yogo_data.should_not be_nil
     ys.yogo_data.should be_instance_of(Array)
     ys.yogo_data.length.should == 10
@@ -23,9 +24,8 @@ describe "A Yogo::Collection" do
   it "should save data for a schema"
   
   it "should retrieve data for a schema" do
-    yc = Yogo::Collection.new
     # populate it with some data?
-    yc.yogo_data('Person').length.should == 10
+    @valid_yogo_collection.yogo_data('Person').length.should == 10
     
   end
   

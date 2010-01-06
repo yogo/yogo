@@ -2,7 +2,6 @@ require 'faker'
 
 class Yogo::Collection
   include DataMapper::Resource
-  include Yogo::DataStore
 
   def self.default_repository_name 
     :yogo
@@ -12,19 +11,21 @@ class Yogo::Collection
   
   property :id, Serial
   
-  
   def yogo_schema
-    @schema ||= Yogo::Schema.new('Person')
-    [@schema]
+    @schemas ||= []
+    @schemas <<  Yogo::Schema.new('Person')
+    @schemas
   end
   
   def yogo_data(schema)
-    @schema.yogo_data
+    yogo_schema.select{|s| s.name == schema }.first.yogo_data
   end
   
 end
 
 class Yogo::Schema
+  
+  attr_accessor :name
 
   def initialize(name)
     @name = name
