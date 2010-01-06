@@ -46,6 +46,7 @@ describe "A Project" do
     it "should have a yogo_collection of data" do
       p = Project.create(:name => "Test Project")
       p.should respond_to(:yogo_collection)
+      p.yogo_collection.should be_instance_of(Yogo::Collection)
     end
   end
 end

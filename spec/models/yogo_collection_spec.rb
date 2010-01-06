@@ -21,7 +21,13 @@ describe "A Yogo::Collection" do
     ys.yogo_data.length.should == 10
   end
   
-  it "should save data for a schema"
+  it "should save data for a schema" do
+    yc = @valid_yogo_collection
+    d = Yogo::Data.new
+    yc.yogo_schema('Person').yogo_data << d
+    yc.save
+    yc.yogo_schema('Person').yogo_data.should be_include(d)
+  end
   
   it "should retrieve data for a schema" do
     # populate it with some data?

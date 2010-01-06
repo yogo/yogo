@@ -2,10 +2,14 @@ class Project
   include DataMapper::Resource
   include Yogo::Pagination
   
-  has 1, :yogo_collection, :model => "Yogo::Collection"
+  # has 1, :yogo_collection, :model => "Yogo::Collection"
 
   property :id, Serial
   property :name, String, :required => true
+
+  def yogo_collection
+    Yogo::Collection.first(:project_id => self.id)
+  end
 
   # to_param is called by rails for routing and such
   def to_param
