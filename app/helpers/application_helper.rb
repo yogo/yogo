@@ -10,7 +10,7 @@ module ApplicationHelper
   end
   
   def all_projects
-    @projects = Project.all
+    Project.all
   end
 
   def pagination_links(collection, cur_page = 1, per_page = 5)
