@@ -3,17 +3,17 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 describe "A Project" do
   
   it "should not be created without a name" do
-    count = Project.all.count
+    count = Project.all.length
     p = Project.new
     p.should_not be_valid   
     p.save
-    count.should == Project.all.count
+    count.should == Project.all.length
   end
 
   it "should be created with a name" do
-    count = Project.all.count
+    count = Project.all.length
     p = Project.create(:name => "Test Project")
-    count.should == Project.all.count - 1
+    count.should == Project.all.length - 1
   end
   
   it "should respond to to_param with the id as a string" do
