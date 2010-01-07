@@ -48,5 +48,20 @@ describe "A Project" do
       p.should respond_to(:yogo_collection)
       p.yogo_collection.should be_instance_of(Yogo::Collection)
     end
+    
+    it "should be able to set a yogo_collection with #yogo_collection=" do
+      p = Project.create(:name => "Test Project")
+      p.should respond_to(:yogo_collection=)
+      p.yogo_collection = Yogo::Collection.new
+      p.yogo_collection.should_not be_nil
+    end
+    
+    it "should properly set the yogo_collection if added when the project is new" do
+     p = Project.new(:name => "Test Project")
+     p.yogo_collection = Yogo::Collection.new
+     p.save
+     q = Project.get p.id
+     q.yogo_collection.should_not be_nil
+    end
   end
 end

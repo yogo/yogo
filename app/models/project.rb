@@ -12,6 +12,12 @@ class Project
   def yogo_collection
     Yogo::Collection.first(:project_id => self.id)
   end
+  
+  def yogo_collection=(collection)
+    # @yogo_collection = collection
+    collection.project_id = self.id
+    collection.save
+  end
 
   # to_param is called by rails for routing and such
   def to_param
