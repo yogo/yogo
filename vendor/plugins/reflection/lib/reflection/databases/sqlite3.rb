@@ -23,7 +23,7 @@ module Databases
     def parse_type(type)
       case type
       when "INTEGER"
-        then "Serial"
+        then "Integer"
       when "integer"
         then "Integer"
       when "FLOAT"
