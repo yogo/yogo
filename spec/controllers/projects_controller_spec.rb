@@ -51,10 +51,13 @@ describe ProjectsController do
     describe "with valid params" do
       it "assigns a newly created project as @project, flashes a notice" do
         Project.stub!(:new).with({'name' => 'Test Project'}).and_return(
-          mock_project(:save => true, :name => 'Test Project')
+          mock_project(:save => true, :name => 'Test Project', :id => 1)
+        )
+        Yogo::Collection.stub!(:create).with({:project_id => 1}).and_return(
+          mock_yogo_collection
         )
         Project.should_receive(:new).with('name'=> 'Test Project')
-        mock_project.should_receive(:yogo_collection=)
+        mock_project.should_receive(:yogo_collection=).with(mock_yogo_collection)
         post :create, :project => {:name => 'Test Project'}
         assigns[:project].should equal(mock_project)
         response.flash[:notice].should =~ /has been created/i      
