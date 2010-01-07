@@ -13,7 +13,7 @@ module DataMapper
       def to_json_schema_compatable_hash
         usable_properties = properties.select{|p| p.name != :id }
         schema_hash = {}
-        schema_hash['id'] = self.name.pluralize
+        schema_hash['id'] = self.storage_name
         properties_hash = {}
         properties.each{|p| properties_hash[p.name]=to_json_type(p.type) if p.name != :id}
         schema_hash['properties'] = properties_hash

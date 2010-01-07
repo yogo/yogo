@@ -33,16 +33,17 @@ module DataMapper
           # to support objects being in *tables* instead of in one big icky
           # sort of table.
           #
-          tblname = Extlib::Inflection.classify(resource.class).pluralize
+          tblname = resource.model.storage_name
+          
 
-          if ! @classes.include?(tblname)
-            payload = {
-              'id' => tblname,
-              'extends' => { "$ref" => "/Class/Object" }
-            }
-
-            response = @persevere.create("/Class/", payload)
-          end
+          # if ! @classes.include?(tblname)
+          #   payload = {
+          #     'id' => tblname,
+          #     'extends' => { "$ref" => "/Class/Object" }
+          #   }
+          # 
+          #   response = @persevere.create("/Class/", payload)
+          # end
 
           path = "/#{tblname}/"
           payload = resource.attributes
@@ -64,7 +65,7 @@ module DataMapper
             end
 
             # resource.id = rsrc_hash["id"].to_i
-            serial.set!(resource, rsrc_hash["id"])
+            serial.set!(resource, rsrc_hash["id"]) unless serial.nil?
 
             created += 1
           else
@@ -104,7 +105,7 @@ module DataMapper
         end
 
         resources.each do |resource|
-          tblname = Extlib::Inflection.classify(resource.class).pluralize
+          tblname = resource.model.storage_name
           path = "/#{tblname}/#{resource.id}"
 
           result = @persevere.update(path, resource.attributes)
@@ -156,7 +157,7 @@ module DataMapper
         resources = Array.new
         json_query = make_json_query(query)
 
-        tblname = Extlib::Inflection.classify(query.model).pluralize
+        tblname = query.model.storage_name
         path = "/#{tblname}/#{json_query}"
 
         response = @persevere.retrieve(path)
@@ -192,6 +193,7 @@ module DataMapper
       #
       # @api semipublic
       def delete(query)
+        puts "I'm inside of the adapter delete!!!"
         connect if @persevere.nil?
 
         deleted = 0
@@ -202,13 +204,17 @@ module DataMapper
           resources = read_many(query)
         end
 
+        puts resources.inspect
+
         resources.each do |resource|
-          tblname = Extlib::Inflection.classify(resource.class).pluralize
+          tblname = resource.model.storage_name
           path = "/#{tblname}/#{resource.id}"
 
           result = @persevere.delete(path)
-
-          if result # ok
+          
+          puts result.code
+          
+          if result.code == "204" # ok
             deleted += 1
           end
         end
