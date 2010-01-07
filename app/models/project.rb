@@ -6,6 +6,8 @@ class Project
 
   property :id, Serial
   property :name, String, :required => true
+  
+  after :create, :initialize_collection
 
   def yogo_collection
     Yogo::Collection.first(:project_id => self.id)
@@ -20,10 +22,16 @@ class Project
   def new_record?
     new?
   end
-
+  
   # A useful method
   # Mostly a joke, this can be removed.
   def puts_moo
     puts 'moo'
   end
+
+  # initialize a yogo_collection for the project
+  def initialize_collection
+    Yogo::Collection.create(:project_id => self.id)
+  end
+
 end

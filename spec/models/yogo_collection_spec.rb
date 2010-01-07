@@ -32,7 +32,22 @@ describe "A Yogo::Collection" do
   it "should retrieve data for a schema" do
     # populate it with some data?
     @valid_yogo_collection.yogo_data('Person').length.should == 10
-    
+  end
+  
+  it "should be invalid without a project" do
+    count = Yogo::Collection.all.length
+    yc = Yogo::Collection.new
+    yc.should_not be_valid
+    yc.save
+    Yogo::Collection.all.length.should == count
+  end
+  
+  it "should save with valid attributes" do
+    count = Yogo::Collection.all.length
+    yc = Yogo::Collection.new(:project_id => 1)
+    yc.should be_valid
+    yc.save
+    Yogo::Collection.all.length.should == count+1
   end
   
   

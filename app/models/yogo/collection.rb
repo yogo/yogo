@@ -9,8 +9,8 @@ class Yogo::Collection
   
   # belongs_to :project
   
-  property :project_id, Integer
   property :id, Serial
+  property :project_id, Integer, :required => true
   
   def yogo_schema(name = nil)
     @schemas ||= []
