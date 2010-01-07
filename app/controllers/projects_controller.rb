@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
   
   def create
     @project = Project.new(params[:project])
-    @project.yogo_collection = Yogo::Collection.new
+    @project.yogo_collection = Yogo::Collection.create(:project_id => @project.id)
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
       redirect_to projects_url
