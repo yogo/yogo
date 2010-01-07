@@ -88,9 +88,20 @@ module DataMapper
     
     def self.generate_descriptions
       @@descriptions.each do |desc|
+        puts desc
+        puts "========"
         eval(desc, @@bind)
       end
       @@descriptions.clear
+    end
+    
+    def self.handle_id(desc)
+      case @@adapter.class.to_s 
+        when /Persevere/
+          return ["property :id, String"] 
+      else
+        return ["property :id, Serial"] 
+      end unless desc['properties']['id'] #this unless may be removed if exists in describe class
     end
     
     def self.describe_model(model_name)
@@ -118,21 +129,17 @@ module DataMapper
       model_description << "class #{history.join('_').singularize.camel_case}"
       model_description << "include DataMapper::Resource"
       model_description << DataMapper::Reflection.append_default_repo_name
-      if @@adapter.class.to_s == /Persevere/
-        model_description << "property :id, String" unless desc['properties']['id']
-      else
-        model_description << "property :id, Serial" unless desc['properties']['id']
-      end
+      model_description << DataMapper::Reflection.append_reflected
+      model_description << handle_id(desc) unless desc['properties']['id']
       desc['properties'].each_pair do |key, value|
         if value.has_key?('properties')
           model_description << "property :#{history.join('_')}_#{key}, String"
           describe_class( value, key, history)
         else
-          prop = value['type'] ? "property :#{key}, #{value['type']}" : "property :#{key}, String"
+          prop = value['type'] ? "property :#{key}, #{value['type'].capitalize}" : "property :#{key}, String"
           model_description << prop
-        end unless key == 'id'
+        end
       end
-      model_description << DataMapper::Reflection.append_reflected
       model_description << 'end'
       @@descriptions << (model_description.join("\n"))
       return model_description.join("\n")

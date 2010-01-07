@@ -4,6 +4,5 @@ module Databases
     end
     def fetch_attributes
     end
-    self.get_schema("Alpha")
   end
 end
