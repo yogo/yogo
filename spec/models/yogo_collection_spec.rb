@@ -3,7 +3,15 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 describe "A Yogo::Collection" do
   
   before(:each) do
-    @valid_yogo_collection = Yogo::Collection.new
+    @valid_yogo_collection = Yogo::Collection.new(:project_id => 1)
+  end
+
+  it "should save with valid attributes" do
+    count = Yogo::Collection.all.length
+    yc = @valid_yogo_collection
+    yc.should be_valid
+    yc.save
+    Yogo::Collection.all.length.should == count+1
   end
   
   it "should return an array of schemas with #yogo_schema" do
@@ -41,14 +49,5 @@ describe "A Yogo::Collection" do
     yc.save
     Yogo::Collection.all.length.should == count
   end
-  
-  it "should save with valid attributes" do
-    count = Yogo::Collection.all.length
-    yc = Yogo::Collection.new(:project_id => 1)
-    yc.should be_valid
-    yc.save
-    Yogo::Collection.all.length.should == count+1
-  end
-  
   
 end
