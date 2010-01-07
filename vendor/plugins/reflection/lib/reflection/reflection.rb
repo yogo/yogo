@@ -98,7 +98,7 @@ module DataMapper
     def self.handle_id(desc)
       case @@adapter.class.to_s 
         when /Persevere/
-          return ["property :id, String"] 
+          return ["property :id, String, :key => true"] 
       else
         return ["property :id, Serial"] 
       end unless desc['properties']['id'] #this unless may be removed if exists in describe class
@@ -137,6 +137,7 @@ module DataMapper
           describe_class( value, key, history)
         else
           prop = value['type'] ? "property :#{key}, #{value['type']}" : "property :#{key}, String"
+          prop += ", :key => true" if key == "id"
           model_description << prop
         end
       end
