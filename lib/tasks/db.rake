@@ -1,7 +1,7 @@
 namespace :db do
-  
-  desc "Copies the example database into persever."
-  task :copy_example_to_persever => :environment do
+  namespace :example do
+  desc "Copies the example database into persevere."
+  task :load => :environment do
     DataMapper::Reflection.setup(:binding => binding, :database => :example)
     DataMapper::Reflection.create_models_from_database
 
@@ -12,11 +12,8 @@ namespace :db do
         collection.each{|item| model.create!(item.attributes) }
       end
     end
-
+  end
+  desc "Clears the example database from persevere."
+  task :clear => :environment do
   end
 end
-
-# desc "Yogo specific database preparation task"
-# task 'db:test:prepare' do
-#   
-# end

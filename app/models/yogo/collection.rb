@@ -1,4 +1,4 @@
-require 'faker'
+#require 'faker'
 
 class Yogo::Collection
   include DataMapper::Resource
@@ -19,9 +19,8 @@ class Yogo::Collection
   end
   
   def yogo_data(schema)
-    yogo_schema.select{|s| s.name == schema }.first.yogo_data
+   yogo_schema.select{|s| s.name == schema }.first.yogo_data
   end
-  
 end
 
 class Yogo::Schema
@@ -55,7 +54,7 @@ end
 
 class Yogo::Data
   def initialize
-    @name = Faker::Name.name
+    @name = "Faker::Name.name"
   end
   
   def to_s

@@ -1,3 +1,5 @@
+require 'file_type_error'
+
 class Project
   include DataMapper::Resource
   include Yogo::Pagination
@@ -10,7 +12,7 @@ class Project
   after :create, :initialize_collection
 
   def yogo_collection
-    Yogo::Collection.first(:project_id => self.id)
+    @yogo_collection || Yogo::Collection.first(:project_id => self.id)
   end
   
   def yogo_collection=(collection)
@@ -39,5 +41,18 @@ class Project
   def initialize_collection
     Yogo::Collection.create(:project_id => self.id)
   end
+  
+  def process_csv(datafile)
+    raise FileTypeError unless datafile.content_type == "text/csv" || datafile.content_type == "text/comma-separated-values"
+    name = File.basename(datafile.original_filename).sub(/[^\w\.\-]/,'_')
+    file_name = File.join("tmp/", name)
 
+    # Write this to a local file temporarily, this should process the contents really
+    File.open(file_name, 'w') { |f| f.write(datafile.read) }
+    
+    # Process the contents
+    
+    # Remove the file
+    File.delete(file_name) if File.exist?(file_name)
+  end
 end
