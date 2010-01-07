@@ -126,7 +126,7 @@ module DataMapper
       desc['properties'].each_pair do |key, value|
         if value.has_key?('properties')
           model_description << "property :#{history.join('_')}_#{key}, String"
-          describe_class(value, key, history)
+          describe_class( value, key, history)
         else
           prop = value['type'] ? "property :#{key}, #{value['type']}" : "property :#{key}, String"
           model_description << prop
