@@ -3,7 +3,7 @@ namespace :reflect do
   task :view => :environment do
     view = []
     DataMapper::Reflection.adapter.fetch_models.each do |model|
-      view << DataMapper::Reflection.describe_class(DataMapper::Reflection::DBReflect.describe_model(model))
+      view << DataMapper::Reflection.describe_class(DataMapper::Reflection.describe_model(model))
     end
     puts "<----------DESCRIPTIONS---------->"
     puts view.join("\n\n")  
