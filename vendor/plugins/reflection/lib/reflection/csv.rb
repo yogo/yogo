@@ -28,7 +28,7 @@ module DataMapper
       end
       
       def self.import_data(csv='/Users/chrisjaeger/Desktop/null.csv')
-        ting = []
+        instance = []
         csv = clean_csv(csv)
         attributes = csv[0].split(',').map{|attribute| attribute.gsub(" ", "_").downcase}
         csv[3..-1].each do |line|
@@ -36,9 +36,9 @@ module DataMapper
           line.split(',').each_with_index do |attribute, index|
             parameters.update( {attributes[index].to_sym => attribute} )
           end unless line.nil?
-          ting << Tesst.new(parameters)
+          instance << Tesst.new(parameters)
         end 
-        ting
+        instance
       end
 
     end

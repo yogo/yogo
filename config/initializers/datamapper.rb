@@ -1,3 +1,6 @@
+# This could be loaded in a better way
+require 'datamapper_json'
+
 # Read the configuration from the existing database.yml file
 config = YAML.load(File.new(File.join(Rails.root, "config", "database.yml")))
 
@@ -10,6 +13,9 @@ DataMapper.setup(:yogo, config["yogo"])
 
 # Setup the persevere repository for cool fun research!
 DataMapper.setup(:example, config["example"])
+
+# Setup reflections
+DataMapper::Reflection.setup(:binding => binding, :database => :example)
 
 # Map the datamapper logging to rails logging
 DataMapper.logger = Rails.logger
