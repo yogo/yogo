@@ -111,7 +111,6 @@ module DataMapper
       model_description << "include DataMapper::Resource"
       model_description << "  def self.default_repository_name"
       model_description <<  "    :#{@@options[:database]}"
-      # puts @@options[:database]
       model_description << "end"
 
       model_description << "property :id, Serial" unless desc['properties']['id']

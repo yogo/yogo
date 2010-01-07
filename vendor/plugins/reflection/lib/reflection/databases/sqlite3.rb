@@ -14,7 +14,7 @@ module Databases
     
     def fetch_attributes(table)
       results = Array.new
-      self.select('PRAGMA table_info(?)', table).each do |column|
+      self.select('PRAGMA table_info(%s)' % table).each do |column|
         results << ReflectedAttribute.new(column.name, parse_type(column.type), column.notnull, column.dflt_value, column.pk)
       end
       return results
