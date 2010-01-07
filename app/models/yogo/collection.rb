@@ -7,14 +7,15 @@ class Yogo::Collection
     :yogo
   end
   
-  belongs_to :project
+  # belongs_to :project
   
   property :id, Serial
+  property :project_id, Integer, :required => true
   
-  def yogo_schema
+  def yogo_schema(name = nil)
     @schemas ||= []
     @schemas <<  Yogo::Schema.new('Person')
-    @schemas
+    name ? @schemas.select{|s| s.name == name}[0] : @schemas
   end
   
   def yogo_data(schema)
