@@ -67,7 +67,7 @@ module DataMapper
     
     def self.create_models_from_database
       @@adapter.fetch_models.each do |model_name|
-        self.create_model_from_db(model_name)
+        create_model_from_db(model_name)
       end
     end
     
@@ -98,7 +98,7 @@ module DataMapper
     def self.handle_id(desc)
       case @@adapter.class.to_s 
         when /Persevere/
-          return ["property :id, String"] 
+          return ["property :id, String, :key => true"] 
       else
         return ["property :id, Serial"] 
       end unless desc['properties']['id'] #this unless may be removed if exists in describe class
@@ -112,7 +112,7 @@ module DataMapper
         desc.update( {'properties' => {}} )
         attributes.each do |attribute|
           if attribute.name == 'id'
-            desc['properties'].update( {attribute.name => {'type' => 'string'}} )
+            desc['properties'].update( {attribute.name => {'type' => 'String'}} )
           else
             desc['properties'].update( {attribute.name => {'type' => attribute.type}} )
           end
@@ -136,7 +136,8 @@ module DataMapper
           model_description << "property :#{history.join('_')}_#{key}, String"
           describe_class( value, key, history)
         else
-          prop = value['type'] ? "property :#{key}, #{value['type'].capitalize}" : "property :#{key}, String"
+          prop = value['type'] ? "property :#{key}, #{value['type']}" : "property :#{key}, String"
+          prop += ", :key => true" if key == "id"
           model_description << prop
         end
       end
