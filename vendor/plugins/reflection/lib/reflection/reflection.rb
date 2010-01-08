@@ -121,7 +121,7 @@ module DataMapper
       desc.to_json
     end
 
-    def self.describe_class(desc, id=nil, history=[], klass=nil)
+    def self.describe_class(desc, klass=nil, id=nil, history=[])
       # namespace = id.split('/')[0] if id.include?('/')
       # id        = id.split('/')[1] if id.include?('/')
       model_description = []
@@ -137,7 +137,7 @@ module DataMapper
       desc['properties'].each_pair do |key, value|
         if value.has_key?('properties')
           model_description << "property :#{history.join('_')}_#{key}, String"
-          describe_class( value, key, history)
+          describe_class( value, nil, key, history)
         else
           prop = value['type'] ? "property :#{key}, #{value['type']}" : "property :#{key}, String"
           prop += ", :key => true" if key == "id"
