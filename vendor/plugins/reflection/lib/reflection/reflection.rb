@@ -121,15 +121,16 @@ module DataMapper
       end
       desc.to_json
     end
-    
-    def self.describe_class(desc, id=nil, history=[])
+
+    def self.describe_class(desc, klass=nil, id=nil, history=[])
       # namespace = id.split('/')[0] if id.include?('/')
       # id        = id.split('/')[1] if id.include?('/')
       model_description = []
       desc = JSON.parse(desc) if desc.class != Hash
       history << desc['id']   if desc['id']
       history << id           if id
-      model_description << "class #{history.join('_').singularize.camel_case}" #namesapce inserted here YOGO::Model
+      model_description << "class #{history.join('_').singularize.camel_case}" 
+      model_description[0] += " < #{klass.name}" if klass
       model_description << "include DataMapper::Resource"
       model_description << append_default_repo_name
       model_description << append_reflected
@@ -137,7 +138,7 @@ module DataMapper
       desc['properties'].each_pair do |key, value|
         if value.has_key?('properties')
           model_description << "property :#{history.join('_')}_#{key}, String"
-          describe_class( value, key, history)
+          describe_class( value, nil, key, history)
         else
           prop = value['type'] ? "property :#{key}, #{value['type']}" : "property :#{key}, String"
           prop += ", :key => true" if key == "id"
