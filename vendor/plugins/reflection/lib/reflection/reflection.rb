@@ -45,9 +45,9 @@ module DataMapper
       @@descriptions
     end
     
-     def self.add_description(description)
-        @@descriptions << description
-      end
+    def self.add_description(description)
+      @@descriptions << description
+    end
     
     def self.options
       @@options
@@ -122,14 +122,16 @@ module DataMapper
     end
     
     def self.describe_class(desc, id=nil, history=[])
+      # namespace = id.split('/')[0] if id.include?('/')
+      # id        = id.split('/')[1] if id.include?('/')
       model_description = []
       desc = JSON.parse(desc) if desc.class != Hash
       history << desc['id']   if desc['id']
       history << id           if id
-      model_description << "class #{history.join('_').singularize.camel_case}"
+      model_description << "class #{history.join('_').singularize.camel_case}" #namesapce inserted here YOGO::Model
       model_description << "include DataMapper::Resource"
-      model_description << DataMapper::Reflection.append_default_repo_name
-      model_description << DataMapper::Reflection.append_reflected
+      model_description << append_default_repo_name
+      model_description << append_reflected
       model_description << handle_id(desc) unless desc['properties']['id']
       desc['properties'].each_pair do |key, value|
         if value.has_key?('properties')
@@ -142,6 +144,7 @@ module DataMapper
         end
       end
       model_description << 'end'
+      puts model_description
       @@descriptions << (model_description.join("\n"))
       return model_description.join("\n")
     end
