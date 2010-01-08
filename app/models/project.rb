@@ -45,12 +45,15 @@ class Project
   def process_csv(datafile)
     raise FileTypeError unless datafile.content_type == "text/csv" || datafile.content_type == "text/comma-separated-values"
     name = File.basename(datafile.original_filename).sub(/[^\w\.\-]/,'_')
-    file_name = File.join("tmp/", name)
+    file_name = File.join("tmp/data/", name)
 
     # Write this to a local file temporarily, this should process the contents really
     File.open(file_name, 'w') { |f| f.write(datafile.read) }
     
     # Process the contents
+    #create a new reflection to create a new model based on the csv
+    @ref = DataMapper::Reflection.new
+    @ref.create_model_from_csv(file_name)
     
     # Remove the file
     File.delete(file_name) if File.exist?(file_name)

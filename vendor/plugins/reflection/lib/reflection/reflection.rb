@@ -82,7 +82,7 @@ module DataMapper
     end
     
     def self.create_model_from_csv(csv)
-      describe_class(self::CSV.describe_model())
+      describe_class(self::CSV.describe_model(csv))
       generate_descriptions
     end
     
