@@ -10,10 +10,8 @@ class Project
   property :name, String, :required => true
   
   after :create, :initialize_collection
-
-  def yogo_collection
-    @yogo_collection || Yogo::Collection.first(:project_id => self.id)
-  end
+  
+  attr_accessor :yogo_collection
   
   def yogo_collection=(collection)
     # @yogo_collection = collection
@@ -39,7 +37,7 @@ class Project
 
   # initialize a yogo_collection for the project
   def initialize_collection
-    Yogo::Collection.create(:project_id => self.id)
+    @yogo_collection = Yogo::Collection.create(self)
   end
   
   def process_csv(datafile)

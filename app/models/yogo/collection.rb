@@ -1,17 +1,19 @@
-#require 'faker'
-
+# The Yogo::Collection is not a database object, but rather a bridge between the 
+# traditionally databased models in the app with the dynamically created models in the 
+# yogo datastore.  The Collection is repsponsible for storage, retrieval and reflection.
+#
 class Yogo::Collection
-  include DataMapper::Resource
 
-  def self.default_repository_name 
-    :yogo
+  attr_accessor :project
+
+  # A Collection requires a project to attach itself to.  It creates a Project Key from the 
+  # name and ID of the project
+  # The project can be anything, but it must respond to #id and #name.
+  def initialize(project)
+    @project = project
+    @project_key = "#{@project.name}_#{@project.id}"
   end
-  
-  # belongs_to :project
-  
-  property :id, Serial
-  property :project_id, Integer, :required => true
-  
+
   def yogo_schema(name = nil)
     @schemas ||= []
     @schemas <<  Yogo::Schema.new('Person')
@@ -25,7 +27,9 @@ end
 
 class Yogo::Schema
   
-  attr_accessor :name
+  def self.default_repository_name 
+    :yogo
+  end
 
   def initialize(name)
     @name = name
@@ -53,6 +57,11 @@ end
 
 
 class Yogo::Data
+  
+  def self.default_repository_name 
+    :yogo
+  end
+  
   def initialize
     @name = "Faker::Name.name"
   end
