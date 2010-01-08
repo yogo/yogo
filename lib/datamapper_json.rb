@@ -15,7 +15,7 @@ module DataMapper
         schema_hash = {}
         schema_hash['id'] = self.storage_name
         properties_hash = {}
-        properties.each{|p| properties_hash[p.name]=to_json_type(p.type) if p.name != :id}
+        properties.each{|p| properties_hash[p.name]={ "type" => to_json_type(p.type) } if p.name != :id}
         schema_hash['properties'] = properties_hash
 
         return schema_hash
