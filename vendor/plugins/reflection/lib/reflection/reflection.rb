@@ -45,9 +45,9 @@ module DataMapper
       @@descriptions
     end
     
-     def self.add_description(description)
-        @@descriptions << description
-      end
+    def self.add_description(description)
+      @@descriptions << description
+    end
     
     def self.options
       @@options
@@ -82,7 +82,7 @@ module DataMapper
     end
     
     def self.create_model_from_csv(csv)
-      describe_class(self::CSV.describe_model())
+      describe_class(self::CSV.describe_model(csv))
       generate_descriptions
     end
     
@@ -120,21 +120,24 @@ module DataMapper
       end
       desc.to_json
     end
-    
-    def self.describe_class(desc, id=nil, history=[])
+
+    def self.describe_class(desc, klass=nil, id=nil, history=[])
+      # namespace = id.split('/')[0] if id.include?('/')
+      # id        = id.split('/')[1] if id.include?('/')
       model_description = []
       desc = JSON.parse(desc) if desc.class != Hash
       history << desc['id']   if desc['id']
       history << id           if id
-      model_description << "class #{history.join('_').singularize.camel_case}"
+      model_description << "class #{history.join('_').singularize.camel_case}" 
+      model_description[0] += " < #{klass.name}" if klass
       model_description << "include DataMapper::Resource"
-      model_description << DataMapper::Reflection.append_default_repo_name
-      model_description << DataMapper::Reflection.append_reflected
+      model_description << append_default_repo_name
+      model_description << append_reflected
       model_description << handle_id(desc) unless desc['properties']['id']
       desc['properties'].each_pair do |key, value|
         if value.has_key?('properties')
           model_description << "property :#{history.join('_')}_#{key}, String"
-          describe_class( value, key, history)
+          describe_class( value, nil, key, history)
         else
           prop = value['type'] ? "property :#{key}, #{value['type']}" : "property :#{key}, String"
           prop += ", :key => true" if key == "id"
@@ -142,6 +145,7 @@ module DataMapper
         end
       end
       model_description << 'end'
+      puts model_description
       @@descriptions << (model_description.join("\n"))
       return model_description.join("\n")
     end
