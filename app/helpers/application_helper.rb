@@ -21,11 +21,11 @@ module ApplicationHelper
     output = ""
 
     if current_page > 1
-      output += link_to("<- Previous", "?page=#{current_page-1}")
+      output += link_to(image_tag("prev.png"), "?page=#{current_page-1}")
     end
     # output += ' PAGINATION '
     if current_page < total_pages
-      output += link_to(" Next ->", "?page=#{current_page+1}")
+      output += link_to(image_tag("next.png"), "?page=#{current_page+1}")
     end
 
     output
