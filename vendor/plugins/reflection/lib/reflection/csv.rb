@@ -3,7 +3,7 @@ module DataMapper
   class Reflection
     class CSV
       
-      def self.describe_model(csv='/tmp/data/test.csv')
+      def self.describe_model(csv='tmp/data/test.csv')
         desc = {}
         desc.update( {'id' => "Ref" + csv.gsub(/.*\//,'').gsub('.csv', '')} )
         desc.update( {'properties' => {}} )
@@ -30,18 +30,34 @@ module DataMapper
       end
       
       def self.import_data(csv='/tmp/data/test.csv')
-        instance = []
-        model_name = "Ref" + csv.csv.gsub(/.*\//,'').gsub('.csv','')
+        #instance = []
+        model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','')
+        Object::const_get(model_name).auto_migrate!
         csv = clean_csv(csv)
-        attributes = csv[0].split(',').map{|attribute| attribute.gsub(" ", "_").downcase}
+        puts attributes = csv[0].split(',').map{|attribute| attribute.gsub(" ", "_").downcase}
+        count =0
         csv[3..-1].each do |line|
-          parameters = {}
+          count +=1
+          parameters = {:id => count.to_s}
+          # @instance = Object::const_get(model_name).new
           line.split(',').each_with_index do |attribute, index|
-            parameters.update( {attributes[index].to_sym => attribute} )
+            parameters = parameters.update( {attributes[index].to_sym => attribute} )
+            # @instance.attribute_set(attributes[index].to_sym, attribute)
+            #            puts attributes[index].to_sym
+            #            puts @instance.attributes
+            #            puts @instance.save
+            #            puts @instance.errors.inspect
           end unless line.nil?
-          instance << Object::const_get(model_name).new(parameters)
+          puts parameters
+          
+          puts @r = Object::const_get(model_name).create!(parameters)
+          puts @r.inspect
+          puts @r.valid?
+          puts @r.errors.inspect
+          # @instance = Object::const_get(model_name).new(parameters)
+          #          puts @instance.save
+          #          puts @instance.errors
         end 
-        instance
       end
 
     end

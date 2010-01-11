@@ -41,8 +41,8 @@ class Project
     
     # Process the contents
     #create a new reflection to create a new model based on the csv
-    @ref = DataMapper::Reflection.new
-    @ref.create_model_from_csv(file_name)
+    DataMapper::Reflection..create_model_from_csv(file_name)
+
     
     # Remove the file
     File.delete(file_name) if File.exist?(file_name)
