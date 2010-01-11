@@ -29,37 +29,33 @@ module DataMapper
         clean_lines
       end
       
-      def self.import_data(csv='/tmp/data/test.csv')
-        #instance = []
+      def self.import_data(csv, repo_name)
         model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','')
-        Object::const_get(model_name).auto_migrate!
+        if repository(:"#{repo_name}").adapter.options[:adapter] == "persevere"
+           repository(:"#{repo_name}").adapter.put_schema(Object::const_get(model_name).send(:to_json_schema_compatable_hash))
+        else
+          puts Object::const_get(model_name).auto_migrate!
+        end
+        
         csv = clean_csv(csv)
         puts attributes = csv[0].split(',').map{|attribute| attribute.gsub(" ", "_").downcase}
         count =0
         csv[3..-1].each do |line|
           count +=1
           parameters = {:id => count.to_s}
-          # @instance = Object::const_get(model_name).new
+
           line.split(',').each_with_index do |attribute, index|
             parameters = parameters.update( {attributes[index].to_sym => attribute} )
-            # @instance.attribute_set(attributes[index].to_sym, attribute)
-            #            puts attributes[index].to_sym
-            #            puts @instance.attributes
-            #            puts @instance.save
-            #            puts @instance.errors.inspect
+
           end unless line.nil?
           puts parameters
-          
-          puts @r = Object::const_get(model_name).create!(parameters)
-          puts @r.inspect
-          puts @r.valid?
-          puts @r.errors.inspect
-          # @instance = Object::const_get(model_name).new(parameters)
-          #          puts @instance.save
-          #          puts @instance.errors
+          repository(:"#{repo_name}") do
+            puts Object::const_get(model_name).create!(parameters)
+          end
         end 
       end
 
     end
   end
 end
+
