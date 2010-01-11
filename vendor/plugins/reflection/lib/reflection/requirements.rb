@@ -1,9 +1,10 @@
-require 'reflection/databases/sqlite3'
-require 'reflection/databases/persevere'
-require 'reflection/databases/my_sql'
-require 'reflection/databases/postgres'
+path = File.expand_path(File.join(File.dirname(__FILE__), 'databases'))
 
+require path + '/sqlite3'
+require path + '/persevere'
+require path + '/my_sql'
+require path + '/postgres'
 
-require 'reflection/parse_types'
-require 'reflection/attribute'
-require 'reflection/csv'
+require path + '/../parse_types'
+require path + '/../attribute'
+require path + '/../csv'

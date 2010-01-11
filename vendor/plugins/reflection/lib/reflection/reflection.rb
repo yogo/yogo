@@ -1,4 +1,6 @@
 require 'reflection/requirements'
+require File.expand_path(File.join(File.dirname(__FILE__), 'requirements'))
+
 module DataMapper
   
   module Model
