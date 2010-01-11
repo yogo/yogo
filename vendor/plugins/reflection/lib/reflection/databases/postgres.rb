@@ -13,23 +13,6 @@ module Databases
       end
       return results
     end
-    
-    def parse_type(type)
-      case type
-      when "INTEGER"
-        then "Serial"
-      when "integer"
-        then "Integer"
-      when "char"
-        then "String"
-      when "datetime"
-        then "DateTime"
-      when "boolean"
-        then "Boolean"
-      else
-        type
-      end
-    end
 
   end
 end
