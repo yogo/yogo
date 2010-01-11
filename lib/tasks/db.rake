@@ -11,7 +11,10 @@ namespace :db do
         collection = model.all
         repository(:yogo).adapter.put_schema(model.send(:to_json_schema_compatable_hash))
         repository(:yogo) do
-          collection.each{|item| model.create!(item.attributes) }
+          collection.each{|item|  model.create!(item.attributes) 
+          puts item.attributes
+          }
+          
         end
       end
     end
