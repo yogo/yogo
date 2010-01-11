@@ -71,6 +71,7 @@ module DataMapper
       end
     end
     
+
     def self.create_model_from_json(json, klass = nil)
       describe_class(json, klass)
       generate_descriptions
@@ -147,7 +148,7 @@ module DataMapper
       model_description << handle_id(desc) unless desc['properties']['id']
       model_description[0] += " < #{klass.name}" if klass
       desc['properties'].each_pair do |key, value|
-        if value.has_key?('properties')
+        if value.is_a?(Hash) && value.has_key?('properties')
           model_description << "property :#{history.join('_')}_#{key}, String"
           describe_class(value, klass, key, history)
         else

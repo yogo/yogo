@@ -11,6 +11,7 @@ module Databases
       schema['properties'].each_pair do |key, value|
         results << ReflectedAttribute.new(key, TypeParser.parse(value['type']))
       end
+      puts results.inspect;
       return results
     end
     

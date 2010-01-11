@@ -1,4 +1,5 @@
 # This could be loaded in a better way
+require 'dm-aggregates'
 require 'datamapper_json'
 
 # Read the configuration from the existing database.yml file

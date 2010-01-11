@@ -7,9 +7,8 @@ module DataMapper
         # "{ \"id\" : \"#{self.name}\",\n \t\"properties\": {\n" + usable_properties.collect{|p| "\t\t\"#{p.name}\" : { \"type\" : \"#{to_json_type(p.type)}\" }" }.join(",\n ") + "\n\t}\n}"
         to_json_schema_compatable_hash.to_json
       end
-
-      private
       
+      #TODO: Add various options in.
       def to_json_schema_compatable_hash
         usable_properties = properties.select{|p| p.name != :id }
         schema_hash = {}
@@ -20,6 +19,8 @@ module DataMapper
 
         return schema_hash
       end
+      
+      private
       
       def to_json_type(type)
         # A case statement doesn't seem to be working when comparing classes.
