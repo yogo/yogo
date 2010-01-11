@@ -4,7 +4,7 @@ namespace :db do
     desc "Copies the example database into persevere."
     task :load => :environment do
       DataMapper::Reflection.setup(:binding => binding, :database => :example)
-      DataMapper::Reflection.create_models_from_database
+      DataMapper::Reflection.create_all_models_from_database
       
       DataMapper::Reflection.setup(:binding => binding, :database => :yogo)
 

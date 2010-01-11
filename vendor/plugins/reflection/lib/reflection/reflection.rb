@@ -1,4 +1,4 @@
-require 'reflection/requirements'
+#require 'reflection/requirements'
 require File.expand_path(File.join(File.dirname(__FILE__), 'requirements'))
 
 module DataMapper
@@ -67,20 +67,19 @@ module DataMapper
       ["def self.default_repository_name", ":#{@@options[:database]}", "end"]
     end
     
-    def self.create_models_from_database
+    def self.create_all_models_from_database
       @@adapter.fetch_models.each do |model_name|
         create_model_from_db(model_name)
       end
     end
     
+    def self.create_model_from_db(model_name)
+      describe_class(describe_model(model_name))
+      generate_descriptions
+    end
 
     def self.create_model_from_json(json, klass = nil)
       describe_class(json, klass)
-      generate_descriptions
-    end
-    
-    def self.create_model_from_db(model_name)
-      describe_class(describe_model(model_name))
       generate_descriptions
     end
     
@@ -107,7 +106,7 @@ module DataMapper
           return ["property :id, String, :key => true"] 
       else
         return ["property :id, Serial"] 
-      end unless desc['properties']['id'] #this unless may be removed if exists in describe class
+      end 
     end
     
     # def self.handle_namespace(id)
@@ -138,9 +137,8 @@ module DataMapper
     def self.describe_class(desc, klass=nil, id=nil, history=[])
       model_description = []
       desc = JSON.parse(desc) if desc.class != Hash
-      #desc['id'], namespace = handle_namespace(desc['id'])
-      history << desc['id']   if desc['id']
-      history << id           if id
+      history << desc['id'].gsub('/', '::')   if desc['id']
+      history << id                           if id
       class_name = klass ? klass.name + "::" : ''
       class_name += history.join('_').singularize.camel_case
       model_description << "class #{class_name}" 
@@ -148,7 +146,6 @@ module DataMapper
       model_description << append_default_repo_name
       model_description << append_reflected
       model_description << handle_id(desc) unless desc['properties']['id']
-      model_description[0] += " < #{klass.name}" if klass
       desc['properties'].each_pair do |key, value|
         if value.is_a?(Hash) && value.has_key?('properties')
           model_description << "property :#{history.join('_')}_#{key}, String"
