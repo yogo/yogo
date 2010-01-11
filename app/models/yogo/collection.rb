@@ -41,12 +41,13 @@ class Yogo::Collection
   private
   
   def instantiate_project
+    klass = "Yogo::" + project_key.classify
     eval <<-KLASS
-    class Yogo::#{project_key.classify}
+    class #{klass}
       
     end
     KLASS
-    @project_class = ("Yogo::" + project_key.classify).constantize
+    @project_class = klass.constantize
   end
 
 end

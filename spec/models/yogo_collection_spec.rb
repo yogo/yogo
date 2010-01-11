@@ -27,7 +27,7 @@ describe "Yogo::Collection"  do
     @yc.project_class.should == ("Yogo::" + @yc.project_key.classify).constantize
   end
   
-  describe "contains Yogo::Schemas" do
+  describe "contains reflected datamapper models" do
 
     it "should contain an array of reflected Yogo::Schema models" do
       @yc.should respond_to(:yogo_schemas)
@@ -46,10 +46,30 @@ describe "Yogo::Collection"  do
         }
       }
       EOF
-      model = @yc.add_yogo_schema(@json_schema)
-      model[0].class.should == DataMapper::Property
-      model[0].model.should == @yc.project_class::Cell
+      model = @yc.add_yogo_schema(@json_schema)[0]
+      model.class.should == DataMapper::Property
+      model.model.should == @yc.project_class::Cell
     end
+
+    it "should save a valid schema which should be persisted to the datastore" do
+      project = Factory(:project)
+      @json_schema = <<-EOF
+      { "id":"Cell",
+        "properties":{
+          "name":{"type":"string"}
+        }
+      }
+      EOF
+      model_name = project.yogo_collection.add_yogo_schema(@json_schema)[0].model.name
+      project_id = project.id
+      project = nil # remove any references to that project, GC should happen
+      project = Project.get project_id
+      project.yogo_collection.yogo_schemas.should_not be_empty
+      project.yogo_collection.yogo_schemas[model_name].should_not be_nil
+        
+    end        
+
+    it "should load and reflect pre-existing schemas"
     
     it "should not save an invalid schema and return nil"
     
