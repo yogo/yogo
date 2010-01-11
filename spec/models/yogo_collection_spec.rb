@@ -32,8 +32,10 @@ describe "Yogo::Collection"  do
     it "should contain an array of reflected Yogo::Schema models" do
       @yc.should respond_to(:yogo_schemas)
       @yc.yogo_schemas.should_not be_nil
-      @yc.yogo_schemas.should be_instance_of(Array)
-      @yc.yogo_schemas.first.should be_instance_of(Yogo::Schema)
+      @yc.yogo_schemas.should be_instance_of(Hash)
+      @yc.yogo_schemas.each do |ys|
+        ys.should be_instance_of(DataMapper::Property)
+      end
     end
     
     it "should save a valid schema and return a reflected model" do
@@ -45,7 +47,8 @@ describe "Yogo::Collection"  do
       }
       EOF
       model = @yc.add_yogo_schema(@json_schema)
-      model.should == @yc.project_class::Cell
+      model[0].class.should == DataMapper::Property
+      model[0].model.should == @yc.project_class::Cell
     end
     
     it "should not save an invalid schema and return nil"

@@ -16,16 +16,18 @@ class Yogo::Collection
       @project = proj
       @project_key = "#{proj.name.gsub(/[^\w]/,'')}"
       instantiate_project
+      @schemas = {}
     end
   end
 
   def yogo_schemas
-    @schemas ||= []
-    @schemas <<  Yogo::Schema.new('Person')
+    @schemas
   end
   
   def add_yogo_schema(json)
-    @schemas << DataMapper::Reflection.create_model_from_json(json)
+    DataMapper::Reflection.create_model_from_json(json, @project_class).each do |m|
+      @schemas[m.model.name] = m
+    end
   end
   
   def valid?
