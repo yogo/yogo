@@ -4,8 +4,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <title>Yogo Data Management Toolkit: <%= controller.action_name %></title>
-    <%= stylesheet_link_tag 'yogo',
-                            'application' %>
+    <%= stylesheet_link_tag 'yogo' %>
     <%= javascript_include_tag 'jquery.js', 
                                'jquery-ui-1.7.2.custom.min.js', 
                                'excanvas.js',
@@ -14,12 +13,20 @@
                                'application.js' %>
   </head>
   <body>
-    <%= render :partial => 'layouts/header' %>
-    <%= render :partial => 'layouts/sidebar' %>
-    <div id="content">
+    <div id="container">
+      <%= render :partial => 'layouts/header' %>
+      <%= render :partial => 'layouts/sidebar' %>
+      <div id="content">
+        <%- if flash[:notice] -%>
+            <div class='notice'><p><%= h flash[:notice] %></p></div>
+        <%- end -%>
+        <%- if flash[:warning] -%>
+            <div class='warning notice'><p><%= h flash[:warning] %></p></div>
+        <%- end -%>
         <div><%= yield %></div>
         <div id='footnotes_holder'></div>
+      </div>
+      <%= render :partial => 'layouts/footer' %>
     </div>
-    <%= render :partial => 'layouts/footer' %>
   </body>
 </html>

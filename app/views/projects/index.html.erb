@@ -1,14 +1,21 @@
-<h2 id='title'>Projects</h2>
-<%= link_to "Create a Project", new_project_url %>
+<h2>Projects</h2>
+<%= image_tag('add.gif') + link_to (" Create a Project", new_project_url) %>
 <hr />
-<ul>
-<% @projects.each do |project| %>
-  <li><%= project.name %> 
-      <%= link_to 'Edit', edit_project_path(project) %>
-      <%= link_to 'Destroy', project_path(project), 
-            :confirm => 'Are you sure?', :method => :delete %>
-  </li>
-<% end %>
-</ul>
-
+<table id="projects-index">
+  <% @projects.each do |project| %>
+    <tr id="projects-index-row<%=project.id%>" class="projects-index-row-border">
+      <td>
+        <%= project.name %>
+      </td>
+      <td>
+        <%= link_to("Edit", edit_project_path(project)) %>
+      </td>
+      <td>
+        <%= image_tag('remove.png') + link_to("Remove", project_path(project), 
+               :confirm => 'Are you sure?', :method => :delete) %><br />
+      </td>
+    </tr>
+  <% end %>
+</table>
+<br />
 <%= pagination_links(@projects, params[:page], 5) %>
