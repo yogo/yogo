@@ -4,9 +4,12 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
 require 'spec/autorun'
 require 'spec/rails'
+require 'factory_girl'
+require 'factories'
 
 # Uncomment the next line to use webrat's matchers
 #require 'webrat/integrations/rspec-rails'
+config = YAML.load(File.new(File.join(Rails.root, "config", "database.yml")))
 DataMapper.setup(:yogo, config["yogo_test"])
 
 # Requires supporting files with custom matchers and macros, etc,

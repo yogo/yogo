@@ -4,21 +4,11 @@ class Project
   include DataMapper::Resource
   include Yogo::Pagination
   
-  # has 1, :yogo_collection, :model => "Yogo::Collection"
-
   property :id, Serial
   property :name, String, :required => true
   
-  after :create, :initialize_collection
+  validates_is_unique   :name
   
-  attr_accessor :yogo_collection
-  
-  def yogo_collection=(collection)
-    # @yogo_collection = collection
-    collection.project_id = self.id
-    collection.save
-  end
-
   # to_param is called by rails for routing and such
   def to_param
     id.to_s
@@ -35,9 +25,10 @@ class Project
     puts 'moo'
   end
 
-  # initialize a yogo_collection for the project
-  def initialize_collection
-    @yogo_collection = Yogo::Collection.create(self)
+  def yogo_collection
+    return nil if new?
+    @yogo_collection ||= Yogo::Collection.new(self)
+    @yogo_collection
   end
   
   def process_csv(datafile)

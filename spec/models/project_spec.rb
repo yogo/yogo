@@ -12,8 +12,20 @@ describe "A Project" do
 
   it "should be created with a name" do
     count = Project.all.length
-    p = Project.create(:name => "Test Project")
+    p = Factory.build(:project)
+    p.should be_valid
+    p.save
     count.should == Project.all.length - 1
+  end
+  
+  it "should have a unique name" do
+    count = Project.all.length
+    p = Factory.create(:project, :name => "A Project")
+    p.should be_valid
+    q = Factory.build(:project, :name => "A Project")
+    q.should_not be_valid
+    q.save
+    Project.all.length.should == count+1
   end
   
   it "should respond to to_param with the id as a string" do
@@ -22,10 +34,9 @@ describe "A Project" do
   end
   
   it "should respond to new_record? with its new? value" do
-    p = Project.new
+    p = Factory.build(:project)
     p.should be_new
     p.should be_new_record
-    p.name = 'Test Project'
     p.save
     p.should_not be_new
     p.should_not be_new_record
@@ -33,7 +44,7 @@ describe "A Project" do
   
   # This is a joke and could be removed
   it "should implement a useful method" do
-    Project.new.should respond_to(:puts_moo)
+    Factory.build(:project).should respond_to(:puts_moo)
   end
   
   it "should be paginated" do
@@ -44,24 +55,14 @@ describe "A Project" do
   describe "uses a yogo Data Store" do
     
     it "should have a yogo_collection of data" do
-      p = Project.create(:name => "Test Project")
+      p = Factory.create(:project)
       p.should respond_to(:yogo_collection)
       p.yogo_collection.should be_instance_of(Yogo::Collection)
     end
     
-    it "should be able to set a yogo_collection with #yogo_collection=" do
-      p = Project.create(:name => "Test Project")
-      p.should respond_to(:yogo_collection=)
-      p.yogo_collection = Yogo::Collection.new
-      p.yogo_collection.should_not be_nil
-    end
-    
-    it "should properly set the yogo_collection if added when the project is new" do
-     p = Project.new(:name => "Test Project")
-     p.yogo_collection = Yogo::Collection.new
-     p.save
-     q = Project.get p.id
-     q.yogo_collection.should_not be_nil
+    it "should not have a yogo_collection if it is new" do
+     p = Factory.build(:project)
+     p.yogo_collection.should be_nil
     end
   end
 end

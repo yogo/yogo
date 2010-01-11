@@ -4,77 +4,49 @@
 #
 class Yogo::Collection
 
-  attr_accessor :project
+  attr_accessor :project, :project_key
 
   # A Collection requires a project to attach itself to.  It creates a Project Key from the 
   # name and ID of the project
   # The project can be anything, but it must respond to #id and #name.
-  def initialize(project)
-    @project = project
-    @project_key = "#{@project.name}_#{@project.id}"
-  end
-
-  def yogo_schema(name = nil)
-    @schemas ||= []
-    @schemas <<  Yogo::Schema.new('Person')
-    name ? @schemas.select{|s| s.name == name}[0] : @schemas
-  end
-  
-  def yogo_data(schema)
-   yogo_schema.select{|s| s.name == schema }.first.yogo_data
-  end
-end
-
-class Yogo::Schema
-  
-  def self.default_repository_name 
-    :yogo
-  end
-
-  def initialize(name)
-    @name = name
-    @data = []
-    10.times do 
-      @data << Yogo::Data.new
+  # LBR Warning: Don't spell out 'project' as the incoming param because it will just call the
+  # accessor method and RETURN NIL EVERY TIME AAARGH.
+  def initialize(proj)
+    if proj
+      @project = proj
+      @project_key = "#{proj.name.gsub(/[^\w]/,'')}"
+      instantiate_project
     end
   end
-  
-  def yogo_data
-    @data
+
+  def yogo_schemas
+    @schemas ||= []
+    @schemas <<  Yogo::Schema.new('Person')
   end
   
-  def to_s
-    @name
+  def add_yogo_schema(json)
+    @schemas << DataMapper::Reflection.create_model_from_json(json)
   end
   
-  def to_json
-    {
-      :name => @name,
-      :data => @data
-    }.to_json
+  def valid?
+    !@project.nil?
   end
+  
+  def project_class
+    @project_class
+  end
+  
+  private
+  
+  def instantiate_project
+    eval <<-KLASS
+    class Yogo::#{project_key.classify}
+      
+    end
+    KLASS
+    @project_class = ("Yogo::" + project_key.classify).constantize
+  end
+
 end
 
 
-class Yogo::Data
-  
-  def self.default_repository_name 
-    :yogo
-  end
-  
-  def initialize
-    @name = "Faker::Name.name"
-  end
-  
-  def to_s
-    @name
-  end
-  
-  def attributes
-    [:name, :id]
-  end
-  
-  def to_json
-    {:name => @name}.to_json
-  end
-end
