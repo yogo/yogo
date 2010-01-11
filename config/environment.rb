@@ -16,14 +16,15 @@ Rails::Initializer.run do |config|
 
   # Required Gems (Install with `rake gems:install`)
   config.gem "dm-core",              :version => '>=0.10.2'
-  config.gem "rails_datamapper"
   config.gem "dm-timestamps"
   config.gem "dm-validations"
   config.gem "dm-is-nested_set"
   config.gem "dm-ar-finders"
   config.gem "dm-persevere-adapter", :version => '>=0.15', :lib => false
+  config.gem "dm-aggregates"
   # config.gem "dm-serializer"  # => this causes a CSV Row Superclass error?! 
   config.gem "do_sqlite3",           :lib => false
+  config.gem "rails_datamapper"
   config.gem "authlogic",            :version => '>=2.1.3'
   
   # JRUBY sensitive gems
