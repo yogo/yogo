@@ -2,8 +2,8 @@ module Databases
   module Postgres
     
     def fetch_models
-      query
-      send(:query, query)
+      query = "select relname from pg_stat_user_tables WHERE schemaname='public'"
+      self.select(query)
     end
     
     def fetch_attributes(table)
