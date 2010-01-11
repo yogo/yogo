@@ -1,71 +1,55 @@
-#require 'faker'
-
+# The Yogo::Collection is not a database object, but rather a bridge between the 
+# traditionally databased models in the app with the dynamically created models in the 
+# yogo datastore.  The Collection is repsponsible for storage, retrieval and reflection.
+#
 class Yogo::Collection
-  include DataMapper::Resource
 
-  def self.default_repository_name 
-    :yogo
+  attr_accessor :project, :project_key
+
+  # A Collection requires a project to attach itself to.  It creates a Project Key from the 
+  # name and ID of the project
+  # The project can be anything, but it must respond to #id and #name.
+  # LBR Warning: Don't spell out 'project' as the incoming param because it will just call the
+  # accessor method and RETURN NIL EVERY TIME AAARGH.
+  def initialize(proj)
+    if proj
+      @project = proj
+      @project_key = "#{proj.name.gsub(/[^\w]/,'')}"
+      instantiate_project
+      @schemas = {}
+    end
+  end
+
+  def yogo_schemas
+    @schemas
   end
   
-  # belongs_to :project
-  
-  property :id, Serial
-  property :project_id, Integer, :required => true
-  
-  def yogo_schema(name = nil)
-    @schemas ||= []
-    @schemas <<  Yogo::Schema.new('Person')
-    name ? @schemas.select{|s| s.name == name}[0] : @schemas
-  end
-  
-  def yogo_data(schema)
-   yogo_schema.select{|s| s.name == schema }.first.yogo_data
-  end
-end
-
-class Yogo::Schema
-  
-  attr_accessor :name
-
-  def initialize(name)
-    @name = name
-    @data = []
-    10.times do 
-      @data << Yogo::Data.new
+  def add_yogo_schema(json)
+    DataMapper::Reflection.create_model_from_json(json, @project_class).each do |m|
+      @schemas[m.model.name] = m
     end
   end
   
-  def yogo_data
-    @data
+  def valid?
+    !@project.nil?
   end
   
-  def to_s
-    @name
+  def project_class
+    @project_class
   end
   
-  def to_json
-    {
-      :name => @name,
-      :data => @data
-    }.to_json
+  private
+  
+  def instantiate_project
+    klass = "Yogo::" + project_key.classify
+    eval <<-KLASS
+    class #{klass}
+      
+    end
+    KLASS
+    @project_class = klass.constantize
   end
+
 end
 
 
-class Yogo::Data
-  def initialize
-    @name = "Faker::Name.name"
-  end
-  
-  def to_s
-    @name
-  end
-  
-  def attributes
-    [:name, :id]
-  end
-  
-  def to_json
-    {:name => @name}.to_json
-  end
-end

@@ -71,8 +71,8 @@ module DataMapper
       end
     end
     
-    def self.create_model_from_json(json)
-      describe_class(json)
+    def self.create_model_from_json(json, klass = nil)
+      describe_class(json, klass)
       generate_descriptions
     end
     
@@ -88,12 +88,14 @@ module DataMapper
     end
     
     def self.generate_descriptions
+      klasses = []
       @@descriptions.each do |desc|
         puts desc
         puts "========"
-        eval(desc, @@bind)
+        klasses << eval(desc, @@bind)
       end
       @@descriptions.clear
+      klasses
     end
     
     def self.handle_id(desc)
@@ -136,7 +138,9 @@ module DataMapper
       #desc['id'], namespace = handle_namespace(desc['id'])
       history << desc['id']   if desc['id']
       history << id           if id
-      model_description << "class #{history.join('_').singularize.camel_case}" 
+      class_name = klass ? klass.name + "::" : ''
+      class_name += history.join('_').singularize.camel_case
+      model_description << "class #{class_name}" 
       model_description << "include DataMapper::Resource"
       model_description << append_default_repo_name
       model_description << append_reflected
@@ -147,7 +151,9 @@ module DataMapper
           model_description << "property :#{history.join('_')}_#{key}, String"
           describe_class(value, klass, key, history)
         else
-          prop = value['type'] ? "property :#{key}, #{value['type']}" : "property :#{key}, String"
+          prop = value['type'] ? \
+            "property :#{key}, #{TypeParser.parse(value['type'])}" : \
+            "property :#{key}, String"
           prop += ", :key => true" if key == "id"
           model_description << prop
         end

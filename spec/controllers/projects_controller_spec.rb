@@ -57,7 +57,6 @@ describe ProjectsController do
           mock_yogo_collection
         )
         Project.should_receive(:new).with('name'=> 'Test Project')
-        mock_project.should_receive(:yogo_collection=).with(mock_yogo_collection)
         post :create, :project => {:name => 'Test Project'}
         assigns[:project].should equal(mock_project)
         response.flash[:notice].should =~ /has been created/i      
