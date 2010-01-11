@@ -52,6 +52,11 @@ describe "A Project" do
     Project.should respond_to(:paginate)
   end
   
+  it "should accepts a csv" do
+    Project.should respond_to(:upload_csv)
+    
+  end
+  
   describe "uses a yogo Data Store" do
     
     it "should have a yogo_collection of data" do
@@ -65,4 +70,5 @@ describe "A Project" do
      p.yogo_collection.should be_nil
     end
   end
+  
 end
