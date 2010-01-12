@@ -22,7 +22,7 @@ Rails::Initializer.run do |config|
   config.gem "dm-ar-finders"
   config.gem "dm-persevere-adapter", :version => '>=0.15', :lib => false
   config.gem "dm-aggregates"
-  # config.gem "dm-serializer"  # => this causes a CSV Row Superclass error?! 
+  config.gem "dm-serializer"  # => this causes a CSV Row Superclass error?! 
   config.gem "do_sqlite3",           :lib => false
   config.gem "rails_datamapper"
   config.gem "authlogic",            :version => '>=2.1.3'

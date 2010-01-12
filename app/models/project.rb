@@ -32,7 +32,8 @@ class Project
   end
   
   def process_csv(datafile)
-    raise FileTypeError unless datafile.content_type == "text/csv" || datafile.content_type == "text/comma-separated-values"
+    raise FileTypeError unless datafile.content_type == 'text/csv' || datafile.content_type == 'text/comma-separated-values' || datafile.content_type == 'application/vnd.ms-excel'
+    puts datafile.content_type
     name = File.basename(datafile.original_filename).sub(/[^\w\.\-]/,'_')
     file_name = File.join("tmp/data/", name)
 

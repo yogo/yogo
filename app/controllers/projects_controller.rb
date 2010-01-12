@@ -54,18 +54,24 @@ class ProjectsController < ApplicationController
   def upload_csv
     @project = Project.get(params[:id])
     
-    begin
-      @project.process_csv(params[:upload]['datafile'])
-      puts "Called process_csv and it worked"
-      flash[:notice]  = "File uploaded succesfully."
-    rescue FileTypeError => e
-      puts "File error"
-      flash[:warning] = "File type #{params[:upload]['datafile'].content_type} not allowed"
+    if !params[:upload].nil?
+      begin
+        @project.process_csv(params[:upload]['datafile'])
+        puts "Called process_csv and it worked"
+        flash[:notice]  = "File uploaded succesfully."
+      rescue FileTypeError => e
+        puts "File error"
+        flash[:warning] = "File type #{params[:upload]['datafile'].content_type} not allowed"
+      end
+    else
+      puts "File area is blank"
+       flash[:warning] = "File upload area cannont be blank."
+    end
     # rescue => e
     #   puts "unknown error"
     #   puts e.inspect
     #   flash[:warning] = "There was an error uploading your file."
-    end
+
     puts flash.inspect
     puts "after begin block"
     redirect_to project_url(@project)
