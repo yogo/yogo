@@ -71,6 +71,43 @@ describe 'Reflection' do
       }
     }
     EOF
+    @lower_case_json_schema = <<-EOF
+    {"id":"items",
+      "properties":{
+        "data":{
+          "type":"string"
+        },
+        "image_id":{
+          "type":"integer"
+        },
+        "price":{
+          "type":"number"
+        },
+        "name":{
+          "type":"string"
+        }
+      }
+    }
+    EOF
+    
+    @lower_case_namespaced_json_schema = <<-EOF
+    {"id":"example_project/items",
+      "properties":{
+        "data":{
+          "type":"string"
+        },
+        "image_id":{
+          "type":"integer"
+        },
+        "price":{
+          "type":"number"
+        },
+        "name":{
+          "type":"string"
+        }
+      }
+    }
+    EOF
   end
   
   it 'should retrieve namespaced schemas for a simple schema' do
