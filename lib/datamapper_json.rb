@@ -9,7 +9,7 @@ module DataMapper
       end
       
       #TODO: Add various options in.
-      def to_json_schema_compatable_hash
+      def to_json_schema_compatible_hash
         usable_properties = properties.select{|p| p.name != :id }
         schema_hash = {}
         schema_hash['id'] = self.storage_name

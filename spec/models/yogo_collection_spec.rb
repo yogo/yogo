@@ -66,10 +66,11 @@ describe "Yogo::Collection"  do
       project = Project.get project_id
       project.yogo_collection.yogo_schemas.should_not be_empty
       project.yogo_collection.yogo_schemas[model_name].should_not be_nil
-        
     end        
 
-    it "should load and reflect pre-existing schemas"
+    it "should load and reflect pre-existing schemas" # do
+    #       
+    #     end
     
     it "should not save an invalid schema and return nil"
     
