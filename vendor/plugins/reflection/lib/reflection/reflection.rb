@@ -137,7 +137,7 @@ module DataMapper
     def self.describe_class(desc, klass=nil, id=nil, history=[])
       model_description = []
       desc = JSON.parse(desc) if desc.class != Hash
-      history << desc['id'].gsub('/', '::')   if desc['id']
+      history << desc['id'].split('/').map{|i| i.camel_case }.join('::')   if desc['id']
       history << id                           if id
       class_name = klass ? klass.name + "::" : ''
       class_name += history.join('_').singularize.camel_case
