@@ -6,18 +6,20 @@ namespace :db do
       DataMapper::Reflection.setup(:binding => binding, :database => :example)
       DataMapper::Reflection.create_all_models_from_database
       
-      DataMapper::Reflection.setup(:binding => binding, :database => :yogo)
+      # DataMapper::Reflection.setup(:binding => binding, :database => :yogo)
 
       [Warehouse, Customer, OrderLine, Order, Item, History, NewOrder, Stock, District].each do |model|
         json_schema = model.send(:to_json_schema_compatible_hash)
-        json_schema["id"] = "example_project/#{json_schema["id"]}"
-        puts json_schema.to_json
+        json_schema["id"] = "yogo/example_project/#{json_schema["id"]}"
+        
+        class_def = DataMapper::Factory.create_model_from_json_schema(json_schema, :yogo)
+        # puts class_def
+        eval(class_def)
         
         collection = model.all
 
-        repository(:yogo).adapter.put_schema(json_schema)
-        DataMapper::Reflection.create_model_from_db(json_schema["id"])
         yogo_model = eval("ExampleProject::#{model.name}")
+        yogo_model.auto_migrate!
 
         collection.each{|item| yogo_model.create!(item.attributes) }
 
