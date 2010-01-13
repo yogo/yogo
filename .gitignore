@@ -18,3 +18,5 @@ Capfile
 *.sw
 .svn
 gfembed*/*
+vendor/bundled/*
+!vendor/bundled/**/cache/*
