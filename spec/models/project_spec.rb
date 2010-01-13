@@ -1,5 +1,19 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
+def mock_uploader(file, type = 'text/csv')
+  filename = "%s/%s" % [ File.dirname(__FILE__), file ]
+  uploader = ActionController::UploadedStringIO.new
+  uploader.original_path = filename
+  uploader.content_type = type
+  def uploader.read
+    File.read(original_path)
+  end
+  def uploader.size
+    File.stat(original_path).size
+  end
+  uploader
+end
+
 describe "A Project" do
   
   it "should not be created without a name" do
@@ -53,7 +67,10 @@ describe "A Project" do
   end
   
   it "should accepts a csv" do
-    Project.should respond_to(:upload_csv)
+    upload = mock_uploader('../../tmp/data/test.csv', "text/csv")
+    p = Project.new
+    p.process_csv(upload).should be_true
+    
     
   end
   
