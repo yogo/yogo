@@ -1,3 +1,4 @@
+Bundler.require_env RAILS_ENV
 # Settings specified here will take precedence over those in config/environment.rb
 
 # In the development environment your application's code is reloaded on
@@ -16,4 +17,4 @@ config.action_controller.perform_caching             = false
 # Don't care if the mailer can't send
 config.action_mailer.raise_delivery_errors = false
 
-config.gem "rails-footnotes"
+# config.gem "rails-footnotes"
