@@ -1,7 +1,3 @@
-# This could be loaded in a better way
-require 'dm-aggregates'
-require 'datamapper_json'
-
 # Read the configuration from the existing database.yml file
 config = YAML.load(File.new(File.join(Rails.root, "config", "database.yml")))
 
