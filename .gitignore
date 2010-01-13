@@ -20,3 +20,4 @@ Capfile
 gfembed*/*
 vendor/bundled/*
 !vendor/bundled/**/cache/*
+bin/*
