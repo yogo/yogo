@@ -17,6 +17,8 @@ class Yogo::Collection
       @project_key = "#{proj.name.gsub(/[^\w]/,'')}"
       instantiate_project
       @schemas = {}
+      retrieve_yogo_models
+      self
     end
   end
 
@@ -25,8 +27,12 @@ class Yogo::Collection
   end
   
   def add_yogo_schema(json)
-    DataMapper::Reflection.create_model_from_json(json, @project_class).each do |m|
-      @schemas[m.model.name] = m
+    # handle json array
+    json.each do |j|
+      DataMapper::Reflection.create_model_from_json(j, @project_class).each do |m|
+        repository(:yogo).adapter.put_schema(m.model.to_json_schema_compatible_hash)
+        @schemas[m.model.name] = m
+      end
     end
   end
   
@@ -39,6 +45,13 @@ class Yogo::Collection
   end
   
   private
+  
+  def retrieve_yogo_models
+    # grab the project scoped schemas from the datastore
+    json = repository(:yogo).adapter.get_schema("[?RegExp('yogo\/#{project_key}.*').test(id)]")
+    # reflect them into models
+    add_yogo_schema(json) if json
+  end
   
   def instantiate_project
     klass = "Yogo::" + project_key.classify

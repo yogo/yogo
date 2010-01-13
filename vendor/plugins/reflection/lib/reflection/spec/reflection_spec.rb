@@ -71,6 +71,43 @@ describe 'Reflection' do
       }
     }
     EOF
+    @lower_case_json_schema = <<-EOF
+    {"id":"items",
+      "properties":{
+        "data":{
+          "type":"string"
+        },
+        "image_id":{
+          "type":"integer"
+        },
+        "price":{
+          "type":"number"
+        },
+        "name":{
+          "type":"string"
+        }
+      }
+    }
+    EOF
+    
+    @lower_case_namespaced_json_schema = <<-EOF
+    {"id":"example_project/items",
+      "properties":{
+        "data":{
+          "type":"string"
+        },
+        "image_id":{
+          "type":"integer"
+        },
+        "price":{
+          "type":"number"
+        },
+        "name":{
+          "type":"string"
+        }
+      }
+    }
+    EOF
   end
   
   it 'should retrieve namespaced schemas for a simple schema' do
@@ -94,10 +131,14 @@ describe 'Reflection' do
     [Project1::KefedModel, Project1::KefedmodelNode].each do |m|
       ref_models.map(&:model).should be_include(m)
     end
-    
+  end
+  
+  it "should create a virtual model of all models in the database" do
+    DataMapper::Reflection.create_all_models_from_database
   end
   
   describe "a reflected model" do
+   
     before(:all) do 
       @simple_json_schema = <<-EOF
       { "id":"Cell",
@@ -109,6 +150,7 @@ describe 'Reflection' do
       }
       EOF
     end
+    
     it "should respond to is_reflected? and return true for a reflected model" do
       DataMapper::Reflection.create_model_from_json(@simple_json_schema)
       Cell.should respond_to(:is_reflected?)
