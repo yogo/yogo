@@ -1,5 +1,5 @@
 <h2>Projects</h2>
-<%= image_tag('add.gif') + link_to (" Create a Project", new_project_url) %>
+<%= link_to (image_tag('add.gif')+" Create a Project", new_project_url) %>
 <hr />
 <table id="projects-index">
   <% @projects.each do |project| %>
@@ -11,7 +11,7 @@
         <%= link_to("Edit", edit_project_path(project)) %>
       </td>
       <td>
-        <%= image_tag('remove.png') + link_to("Remove", project_path(project), 
+        <%= link_to(image_tag('remove.png')+"Remove", project_path(project), 
                :confirm => 'Are you sure?', :method => :delete) %><br />
       </td>
     </tr>

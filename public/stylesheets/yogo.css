@@ -1,11 +1,11 @@
 /*
-Link Brown: #734f3b
+Link Brown: #703824
 Header Blue: #455D8C
 */
 
 a {
   text-decoration: none;
-  color:#734f3b;
+  color:#703824;
 }
 
 a img {
@@ -82,7 +82,7 @@ h3 {
 }
 
 #header-img {
-  padding:60px 0 0 12px;
+/*  padding:60px 0 0 12px;*/
 }
 
 #user-bar {
@@ -90,13 +90,8 @@ h3 {
   padding:8px 20px 0 0;
 }
 
-  #user-bar a {
-    color:#fff;
-  }
-  
   #log-link {
     font-size:15px;
-    color:#ffff99;
   }
 
 #sidebar {

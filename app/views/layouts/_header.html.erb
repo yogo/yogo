@@ -1,17 +1,16 @@
 <div id='header'>
-  <div id='user-bar'>
-      <div id='log-link'>
-          <%- if logged_in? -%>
-              <span id='username'><%=h current_user.name %> : </span>
-              <%= link_to("Log out", logout_path, :method => :delete) %>
-          <%- else -%>
-              <%= link_to("Log in", login_path) %>
-          <%- end -%>
-      </div>
-  </div>
-  
   <div id="header-img">
     <%= link_to(image_tag('title.png'), '/') %>
   </div>
-
 </div>
+<div id='user-bar'>
+    <div id='log-link'>
+        <%- if logged_in? -%>
+            <span id='username'><%=h current_user.name %> : </span>
+            <%= link_to("Log out", logout_path, :method => :delete) %>
+        <%- else -%>
+            <%= link_to("Log in", login_path) %>
+        <%- end -%>
+    </div>
+</div>
+<br style="clear:both;" />
