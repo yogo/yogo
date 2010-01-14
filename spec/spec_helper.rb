@@ -6,6 +6,7 @@ require 'spec/autorun'
 require 'spec/rails'
 require 'factory_girl'
 require 'factories'
+require 'datamapper/factory'
 
 # Uncomment the next line to use webrat's matchers
 #require 'webrat/integrations/rspec-rails'
