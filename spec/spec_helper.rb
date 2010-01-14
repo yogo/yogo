@@ -11,7 +11,8 @@ require 'factories'
 #require 'webrat/integrations/rspec-rails'
 config = YAML.load(File.new(File.join(Rails.root, "config", "database.yml")))
 DataMapper.setup(:yogo, config["yogo_test"])
-DataMapper::Reflection.setup(:binding => binding, :database => :yogo)
+DataMapper.setup(:yogo_test, config["yogo_test"])
+DataMapper::Reflection.setup(:binding => binding, :database => :yogo_test)
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}

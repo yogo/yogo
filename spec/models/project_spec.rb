@@ -66,12 +66,21 @@ describe "A Project" do
     Project.should respond_to(:paginate)
   end
   
-  it "should accepts a csv" do
-    upload = mock_uploader('../../tmp/data/test.csv', "text/csv")
-    p = Project.new
-    p.process_csv(upload).should be_true
-    
-    
+  it "should create a model from a csv" do
+    csv = "#{Rails.root}/tmp/data/test.csv"
+    File.open(csv, "r").should be_true
+    DataMapper::Reflection.create_model_from_csv(csv)
+    model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','') 
+    Object::const_get(model_name).new.should be_true
+  end
+  
+  #this test needs "should create a model from a csv" to pass to work
+  it "should import data from csv" do
+    csv = "#{Rails.root}/tmp/data/test.csv"
+    File.open(csv, "r").should be_true 
+    DataMapper::Reflection.import_data_from_csv(csv)    
+    model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','') 
+    Object::const_get(model_name).first(:name => "Bug").should be_true 
   end
   
   describe "uses a yogo Data Store" do

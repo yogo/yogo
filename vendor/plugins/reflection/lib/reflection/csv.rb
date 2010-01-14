@@ -32,8 +32,10 @@ module DataMapper
       def self.import_data(csv, repo_name)
         model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','')
         if repository(:"#{repo_name}").adapter.options[:adapter] == "persevere"
-           repository(:"#{repo_name}").adapter.put_schema(Object::const_get(model_name).send(:to_json_schema_compatable_hash))
-        else
+             # repository(:"#{repo_name}").adapter.put_schema( 
+             Object::const_get(model_name).send(:to_json_schema_compatable_hash)
+             # )
+          else
           puts Object::const_get(model_name).auto_upgrade!
         end
         
