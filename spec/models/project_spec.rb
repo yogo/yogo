@@ -74,13 +74,13 @@ describe "A Project" do
     Object::const_get(model_name).new.should be_true
   end
   
-  #this test needs "should create a model from a csv" to pass to work
   it "should import data from csv" do
     csv = "#{Rails.root}/tmp/data/test.csv"
+    DataMapper::Reflection.create_model_from_csv(csv)
     File.open(csv, "r").should be_true 
     DataMapper::Reflection.import_data_from_csv(csv)    
-    model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','') 
-    Object::const_get(model_name).first(:name => "Bug").should be_true 
+    model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','')
+    Object::const_get(model_name).first(:name => "Bug").should be_true  
   end
   
   describe "uses a yogo Data Store" do
