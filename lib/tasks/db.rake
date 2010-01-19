@@ -12,13 +12,13 @@ namespace :db do
         json_schema = model.send(:to_json_schema_compatible_hash)
         json_schema["id"] = "yogo/example_project/#{json_schema["id"]}"
         
-        class_def = DataMapper::Factory.create_model_from_json_schema(json_schema, :yogo)
+        class_def = DataMapper::Factory.describe_model_from_json_schema(json_schema, :yogo)
         # puts class_def
         eval(class_def)
         
         collection = model.all
 
-        yogo_model = eval("ExampleProject::#{model.name}")
+        yogo_model = eval("Yogo::ExampleProject::#{model.name}")
         yogo_model.auto_migrate!
 
         collection.each{|item| yogo_model.create!(item.attributes) }
