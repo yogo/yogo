@@ -10,6 +10,8 @@ class TypeParser
       then 'Integer'
     when 'integer'
       then 'Integer'
+    when 'number'
+      then 'Float'
     when 'FLOAT'
       then 'Float'  
     when 'varchar(255)'

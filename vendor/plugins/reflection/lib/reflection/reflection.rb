@@ -68,9 +68,11 @@ module DataMapper
     end
     
     def self.create_all_models_from_database
+      k = []
       @@adapter.fetch_models.each do |model_name|
-        create_model_from_db(model_name)
+        k << create_model_from_db(model_name)
       end
+      k.flatten
     end
     
     def self.create_model_from_db(model_name)
@@ -86,7 +88,7 @@ module DataMapper
     def self.create_model_from_csv(csv)
       describe_class(self::CSV.describe_model(csv))
       generate_descriptions
-      self::CSV.import_data(csv, @@options[:database])
+      #self::CSV.import_data(csv, @@options[:database])
     end
     
     def self.generate_descriptions
@@ -117,6 +119,14 @@ module DataMapper
     #   end
     # end
     
+    def self.append_modules(modules)
+      mods = Array.new
+      modules.split('::')[0..-2].each do |mod|
+        mods << "module #{mod}"
+      end
+      mods
+    end
+    
     def self.describe_model(model_name)
       desc = {}
       @@adapter.fetch_models.select{|model| model == model_name}.each do |model|
@@ -137,11 +147,12 @@ module DataMapper
     def self.describe_class(desc, klass=nil, id=nil, history=[])
       model_description = []
       desc = JSON.parse(desc) if desc.class != Hash
-      history << desc['id'].split('/').map{|i| i.camel_case }.join('::')   if desc['id']
-      history << id                           if id
+      history << desc['id'].split('/').map{|i| i.camel_case }.join('::') if desc['id']
+      history << id if id
       class_name = klass ? klass.name + "::" : ''
       class_name += history.join('_').singularize.camel_case
-      model_description << "class #{class_name}" 
+      model_description << append_modules(class_name)
+      model_description << "class #{class_name.split('::')[-1]}" 
       model_description << "include DataMapper::Resource"
       model_description << append_default_repo_name
       model_description << append_reflected
@@ -158,7 +169,9 @@ module DataMapper
           model_description << prop
         end
       end
-      model_description << 'end'
+      class_name.split('::').length.times do
+        model_description << 'end'
+      end
       @@descriptions << (model_description.join("\n"))
       return model_description.join("\n")
     end
