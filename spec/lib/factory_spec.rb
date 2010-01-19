@@ -7,8 +7,12 @@ describe "A Factory" do
   end
   
   it "should respond to create_model_from_json_schema" do
-    DataMapper::Factory.should respond_to(:create_model_from_json_schema)
+    DataMapper::Factory.should respond_to(:describe_model_from_json_schema)
     # Factory.should respond_to(:build)
+  end
+
+  it "should respond to build" do
+    DataMapper::Factory.should respond_to(:build)
   end
   
 end

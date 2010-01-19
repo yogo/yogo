@@ -9,6 +9,13 @@ describe ProjectsController do
   def mock_yogo_collection(stubs={})
     @mock_yogo_collection ||= mock_model(Yogo::Collection, stubs)
   end
+  
+  def mock_models(proj)
+    [ build_reflected_model('Vanilla',    proj),
+      build_reflected_model('Chocolate',  proj),
+      build_reflected_model('Strawberry', proj)
+      ]
+  end
 
   describe "GET projects/" do
   
@@ -25,8 +32,11 @@ describe ProjectsController do
   describe "GET projects/:id" do
     it "assigns the requested project as @project" do
      Project.stub!(:get).with("37").and_return(mock_project)
+     Project.stub!(:yogo_collection).and_return(mock_yogo_collection)
+     mock_yogo_collection.should_receive(:models).and_return(mock_models(mock_project))
      get :show, :id => "37"
      assigns[:project].should equal(mock_project)
+     assigns[:models].should equal(mock_models)
     end
   end
 

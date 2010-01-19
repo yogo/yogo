@@ -18,59 +18,88 @@ describe "Yogo::Collection"  do
   it "should create a project_key from the project id and name (with non-alphas stripped)" do
     ['Test:Project, Test Project, Test&Project, Test!Project'].each do |name|
       p = Factory.create(:project, :name => name)
-      key = name.gsub(/[^\w]/,'')
-      p.yogo_collection.project_key.should == "#{key}"
+      p.yogo_collection.project_key.match(/[^\w]/).should be_nil
     end
   end
   
-  it "should instantiate a class of the project key" do
-    @yc.project_class.should == ("Yogo::" + @yc.project_key.classify).constantize
-  end
-  
-  describe "contains reflected datamapper models" do
+  describe "contains references to reflected datamapper models" do
 
-    it "should contain an array of reflected Yogo::Schema models" do
-      @yc.should respond_to(:yogo_schemas)
-      @yc.yogo_schemas.should_not be_nil
-      @yc.yogo_schemas.should be_instance_of(Hash)
-      @yc.yogo_schemas.each do |ys|
-        ys.should be_instance_of(DataMapper::Property)
+    it "should contain an array of reflected models" do
+      @yc.should respond_to(:models)
+      @yc.models.should_not be_nil
+      @yc.models.should be_instance_of(Array)
+      @yc.models.each do |m|
+        m.should be_instance_of(DataMapper::Property)
       end
     end
     
-    it "should save a valid schema and return a reflected model" do
-      @json_schema = <<-EOF
-      { "id":"Cell",
-        "properties":{
-          "name":{"type":"string"}
+    it "should respond to an add_model method that creates a model" do
+      collection = Yogo::Collection.new(Factory(:project, :name => 'Test Project 1'))
+      model_hash = { 
+        "id" => "Yogo/TestProject1/Cell",
+        "properties" => {
+          "name" => {"type" => "string"}
         }
       }
-      EOF
-      model = @yc.add_yogo_schema(@json_schema)[0]
-      model.class.should == DataMapper::Property
-      model.model.should == @yc.project_class::Cell
+      m = collection.add_model(model_hash)
+      m.should == Yogo::TestProject1::Cell
+      Yogo::TestProject1::Cell.ancestors.should include(DataMapper::Resource)
     end
-
-    it "should save a valid schema which should be persisted to the datastore" do
-      project = Factory(:project)
-      @json_schema = <<-EOF
-      { "id":"Cell",
-        "properties":{
-          "name":{"type":"string"}
+    
+    it "should make the newly added model available via .models" do
+      model_hash = { 
+        "id" => "Yogo/#{@yc.project_key}/Cell",
+        "properties" => {
+          "name" => {"type" => "string"}
         }
       }
-      EOF
-      model_name = project.yogo_collection.add_yogo_schema(@json_schema)[0].model.name
-      project_id = project.id
-      project = nil # remove any references to that project, GC should happen
-      project = Project.get project_id
-      project.yogo_collection.yogo_schemas.should_not be_empty
-      project.yogo_collection.yogo_schemas[model_name].should_not be_nil
-    end        
-
-    it "should load and reflect pre-existing schemas" # do
-    #       
-    #     end
+      @yc.add_model(model_hash)
+      model_names = @yc.models.map(&:name)
+      model_names.map{|m| m.match(/^Yogo::#{@yc.project_key}::Cell/)}.compact.should_not be_empty
+    end
+    
+    
+    it "should properly namespace an un-namespaced model hash" do
+      model_hash = { 
+        "id" => "Monkey",
+        "properties" => {
+          "name" => {"type" => "string"}
+        }
+      }
+      @yc.add_model(model_hash)
+      model_names = @yc.models.map(&:name)
+      model_names.map{|m| m.match(/^Yogo::#{@yc.project_key}::Monkey/)}.compact.should_not be_empty
+    end
+    
+    it "should save a valid schema which should be persisted to the datastore" do
+      # This is already in the test database and should be pre-populated for 
+      # the above project
+      persisted_model_hash = { 
+        "id" => "Yogo/PersistedData/Cell",
+        "properties" => {
+          "name" => {"type" => "string"}
+        }
+      }
+      repository(:yogo).adapter.put_schema(persisted_model_hash)
+      project = Factory(:project, :name => 'Persisted Data')
+      project.yogo_collection.models.should be_empty
+      repository(:yogo).adapter.reflect!
+      project.yogo_collection.models.should_not be_empty
+    end
+    
+    it "should be able to delete its schemas" do
+      persisted_model_hash = { 
+        "id" => "Yogo/PersistedData/Cell",
+        "properties" => {
+          "name" => {"type" => "string"}
+        }
+      }
+      repository(:yogo).adapter.put_schema(persisted_model_hash)
+      project = Factory(:project, :name => 'Persisted Data')
+      project.yogo_collection.models.should_not be_empty
+      project.yogo_collection.delete_models!
+      project.yogo_collection.models.should be_empty
+    end
     
     it "should not save an invalid schema and return nil"
     

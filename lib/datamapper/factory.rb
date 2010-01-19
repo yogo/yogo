@@ -2,20 +2,33 @@
 module DataMapper
 class Factory
   
-  def self.create_model_from_json_schema(json_schema, repository_name = :default, options = {})
+  def self.build(description, repository_name = :default, options = {})
+    desc =  describe_model_from_json_schema(description, repository_name, options)
+    Object.class_eval(desc).model # just return the model, instead of last eval'd model property
+  end
+  
+  def self.describe_model_from_json_schema(json_schema, repository_name = :default, options = {})
     json_schema = JSON.parse(json_schema) unless json_schema.is_a?(Hash)
     
     scoping       = json_schema['id'].split('/').collect{|i| i.singularize.camel_case }
     module_names  = scoping[0..-2]
     class_name    = scoping[-1]
     properties    = json_schema['properties']
-    
+
+    return nil unless properties #we can't handle property-less models... yet
+
     class_definition = ""
     
     module_names.each{|mod| class_definition += "module #{mod}\n" }
     
     class_definition += "class #{class_name}\n"
     class_definition += "  include DataMapper::Resource\n"
+
+    # LBR: Deleted?  Yes.  Go away.  
+    class_definition += "@@deleted = false\n"
+    class_definition += "def self.delete!\n  @@deleted = true\nend\n"
+    class_definition += "def self.deleted?\n  @@deleted\nend\n"
+    
     class_definition += "def self.default_repository_name; :#{repository_name}; end\n"
     
     class_definition += "property :id, String, :serial => true\n"
@@ -29,7 +42,6 @@ class Factory
     end
     
     class_definition += "end\n"
-    
     
     module_names.each{|mod| class_definition += "end\n" }
     
