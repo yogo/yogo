@@ -6,13 +6,10 @@ config = YAML.load(File.new(File.join(Rails.root, "config", "database.yml")))
 DataMapper.setup(:default, config[Rails.env])
 
 # Setup the persevere repository for cool fun research!
-DataMapper.setup(:yogo, config["yogo"])
+DataMapper.setup(:yogo, config["yogo"]) unless ENV['NO_PERSEVERE']
 
 # Setup the persevere repository for cool fun research!
-DataMapper.setup(:example, config["example"])
-
-# Setup reflections
-DataMapper::Reflection.setup(:binding => binding, :database => :yogo)
+DataMapper.setup(:example, config["example"]) unless ENV['NO_PERSEVERE']
 
 # Map the datamapper logging to rails logging
 DataMapper.logger = Rails.logger

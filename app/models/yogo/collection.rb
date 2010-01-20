@@ -2,67 +2,63 @@
 # traditionally databased models in the app with the dynamically created models in the 
 # yogo datastore.  The Collection is repsponsible for storage, retrieval and reflection.
 #
-class Yogo::Collection
-
-  attr_accessor :project, :project_key
-
-  # A Collection requires a project to attach itself to.  It creates a Project Key from the 
-  # name and ID of the project
-  # The project can be anything, but it must respond to #id and #name.
-  # LBR Warning: Don't spell out 'project' as the incoming param because it will just call the
-  # accessor method and RETURN NIL EVERY TIME AAARGH.
-  def initialize(proj)
-    if proj
-      @project = proj
-      @project_key = "#{proj.name.gsub(/[^\w]/,'')}"
-      instantiate_project
-      @schemas = {}
-      retrieve_yogo_models
-      self
-    end
-  end
-
-  def yogo_schemas
-    @schemas
-  end
+module Yogo
   
-  def add_yogo_schema(json)
-    # handle json array
-    json.each do |j|
-      DataMapper::Reflection.create_model_from_json(j, @project_class).each do |m|
-        repository(:yogo).adapter.put_schema(m.model.to_json_schema_compatible_hash)
-        @schemas[m.model.name] = m
+  class Collection
+
+    attr_accessor :project
+
+    # A Collection requires a project to attach itself to.  It creates a Project Key from the 
+    # name and ID of the project
+    # The project can be anything, but it must respond to #id and #name.
+    # LBR Warning: Don't spell out 'project' as the incoming param because it will just call the
+    # accessor method and RETURN NIL EVERY TIME AAARGH.
+    def initialize(projekt)
+      @project = projekt
+    end
+
+    def models
+      DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{project_key}::/ }
+    end
+  
+    def add_model(hash)
+      DataMapper::Factory.build(namespace(hash), :yogo)
+    end
+  
+    def valid?
+      !@project.nil?
+    end
+  
+    def project_key
+      project.name.gsub(/[^\w]/,'')
+    end
+
+    def delete_models!
+      models.each do |model|
+        model.auto_migrate_down!
+        name_array = model.name.split("::")
+        if name_array.length == 1
+          Object.send(:remove_const, model.name.to_sym)
+        else
+          ns = eval(name_array[0..-2].join("::"))
+          ns.send(:remove_const, name_array[-1].to_sym)
+        end
+        DataMapper::Model.descendants.delete(model)
       end
     end
-  end
-  
-  def valid?
-    !@project.nil?
-  end
-  
-  def project_class
-    @project_class
-  end
-  
-  private
-  
-  def retrieve_yogo_models
-    # grab the project scoped schemas from the datastore
-    json = repository(:yogo).adapter.get_schema("[?RegExp('yogo\/#{project_key}.*').test(id)]")
-    # reflect them into models
-    add_yogo_schema(json) if json
-  end
-  
-  def instantiate_project
-    klass = "Yogo::" + project_key.classify
-    eval <<-KLASS
-    class #{klass}
-      
+
+    #
+    # Private Methods
+    #
+    private
+    
+    def namespace(hash)
+      unless hash['id'] =~ /^Yogo\/#{project_key}\/\w+/
+        hash['id'] = "Yogo/#{project_key}/#{hash['id']}"
+      end
+      hash
     end
-    KLASS
-    @project_class = klass.constantize
+    
   end
-
 end
-
 

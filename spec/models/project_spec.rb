@@ -66,6 +66,7 @@ describe "A Project" do
     Project.should respond_to(:paginate)
   end
   
+
   it "should create a model from a csv" do
     csv = "#{Rails.root}/tmp/data/test.csv"
     File.open(csv, "r").should be_true
@@ -77,11 +78,18 @@ describe "A Project" do
   it "should import data from csv" do
     csv = "#{Rails.root}/tmp/data/test.csv"
     DataMapper::Reflection.create_model_from_csv(csv)
-    File.open(csv, "r").should be_true 
+    File.open(csv, "r").should be_true
     DataMapper::Reflection.import_data_from_csv(csv)    
     model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','')
-    Object::const_get(model_name).first(:name => "Bug").should be_true  
+    puts Object::const_get(model_name).name
+     puts Object::const_get(model_name).new
+     puts Object::const_get(model_name).all
+    puts "yeah"
+    
+   yogo_model = eval("DataMapper::Reflection::CSV::Yogo::Project::#{Object::const_get(model_name).name}")
+    puts yogo_model.first(:name => "Bug").should be_true
   end
+
   
   describe "uses a yogo Data Store" do
     

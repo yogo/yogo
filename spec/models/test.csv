@@ -1,0 +1,6 @@
+Name,ID,Mass,Charge
+String,Integer,Float,Float
+NA,NA,kg,volts
+Sean,1,1283,1.2
+Bug,2,23492,1.5
+Aed,4,233213,3.2

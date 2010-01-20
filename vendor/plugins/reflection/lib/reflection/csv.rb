@@ -33,23 +33,15 @@ module DataMapper
         model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','')
         puts repo_name
         # if repository(:"#{repo_name}").adapter.options[:adapter] == "persevere"
-                       json_schema = Object::const_get(model_name).send(:to_json_schema_compatible_hash)
-                       json_schema["id"] = "yogo/example_project/#{json_schema["id"]}"
+        json_schema = Object::const_get(model_name).to_json_schema_compatible_hash(:yogo)
+        json_schema["id"] = "yogo/project/#{json_schema["id"]}"
+        class_def = DataMapper::Factory.describe_model_from_json_schema(json_schema, :yogo)
 
-                       class_def = DataMapper::Factory.create_model_from_json_schema(json_schema, :yogo_test)
-                       # puts class_def
-                       eval(class_def)
-
-                       collection = model.all
-
-                       yogo_model = eval("#{model.name}")
-                       yogo_model.auto_migrate! 
-                        # Object::const_get(model_name).auto_migrate!
-                        # )
-                     # else
-                     #      puts Object::const_get(model_name).auto_upgrade!
-                     #    end
-        
+        eval(class_def)
+        yogo_model = eval("Yogo::Project::#{Object::const_get(model_name).name}")
+         
+        yogo_model.auto_upgrade!
+         
         csv = clean_csv(csv)
         puts attributes = csv[0].split(',').map{|attribute| attribute.gsub(" ", "_").downcase}
         count =0
@@ -62,9 +54,7 @@ module DataMapper
 
           end unless line.nil?
           puts parameters
-          # repository(:"#{repo_name}") do
-            # puts Object::const_get(model_name).create!(parameters)
-            #         end
+
           yogo_model.create!(parameters)
         end 
       end
