@@ -12,6 +12,19 @@ The build system should take care of this but...
 4. Run the server by typing "glassfish"
 5. Go to http://localhost:3000/ and get the Yogo start page
 
+== Submodules Missing?
+
+Stick the following in your .git/config 
+
+[submodule "vendor/plugins/yogo-authz"]
+       url = git://github.com/yogo/yogo-authz.git
+[submodule "vendor/plugins/yogo-settings"]
+       url = git://github.com/yogo/yogo-settings.git
+[submodule "vendor/gems/dm-persevere-adapter-0.16.0"]
+       url = git://github.com/yogo/dm-persevere-adapter.git
+
+Then run: git submodule update
+
 == Setting up a Persevere Database
 
 1. Get persevere and run an instance on port 8080
