@@ -154,6 +154,10 @@ module DataMapper
       model_description << append_modules(class_name)
       model_description << "class #{class_name.split('::')[-1]}" 
       model_description << "include DataMapper::Resource"
+      # LBR: Deleted?  Yes.  Go away.  
+      model_description << "@@deleted = false"
+      model_description << "def self.delete!\n  @@deleted = true\nend"
+      model_description << "def self.deleted?\n  @@deleted\nend"
       model_description << append_default_repo_name
       model_description << append_reflected
       model_description << handle_id(desc) unless desc['properties']['id']
