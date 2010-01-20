@@ -1,5 +1,5 @@
 bundle_path "vendor/bundled"
-bin_path "bin"
+bin_path "vendor/bundled/bin"
 
 source "http://gemcutter.org"
 
