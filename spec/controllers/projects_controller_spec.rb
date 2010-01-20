@@ -9,6 +9,13 @@ describe ProjectsController do
   def mock_yogo_collection(stubs={})
     @mock_yogo_collection ||= mock_model(Yogo::Collection, stubs)
   end
+  
+  def mock_models(proj)
+    [ build_reflected_model('Vanilla',    proj),
+      build_reflected_model('Chocolate',  proj),
+      build_reflected_model('Strawberry', proj)
+      ]
+  end
 
   describe "GET projects/" do
   
@@ -24,9 +31,9 @@ describe ProjectsController do
   #There is no projects#show action at this time.
   describe "GET projects/:id" do
     it "assigns the requested project as @project" do
-     Project.stub!(:get).with("37").and_return(mock_project)
-     get :show, :id => "37"
-     assigns[:project].should equal(mock_project)
+      Project.stub!(:get).with("37").and_return(mock_project)
+      get :show, :id => "37"
+      assigns[:project].should equal(mock_project)
     end
   end
 
@@ -50,13 +57,12 @@ describe ProjectsController do
 
     describe "with valid params" do
       it "assigns a newly created project as @project, flashes a notice" do
-        Project.stub!(:new).with({'name' => 'Test Project'}).and_return(
-          mock_project(:save => true, :name => 'Test Project', :id => 1)
-        )
         Yogo::Collection.stub!(:create).with({:project_id => 1}).and_return(
           mock_yogo_collection
         )
-        Project.should_receive(:new).with('name'=> 'Test Project')
+        Project.should_receive(:new).with('name'=> 'Test Project').and_return(
+          mock_project(:save => true, :name => 'Test Project', :id => 1)
+        )
         post :create, :project => {:name => 'Test Project'}
         assigns[:project].should equal(mock_project)
         response.flash[:notice].should =~ /has been created/i      

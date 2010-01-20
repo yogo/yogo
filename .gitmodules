@@ -4,6 +4,3 @@
 [submodule "vendor/plugins/yogo-settings"]
 	path = vendor/plugins/yogo-settings
 	url = git://github.com/yogo/yogo-settings.git
-[submodule "vendor/gems/dm-persevere-adapter-0.16.0"]
-	path = vendor/gems/dm-persevere-adapter-0.16.0
-	url = git://github.com/yogo/dm-persevere-adapter.git

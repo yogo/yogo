@@ -28,7 +28,6 @@ class Project
   def yogo_collection
     return nil if new?
     @yogo_collection ||= Yogo::Collection.new(self)
-    @yogo_collection
   end
   
   def process_csv(datafile)
