@@ -75,21 +75,21 @@ describe "Yogo::Collection"  do
       # This is already in the test database and should be pre-populated for 
       # the above project
       persisted_model_hash = { 
-        "id" => "Yogo/PersistedData/Cell",
+        "id" => "yogo/persisted_data/cell",
         "properties" => {
           "name" => {"type" => "string"}
         }
       }
       repository(:yogo).adapter.put_schema(persisted_model_hash)
       project = Factory(:project, :name => 'Persisted Data')
-      project.yogo_collection.models.should be_empty
-      DataMapper::Reflection.create_all_models_from_database
-      project.yogo_collection.models.should_not be_empty
+      project.yogo_collection.models.should == []
+      models = DataMapper::Reflection.reflect(:yogo)
+      project.yogo_collection.models.map(&:name).should == ["Yogo::PersistedData::Cell"]
     end
     
     it "should be able to delete its schemas" do
       persisted_model_hash = { 
-        "id" => "Yogo/PersistedData/Cell",
+        "id" => "yogo/persisted_data/cell",
         "properties" => {
           "name" => {"type" => "string"}
         }

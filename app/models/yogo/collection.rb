@@ -18,9 +18,7 @@ module Yogo
     end
 
     def models
-      DataMapper::Model.descendants.select do |m| 
-        m.name =~ /Yogo::#{project_key}::/ && !m.deleted?
-      end
+      DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{project_key}::/ }
     end
   
     def add_model(hash)
@@ -36,9 +34,16 @@ module Yogo
     end
 
     def delete_models!
-      models.each do |m| 
-        m.auto_migrate_down! 
-        m.delete!
+      models.each do |model|
+        model.auto_migrate_down!
+        name_array = model.name.split("::")
+        if name_array.length == 1
+          Object.send(:remove_const, model.name.to_sym)
+        else
+          ns = eval(name_array[0..-2].join("::"))
+          ns.send(:remove_const, name_array[-1].to_sym)
+        end
+        DataMapper::Model.descendants.delete(model)
       end
     end
 
