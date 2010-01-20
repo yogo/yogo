@@ -83,7 +83,7 @@ describe "Yogo::Collection"  do
       repository(:yogo).adapter.put_schema(persisted_model_hash)
       project = Factory(:project, :name => 'Persisted Data')
       project.yogo_collection.models.should be_empty
-      repository(:yogo).adapter.reflect!
+      DataMapper::Reflection.create_all_models_from_database
       project.yogo_collection.models.should_not be_empty
     end
     
