@@ -24,3 +24,8 @@ yogo:
   adapter: persevere
   host: localhost
   port: 8080
+
+yogo_test:
+  adapter: persevere
+  host: localhost
+  port: 8081
