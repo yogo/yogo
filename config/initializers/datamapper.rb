@@ -11,9 +11,6 @@ DataMapper.setup(:yogo, config["yogo"])
 # Setup the persevere repository for cool fun research!
 DataMapper.setup(:example, config["example"])
 
-# Setup reflections
-DataMapper::Reflection.setup(:binding => binding, :database => :yogo)
-
 # Map the datamapper logging to rails logging
 DataMapper.logger = Rails.logger
 DataObjects::Postgres.logger  = Rails.logger if DataObjects.const_defined?(:Postgres)

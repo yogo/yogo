@@ -2,19 +2,17 @@ module Databases
   module Persevere
     
     def fetch_models
-      self.get_schema.map {|schema| schema['id']}
+      @schemas = JSON.parse(self.get_schema)
+      @schemas.map { |schema| schema['id'][0..3] == "yogo" ? schema['id'] : nil }.compact
     end
     
     def fetch_attributes(table)
       results = Array.new
-      schema = self.get_schema.select {|x| x['id'] == table}[0]
+      schema = JSON.parse(self.get_schema(table))
       schema['properties'].each_pair do |key, value|
         results << ReflectedAttribute.new(key, TypeParser.parse(value['type']))
       end
-      puts results.inspect;
       return results
     end
-    #tunnel
-    
   end
 end

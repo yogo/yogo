@@ -60,7 +60,6 @@ class Factory
       when "boolean" then "DataMapper::Types::Boolean"
       when "any"     then "String"
       else raise Exception.new("Type #{type_properties['type']} is not defined.")
-      
       end
     end
   

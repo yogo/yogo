@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-
-
 describe 'Reflection' do 
   before(:all) do 
     @simple_json_schema = <<-EOF
