@@ -16,13 +16,3 @@ DataMapper::Reflection.setup(:binding => binding, :database => :persevere)
 
 module Project1
 end
-
-# class Book
-#   include DataMapper::Resource
-# 
-#   # Persevere only does id's as strings.  
-#   property :id, String, :serial => true
-#   property :author, String
-#   property :created_at, DateTime
-#   property :title, String
-# end

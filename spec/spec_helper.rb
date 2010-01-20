@@ -12,7 +12,7 @@ require 'datamapper/factory'
 #require 'webrat/integrations/rspec-rails'
 config = YAML.load(File.new(File.join(Rails.root, "config", "database.yml")))
 DataMapper.setup(:yogo, config["yogo_test"])
-DataMapper::Reflection.setup(:database => :yogo)
+#DataMapper::Reflection.setup(:database => :yogo)
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.

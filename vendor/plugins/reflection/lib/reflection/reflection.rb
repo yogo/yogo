@@ -192,9 +192,9 @@ module DataMapper
       model_description << "include DataMapper::Resource"
       model_description << "def self.default_repository_name; :#{repo}; end"
       model_description << "def self.is_reflected?; true; end"
+
       # This needs to be pushed into the adapter to get the appropriate serial field and extended attributes
       model_description << "property :id, Serial"
-      # model_description << handle_id(desc) unless desc['properties']['id']
       desc['properties'].each_pair do |key, value|
         # This should lookup the attribute/type mapping from the adapter
         prop = value['type'] ? \
@@ -213,9 +213,7 @@ module DataMapper
     def self.reflect(repository, overwrite=false)
       adapter = DataMapper.repository(repository).adapter
       models = Array.new
-
-#      puts "Adapter is: #{adapter.class.to_s}"
-      
+            
       # Make this behave the way migrations/aggregation work...
       case adapter.class.to_s
       when /Sqlite3/ 
@@ -229,21 +227,16 @@ module DataMapper
       else 
         raise "#{@@adapter.class} is not supported." 
       end
-      
-#      puts "Getting ready to process models from repo: #{repository}"
-
+            
       # For each model
       adapter.fetch_models.each do |model|
-#        puts "Model: #{model}"
         description = Hash.new
         # Get the attributes
-#        puts "Fetching attributes for: #{model}"
         attributes = adapter.fetch_attributes(model)
         #description.update( {'id' => "#{model}"} )
         description.update( {'id' => model.split('/') } )
         description.update( {'properties' => {}} )
         attributes.each do |attribute|
-#          puts "\t Attribute: #{attribute}"
           if attribute.name == 'id'
             description['properties'].update( {attribute.name => {'type' => 'String'}} )
           else
