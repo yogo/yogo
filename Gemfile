@@ -18,13 +18,13 @@ gem "rails_datamapper"
 gem "authlogic", "2.1.3"
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)
-  gem "json_pure", '>=1.2.0', :require_as => nil
+  gem "json_pure", '1.2.0', :require_as => nil
 else
-  gem "json",      '>=1.2.0', :require_as => nil
+  gem "json",      '1.2.0', :require_as => nil
 end
 
 gem "rails-footnotes", :only => :development
 
-gem 'rspec',         :require_as => nil, :only => :test
-gem 'rspec-rails',   :require_as => 'spec/rails', :only => :test
-gem 'factory_girl',  :only => :test
+gem 'rspec',        '1.3.0',  :require_as => nil, :only => :test
+gem 'rspec-rails',  '1.3.0',  :require_as => 'spec/rails', :only => :test
+gem 'factory_girl', '1.2.3',  :only => :test
