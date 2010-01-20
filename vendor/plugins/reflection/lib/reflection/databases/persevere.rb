@@ -1,8 +1,9 @@
 module Databases
   module Persevere
+    @@reserved_classes = ['User','Transaction','Capability','File','Class']
     
     def fetch_models
-      self.get_schema.map {|schema| schema['id']}
+      JSON.parse(self.get_schema).map {|schema| schema['id']} - @@reserved_classes
     end
     
     def fetch_attributes(table)
