@@ -20,12 +20,20 @@ example:
 # Persevere 1.0 beta
 #  gem install persevere
 #  gem install dm-persevere-adapter
-yogo:
+yogo_development:
   adapter: persevere
   host: localhost
   port: 8080
 
+yogo_production:
+  adapter: persevere
+  host: localhost
+  port: 8080
+
+#
+# run with bin/persvr -p 8081
+#
 yogo_test:
   adapter: persevere
   host: localhost
-  port: 8081
+  port: 8080
