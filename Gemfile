@@ -16,7 +16,12 @@ gem "dm-aggregates"
 gem "do_sqlite3", "0.10.1"
 gem "rails_datamapper"
 gem "authlogic", "2.1.3"
-gem "json_pure", "1.2.0"
+# JRUBY sensitive gems
+if defined?(JRUBY_VERSION)
+  gem "json_pure", '>=1.2.0', :require_as => nil
+else
+  gem "json",      '>=1.2.0', :require_as => nil
+end
 
 gem "rails-footnotes", :only => :development
 

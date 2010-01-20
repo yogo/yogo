@@ -1,8 +1,17 @@
 #!/bin/bash
 
+RUBY_VERSION=`/usr/bin/env ruby -v | awk '{print $1}'`
+
+if [ $RUBY_VERSION == "jruby" ]
+then
+  RUBY="ruby -X-C -S"
+else
+  RUBY="ruby -S"
+fi
+
 pushd `dirname $0`
 
-RUBY="ruby -X-C -S"
+
 echo "Configuring fresh yogo checkout for development..."
 git submodule init && \
 git submodule update && \
