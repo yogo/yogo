@@ -26,5 +26,5 @@ end
 gem "rails-footnotes", :only => :development
 
 gem 'rspec',        '1.3.0',  :require_as => nil, :only => :test
-gem 'rspec-rails',  '1.3.0',  :require_as => 'spec/rails', :only => :test
+gem 'rspec-rails',  '1.3.2',  :require_as => 'spec/rails', :only => :test
 gem 'factory_girl', '1.2.3',  :only => :test
