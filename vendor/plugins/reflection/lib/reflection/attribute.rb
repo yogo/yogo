@@ -8,5 +8,4 @@ class ReflectedAttribute
     self.default_val = default_val
     self.primary_key = primary_key
   end
-  
 end
