@@ -1,5 +1,6 @@
 module Databases
   module Persevere
+    @@reserved_classes = ['User','Transaction','Capability','File','Class']
     
     def fetch_models
       @schemas = JSON.parse(self.get_schema)
