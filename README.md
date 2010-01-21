@@ -22,14 +22,9 @@ Yogo is a Data Management System built on Ruby on Rails, DataMapper, and Perseve
 ## Submodules Missing?
 
 Stick the following in your .git/config 
-``
-[submodule "vendor/plugins/yogo-authz"]
-       url = git://github.com/yogo/yogo-authz.git
-[submodule "vendor/plugins/yogo-settings"]
-       url = git://github.com/yogo/yogo-settings.git
-[submodule "vendor/gems/dm-persevere-adapter-0.16.0"]
-       url = git://github.com/yogo/dm-persevere-adapter.git
-``
+
+    [submodule "vendor/plugins/yogo-authz"]
+           url = git://github.com/yogo/yogo-authz.git
 
 Then run: `git submodule update`
 
