@@ -1,0 +1,20 @@
+<H3><%= @model.name.split("::")[-1].titleize %></H3>
+<table>
+  <thead>
+    <tr>
+      <th></th><th></th>
+      <%- @model.properties.each do |h| %>
+      <th><%= h.name.to_s.titleize %></th>
+      <%- end %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= link_to('Edit', edit_project_yogo_collection_yogo_data_path(@project, @model.name.split("::")[-1], @item.id)) %></td>
+      <td><%= link_to('Delete', project_yogo_collection_yogo_data_path(@project, @model.name.split("::")[-1], @item.id), :method => :delete) %></td>
+      <%- @model.properties.each do |p| %>
+      <td><%= @item[p.name] %></td>
+      <%- end %>
+    </tr>
+  </tbody>
+</table>

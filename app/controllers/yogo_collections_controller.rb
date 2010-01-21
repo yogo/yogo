@@ -7,7 +7,11 @@ class YogoCollectionsController < ApplicationController
   
   def show
     @model = @project.yogo_collection.get_model(params[:id])
-    @data = @model.all
+    @model.send(:include, Yogo::Pagination)
+    @data = @model.paginate(:page => params[:page ])
+  end
+  
+  def edit
   end
   
   def show_data

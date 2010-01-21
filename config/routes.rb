@@ -1,7 +1,9 @@
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
   map.resources :projects, :except => [ :edit, :update, :destroy ] do |project|
-    project.resources :yogo_collections
+    project.resources :yogo_collections do |yc|
+      yc.resources :yogo_data
+    end
   end
 
   # Sample of regular route:

@@ -18,12 +18,6 @@ class Project
   def new_record?
     new?
   end
-  
-  # A useful method
-  # Mostly a joke, this can be removed.
-  def puts_moo
-    puts 'moo' 
-  end
 
   def yogo_collection
     return nil if new?
