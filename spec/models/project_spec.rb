@@ -1,5 +1,19 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
+def mock_uploader(file, type = 'text/csv')
+  filename = "%s/%s" % [ File.dirname(__FILE__), file ]
+  uploader = ActionController::UploadedStringIO.new
+  uploader.original_path = filename
+  uploader.content_type = type
+  def uploader.read
+    File.read(original_path)
+  end
+  def uploader.size
+    File.stat(original_path).size
+  end
+  uploader
+end
+
 describe "A Project" do
   
   it "should not be created without a name" do
@@ -52,10 +66,30 @@ describe "A Project" do
     Project.should respond_to(:paginate)
   end
   
-  it "should accepts a csv" # do
-  #     Project.should respond_to(:upload_csv)
-  #     
-  #   end
+
+  it "should create a model from a csv" do
+    csv = "#{Rails.root}/tmp/data/test.csv"
+    File.open(csv, "r").should be_true
+    DataMapper::Reflection.create_model_from_csv(csv)
+    model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','') 
+    Object::const_get(model_name).new.should be_true
+  end
+  
+  it "should import data from csv" do
+    csv = "#{Rails.root}/tmp/data/test.csv"
+    DataMapper::Reflection.create_model_from_csv(csv)
+    File.open(csv, "r").should be_true
+    DataMapper::Reflection.import_data_from_csv(csv)    
+    model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','')
+    puts Object::const_get(model_name).name
+     puts Object::const_get(model_name).new
+     puts Object::const_get(model_name).all
+    puts "yeah"
+    
+   yogo_model = eval("DataMapper::Reflection::CSV::Yogo::Project::#{Object::const_get(model_name).name}")
+    puts yogo_model.first(:name => "Bug").should be_true
+  end
+
   
   describe "uses a yogo Data Store" do
     

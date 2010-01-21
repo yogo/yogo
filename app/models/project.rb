@@ -22,7 +22,7 @@ class Project
   # A useful method
   # Mostly a joke, this can be removed.
   def puts_moo
-    puts 'moo'
+    puts 'moo' 
   end
 
   def yogo_collection
@@ -42,6 +42,7 @@ class Project
     # Process the contents
     #create a new reflection to create a new model based on the csv
     DataMapper::Reflection.create_model_from_csv(file_name)
+    DataMapper::Reflection.import_data_from_csv(file_name)
     
     # Remove the file
     File.delete(file_name) if File.exist?(file_name)
