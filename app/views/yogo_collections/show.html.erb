@@ -1,0 +1,5 @@
+<H3><%= @model.name.split("::")[-1].titleize %></H3>
+<%- @data.each do |d| %>
+  <%= d.id %><br />
+<%- end %>
+<%= render :partial => 'csv_form'%>
