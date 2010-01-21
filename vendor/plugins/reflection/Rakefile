@@ -1,5 +1,0 @@
-require 'rubygems'
-require 'pathname'
-	
-ROOT    = Pathname(__FILE__).dirname.expand_path
-Pathname.glob(ROOT.join('tasks/**/*.rb').to_s).each { |f| require f }

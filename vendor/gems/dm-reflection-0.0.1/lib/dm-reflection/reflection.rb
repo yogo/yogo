@@ -1,4 +1,5 @@
 module DataMapper
+
   module Model
     def is_reflected?
       false
@@ -66,14 +67,16 @@ module DataMapper
   
   module Adapters
     extendable do
+  
       # @api private
       def const_added(const_name)
         puts "----> Invoking const_added for #{const_name}"
-        if DataMapper::Reflection.const_defined?(const_name)
+        if DataMapper::Adapters.const_defined?(const_name)
           adapter = const_get(const_name)
           puts "---> including #{DataMapper::Reflection.const_get(const_name)}"
           adapter.send(:include, DataMapper::Reflection.const_get(const_name))
-        end  
+        end
+  
         super
       end
     end

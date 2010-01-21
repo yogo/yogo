@@ -18,6 +18,7 @@ gem "dm-aggregates"
 gem "do_sqlite3", "0.10.1"
 gem "rails_datamapper"
 gem "authlogic", "2.1.3"
+gem "dm-reflection", "0.0.1"
 
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)

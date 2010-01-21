@@ -1,1 +1,1 @@
-require 'reflection/reflection'
+require 'reflection'
