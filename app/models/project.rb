@@ -41,8 +41,10 @@ class Project
     
     # Process the contents
     #create a new reflection to create a new model based on the csv
-    DataMapper::Reflection.create_model_from_csv(file_name)
-    DataMapper::Reflection.import_data_from_csv(file_name)
+    model_hash = DataMapper::Reflection::CSV.describe_model(file_name)
+    yogo_collection.add_model(model_hash)
+#    DataMapper::Reflection::CSV.create_model_from_csv(file_name)
+    DataMapper::Reflection::CSV.import_data(filename, :yogo)
     
     # Remove the file
     File.delete(file_name) if File.exist?(file_name)

@@ -1,3 +1,4 @@
+require 'ruby-debug'
 module DataMapper
 
   module Model
@@ -66,14 +67,13 @@ module DataMapper
   end
   
   module Adapters
+    
     extendable do
   
       # @api private
       def const_added(const_name)
-        puts "----> Invoking const_added for #{const_name}"
-        if DataMapper::Adapters.const_defined?(const_name)
+        if DataMapper::Reflection.const_defined?(const_name)
           adapter = const_get(const_name)
-          puts "---> including #{DataMapper::Reflection.const_get(const_name)}"
           adapter.send(:include, DataMapper::Reflection.const_get(const_name))
         end
   

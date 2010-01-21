@@ -2,7 +2,7 @@
 module DataMapper
   module Reflection
     class CSV
-      
+
       def self.describe_model(csv='tmp/data/test.csv')
         desc = {}
         desc.update( {'id' => "Ref" + csv.gsub(/.*\//,'').gsub('.csv', '')} )
@@ -14,21 +14,21 @@ module DataMapper
         attributes.each_with_index do |property, index|
           prop = property.gsub(' ', '_')
           prop = prop.downcase
-          desc['properties'].update( {prop => {'type' => data_types[index]}} )
+          desc['properties'].update( {prop => {'type' => data_types[index]}} ) unless prop == "id"
         end
-        desc.to_json
+        desc
       end
 
       def self.clean_csv(csv=nil)
         clean_lines = []
         File.new(csv, 'r').each_line do |line|
           if line.chomp != ""
-           clean_lines << line.chomp
+            clean_lines << line.chomp
           end
         end
         clean_lines
       end
-      
+
       def self.import_data(csv, repo_name)
         model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','')
         puts repo_name
@@ -39,11 +39,11 @@ module DataMapper
 
         eval(class_def)
         yogo_model = eval("Yogo::Project::#{Object::const_get(model_name).name}")
-         
+
         yogo_model.auto_upgrade!
-         
+
         csv = clean_csv(csv)
-        puts attributes = csv[0].split(',').map{|attribute| attribute.gsub(" ", "_").downcase}
+        attributes = csv[0].split(',').map{|attribute| attribute.gsub(" ", "_").downcase}
         count =0
         csv[3..-1].each do |line|
           count +=1
@@ -53,12 +53,26 @@ module DataMapper
             parameters = parameters.update( {attributes[index].to_sym => attribute} )
 
           end unless line.nil?
-          puts parameters
-
           yogo_model.create!(parameters)
         end 
       end
+      
+      def self.import_data_to_model(csv, model, repo_name)
+        csv = clean_csv(csv)
+        attributes = csv[0].split(',').map{|attribute| attribute.gsub(" ", "_").downcase}
+        count = 0
+        csv[3..-1].each do |line|
+          count +=1
+          parameters = {:id => count.to_s}
 
+          line.split(',').each_with_index do |attribute, index|
+            parameters = parameters.update( {attributes[index].to_sym => attribute} )
+
+          end unless line.nil?
+
+          model.create!(parameters)
+        end 
+      end
     end
   end
 end

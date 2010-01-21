@@ -56,6 +56,7 @@ class Factory
       case type_properties['type'].downcase
       when "string"  then "String"
       when "integer" then "Integer"
+      when "float"   then "Float"
       when "number"  then "Float"
       when "boolean" then "DataMapper::Types::Boolean"
       when "any"     then "String"

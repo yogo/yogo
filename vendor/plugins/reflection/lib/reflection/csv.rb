@@ -1,3 +1,4 @@
+require 'ruby-debug'
 # require 'csv'
 module DataMapper
   module Reflection
@@ -16,7 +17,7 @@ module DataMapper
           prop = prop.downcase
           desc['properties'].update( {prop => {'type' => data_types[index]}} )
         end
-        desc.to_json
+        desc
       end
 
       def self.clean_csv(csv=nil)

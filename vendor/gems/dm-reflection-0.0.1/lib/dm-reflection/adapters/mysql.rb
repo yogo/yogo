@@ -16,6 +16,5 @@ module Databases
       end
       results
     end
-
   end
 end

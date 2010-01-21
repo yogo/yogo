@@ -1,21 +1,14 @@
 # This file is copied to ~/spec when you run 'ruby script/generate rspec'
 # from the project root directory.
 ENV["RAILS_ENV"] ||= 'test'
+
 require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
+
 require 'spec/autorun'
 require 'spec/rails'
 require 'factory_girl'
 require 'factories'
 require 'datamapper/factory'
-
-
-# Uncomment the next line to use webrat's matchers
-#require 'webrat/integrations/rspec-rails'
-config = YAML.load(File.new(File.join(Rails.root, "config", "database.yml")))
-DataMapper.setup(:yogo, config["yogo_test"])
-
-DataMapper::Reflection.setup(:binding => binding, :database => :yogo)
-
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.

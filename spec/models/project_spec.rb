@@ -16,6 +16,20 @@ end
 
 describe "A Project" do
   
+  describe "uses a yogo Data Store" do
+    
+    it "should have a yogo_collection of data" do
+      p = Factory.create(:project)
+      p.should respond_to(:yogo_collection)
+      p.yogo_collection.should be_instance_of(Yogo::Collection)
+    end
+    
+    it "should not have a yogo_collection if it is new" do
+     p = Factory.build(:project)
+     p.yogo_collection.should be_nil
+    end
+  end
+  
   it "should not be created without a name" do
     count = Project.all.length
     p = Project.new
@@ -55,54 +69,34 @@ describe "A Project" do
     p.should_not be_new
     p.should_not be_new_record
   end
-  
-  # This is a joke and could be removed
-  it "should implement a useful method" do
-    Factory.build(:project).should respond_to(:puts_moo)
-  end
-  
+
   it "should be paginated" do
     Project.should respond_to(:page_count)
     Project.should respond_to(:paginate)
   end
-  
 
   it "should create a model from a csv" do
-    csv = "#{Rails.root}/tmp/data/test.csv"
+    p = Project.create(:name => "Ugly Duckling")
+    csv = "#{Rails.root}/spec/models/test.csv"
     File.open(csv, "r").should be_true
-    DataMapper::Reflection.create_model_from_csv(csv)
+    model_hash = DataMapper::Reflection::CSV.describe_model(csv)
+    p.yogo_collection.add_model(model_hash)
     model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','') 
-    Object::const_get(model_name).new.should be_true
+    eval("Yogo::UglyDuckling").const_defined?(model_name).should be_true
+    p.destroy!
   end
   
   it "should import data from csv" do
-    csv = "#{Rails.root}/tmp/data/test.csv"
-    DataMapper::Reflection.create_model_from_csv(csv)
+    p = Project.create(:name => "Princess and the Swan")
+    csv = "#{Rails.root}/spec/models/test.csv"
+    model_hash = DataMapper::Reflection::CSV.describe_model(csv)
+    yogo_model = p.yogo_collection.add_model(model_hash)
+    yogo_model.auto_migrate!
     File.open(csv, "r").should be_true
-    DataMapper::Reflection.import_data_from_csv(csv)    
+    DataMapper::Reflection::CSV.import_data_to_model(csv, yogo_model, :yogo)
     model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','')
-    puts Object::const_get(model_name).name
-     puts Object::const_get(model_name).new
-     puts Object::const_get(model_name).all
-    puts "yeah"
-    
-   yogo_model = eval("DataMapper::Reflection::CSV::Yogo::Project::#{Object::const_get(model_name).name}")
-    puts yogo_model.first(:name => "Bug").should be_true
+    yogo_model.first(:name => "Bug").should be_true
+    p.destroy!
   end
 
-  
-  describe "uses a yogo Data Store" do
-    
-    it "should have a yogo_collection of data" do
-      p = Factory.create(:project)
-      p.should respond_to(:yogo_collection)
-      p.yogo_collection.should be_instance_of(Yogo::Collection)
-    end
-    
-    it "should not have a yogo_collection if it is new" do
-     p = Factory.build(:project)
-     p.yogo_collection.should be_nil
-    end
-  end
-  
 end
