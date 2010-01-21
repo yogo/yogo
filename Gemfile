@@ -12,7 +12,7 @@ gem "dm-timestamps"
 gem "dm-validations"
 gem "dm-is-nested_set"
 gem "dm-ar-finders"
-gem "dm-persevere-adapter", "0.21.0", :require_as => nil
+gem "dm-persevere-adapter", "0.22.0", :require_as => nil
 gem "dm-serializer", "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates"
 gem "do_sqlite3", "0.10.1"
