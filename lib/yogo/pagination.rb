@@ -25,7 +25,7 @@ module Yogo
       def page_count(options = {})
         per_page = options.delete(:per_page) || 5
 
-        (all(options).length.to_f / per_page).ceil
+        (all(options).count.to_f / per_page).ceil
       end
       
     end
