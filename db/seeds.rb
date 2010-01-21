@@ -10,36 +10,27 @@ Dir[File.join(RAILS_ROOT, "vendor", "plugins", "*", "app", "models", "**", "*.rb
 DataMapper.auto_migrate!
 
 begin # Yogo  initialization
-  puts "Creating Sysadmin and supporting groups..."
-  User.create(:login => "sysadmin",
-              :first_name            => "System",
-              :last_name             => "Administrator",
-              :email                 => "yogo@montana.edu",
-              :password              => "password",
-              :password_confirmation => "password"
+  puts "Creating default user and admin group."
+  User.create(:login => "default_user",
+              :first_name            => "Default",
+              :last_name             => "User",
+              :email                 => "default_user@example.com",
+              :password              => "p@55w0rd",
+              :password_confirmation => "p@55w0rd"
               )
           
-  user = User.first(:login => 'sysadmin')
+  user = User.first(:login => 'default_user')
 
   default_group = Yogo::Group.create(:name => 'default')
   
   Yogo::Group.create(:name => Yogo::Settings[:anonymous_user_group], :foreign_id => -1)
 
   Yogo::Group.create(:parent      => default_group, 
-                          :name        => 'sysadmin',
+                          :name        => 'admin',
                           :description => 'System Administrators.',
                           :sysadmin    => true)
                         
-
-  Yogo::Group.create(:parent      => default_group, 
-                          :name        => 'pi',
-                          :description => 'Principal Investigators.')
-
-  Yogo::Group.create(:parent      => default_group, 
-                          :name        => 'data_manager',
-                          :description => 'Data Managers for projects.')
-
   Yogo::Membership.create(:user => user, 
-                    :group => Yogo::Group.first(:name => 'sysadmin'))
+                    :group => Yogo::Group.first(:name => 'admin'))
   puts "Done"
 end

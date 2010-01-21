@@ -2,12 +2,14 @@ require 'file_type_error'
 
 class ProjectsController < ApplicationController
 
+  require_user :for => [ :show, :new, :create, :edit, :destroy, :update, :upload_csv]
   def index
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
 
   def show
     @project = Project.get(params[:id])
+    @models = @project.yogo_collection.models
   end
 
   def new
@@ -57,23 +59,14 @@ class ProjectsController < ApplicationController
     if !params[:upload].nil?
       begin
         @project.process_csv(params[:upload]['datafile'])
-        puts "Called process_csv and it worked"
         flash[:notice]  = "File uploaded succesfully."
       rescue FileTypeError => e
-        puts "File error"
-        flash[:warning] = "File type #{params[:upload]['datafile'].content_type} not allowed"
+        flash[:error] = "File type #{params[:upload]['datafile'].content_type} not allowed"
       end
     else
-      puts "File area is blank"
-       flash[:warning] = "File upload area cannont be blank."
+       flash[:error] = "File upload area cannont be blank."
     end
-    # rescue => e
-    #   puts "unknown error"
-    #   puts e.inspect
-    #   flash[:warning] = "There was an error uploading your file."
 
-    puts flash.inspect
-    puts "after begin block"
     redirect_to project_url(@project)
   end
 end

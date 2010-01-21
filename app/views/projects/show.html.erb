@@ -1,14 +1,4 @@
 <h1><%= @project.name %></h1>
-
 <h3>Project Data</h3>
-
-<%#- @project.yogo_collection.yogo_schema.each do |s| %>
-  <h3><%#= s %></h3>
-  <!-- <ul>
-  <%#- s.yogo_data.each do |d| %>
-    <li><%#= d %></li>
-  <%#- end %>
-  </ul> -->
-<%#- end %>  
-
+<%= render :partial => 'yogo_collections/project_list' %>
 <%= render :partial => 'upload' %>

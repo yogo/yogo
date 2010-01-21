@@ -1,0 +1,6 @@
+<div id="yogo_collections_index">
+  <%- @models.each do |m| %>
+  <% short_name =  m.name.split('::')[-1] %>
+  <%= link_to(short_name.titleize, project_yogo_collection_path(@project, short_name)) %><br />
+  <%- end %>
+</div>
