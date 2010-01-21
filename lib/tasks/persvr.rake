@@ -83,4 +83,17 @@ namespace :persvr do
       end
     end
   end
+  
+  task :status => :version do
+    puts "-"*50
+    puts "Status  \t Instance"
+    puts "-"*50
+    FileList[RAILS_ROOT/:db/:persvr/'*'].each do |dir|
+      if File.exist? dir/'WEB-INF'/'process'
+        puts "RUNNING \t #{dir}"
+      else
+        puts "STOPPED: #{dir}"
+      end
+    end
+  end
 end
