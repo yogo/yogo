@@ -6,6 +6,7 @@ log/*.log*
 tmp/**/*
 .DS\_Store
 db/cstore/**
+db/persvr/*
 doc/api
 doc/app
 doc/plugins
