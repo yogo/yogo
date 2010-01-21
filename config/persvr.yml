@@ -1,0 +1,11 @@
+development: 
+  database: db/persvr/development
+  port: 8080
+
+test:
+  database: db/persvr/test
+  port: 8080
+
+production:
+  database: db/persvr/production
+  port: 8080
