@@ -69,13 +69,14 @@ describe "A Project" do
     
     # Process the contents
     csv_data = FasterCSV.read(file_name)
+
     model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
     # csv_data[3..-1].each do |line| 
     #   line_data = Hash.new
     #   csv_data[0].each_index { |i| line_data[cvs_data[0][i]] = line[i] }
     #   model.create(line_data)
     # end
-    
+
     Object.const_defined?(model_name).should be_true
   end
   
@@ -88,13 +89,15 @@ describe "A Project" do
     # Process the contents
     csv_data = FasterCSV.read(file_name)
     model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
+    model.auto_migrate!
     csv_data[3..-1].each do |line| 
       line_data = Hash.new
-      csv_data[0].each_index { |i| line_data[csv_data[0][i]] = line[i] }
+      csv_data[0].each_index { |i| line_data[csv_data[0][i].downcase] = line[i] }
       model.create(line_data)
     end
-    
+
     model.first(:name => "Bug").should be_true
+    model.auto_migrate_down!
   end
 
 end

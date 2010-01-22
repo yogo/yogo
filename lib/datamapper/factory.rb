@@ -9,6 +9,58 @@ class Factory
     Object.class_eval(desc).model # just return the model, instead of last eval'd model property
   end
   
+  # This will look for a hash with certain keys in it. Those keys are:
+  # :modules    =>  [], and array of modules the class will be namespaced into by the order they are in the array
+  # :name       =>  'ClassName' The name of the class in camel case format.
+  # :properties =>  {}, a hash of properties
+  # 
+  #     Each key in the property hash is the name of the property.
+  #     if the key points to a string or symbol, that will be used as the property type.
+  #     The property type should be a valid DataMapper property type.
+  #
+  #     If the key points to a hash, 
+  #
+  #
+  #  NOT Implemented
+  # :associations => {} associations this class has with other classes.
+  #
+  # This returns a datamapper model. 
+  def self.build_model_from_hash(desc, repository_name = :default, options = {})
+    module_names = desc[:modules] || []
+    class_name   = desc[:name]
+    properties   = desc[:properties]
+    
+    class_definition = ''
+    
+    module_names.each{|mod| class_definition += "module #{mod}\n" }
+    
+    class_definition += "class #{class_name}\n"
+    class_definition += "  include DataMapper::Resource\n"
+    
+    class_definition += "def self.default_repository_name; :#{repository_name}; end\n"
+
+    properties.each_pair do |property, opts|
+      if opts.is_a?(Hash)
+
+        class_definition += "property :#{property}, #{opts['type']}"
+        opts.reject{|k,v| k=='type'}.each_pair{|key,value| class_definition += ", :#{key} => #{value}"}
+      else
+        class_definition += "property :#{property}, #{opts}"
+      end
+     
+      class_definition += "\n"
+    end
+    
+    class_definition += "end\n"
+    
+    module_names.each{|mod| class_definition += "end\n" }
+
+    model = Object.class_eval(class_definition).model
+    model.send(:include, options[:modules]) if options.has_key?(:modules)
+    
+    return model
+  end
+  
   def self.describe_model_from_json_schema(json_schema, repository_name = :default, options = {})
     json_schema = JSON.parse(json_schema) unless json_schema.is_a?(Hash)
     
@@ -25,15 +77,10 @@ class Factory
     
     class_definition += "class #{class_name}\n"
     class_definition += "  include DataMapper::Resource\n"
-
-    # LBR: Deleted?  Yes.  Go away.  
-    class_definition += "@@deleted = false\n"
-    class_definition += "def self.delete!\n  @@deleted = true\nend\n"
-    class_definition += "def self.deleted?\n  @@deleted\nend\n"
     
     class_definition += "def self.default_repository_name; :#{repository_name}; end\n"
     
-    class_definition += "property :id, String, :serial => true\n" unless properties.has_key?('id')
+    class_definition += "property :id, String, :serial => true\n" 
     properties.each_pair do |property, options|
       class_definition += "property :#{property}, #{to_dm_type(options)}"
       class_definition += (", :required => %s" % (options["optional"].eql?(true) ? "false" : "true"))
@@ -50,15 +97,18 @@ class Factory
     class_definition
   end
   
-  def self.make_model_from_csv(name, spec_array)
-    spec_hash = { 'id' => name,
-                  'properties' => Hash.new }
+  def self.make_model_from_csv(class_name, spec_array)
+    scopes = class_name.split('::')
+    spec_hash = { :name => scopes[-1],
+                  :properties => Hash.new }
+    spec_hash[:modules] = scopes[0..-1] unless scopes.length.eql?(1)                  
     spec_array[0].each_index do |idx|
-      if spec_array[0] != 'id'
-        spec_hash['properties'].merge!({ spec_array[0][idx].tableize.singular => { "type" => spec_array[1][idx], "optional" => "true" } } ) 
-      end
+
+      spec_hash[:properties].merge!({ spec_array[0][idx].tableize.singular => { "type" => spec_array[1][idx], "required" => false, "key" => true } } ) 
+
     end
-    build(spec_hash, :yogo)
+
+    self.build_model_from_hash(spec_hash, :yogo)
   end
   
   private
