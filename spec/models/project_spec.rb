@@ -62,27 +62,39 @@ describe "A Project" do
   end
 
   it "should create a model from a csv" do
-    p = Project.create(:name => "Ugly Duckling")
-    csv = "#{Rails.root}/spec/models/test.csv"
-    File.open(csv, "r").should be_true
-    model_hash = DataMapper::Reflection::CSV.describe_model(csv)
-    p.add_model(model_hash)
-    model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','') 
-    eval("Yogo::UglyDuckling").const_defined?(model_name).should be_true
-    p.destroy!
+    file_name = "#{Rails.root}/spec/models/csvtest.csv"
+    
+    # Get Model name
+    model_name = File.basename(file_name, ".csv").camelcase
+    
+    # Process the contents
+    csv_data = FasterCSV.read(file_name)
+    model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
+    # csv_data[3..-1].each do |line| 
+    #   line_data = Hash.new
+    #   csv_data[0].each_index { |i| line_data[cvs_data[0][i]] = line[i] }
+    #   model.create(line_data)
+    # end
+    
+    Object.const_defined?(model_name).should be_true
   end
   
   it "should import data from csv" do
-    p = Project.create(:name => "Princess and the Swan")
-    csv = "#{Rails.root}/spec/models/test.csv"
-    model_hash = DataMapper::Reflection::CSV.describe_model(csv)
-    yogo_model = p.add_model(model_hash)
-    yogo_model.auto_migrate!
-    File.open(csv, "r").should be_true
-    DataMapper::Reflection::CSV.import_data_to_model(csv, yogo_model, :yogo)
-    model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','')
-    yogo_model.first(:name => "Bug").should be_true
-    p.destroy!
+    file_name = "#{Rails.root}/spec/models/csvtest.csv"
+    
+    # Get Model name
+    model_name = File.basename(file_name, ".csv").camelcase
+    
+    # Process the contents
+    csv_data = FasterCSV.read(file_name)
+    model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
+    csv_data[3..-1].each do |line| 
+      line_data = Hash.new
+      csv_data[0].each_index { |i| line_data[csv_data[0][i]] = line[i] }
+      model.create(line_data)
+    end
+    
+    model.first(:name => "Bug").should be_true
   end
 
 end

@@ -1,5 +1,3 @@
-require 'file_type_error'
-
 class Project
   include DataMapper::Resource
   include Yogo::Pagination
@@ -20,24 +18,28 @@ class Project
   end
   
   def process_csv(datafile)
-    raise FileTypeError unless datafile.content_type == 'text/csv' || datafile.content_type == 'text/comma-separated-values' || datafile.content_type == 'application/vnd.ms-excel'
-    puts datafile.content_type
     name = File.basename(datafile.original_filename).sub(/[^\w\.\-]/,'_')
     file_name = File.join("tmp/data/", name)
 
     # Write this to a local file temporarily, this should process the contents really
     File.open(file_name, 'w') { |f| f.write(datafile.read) }
     
+    # Get Model name
+    model_name = "Yogo::#{project_key}::#{File.basename(file_name, ".csv").singularize.camelcase}"
+    
     # Process the contents
-    #create a new reflection to create a new model based on the csv
-    model_hash = DataMapper::Reflection::CSV.describe_model(file_name)
-    yogo_collection.add_model(model_hash)
-    DataMapper::Reflection::CSV.import_data(filename, :yogo)
+    csv_data = FasterCSV.read(file_name)
+    model = make_model_from_csv(model_name, csv_data[0..2])
+    csv_data[3..-1].each do |line| 
+      line_data = Hash.new
+      csv_data[0].each_index { |i| line_data[cvs_data[0][i]] = line[i] }
+      model.create(line_data)
+    end
     
     # Remove the file
     File.delete(file_name) if File.exist?(file_name)
   end
-  
+
   def models
     DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{project_key}::/ }
   end

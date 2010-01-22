@@ -4,6 +4,8 @@ class Factory
   
   def self.build(description, repository_name = :default, options = {})
     desc =  describe_model_from_json_schema(description, repository_name, options)
+    puts "DESCRIPTION"
+    puts desc
     Object.class_eval(desc).model # just return the model, instead of last eval'd model property
   end
   
@@ -31,7 +33,7 @@ class Factory
     
     class_definition += "def self.default_repository_name; :#{repository_name}; end\n"
     
-    class_definition += "property :id, String, :serial => true\n"
+    class_definition += "property :id, String, :serial => true\n" unless properties.has_key?('id')
     properties.each_pair do |property, options|
       class_definition += "property :#{property}, #{to_dm_type(options)}"
       class_definition += (", :required => %s" % (options["optional"].eql?(true) ? "false" : "true"))
@@ -46,6 +48,17 @@ class Factory
     module_names.each{|mod| class_definition += "end\n" }
     
     class_definition
+  end
+  
+  def self.make_model_from_csv(name, spec_array)
+    spec_hash = { 'id' => name,
+                  'properties' => Hash.new }
+    spec_array[0].each_index do |idx|
+      if spec_array[0] != 'id'
+        spec_hash['properties'].merge!({ spec_array[0][idx].tableize.singular => { "type" => spec_array[1][idx], "optional" => "true" } } ) 
+      end
+    end
+    build(spec_hash, :yogo)
   end
   
   private
