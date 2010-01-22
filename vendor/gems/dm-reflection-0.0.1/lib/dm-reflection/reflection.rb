@@ -44,10 +44,10 @@ module DataMapper
       models = Array.new
             
       # For each model
-      adapter.fetch_storage_names.each do |model|
+      adapter.get_storage_names.each do |model|
         description = Hash.new
         # Get the attributes
-        attributes = adapter.fetch_attributes(model)
+        attributes = adapter.get_properties(model)
         #description.update( {'id' => "#{model}"} )
         description.update( {'id' => model.split('/') } )
         description.update( {'properties' => {}} )

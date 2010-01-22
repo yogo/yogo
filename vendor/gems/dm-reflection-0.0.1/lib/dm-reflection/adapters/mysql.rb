@@ -1,13 +1,13 @@
 module Databases
   module MySQL
     
-    def fetch_storage_names
+    def get_storage_names
       database = self.options['database']
       query = "SHOW TABLES FROM #{database}"
       self.select(query)
     end
     
-    def fetch_attributes(table)
+    def get_properties(table)
       results = Array.new
       database = DataMapper::Reflection.adapter.options['database']
       query = "show columns from #{table} in #{database};"

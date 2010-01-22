@@ -3,12 +3,12 @@ module DataMapper
     module PersevereAdapter
       RESERVED_CLASSNAMES = ['User','Transaction','Capability','File','Class']
 
-      def fetch_storage_names
+      def get_storage_names
         @schemas = JSON.parse(self.get_schema)
         @schemas.map { |schema| schema['id'] unless RESERVED_CLASSNAMES.include?(schema['id']) }.compact
       end
 
-      def fetch_attributes(table)
+      def get_properties(table)
         results = Array.new
         schema = JSON.parse(self.get_schema(table))
         schema['properties'].each_pair do |key, value|

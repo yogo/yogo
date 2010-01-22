@@ -2,7 +2,7 @@ module DataMapper
   module Reflection
     module Sqlite3Adapter
 
-      def fetch_storage_names
+      def get_storage_names
         # This should return a new DataMapper resource.
         query = <<-QUERY
         SELECT name FROM sqlite_master
@@ -14,7 +14,7 @@ module DataMapper
         self.select(query)
       end
 
-      def fetch_attributes(table)
+      def get_properties(table)
         results = Array.new
         # This should really create DataMapper Properties, I think
         self.select('PRAGMA table_info(%s)' % table).each do |column|
