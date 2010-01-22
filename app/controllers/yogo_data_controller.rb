@@ -8,6 +8,14 @@ class YogoDataController < ApplicationController
   def edit
     @item = @model.get(params[:id])
   end
+
+  def update
+    @item = @model.get(params[:id])
+    goober = "yogo_#{@project.yogo_collection.project_key.underscore}_#{@model.name.split("::")[-1].underscore}"
+    @item.attributes = params[goober]
+    @item.save
+    redirect_to project_yogo_collection_url(@project, @model.name.split("::")[-1])
+  end  
   
   def destroy
     @model.get(params[:id]).destroy!

@@ -1,1 +1,17 @@
-THIS IS WORKING IVAN
+<H3><%= @model.name.split("::")[-1].titleize %></H3>
+<%- form_for(@item, :url => project_yogo_collection_yogo_data_path(@project, @model.name.split("::")[-1], @item.id)) do |f| -%>
+<table>
+  <thead>
+  </thead>
+  <tbody>
+      <%- @model.properties.each do |p| %>
+      <tr>
+      <td><%= p.name.to_s.titleize %></td>
+      <td><%= f.text_field(p.name) %></td>
+      </tr>
+      <%- end %>
+  </tbody>
+</table>
+<%= f.submit %>
+<%- end -%>
+
