@@ -1,10 +1,14 @@
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
   map.resources :projects, :except => [ :edit, :update, :destroy ] do |project|
-    project.resources :yogo_collections do |yc|
-      yc.resources :yogo_data
-    end
+    # /projects/:project_id/yogo_data/:model_name
+    # /projects/:project_id/yogo_data/:model_name/:id
+    project.resources :yogo_data, :as => 'yogo_data/:model_id'
+
+    # /projects/:project_id/yogo_models/:model_name
+    project.resources :yogo_models
   end
+  
 
   # Sample of regular route:
   #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'

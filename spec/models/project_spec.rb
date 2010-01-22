@@ -15,21 +15,7 @@ def mock_uploader(file, type = 'text/csv')
 end
 
 describe "A Project" do
-  
-  describe "uses a yogo Data Store" do
     
-    it "should have a yogo_collection of data" do
-      p = Factory.create(:project)
-      p.should respond_to(:yogo_collection)
-      p.yogo_collection.should be_instance_of(Yogo::Collection)
-    end
-    
-    it "should not have a yogo_collection if it is new" do
-     p = Factory.build(:project)
-     p.yogo_collection.should be_nil
-    end
-  end
-  
   it "should not be created without a name" do
     count = Project.all.length
     p = Project.new
@@ -40,7 +26,7 @@ describe "A Project" do
 
   it "should be created with a name" do
     count = Project.all.length
-    p = Factory.build(:project)
+    p = Factory.create(:project)
     p.should be_valid
     p.save
     count.should == Project.all.length - 1
@@ -80,7 +66,7 @@ describe "A Project" do
     csv = "#{Rails.root}/spec/models/test.csv"
     File.open(csv, "r").should be_true
     model_hash = DataMapper::Reflection::CSV.describe_model(csv)
-    p.yogo_collection.add_model(model_hash)
+    p.add_model(model_hash)
     model_name = "Ref" + csv.gsub(/.*\//,'').gsub('.csv','') 
     eval("Yogo::UglyDuckling").const_defined?(model_name).should be_true
     p.destroy!
@@ -90,7 +76,7 @@ describe "A Project" do
     p = Project.create(:name => "Princess and the Swan")
     csv = "#{Rails.root}/spec/models/test.csv"
     model_hash = DataMapper::Reflection::CSV.describe_model(csv)
-    yogo_model = p.yogo_collection.add_model(model_hash)
+    yogo_model = p.add_model(model_hash)
     yogo_model.auto_migrate!
     File.open(csv, "r").should be_true
     DataMapper::Reflection::CSV.import_data_to_model(csv, yogo_model, :yogo)

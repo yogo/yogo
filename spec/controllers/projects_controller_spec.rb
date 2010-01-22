@@ -6,9 +6,6 @@ describe ProjectsController do
     @mock_project ||= mock_model(Project, stubs)
   end
 
-  def mock_yogo_collection(stubs={})
-    @mock_yogo_collection ||= mock_model(Yogo::Collection, stubs)
-  end
   
   def mock_models(proj)
     [ build_reflected_model('Vanilla',    proj),
@@ -31,7 +28,7 @@ describe ProjectsController do
   #There is no projects#show action at this time.
   describe "GET projects/:id" do
     it "assigns the requested project as @project" do
-      Project.stub!(:get).with("37").and_return(mock_project)
+      Project.stub!(:get).with("37").and_return(mock_project(:models => []))
       get :show, :id => "37"
       assigns[:project].should equal(mock_project)
     end
@@ -57,9 +54,6 @@ describe ProjectsController do
 
     describe "with valid params" do
       it "assigns a newly created project as @project, flashes a notice" do
-        Yogo::Collection.stub!(:create).with({:project_id => 1}).and_return(
-          mock_yogo_collection
-        )
         Project.should_receive(:new).with('name'=> 'Test Project').and_return(
           mock_project(:save => true, :name => 'Test Project', :id => 1)
         )
@@ -70,7 +64,7 @@ describe ProjectsController do
 
       it "redirects to the project list" do
         Project.stub!(:new).and_return(
-          mock_project(:save => true, :name => 'Test Project', :yogo_collection= => true)
+          mock_project(:save => true, :name => 'Test Project')
         )
         post :create, :yogo => {}
         response.should redirect_to(projects_url)
@@ -80,14 +74,14 @@ describe ProjectsController do
     describe "with invalid params" do
       it "assigns a newly created but unsaved project as @project" do
         Project.stub!(:new).with({'name' => 'Test Project'}).and_return(
-          mock_project(:save => true, :name => 'Test Project', :yogo_collection= => true)
+          mock_project(:save => true, :name => 'Test Project')
         )
         post :create, :project => {:name => 'Test Project'}
         assigns[:project].should equal(mock_project)
       end
 
       it "re-renders the 'new' template, flashes an error" do
-        Project.stub!(:new).and_return(mock_project(:save => false, :yogo_collection= => true))
+        Project.stub!(:new).and_return(mock_project(:save => false))
         post :create, :project => {}
         response.should render_template('new')
         response.flash[:error].should =~ /could not be created/i      

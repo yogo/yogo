@@ -1,0 +1,7 @@
+<div id="yogo_project_list">
+  <ul>
+  <%- @models.each do |m| %>
+    <li> <%= link_to(m.name.split('::')[-1].titleize, project_yogo_data_path(@project, m.name.split('::')[-1])) %></li>
+  <%- end %>
+  </ul>
+</div>

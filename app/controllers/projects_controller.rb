@@ -2,14 +2,14 @@ require 'file_type_error'
 
 class ProjectsController < ApplicationController
 
-  require_user :for => [ :show, :new, :create, :edit, :destroy, :update, :upload_csv]
+#  require_user :for => [ :show, :new, :create, :edit, :destroy, :update, :upload_csv]
   def index
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
 
   def show
     @project = Project.get(params[:id])
-    @models = @project.yogo_collection.models
+    @models = @project.models
   end
 
   def new

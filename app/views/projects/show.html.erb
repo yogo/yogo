@@ -1,4 +1,16 @@
 <h1><%= @project.name %></h1>
-<h3>Project Data</h3>
-<%= render :partial => 'yogo_collections/project_list' %>
+<table>
+  <thead>
+    <tr>
+      <th>Project Models</th>
+      <th>Project Data</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= render :partial => 'yogo_models/model_list' %></td>
+      <td><%= render :partial => 'yogo_data/data_list' %></td>
+    </tr>
+  </tbody>
+</table>
 <%= render :partial => 'upload' %>

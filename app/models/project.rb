@@ -18,11 +18,6 @@ class Project
   def new_record?
     new?
   end
-
-  def yogo_collection
-    return nil if new?
-    @yogo_collection ||= Yogo::Collection.new(self)
-  end
   
   def process_csv(datafile)
     raise FileTypeError unless datafile.content_type == 'text/csv' || datafile.content_type == 'text/comma-separated-values' || datafile.content_type == 'application/vnd.ms-excel'
@@ -37,10 +32,56 @@ class Project
     #create a new reflection to create a new model based on the csv
     model_hash = DataMapper::Reflection::CSV.describe_model(file_name)
     yogo_collection.add_model(model_hash)
-#    DataMapper::Reflection::CSV.create_model_from_csv(file_name)
     DataMapper::Reflection::CSV.import_data(filename, :yogo)
     
     # Remove the file
     File.delete(file_name) if File.exist?(file_name)
   end
+  
+  def models
+    DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{project_key}::/ }
+  end
+  
+  def get_model(name)
+    DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{project_key}::#{name}/ }[0]
+  end
+
+  def add_model(hash)
+    DataMapper::Factory.build(namespace(hash), :yogo)
+  end
+  
+  # def valid?
+  #   !@project.nil?
+  # end
+
+  def project_key
+    name.gsub(/[^\w]/,'')
+  end
+
+  def delete_models!
+    models.each do |model|
+      model.auto_migrate_down!
+      name_array = model.name.split("::")
+      if name_array.length == 1
+        Object.send(:remove_const, model.name.to_sym)
+      else
+        ns = eval(name_array[0..-2].join("::"))
+        ns.send(:remove_const, name_array[-1].to_sym)
+      end
+      DataMapper::Model.descendants.delete(model)
+    end
+  end
+
+  #
+  # Private Methods
+  #
+  private
+  
+  def namespace(hash)
+    unless hash['id'] =~ /^Yogo\/#{project_key}\/\w+/
+      hash['id'] = "Yogo/#{project_key}/#{hash['id']}"
+    end
+    hash
+  end
+  
 end
