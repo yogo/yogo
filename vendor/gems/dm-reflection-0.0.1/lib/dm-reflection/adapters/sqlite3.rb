@@ -2,7 +2,7 @@ module DataMapper
   module Reflection
     module Sqlite3Adapter
 
-      def fetch_models
+      def fetch_storage_names
         # This should return a new DataMapper resource.
         query = <<-QUERY
         SELECT name FROM sqlite_master

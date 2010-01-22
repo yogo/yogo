@@ -1,7 +1,7 @@
 module Databases
   module Postgres
     
-    def fetch_models
+    def fetch_storage_names
       query = "select relname from pg_stat_user_tables WHERE schemaname='public'"
       self.select(query)
     end

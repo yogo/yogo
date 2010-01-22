@@ -1,7 +1,7 @@
 module Databases
   module MySQL
     
-    def fetch_models
+    def fetch_storage_names
       database = self.options['database']
       query = "SHOW TABLES FROM #{database}"
       self.select(query)

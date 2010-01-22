@@ -2,7 +2,7 @@ namespace :reflect do
   desc "Configure navigation settings."
   task :view => :environment do
     view = []
-    DataMapper::Reflection.adapter.fetch_models.each do |model|
+    DataMapper::Reflection.adapter.fetch_storage_names.each do |model|
       view << DataMapper::Reflection.describe_class(DataMapper::Reflection.describe_model(model))
     end
     puts "<----------DESCRIPTIONS---------->"

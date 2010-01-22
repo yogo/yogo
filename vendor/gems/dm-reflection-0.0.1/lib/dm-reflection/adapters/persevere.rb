@@ -3,7 +3,7 @@ module DataMapper
     module PersevereAdapter
       RESERVED_CLASSNAMES = ['User','Transaction','Capability','File','Class']
 
-      def fetch_models
+      def fetch_storage_names
         @schemas = JSON.parse(self.get_schema)
         @schemas.map { |schema| schema['id'] unless RESERVED_CLASSNAMES.include?(schema['id']) }.compact
       end

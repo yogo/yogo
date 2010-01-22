@@ -12,19 +12,19 @@ describe 'The DataMapper reflection module' do
   end
   
   describe 'persevere adapter' do
-    it 'should respond to fetch_models and return an array of models'
+    it 'should respond to fetch_storage_names and return an array of models'
   end
   
   describe 'mysql adapter' do
-    it 'should respond to fetch_models and return an array of models'
+    it 'should respond to fetch_storage_names and return an array of models'
   end
   
   describe 'sqlite3 adapter' do
-    it 'should respond to fetch_models and return an array of models'
+    it 'should respond to fetch_storage_names and return an array of models'
   end
   
   describe 'postgres adapter' do
-    it 'should respond to fetch_models and return an array of models'
+    it 'should respond to fetch_storage_names and return an array of models'
   end
   
   describe 'csv utilities' do

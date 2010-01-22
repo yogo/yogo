@@ -44,7 +44,7 @@ module DataMapper
       models = Array.new
             
       # For each model
-      adapter.fetch_models.each do |model|
+      adapter.fetch_storage_names.each do |model|
         description = Hash.new
         # Get the attributes
         attributes = adapter.fetch_attributes(model)
