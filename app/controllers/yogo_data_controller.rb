@@ -2,11 +2,11 @@ class YogoDataController < ApplicationController
   before_filter :find_parent_items
   
   def index
+    @data = @model.all
     @models = @model.all
   end
   
   def show
-    @data = @model.all
     @item = @model.get(params[:id])
   end
   
@@ -24,7 +24,7 @@ class YogoDataController < ApplicationController
   
   def destroy
     @model.get(params[:id]).destroy!
-    redirect_to project_yogo_data_url(@project, @model.name.split("::")[-1])
+    redirect_to project_yogo_data_index_url(@project, @model.name.split("::")[-1])
   end
   
   private
