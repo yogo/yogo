@@ -18,17 +18,13 @@ class Project
   end
   
   def process_csv(datafile)
-    name = File.basename(datafile.original_filename).sub(/[^\w\.\-]/,'_')
-    file_name = File.join("tmp/data/", name)
+    # Read the data in
+    csv_data = FasterCSV.read(datafile.path)
 
-    # Write this to a local file temporarily, this should process the contents really
-    File.open(file_name, 'w') { |f| f.write(datafile.read) }
-    
     # Get Model name
-    model_name = "Yogo::#{project_key}::#{File.basename(file_name, ".csv").singularize.camelcase}"
+    model_name = "Yogo::#{project_key}::#{File.basename(datafile.original_filename, ".csv").singularize.camelcase}"
     
     # Process the contents
-    csv_data = FasterCSV.read(file_name)
     model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
     model.auto_migrate!
     csv_data[3..-1].each do |line| 
@@ -36,9 +32,6 @@ class Project
       csv_data[0].each_index { |i| line_data[csv_data[0][i].downcase] = line[i] }
       model.create(line_data)
     end
-    
-    # Remove the file
-    File.delete(file_name) if File.exist?(file_name)
   end
 
   def models

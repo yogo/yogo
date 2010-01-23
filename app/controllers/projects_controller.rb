@@ -57,9 +57,13 @@ class ProjectsController < ApplicationController
     @project = Project.get(params[:id])
     
     if !params[:upload].nil?
-      flash[:error] = "File type #{params[:upload]['datafile'].content_type} not allowed" if datafile.content_type == 'text/csv' || datafile.content_type == 'text/comma-separated-values' || datafile.content_type == 'application/vnd.ms-excel'
+      datafile = params[:upload]['datafile']
+      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel'].include?(datafile.content_type)
+        flash[:error] = "File type #{datafile.content_type} not allowed"
+        redirect_to project_url(@project)
+      end
       # Check filename for .csv 
-      @project.process_csv(params[:upload]['datafile'])
+      @project.process_csv(datafile)
       flash[:notice]  = "File uploaded succesfully."
     else
        flash[:error] = "File upload area cannont be blank."
