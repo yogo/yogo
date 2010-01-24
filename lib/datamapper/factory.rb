@@ -101,11 +101,9 @@ class Factory
     scopes = class_name.split('::')
     spec_hash = { :name => scopes[-1],
                   :properties => Hash.new }
-    spec_hash[:modules] = scopes[0..-1] unless scopes.length.eql?(1)                  
+    spec_hash[:modules] = scopes[0..-2] unless scopes.length.eql?(1)                  
     spec_array[0].each_index do |idx|
-
       spec_hash[:properties].merge!({ spec_array[0][idx].tableize.singular => { "type" => spec_array[1][idx], "required" => false, "key" => true } } ) 
-
     end
 
     self.build_model_from_hash(spec_hash, :yogo)
