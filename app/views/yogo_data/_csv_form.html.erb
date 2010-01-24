@@ -1,8 +1,9 @@
 <strong>Data File Management</strong>
-<%- form_tag({:id => @project.id, :action => 'upload_csv'}, :multipart => true) do -%>
-    <p><label for="upload_file">Select File</label> : 
-    <%= file_field('upload', 'datafile', :accept => "text/csv,text/comma-separated-values") %></p>
-    <%= submit_tag("Upload") %>
 
-    <%= button_to("Download preformatted CSV file", :action => "download_csv" ) %>
+<%- form_tag({:project_id => @project.id, :model_id => @model.name.split('::')[-1].titleize, :action => 'upload_csv'}, :multipart => true) do -%>
+    <p><label for="upload_file">Select File</label> : 
+    <%= file_field('upload', 'datafile', :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel") %></p>
+    <%= submit_tag("Upload") %>
 <%- end -%>
+
+<%= button_to("Download CSV file", {:project_id => @project.id, :model_id => @model.name.split('::')[-1].titleize, :action => 'download_csv'} ) %>
