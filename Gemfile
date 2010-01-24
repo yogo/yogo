@@ -28,7 +28,7 @@ else
 end
 
 # Development-only gems
-gem "rails-footnotes", :only => :development
+#gem "rails-footnotes", :only => :development
 
 # Testing-only gems
 gem 'rspec',        '1.3.0',  :require_as => nil, :only => :test
