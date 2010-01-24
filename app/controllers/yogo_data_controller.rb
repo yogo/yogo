@@ -3,7 +3,6 @@ class YogoDataController < ApplicationController
   
   def index
     @data = @model.all
-    @models = @model.all
   end
   
   def show
@@ -27,6 +26,16 @@ class YogoDataController < ApplicationController
     redirect_to project_yogo_data_index_url(@project, @model.name.split("::")[-1])
   end
   
+  def upload_csv
+    flash[:notice] = "Data upload on models is not supported yet."
+    redirect_to project_yogo_data_index_url(@project, @model.name.split("::")[-1])
+  end
+  
+  def download_csv
+    flash[:notice] = "Data download on models is not supported yet."
+    redirect_to project_yogo_data_index_url(@project, @model.name.split("::")[-1])    
+  end
+
   private
   
   def find_parent_items
