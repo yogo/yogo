@@ -27,6 +27,7 @@ class Project
     # Process the contents
     model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
     model.auto_migrate!
+    
     csv_data[3..-1].each do |line| 
       line_data = Hash.new
       csv_data[0].each_index { |i| line_data[csv_data[0][i].downcase] = line[i] }

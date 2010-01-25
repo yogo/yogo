@@ -26,14 +26,21 @@ class YogoDataController < ApplicationController
     redirect_to project_yogo_data_index_url(@project, @model.name.split("::")[-1])
   end
   
-  def upload_csv
+  def upload
     flash[:notice] = "Data upload on models is not supported yet."
     redirect_to project_yogo_data_index_url(@project, @model.name.split("::")[-1])
   end
   
-  def download_csv
-    flash[:notice] = "Data download on models is not supported yet."
-    redirect_to project_yogo_data_index_url(@project, @model.name.split("::")[-1])    
+  def download
+    csv_output = FasterCSV.generate do |csv|
+      csv << @model.properties.map{|prop| prop.name.to_s.capitalize}
+      csv << @model.properties.map{|prop| prop.type}
+      csv << "Units will go here when supported"
+    end
+
+    csv_output << @model.all.to_csv if params[:include_data]
+    
+    send_data(csv_output, :filename => "#{@model.name.split("::")[-1].tableize.singular}.csv", :type => "text/csv", :disposition => 'attachment')
   end
 
   private

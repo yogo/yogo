@@ -1,5 +1,5 @@
 <strong>Data File Upload</strong>
-<% form_tag({:id => @project.id, :action => 'upload_csv'}, :multipart => true) do -%>
+<% form_tag(upload_project_path(@project.id), :multipart => true) do -%>
     <p><label for="upload_file">Select File</label> : 
 
     <%= file_field 'upload', 'datafile', :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel" %></p>

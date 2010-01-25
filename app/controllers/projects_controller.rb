@@ -2,7 +2,7 @@ require 'file_type_error'
 
 class ProjectsController < ApplicationController
 
-#  require_user :for => [ :show, :new, :create, :edit, :destroy, :update, :upload_csv]
+#  require_user :for => [ :show, :new, :create, :edit, :destroy, :update, :upload]
   def index
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
@@ -53,7 +53,7 @@ class ProjectsController < ApplicationController
     redirect_to projects_url
   end
 
-  def upload_csv
+  def upload
     @project = Project.get(params[:id])
     
     if !params[:upload].nil?
@@ -68,7 +68,7 @@ class ProjectsController < ApplicationController
     else
        flash[:error] = "File upload area cannont be blank."
     end
-
+    
     redirect_to project_url(@project)
   end
 end
