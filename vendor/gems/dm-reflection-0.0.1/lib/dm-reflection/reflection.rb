@@ -26,7 +26,9 @@ module DataMapper
       desc['properties'].each_pair do |key, value|
         # This should lookup the attribute/type mapping from the adapter
     
-        line = "property :#{key}, #{value[:type]}, :key => #{value[:key]}, :required => #{value[:required]}"
+        line  = "property :#{key}, #{value[:type]}"
+        line += ", :key => #{value[:key]}" unless value[:key].blank?
+        line += ", :required => #{value[:required]}" unless value[:required].blank?
         line += ", :default => #{value[:default]}" unless value[:default].blank?
   
         model_description << line

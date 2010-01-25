@@ -28,7 +28,11 @@ module DataMapper
         results = Array.new
         schema = self.get_schema(table)[0]
         schema['properties'].each_pair do |key, value|
-          results << {:name => key, :type => get_type(value['type'], value['format']), :required => !value['optional'], :default => value['default'], :key => value.has_key?('index') && value['index'] }
+          property = {:name => key, :type => get_type(value['type'], value['format']) }
+          property.merge!({ :required => !value['optional'], 
+                         :default => value['default'], 
+                         :key => value.has_key?('index') && value['index'] }) unless property[:type] == DataMapper::Types::Serial
+          results << property
         end
         return results
       end
