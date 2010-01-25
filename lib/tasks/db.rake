@@ -1,22 +1,24 @@
 namespace :yogo do
   namespace :db do
     namespace :example do
-
       desc "Copies the example database into persevere."
       task :load => :environment do
-        # Creates in memory models from the example database
-        models = DataMapper::Reflection.reflect(:example)
-
+        require 'ruby-debug'
         # Iterate through each model and make it in persevere, then copy instances
-        models.each do |model|
-          # Extract and modify model description from source, to be persevere compliant
-          json_schema = model.to_json_schema_compatible_hash(:yogo)
-          json_schema["id"] = "yogo/example_project/#{json_schema["id"]}"
-          class_def = DataMapper::Factory.describe_model_from_json_schema(json_schema, :yogo)
+        DataMapper::Reflection.reflect(:example).each do |model|
+          mphash = Hash.new
+          model.properties.each do |prop| 
+            mphash[prop.name] = { :type => prop.type, :key => prop.key?, :serial => prop.serial? } 
+            mphash[prop.name].merge!({:default => prop.default}) if prop.default? 
+          end
 
-          # Create the new model that is persevere specific
-          eval(class_def)
-          yogo_model = eval("Yogo::ExampleProject::#{model.name}")
+          model_hash = { :name       => model.name.camelcase, 
+                         :modules    => ["Yogo", "ExampleProject"], 
+                         :properties => mphash }
+
+
+          yogo_model = DataMapper::Factory.build(model_hash, :yogo)
+
           yogo_model.auto_migrate!
 
           # Create each instance of the class

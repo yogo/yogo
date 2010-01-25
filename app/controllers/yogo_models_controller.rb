@@ -6,15 +6,15 @@ class YogoModelsController < ApplicationController
   end
   
   def show
-    @model = @project.get_model(params[:model_id])
+    @model = @project.get_model(params[:id])
   end
   
   def edit
-    @model = @project.get_model(params[:model_id])
+    @model = @project.get_model(params[:id])
   end
 
   def update
-    @model = @project.get_model(params[:model_id])
+    @model = @project.get_model(params[:id])
     # Needs to be implemented
     redirect_to project_yogo_model_url(@project, @model.name.split("::")[-1])
   end  

@@ -9,11 +9,12 @@ end
 def build_reflected_model(name, project)
   project ||= Factory.build(:project)
   DataMapper::Factory.build(
-  {'id' => "Yogo/#{project.project_key}/#{name}",
-    'properties' => {
-      "name"      => 'string',
-      'parent_id' => 'integer'
-    }
+  {:name => "#{name}",
+   :modules => ["Yogo", "#{project.project_key}"],
+   :properties => {
+      "id"        => Serial,
+      "name"      => String,
+      "parent_id" => Integer
+   }
   })
-  
 end

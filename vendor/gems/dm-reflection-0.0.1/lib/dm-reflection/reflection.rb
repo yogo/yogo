@@ -21,16 +21,15 @@ module DataMapper
       model_description << "include DataMapper::Resource"
       model_description << "def self.default_repository_name; :#{repo}; end"
       model_description << "def self.is_reflected?; true; end"
-
+    
       # This needs to be pushed into the adapter to get the appropriate serial field and extended attributes
-      model_description << "property :id, Serial"
       desc['properties'].each_pair do |key, value|
         # This should lookup the attribute/type mapping from the adapter
-        prop = value['type'] ? \
-        "property :#{key}, #{TypeParser.parse(value['type'])}" : \
-        "property :#{key}, String"
-        prop += ", :key => true" if key == "id"
-        model_description << prop
+    
+        line = "property :#{key}, #{value[:type]}, :key => #{value[:key]}, :required => #{value[:required]}"
+        line += ", :default => #{value[:default]}" unless value[:default].blank?
+  
+        model_description << line
       end
       
       desc['id'].each do
@@ -48,17 +47,14 @@ module DataMapper
         description = Hash.new
         # Get the attributes
         attributes = adapter.get_properties(model)
-        #description.update( {'id' => "#{model}"} )
         description.update( {'id' => model.split('/') } )
         description.update( {'properties' => {}} )
         attributes.each do |attribute|
-          if attribute.name == 'id'
-            description['properties'].update( {attribute.name => {'type' => 'String'}} )
-          else
-            description['properties'].update( {attribute.name => {'type' => attribute.type}} )
-          end
+          description['properties'].update( { attribute[:name] =>  attribute } )
+
         end
         desc = make_model_string(description, repository)
+        puts desc
         models << Object.class_eval(desc).model
       end
       models
