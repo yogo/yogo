@@ -50,8 +50,11 @@ module DataMapper
         pname = spec_array[0][idx].tableize.singular
         ptype = spec_array[1][idx]
         punits = spec_array[2][idx]
-        pkey = pname == 'id' ? true : false
-        prop_hash = { pname => { :type => ptype, :required => false, :key => pkey } }
+        if pname == 'id'
+          prop_hash = { pname => { :type => 'Serial' } }
+        else
+          prop_hash = { pname => { :type => ptype, :required => false } }
+        end
         spec_hash[:properties].merge!(prop_hash) 
       end
 
