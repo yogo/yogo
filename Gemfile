@@ -18,11 +18,15 @@ gem "dm-aggregates"
 gem "dm-persevere-adapter", "0.28.0", :require_as => nil
 gem "do_sqlite3", "0.10.1", :require_as => nil
 gem "rails_datamapper"
+
 gem "authlogic", "2.1.3"
+gem "fastercsv"
 
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)
   gem "json_pure", '1.2.0', :require_as => nil
+  gem "ruby-debug-base", "0.10.3.1", :require_as => nil, :path => "vendor/extra_gems/ruby-debug-base-0.10.3.1-java"
+  gem "ruby-debug", :require_as => nil
 else
   gem "json",      '1.2.0', :require_as => nil
 end
