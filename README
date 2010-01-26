@@ -25,6 +25,9 @@ Stick the following in your .git/config
 
 Then run: git submodule update
 
+== Installing Persevere
+Do stuff
+
 == Setting up a Persevere Database
 
 1. Get persevere and run an instance on port 8080
