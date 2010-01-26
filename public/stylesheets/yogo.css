@@ -152,9 +152,18 @@ h3 {
   vertical-align:bottom;
 }
 
-.projects-index-row-border td {
+.projects-index-row-border td, .projects-show-row-border li {
   border-bottom:1px dotted #888;
   vertical-align:bottom;
+}
+
+#yogo-data-list ul {
+  margin:0;
+  padding:0;
+}
+
+#yogo-data-list ul li {
+  list-style-type: none;
 }
 
 #footer {

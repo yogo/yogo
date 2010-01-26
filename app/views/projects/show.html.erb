@@ -1,15 +1,15 @@
 <h1><%= @project.name %></h1>
-<table>
+<table id="projects-show">
   <thead>
     <tr>
-      <th>Project Models</th>
-      <th>Project Data</th>
+      <th>Models</th>
+      <th>Data</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
+    <tr id="projects-show-row<%=@project.id%>" class="projects-show-row-border">
       <td><%= render :partial => 'yogo_models/model_list' %></td>
-      <td><%= render :partial => 'yogo_data/model_list' %></td>
+      <td><%= render :partial => 'yogo_data/data_list' %></td>
     </tr>
   </tbody>
 </table>
