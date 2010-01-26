@@ -12,10 +12,10 @@ class Project
     id.to_s
   end
   
-  # respond to #new_record for legacy purposes
-  def new_record?
-    new?
-  end
+  # # respond to #new_record for legacy purposes
+  # def new_record?
+  #   new?
+  # end
   
   def process_csv(datafile)
     # Read the data in
@@ -47,10 +47,6 @@ class Project
     DataMapper::Factory.build(namespace(hash), :yogo)
   end
   
-  # def valid?
-  #   !@project.nil?
-  # end
-
   def project_key
     name.gsub(/[^\w]/,'')
   end
