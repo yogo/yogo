@@ -55,14 +55,6 @@ describe "A Project" do
     end
   end
 
-  it "should respond to new_record? with its new? value" do
-    p = Project.create(:name => "New Record test factory")
-    p.should be_new
-    p.save
-    p.should_not be_new
-    p.destroy!
-  end
-
   it "should be paginated" do
     Project.should respond_to(:page_count)
     Project.should respond_to(:paginate)
@@ -106,9 +98,11 @@ describe "A Project" do
     it "should respond to an add_model method that creates a model" do
       project = Project.create(:name => "Test Project 1")
       model_hash = { 
-        "id" => "Yogo/TestProject1/Cell",
-        "properties" => {
-          "name" => {"type" => "string"}
+        :name => "Cell",
+        :modules => ["Yogo", "TestProject1"],
+        :properties => {
+          "name" => {:type => "String"},
+          "id"   => {:type => "Serial"}
         }
       }
       m = project.add_model(model_hash)
@@ -119,9 +113,11 @@ describe "A Project" do
     it "should make the newly added model available via .models" do
       project = Factory.create(:project, :name => "Test Project 1")
       model_hash = { 
-        "id" => "Yogo/#{project.project_key}/Cell",
-        "properties" => {
-          "name" => {"type" => "string"}
+        :name => "Cell",
+        :modules => ["Yogo", "TestProject1"],
+        :properties => {
+          "name" => {:type => "String"},
+          "id"   => {:type => "Serial"}
         }
       }
       project.add_model(model_hash)
@@ -133,9 +129,11 @@ describe "A Project" do
     it "should properly namespace an un-namespaced model hash" do
       project = Factory.create(:project, :name => "Test Project 2")
       model_hash = { 
-        "id" => "Monkey",
-        "properties" => {
-          "name" => {"type" => "string"}
+        :name => "Monkey",
+        :modules => ["Yogo", "TestProject2"],
+        :properties => {
+          "name" => {:type => "String"},
+          "id"   => {:type => "Serial"}
         }
       }
       project.add_model(model_hash)
@@ -157,6 +155,7 @@ describe "A Project" do
       project.models.should == []
       models = DataMapper::Reflection.reflect(:yogo)
       project.models.map(&:name).should == ["Yogo::PersistedData::Cell"]
+      repository(:yogo).adapter.delete_schema(persisted_model_hash)
     end
 
     it "should be able to delete its schemas" do
@@ -172,11 +171,6 @@ describe "A Project" do
       project.delete_models!
       project.models.should be_empty
     end
-
-    it "should not save an invalid schema and return nil"
-
-    it "should respond to the schemas as if it 'had many' of each"
-
   end
-
+  it "should not save an invalid schema and return nil"
 end
