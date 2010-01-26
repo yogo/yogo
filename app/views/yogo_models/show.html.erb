@@ -1,3 +1,19 @@
-THIS IS THE MODEL SHOW
+<h3><%= @model.name.gsub!('::', " => ") %></h3>
 
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @model.properties.each do |prop| %>
+    <tr>
+      <td><%= prop.name %></td>
+      <td><%= (prop.type.to_s == "DataMapper::Types::Serial") ? "Integer" : prop.type  %></td>
+    <tr>
+    <%- end %>
+  </tbody>
+</table>
 <%= link_to('Edit', edit_project_yogo_model_path(@project, @model.name.split("::")[-1])) %>

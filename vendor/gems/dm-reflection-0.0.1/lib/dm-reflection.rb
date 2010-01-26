@@ -1,6 +1,4 @@
 require 'dm-reflection/reflection'
-require 'dm-reflection/parse_types'
-require 'dm-reflection/attribute'
 require 'dm-reflection/csv'
 require 'dm-reflection/adapters/sqlite3'
 require 'dm-reflection/adapters/persevere'

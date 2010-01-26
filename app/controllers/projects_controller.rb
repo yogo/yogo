@@ -1,5 +1,3 @@
-require 'file_type_error'
-
 class ProjectsController < ApplicationController
 
 #  require_user :for => [ :show, :new, :create, :edit, :destroy, :update, :upload]

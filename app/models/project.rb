@@ -12,11 +12,6 @@ class Project
     id.to_s
   end
   
-  # respond to #new_record for legacy purposes
-  def new_record?
-    new?
-  end
-  
   def process_csv(datafile)
     # Read the data in
     csv_data = FasterCSV.read(datafile.path)
@@ -44,13 +39,9 @@ class Project
   end
 
   def add_model(hash)
-    DataMapper::Factory.build(namespace(hash), :yogo)
+    DataMapper::Factory.build(hash, :yogo)
   end
   
-  # def valid?
-  #   !@project.nil?
-  # end
-
   def project_key
     name.gsub(/[^\w]/,'')
   end
@@ -69,16 +60,16 @@ class Project
     end
   end
 
-  #
-  # Private Methods
-  #
-  private
-  
-  def namespace(hash)
-    unless hash['id'] =~ /^Yogo\/#{project_key}\/\w+/
-      hash['id'] = "Yogo/#{project_key}/#{hash['id']}"
-    end
-    hash
-  end
-  
+  # #
+  # # Private Methods
+  # #
+  # private
+  # 
+  # def namespace(hash)
+  #   unless hash['id'] =~ /^Yogo\/#{project_key}\/\w+/
+  #     hash['id'] = "Yogo/#{project_key}/#{hash['id']}"
+  #   end
+  #   hash
+  # end
+  # 
 end
