@@ -14,3 +14,5 @@
   </tbody>
 </table>
 <%= render :partial => 'upload' %>
+
+<%= link_to("Remove Project", project_path(@project), :method => :delete, :confirm => "Removing this project will destroy all data associated with it.\n Continue?") %>

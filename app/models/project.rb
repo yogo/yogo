@@ -7,6 +7,10 @@ class Project
   
   validates_is_unique   :name
   
+  before :destroy do |project|
+    self.delete_models!
+  end
+  
   # to_param is called by rails for routing and such
   def to_param
     id.to_s
