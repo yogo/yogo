@@ -69,4 +69,9 @@ class ProjectsController < ApplicationController
     
     redirect_to project_url(@project)
   end
+  
+  def rereflect
+    DataMapper::Reflection.reflect(:yogo)
+    redirect_to projects_url
+  end
 end
