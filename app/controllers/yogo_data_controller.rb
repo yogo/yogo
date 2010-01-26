@@ -1,6 +1,6 @@
 class YogoDataController < ApplicationController
   before_filter :find_parent_items
-  
+ 
   def index
     @data = @model.paginate(:page => params[:page], :per_page => 10)
   end
