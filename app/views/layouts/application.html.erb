@@ -13,6 +13,7 @@
     <div id="container"  class="clearfix">
       <%= render :partial => 'layouts/header' %>
       <%= render :partial => 'layouts/sidebar' %>
+<%= render :partial => 'navigation/yogo_nav' %>
       <div id="content">
         <%- if flash[:notice] -%>
             <div class='notice'><p><%= h flash[:notice] %></p></div>
