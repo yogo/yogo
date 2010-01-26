@@ -3,7 +3,6 @@ namespace :yogo do
     namespace :example do
       desc "Copies the example database into persevere."
       task :load => :environment do
-        require 'ruby-debug'
         # Iterate through each model and make it in persevere, then copy instances
         DataMapper::Reflection.reflect(:example).each do |model|
           mphash = Hash.new
