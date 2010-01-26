@@ -9,22 +9,26 @@ module DataMapper
   module Reflection
     def self.make_model_string(desc, repo)
       model_description = []
-      class_name = desc['id'][-1].singular.camel_case
+      storage_name = desc['id'][-1]
+      class_name = desc['id'][-1].singular.camelcase
       # We start the class definition by wrapping the appropriate number of module definitions
       desc['id'][0..-2].each do |mod|
         model_description << "module #{mod.capitalize.camel_case}"
       end
       model_description << "class #{class_name}" 
       model_description << "include DataMapper::Resource"
+      model_description << "storage_names[:#{repo}] = '#{storage_name}';"
       model_description << "def self.default_repository_name; :#{repo}; end"
       model_description << "def self.is_reflected?; true; end"
       # This needs to be pushed into the adapter to get the appropriate serial field and extended attributes
       desc['properties'].each_pair do |key, value|
         # This should lookup the attribute/type mapping from the adapter
         line  = "property :#{key}, #{value[:type]}"
+        line += ", :field => '#{value[:name]}'" unless value[:name].blank?
         line += ", :key => #{value[:key]}" unless value[:key].blank?
         line += ", :required => #{value[:required]}" unless value[:required].blank?
         line += ", :default => #{value[:default]}" unless value[:default].blank?
+        line += ", :serial => #{value[:serial]}" unless value[:serial].blank?
         model_description << line
       end
       desc['id'].each do
