@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   def check_local_only
     return true if Rails.env == "test"
     
-    if Yogo::Settings[:local_only] && !request.env["REMOTE_ADDR"].match("127.0.0.1")
+    if Yogo::Settings[:local_only] && !["127.0.0.1", "0:0:0:0:0:0:0:1%0"].include?(request.env["REMOTE_ADDR"])
       # Raise a 403 exception or perhaps just redirect.
       render(:text => 'This resource is forbidden.', :status => 403) and return
     end
