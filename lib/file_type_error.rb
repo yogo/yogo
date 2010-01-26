@@ -1,2 +1,0 @@
-class FileTypeError < Exception
-end

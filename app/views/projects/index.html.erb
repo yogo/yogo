@@ -1,13 +1,5 @@
-<h2>Projects</h2>
-<%= link_to(image_tag('add.gif')+" Create a Project", new_project_url) %>
-<hr />
-<table id="projects-index">
-  <% @projects.each do |project| %>
-    <tr id="projects-index-row<%=project.id%>" class="projects-index-row-border">
-      <td>
-        <%= link_to(project.name, project_path(project)) %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-<%= pagination_links(@projects, params[:page], 5) %>
+<H2>The Yogo Data Management Toolkit</H2>
+
+Welcome to the Yogo Data Management Toolkit.
+
+This should explain what the software is, what it does, and how to get started.

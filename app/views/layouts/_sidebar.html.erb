@@ -7,29 +7,11 @@
         <div class="nav-items">
             <ul>
                 <% all_projects.each do |project|%>
-                <%= add_menu_item(project.name, project_path(project))%>
+                 <%= add_menu_item(project.name, project_path(project))%>
                 <% end %>
             </ul>
+            <br/>
+            <%= link_to(image_tag('add.gif')+" Create a Project", new_project_url) %>
         </div>
     </div>
-    <% if @project %> 
-    <div id="nav-tools" class="nav-group">
-      <div class="nav-title" id='tools-title'>Tools</div>
-        <div class="nav-items">
-            <ul>
-                <% if logged_in? && current_user.has_group?(:sysadmin) %>
-                    <%= add_menu_item("Manage Users", yogo_project_users_path(@project)) unless @project.nil? %>
-                    <%= add_menu_item("Manage Roles", yogo_project_roles_path(@project)) unless @project.nil? %>
-                    <%= add_menu_item("Manage Permissions", yogo_project_permissions_path(@project)) unless @project.nil? %>
-                <% end %>
-                <% if logged_in? && current_user.has_group?(:pi) %>
-                    <%= add_menu_item("New Project", new_yogo_project_path) %>
-                <% end %>
-                <% if logged_in? && current_user.has_group?(:data_manager) %>
-                    <%= add_menu_item("Data Management", new_yogo_project_path) %>
-                <% end %>                
-            </ul>
-        </div>
-    </div>
-    <% end %>
 </div>

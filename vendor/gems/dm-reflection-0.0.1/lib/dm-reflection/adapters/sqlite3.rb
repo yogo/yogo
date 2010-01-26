@@ -5,13 +5,13 @@ module DataMapper
       def get_type(db_type)
         db_type.gsub!(/\(\d*\)/, '')
         {
-           'INTEGER'     =>  Integer    ,
-           'VARCHAR'     =>  String     ,
-           'DECIMAL'     =>  BigDecimal ,
-           'FLOAT'       =>  Float      ,
-           'TIMESTAMP'   =>  DateTime   ,
-           'DATE'        =>  Date       ,
-           'BOOLEAN'     =>  TrueClass  ,
+           'INTEGER'     =>  Integer      ,
+           'VARCHAR'     =>  String       ,
+           'DECIMAL'     =>  BigDecimal   ,
+           'FLOAT'       =>  Float        ,
+           'TIMESTAMP'   =>  DateTime     ,
+           'DATE'        =>  Date         ,
+           'BOOLEAN'     =>  Types::Boolean,
            'TEXT'        =>  Types::Text
           }[db_type]
       end
