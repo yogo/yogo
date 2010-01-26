@@ -33,7 +33,7 @@ class YogoModelsController < ApplicationController
         !prop_name.blank? && !@model.properties.map{|p| p.name }.include?(prop_name)
         
       @model.send(:property, prop_name.to_sym, prop_type, :required => false)
-      @model.auto_migrate!
+      @model.auto_migrate_up!
       flash[:notice] = "Property #{prop_name} added"
       
       redirect_to project_yogo_model_url(@project, @model.name.split("::")[-1])
