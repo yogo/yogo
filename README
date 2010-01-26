@@ -22,6 +22,9 @@ Stick the following in your .git/config
 
 Then run: git submodule update
 
+== Installing Persevere
+Do stuff
+
 == Setting up a Persevere Database
 
 Get persevere at http://persevere-framework.googlecode.com/files/persevere1.0.1.rc.tar.gz
