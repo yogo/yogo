@@ -11,9 +11,10 @@
     <%- @model.properties.each do |prop| %>
     <tr>
       <td><%= prop.name %></td>
-      <td><%= (prop.type.to_s == "DataMapper::Types::Serial") ? "Integer" : prop.type  %></td>
+      <td><%= (prop.type.to_s == "DataMapper::Types::Serial") ? "Integer" : @types[prop.type]  %></td>
     <tr>
     <%- end %>
   </tbody>
 </table>
 <%= link_to('Edit', edit_project_yogo_model_path(@project, @model.name.split("::")[-1])) %>
+<%= link_to('Remove', project_yogo_model_path(@project, @model.name.split("::")[-1]), :method => :delete, :confirm => 'Removing this model will also destroy all data associated with the model. Continue?') %>

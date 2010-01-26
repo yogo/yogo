@@ -20,8 +20,9 @@ class YogoModelsController < ApplicationController
   end  
   
   def destroy
-    @model.get(params[:id]).destroy!
-    redirect_to project_yogo_model_url(@project, @model.name.split("::")[-1])
+    model = @project.get_model(params[:id])
+    @project.delete_model(model)
+    redirect_to project_yogo_models_url(@project)
   end
   
   private
