@@ -4,11 +4,15 @@ namespace :yogo do
     desc "Import legacy database into Yogo."
     task :import, :db, :name, :needs => :environment do |task, args|
       # Connect to the legacy database
+      return 
       DataMapper.setup(:import, args[:db])
        # We'll create a new project with the name of the imported database
        project = Project.create(:name => args[:name])
        # Iterate through each model and make it in persevere, then copy instances
-       DataMapper::Reflection.reflect(:import).each do |model|
+       models = DataMapper::Reflection.reflect(:import)
+       puts "There are #{models.length} models to process. They are:"
+       puts "\t#{models.join("\n\t")}"
+       models.each do |model|
          mphash = Hash.new
          model.properties.each do |prop| 
            mphash[prop.name] = { :type => prop.type, :key => prop.key?, :serial => prop.serial? } 
@@ -19,14 +23,12 @@ namespace :yogo do
                         :properties => mphash }
          yogo_model = DataMapper::Factory.build(model_hash, :yogo)
          yogo_model.auto_migrate!
+         print "Created #{yogo_model}, importing data..."
          # Create each instance of the class
          model.all.each do |item| 
-           begin
-             yogo_model.create!(item.attributes) 
-           rescue Error => e
-             puts "Error making instance #{item.inspect} #{e.inspects}"
-           end
+           yogo_model.create!(item.attributes) 
          end
+         print "done!\n"
        end
     end
 
