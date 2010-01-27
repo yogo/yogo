@@ -1,1 +1,20 @@
-THIS IS MODEL EDIT
+<h3>Edit <%= @model.name.gsub!('::', " => ") %></h3>
+
+
+<%- form_for(@model, :url => project_yogo_model_path(@project, @model.name.split('::')[-1])) do |f| -%>
+
+  <%= label_tag(:name) %>: <%= text_field_tag(:name) %>
+  
+  <%- options = options_for_select(@options) -%> 
+  <%= label_tag(:type) %>: <%= select_tag(:type, options ) %>
+  
+  <%= f.submit('Add Property') %>
+    
+<%- end -%>
+<br>
+  <div>Current Properties</div>
+<br>
+<%- @model.properties.each do |prop| %>
+  <%= prop.name %>
+  <%= (prop.type.to_s == "DataMapper::Types::Serial") ? "Integer" :  @types[prop.type]  %><br />
+<%- end -%>

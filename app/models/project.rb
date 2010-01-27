@@ -7,6 +7,10 @@ class Project
   
   validates_is_unique   :name
   
+  before :destroy do |project|
+    self.delete_models!
+  end
+  
   # to_param is called by rails for routing and such
   def to_param
     id.to_s
@@ -46,17 +50,22 @@ class Project
     name.gsub(/[^\w]/,'')
   end
 
+  def delete_model(model)
+    model = get_model(model) if model.class == String
+    model.auto_migrate_down!
+    name_array = model.name.split("::")
+    if name_array.length == 1
+      Object.send(:remove_const, model.name.to_sym)
+    else
+      ns = eval(name_array[0..-2].join("::"))
+      ns.send(:remove_const, name_array[-1].to_sym)
+    end
+    DataMapper::Model.descendants.delete(model)
+  end
+
   def delete_models!
     models.each do |model|
-      model.auto_migrate_down!
-      name_array = model.name.split("::")
-      if name_array.length == 1
-        Object.send(:remove_const, model.name.to_sym)
-      else
-        ns = eval(name_array[0..-2].join("::"))
-        ns.send(:remove_const, name_array[-1].to_sym)
-      end
-      DataMapper::Model.descendants.delete(model)
+     delete_model(model)
     end
   end
 

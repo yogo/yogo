@@ -18,14 +18,16 @@ Stick the following in your .git/config
 
 [submodule "vendor/plugins/yogo-authz"]
        url = git://github.com/yogo/yogo-authz.git
-[submodule "vendor/plugins/yogo-settings"]
-       url = git://github.com/yogo/yogo-settings.git
-[submodule "vendor/gems/dm-persevere-adapter-0.16.0"]
-       url = git://github.com/yogo/dm-persevere-adapter.git
+
 
 Then run: git submodule update
 
+== Installing Persevere
+Do stuff
+
 == Setting up a Persevere Database
+
+Get persevere at http://persevere-framework.googlecode.com/files/persevere1.0.1.rc.tar.gz
 
 1. Get persevere and run an instance on port 8080
 2. Optionally, run another instance on port 8181 for testing

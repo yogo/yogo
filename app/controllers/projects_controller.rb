@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
 
 #  require_user :for => [ :show, :new, :create, :edit, :destroy, :update, :upload]
   def index
-    @projects = Project.paginate(:page => params[:page], :per_page => 5)
+    # @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
 
   def show
@@ -67,7 +67,7 @@ class ProjectsController < ApplicationController
        flash[:error] = "File upload area cannont be blank."
     end
     
-    redirect_to project_url(@project)
+    redirect_to projects_url
   end
   
   def rereflect
