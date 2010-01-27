@@ -19,7 +19,7 @@ gem "do_sqlite3",           "0.10.1", :require_as => nil
 gem "do_mysql",             "0.10.1", :require_as => nil
 #gem "do_postgres",          "0.10.1", :require_as => nil
 gem "rails_datamapper"
-#gem "authlogic",            "2.1.3"
+gem "authlogic",            "2.1.3"
 gem "fastercsv"
 
 # JRUBY sensitive gems
