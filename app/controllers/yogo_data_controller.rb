@@ -10,8 +10,8 @@
 class YogoDataController < ApplicationController
   before_filter :find_parent_items
  
-  #  Display's paginated data items from the selected yogo project model
-  # 
+  # Display's paginated data items from the selected yogo project model
+  #
   # * 10 data objects per page are displayed
   def index
     @data = @model.paginate(:page => params[:page], :per_page => 10)
@@ -31,7 +31,7 @@ class YogoDataController < ApplicationController
     respond_to do |format|
       format.html { render( :action => :index) }
       format.json { render( :json => @data.to_json )}
-      format.csv  { download_csv}
+      format.csv { download_csv}
     end
   end
   

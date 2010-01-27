@@ -1,3 +1,7 @@
+needs showhide.js
+needs prototype.js
+
+
 Nav:Attribute/DatabaseValue/DisplayValue should have class methods that make everything move nicer
 
 def generate_navigation_display(parameters, level=1)

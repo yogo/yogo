@@ -3,95 +3,447 @@
 	{"id":"generated.js?sources?0",
 		"name":"yogo/example_project/customer",
 		"schema":{
+			"properties":{
+				"first":{
+					"type":"string",
+					"optional":true
+				},
+				"middle":{
+					"type":"string",
+					"optional":true
+				},
+				"last":{
+					"type":"string",
+					"optional":true
+				},
+				"street1":{
+					"type":"string",
+					"optional":true
+				},
+				"street2":{
+					"type":"string",
+					"optional":true
+				},
+				"city":{
+					"type":"string",
+					"optional":true
+				},
+				"state":{
+					"type":"string",
+					"optional":true
+				},
+				"zip":{
+					"type":"string",
+					"optional":true
+				},
+				"phone":{
+					"type":"string",
+					"optional":true
+				},
+				"since":{
+					"type":"string",
+					"format":"date-time",
+					"optional":true
+				},
+				"credit":{
+					"type":"string",
+					"optional":true
+				},
+				"credit_limit":{
+					"type":"number",
+					"optional":true
+				},
+				"discount":{
+					"type":"number",
+					"optional":true
+				},
+				"balance":{
+					"type":"number",
+					"optional":true
+				},
+				"ytd_payments":{
+					"type":"number",
+					"optional":true
+				},
+				"payment_count":{
+					"type":"integer",
+					"optional":true
+				},
+				"delivery_count":{
+					"type":"integer",
+					"optional":true
+				},
+				"data":{
+					"type":"string",
+					"optional":true
+				},
+				"warehouse_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"district_id":{
+					"type":"integer",
+					"optional":true
+				}
+			},
+			"prototype":{
+			},
+			"instances":{"$ref":"../yogo/example_project/customer/"}
 		}
 	},
 	{"id":"generated.js?sources?1",
 		"name":"yogo/example_project/district",
 		"schema":{
+			"properties":{
+				"name":{
+					"type":"string",
+					"optional":true
+				},
+				"street1":{
+					"type":"string",
+					"optional":true
+				},
+				"street2":{
+					"type":"string",
+					"optional":true
+				},
+				"city":{
+					"type":"string",
+					"optional":true
+				},
+				"state":{
+					"type":"string",
+					"optional":true
+				},
+				"zip":{
+					"type":"string",
+					"optional":true
+				},
+				"tax":{
+					"type":"number",
+					"optional":true
+				},
+				"ytd":{
+					"type":"number",
+					"optional":true
+				},
+				"next_order_number":{
+					"type":"integer",
+					"optional":true
+				},
+				"warehouse_id":{
+					"type":"integer",
+					"optional":true
+				}
+			},
+			"prototype":{
+			},
+			"instances":{"$ref":"../yogo/example_project/district/"}
 		}
 	},
 	{"id":"generated.js?sources?2",
 		"name":"yogo/example_project/history",
 		"schema":{
+			"properties":{
+				"created":{
+					"type":"string",
+					"format":"date-time",
+					"optional":true
+				},
+				"amount":{
+					"type":"number",
+					"optional":true
+				},
+				"data":{
+					"type":"string",
+					"optional":true
+				},
+				"customer_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"district_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"warehouse_id":{
+					"type":"integer",
+					"optional":true
+				}
+			},
+			"prototype":{
+			},
+			"instances":{"$ref":"../yogo/example_project/history/"}
 		}
 	},
 	{"id":"generated.js?sources?3",
 		"name":"yogo/example_project/item",
 		"schema":{
+			"properties":{
+				"image_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"name":{
+					"type":"string",
+					"optional":true
+				},
+				"price":{
+					"type":"number",
+					"optional":true
+				},
+				"data":{
+					"type":"string",
+					"optional":true
+				}
+			},
+			"prototype":{
+			},
+			"instances":{"$ref":"../yogo/example_project/item/"}
 		}
 	},
 	{"id":"generated.js?sources?4",
 		"name":"yogo/example_project/new_order",
 		"schema":{
+			"properties":{
+				"district_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"warehouse_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"order_id":{
+					"type":"integer",
+					"optional":true
+				}
+			},
+			"prototype":{
+			},
+			"instances":{"$ref":"../yogo/example_project/new_order/"}
 		}
 	},
 	{"id":"generated.js?sources?5",
 		"name":"yogo/example_project/order",
 		"schema":{
+			"properties":{
+				"created":{
+					"type":"string",
+					"format":"date-time",
+					"optional":true
+				},
+				"carrier":{
+					"type":"integer",
+					"optional":true
+				},
+				"line_count":{
+					"type":"integer",
+					"optional":true
+				},
+				"all_local":{
+					"type":"integer",
+					"optional":true
+				},
+				"district_info":{
+					"type":"string",
+					"optional":true
+				},
+				"customer_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"district_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"warehouse_id":{
+					"type":"integer",
+					"optional":true
+				}
+			},
+			"prototype":{
+			},
+			"instances":{"$ref":"../yogo/example_project/order/"}
 		}
 	},
 	{"id":"generated.js?sources?6",
 		"name":"yogo/example_project/order_line",
 		"schema":{
+			"properties":{
+				"line_number":{
+					"type":"integer",
+					"optional":true
+				},
+				"item_code":{
+					"type":"integer",
+					"optional":true
+				},
+				"supply_warehouse_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"delivery_date":{
+					"type":"string",
+					"format":"date-time",
+					"optional":true
+				},
+				"quantity":{
+					"type":"integer",
+					"optional":true
+				},
+				"amount":{
+					"type":"number",
+					"optional":true
+				},
+				"district_information":{
+					"type":"string",
+					"optional":true
+				},
+				"district_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"order_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"warehouse_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"stock_id":{
+					"type":"integer",
+					"optional":true
+				}
+			},
+			"prototype":{
+			},
+			"instances":{"$ref":"../yogo/example_project/order_line/"}
 		}
 	},
 	{"id":"generated.js?sources?7",
 		"name":"yogo/example_project/stock",
 		"schema":{
+			"properties":{
+				"quantity":{
+					"type":"integer",
+					"optional":true
+				},
+				"district_01":{
+					"type":"string",
+					"optional":true
+				},
+				"district_02":{
+					"type":"string",
+					"optional":true
+				},
+				"district_03":{
+					"type":"string",
+					"optional":true
+				},
+				"district_04":{
+					"type":"string",
+					"optional":true
+				},
+				"district_05":{
+					"type":"string",
+					"optional":true
+				},
+				"district_06":{
+					"type":"string",
+					"optional":true
+				},
+				"district_07":{
+					"type":"string",
+					"optional":true
+				},
+				"district_08":{
+					"type":"string",
+					"optional":true
+				},
+				"district_09":{
+					"type":"string",
+					"optional":true
+				},
+				"district_10":{
+					"type":"string",
+					"optional":true
+				},
+				"ytd":{
+					"type":"integer",
+					"optional":true
+				},
+				"order_count":{
+					"type":"integer",
+					"optional":true
+				},
+				"remote_count":{
+					"type":"integer",
+					"optional":true
+				},
+				"data":{
+					"type":"string",
+					"optional":true
+				},
+				"item_id":{
+					"type":"integer",
+					"optional":true
+				},
+				"warehouse_id":{
+					"type":"integer",
+					"optional":true
+				}
+			},
+			"prototype":{
+			},
+			"instances":{"$ref":"../yogo/example_project/stock/"}
 		}
 	},
 	{"id":"generated.js?sources?8",
 		"name":"yogo/example_project/warehouse",
 		"schema":{
+			"properties":{
+				"name":{
+					"type":"string",
+					"optional":true
+				},
+				"street1":{
+					"type":"string",
+					"optional":true
+				},
+				"street2":{
+					"type":"string",
+					"optional":true
+				},
+				"city":{
+					"type":"string",
+					"optional":true
+				},
+				"state":{
+					"type":"string",
+					"optional":true
+				},
+				"zip":{
+					"type":"string",
+					"optional":true
+				},
+				"tax":{
+					"type":"number",
+					"optional":true
+				},
+				"ytd":{
+					"type":"number",
+					"optional":true
+				}
+			},
+			"prototype":{
+			},
+			"instances":{"$ref":"../yogo/example_project/warehouse/"}
 		}
 	},
 	{"id":"generated.js?sources?9",
-		"name":"yogo/example_project/new_order",
-		"schema":{
-		}
-	},
-	{"id":"generated.js?sources?10",
-		"name":"yogo/example_project/stock",
-		"schema":{
-		}
-	},
-	{"id":"generated.js?sources?11",
-		"name":"yogo/example_project/order_line",
-		"schema":{
-		}
-	},
-	{"id":"generated.js?sources?12",
-		"name":"yogo/example_project/order",
-		"schema":{
-		}
-	},
-	{"id":"generated.js?sources?13",
-		"name":"yogo/example_project/warehouse",
-		"schema":{
-		}
-	},
-	{"id":"generated.js?sources?14",
-		"name":"yogo/example_project/customer",
-		"schema":{
-		}
-	},
-	{"id":"generated.js?sources?15",
-		"name":"yogo/example_project/item",
-		"schema":{
-		}
-	},
-	{"id":"generated.js?sources?16",
-		"name":"yogo/example_project/district",
-		"schema":{
-		}
-	},
-	{"id":"generated.js?sources?17",
-		"name":"yogo/example_project/history",
-		"schema":{
-		}
-	},
-	{"id":"generated.js?sources?18",
-		"name":"yogo/example_project/customer",
+		"name":"yogo/example_project/customers",
 		"schema":{
 			"properties":{
 				"first":{
@@ -180,8 +532,8 @@
 			}
 		}
 	},
-	{"id":"generated.js?sources?19",
-		"name":"yogo/example_project/district",
+	{"id":"generated.js?sources?10",
+		"name":"yogo/example_project/districts",
 		"schema":{
 			"properties":{
 				"name":{
@@ -229,8 +581,8 @@
 			}
 		}
 	},
-	{"id":"generated.js?sources?20",
-		"name":"yogo/example_project/history",
+	{"id":"generated.js?sources?11",
+		"name":"yogo/example_project/histories",
 		"schema":{
 			"properties":{
 				"created":{
@@ -263,8 +615,8 @@
 			}
 		}
 	},
-	{"id":"generated.js?sources?21",
-		"name":"yogo/example_project/item",
+	{"id":"generated.js?sources?12",
+		"name":"yogo/example_project/items",
 		"schema":{
 			"properties":{
 				"image_id":{
@@ -288,8 +640,8 @@
 			}
 		}
 	},
-	{"id":"generated.js?sources?22",
-		"name":"yogo/example_project/new_order",
+	{"id":"generated.js?sources?13",
+		"name":"yogo/example_project/new_orders",
 		"schema":{
 			"properties":{
 				"district_id":{
@@ -309,8 +661,8 @@
 			}
 		}
 	},
-	{"id":"generated.js?sources?23",
-		"name":"yogo/example_project/order",
+	{"id":"generated.js?sources?14",
+		"name":"yogo/example_project/orders",
 		"schema":{
 			"properties":{
 				"created":{
@@ -351,8 +703,8 @@
 			}
 		}
 	},
-	{"id":"generated.js?sources?24",
-		"name":"yogo/example_project/order_line",
+	{"id":"generated.js?sources?15",
+		"name":"yogo/example_project/order_lines",
 		"schema":{
 			"properties":{
 				"line_number":{
@@ -405,8 +757,8 @@
 			}
 		}
 	},
-	{"id":"generated.js?sources?25",
-		"name":"yogo/example_project/stock",
+	{"id":"generated.js?sources?16",
+		"name":"yogo/example_project/stocks",
 		"schema":{
 			"properties":{
 				"quantity":{
@@ -482,8 +834,8 @@
 			}
 		}
 	},
-	{"id":"generated.js?sources?26",
-		"name":"yogo/example_project/warehouse",
+	{"id":"generated.js?sources?17",
+		"name":"yogo/example_project/warehouses",
 		"schema":{
 			"properties":{
 				"name":{
