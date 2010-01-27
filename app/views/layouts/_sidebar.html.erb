@@ -1,6 +1,12 @@
 <div id="sidebar">
     <div id="nav-home" class="nav-group">
-      <div class="nav-title" id='home-title'><%= link_to("Home", "/") %></div>
+      <div class="nav-title" id='home-title'><%= link_to("Home", projects_url) %></div>
+    </div>
+    <div id="nav-create-project" class="nav-group">
+      <%= link_to(image_tag('add.gif')+" Create a Project", new_project_url) %>
+    </div>
+    <div id="dev-tools" class="nav-group">
+      <%= link_to("Refresh Reflections", rereflect_projects_path, :method => :post)%>
     </div>
     <div id="nav-projects" class="nav-group">
       <div class="nav-title" id='projects-title'>Projects</div>
@@ -10,12 +16,7 @@
                  <%= add_menu_item(project.name, project_path(project))%>
                 <% end %>
             </ul>
-            <br/>
-            <%= link_to(image_tag('add.gif')+" Create a Project", new_project_url) %>
         </div>
     </div>
     <br/>
-    <div id="dev-tools">
-      <%= link_to("Refresh Reflections", rereflect_projects_path, :method => :post)%>
-    </div>
 </div>

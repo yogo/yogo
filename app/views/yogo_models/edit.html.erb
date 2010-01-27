@@ -1,20 +1,34 @@
-<h3>Edit <%= @model.name.gsub!('::', " => ") %></h3>
+<h1>Editing <%= @model.name.split("::")[-1].titleize %></h1>
 
+<div id="model-edit">
+  <%- form_for(@model, :url => project_yogo_model_path(@project, @model.name.split('::')[-1])) do |f| -%>
 
-<%- form_for(@model, :url => project_yogo_model_path(@project, @model.name.split('::')[-1])) do |f| -%>
-
-  <%= label_tag(:name) %>: <%= text_field_tag(:name) %>
+    <%= label_tag(:name) %>: <%= text_field_tag(:name) %>
   
-  <%- options = options_for_select(@options) -%> 
-  <%= label_tag(:type) %>: <%= select_tag(:type, options ) %>
+    <%- options = options_for_select(@options) -%> 
+    <%= label_tag(:type) %>: <%= select_tag(:type, options ) %>
   
-  <%= f.submit('Add Property') %>
+    <%= f.submit('Add Property') %>
     
-<%- end -%>
-<br>
-  <div>Current Properties</div>
-<br>
-<%- @model.properties.each do |prop| %>
-  <%= prop.name %>
-  <%= (prop.type.to_s == "DataMapper::Types::Serial") ? "Integer" :  @types[prop.type]  %><br />
-<%- end -%>
+  <%- end -%>
+</div>
+
+<table id="model-show">
+  <thead>Current Properties
+    <tr>
+      <th>Name</th>
+      <th>Data type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- i = 0 %>
+    <%- @model.properties.each do |prop| %>
+      <%- if i == 2 : i = 0 end %>
+      <tr id="model-show-row" class="alternate-rows<%= i %>">
+        <td><%= prop.name.to_s.titleize %></td>
+        <td><%= (prop.type.to_s == "DataMapper::Types::Serial") ? "Integer" : @types[prop.type]  %></td>
+      <tr>
+      <%- i += 1 %>
+    <%- end %>
+  </tbody>
+</table>

@@ -1,5 +1,5 @@
 <H3><%= @model.name.split("::")[-1].titleize %></H3>
-<table>
+<table id="data-show">
   <thead>
     <tr>
       <th></th><th></th>
@@ -10,11 +10,12 @@
   </thead>
   <tbody>
     <tr>
-      <td><%= link_to('Edit', edit_project_yogo_data_path(@project, @model.name.split("::")[-1], @item.id)) %></td>
-      <td><%= link_to('Delete', project_yogo_data_path(@project, @model.name.split("::")[-1], @item.id), :method => :delete) %></td>
+      <td><%= link_to(image_tag('edit.png')+'Edit', edit_project_yogo_data_path(@project, @model.name.split("::")[-1], @item.id)) %></td>
+      <td><%= link_to(image_tag('remove.png')+'Delete', project_yogo_data_path(@project, @model.name.split("::")[-1], @item.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
       <%- @model.properties.each do |p| %>
       <td><%= @item[p.name] %></td>
       <%- end %>
     </tr>
   </tbody>
 </table>
+
