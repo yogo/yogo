@@ -32,7 +32,7 @@ module DataMapper
         results = Array.new
         # This should really create DataMapper Properties, I think
         self.select('PRAGMA table_info(%s)' % table).each do |column|
-          results << {:name => column.name, :type => get_type(column.type), :required => column.notnull==0 ? false : true, :default => column.dflt_value, :key => column.pk==0 ? false : true}
+          results << {:name => column.name.downcase, :field => column.name, :type => get_type(column.type), :required => column.notnull==0 ? false : true, :default => column.dflt_value, :key => column.pk==0 ? false : true}
         end
         return results
       end

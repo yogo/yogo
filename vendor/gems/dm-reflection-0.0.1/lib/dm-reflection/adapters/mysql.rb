@@ -1,35 +1,38 @@
-module Databases
-  module MySQL
-    
-    def get_type(db_type)
-      db_type.gsub!(/\(\d*\)/, '')
-      {
-         'INTEGER'     =>  Integer    ,
-         'VARCHAR'     =>  String     ,
-         'DECIMAL'     =>  BigDecimal ,
-         'FLOAT'       =>  Float      ,
-         'DATETIME'    =>  DateTime   ,
-         'DATE'        =>  Date       ,
-         'BOOLEAN'     =>  Types::Boolean  ,
-         'TEXT'        =>  Types::Text
-        }[db_type]
-    end
-        
-    def get_storage_names
-      database = self.options['database']
-      query = "SHOW TABLES FROM #{database}"
-      self.select(query)
-    end
-    
-    def get_properties(table)
-      results = Array.new
-      database = DataMapper::Reflection.adapter.options['database']
-      query = "show columns from #{table} in #{database};"
-      repository(:defaults).adapter.send(:query, query).each do |column|        
-        puts "#{column.inspect}"
-        results << {:name => column.field, :type => get_type(column.type), :required => column.null=='NO' ? false : true, :default => column.default, :serial => column.key=='PRI' ? true: false}
+module DataMapper
+  module Reflection
+    module MysqlAdapter
+      def get_type(db_type)
+        db_type.gsub!(/\(\d*\)/, '')
+        {
+          'tinyint'     =>  Integer    ,
+          'smallint'    =>  Integer    ,
+          'int'         =>  Integer    ,
+          'integer'     =>  Integer    ,
+          'varchar'     =>  String     ,
+          'char'        =>  String     ,
+          'decimal'     =>  BigDecimal ,
+          'double'      =>  Float      ,
+          'float'       =>  Float      ,
+          'datetime'    =>  DateTime   ,
+          'date'        =>  Date       ,
+          'boolean'     =>  Types::Boolean  ,
+          'text'        =>  Types::Text
+          }[db_type.split(' ')[0]]
       end
-      results
+
+      def get_storage_names
+        query = "SHOW FULL TABLES FROM #{options[:path][1..-1]} WHERE Table_type = 'BASE TABLE'"
+        self.select(query).map {|item| item[0] }
+      end
+
+      def get_properties(table)
+        results = Array.new
+        query = "show columns from #{table} in #{options[:path][1..-1]};"
+        send(:query, query).each do |column|
+          results << {:name => column.field.downcase, :field => column.field, :type => get_type(column.type), :required => (column.null=='NO') ? true : false, :default => column.default, :key => ["PRI", "MUL"].include?(column.key) ? true: false}
+        end
+        results
+      end
     end
   end
 end

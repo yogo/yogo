@@ -1,9 +1,38 @@
+require 'ruby-debug'
 namespace :yogo do
   namespace :db do
+    desc "Import legacy database into Yogo."
+    task :import, :db, :name, :needs => :environment do |task, args|
+      # Connect to the legacy database
+      DataMapper.setup(:import, args[:db])
+       # We'll create a new project with the name of the imported database
+       project = Project.create(:name => args[:name])
+       # Iterate through each model and make it in persevere, then copy instances
+       DataMapper::Reflection.reflect(:import).each do |model|
+         mphash = Hash.new
+         model.properties.each do |prop| 
+           mphash[prop.name] = { :type => prop.type, :key => prop.key?, :serial => prop.serial? } 
+           mphash[prop.name].merge!({:default => prop.default}) if prop.default? 
+         end
+         model_hash = { :name       => model.name.camelcase, 
+                        :modules    => ["Yogo", args[:name].camelcase], 
+                        :properties => mphash }
+         yogo_model = DataMapper::Factory.build(model_hash, :yogo)
+         yogo_model.auto_migrate!
+         # Create each instance of the class
+         model.all.each do |item| 
+           begin
+             yogo_model.create!(item.attributes) 
+           rescue Error => e
+             puts "Error making instance #{item.inspect} #{e.inspects}"
+           end
+         end
+       end
+    end
+
     namespace :example do
       desc "Copies the example database into persevere."
       task :load => :environment do
-        require 'ruby-debug'
         # Iterate through each model and make it in persevere, then copy instances
         DataMapper::Reflection.reflect(:example).each do |model|
           mphash = Hash.new
@@ -11,20 +40,14 @@ namespace :yogo do
             mphash[prop.name] = { :type => prop.type, :key => prop.key?, :serial => prop.serial? } 
             mphash[prop.name].merge!({:default => prop.default}) if prop.default? 
           end
-
           model_hash = { :name       => model.name.camelcase, 
                          :modules    => ["Yogo", "ExampleProject"], 
                          :properties => mphash }
-
-
           yogo_model = DataMapper::Factory.build(model_hash, :yogo)
-
           yogo_model.auto_migrate!
-
           # Create each instance of the class
           model.all.each{ |item| yogo_model.create!(item.attributes) }
         end
-
        Project.create(:name => "Example Project")
       end
 
