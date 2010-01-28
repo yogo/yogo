@@ -22,19 +22,20 @@ class Project
     self.delete_models!
   end
 
-  # Returns the project namespaced name
+  # @return [String] the project namespaced name
   #
   def namespace
     name.split(/\W/).map{ |item| item.capitalize}.join("")
   end
   
-  # Returns the project path name
+  # @return [String] the project path name
   #
   def path
     name.downcase.gsub(/[^\w]/, '_')
   end
   
   # to_param is called by rails for routing and such
+  # 
   def to_param
     id.to_s
   end
@@ -64,13 +65,14 @@ class Project
       model.create(line_data)
     end
   end
-  # Returns an array of the models associated with current project namespace
+  
+  # @return [Array] of the models associated with current project namespace
   #
   def models
     DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{namespace}::/ }
   end
   
-  # Returns a models name from the  "name"
+  # @return [String] DataMapper models name from the  "name"
   #
   # * The csv datafile must be in the following format:
   # =Example
@@ -79,9 +81,16 @@ class Project
     DataMapper::Model.descendants.select{|m| m.to_s.split('::')[-1] == name }[0]
   end
 
+  # @return [DataMapper::Model] a new model 
   # Adds a model to the current project
   #
-  # * "hash" contains all the modules, name and properties to define the model
+  # @param [Hash] hash contains all the modules, name and properties to define the model
+  # @options hash [String] :name The models name
+  # @options hash [Array] :modules An array of the modules to namespace the model
+  # @options hash [Hash] :properties All the models properties
+  # @options properties [Hash] prop_name This is the actual property name and is the hash-key
+  # @options prop_name [String] :type The datatype of the property   
+  # @options prop_name [Boolean] :required  If the property can be null or not  
   # 
   def add_model(hash)
     DataMapper::Factory.build(hash, :yogo)
