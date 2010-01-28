@@ -1,7 +1,7 @@
 require 'slash_path'
 require 'yaml'
 namespace :persvr do
-  persvr_cmd = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || 'persvr'
+  PERSVR_CMD = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || 'persvr'
   
   def config(env)
     cfg = YAML.load_file(RAILS_ROOT/:config/'persvr.yml')[env]
@@ -12,7 +12,7 @@ namespace :persvr do
   end
   
   task :version do
-    sh "#{persvr_cmd} --version" do |ok,resp|
+    sh "#{PERSVR_CMD} --version" do |ok,resp|
       unless ok
         raise "persvr was not found! Ensure persevere is installed and set PERSEVERE_HOME to the path of your persevere install."
       end
@@ -23,7 +23,7 @@ namespace :persvr do
   task :create => [:version] do
     cfg = config(RAILS_ENV)
     cd RAILS_ROOT do
-      sh "#{persvr_cmd} --gen-server #{cfg['database']}" unless File.exist? RAILS_ROOT/cfg['database']
+      sh "#{PERSVR_CMD} --gen-server #{cfg['database']}" unless File.exist? RAILS_ROOT/cfg['database']
     end
   end
   
@@ -37,28 +37,37 @@ namespace :persvr do
   task :clear => [:version, :stop] do
     cfg = config(RAILS_ENV)
     cd RAILS_ROOT/cfg['database'] do
-      sh "#{persvr_cmd} --eraseDB"
+      sh "#{PERSVR_CMD} --eraseDB"
     end
   end
   
-  desc "Start the persevere instance for the current environment."
-  task :start => [:version, :create] do
+  def start_persvr(interactive=false)
     cfg = config(RAILS_ENV)
     cd RAILS_ROOT/cfg['database'] do
       if File.exist? "./WEB-INF/process"
         puts "Persevere instance already running in #{RAILS_ROOT/cfg['database']}"
       else
-        log = RAILS_ROOT/:log/"persvr_#{RAILS_ENV}.log"
-        pid = Process.fork do
-          Process.fork do
-            puts "Starting persvr #{RAILS_ENV} instance in #{RAILS_ROOT/cfg['database']}..."
+        if defined? JRUBY_VERSION
+          puts "I can't fork the persvr into a background process from JRuby."
+          puts "You will need to execute `rake pesvr:start` from a separate shell if you want to run script/server."
+          puts "Starting persvr #{RAILS_ENV} instance in #{RAILS_ROOT/cfg['database']}..."
+          exec "#{PERSVR_CMD} --start --port #{cfg['port']}"
+        else
+          log = RAILS_ROOT/:log/"persvr_#{RAILS_ENV}.log"
+          pid = Process.fork do
+            puts "Starting background persvr #{RAILS_ENV} instance in #{RAILS_ROOT/cfg['database']}..."
             puts "...logging persvr output to #{log}."
-            exec "#{persvr_cmd} --start --port #{cfg['port']} &> #{log}" 
+            exec "#{PERSVR_CMD} --start --port #{cfg['port']} &> #{log}" 
           end
+          Process.detach(pid)
         end
-        Process.detach(pid)
       end
     end
+  end
+  
+  desc "Start the persevere instance for the current environment."
+  task :start => [:version, :create] do
+    start_persvr
   end
   
   desc "Stop the persevere instance for the current environment."
@@ -66,7 +75,7 @@ namespace :persvr do
     cfg = config(RAILS_ENV)
     cd RAILS_ROOT/cfg['database'] do
       if File.exist? '.'/'WEB-INF'/'process'
-        sh "#{persvr_cmd} --stop"
+        sh "#{PERSVR_CMD} --stop"
       else
         puts "Persevere instance not running in #{RAILS_ROOT/cfg['database']}"
       end
@@ -78,7 +87,7 @@ namespace :persvr do
       if File.exist? dir/'WEB-INF'/'process'
         cd dir do
           puts "Stopping persevere instance in #{dir}"
-          sh "#{persvr_cmd} --stop"
+          sh "#{PERSVR_CMD} --stop"
         end
       end
     end
