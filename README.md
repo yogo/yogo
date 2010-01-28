@@ -4,7 +4,12 @@ Yogo is a Data Management System built on Ruby on Rails, DataMapper, and Perseve
 
 ## Getting Started with Development
 
-1. Checkout the project: `git clone http://github.com/yogo/yogo.git`
+1. Checkout the project:           `git clone http://github.com/yogo/yogo.git`
+2. Change directories to the code: `cd yogo`
+3. Initialize the environment:     `./setup.sh`
+4. Start persevere:                `rake persvr:start`
+5. Start the application:          `script/server`
+
 2. Create a config/database.yml file (or copy the example provided in `config/database.yml.start`)
 3. Update Git Submodules
     1. `git submodule init`
