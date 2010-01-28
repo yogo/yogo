@@ -1,20 +1,29 @@
-<h3><%= @model.name.gsub!('::', " => ") %></h3>
+<h1><%= @model.name.split("::")[-1].titleize %></h1>
 
-<table>
+<div id="model-action-links">
+  <%= link_to(image_tag('edit.png')+'Edit '+@model.name.split("::")[-1].titleize, edit_project_yogo_model_path(@project, @model.name.split("::")[-1])) %>
+  <%= link_to(image_tag('remove.png')+'Remove '+@model.name.split("::")[-1].titleize, project_yogo_model_path(@project, @model.name.split("::")[-1]), :method => :delete, :confirm => 'Removing this model will also destroy all data associated with the model. Continue?') %>
+</div>
+<table id="model-show">
   <thead>
     <tr>
       <th>Name</th>
-      <th>Type</th>
+      <th>Data type</th>
     </tr>
   </thead>
   <tbody>
+    <%- i = 0 %>
     <%- @model.properties.each do |prop| %>
-    <tr>
-      <td><%= prop.name %></td>
-      <td><%= (prop.type.to_s == "DataMapper::Types::Serial") ? "Integer" : @types[prop.type]  %></td>
-    <tr>
+      <%- if i == 2 : i = 0 end %>
+      <tr id="model-show-row" class="alternate-rows<%= i %>">
+        <td><%= prop.name.to_s.titleize %></td>
+        <td><%= (prop.type.to_s == "DataMapper::Types::Serial") ? "Integer" : @types[prop.type]  %></td>
+      <tr>
+      <%- i += 1 %>
     <%- end %>
   </tbody>
 </table>
-<%= link_to('Edit', edit_project_yogo_model_path(@project, @model.name.split("::")[-1])) %>
-<%= link_to('Remove', project_yogo_model_path(@project, @model.name.split("::")[-1]), :method => :delete, :confirm => 'Removing this model will also destroy all data associated with the model. Continue?') %>
+
+
+
+

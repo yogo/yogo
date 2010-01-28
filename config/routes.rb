@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
-  map.resources :projects, :except => [ :edit, :update ], :member => { :upload => :post } do |project|
+  map.resources :projects, :except => [ :edit, :update ], :member => { :upload => :post }, :collection => { :rereflect => :post } do |project|
     
     # /projects/:project_id/yogo_data/:model_name
     # /projects/:project_id/yogo_data/:model_name/:id
@@ -11,5 +11,5 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => "projects"
+  map.root :controller => "welcome"
 end

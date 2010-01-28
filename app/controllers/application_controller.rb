@@ -2,9 +2,6 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  include Yogo::AuthenticatedSystem
-  include Yogo::AuthorizationSystem
-  
   before_filter :check_local_only
   
   helper :all # include all helpers, all the time

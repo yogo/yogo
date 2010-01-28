@@ -39,7 +39,7 @@ class Project
   end
   
   def get_model(name)
-    DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{project_key}::#{name}/ }[0]
+    DataMapper::Model.descendants.select{|m| m.to_s.split('::')[-1] == name }[0]
   end
 
   def add_model(hash)

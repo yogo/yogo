@@ -1,5 +1,8 @@
 <h1><%= @project.name %></h1>
-<table id="projects-show">
+<div id="project-remove-link">
+  <%= link_to(image_tag('remove.png')+"Remove Project", project_path(@project), :method => :delete, :confirm => "Removing this project will destroy all data associated with it.\n Continue?") %>
+</div>
+<table id="project-show">
   <thead>
     <tr>
       <th>Models</th>
@@ -7,12 +10,18 @@
     </tr>
   </thead>
   <tbody>
-    <tr id="projects-show-row<%=@project.id%>" class="projects-show-row-border">
-      <td><%= render :partial => 'yogo_models/model_list' %></td>
-      <td><%= render :partial => 'yogo_data/data_list' %></td>
-    </tr>
+    <%- i = 0 %>
+    <%- @models.each do |m| %>
+      <%- if i == 2 : i = 0 end %>
+      <tr id="project-show-row" class="alternate-rows<%= i %>">
+        <td><%= link_to(m.name.split('::')[-1].titleize, project_yogo_model_path(@project, m.name.split('::')[-1])) %></td>
+        <td>(<%= link_to(m.count, project_yogo_data_index_path(@project, m.name.split('::')[-1])) %>)</td>
+      </tr>
+      <%- i += 1 %>
+    <%- end %>
   </tbody>
 </table>
-<%= render :partial => 'upload' %>
 
-<%= link_to("Remove Project", project_path(@project), :method => :delete, :confirm => "Removing this project will destroy all data associated with it.\n Continue?") %>
+<div id="upload">
+  <%= render :partial => 'upload' %>
+</div>

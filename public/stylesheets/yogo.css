@@ -2,6 +2,18 @@
 Link Brown: #703824
 Header Blue: #455D8C
 */
+* {
+	margin:0;
+	padding:0;
+} 
+
+html, body, #container {
+	height: 100%;
+}
+/*LKW's note: I took out these bits (from sticky footer) but need 
+to do cross-browser testing to make sure they're not needed.*/
+/*body > #container {height: auto; min-height: 100%;} */
+/*#main {padding-bottom: 150px;}*/  /* must be same height as the footer */
 
 a {
   text-decoration: none;
@@ -59,9 +71,31 @@ h3 {
   text-align:center;
   width:500px;
   margin:auto;
+	margin-bottom:20px;
   border:1px solid #aaa;
   background:#ddd;
 }
+
+/*This is here (in part) so the footer will stay at the bottom of pages*/
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clearfix {
+	display: inline-block;
+}
+/* Hides from IE-mac \*/
+* html .clearfix { 
+	height: 1%;
+}
+.clearfix {
+	display: block;
+}
+/* End hide from IE-mac */
+
 
 #container {
   width:950px;
@@ -81,10 +115,6 @@ h3 {
   height:111px;
 }
 
-#header-img {
-/*  padding:60px 0 0 12px;*/
-}
-
 #user-bar {
   float:right;
   padding:8px 20px 0 0;
@@ -101,6 +131,10 @@ h3 {
   margin-right:8px;
   border-right:1px solid #ddd;
 }
+	
+	.nav-group {
+		margin:12px 0;
+	}
 
   #home-title {
     width:48px;
@@ -114,7 +148,7 @@ h3 {
     padding:6px 0 0 0;
     border-top:1px dotted #888;
   }
-  
+
   #sidebar ul {
     padding:0px;
     margin:3px 5px 0 15px;
@@ -147,14 +181,39 @@ h3 {
   border:2px solid #ddd;
 }
 
-#projects-index td {
-  padding:4px 16px 6px 16px;
-  vertical-align:bottom;
+#project-remove-link {
+	padding:12px;
 }
 
-.projects-index-row-border td, .projects-show-row-border li {
+#project-show, #model-show {
+	padding:12px 0;
+}
+
+#project-show-row td, #model-show-row td {
+	padding:3px 8px;
   border-bottom:1px dotted #888;
   vertical-align:bottom;
+	color:#777;
+}
+
+#model-edit {
+	padding:20px 12px;
+}
+
+#model-show-row td {
+	color:#000;
+}
+
+#model-action-links {
+	padding:12px;
+}
+
+#model-action-links a{
+	padding:0 12px;
+}
+
+.alternate-rows0 td {
+  background:#EEE;
 }
 
 #yogo-data-list ul {
@@ -166,6 +225,27 @@ h3 {
   list-style-type: none;
 }
 
+#data-index th, #data-show th {
+	padding:8px;
+}
+
+#data-index td, #data-show td {
+	min-width:75px;
+	padding:4px;
+}
+
+#pagination-links {
+	padding:12px;
+}
+
+#upload {
+	margin:20px 0;
+}
+
 #footer {
-  text-align:center;
+	position: relative;
+	margin-top: -100px; /* negative value of footer height */
+	height: 100px;
+	clear:both;
+	text-align:center;
 }

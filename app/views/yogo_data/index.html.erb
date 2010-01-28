@@ -1,5 +1,5 @@
-<H3><%= @model.name.split("::")[-1].titleize %></H3>
-<table>
+<H3><%= @model.name.split("::")[-1].titleize %> (<%= @model.count %>)</H3>
+<table id="data-index">
   <thead>
     <tr>
       <th></th><th></th>
@@ -11,8 +11,8 @@
   <tbody>
   <%- @data.each do |d| %>
     <tr>
-      <td><%= link_to('Edit', edit_project_yogo_data_path(@project, @model.name.split("::")[-1], d.id)) %></td>
-      <td><%= link_to('Delete', project_yogo_data_path(@project, @model.name.split("::")[-1], d.id), :method => :delete) %></td>
+      <td><%= link_to(image_tag('edit.png')+'Edit', edit_project_yogo_data_path(@project, @model.name.split("::")[-1], d.id)) %></td>
+      <td><%= link_to(image_tag('remove.png')+'Delete', project_yogo_data_path(@project, @model.name.split("::")[-1], d.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
       <%- @model.properties.each do |p| %>
       <td><%= d[p.name] %></td>
       <%- end %>
@@ -20,5 +20,25 @@
     <%- end %>
   </tbody>
 </table>
-<%= pagination_links(@data, params[:page], 5) %>
+<div id="pagination-links">
+  <%= pagination_links(@data, params[:page], 5) %>
+</div>
 <%= render :partial => 'csv_form'%>
+
+<!-- Tried flipping the table on its side. -->
+<!-- <table>
+  <thead>
+  </thead>
+  <tbody>
+    
+      <%#- @model.properties.each do |p| %>
+      <tr>
+      <td><%#= p.name.to_s.titleize %></td>
+      <%#- @data.each do |d| %>
+      <td><%#= d[p.name] %></td>
+            <%#- end %>
+      </tr>
+
+      <%#- end %>
+  </tbody>
+</table> -->

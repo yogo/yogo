@@ -4,7 +4,7 @@ For now, this gem only allows you to print the ruby source for any DataMapper::M
 
   require 'rubygems'
   require 'dm-core'
-  require 'dm-reflection/builders/source_builder'
+  require 'dm-reflection'
 
   class Project
 
@@ -42,6 +42,11 @@ For now, this gem only allows you to print the ruby source for any DataMapper::M
   end
   RUBY
 
+Also, you can create models from a repository by doing the following:
+
+  require 'dm-reflection'
+  models = DataMapper::Reflection.reflect(:default)
+  
 == Note on Patches/Pull Requests
 
 * Fork the project.
@@ -54,4 +59,6 @@ For now, this gem only allows you to print the ruby source for any DataMapper::M
 
 == Copyright
 
-Copyright (c) 2009 Martin Gamsjaeger (snusnu). See LICENSE for details.
+See LICENSE for details.
+Copyright (c) 2009 Martin Gamsjaeger (snusnu). 
+Copyright (c) 2010 Montana State University, Bozeman (The Yogo Data Management Team).
