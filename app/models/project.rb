@@ -35,7 +35,7 @@ class Project
   end
 
   def models
-    DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{project_key}::/ }
+    DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{project_key.camelize}::/ }
   end
   
   def get_model(name)
@@ -68,17 +68,4 @@ class Project
      delete_model(model)
     end
   end
-
-  # #
-  # # Private Methods
-  # #
-  # private
-  # 
-  # def namespace(hash)
-  #   unless hash['id'] =~ /^Yogo\/#{project_key}\/\w+/
-  #     hash['id'] = "Yogo/#{project_key}/#{hash['id']}"
-  #   end
-  #   hash
-  # end
-  # 
 end

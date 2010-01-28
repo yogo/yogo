@@ -57,6 +57,19 @@ Also, you can create models from a repository by doing the following:
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
+== Future Work
+
+* Support Associations/Relationships
+* Support Single Table Inheritance
+* Ensure Round tripping is functional
+  ** Create model M in DataMapper
+  ** Migrate M to a repository
+  ** Reflect M' from the repository
+  ** M should == M'
+  
+* Having round tripping provably working is the first goal
+* Legacy reflection is something to make work after round tripping (because the assumptions DM makes won't always hold.)
+  
 == Copyright
 
 See LICENSE for details.

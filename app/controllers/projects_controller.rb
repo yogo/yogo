@@ -1,6 +1,5 @@
 class ProjectsController < ApplicationController
 
-#  require_user :for => [ :show, :new, :create, :edit, :destroy, :update, :upload]
   def index
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
@@ -73,5 +72,11 @@ class ProjectsController < ApplicationController
   def rereflect
     DataMapper::Reflection.reflect(:yogo)
     redirect_to projects_url
+  end
+  
+  def loadexample
+    # Load the project and data 
+    Yogo::Loader.load(:example, "Example Project")
+    redirect_to :back
   end
 end

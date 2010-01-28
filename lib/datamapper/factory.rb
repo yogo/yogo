@@ -21,7 +21,7 @@ module DataMapper
       class_name   = desc[:name]
       properties   = desc[:properties]
       class_definition = ''
-      module_names.each{|mod| class_definition += "module #{mod}\n" }
+      module_names.each{|mod| class_definition += "module #{mod.camelize}\n" }
       class_definition += "class #{class_name}\n"
       class_definition += "  include DataMapper::Resource\n"
       class_definition += "def self.default_repository_name; :#{repository_name}; end\n"

@@ -35,22 +35,7 @@ namespace :yogo do
     namespace :example do
       desc "Copies the example database into persevere."
       task :load => :environment do
-        # Iterate through each model and make it in persevere, then copy instances
-        DataMapper::Reflection.reflect(:example).each do |model|
-          mphash = Hash.new
-          model.properties.each do |prop| 
-            mphash[prop.name] = { :type => prop.type, :key => prop.key?, :serial => prop.serial? } 
-            mphash[prop.name].merge!({:default => prop.default}) if prop.default? 
-          end
-          model_hash = { :name       => model.name.camelcase, 
-                         :modules    => ["Yogo", "ExampleProject"], 
-                         :properties => mphash }
-          yogo_model = DataMapper::Factory.build(model_hash, :yogo)
-          yogo_model.auto_migrate!
-          # Create each instance of the class
-          model.all.each{ |item| yogo_model.create!(item.attributes) }
-        end
-       Project.create(:name => "Example Project")
+        Yogo::Loader.load(:example, "Example Project")
       end
 
       desc "Clears the example database from persevere."

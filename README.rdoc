@@ -1,0 +1,26 @@
+== Welcome to Yogo
+
+Yogo is a Data Management System built on Ruby on Rails, DataMapper, and Persevere.
+
+In order to start helping develop the Yogo Data Management Toolkit you will first need to setup your build environment. We are working to automate this process, but in the mean time you will need to install one prerequisite (Persevere) manually.
+
+== Prerequisites - Persevere
+
+Get persevere at http://persevere-framework.googlecode.com/files/persevere1.0.1.rc.tar.gz
+
+1. Get persevere and run an instance on port 8080
+2. Optionally, run another instance on port 8181 for testing
+
+The recommended way to do this is to download and install persevere to a standard application location.  Make sure that the persvr binary is available to the PATH. Go to the db/ directory of the app and run: 
+persvr --gen-server yogo 
+persvr --gen-server yogo_test 
+
+Then cd into each one of those dirs and run: persvr -p PORT#
+
+There should probably be a rake task to do this for you if the build environment doesn't.
+
+== Getting Started with Development
+
+1. git clone git://github.com/yogo/yogo.git
+2. cd yogo
+3. ./setup.sh
