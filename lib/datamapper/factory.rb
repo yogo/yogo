@@ -1,20 +1,28 @@
-#This is my factory. Vadka sqweu driver you buddy.
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: factory.rb
+# This Factory builds DataMapper models 
+#
 module DataMapper
   class Factory
+    
     # This will look for a hash with certain keys in it. Those keys are:
-    # :modules    =>  [], and array of modules the class will be namespaced into by the order they are in the array
-    # :name       =>  'ClassName' The name of the class in camel case format.
-    # :properties =>  {}, a hash of properties
+    # * :modules    =>  [], and array of modules the class will be namespaced into by the order they are in the array
+    # * :name       =>  'ClassName' The name of the class in camel case format.
+    # * :properties =>  {}, a hash of properties
     # 
     #     Each key in the property hash is the name of the property.
     #     if the key points to a string or symbol, that will be used as the property type.
     #     The property type should be a valid DataMapper property type.
-    #
+    #--
     #     If the key points to a hash, dum, Dum, DUM!? What will happen?!
     #
     #  TODO : Implement support for relationships/associations
     # :associations => {} associations this class has with other classes.
-    #
+    #++
     # This returns a datamapper model. 
     def self.build(desc, repository_name = :default, options = {})
       module_names = desc[:modules] || []
@@ -41,6 +49,15 @@ module DataMapper
       return model
     end
 
+    # This accepts class_name ("Yogo::Example::SomeName") and a 2-dimensional
+    # array containing the first three line of a CSV file.
+    #
+    # The array should contain:
+    # 1. property names in [0][]
+    # 2. property types in [1][]
+    # 3. property units in [2][] - currently unsupported
+    # 
+    # Returns a DataMapper model with properties defined by spec_array
     def self.make_model_from_csv(class_name, spec_array)
       scopes = class_name.split('::')
       spec_hash = { :name => scopes[-1], :properties => Hash.new }

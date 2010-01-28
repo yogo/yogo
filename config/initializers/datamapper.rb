@@ -1,3 +1,11 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: datamapper.rb
+# 
+#
 # Read the configuration from the existing database.yml file
 config = YAML.load(File.new(File.join(Rails.root, "config", "database.yml")))
 

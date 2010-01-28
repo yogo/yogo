@@ -1,3 +1,11 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: test.rb
+# 
+#
 Bundler.require_env RAILS_ENV
 # Settings specified here will take precedence over those in config/environment.rb
 

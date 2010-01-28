@@ -1,3 +1,11 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: routes.rb
+# 
+#
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
   map.resources :projects, :except => [ :edit, :update ], :member => { :upload => :post }, :collection => { :rereflect => :post, :loadexample => :post } do |project|

@@ -1,4 +1,16 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: projects_controller.rb
+# The projects controller provides all the CRUD functionality for the project
+# and additionally: upload of CSV files, an example project and rereflection
+# of the yogo repository.
+#
+
 class ProjectsController < ApplicationController
+
 
   def index
     @projects = Project.paginate(:page => params[:page], :per_page => 5)

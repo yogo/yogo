@@ -1,4 +1,9 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
 #
+# License -> see license.txt
+#
+# FILE: glassfish.yml
 # GlassFish configuration.
 #
 # Please read the comments for each configuration settings before modifying.

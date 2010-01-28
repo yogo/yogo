@@ -1,7 +1,18 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: persvr.rake
+# 
+#
+
 require 'slash_path'
 require 'yaml'
+require 'net/http'
+
 namespace :persvr do
-  PERSVR_CMD = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || 'persvr'
+  PERSVR_CMD = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || RAILS_ROOT/'vendor/bundled/bin/persvr' || 'persvr'
   
   def config(env)
     cfg = YAML.load_file(RAILS_ROOT/:config/'persvr.yml')[env]
@@ -17,6 +28,40 @@ namespace :persvr do
         raise "persvr was not found! Ensure persevere is installed and set PERSEVERE_HOME to the path of your persevere install."
       end
     end
+  end
+  
+  desc "Download and unpack persevere for development"
+  task :setup do
+    persvr_zip = RAILS_ROOT/:tmp/'persvr.zip'
+    vendor_dir = RAILS_ROOT/:vendor
+    # Grab persevere from http://persevere-framework.googlecode.com/files/persevere1.0.1.rc2.zip
+    Net::HTTP.start("persevere-framework.googlecode.com") do |http|
+      resp = http.get("/files/persevere1.0.1.rc2.zip")
+      open(persvr_zip, "wb") { |file| file.write(resp.body) }
+    end
+    
+    # unpack it in vendor/persevere
+    sh "unzip -o #{persvr_zip} -d #{vendor_dir} >& /dev/null"
+    
+    # link vendor/persevere/bin/persvr to vendor/bundled/bin/persvr
+    sh "ln -f -s #{vendor_dir}/persevere/bin/persvr #{vendor_dir}/bundled/bin/persvr"
+    
+    # Chmod +x
+    sh "chmod +x #{vendor_dir}/persevere/bin/persvr"
+    
+    # Clean up zip file
+    sh "rm #{persvr_zip}"
+  end
+  
+  desc "Cleanup vendor installed persevere"
+  task :remove do
+    vendor_dir = RAILS_ROOT/:vendor
+    
+    # Remove the link
+    sh "rm #{vendor_dir}/bundled/bin/persvr"
+    
+    # Remove the installed code
+    sh "rm -rf #{vendor_dir}/persevere"
   end
   
   desc "Create the persevere instance for the current environment."

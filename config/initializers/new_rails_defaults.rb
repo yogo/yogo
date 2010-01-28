@@ -1,3 +1,11 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: new_railes_defaults.rb
+# 
+#
 # Be sure to restart your server when you modify this file.
 
 # These settings change the behavior of Rails 2 apps and will be defaults
