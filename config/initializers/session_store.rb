@@ -1,3 +1,11 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: session_store.rb
+# 
+#
 # Be sure to restart your server when you modify this file.
 
 # Your secret key for verifying cookie session data integrity.

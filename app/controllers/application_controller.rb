@@ -1,6 +1,12 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: application_controller.rb
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
-
+#
 class ApplicationController < ActionController::Base
   before_filter :check_local_only
   
@@ -12,6 +18,8 @@ class ApplicationController < ActionController::Base
   
   private
   
+  # Checks requests to ensure they are local only
+  #
   def check_local_only
     return true if Rails.env == "test"
     

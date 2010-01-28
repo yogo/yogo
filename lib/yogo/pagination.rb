@@ -1,3 +1,11 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: pagination.rb
+# 
+#
 module Yogo
   module Pagination
     def self.included(base)
