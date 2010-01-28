@@ -30,7 +30,7 @@ Then run: `git submodule update`
 
 ## Setting up Persevere
 
-1. Download Persevere 1.0 from: http://persevere-framework.googlecode.com/files/persevere1.0.zip
+1. Download Persevere 1.0 from: http://persevere-framework.googlecode.com/files/persevere1.0.1.rc2.tar.gz
 2. Uncompress and move the Persevere installation to your desired location (`~/persevere`, `/usr/local/persevere`, etc)
 3. Make the persvr command (`path_to_persevere/bin/persvr`) accessible by doing one of the following:
     - including the persevere/bin directory in your `PATH` (`export PATH=$PATH:path_to_persevere/bin`)
