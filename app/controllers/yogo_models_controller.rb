@@ -3,7 +3,7 @@
 #
 # License -> see license.txt
 #
-# FILE: projects_controller.rb
+# FILE: yogo_models_controller.rb
 # Functionality for CRUD of yogo project models
 # 
 class YogoModelsController < ApplicationController

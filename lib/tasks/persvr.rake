@@ -1,3 +1,12 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: persvr.rake
+# 
+#
+
 require 'slash_path'
 require 'yaml'
 require 'net/http'
