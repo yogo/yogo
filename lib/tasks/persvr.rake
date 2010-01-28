@@ -3,7 +3,7 @@ require 'yaml'
 require 'net/http'
 
 namespace :persvr do
-  PERSVR_CMD = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || 'vendor/bundled/bin/persvr' || 'persvr'
+  PERSVR_CMD = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || '#{RAILS_ROOT}/vendor/bundled/bin/persvr' || 'persvr'
   
   def config(env)
     cfg = YAML.load_file(RAILS_ROOT/:config/'persvr.yml')[env]
