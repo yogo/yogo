@@ -14,11 +14,10 @@ module Yogo
           mphash[prop.name] = { :type => prop.type, :key => prop.key?, :serial => prop.serial? } 
           mphash[prop.name].merge!({:default => prop.default}) if prop.default? 
         end
-        model_hash = { :name       => model.storage_name.camelize,
-                       :modules    => ["Yogo", name.camelize ],
+        model_hash = { :name       => model.name.capitalize.gsub(/[^\w]/, '_'),
+                       :modules    => ["Yogo", name.camelize.gsub(/[^\w]/, '') ],
                        :properties => mphash
                      }
-
         yogo_model = DataMapper::Factory.build(model_hash, :yogo)
         yogo_model.auto_migrate!
         # Create each instance of the class

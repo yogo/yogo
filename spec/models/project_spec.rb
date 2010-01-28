@@ -47,10 +47,10 @@ describe "A Project" do
     p.to_param.should == p.id.to_s
   end
 
-  it "should create a project_key from the project id and name (with non-alphas stripped)" do
+  it "should create a namespace from the project id and name (with non-alphas stripped)" do
     ['Test:Project', 'Test Project', 'Test&Project', 'Test!Project'].each do |name|
       p = Project.create(:name => name)
-      p.project_key.match(/[^\w]/).should be_nil
+      p.namespace.match(/[^\w]/).should be_nil
       p.destroy!
     end
   end
@@ -122,7 +122,8 @@ describe "A Project" do
       }
       project.add_model(model_hash)
       model_names = project.models.map(&:name)
-      model_names.map{|m| m.match(/^Yogo::#{project.project_key}::Cell/)}.compact.should_not be_empty
+      puts "NAMESPACE: #{project.namespace}"
+      model_names.map{|m| m.match(/^Yogo::#{project.namespace}::Cell/)}.compact.should_not be_empty
     end
 
 
@@ -138,7 +139,7 @@ describe "A Project" do
       }
       project.add_model(model_hash)
       model_names = project.models.map(&:name)
-      model_names.map{|m| m.match(/^Yogo::#{project.project_key}::Monkey/)}.compact.should_not be_empty
+      model_names.map{|m| m.match(/^Yogo::#{project.namespace}::Monkey/)}.compact.should_not be_empty
     end
 
     it "should save a valid schema which should be persisted to the datastore" do
