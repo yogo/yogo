@@ -36,6 +36,7 @@ namespace :yogo do
       desc "Copies the example database into persevere."
       task :load => :environment do
         Yogo::Loader.load(:example, "Example Project")
+        DataMapper::Reflection.reflect(:yogo)
       end
 
       desc "Clears the example database from persevere."
