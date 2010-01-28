@@ -122,7 +122,6 @@ describe "A Project" do
       }
       project.add_model(model_hash)
       model_names = project.models.map(&:name)
-      puts "NAMESPACE: #{project.namespace}"
       model_names.map{|m| m.match(/^Yogo::#{project.namespace}::Cell/)}.compact.should_not be_empty
     end
 

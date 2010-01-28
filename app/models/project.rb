@@ -8,7 +8,6 @@
  # a project and the project is where the models and data will be namespaced.
  #
 
-
 class Project
   include DataMapper::Resource
   include Yogo::Pagination
@@ -18,9 +17,7 @@ class Project
   
   validates_is_unique   :name
   
-  before :destroy do |project|
-    self.delete_models!
-  end
+  before :destroy, :delete_models!
 
   # Returns the project namespaced name
   #
@@ -64,6 +61,7 @@ class Project
       model.create(line_data)
     end
   end
+  
   # Returns an array of the models associated with current project namespace
   #
   def models
@@ -92,15 +90,15 @@ class Project
   #
   def delete_model(model)
     model = get_model(model) if model.class == String
+    name = model.name.demodulize
     model.auto_migrate_down!
-    name_array = model.name.split("::")
-    if name_array.length == 1
-      Object.send(:remove_const, model.name.to_sym)
-    else
-      ns = eval(name_array[0..-2].join("::"))
-      ns.send(:remove_const, name_array[-1].to_sym)
-    end
+
     DataMapper::Model.descendants.delete(model)
+    n = eval("Yogo")
+    if n.constants.include?(namespace.to_sym) 
+      ns = eval("Yogo::#{namespace}")
+      ns.send(:remove_const, name.to_sym) if ns.constants.include?(name.to_sym)
+    end
   end
 
   # Removes all models and all of the data from a project
@@ -108,7 +106,7 @@ class Project
   # * performed before project.destroy
   def delete_models!
     models.each do |model|
-     delete_model(model)
+      delete_model(model)
     end
   end
 end
