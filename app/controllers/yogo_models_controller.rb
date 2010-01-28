@@ -64,6 +64,7 @@ class YogoModelsController < ApplicationController
     @model = false
     
     if errors.empty? and (@model = @project.add_model(class_name, :properties => cleaned_options)) != false
+      @model.auto_migrate!
       flash[:notice] = 'The model was sucessfully created.'
       redirect_to(project_yogo_model_url(@project, @model.name.demodulize))
     else
@@ -91,7 +92,7 @@ class YogoModelsController < ApplicationController
     cleaned_params = []
     
     params[:new_property].each do |prop|
-      name = prop[:name].squeeze.gsub(' ', '_').tableize
+      name = prop[:name].squeeze.downcase.gsub(' ', '_')
       prop_type = HumanTypes[prop[:type]]
       
       next if name.blank?
@@ -117,10 +118,11 @@ class YogoModelsController < ApplicationController
     # Type Checking
     if errors.empty?
       cleaned_params.each do |prop|
+        
         @model.send(:property, prop[0].to_sym, prop[1], :required => false)
       end
       
-      @model.auto_migrate_up!
+      @model.auto_upgrade!
       flash[:notice] = "Properties added"
       
       redirect_to project_yogo_model_url(@project, @model.name.demodulize)
