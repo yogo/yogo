@@ -3,7 +3,7 @@ bundle_path "vendor/bundled"
 bin_path    "vendor/bundled/bin"
 source      "http://gemcutter.org"
 
-# Required gems
+# Required core gems
 gem "rails",                "2.3.5"
 gem "rake"                 
 gem "dm-core",              "0.10.2"
@@ -19,14 +19,17 @@ gem "do_sqlite3",           "0.10.1", :require_as => nil
 gem "do_mysql",             "0.10.1", :require_as => nil
 #gem "do_postgres",          "0.10.1", :require_as => nil
 gem "rails_datamapper"
-gem "authlogic",            "2.1.3"
+
+# Extra supporting gems
+# gem "authlogic",            "2.1.3"
 gem "fastercsv"
 
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)
-  gem "json_pure", '1.2.0', :require_as => nil
-  gem "ruby-debug-base", "0.10.3.1", :require_as => nil, :path => "vendor/extra_gems/ruby-debug-base-0.10.3.1-java"
-  gem "ruby-debug", :require_as => nil
+  gem "json_pure",         '1.2.0',    :require_as => nil
+  gem "ruby-debug-base",   "0.10.3.1", :require_as => nil, :only => [:development, :test],
+                                       :path => "vendor/extra_gems/ruby-debug-base-0.10.3.1-java"
+  gem "ruby-debug",                    :require_as => nil, :only => [:development, :test]
 else
   gem "json",      "1.2.0", :require_as => nil
 end
