@@ -1,8 +1,8 @@
-<h1><%= @model.name.split("::")[-1].titleize %></h1>
+<h1><%= @model.name.demodulize.titleize %></h1>
 
 <div id="model-action-links">
-  <%= link_to(image_tag('edit.png')+'Edit '+@model.name.split("::")[-1].titleize, edit_project_yogo_model_path(@project, @model.name.split("::")[-1])) %>
-  <%= link_to(image_tag('remove.png')+'Remove '+@model.name.split("::")[-1].titleize, project_yogo_model_path(@project, @model.name.split("::")[-1]), :method => :delete, :confirm => 'Removing this model will also destroy all data associated with the model. Continue?') %>
+  <%= link_to(image_tag('edit.png')+'Edit '+@model.name.demodulize.titleize, edit_project_yogo_model_path(@project, @model.name.demodulize)) %>
+  <%= link_to(image_tag('remove.png')+'Remove '+@model.name.demodulize.titleize, project_yogo_model_path(@project, @model.name.demodulize), :method => :delete, :confirm => 'Removing this model will also destroy all data associated with the model. Continue?') %>
 </div>
 <table id="model-show">
   <thead>

@@ -1,4 +1,4 @@
-<H3><%= @model.name.split("::")[-1].titleize %> (<%= @model.count %>)</H3>
+<H3><%= @model.name.demodulize.titleize %> (<%= @model.count %>)</H3>
 <table id="data-index">
   <thead>
     <tr>
@@ -11,8 +11,8 @@
   <tbody>
   <%- @data.each do |d| %>
     <tr>
-      <td><%= link_to(image_tag('edit.png')+'Edit', edit_project_yogo_data_path(@project, @model.name.split("::")[-1], d.id)) %></td>
-      <td><%= link_to(image_tag('remove.png')+'Delete', project_yogo_data_path(@project, @model.name.split("::")[-1], d.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
+      <td><%= link_to(image_tag('edit.png')+'Edit', edit_project_yogo_data_path(@project, @model.name.demodulize, d.id)) %></td>
+      <td><%= link_to(image_tag('remove.png')+'Delete', project_yogo_data_path(@project, @model.name.demodulize, d.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
       <%- @model.properties.each do |p| %>
       <td><%= d[p.name] %></td>
       <%- end %>

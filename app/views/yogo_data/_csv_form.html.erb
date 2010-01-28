@@ -1,11 +1,11 @@
 <div id="upload">
   <strong>Data File Management</strong>
-  <%- form_tag(upload_project_yogo_data_path( @project.id, @model.name.split('::')[-1].titleize), :multipart => true ) do -%>
+  <%- form_tag(upload_project_yogo_data_path( @project.id, @model.name.demodulize.titleize), :multipart => true ) do -%>
       <label for="upload_file">Select File</label> : 
       <%= file_field('upload', 'datafile', :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel") %>
       <%= submit_tag("Upload") %>
   <%- end -%>
   <br />
-  <%= link_to("Download CSV file", download_project_yogo_data_path( @project.id, @model.name.split('::')[-1].titleize ), :method => :get ) %><br/>
-  <%= link_to("Download CSV file (with current data)", download_project_yogo_data_path( @project.id, @model.name.split('::')[-1].titleize, :include_data => true ), :method => :get ) %>
+  <%= link_to("Download CSV file", download_project_yogo_data_path( @project.id, @model.name.demodulize.titleize ), :method => :get ) %><br/>
+  <%= link_to("Download CSV file (with current data)", download_project_yogo_data_path( @project.id, @model.name.demodulize.titleize, :include_data => true ), :method => :get ) %>
 </div>

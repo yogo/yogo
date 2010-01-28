@@ -12,8 +12,8 @@
   <tbody>
     <%- @models.each do |m| %>
       <tr id="project-show-row" class="<%= cycle('alternate-rows0', 'alternate-rows1') %>">
-        <td><%= link_to(m.name.split('::')[-1].titleize, project_yogo_model_path(@project, m.name.split('::')[-1])) %></td>
-        <td>(<%= link_to(m.count, project_yogo_data_index_path(@project, m.name.split('::')[-1])) %>)</td>
+        <td><%= link_to(m.name.demodulize.titleize, project_yogo_model_path(@project, m.name.demodulize)) %></td>
+        <td>(<%= link_to(m.count, project_yogo_data_index_path(@project, m.name.demodulize)) %>)</td>
       </tr>
     <%- end %>
   </tbody>

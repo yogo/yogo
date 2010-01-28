@@ -1,4 +1,4 @@
-<h1>Editing <%= @model.name.split("::")[-1].titleize %></h1>
+<h1>Editing <%= @model.name.demodulize.titleize %></h1>
 
 <div id="model-edit">
   <%- form_for(@model, :url => project_yogo_model_path(@project, @model.name.split('::')[-1])) do |f| -%>

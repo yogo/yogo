@@ -1,4 +1,4 @@
-<H3><%= @model.name.split("::")[-1].titleize %></H3>
+<H3><%= @model.name.demodulize.titleize %></H3>
 <table id="data-show">
   <thead>
     <tr>
@@ -10,8 +10,8 @@
   </thead>
   <tbody>
     <tr>
-      <td><%= link_to(image_tag('edit.png')+'Edit', edit_project_yogo_data_path(@project, @model.name.split("::")[-1], @item.id)) %></td>
-      <td><%= link_to(image_tag('remove.png')+'Delete', project_yogo_data_path(@project, @model.name.split("::")[-1], @item.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
+      <td><%= link_to(image_tag('edit.png')+'Edit', edit_project_yogo_data_path(@project, @model.name.demodulize, @item.id)) %></td>
+      <td><%= link_to(image_tag('remove.png')+'Delete', project_yogo_data_path(@project, @model.name.demodulize, @item.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
       <%- @model.properties.each do |p| %>
       <td><%= @item[p.name] %></td>
       <%- end %>

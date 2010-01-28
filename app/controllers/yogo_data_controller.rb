@@ -15,15 +15,15 @@ class YogoDataController < ApplicationController
 
   def update
     @item = @model.get(params[:id])
-    goober = "yogo_#{@project.project_key.underscore}_#{@model.name.split("::")[-1].underscore}"
+    goober = "yogo_#{@project.project_key.underscore}_#{@model.name.demodulize.underscore}"
     @item.attributes = params[goober]
     @item.save
-    redirect_to project_yogo_data_url(@project, @model.name.split("::")[-1])
+    redirect_to project_yogo_data_url(@project, @model.name.demodulize)
   end  
   
   def destroy
     @model.get(params[:id]).destroy!
-    redirect_to project_yogo_data_index_url(@project, @model.name.split("::")[-1])
+    redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end
   
   def upload
@@ -63,7 +63,7 @@ class YogoDataController < ApplicationController
           flash[:error] = "CSV File improperly formatted. Data not uploaded."
         end
       end
-      redirect_to project_yogo_data_index_url(@project, @model.name.split("::")[-1])
+      redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
     end
   end
   
@@ -77,7 +77,7 @@ class YogoDataController < ApplicationController
     csv_output << @model.all.to_csv if params[:include_data]
     
     send_data(csv_output, 
-              :filename    => "#{@model.name.split("::")[-1].tableize.singular}.csv", 
+              :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')
   end

@@ -1,7 +1,7 @@
 <div id="yogo-model-list">
   <ul>
   <%- @models.each do |m| %>
-    <li> <%= link_to(m.name.split('::')[-1].titleize, project_yogo_model_path(@project, m.name.split('::')[-1])) %></li>
+    <li> <%= link_to(m.name.demodulize.titleize, project_yogo_model_path(@project, m.name.demodulize)) %></li>
   <%- end %>
   </ul>
 </div>

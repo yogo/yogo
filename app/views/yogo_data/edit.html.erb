@@ -1,6 +1,6 @@
-<H3><%= @model.name.split("::")[-1].titleize %></H3>
+<H3><%= @model.name.demodulize.titleize %></H3>
 <br />
-<%- form_for(@item, :url => project_yogo_data_path(@project, @model.name.split("::")[-1], @item.id)) do |f| -%>
+<%- form_for(@item, :url => project_yogo_data_path(@project, @model.name.demodulize, @item.id)) do |f| -%>
 <table>
   <thead>
   </thead>
