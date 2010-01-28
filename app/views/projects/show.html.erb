@@ -10,14 +10,11 @@
     </tr>
   </thead>
   <tbody>
-    <%- i = 0 %>
     <%- @models.each do |m| %>
-      <%- if i == 2 : i = 0 end %>
-      <tr id="project-show-row" class="alternate-rows<%= i %>">
+      <tr id="project-show-row" class="<%= cycle('alternate-rows0', 'alternate-rows1') %>">
         <td><%= link_to(m.name.split('::')[-1].titleize, project_yogo_model_path(@project, m.name.split('::')[-1])) %></td>
         <td>(<%= link_to(m.count, project_yogo_data_index_path(@project, m.name.split('::')[-1])) %>)</td>
       </tr>
-      <%- i += 1 %>
     <%- end %>
   </tbody>
 </table>
