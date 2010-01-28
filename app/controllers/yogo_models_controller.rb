@@ -30,7 +30,7 @@ class YogoModelsController < ApplicationController
     
     # Type Checking
     if !prop_type.nil? &&
-        !prop_name.blank? && !@model.properties.map{|p| p.name }.include?(prop_name)
+        !prop_name.blank? &&
         
       @model.send(:property, prop_name.to_sym, prop_type, :required => false)
       @model.auto_migrate_up!
