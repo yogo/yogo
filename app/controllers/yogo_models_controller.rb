@@ -9,13 +9,12 @@
 class YogoModelsController < ApplicationController
   before_filter :find_parent_items
   
-
   # Constant for the supported Human readable datatypes
   HumanTypes = { "Decimal"        => BigDecimal, 
-                  "Integer"        => Integer,
-                  "Text"           => String, 
-                  "True/False"     => DataMapper::Types::Boolean, 
-                  "Date"           => DateTime }
+                 "Integer"        => Integer,
+                 "Text"           => String, 
+                 "True/False"     => DataMapper::Types::Boolean, 
+                 "Date"           => DateTime }
   
   # Provides a list of the models for the current project
   # 
@@ -126,6 +125,7 @@ class YogoModelsController < ApplicationController
       flash[:notice] = "Properties added"
       
       redirect_to project_yogo_model_url(@project, @model.name.demodulize)
+
     else
       flash[:notice] = "Properties were not added."
       flash[:model_errors] = errors
