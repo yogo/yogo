@@ -48,7 +48,7 @@ class YogoModelsController < ApplicationController
     errors = {}
     
     params[:new_property].each do |prop|
-      name = prop[:name].squeeze.gsub(' ', '_').tableize
+      name = prop[:name].squish.gsub(' ', '_').tableize
       prop_type = HumanTypes[prop[:type]]
       
       next if name.blank?
@@ -91,7 +91,7 @@ class YogoModelsController < ApplicationController
     cleaned_params = []
     
     params[:new_property].each do |prop|
-      name = prop[:name].squeeze.downcase.gsub(' ', '_')
+      name = prop[:name].squish.downcase.gsub(' ', '_')
       prop_type = HumanTypes[prop[:type]]
       
       next if name.blank?
@@ -104,7 +104,7 @@ class YogoModelsController < ApplicationController
     end
     
     params[:property].each_pair do |prop, type|
-      name = prop.squeeze.gsub(' ', '_')
+      name = prop.squish.gsub(' ', '_')
       prop_type = HumanTypes[type]
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
