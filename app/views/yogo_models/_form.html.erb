@@ -1,0 +1,57 @@
+<%# Please forgive me. I don't want this cluddering the controller. But is the view any better? %>
+<%- if @model.name == "Struct::PrototypeModel" -%>
+  <%- path = project_yogo_models_path(@project) -%>
+  <%- method = :post -%>
+<%- else -%>
+  <%- path = project_yogo_model_path(@project, @model.name.demodulize) -%>
+  <%- method = :put -%>
+<%- end -%>
+
+<%- options = options_for_select(@options) -%> 
+       
+<div id="model-edit">
+  <%- form_for(@model, :url => path, :html => { :method => method }) do |f| -%>
+  
+    <%# Output errors if there are any. %>
+    <%- if flash[:model_errors] -%>
+      <%- flash[:model_errors].each_pair do |key,value| -%>
+        <%= h key + value %>
+      <%- end -%>
+    <%- end -%>
+  
+    <%# If this is a new model, as for it's name. %>
+    <%- if @model.name == "Struct::PrototypeModel" -%>
+      <%= label_tag(:class_name) %>: <%= text_field_tag(:class_name) %><br>
+    <%- else -%>
+    
+     <%- @model.properties.each do |prop| %>
+        <%- unless prop.name == :id -%>
+          <%= h prop.name.to_s.titleize %>
+          <%= select_tag("property_#{prop.name}", options_for_select(@options, @types[prop.type]), :name => "property[#{prop.name}]") %><br>
+        <%- end -%>
+      <%- end %>
+      
+    <%- end -%>
+    
+    <div id='new-properties'>
+      <div class='new-property'>
+        <%= label_tag(:name, 'Property Name') %>: <%= text_field_tag(:name, nil, :name => 'new_property[][name]') %>
+  
+        <%- options = options_for_select(@options) -%> 
+        <%= label_tag(:type) %>: <%= select_tag(:type, options, :name => 'new_property[][type]' ) %>
+        <%= link_to('Remove this', '', :class => 'remove-new-property') %>
+      </div>
+    </div>
+    <%= link_to('Add another Property', '', :id => 'add-property') %>
+  <br>
+  
+  <%= f.submit('Save') %>
+    
+  <%- end -%>
+</div>
+
+<div style="display:none" id='form-template'>  
+  <%= label_tag(:name, 'Property Name') %>: <%= text_field_tag(:name, nil, :name => 'new_property[][name]') %>
+  <%= label_tag(:type) %>: <%= select_tag(:type, options, :name => 'new_property[][type]' ) %>
+  <%= link_to('Remove this', '', :class => 'remove-new-property') %>
+</div>

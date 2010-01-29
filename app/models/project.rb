@@ -75,7 +75,7 @@ class Project
   # =Example
   #  
   def get_model(name)
-    DataMapper::Model.descendants.select{|m| m.to_s.split('::')[-1] == name }[0]
+    DataMapper::Model.descendants.select{|m| m.to_s.demodulize == name }[0]
   end
 
   # @return [DataMapper::Model] a new model 
@@ -89,8 +89,17 @@ class Project
   # @options prop_name [String] :type The datatype of the property   
   # @options prop_name [Boolean] :required  If the property can be null or not  
   # 
-  def add_model(hash)
-    DataMapper::Factory.build(hash, :yogo)
+  def add_model(hash_or_name, options = {})
+    if hash_or_name.is_a?(String)
+      return false unless valid_model_or_column_name?(hash_or_name)
+      hash_or_name = {:name => hash_or_name.camelize, 
+                   :modules => ['Yogo', self.namespace],
+                   :properties => options[:properties].merge({
+                     :id => DataMapper::Types::Serial }) 
+                  }
+                  
+    end
+    return DataMapper::Factory.build(hash_or_name, :yogo)
   end
   
   # Removes a model and all of its data from a project
@@ -117,4 +126,11 @@ class Project
       delete_model(model)
     end
   end
+  
+  private
+  
+  def valid_model_or_column_name?(potential_name)
+    !potential_name.match(/^\d|\.|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)/)
+  end
+  
 end
