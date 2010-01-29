@@ -1,8 +1,11 @@
-# Yogo Settings Module
-# Copyright (c) 2009 Montana State University
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
 #
 # FILE: settings.rb
 # Implementing a settings configuration class.
+# 
 module Yogo
   class Settings
     include DataMapper::Resource  

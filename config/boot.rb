@@ -1,3 +1,11 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: boot.rb
+# 
+#
 # Don't change this file!
 # Configure your app in config/environment.rb and config/environments/*.rb
 

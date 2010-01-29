@@ -1,3 +1,11 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: yogo.rake
+# 
+#
 namespace :yogo do
 
   desc "ensure that yogo project is properly setup"

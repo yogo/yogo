@@ -1,18 +1,36 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: yogo_data_controller.rb
+# Functionality for CRUD of data within a yogo project's model
+# Additionally upload and download of data via CSV is provided
+#
 class YogoDataController < ApplicationController
   before_filter :find_parent_items
  
+  #  Display's paginated data items from the selected yogo project model
+  # 
+  # * 10 data objects per page are displayed
   def index
     @data = @model.paginate(:page => params[:page], :per_page => 10)
   end
   
+  # Displays a yogo project model data item's properites and values
+  # 
   def show
     @item = @model.get(params[:id])
   end
   
+  # Allows a user to edit a yogo project model data item's values
+  #
   def edit
     @item = @model.get(params[:id])
   end
 
+  # Adds a data item to the current yogo project model
+  #
   def update
     @item = @model.get(params[:id])
     goober = "yogo_#{@project.project_key.underscore}_#{@model.name.split("::")[-1].underscore}"
@@ -21,14 +39,19 @@ class YogoDataController < ApplicationController
     redirect_to project_yogo_data_url(@project, @model.name.split("::")[-1])
   end  
   
+  # Deletes a yogo project model's selected datum
+  # 
   def destroy
     @model.get(params[:id]).destroy!
     redirect_to project_yogo_data_index_url(@project, @model.name.split("::")[-1])
   end
   
+  # Accepts the upload of a CSV file
+  # 
   def upload
     if !params[:upload].nil? && datafile = params[:upload]['datafile']
-      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel'].include?(datafile.content_type)
+      if ! ['text/csv', 'text/comma-separated-values',  
+             'application/vnd.ms-excel'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
       else
         # Read the data in
@@ -42,7 +65,8 @@ class YogoDataController < ApplicationController
 
         valid = true
         @model.properties.each do |prop|
-          valid = false unless prop_hash.has_key?(prop.name.to_s) && prop_hash[prop.name.to_s] == prop.type.to_s
+          valid = false unless prop_hash.has_key?(prop.name.to_s) && 
+                   prop_hash[prop.name.to_s] == prop.type.to_s
         end
 
         if valid
@@ -67,6 +91,8 @@ class YogoDataController < ApplicationController
     end
   end
   
+  # Allows download of yogo project model data in CSV format
+  # 
   def download
     csv_output = FasterCSV.generate do |csv|
       csv << @model.properties.map{|prop| prop.name.to_s.capitalize}
