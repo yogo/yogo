@@ -73,7 +73,7 @@ class YogoDataController < ApplicationController
           # Load data from csv file
           csv_data[3..-1].each do |line| 
             line_data = Hash.new
-            csv_data[0].each_index { |i| line_data[csv_data[0][i].downcase] = line[i].strip }
+            csv_data[0].each_index { |i| line_data[csv_data[0][i].tableize.singularize] = line[i].strip }
             item = @model.get(line_data['id'])
             if ! item.nil?
               item.attributes = line_data
