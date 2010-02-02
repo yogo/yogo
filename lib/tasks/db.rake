@@ -6,7 +6,6 @@
 # FILE: db.rake
 # 
 #
-require 'ruby-debug'
 namespace :yogo do
   namespace :db do
     desc "Import legacy database into Yogo."

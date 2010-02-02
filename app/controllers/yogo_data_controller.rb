@@ -15,12 +15,22 @@ class YogoDataController < ApplicationController
   # * 10 data objects per page are displayed
   def index
     @data = @model.paginate(:page => params[:page], :per_page => 10)
+    respond_to do |format|
+      format.html
+      format.json { @data = @model.all if params[:page].blank?; render( :json => @data.to_json )}
+      format.csv { download_csv }
+    end
   end
   
   # Displays a yogo project model data item's properites and values
   # 
   def show
     @item = @model.get(params[:id])
+    
+    respond_to do |format|
+      format.html
+      format.json { render( :json => @item.to_json )}
+    end
   end
   
   def new
@@ -87,7 +97,7 @@ class YogoDataController < ApplicationController
           # Load data from csv file
           csv_data[3..-1].each do |line| 
             line_data = Hash.new
-            csv_data[0].each_index { |i| line_data[csv_data[0][i].downcase] = line[i].strip }
+            csv_data[0].each_index { |i| line_data[csv_data[0][i].tableize.singularize] = line[i].strip }
             item = @model.get(line_data['id'])
             if ! item.nil?
               item.attributes = line_data
@@ -105,24 +115,26 @@ class YogoDataController < ApplicationController
     end
   end
   
+
+
+  private
+  
   # Allows download of yogo project model data in CSV format
   # 
-  def download
+  def download_csv
     csv_output = FasterCSV.generate do |csv|
       csv << @model.properties.map{|prop| prop.name.to_s.capitalize}
       csv << @model.properties.map{|prop| prop.type}
       csv << "Units will go here when supported"
     end
 
-    csv_output << @model.all.to_csv if params[:include_data]
+    csv_output << @model.all.to_csv
     
     send_data(csv_output, 
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')
   end
-
-  private
   
   def find_parent_items
     @project = Project.get(params[:project_id])

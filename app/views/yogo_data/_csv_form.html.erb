@@ -6,6 +6,6 @@
       <%= submit_tag("Upload") %>
   <%- end -%>
   <br />
-  <%= link_to("Download CSV file", download_project_yogo_data_path( @project.id, @model.name.demodulize.titleize ), :method => :get ) %><br/>
-  <%= link_to("Download CSV file (with current data)", download_project_yogo_data_path( @project.id, @model.name.demodulize.titleize, :include_data => true ), :method => :get ) %>
+  <%= link_to("Download CSV file", project_yogo_model_path( @project.id, @model.name.demodulize.titleize, :format => :csv ), :method => :get ) %><br/>
+  <%= link_to("Download CSV file (with current data)", project_yogo_data_index_path( @project.id, @model.name.demodulize.titleize, :format => :csv ), :method => :get ) %>
 </div>

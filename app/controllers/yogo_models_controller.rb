@@ -20,6 +20,11 @@ class YogoModelsController < ApplicationController
   # 
   def index
     @models = @project.models
+    
+    respond_to do |format|
+      format.html
+      format.json { render( :json => "[#{@models.collect{|m| m.to_json_schema }.join(', ')}}" )}
+    end
   end
   
   # Display a model schema with Human readable datatypes
@@ -27,6 +32,12 @@ class YogoModelsController < ApplicationController
   def show
     @model = @project.get_model(params[:id])
     @types = HumanTypes.invert
+    
+    respond_to do |format|
+      format.html
+      format.json { render( :json => @model.to_json_schema )}
+      format.csv { download_csv }
+    end
   end
   
   def new
@@ -144,6 +155,21 @@ class YogoModelsController < ApplicationController
   end
   
   private
+  
+  # Allows download of yogo project model data in CSV format
+  # 
+  def download_csv
+    csv_output = FasterCSV.generate do |csv|
+      csv << @model.properties.map{|prop| prop.name.to_s.capitalize}
+      csv << @model.properties.map{|prop| prop.type}
+      csv << "Units will go here when supported"
+    end
+    
+    send_data(csv_output, 
+              :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
+              :type        => "text/csv", 
+              :disposition => 'attachment')
+  end
   
   # Sets @project to the current project_id parameter
   #

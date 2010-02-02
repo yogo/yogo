@@ -7,7 +7,7 @@ $(document).ready(function(){
   });
   
   $('.remove-new-property').live('click', function(event){
-    $(this).parent('div.new-property').hide().remove();
+    $(this).parents('div.new-property').hide().remove();
     return false;
   });
   

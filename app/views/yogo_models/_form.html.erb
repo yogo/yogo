@@ -1,4 +1,4 @@
-<%# Please forgive me. I don't want this cluddering the controller. But is the view any better? %>
+<%# I started to move this into a helper, but I think it's okay here for now. %>
 <%- if @model.name == "Struct::PrototypeModel" -%>
   <%- path = project_yogo_models_path(@project) -%>
   <%- method = :post -%>
@@ -19,15 +19,24 @@
       <%- end -%>
     <%- end -%>
   
-    <%# If this is a new model, as for it's name. %>
+    <%# If this is a new model, ask for its name. %>
     <%- if @model.name == "Struct::PrototypeModel" -%>
-      <%= label_tag(:class_name) %>: <%= text_field_tag(:class_name) %><br>
+      <div class="model-edit-label">
+        <%= label_tag(:class_name, "Model name") %>:
+      </div>
+      <div class="model-edit-input">
+        <%= text_field_tag(:class_name) %>
+      </div>
     <%- else -%>
     
      <%- @model.properties.each do |prop| %>
         <%- unless prop.name == :id -%>
-          <%= h prop.name.to_s.titleize %>
-          <%= select_tag("property_#{prop.name}", options_for_select(@options, @types[prop.type]), :name => "property[#{prop.name}]") %><br>
+        <div class="model-edit-label">
+          <%= h prop.name.to_s.titleize %> :
+        </div>
+        <div class="model-edit-input">  
+          <%= select_tag("property_#{prop.name}", options_for_select(@options, @types[prop.type]), :name => "property[#{prop.name}]") %>
+        </div>
         <%- end -%>
       <%- end %>
       
@@ -35,15 +44,20 @@
     
     <div id='new-properties'>
       <div class='new-property'>
-        <%= label_tag(:name, 'Property Name') %>: <%= text_field_tag(:name, nil, :name => 'new_property[][name]') %>
-  
-        <%- options = options_for_select(@options) -%> 
-        <%= label_tag(:type) %>: <%= select_tag(:type, options, :name => 'new_property[][type]' ) %>
-        <%= link_to('Remove this', '', :class => 'remove-new-property') %>
+        <div class="model-edit-label">
+          <%= label_tag(:name, 'Property Name') %>:
+        </div> 
+        <div class="model-edit-input">
+          <%= text_field_tag(:name, nil, :name => 'new_property[][name]') %>
+          <%- options = options_for_select(@options) -%> 
+          <%= label_tag(:type) %>:
+          <%= select_tag(:type, options, :name => 'new_property[][type]' ) %>
+          <%= link_to(image_tag('remove.png')+'Remove', '', :class => 'remove-new-property') %>
+        </div>
       </div>
     </div>
-    <%= link_to('Add another Property', '', :id => 'add-property') %>
-  <br>
+    <%= link_to(image_tag('add.gif')+' Add a property', '', :id => 'add-property') %>
+  <br><br>
   
   <%= f.submit('Save') %>
     
@@ -51,7 +65,14 @@
 </div>
 
 <div style="display:none" id='form-template'>  
-  <%= label_tag(:name, 'Property Name') %>: <%= text_field_tag(:name, nil, :name => 'new_property[][name]') %>
-  <%= label_tag(:type) %>: <%= select_tag(:type, options, :name => 'new_property[][type]' ) %>
-  <%= link_to('Remove this', '', :class => 'remove-new-property') %>
+  <div class="model-edit-label">
+    <%= label_tag(:name, 'Property Name') %>:
+  </div> 
+  <div class="model-edit-input">
+    <%= text_field_tag(:name, nil, :name => 'new_property[][name]') %>
+    <%- options = options_for_select(@options) -%> 
+    <%= label_tag(:type) %>:
+    <%= select_tag(:type, options, :name => 'new_property[][type]' ) %>
+    <%= link_to(image_tag('remove.png')+'Remove', '', :class => 'remove-new-property') %>
+  </div>
 </div>
