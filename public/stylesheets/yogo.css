@@ -253,7 +253,10 @@ h3 {
 #pagination-links {
 	padding:12px;
 }
-
+#add-datum {
+  padding: 12px;
+  border: 2px solid #ddd;
+}
 #upload {
 	margin:20px 0;
 }
