@@ -20,6 +20,11 @@ class YogoModelsController < ApplicationController
   # 
   def index
     @models = @project.models
+    
+    respond_to do |format|
+      format.html
+      format.json { render( :json => "[#{@models.collect{|m| m.to_json_schema }.join(', ')}}" )}
+    end
   end
   
   # Display a model schema with Human readable datatypes
@@ -30,6 +35,7 @@ class YogoModelsController < ApplicationController
     
     respond_to do |format|
       format.html
+      format.json { render( :json => @model.to_json_schema )}
       format.csv { download_csv }
     end
   end
