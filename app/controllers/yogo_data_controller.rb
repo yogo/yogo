@@ -15,6 +15,11 @@ class YogoDataController < ApplicationController
   # * 10 data objects per page are displayed
   def index
     @data = @model.paginate(:page => params[:page], :per_page => 10)
+    
+    respond_to do |format|
+      format.html
+      format.csv { download_csv }
+    end
   end
   
   # Displays a yogo project model data item's properites and values
@@ -91,24 +96,26 @@ class YogoDataController < ApplicationController
     end
   end
   
+
+
+  private
+  
   # Allows download of yogo project model data in CSV format
   # 
-  def download
+  def download_csv
     csv_output = FasterCSV.generate do |csv|
       csv << @model.properties.map{|prop| prop.name.to_s.capitalize}
       csv << @model.properties.map{|prop| prop.type}
       csv << "Units will go here when supported"
     end
 
-    csv_output << @model.all.to_csv if params[:include_data]
+    csv_output << @model.all.to_csv
     
     send_data(csv_output, 
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')
   end
-
-  private
   
   def find_parent_items
     @project = Project.get(params[:project_id])
