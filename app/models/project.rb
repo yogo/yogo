@@ -58,7 +58,7 @@ class Project
     
     csv_data[3..-1].each do |line| 
       line_data = Hash.new
-      csv_data[0].each_index { |i| line_data[csv_data[0][i].downcase] = line[i] }
+      csv_data[0].each_index { |i| line_data[csv_data[0][i].tableize.singularize] = line[i] }
       model.create(line_data)
     end
   end
