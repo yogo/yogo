@@ -29,8 +29,11 @@
 <div id="pagination-links">
   <%= pagination_links(@data, params[:page], 10) %>
 </div>
+<div id="add-datum">
+  <h3>Add New Data</h3><br>
+<%= link_to('Add New Data Item', new_project_yogo_data_path(@project, @model.name.demodulize))%>
 <%= render :partial => 'csv_form'%>
-
+</div>
 <!-- Tried flipping the table on its side. -->
 <!-- <table>
   <thead>

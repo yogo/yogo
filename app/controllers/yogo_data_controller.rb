@@ -46,12 +46,26 @@ class YogoDataController < ApplicationController
     end
   end
   
+  def new
+    @item = @model.new
+  end
   # Allows a user to edit a yogo project model data item's values
   #
   def edit
     @item = @model.get(params[:id])
   end
 
+  def create
+    @item = @model.new(params[:item])
+    
+    if @item.save
+      flash[:notice] = "New \"#{@model.name}\" has been created."
+      redirect_to project_yogo_data_url(@project, @model.name.demodulize)
+    else
+      flash[:error] = "\"#{@model.name}\" could not be created."
+      render :action => :new
+    end
+  end
   # Adds a data item to the current yogo project model
   #
   def update
