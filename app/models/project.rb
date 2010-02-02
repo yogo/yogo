@@ -14,6 +14,7 @@ class Project
   
   property :id, Serial
   property :name, String, :required => true
+  property :description, Text, :require => false
   
   validates_is_unique   :name
   

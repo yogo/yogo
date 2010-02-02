@@ -1,4 +1,7 @@
 <h1><%= @project.name %></h1>
+<div id="project-overview">
+  <%= @project.description%>
+</div>
 <div id="project-remove-link">
   <%= link_to(image_tag('remove.png')+"Remove Project", project_path(@project), :method => :delete, :confirm => "Removing this project will destroy all data associated with it.\n Continue?") %>
 </div>
