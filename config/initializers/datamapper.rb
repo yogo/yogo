@@ -9,6 +9,8 @@
 # Read the configuration from the existing database.yml file
 config = YAML.load(File.new(File.join(Rails.root, "config", "database.yml")))
 
+require 'datamapper/search'
+
 # Setup the default datamapper repository corresponding to the current rails environment
 # unnecessary: rails-datamapper handles this 
 DataMapper.setup(:default, config[Rails.env])

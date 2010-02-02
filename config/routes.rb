@@ -12,7 +12,7 @@ ActionController::Routing::Routes.draw do |map|
     
     # /projects/:project_id/yogo_data/:model_name
     # /projects/:project_id/yogo_data/:model_name/:id
-    project.resources :yogo_data, :as => 'yogo_data/:model_id', :collection => { :upload => :post }
+    project.resources :yogo_data, :as => 'yogo_data/:model_id', :collection => { :upload => :post, :search => :get }
     
     # /projects/:project_id/yogo_models/:model_name
     project.resources :yogo_models

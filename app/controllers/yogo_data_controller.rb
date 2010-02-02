@@ -22,6 +22,19 @@ class YogoDataController < ApplicationController
     end
   end
   
+  # Search
+  #
+  def search
+    search_term = params[:search_term]
+    @data = @model.search(search_term)
+    
+    respond_to do |format|
+      format.html { render( :action => :index) }
+      format.json { render( :json => @data.to_json )}
+      format.csv  { download_csv}
+    end
+  end
+  
   # Displays a yogo project model data item's properites and values
   # 
   def show
