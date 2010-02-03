@@ -9,7 +9,7 @@
 module Yogo
   class Types
     # Constant for the supported Human readable datatypes
-    @@HumanTM = { "Decimal"        => BigDecimal, 
+    @@HumanTM = { "Decimal"        => Float, 
                   "Integer"        => Integer,
                   "Text"           => String, 
                   "True/False"     => DataMapper::Types::Boolean, 
