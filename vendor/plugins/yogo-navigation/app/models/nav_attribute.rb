@@ -21,7 +21,7 @@ class NavAttribute
     self.nav_display_values.each do |display|
       names << display.value
     end
-    return names
+    return (names.sort) << '+'
   end
   
   def fetch_db_value(range)

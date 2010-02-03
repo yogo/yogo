@@ -10,7 +10,7 @@
 						<td><%= select_tag 'nav_model[display]', options_for_select([ 'true', 'false' ], :selected => @nav_model.display.to_s)  %></li></td>
 					</tr>
 					<tr>
-						<td><li>Controller:</td> 
+						<td><li>Model ID:</td> 
 						<td><%= text_field_tag 'nav_model[model_id]', @nav_model.model_id, :size => 20 %></li></td>
 					</tr>	
 					<tr>
@@ -69,7 +69,7 @@
 									<th>Current Values</th>
 									<th>Remove?</th>
 									<% end %>
-										<% attrib.nav_display_values.each do |values| %>
+										<% attrib.nav_display_values.sort_by {|x| x.value.to_s}.each do |values| %>
 									<tr>
 										<td>
 									<%= values.value + " : " + values.nav_database_value.value %><br>

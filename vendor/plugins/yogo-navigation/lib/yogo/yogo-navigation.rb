@@ -140,6 +140,10 @@ module Yogo
         relationships
       end
       
+      def self.create_navigation_from_model(model)
+        
+      end
+      
     end
   end
 end

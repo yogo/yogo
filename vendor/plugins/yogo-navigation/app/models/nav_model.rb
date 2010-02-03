@@ -17,23 +17,10 @@ class NavModel
   
   def fetch_attributes
     attributes = []
-    if self.nav_attributes
-      self.nav_attributes.each do |attribute|
-        #if attribute.included
-          attributes << attribute
-        #end
-      end
-    end
-    #attributes = attributes.sort
-    # if has_relationships?(table)
-    #   fetch_relationships(table).each_pair do |relative_table, relationship|
-    #     if NavModel.first(:name => relative_table.to_s).included == true
-    #       attributes << {relative_table.to_s => relationship} 
-    #     end
-    #   end
-    # end
-    #attributes << {'alpha' => 'relationship'}
-    return attributes
+    self.nav_attributes.each do |attribute|
+        attributes << attribute if attribute.display
+    end if self.nav_attributes
+    return attributes.sort_by { |x| x.display.to_s }
   end
   
   def empty_contents?

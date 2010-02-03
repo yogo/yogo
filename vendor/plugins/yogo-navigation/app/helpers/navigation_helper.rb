@@ -3,6 +3,7 @@ module NavigationHelper
   def generate_navigation_display(models)
     display = []
     models.map! {|mod| NavModel.first(:name => mod.name)}
+    models.delete_if {|x| x.nil?}
     table = models.select {|x| x.model_id == request.parameters[:model_id]}[0]
     if display_conditions(request.parameters, table)
       display = construct_display(table, table, [table], [])
@@ -19,31 +20,10 @@ module NavigationHelper
     end
   end
   
-  def fetch_attributes(table)
-    attributes = []
-    if NavModel.first(:name => table).nav_attributes
-      NavModel.first(:name => table).nav_attributes.each do |attribute|
-        #if attribute.included
-          attributes << attribute.name
-        #end
-      end
-    end
-    attributes = attributes.sort
-    # if has_relationships?(table)
-    #   fetch_relationships(table).each_pair do |relative_table, relationship|
-    #     if NavModel.first(:name => relative_table.to_s).included == true
-    #       attributes << {relative_table.to_s => relationship} 
-    #     end
-    #   end
-    # end
-    #attributes << {'alpha' => 'relationship'}
-    return attributes
-  end
-  
   def fetch_path(table, attribute, range, history)
     #if hist > 1 then prime
     controller = table.model_id
-    database_value = attribute.fetch_db_value(range)
+    database_value = attribute.fetch_db_value(range) unless range.eql?('+')
     if params[table.name.to_sym] == nil
        return link_to("#{range}", "#{controller}?#{request.url.split("?")[1]}&#{table.name}[#{attribute.name}]=#{database_value}")# + fetch_count(table, attribute, database_value)
     else
