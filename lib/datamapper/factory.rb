@@ -65,7 +65,7 @@ module DataMapper
       spec_array[0].each_index do |idx|
         prop_hash = Hash.new
         pname = spec_array[0][idx].tableize.singular
-        ptype = spec_array[1][idx]
+        ptype = Yogo::Types.human_to_dm(spec_array[1][idx])
         punits = spec_array[2][idx]
         if pname == 'id'
           prop_hash = { pname => { :type => 'Serial' } }
@@ -74,7 +74,6 @@ module DataMapper
         end
         spec_hash[:properties].merge!(prop_hash) 
       end
-
       self.build(spec_hash, :yogo)
     end
   end

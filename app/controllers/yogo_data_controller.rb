@@ -103,9 +103,16 @@ class YogoDataController < ApplicationController
           # Load data from csv file
           csv_data[3..-1].each do |line| 
             line_data = Hash.new
-            csv_data[0].each_index { |i| line_data[csv_data[0][i].tableize.singularize] = line[i].strip }
-            item = @model.get(line_data['id'])
-            if ! item.nil?
+            csv_data[0].each_index do |i| 
+              column_name = csv_data[0][i].tableize.singularize
+              type = Yogo::Types.human_to_dm(csv_data[1][i])
+              line_data[column_name] = type(line[i].strip)
+            end
+            puts "LINES :"
+            require 'pp'
+            pp(line_data)
+            if line_data.has_key?('id') && ! @model.get(line_data['id']).nil?
+              item = @model.get(line_data['id'])
               item.attributes = line_data
               item.save
             else
@@ -129,8 +136,8 @@ class YogoDataController < ApplicationController
   # 
   def download_csv
     csv_output = FasterCSV.generate do |csv|
-      csv << @model.properties.map{|prop| prop.name.to_s.capitalize}
-      csv << @model.properties.map{|prop| prop.type}
+      csv << @model.properties.map{|prop| prop.name.to_s.humanize}
+      csv << @model.properties.map{|prop| Yogo::Types.dm_to_human(prop.type)}
       csv << "Units will go here when supported"
     end
 

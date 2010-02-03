@@ -57,9 +57,18 @@ class Project
     model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
     model.auto_migrate!
     
-    csv_data[3..-1].each do |line| 
+    csv_data[3..-1].each do |line|
+      puts "LINE : #{line}"
       line_data = Hash.new
-      csv_data[0].each_index { |i| line_data[csv_data[0][i].tableize.singularize] = line[i] }
+      csv_data[0].each_index do |i| 
+        attr_name = csv_data[0][i].tableize.singularize
+        type = Yogo::Types.human_to_dm(csv_data[1][i])
+        puts "#{attr_name} #{type} /#{line[i]}/"
+        line_data[attr_name] = line[i]
+      end
+      puts "LINE DATA:"
+      require 'pp'
+      pp(line_data)
       model.create(line_data)
     end
   end

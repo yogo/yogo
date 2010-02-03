@@ -1,6 +1,6 @@
 Name,ID,Mass,Charge
-String,Integer,Float,Float
+Text,Integer,Decimal,Decimal
 NA,NA,kg,volts
-Sean,1,1283,1.2
-Bug,2,23492,1.5
-Aed,3,233213,3.2
+Sean,1,1283.0,1.2
+Bug,2,23492.0,1.5
+Aed,3,233213.0,3.2
