@@ -81,7 +81,11 @@ class Project
   # =Example
   #  
   def get_model(name)
-    DataMapper::Model.descendants.select{|m| m.to_s.demodulize == name }[0]
+    DataMapper::Model.descendants.select{ |m| m.to_s.demodulize == name }.first
+  end
+
+  def search_models(search_term)
+    DataMapper::Model.descendants.select{ |m| m.name =~ /Yogo::#{namespace}::\w*#{search_term}\w*/i }
   end
 
   # @return [DataMapper::Model] a new model 

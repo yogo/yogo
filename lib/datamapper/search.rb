@@ -11,9 +11,12 @@ module DataMapper
           queries << all( options.merge(prop.name.like => "%#{value}%") )
         end
       end
-      
-      query = queries.first
-      queries[1..-1].each{|q| query = query | q }
+
+      query = []
+      if !queries.empty?
+        query = queries.first
+        queries[1..-1].each{|q| query = query | q } unless queries.length < 1
+      end
       
       return query
     end

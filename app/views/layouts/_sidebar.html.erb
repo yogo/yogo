@@ -18,5 +18,8 @@
             </ul>
         </div>
     </div>
-    <br/>
+    <%- form_for(:model, :url => search_projects_path, :html => {:method => :get} ) do |f| -%>
+      <%= text_field_tag("search_term") %>
+      <%= f.submit('Search') %>
+    <%- end -%>
 </div>

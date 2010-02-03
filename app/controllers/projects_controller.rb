@@ -15,6 +15,34 @@ class ProjectsController < ApplicationController
   def index
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
+  
+  # This searches for data across all projects.
+  # First we search projects that might match.
+  # Then we search models that might match
+  # Then we search the contents of the models(but just count).
+  def search
+    search_term = params[:search_term]
+    
+    @projects = Project.search(search_term)
+
+    @proj_models = []
+    Project.all.each do |project|
+      @proj_models << [project, project.search_models(search_term).flatten ]
+    end
+
+    @proj_models_data = []
+    Project.all.each do |project|
+      project.models.each do |model|
+        count = model.search(search_term).count
+        @proj_models_data << [project, model, count] if count > 0
+      end
+    end
+    
+    respond_to do |format|
+      format.html
+    end
+
+  end
 
   def show
     @project = Project.get(params[:id])
