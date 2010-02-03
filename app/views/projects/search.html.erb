@@ -1,25 +1,27 @@
-<%- unless @projects.empty? -%>
-  <ul>
-  <%- for project in @projects -%>
-    <li><%= link_to(project.name, project_path(project)) %> Project</li>
+<div id="project-search">
+  <%- unless @projects.empty? -%>
+    <ul>
+    <%- for project in @projects -%>
+      <li><%= link_to(project.name, project_path(project)) %> </li>
+    <%- end -%>
+    </ul>
   <%- end -%>
-  </ul>
-<%- end -%>
-<br>
+  <br>
 
-<%- unless @proj_models.empty? -%>
-  <%- for proj_model in @proj_models -%>
-    <%- project = proj_model[0] -%>
-    <%- for model in proj_model[1] -%>
-      <li><%=project.name %>: <%= link_to(model.name, project_yogo_model_path(project, model.name.demodulize)) %></li>
+  <%- unless @proj_models.empty? -%>
+    <%- for proj_model in @proj_models -%>
+      <%- project = proj_model[0] -%>
+      <%- for model in proj_model[1] -%>
+        <li><%=project.name %>: <%= link_to(model.name, project_yogo_model_path(project, model.name.demodulize)) %></li>
+      <%- end -%>
     <%- end -%>
   <%- end -%>
-<%- end -%>
 
-<%- unless @proj_models_data.empty? -%>
-  <ul>
-  <%- @proj_models_data.each do |data_set| -%>
-    <li><%= data_set[0].name %>: <%= data_set[1].name.demodulize %>: <%= link_to("(#{data_set[2]})", search_project_yogo_data_path(project, data_set[1].name.demodulize, :search_term => params[:search_term])) %> </li>
+  <%- unless @proj_models_data.empty? -%>
+    <ul>
+    <%- @proj_models_data.each do |data_set| -%>
+      <li><%= data_set[0].name %>: <%= data_set[1].name.demodulize %>: <%= link_to("(#{data_set[2]})", search_project_yogo_data_path(project, data_set[1].name.demodulize, :search_term => params[:search_term])) %> </li>
+    <%- end -%>
+    </ul>
   <%- end -%>
-  </ul>
-<%- end -%>
+</div>

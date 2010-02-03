@@ -8,8 +8,9 @@ Yogo is a Data Management System built on Ruby on Rails, DataMapper, and Perseve
 2. Change directories to the code: `cd yogo`
 3. Initialize the environment:     `./setup.sh`
 4. Start persevere:                `rake persvr:start`
-5. Start the application:          `script/server`
-6. Go to http://localhost:3000/ and get the Yogo start page
+5. Add example data if desired:    `rake yogo:db:example:load`
+6. Start the application:          `script/server`
+7. Go to http://localhost:3000/ and get the Yogo start page
 
 ## Submodules Missing?
 

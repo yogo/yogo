@@ -1,7 +1,12 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~ Overall Layout Elements ~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /*
 Link Brown: #703824
-Header Blue: #455D8C
+Header Turq: #214A5D
 */
+
 * {
 	margin:0;
 	padding:0;
@@ -76,6 +81,10 @@ h3 {
   background:#ddd;
 }
 
+.alternate-rows0 td {
+  background:#EEE;
+}
+
 /*This is here (in part) so the footer will stay at the bottom of pages*/
 .clearfix:after {
 	content: ".";
@@ -97,6 +106,10 @@ h3 {
 /* End hide from IE-mac */
 
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~!~~~~ Container and Content ~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 #container {
   width:950px;
   margin:auto;
@@ -108,6 +121,11 @@ h3 {
   width:700px;
   padding:20px 10px;
 }
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~ Header and Users  ~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #header {
   padding:0;
@@ -123,6 +141,19 @@ h3 {
   #log-link {
     font-size:15px;
   }
+
+#user-session-login {
+  margin:auto;
+  padding:20px;
+  width:400px;
+  text-align:center;
+  background:#ffffdd;
+  border:2px solid #ddd;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~ Sidebar ~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #sidebar {
   width:175px;
@@ -157,7 +188,6 @@ h3 {
   #sidebar ul li {
     margin-left: 10px;
     padding:5px 0 0 0px;
-    /*list-style-type: none;*/
     list-style-image: url("../images/bullet.gif");
   }
 
@@ -171,15 +201,20 @@ h3 {
   #sidebar ul li:hover {
     background-color: #EEE;
   }
+  
+  #sidebar-search {
+    text-align:center;
+    margin-top:20px;
+  }
+  
+  #sidebar-search input {
+    margin:0px 12px 6px 0;
+  }
 
-#user-session-login {
-  margin:auto;
-  padding:20px;
-  width:400px;
-  text-align:center;
-  background:#ffffdd;
-  border:2px solid #ddd;
-}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~ Projects ~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #project-remove-link {
 	padding:12px;
@@ -195,6 +230,32 @@ h3 {
   vertical-align:bottom;
 	color:#777;
 }
+
+#project-search ul {
+  list-style-type:none;
+}
+
+#project-new label {
+  vertical-align:top;
+  float:left;
+  width:9em;
+  text-align:right;
+  margin-right:0.5em;
+  clear:both;
+}
+
+#project-new input {
+  margin-bottom:2em;
+}
+
+#project-new textarea {
+  height:100px;
+}
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~ Models ~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #model-edit {
 	padding:20px 12px;
@@ -228,9 +289,10 @@ h3 {
 	padding:0 12px;
 }
 
-.alternate-rows0 td {
-  background:#EEE;
-}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~ Data ~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #yogo-data-list ul {
   margin:0;
@@ -241,25 +303,43 @@ h3 {
   list-style-type: none;
 }
 
-#data-index th, #data-show th {
-	padding:8px;
+#data-index {
+  border:1px dotted #214a5d;
+  border-right:none;
+  border-left:none;
+  padding:12px;
+  margin-top:20px;
 }
 
-#data-index td, #data-show td {
-	min-width:75px;
-	padding:4px;
-}
+  #data-index h3 {
+    text-align:center;
+  }
+
+  #data-index th, #data-show th {
+  	padding:8px;
+  }
+
+  #data-index td, #data-show td {
+  	min-width:75px;
+  	padding:4px;
+  }
 
 #pagination-links {
 	padding:12px;
 }
-#add-datum {
-  padding: 12px;
-  border: 2px solid #ddd;
+
+#search-data {
+  margin-bottom:20px;
 }
+
 #upload {
 	margin:20px 0;
 }
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~ Footer ~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #footer {
 	position: relative;
