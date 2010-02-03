@@ -60,31 +60,32 @@ describe "A Project" do
     Project.should respond_to(:paginate)
   end
 
-  it "should create a model from a csv" do
-    file_name = "#{Rails.root}/spec/models/csvtest.csv"
-    model_name = File.basename(file_name, ".csv").camelcase
-    csv_data = FasterCSV.read(file_name)
-    model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
-    Object.const_defined?(model_name).should be_true
-  end
-
-  it "should import data from csv" do
-    file_name = "#{Rails.root}/spec/models/csvtest.csv"
-    model_name = File.basename(file_name, ".csv").camelcase
-    csv_data = FasterCSV.read(file_name)
-    model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
-    model.auto_migrate!
-    csv_data[3..-1].each do |line| 
-      line_data = Hash.new
-      csv_data[0].each_index { |i| line_data[csv_data[0][i].downcase] = line[i] }
-      model.create(line_data)
+  describe 'importing from csv' do
+    it "should create a model from a csv" do
+      file_name = "#{Rails.root}/spec/models/csvtest.csv"
+      model_name = File.basename(file_name, ".csv").camelcase
+      csv_data = FasterCSV.read(file_name)
+      model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
+      Object.const_defined?(model_name).should be_true
     end
-    model.first(:name => "Bug").should be_true
-    model.auto_migrate_down!
+
+    it "should import data from csv" do
+      file_name = "#{Rails.root}/spec/models/csvtest.csv"
+      model_name = File.basename(file_name, ".csv").camelcase
+      csv_data = FasterCSV.read(file_name)
+      model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
+      model.auto_migrate!
+      csv_data[3..-1].each do |line| 
+        line_data = Hash.new
+        csv_data[0].each_index { |i| line_data[csv_data[0][i].downcase] = line[i] }
+        model.create(line_data)
+      end
+      model.first(:name => "Bug").should be_true
+      model.auto_migrate_down!
+    end
   end
 
   describe "contains references to reflected datamapper models" do
-
     it "should contain an array of reflected models" do
       p = Factory.build(:project)
       p.should respond_to(:models)
@@ -172,5 +173,6 @@ describe "A Project" do
       project.models.should be_empty
     end
   end
+
   it "should not save an invalid schema and return nil"
 end

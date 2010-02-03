@@ -15,7 +15,7 @@
     <%- @model.properties.each do |prop| %>
       <tr id="model-show-row" class="<%= cycle('alternate-rows0', 'alternate-rows1') %>">
         <td><%= prop.name.to_s.titleize %></td>
-        <td><%= (prop.type.to_s == "DataMapper::Types::Serial") ? "Integer" : @types[prop.type]  %></td>
+        <td><%= Yogo::Types.dm_to_human(prop.type) %></td>
       <tr>
     <%- end %>
   </tbody>

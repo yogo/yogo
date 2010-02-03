@@ -1,11 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/csv_shared_controller_spec')
 
 describe ProjectsController do
 
   def mock_project(stubs={})
     @mock_project ||= mock_model(Project, stubs)
   end
-
   
   def mock_models(proj)
     [ build_reflected_model('Vanilla',    proj),
@@ -160,7 +160,7 @@ describe ProjectsController do
         delete :destroy, :id => "1"
         response.should redirect_to(projects_url)
       end
-    end
+    end # success
     describe "failure" do
       it "does not destroy the requested project, flashes an error" do
         Project.should_receive(:get).with("37").and_return(mock_project(:name => 'Test Project'))
@@ -173,9 +173,14 @@ describe ProjectsController do
         delete :destroy, :id => "1"
         response.should redirect_to(projects_url)
       end
+    end # failure
+  end # POST tests
 
-    end
-  end
+  it_should_behave_like 'CSV File Loading Support'
   
+  describe 'creating a model from a csv file' do
+    # Model tests
+    it 'should create a new model (overwriting any existing one)'
+  end # csv handling
   
-end
+end # projects controller

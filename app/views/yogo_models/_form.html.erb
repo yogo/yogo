@@ -35,7 +35,7 @@
           <%= h prop.name.to_s.titleize %> :
         </div>
         <div class="model-edit-input">  
-          <%= select_tag("property_#{prop.name}", options_for_select(@options, @types[prop.type]), :name => "property[#{prop.name}]") %>
+          <%= select_tag("property_#{prop.name}", options_for_select(@options, Yogo::Types.dm_to_human(prop.type)), :name => "property[#{prop.name}]") %>
         </div>
         <%- end -%>
       <%- end %>

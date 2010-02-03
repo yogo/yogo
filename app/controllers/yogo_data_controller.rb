@@ -58,11 +58,17 @@ class YogoDataController < ApplicationController
   def create
     @item = @model.new(params[:item])
     
-    if @item.save
-      flash[:notice] = "New \"#{@model.name}\" has been created."
-      redirect_to project_yogo_data_url(@project, @model.name.demodulize)
+    if @item.valid?
+      puts @item
+      if @item.save
+        flash[:notice] = "New \"#{@model.name}\" has been created."
+        redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
+      else
+        flash[:error] = "\"#{@model.name}\" could not be created."
+        render :action => :new
+      end
     else
-      flash[:error] = "\"#{@model.name}\" could not be created."
+      flash[:error] = "\"#{@model.name}\" could not be created: data is invalid."
       render :action => :new
     end
   end
@@ -102,20 +108,23 @@ class YogoDataController < ApplicationController
 
         valid = true
         @model.properties.each do |prop|
-          valid = false unless prop_hash.has_key?(prop.name.to_s) && 
-                   prop_hash[prop.name.to_s] == prop.type.to_s
+#          puts "Condition 1: [attr exists] #{prop_hash.has_key?(prop.name.to_s)}"
+#          puts "Condition 2: [type matches] #{prop_hash[prop.name.to_s] == Yogo::Types.dm_to_human(prop.type)}"
+          valid = false unless (prop_hash.has_key?(prop.name.to_s) && 
+                                prop_hash[prop.name.to_s] == Yogo::Types.dm_to_human(prop.type))
         end
 
         if valid
           # Load data from csv file
           csv_data[3..-1].each do |line| 
             line_data = Hash.new
-            csv_data[0].each_index { |i| line_data[csv_data[0][i].tableize.singularize] = line[i].strip }
-            item = @model.get(line_data['id'])
-            if ! item.nil?
+            csv_data[0].each_index { |i| line_data[csv_data[0][i].tableize.singularize] = line[i] }
+            if line_data.has_key?('id') && ! @model.get(line_data['id']).nil?
+              item = @model.get(line_data['id'])
               item.attributes = line_data
               item.save
             else
+              line_data.delete('id') if line_data.has_key?('id')
               @model.create(line_data)
             end
           end
@@ -128,20 +137,18 @@ class YogoDataController < ApplicationController
     end
   end
   
-
-
   private
   
   # Allows download of yogo project model data in CSV format
   # 
   def download_csv
     csv_output = FasterCSV.generate do |csv|
-      csv << @model.properties.map{|prop| prop.name.to_s.capitalize}
-      csv << @model.properties.map{|prop| prop.type}
+      csv << @model.properties.map{|prop| prop.name.to_s.humanize}
+      csv << @model.properties.map{|prop| Yogo::Types.dm_to_human(prop.type)}
       csv << "Units will go here when supported"
     end
 
-    csv_output << @model.all.to_csv
+    @model.all.each { |m| csv_output << m.to_csv }
     
     send_data(csv_output, 
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 

@@ -14,6 +14,7 @@ class Project
   
   property :id, Serial
   property :name, String, :required => true
+  property :description, Text, :required => false
   
   validates_is_unique   :name
   
@@ -56,9 +57,14 @@ class Project
     model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
     model.auto_migrate!
     
-    csv_data[3..-1].each do |line| 
+    csv_data[3..-1].each do |line|
       line_data = Hash.new
-      csv_data[0].each_index { |i| line_data[csv_data[0][i].tableize.singularize] = line[i] }
+      csv_data[0].each_index do |i| 
+        attr_name = csv_data[0][i].tableize.singularize
+        prop = model.properties[attr_name]
+        type = Yogo::Types.human_to_dm(csv_data[1][i])
+        line_data[attr_name] = prop.typecast(line[i])
+      end
       model.create(line_data)
     end
   end

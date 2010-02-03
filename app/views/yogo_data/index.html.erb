@@ -34,20 +34,4 @@
 <%= link_to('Add New Data Item', new_project_yogo_data_path(@project, @model.name.demodulize))%>
 <%= render :partial => 'csv_form'%>
 </div>
-<!-- Tried flipping the table on its side. -->
-<!-- <table>
-  <thead>
-  </thead>
-  <tbody>
-    
-      <%#- @model.properties.each do |p| %>
-      <tr>
-      <td><%#= p.name.to_s.titleize %></td>
-      <%#- @data.each do |d| %>
-      <td><%#= d[p.name] %></td>
-            <%#- end %>
-      </tr>
 
-      <%#- end %>
-  </tbody>
-</table> -->

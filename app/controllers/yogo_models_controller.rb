@@ -8,14 +8,7 @@
 # 
 class YogoModelsController < ApplicationController
   before_filter :find_parent_items
-  
-  # Constant for the supported Human readable datatypes
-  HumanTypes = { "Decimal"        => BigDecimal, 
-                 "Integer"        => Integer,
-                 "Text"           => String, 
-                 "True/False"     => DataMapper::Types::Boolean, 
-                 "Date"           => DateTime }
-  
+
   # Provides a list of the models for the current project
   # 
   def index
@@ -31,13 +24,13 @@ class YogoModelsController < ApplicationController
   #
   def show
     @model = @project.get_model(params[:id])
-    @types = HumanTypes.invert
     
     respond_to do |format|
       format.html
       format.json { render( :json => @model.to_json_schema )}
       format.csv { download_csv }
     end
+
   end
   
   def new
@@ -48,19 +41,17 @@ class YogoModelsController < ApplicationController
       @model = Struct.new('PrototypeModel')
     end
     
-    @options = HumanTypes.keys.collect{|key| [key,key] }
-    
+    @options = Yogo::Types.human_types.map{|key| [key,key] }
   end
   
   def create
     class_name = params[:class_name].titleize.gsub(' ', '')
     cleaned_options = {}
-    # params[:name]
     errors = {}
     
     params[:new_property].each do |prop|
       name = prop[:name].squish.gsub(' ', '_').tableize
-      prop_type = HumanTypes[prop[:type]]
+      prop_type = Yogo::Types.human_to_dm(prop[:type])
       
       next if name.blank?
       
@@ -88,8 +79,7 @@ class YogoModelsController < ApplicationController
   #
   def edit
     @model = @project.get_model(params[:id])
-    @options = HumanTypes.keys.collect{|key| [key,key] }
-    @types = HumanTypes.invert
+    @options = Yogo::Types.human_types.map{|key| [key,key] } 
   end
 
   # Processes adding a field/property to an existing model
@@ -103,7 +93,7 @@ class YogoModelsController < ApplicationController
     
     params[:new_property].each do |prop|
       name = prop[:name].squish.downcase.gsub(' ', '_')
-      prop_type = HumanTypes[prop[:type]]
+      prop_type = Yogo::Types.human_to_dm(prop[:type])
       
       next if name.blank?
       
@@ -116,7 +106,7 @@ class YogoModelsController < ApplicationController
     
     params[:property].each_pair do |prop, type|
       name = prop.squish.gsub(' ', '_')
-      prop_type = HumanTypes[type]
+      prop_type = Yogo::Types.human_to_dm(type)
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
         cleaned_params << [name, prop_type]
@@ -160,8 +150,8 @@ class YogoModelsController < ApplicationController
   # 
   def download_csv
     csv_output = FasterCSV.generate do |csv|
-      csv << @model.properties.map{|prop| prop.name.to_s.capitalize}
-      csv << @model.properties.map{|prop| prop.type}
+      csv << @model.properties.map{|prop| prop.name.to_s.humanize}
+      csv << @model.properties.map{|prop| Yogo::Types.dm_to_human(prop.type)}
       csv << "Units will go here when supported"
     end
     

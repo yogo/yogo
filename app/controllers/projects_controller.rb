@@ -78,7 +78,7 @@ class ProjectsController < ApplicationController
        flash[:error] = "File upload area cannont be blank."
     end
     
-    redirect_to projects_url
+    redirect_to project_url(@project)
   end
   
   def rereflect
