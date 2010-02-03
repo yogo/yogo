@@ -160,7 +160,7 @@ describe ProjectsController do
         delete :destroy, :id => "1"
         response.should redirect_to(projects_url)
       end
-    end
+    end # success
     describe "failure" do
       it "does not destroy the requested project, flashes an error" do
         Project.should_receive(:get).with("37").and_return(mock_project(:name => 'Test Project'))
@@ -173,9 +173,22 @@ describe ProjectsController do
         delete :destroy, :id => "1"
         response.should redirect_to(projects_url)
       end
+    end # failure
+  end # POST tests
 
-    end
-  end
-  
-  
-end
+  #
+  # At the project level cvs upload means creating a model and instances from a spreadsheet
+  # There are a set of tests that should be done on the model creation piece, but
+  # the instance creation tests overlap significantly with the yogo_models_controller csv handling.
+  # 
+  describe 'csv file handling' do
+    # Data validation
+    it 'should validate types are valid in the spreadsheet'
+    it 'should return an error when bad types are used in the spreadsheet'
+    # Model tests
+    it 'should create a new model (overwriting any existing one)'
+    # Instance tests
+    it 'should create instances of the new model from all valid rows of the spreadsheet'
+    it 'should warn about invalid instance/row data but continue to create subsequent instances'
+  end # csv handling
+end # projects controller

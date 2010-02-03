@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe YogoModelsController do
+describe WelcomeController do
   
   describe 'POST' do
   end # POST tests
@@ -13,4 +13,4 @@ describe YogoModelsController do
   
   describe 'DELETE' do
   end # DELETE tests
-end # YogoModelsController 
+end # WelcomeController
