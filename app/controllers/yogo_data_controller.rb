@@ -61,14 +61,14 @@ class YogoDataController < ApplicationController
     if @item.valid?
       puts @item
       if @item.save
-        flash[:notice] = "New \"#{@model.name}\" has been created."
+        flash[:notice] = "New \"#{@model.name.demodulize}\" has been created."
         redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
       else
-        flash[:error] = "\"#{@model.name}\" could not be created."
+        flash[:error] = "\"#{@model.name.demodulize}\" could not be created."
         render :action => :new
       end
     else
-      flash[:error] = "\"#{@model.name}\" could not be created: data is invalid."
+      flash[:error] = "\"#{@model.name.demodulize}\" could not be created: data is invalid."
       render :action => :new
     end
   end
