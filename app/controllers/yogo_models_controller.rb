@@ -150,8 +150,8 @@ class YogoModelsController < ApplicationController
   # 
   def download_csv
     csv_output = FasterCSV.generate do |csv|
-      csv << @model.properties.map{|prop| prop.name.to_s.capitalize}
-      csv << @model.properties.map{|prop| prop.type}
+      csv << @model.properties.map{|prop| prop.name.to_s.humanize}
+      csv << @model.properties.map{|prop| Yogo::Types.dm_to_human(prop.type)}
       csv << "Units will go here when supported"
     end
     
