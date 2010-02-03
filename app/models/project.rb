@@ -58,17 +58,13 @@ class Project
     model.auto_migrate!
     
     csv_data[3..-1].each do |line|
-      puts "LINE : #{line}"
       line_data = Hash.new
       csv_data[0].each_index do |i| 
         attr_name = csv_data[0][i].tableize.singularize
+        prop = model.properties[attr_name]
         type = Yogo::Types.human_to_dm(csv_data[1][i])
-        puts "#{attr_name} #{type} /#{line[i]}/"
-        line_data[attr_name] = line[i]
+        line_data[attr_name] = prop.typecast(line[i])
       end
-      puts "LINE DATA:"
-      require 'pp'
-      pp(line_data)
       model.create(line_data)
     end
   end
