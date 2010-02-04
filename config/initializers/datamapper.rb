@@ -7,7 +7,7 @@
 # 
 #
 # Read the configuration from the existing database.yml file
-config = YAML.load(File.new(File.join(Rails.root, "config", "database.yml")))
+config = Rails.configuration.database_configuration
 
 require 'datamapper/search'
 
