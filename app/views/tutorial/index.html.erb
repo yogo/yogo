@@ -1,0 +1,197 @@
+<h2>Recipe Tutorial</h2>
+<div>
+
+<p >This tutorial will cover how to use the Yogo Data Management
+Toolkit to create a Recipes project for storing your recipes.  This is a very
+simple introduction to ease you into using this tool.</p>
+
+<p >&nbsp;</p>
+
+<p >From the Yogo Data Management Toolkit homepage begin
+creating a recipe project by clicking the "Create a Project" link on the
+sidebar to the left of the screen.</p>
+
+<p >&nbsp;</p>
+
+<p ><img width=600 height=400
+id="Picture 2" src="/images/yogo_recipe_tutorial_files/homepage_arrow.jpg"></p>
+
+<p >On the Create Project screen fill in the "Project Name"
+field with "Recipes" and fill the "Project Description" text area with
+something like "This is a collection of recipes for delicious foods I enjoy
+making."  Then click the "Create" button to create the Recipes project.</p>
+
+<p ><img width=600 height=400
+id="Picture 3" src="/images/yogo_recipe_tutorial_files/create_project.jpg"></p>
+
+<p >Now a message should appear saying "Project "Recipes" has
+been created" and the projects index page should now display a link to "Recipes"
+and the sidebar show also now have a link to "Recipes".  Click either of the
+"Recipes" links for the next step.</p>
+
+<p >&nbsp;</p>
+
+<p ><img width=600 height=400
+id="Picture 4" src="/images/yogo_recipe_tutorial_files/project_created.jpg"></p>
+
+<p >&nbsp;</p>
+
+<p >The "Recipes" project should now be loaded into the current
+view.  The title of the currently selected project "Recipes" and the description
+should appear at the top of the view.  Under the description is the heading
+"Models Data" and this area is currently empty as no models have been created
+yet.  Below that the "Data file upload" heading contains a file upload field. 
+This field is for loading CSV files, that conform to the Yogo Data Management
+ToolkitÕs formatting expectations, to create new models and fill them with
+data.  The CSV feature will be addressed in more detail later in the tutorial. 
+For now look at the link "Create a new model" below the file upload field and
+click it to create a new model for the "Recipes" project.</p>
+
+<p >&nbsp;</p>
+
+<p ><img width=600 height=400
+id="Picture 5" src="/images/yogo_recipe_tutorial_files/recipes_empty.jpg"></p>
+
+<p >&nbsp;</p>
+
+<p >The "Create a new model for Recipes" page should be visible
+now.   First fill in the field "Model name" with "Recipe" this model will
+contain the attributes of a recipe when we are done.  Next fill in the
+"Property Name" field with "Name" as every recipe should have a delicious
+sounding name. For the "Type" drop down selection box choose "Text" since we
+would like our Name to be in words rather than numbers, dates etc.</p>
+
+<p ><img width=600 height=400
+id="Picture 6" src="/images/yogo_recipe_tutorial_files/recipe_new_model_initial.jpg"></p>
+
+<p >Now seeing as our recipe should probably have other
+attributes or properties, as we like to refer to them within our model
+definition, we should add another property.  So click on the "Add a property"
+link and a new "Property Name" field and corresponding "Type field should pop
+up directly below the "Name" property.</p>
+
+<p >&nbsp;</p>
+
+<p ><img width=600 height=400
+id="Picture 7" src="/images/yogo_recipe_tutorial_files/recipe_new_model_second_property.jpg"></p>
+
+<p >With this second property field present we can now  add a
+"Category" since we would like to categorize these recipes i.e(Dessert, Breads,
+Meat etc).  For the "Type" drop down selection box choose "Text". </p>
+
+<p >&nbsp;</p>
+
+<p >&nbsp;</p>
+
+<p ><img width=600 height=400
+id="Picture 8" src="/images/yogo_recipe_tutorial_files/recipe_new_model_ingredients.jpg"></p>
+
+<p >&nbsp;</p>
+
+<p >Now lets add a third property and call it "Ingredients" and
+it will be of "Type" "Text".</p>
+
+<p ><img width=600 height=400
+id="Picture 17" src="/images/yogo_recipe_tutorial_files/recipe_new_model_third_property_ingredients.jpg"></p>
+
+<p >&nbsp;</p>
+
+<p >Ok now that we have that filled in lets save our finished
+"Recipe" model.  Click the "Save" buton.</p>
+
+<p >&nbsp;</p>
+
+<p ><img width=600 height=400
+id="Picture 9" src="/images/yogo_recipe_tutorial_files/saved_recipe_model_one.jpg"></p>
+
+<p >&nbsp;</p> 
+
+<p >Uh oh...  Now that I think out it looks like we forgot an
+important propertyÉ DIRECTIONS of course.  No problem we can simply click on
+the "Edit Recipe" link toad "Directions" to our "Recipe" model.</p>
+
+<p >&nbsp;</p>
+
+<p ><img width=600 height=400
+id="Picture 10" src="/images/yogo_recipe_tutorial_files/edit_recipe_model_directions.jpg"></p>
+
+<p >Fill in the "Property Name" field just as before with
+"Directions" and select "Text" for the "Type".  Then click "Save" again.</p>
+
+<p >&nbsp;</p>
+
+<p ><img width=600 height=400
+id="Picture 11" src="/images/yogo_recipe_tutorial_files/saved_recipes_model_two.jpg"></p>
+
+<p >You can now see the "Recipe" model page and a message saying
+"Properties added" which refers to the "Directions " property we just finished
+adding.  Note that a table of all the properties in the "Recipe" model is
+displayed with a corresponding Data type.  You may have noticed that there is a
+property that we didnÕt add &#8211; Id.  The Id property is a unique Integer (non-decimal
+number) identifier that the Yogo Data Management Toolkit creates automatically
+to ensure each entry is unique.  Now that we are reasonably satisfied we can
+describe a recipe using the properties in our "Recipe" model.  We can move onto
+adding recipes or data to our "Recipes" project.  So first find the "Recpies"
+link on the sidebar and click it.</p>
+
+<p ><img width=600 height=400
+id="_x0000_i1030" src="/images/yogo_recipe_tutorial_files/recipes_project_show_two.jpg"></p>
+
+<p >Okay we are back at the "Recipes" project page but you will
+now see that our "Recipe" model is under "Models Data".  The "Models Data" is
+actually a table listing models that our project has, in our case just
+"Recipe", and the data associated with that model, for us we see (0) because
+there are 0 recipes stored thus far.  Also not that "Recipe" is a link that
+will take you to the "Recipe" model page and the Data columns "(0)" is also a
+link that will take us to the data page for the "Recipe".  Go ahead and click
+the "Recipe" link to see where it takes you.</p>
+
+<p >&nbsp;</p>
+
+<p ><img width=600 height=400
+id="Picture 13" src="/images/yogo_recipe_tutorial_files/recipe_link_one.jpg"></p>
+
+<p >You now can see the "Recipe" model page with our table of properties
+for the model.  Lets go back to the project page by clicking the "Recipes" link
+in the sidebar.</p>
+
+<p >&nbsp;</p>
+
+<p ><img width=600 height=400
+id="Picture 12" src="/images/yogo_recipe_tutorial_files/recipes_project_show_two.jpg"></p>
+
+<p >So now lets add some recipe information.  Click the "(0)"
+link under the Data column.</p>
+
+<p ><img width=600 height=400
+id="Picture 15" src="//images/yogo_recipe_tutorial_files/recipe_data_page_one.png"></p>
+
+<p >We are now on the "Recipe" data page. On this page we can
+search our recipes, add data via the "Add Data" link, view the current data in
+"Recipe" in a table format and upload/download CSV files.  For now let us add a
+recipe.  Click the "Add Data" link.</p>
+
+<p ><img width=600 height=400
+id="Picture 18" src="/images/yogo_recipe_tutorial_files/add_recipe_data_one.jpg"></p>
+
+<p >For our first recipe we are going to add the simplest
+culinary delight ever &#8211; boiled water.  So fill in the "Name" field with
+"Boiling Water, the "Category" field with "Soup", the Ingredients field with "1
+cup of Water", and the "Directions" field with "Add 1 cup of water to pot and
+boil".  Now click "Save" and we have added our first recipe!</p>
+
+<p >&nbsp;</p>
+
+<p ><img width=600 height=400
+id="Picture 19" src="/images/yogo_recipe_tutorial_files/recipe_one_added.jpg"></p>
+
+<p >We are now back at the "Recipe" data page and the "Recipe"
+table now shows our recipe for boiling water and a message in the gray box
+indicating a successful creation of a new "Recipe".  Note that Yogo
+automatically assigned an Id of 1 to the new recipe.</p>
+
+<p >&nbsp;</p>
+
+<p >&nbsp;</p>
+
+</div>
