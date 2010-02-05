@@ -7,7 +7,7 @@
   <tbody>
       <%- @model.properties.each do |p| %>
       <tr>
-      <td><%= p.name.to_s.titleize %></td>
+      <td><%= f.label(p.name, p.name.to_s.titleize) %></td>
       <td><%= f.text_field(p.name) %></td>
       </tr>
       <%- end %>
