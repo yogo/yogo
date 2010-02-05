@@ -22,7 +22,7 @@ class YogoDataController < ApplicationController
     end
   end
   
-  # Search
+  # Search the current model for the search parameters.
   #
   def search
     search_term = params[:search_term]
@@ -49,6 +49,7 @@ class YogoDataController < ApplicationController
   def new
     @item = @model.new
   end
+  
   # Allows a user to edit a yogo project model data item's values
   #
   def edit
@@ -56,7 +57,13 @@ class YogoDataController < ApplicationController
   end
 
   def create
-    @item = @model.new(params[:item])
+    goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
+    
+    data_items = params[goober]
+    files = []
+    data_items.each_pair { |key,value| files << key if value.kind_of?(Tempfile) }
+    
+    @item = @model.new(params[goober])
     
     if @item.valid?
       if @item.save
@@ -71,11 +78,12 @@ class YogoDataController < ApplicationController
       render :action => :new
     end
   end
-  # Adds a data item to the current yogo project model
+  
+  # Updates a data item to the current yogo project model
   #
   def update
     @item = @model.get(params[:id])
-    goober = "yogo_#{@project.project_key.underscore}_#{@model.name.demodulize.underscore}"
+    goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
     @item.attributes = params[goober]
     @item.save
     redirect_to project_yogo_data_url(@project, @model.name.demodulize)

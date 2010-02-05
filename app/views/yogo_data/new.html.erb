@@ -1,9 +1,8 @@
 <H3><%= @model.name.demodulize.titleize.singularize %></H3>
 <br />
-<%- form_for( @item, :url => project_yogo_data_index_path(@project, @model.name.demodulize), 
-                      :multipart => true,
-                     :html => { :method => :post },
-                     :builder => YogoDataFormBuilder ) do |f| -%>
+<%- form_for(@item, :url => project_yogo_data_index_path(@project, @model.name.demodulize), 
+                    :builder => YogoDataFormBuilder,
+                    :html => { :method => :post, :enctype => 'multipart/form-data' } ) do |f| -%>
 <table>
   <thead>
   </thead>
