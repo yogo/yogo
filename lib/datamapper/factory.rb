@@ -28,25 +28,34 @@ module DataMapper
       module_names = desc[:modules] || []
       class_name   = desc[:name]
       properties   = desc[:properties]
-      class_definition = ''
-      module_names.each{|mod| class_definition += "module #{mod.camelize}\n" }
-      class_definition += "class #{class_name}\n"
-      class_definition += "  include DataMapper::Resource\n"
-      class_definition += "def self.default_repository_name; :#{repository_name}; end\n"
-      properties.each_pair do |property, opts|
-        if opts.is_a?(Hash)
-          class_definition += "property :#{property}, #{opts[:type]}"
-          opts.reject{|k,v| k == :type}.each_pair{|key,value| class_definition += ", :#{key} => #{value}"}
-        else
-          class_definition += "property :#{property}, #{opts}"
+      full_name    = (module_names + [class_name]).join('::')
+      
+      # Define our anonymous class, anonymously.
+      anon_class = DataMapper::Model.new do 
+        self.class_eval("def self.default_repository_name; :#{repository_name}; end")
+        properties.each_pair do |property, opts|
+          if opts.is_a?(Hash)
+            opts[:type] = :'DataMapper::Types::Serial' if opts[:type].to_s == 'Serial'
+            property( property.to_sym, eval(opts[:type].to_s), opts.reject{|k,v| k == :type })
+          else
+            opts = :'DataMapper::Types::Serial' if opts.to_s == 'Serial'
+            property( property.to_sym, eval(opts.to_s))
+          end
         end
-        class_definition += "\n"
       end
-      class_definition += "end\n"
-      module_names.each{|mod| class_definition += "end\n" }
-      model = Object.class_eval(class_definition).model
-      model.send(:include, options[:modules]) if options.has_key?(:modules)
-      return model
+      
+      # Create the scoping for the class, if it doesn't already exist.
+      current_context = Object
+      module_names.each do |mod|
+        current_context.const_set(mod, Module.new) unless current_context.const_defined?(mod)
+        current_context = Object.class_eval("#{current_context.name}::#{mod}", __FILE__, __LINE__)
+      end
+
+      # Give the class a name.
+      named_class = Object.class_eval("#{full_name} = anon_class", __FILE__, __LINE__)
+      
+      named_class.send(:include, options[:modules]) if options.has_key?(:modules)
+      return named_class
     end
 
     # This accepts class_name ("Yogo::Example::SomeName") and a 2-dimensional
