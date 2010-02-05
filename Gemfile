@@ -14,6 +14,7 @@ gem "dm-is-nested_set"
 gem "dm-ar-finders"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates"
+gem "dm-types"
 gem "dm-persevere-adapter", "0.32.0", :require_as => nil
 gem "do_sqlite3",           "0.10.1", :require_as => nil
 gem "do_mysql",             "0.10.1", :require_as => nil

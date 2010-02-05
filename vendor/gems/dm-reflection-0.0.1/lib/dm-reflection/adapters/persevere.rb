@@ -26,6 +26,7 @@ module DataMapper
             when 'date-time' then DateTime
             when 'date'      then Date
             when 'time'      then Time
+            when 'uri'       then DataMapper::Types::URI
           end
         end
       end

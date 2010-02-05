@@ -13,7 +13,8 @@ module Yogo
                   "Integer"        => Integer,
                   "Text"           => String, 
                   "True/False"     => DataMapper::Types::Boolean, 
-                  "Date"           => DateTime }
+                  "Date"           => DateTime,
+                  "File"           => DataMapper::Types::URI }
                   
     @@DMTM = { Float                      => "Decimal",
                BigDecimal                 => "Decimal",
@@ -21,7 +22,8 @@ module Yogo
                String                     => "Text",
                DataMapper::Types::Boolean => "True/False",
                DateTime                   => "Date",
-               DataMapper::Types::Serial  => "Integer" }
+               DataMapper::Types::Serial  => "Integer",
+               DataMapper::Types::URI     => "File" }
 
     def self.dm_to_human(dmtype)
       @@DMTM[dmtype]
