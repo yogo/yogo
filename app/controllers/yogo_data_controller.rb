@@ -59,7 +59,6 @@ class YogoDataController < ApplicationController
     @item = @model.new(params[:item])
     
     if @item.valid?
-      puts @item
       if @item.save
         flash[:notice] = "New \"#{@model.name.demodulize}\" has been created."
         redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
