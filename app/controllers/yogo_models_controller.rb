@@ -34,12 +34,7 @@ class YogoModelsController < ApplicationController
   end
   
   def new
-    # This is an attempt to make a mock object to work with in the editor.
-    if Struct.const_defined?('PrototypeModel')
-      @model = Struct::PrototypeModel
-    else
-      @model = Struct.new('PrototypeModel')
-    end
+    @model = Class.new
     
     @options = Yogo::Types.human_types.map{|key| [key,key] }
   end

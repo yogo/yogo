@@ -1,5 +1,5 @@
 <%# I started to move this into a helper, but I think it's okay here for now. %>
-<%- if @model.name == "Struct::PrototypeModel" -%>
+<%- if @model.name.blank? -%>
   <%- path = project_yogo_models_path(@project) -%>
   <%- method = :post -%>
 <%- else -%>
@@ -20,7 +20,7 @@
     <%- end -%>
   
     <%# If this is a new model, ask for its name. %>
-    <%- if @model.name == "Struct::PrototypeModel" -%>
+    <%- if @model.name.blank? -%>
       <div class="model-edit-label">
         <%= label_tag(:class_name, "Model name") %>:
       </div>
