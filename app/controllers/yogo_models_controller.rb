@@ -92,6 +92,7 @@ class YogoModelsController < ApplicationController
     cleaned_params = []
     
     params[:new_property].each do |prop|
+      next if prop[:name].empty? || prop[:type].empty?
       name = prop[:name].squish.downcase.gsub(' ', '_')
       prop_type = Yogo::Types.human_to_dm(prop[:type])
       
@@ -102,7 +103,7 @@ class YogoModelsController < ApplicationController
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
-    end
+    end unless params[:new_property].nil?
     
     params[:property].each_pair do |prop, type|
       name = prop.squish.gsub(' ', '_')
@@ -114,7 +115,7 @@ class YogoModelsController < ApplicationController
         errors[name] = " is a malformed name or an invalid type."
       end
     end
-    
+
     # Type Checking
     if errors.empty?
       cleaned_params.each do |prop|
