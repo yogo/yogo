@@ -331,7 +331,6 @@ h3 {
     padding:4px;
     border: 1px dotted #AAA;
     max-height: 20px;
-    overflow: scroll;
   }
 
   #data-index-table tr:hover, #data-show tr:hover {
