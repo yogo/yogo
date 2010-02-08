@@ -7,7 +7,7 @@ describe 'The DataMapper reflection module' do
   end
   
   describe 'reflected model instance' do   
-    it 'should respond to is_reflected? and return true for a reflected model' 
+    # it 'should respond to is_reflected? and return true for a reflected model' 
     it 'should respond to default_repository_name? and return the correct repo for a reflected model'
   end
   

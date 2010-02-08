@@ -22,7 +22,7 @@ DataMapper.setup(:yogo, config["yogo_#{Rails.env}"]) unless ENV['NO_PERSEVERE']
 DataMapper.setup(:example, config["example"])
 
 # Map the datamapper logging to rails logging
-DataMapper.logger = Rails.logger
+DataMapper.logger             = Rails.logger
 DataObjects::Postgres.logger  = Rails.logger if DataObjects.const_defined?(:Postgres)
 DataObjects::Sqlserver.logger = Rails.logger if DataObjects.const_defined?(:Sqlserver)
 DataObjects::Mysql.logger     = Rails.logger if DataObjects.const_defined?(:Mysql)
