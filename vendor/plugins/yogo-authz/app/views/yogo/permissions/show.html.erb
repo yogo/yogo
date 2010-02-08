@@ -1,0 +1,26 @@
+<%- for controller in @controllers -%>
+  <h2><%= h controller.name %></h2>
+  <ul>
+  <%-for action in controller.action_methods.sort -%>
+    <li>
+      <%= h action %>
+      <%- permission = @permissions.first(:controller_name => controller.name, :action_name => action) -%>
+      <%- if permission.nil? -%>
+        <%= link_to("Grant Permission", 
+                     group_permission_path(@group.id, 
+                                         :controller_name => controller.name,
+                                         :action_name     => action 
+                                         ),
+                    :method => 'create'
+                    )
+        %>
+      <%- else -%>
+        <%= link_to("Remove Permission",
+                    group_permission_path(@group.id, :permission_id => permission.id),
+                    :method => :delete) %>
+      <%- end -%>
+    </li>
+    
+  <%- end -%>
+  </ul>
+<%- end -%>

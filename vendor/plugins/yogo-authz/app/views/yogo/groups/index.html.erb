@@ -1,0 +1,4 @@
+<div class="create_new"><%= link_to("Create Group", new_group_path) %></div>
+
+<h2>Groups</h2>
+<%= render :partial => 'group_list', :locals => {:groups => @groups} %>
