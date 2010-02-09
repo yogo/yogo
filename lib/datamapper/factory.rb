@@ -73,16 +73,17 @@ module DataMapper
       spec_hash[:modules] = scopes[0..-2] unless scopes.length.eql?(1)                  
       spec_array[0].each_index do |idx|
         prop_hash = Hash.new
-        pname = spec_array[0][idx].tableize.singular
+        pname = spec_array[0][idx].tableize.singular.gsub(' ', '_')
         ptype = Yogo::Types.human_to_dm(spec_array[1][idx])
         punits = spec_array[2][idx]
         if pname == 'id'
-          prop_hash = { pname => { :type => 'Serial' } }
+          prop_hash = { pname => { :type => DataMapper::Types::Serial } }
         else
           prop_hash = { pname => { :type => ptype, :required => false } }
         end
         spec_hash[:properties].merge!(prop_hash) 
       end
+      puts "CSV Spec Hash: #{spec_hash.inspect}"
       self.build(spec_hash, :yogo)
     end
   end

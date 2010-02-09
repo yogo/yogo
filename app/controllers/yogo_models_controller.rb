@@ -60,8 +60,8 @@ class YogoModelsController < ApplicationController
     @model = false
     
     if errors.empty? and (@model = @project.add_model(class_name, :properties => cleaned_options)) != false
-      @model.send(:include,Yogo::DataMethods) unless m.included_modules.include?(Yogo::DataMethods)
-      @model.send(:include,Yogo::Pagination) unless m.included_modules.include?(Yogo::Pagination)
+      @model.send(:include,Yogo::DataMethods) unless @model.included_modules.include?(Yogo::DataMethods)
+      @model.send(:include,Yogo::Pagination) unless @model.included_modules.include?(Yogo::Pagination)
       @model.auto_migrate!
       flash[:notice] = 'The model was sucessfully created.'
       redirect_to(project_yogo_model_url(@project, @model.name.demodulize))
@@ -148,13 +148,7 @@ class YogoModelsController < ApplicationController
   # Allows download of yogo project model data in CSV format
   # 
   def download_csv
-    csv_output = FasterCSV.generate do |csv|
-      csv << @model.properties.map{|prop| prop.name.to_s.humanize}
-      csv << @model.properties.map{|prop| Yogo::Types.dm_to_human(prop.type)}
-      csv << "Units will go here when supported"
-    end
-    
-    send_data(csv_output, 
+    send_data(Yogo::CSV.make_csv(@model, false), 
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')

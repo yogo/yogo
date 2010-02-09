@@ -30,7 +30,7 @@ module Yogo
     end
     
     def self.human_to_dm(humantype)
-      @@HumanTM[humantype]
+      @@HumanTM[humantype.capitalize]
     end
     
     def self.human_types
