@@ -58,11 +58,7 @@ class YogoDataController < ApplicationController
 
   def create
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
-    
-    data_items = params[goober]
-    files = []
-    data_items.each_pair { |key,value| files << key if value.kind_of?(Tempfile) }
-    
+
     @item = @model.new(params[goober])
     
     if @item.valid?
