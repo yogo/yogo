@@ -12,9 +12,11 @@ module DataMapper
       # @param [String] optional format format specification for string attributes
       # @return [Type] a DataMapper or Ruby type object.
       # 
-      def get_type(db_type, format = nil)
-        db_type.gsub!(/\(\d*\)/, '')
-        case db_type
+      def get_type(db_type)
+        type = db_type['type'].gsub(/\(\d*\)/, '')
+        format = db_type['format']
+
+        case type
         when 'serial'    then DataMapper::Types::Serial
         when 'integer'   then Integer
         when 'number'    then BigDecimal 
@@ -53,7 +55,7 @@ module DataMapper
         results = Array.new
         schema = self.get_schema(table)[0]
         schema['properties'].each_pair do |key, value|
-          property = {:name => key, :type => get_type(value['type'], value['format']) }
+          property = {:name => key, :type => get_type(value) }
           property.merge!({ :required => !value['optional'], 
                          :default => value['default'], 
                          :key => value.has_key?('index') && value['index'] }) unless property[:type] == DataMapper::Types::Serial

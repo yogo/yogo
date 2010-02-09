@@ -45,7 +45,7 @@ class YogoModelsController < ApplicationController
     errors = {}
     
     params[:new_property].each do |prop|
-      name = prop[:name].squish.gsub(' ', '_').tableize
+      name = prop[:name].squish.downcase.gsub(' ', '_')
       prop_type = Yogo::Types.human_to_dm(prop[:type])
       
       next if name.blank?
@@ -60,6 +60,8 @@ class YogoModelsController < ApplicationController
     @model = false
     
     if errors.empty? and (@model = @project.add_model(class_name, :properties => cleaned_options)) != false
+      @model.send(:include,Yogo::DataMethods) unless m.included_modules.include?(Yogo::DataMethods)
+      @model.send(:include,Yogo::Pagination) unless m.included_modules.include?(Yogo::Pagination)
       @model.auto_migrate!
       flash[:notice] = 'The model was sucessfully created.'
       redirect_to(project_yogo_model_url(@project, @model.name.demodulize))
@@ -101,7 +103,7 @@ class YogoModelsController < ApplicationController
     end unless params[:new_property].nil?
     
     params[:property].each_pair do |prop, type|
-      name = prop.squish.gsub(' ', '_')
+      name = prop.squish.downcase.gsub(' ', '_')
       prop_type = Yogo::Types.human_to_dm(type)
       
       if valid_model_or_column_name?(name) && !prop_type.nil?

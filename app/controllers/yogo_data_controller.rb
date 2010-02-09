@@ -162,6 +162,5 @@ class YogoDataController < ApplicationController
   def find_parent_items
     @project = Project.get(params[:project_id])
     @model = @project.get_model(params[:model_id])
-    @model.send(:include, Yogo::Pagination)
   end
 end
