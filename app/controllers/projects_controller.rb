@@ -110,7 +110,9 @@ class ProjectsController < ApplicationController
   end
   
   def rereflect
-    DataMapper::Reflection.reflect(:yogo)
+    models = DataMapper::Reflection.reflect(:yogo)
+    models.each{|m| m.send(:include,Yogo::DataMethods) unless m.included_modules.include?(Yogo::DataMethods)}
+    models.each{|m| m.send(:include,Yogo::Pagination) unless m.included_modules.include?(Yogo::Pagination)}
     redirect_to projects_url
   end
   

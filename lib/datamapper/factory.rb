@@ -52,7 +52,7 @@ module DataMapper
       end
 
       # Give the class a name.
-      named_class = Object.class_eval("#{full_name} = anon_class", __FILE__, __LINE__)
+      named_class = current_context.const_set(class_name, anon_class)
       
       named_class.send(:include, options[:modules]) if options.has_key?(:modules)
       return named_class

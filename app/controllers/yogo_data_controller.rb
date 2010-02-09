@@ -58,11 +58,7 @@ class YogoDataController < ApplicationController
 
   def create
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
-    
-    data_items = params[goober]
-    files = []
-    data_items.each_pair { |key,value| files << key if value.kind_of?(Tempfile) }
-    
+
     @item = @model.new(params[goober])
     
     if @item.valid?
@@ -166,6 +162,5 @@ class YogoDataController < ApplicationController
   def find_parent_items
     @project = Project.get(params[:project_id])
     @model = @project.get_model(params[:model_id])
-    @model.send(:include, Yogo::Pagination)
   end
 end
