@@ -8,25 +8,25 @@
 <%= link_to(image_tag('add.gif')+' Add Data', new_project_yogo_data_path(@project, @model.name.demodulize))%>
 
 <div id="data-index">
+
   <H3><%= @model.name.demodulize.titleize %> (<%= @model.count %>)</H3>
 
   <table id="data-index-table">
     <thead>
       <tr>
+        <th class="data-index-table-actions"></th>
         <%- @model.properties.each do |h| %>
         <th><%= h.name.to_s.titleize %></th>
         <%- end %>
-        <th></th><th></th>
       </tr>
     </thead>
     <tbody>
     <%- @data.each do |d| %>
-      <tr>
+      <tr class="<%=cycle("alternate-rows0","") %>">
+        <td class="data-index-table-actions"><%= link_to(image_tag('edit.png',:alt => "Edit Item", :title => "Edit Item"), edit_project_yogo_data_path(@project, @model.name.demodulize, d.id)) %><%= link_to(image_tag('remove.png',:alt => "Delete Item", :title => "Delete Item"), project_yogo_data_path(@project, @model.name.demodulize, d.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
         <%- @model.properties.each do |p| %>
         <td><%= d[p.name] %></td>
         <%- end %>
-        <td><%= link_to(image_tag('edit.png')+'Edit', edit_project_yogo_data_path(@project, @model.name.demodulize, d.id)) %></td>
-        <td><%= link_to(image_tag('remove.png')+'Delete', project_yogo_data_path(@project, @model.name.demodulize, d.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
       </tr>
       <%- end %>
     </tbody>
