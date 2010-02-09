@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
     end
     
   private
-  
+  ##
   # Checks requests to ensure they are local only
   #
   def check_local_only

@@ -26,7 +26,6 @@ module DataMapper
             when 'date-time' then DateTime
             when 'date'      then Date
             when 'time'      then Time
-            when 'uri'       then DataMapper::Types::URI
           end
         end
       end
@@ -37,7 +36,7 @@ module DataMapper
       # 
       def get_storage_names
         @schemas = self.get_schema
-        @schemas.map { |schema| schema['id'] }
+        @schemas.map { |schema| schema['id'].gsub('/', '__') }
       end
 
       ##
@@ -51,7 +50,7 @@ module DataMapper
       # 
       def get_properties(table)
         results = Array.new
-        schema = self.get_schema(table)[0]
+        schema = self.get_schema(table.gsub('__', '/'))[0]
         schema['properties'].each_pair do |key, value|
           property = {:name => key, :type => get_type(value['type'], value['format']) }
           property.merge!({ :required => !value['optional'], 
