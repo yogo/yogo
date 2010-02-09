@@ -26,7 +26,6 @@ module DataMapper
           # Do nothing
         else
           unamed_class = DataMapper::Model.new do 
-              storage_names[repository] = model.to_s;
               self.class_eval("def self.default_repository_name; :#{repository}; end")
           end
           new_model = namespace.const_set(class_name, unamed_class)

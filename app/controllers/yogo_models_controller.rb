@@ -121,6 +121,7 @@ class YogoModelsController < ApplicationController
       end
       
       @model.auto_upgrade!
+      @model.send(:include,Yogo::DataMethods)
       flash[:notice] = "Properties added"
       
       redirect_to project_yogo_model_url(@project, @model.name.demodulize)
