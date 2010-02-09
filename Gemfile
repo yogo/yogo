@@ -24,6 +24,7 @@ gem "rails_datamapper"
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"
 gem "fastercsv"
+gem "carrierwave"
 
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)
