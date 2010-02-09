@@ -1,21 +1,18 @@
 <H3><%= @model.name.demodulize.titleize %></H3>
+
+<%= link_to(image_tag('edit.png')+'Edit', edit_project_yogo_data_path(@project, @model.name.demodulize, @item.id)) %>
+<%= link_to(image_tag('remove.png')+'Delete', project_yogo_data_path(@project, @model.name.demodulize, @item.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %>
+<br><br>
 <table id="data-show">
   <thead>
-    <tr>
-      <th></th><th></th>
-      <%- @model.properties.each do |h| %>
-      <th><%= h.name.to_s.titleize %></th>
-      <%- end %>
-    </tr>
   </thead>
   <tbody>
-    <tr class="<%=cycle("alternate-rows0","" %>">
-      <td><%= link_to(image_tag('edit.png')+'Edit', edit_project_yogo_data_path(@project, @model.name.demodulize, @item.id)) %></td>
-      <td><%= link_to(image_tag('remove.png')+'Delete', project_yogo_data_path(@project, @model.name.demodulize, @item.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
       <%- @model.properties.each do |p| %>
-      <td><%= @item[p.name] %></td>
+      <tr>
+      <td><%= label(p.name, p.name.to_s.titleize) %></td>
+      <td><%= @item[p.name]%></td>
+      </tr>
       <%- end %>
-    </tr>
   </tbody>
 </table>
 

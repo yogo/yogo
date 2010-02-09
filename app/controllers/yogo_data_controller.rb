@@ -82,7 +82,7 @@ class YogoDataController < ApplicationController
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
     @item.attributes = params[goober]
     @item.save
-    redirect_to project_yogo_data_url(@project, @model.name.demodulize)
+    redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end  
   
   # Deletes a yogo project model's selected datum
