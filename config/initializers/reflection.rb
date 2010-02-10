@@ -6,8 +6,6 @@
 # FILE: reflections.rb
 # 
 #
-require 'datamapper/factory'
-require 'datamapper/types/file'
 
 models = []
 # Reflect Yogo data into memory

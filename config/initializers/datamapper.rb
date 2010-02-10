@@ -6,10 +6,14 @@
 # FILE: datamapper.rb
 # 
 #
+
+# Require custom extensions to datamapper.
+require 'datamapper/search'
+require 'datamapper/types/file'
+require 'datamapper/factory'
+
 # Read the configuration from the existing database.yml file
 config = Rails.configuration.database_configuration
-
-require 'datamapper/search'
 
 # Setup the default datamapper repository corresponding to the current rails environment
 # unnecessary: rails-datamapper handles this 
