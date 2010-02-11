@@ -9,8 +9,8 @@
 
 # Require custom extensions to datamapper.
 require 'datamapper/search'
-require 'datamapper/types/file'
 require 'datamapper/factory'
+require 'datamapper/types/yogo_file'
 
 # Read the configuration from the existing database.yml file
 config = Rails.configuration.database_configuration
