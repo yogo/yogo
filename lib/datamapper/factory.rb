@@ -30,6 +30,19 @@ module DataMapper
       properties   = desc[:properties]
       full_name    = (module_names + [class_name]).join('::')
       
+      # Create the scoping for the class, if it doesn't already exist.
+      current_context = Object
+      module_names.each do |mod|
+        current_context.const_set(mod, Module.new) unless current_context.const_defined?(mod)
+        current_context = Object.class_eval("#{current_context.name}::#{mod}", __FILE__, __LINE__)
+      end
+
+      if current_context.const_defined?(class_name) # && options[:overwrite] == true
+        cur_class = current_context.const_get(class_name)
+        DataMapper::Model.descendants.delete(cur_class)
+        current_context.send(:remove_const, class_name.to_sym)
+      end
+
       # Define our anonymous class, anonymously.
       anon_class = DataMapper::Model.new do 
         self.class_eval("def self.default_repository_name; :#{repository_name}; end")
@@ -42,13 +55,6 @@ module DataMapper
             property( property.to_sym, eval(opts.to_s))
           end
         end
-      end
-      
-      # Create the scoping for the class, if it doesn't already exist.
-      current_context = Object
-      module_names.each do |mod|
-        current_context.const_set(mod, Module.new) unless current_context.const_defined?(mod)
-        current_context = Object.class_eval("#{current_context.name}::#{mod}", __FILE__, __LINE__)
       end
 
       # Give the class a name.
@@ -83,8 +89,9 @@ module DataMapper
         end
         spec_hash[:properties].merge!(prop_hash) 
       end
-      puts "CSV Spec Hash: #{spec_hash.inspect}"
+      # puts "CSV Spec Hash: #{spec_hash.inspect}"
       self.build(spec_hash, :yogo)
     end
-  end
-end
+    
+  end# class Factory
+end # module DataMapper
