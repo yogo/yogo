@@ -1,6 +1,7 @@
 module DataMapper
   module Reflection
     module PersevereAdapter
+      extend Chainable
       
       ##
       # Convert the JSON Schema type into a DataMapper type
@@ -12,22 +13,24 @@ module DataMapper
       # @param [String] optional format format specification for string attributes
       # @return [Type] a DataMapper or Ruby type object.
       # 
-      def get_type(db_type)
-        type = db_type['type'].gsub(/\(\d*\)/, '')
-        format = db_type['format']
+      chainable do
+        def get_type(db_type)
+          type = db_type['type'].gsub(/\(\d*\)/, '')
+          format = db_type['format']
 
-        case type
-        when 'serial'    then DataMapper::Types::Serial
-        when 'integer'   then Integer
-        when 'number'    then BigDecimal 
-        when 'number'    then Float      
-        when 'boolean'   then DataMapper::Types::Boolean
-        when 'string'    then 
-          case format
-            when nil         then String
-            when 'date-time' then DateTime
-            when 'date'      then Date
-            when 'time'      then Time
+          case type
+          when 'serial'    then DataMapper::Types::Serial
+          when 'integer'   then Integer
+          when 'number'    then BigDecimal 
+          when 'number'    then Float      
+          when 'boolean'   then DataMapper::Types::Boolean
+          when 'string'    then 
+            case format
+              when nil         then String
+              when 'date-time' then DateTime
+              when 'date'      then Date
+              when 'time'      then Time
+            end
           end
         end
       end
