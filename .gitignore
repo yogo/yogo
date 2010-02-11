@@ -24,3 +24,5 @@ vendor/bundled/*
 bin/*
 tmtags
 vendor/persevere/*
+public/files/*
+public/uploads/*
