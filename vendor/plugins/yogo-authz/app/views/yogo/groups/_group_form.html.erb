@@ -1,0 +1,23 @@
+<%= f.error_messages %>
+
+<p>
+  <%= f.label(:name) %><br />
+  <%= f.text_field(:name) %>
+</p>
+
+<p>
+  <%= f.label(:description) %><br />
+  <%= f.text_field(:description) %>
+</p>
+
+<p>
+  <%= f.label(:sysadmin, "Sysadmin?") %>
+  <%= f.check_box(:sysadmin) %>
+</p>
+
+<p>
+  <%= f.label(:parent_id, "Parent Group") %><br />
+  <%= f.select(:parent_id, 
+               Yogo::Group.all.collect{|g| [g.name.capitalize, g.id]}, 
+              :include_blank => true) %>
+</p>

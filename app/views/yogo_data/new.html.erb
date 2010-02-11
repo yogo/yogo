@@ -1,15 +1,17 @@
 <H3><%= @model.name.demodulize.titleize.singularize %></H3>
 <br />
-<%- form_for(:item, @item, :url => {:controller => "yogo_data", :action => "create"}) do |f| -%>
+<%- form_for(@item, :url => project_yogo_data_index_path(@project, @model.name.demodulize), 
+                    :builder => YogoDataFormBuilder,
+                    :html => { :method => :post, :enctype => 'multipart/form-data' } ) do |f| -%>
 <table>
   <thead>
   </thead>
   <tbody>
       <%- @model.properties.each do |p| %>
-        <% if p.name.to_s.titleize != 'Id'%>
+        <% if p.name != :id %>
           <tr>
-          <td><%= p.name.to_s.titleize %>: </td>
-          <td><%= f.text_field(p.name) %></td>
+            <td><%= f.label(p.name, p.name.to_s.titleize) %>: </td>
+            <td><%= f.field_for_param(p) %></td>
           </tr>
         <%- end -%>
       <%- end %>

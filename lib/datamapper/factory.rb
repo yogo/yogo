@@ -28,25 +28,40 @@ module DataMapper
       module_names = desc[:modules] || []
       class_name   = desc[:name]
       properties   = desc[:properties]
-      class_definition = ''
-      module_names.each{|mod| class_definition += "module #{mod.camelize}\n" }
-      class_definition += "class #{class_name}\n"
-      class_definition += "  include DataMapper::Resource\n"
-      class_definition += "def self.default_repository_name; :#{repository_name}; end\n"
-      properties.each_pair do |property, opts|
-        if opts.is_a?(Hash)
-          class_definition += "property :#{property}, #{opts[:type]}"
-          opts.reject{|k,v| k == :type}.each_pair{|key,value| class_definition += ", :#{key} => #{value}"}
-        else
-          class_definition += "property :#{property}, #{opts}"
-        end
-        class_definition += "\n"
+      full_name    = (module_names + [class_name]).join('::')
+      
+      # Create the scoping for the class, if it doesn't already exist.
+      current_context = Object
+      module_names.each do |mod|
+        current_context.const_set(mod, Module.new) unless current_context.const_defined?(mod)
+        current_context = Object.class_eval("#{current_context.name}::#{mod}", __FILE__, __LINE__)
       end
-      class_definition += "end\n"
-      module_names.each{|mod| class_definition += "end\n" }
-      model = Object.class_eval(class_definition).model
-      model.send(:include, options[:modules]) if options.has_key?(:modules)
-      return model
+
+      if current_context.const_defined?(class_name) # && options[:overwrite] == true
+        cur_class = current_context.const_get(class_name)
+        DataMapper::Model.descendants.delete(cur_class)
+        current_context.send(:remove_const, class_name.to_sym)
+      end
+
+      # Define our anonymous class, anonymously.
+      anon_class = DataMapper::Model.new do 
+        self.class_eval("def self.default_repository_name; :#{repository_name}; end")
+        properties.each_pair do |property, opts|
+          if opts.is_a?(Hash)
+            opts[:type] = :'DataMapper::Types::Serial' if opts[:type].to_s == 'Serial'
+            property( property.to_sym, eval(opts[:type].to_s), opts.reject{|k,v| k == :type })
+          else
+            opts = :'DataMapper::Types::Serial' if opts.to_s == 'Serial'
+            property( property.to_sym, eval(opts.to_s))
+          end
+        end
+      end
+
+      # Give the class a name.
+      named_class = current_context.const_set(class_name, anon_class)
+      
+      named_class.send(:include, options[:modules]) if options.has_key?(:modules)
+      return named_class
     end
 
     # This accepts class_name ("Yogo::Example::SomeName") and a 2-dimensional
@@ -64,17 +79,19 @@ module DataMapper
       spec_hash[:modules] = scopes[0..-2] unless scopes.length.eql?(1)                  
       spec_array[0].each_index do |idx|
         prop_hash = Hash.new
-        pname = spec_array[0][idx].tableize.singular
+        pname = spec_array[0][idx].tableize.singular.gsub(' ', '_')
         ptype = Yogo::Types.human_to_dm(spec_array[1][idx])
         punits = spec_array[2][idx]
         if pname == 'id'
-          prop_hash = { pname => { :type => 'Serial' } }
+          prop_hash = { pname => { :type => DataMapper::Types::Serial } }
         else
           prop_hash = { pname => { :type => ptype, :required => false } }
         end
         spec_hash[:properties].merge!(prop_hash) 
       end
+      # puts "CSV Spec Hash: #{spec_hash.inspect}"
       self.build(spec_hash, :yogo)
     end
-  end
-end
+    
+  end# class Factory
+end # module DataMapper

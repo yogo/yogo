@@ -1,78 +1,45 @@
 module DataMapper
-  module Model
-    ##
-    # Decorate the DataMapper::Model with a method that tests whether it was created by reflection.
-    # @return [Boolean] defaults to false, reflection overrides this.
-    # 
-    def is_reflected?
-      false
-    end
-  end # module Model
-
   module Reflection
-    ##
-    # Converts an internal hash into a string
-    # 
-    # @param [Hash] desc is a hash of name and attributes pulled out of the adapter.
-    # @param [Slug] repo is the key to the repository this model will live in.
-    # @return [String] a string defining the datamapper model.
-    # 
-    def self.make_model_string(desc, repo)
-      model_description = []
-      storage_name = desc['id']
-      
-      mscope = desc['id'].split('/').map{ |scope| scope.capitalize.camelcase }
-      mscope[0..-2].each do |scope|
-        model_description << "module #{scope}"
-      end
-      
-      model_description << "class #{mscope[-1]}" 
-      model_description << "include DataMapper::Resource"
-      model_description << "storage_names[:#{repo}] = '#{storage_name}';"
-      model_description << "def self.default_repository_name; :#{repo}; end"
-      model_description << "def self.is_reflected?; true; end"
-
-      desc['properties'].each_pair do |key, value|
-        line  = "property :#{key}, #{value[:type]}"
-        line += ", :field => '#{value[:field]}'" unless value[:field].blank?
-        line += ", :key => #{value[:key]}" unless value[:key].blank?
-        line += ", :required => #{value[:required]}" unless value[:required].blank?
-        line += ", :default => #{value[:default]}" unless value[:default].blank?
-        line += ", :serial => #{value[:serial]}" unless value[:serial].blank?
-        model_description << line
-      end
-      model_description << "end # Class #{mscope[-1]}"
-      
-      mscope[0..-2].each do |scope|
-        model_description << "end # Module #{scope}"
-      end
-      return model_description.join("\n")
-    end
-
     ##
     # Main reflection method reflects models out of a repository.
     # @param [Slug] repository is the key to the repository that will be reflected.
+    # @param [Constant] namespace is the namespace into which the reflected models will be added
     # @param [Boolean] overwrite indicates the reflected models should replace existing models or not.
     # @return [DataMapper::Model Array] the reflected models.
-    # 
-    def self.reflect(repository, overwrite=false)
+    #
+    def self.reflect(repository, namespace=Object, overwrite=false)
       adapter = DataMapper.repository(repository).adapter
       models = Array.new
+      old_namespace = namespace
       adapter.get_storage_names.each do |model|
-        description = Hash.new
-        attributes = adapter.get_properties(model)
-        description.update( {'id' => model } )
-        description.update( {'properties' => {}} )
-        attributes.each do |attribute|
-          description['properties'].update( { attribute[:name] =>  attribute } )
+        namespace = old_namespace
+        ctxtarray = model.split('__').map! do |item| 
+          Extlib::Inflection.singularize(item.split("_").map { |word| word.capitalize }.join("")) 
         end
-        desc = make_model_string(description, repository)
-        models << Object.class_eval(desc).model
+        # Create the scoping for the class, if it doesn't already exist.
+        ctxtarray[0..-2].each do |mod|
+          namespace.const_set(mod, Module.new) unless namespace.const_defined?(mod)
+          namespace = Object.class_eval("#{namespace.name}::#{mod}", __FILE__, __LINE__)
+        end
+        class_name = ctxtarray[-1]
+        if namespace.const_defined?(class_name) && ! overwrite
+          # Do nothing
+        else
+          unamed_class = DataMapper::Model.new do 
+              self.class_eval("def self.default_repository_name; :#{repository}; end")
+          end
+          new_model = namespace.const_set(class_name, unamed_class)
+          adapter.get_properties(model).each do |attribute|
+            attribute.delete_if { |k,v| v.nil? }
+            new_model.property(attribute.delete(:name).to_sym, attribute.delete(:type), attribute)
+          end
+          models << new_model
+        end
       end
       models
     end
   end # module Reflection
-  
+
   module Adapters
     extendable do
       ##

@@ -34,12 +34,7 @@ class YogoModelsController < ApplicationController
   end
   
   def new
-    # This is an attempt to make a mock object to work with in the editor.
-    if Struct.const_defined?('PrototypeModel')
-      @model = Struct::PrototypeModel
-    else
-      @model = Struct.new('PrototypeModel')
-    end
+    @model = Class.new
     
     @options = Yogo::Types.human_types.map{|key| [key,key] }
   end
@@ -50,7 +45,7 @@ class YogoModelsController < ApplicationController
     errors = {}
     
     params[:new_property].each do |prop|
-      name = prop[:name].squish.gsub(' ', '_').tableize
+      name = prop[:name].squish.downcase.gsub(' ', '_')
       prop_type = Yogo::Types.human_to_dm(prop[:type])
       
       next if name.blank?
@@ -65,6 +60,8 @@ class YogoModelsController < ApplicationController
     @model = false
     
     if errors.empty? and (@model = @project.add_model(class_name, :properties => cleaned_options)) != false
+      @model.send(:include,Yogo::DataMethods) unless @model.included_modules.include?(Yogo::DataMethods)
+      @model.send(:include,Yogo::Pagination) unless @model.included_modules.include?(Yogo::Pagination)
       @model.auto_migrate!
       flash[:notice] = 'The model was sucessfully created.'
       redirect_to(project_yogo_model_url(@project, @model.name.demodulize))
@@ -92,6 +89,7 @@ class YogoModelsController < ApplicationController
     cleaned_params = []
     
     params[:new_property].each do |prop|
+      next if prop[:name].empty? || prop[:type].empty?
       name = prop[:name].squish.downcase.gsub(' ', '_')
       prop_type = Yogo::Types.human_to_dm(prop[:type])
       
@@ -102,10 +100,10 @@ class YogoModelsController < ApplicationController
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
-    end
+    end unless params[:new_property].nil?
     
     params[:property].each_pair do |prop, type|
-      name = prop.squish.gsub(' ', '_')
+      name = prop.squish.downcase.gsub(' ', '_')
       prop_type = Yogo::Types.human_to_dm(type)
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
@@ -114,7 +112,7 @@ class YogoModelsController < ApplicationController
         errors[name] = " is a malformed name or an invalid type."
       end
     end
-    
+
     # Type Checking
     if errors.empty?
       cleaned_params.each do |prop|
@@ -123,6 +121,7 @@ class YogoModelsController < ApplicationController
       end
       
       @model.auto_upgrade!
+      @model.send(:include,Yogo::DataMethods)
       flash[:notice] = "Properties added"
       
       redirect_to project_yogo_model_url(@project, @model.name.demodulize)
@@ -141,7 +140,7 @@ class YogoModelsController < ApplicationController
   def destroy
     model = @project.get_model(params[:id])
     @project.delete_model(model)
-    redirect_to project_yogo_models_url(@project)
+    redirect_to project_url(@project)
   end
   
   private
@@ -149,13 +148,7 @@ class YogoModelsController < ApplicationController
   # Allows download of yogo project model data in CSV format
   # 
   def download_csv
-    csv_output = FasterCSV.generate do |csv|
-      csv << @model.properties.map{|prop| prop.name.to_s.humanize}
-      csv << @model.properties.map{|prop| Yogo::Types.dm_to_human(prop.type)}
-      csv << "Units will go here when supported"
-    end
-    
-    send_data(csv_output, 
+    send_data(Yogo::CSV.make_csv(@model, false), 
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')

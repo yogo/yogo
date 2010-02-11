@@ -55,18 +55,12 @@ class Project
     
     # Process the contents
     model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
+    model.send(:include,Yogo::DataMethods) unless model.included_modules.include?(Yogo::DataMethods)
+    model.send(:include,Yogo::Pagination) unless model.included_modules.include?(Yogo::Pagination)
     model.auto_migrate!
     
-    csv_data[3..-1].each do |line|
-      line_data = Hash.new
-      csv_data[0].each_index do |i| 
-        attr_name = csv_data[0][i].tableize.singularize
-        prop = model.properties[attr_name]
-        type = Yogo::Types.human_to_dm(csv_data[1][i])
-        line_data[attr_name] = prop.typecast(line[i])
-      end
-      model.create(line_data)
-    end
+    # Load data
+    Yogo::CSV.load_data(model, csv_data)
   end
   
   # @return [Array] of the models associated with current project namespace

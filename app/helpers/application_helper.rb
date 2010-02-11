@@ -34,12 +34,21 @@ module ApplicationHelper
     output = ""
 
     if current_page > 1
-      output += link_to(image_tag("prev.png"), "?page=#{current_page-1}")
+      output += link_to("&lt;&nbsp;Previous&nbsp;", "?page=#{current_page-1}")
     end
-    # output += ' PAGINATION '
+  
+    if total_pages > 2
+        (1...total_pages+1).each do |p|
+          output += link_to("&nbsp;"+((current_page==p) ? "<strong>"+p.to_s+"</strong>" : p.to_s + "")+"&nbsp;","?page=#{p}")
+      end
+    end
+
     if current_page < total_pages
-      output += link_to(image_tag("next.png"), "?page=#{current_page+1}")
+      output += link_to("&nbsp;Next&nbsp;&gt;", "?page=#{current_page+1}")
     end
+    
+    output = (link_to("<< First&nbsp;","?page=1") + output)
+    output << link_to("&nbsp;Last >>","?page=#{total_pages+1}")
 
     output
   end

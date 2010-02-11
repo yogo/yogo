@@ -1,0 +1,19 @@
+<%# TODO: Make this prettier. Add some ajax? %>
+<%- for controller in @controllers.select{|c| !c.action_methods.empty?} -%>
+<h2><%= controller.name %></h2>
+<ul>
+<%- for action in controller.action_methods.sort -%>
+  <%- requirement = Yogo::Requirement.first_or_create(:controller_name => controller.controller_path, 
+                                                           :action_name     => action) -%>
+  <li>
+    <%= h action %>
+      <%= link_to("Require logged in user", add_user_requirement_path(requirement.id), :method => :put) \
+          unless requirement.require_user %>
+      <%= link_to("Require no user", add_no_user_requirement_path(requirement.id), :method => :put) \
+          unless requirement.require_no_user %>
+      <%= link_to("Remove requirement", remove_user_requirement_path(requirement.id), :method => :put) \
+          if requirement.require_user or requirement.require_no_user %>
+  </li>
+<%- end -%>
+</ul>
+<%- end -%>

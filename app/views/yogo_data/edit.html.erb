@@ -1,14 +1,17 @@
 <H3><%= @model.name.demodulize.titleize %></H3>
 <br />
-<%- form_for(@item, :url => project_yogo_data_path(@project, @model.name.demodulize, @item.id)) do |f| -%>
+<%- form_for(@item, :url => project_yogo_data_path(@project, @model.name.demodulize, @item.id), 
+
+                    :html => { :enctype => 'multipart/form-data' },
+                    :builder => YogoDataFormBuilder) do |f| -%>
 <table>
   <thead>
   </thead>
   <tbody>
       <%- @model.properties.each do |p| %>
       <tr>
-      <td><%= p.name.to_s.titleize %></td>
-      <td><%= f.text_field(p.name) %></td>
+      <td><%= f.label(p.name, p.name.to_s.titleize) %></td>
+      <td><%= f.field_for_param(p) %></td>
       </tr>
       <%- end %>
   </tbody>

@@ -1,3 +1,0 @@
-[submodule "vendor/plugins/yogo-authz"]
-	path = vendor/plugins/yogo-authz
-	url = git://github.com/yogo/yogo-authz.git

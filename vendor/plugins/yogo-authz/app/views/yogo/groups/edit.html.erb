@@ -1,0 +1,7 @@
+<h2>Editing <%= h @group.name %></h2>
+<%= error_messages_for :group %>
+
+<%- form_for(@group, :url => group_path(@group.id)) do |f| -%>
+  <%= render :partial => 'group_form', :locals => {:f => f} %>
+  <p><%= f.submit('Update') %> <%= link_to("Cancel", group_path(@group.id)) %></p>
+<%- end -%>
