@@ -8,6 +8,7 @@
 <%- end -%>
 
 <%- options = options_for_select(@options) -%> 
+<%- current_pos = 0 -%>
        
 <div id="model-edit">
   <%- form_for(@model, :url => path, :html => { :method => method }) do |f| -%>
@@ -27,35 +28,41 @@
       <div class="model-edit-input">
         <%= text_field_tag(:class_name) %>
       </div>
+      <ul id='sortable'>
     <%- else -%>
-    
-     <%- @model.properties.each do |prop| %>
-        <%- unless prop.name == :id -%>
-        <div class="model-edit-label">
-          <%= h prop.name.to_s.titleize %> :
-        </div>
-        <div class="model-edit-input">  
-          <%= select_tag("property_#{prop.name}", options_for_select(@options, Yogo::Types.dm_to_human(prop.type)), :name => "property[#{prop.name}]") %>
-        </div>
-        <%- end -%>
-      <%- end %>
+
+
+    <ul id='sortable'>
+       <%- @model.properties.each do |prop| %>
+          <%- unless prop.name == :id -%>
+          <li>
+            <div class="model-edit-label">
+              <%= h prop.name.to_s.titleize %> :
+            </div>
+            <div class="model-edit-input">  
+              <%= select_tag("property_#{prop.name}_type", options_for_select(@options, Yogo::Types.dm_to_human(prop.type)), :name => "property[#{prop.name}][type]") %>
+              <%= hidden_field_tag("property_#{prop.name}_position", current_pos += 1, :name => "property[#{prop.name}][position]" ) %>
+            </div>
+          </li>
+          <%- end -%>
+        <%- end %>
       
-    <%- end -%>
+      <%- end -%>
     
-    <div id='new-properties'>
-      <div class='new-property'>
-        <div class="model-edit-label">
-          <%= label_tag(:name, 'Property Name') %>:
-        </div> 
-        <div class="model-edit-input">
-          <%= text_field_tag(:name, nil, :name => 'new_property[][name]') %>
-          <%- options = options_for_select(@options) -%> 
-          <%= label_tag(:type) %>:
-          <%= select_tag(:type, options, :name => 'new_property[][type]' ) %>
-          <%= link_to(image_tag('remove.png')+'Remove', '', :class => 'remove-new-property') %>
-        </div>
-      </div>
-    </div>
+       <li class='new-property'>
+          <div class="model-edit-label">
+            <%= label_tag(:name, 'Property Name') %>:
+          </div> 
+          <div class="model-edit-input">
+            <%= text_field_tag(:name, nil, :name => 'new_property[][name]') %>
+            <%- options = options_for_select(@options) -%> 
+            <%= label_tag(:type) %>:
+            <%= select_tag(:type, options, :name => 'new_property[][type]' ) %>
+            <%= hidden_field_tag("position", current_pos += 1, :name => "new_property[][position]" ) %>
+            <%= link_to(image_tag('remove.png')+'Remove', '', :class => 'remove-new-property') %>
+          </div>
+      </li>
+    </ul>
     <%= link_to(image_tag('add.gif')+' Add a property', '', :id => 'add-property') %>
   <br><br>
   
@@ -73,6 +80,7 @@
     <%- options = options_for_select(@options) -%> 
     <%= label_tag(:type) %>:
     <%= select_tag(:type, options, :name => 'new_property[][type]' ) %>
+    <%= hidden_field_tag("position", current_pos +=1, :name => "new_property[][position]" ) %>
     <%= link_to(image_tag('remove.png')+'Remove', '', :class => 'remove-new-property') %>
   </div>
 </div>
