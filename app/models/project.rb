@@ -97,9 +97,9 @@ class Project
     if hash_or_name.is_a?(String)
       return false unless valid_model_or_column_name?(hash_or_name)
       hash_or_name = {:name => hash_or_name.camelize, 
-                   :modules => ['Yogo', self.namespace],
-                   :properties => options[:properties].merge({
-                     :id => DataMapper::Types::Serial }) 
+                      :modules => ['Yogo', self.namespace],
+                      :properties => options[:properties].merge({
+                      :id => DataMapper::Types::Serial }) 
                   }
                   
     end

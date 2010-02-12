@@ -47,11 +47,12 @@ class YogoModelsController < ApplicationController
     params[:new_property].each do |prop|
       name = prop[:name].squish.downcase.gsub(' ', '_')
       prop_type = Yogo::Types.human_to_dm(prop[:type])
+      prop_pos = prop[:position]
       
       next if name.blank?
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        cleaned_options[name] = prop_type
+        cleaned_options[name] = { :type => prop_type, :position => prop_pos }
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
@@ -63,6 +64,7 @@ class YogoModelsController < ApplicationController
       @model.send(:include,Yogo::DataMethods) unless @model.included_modules.include?(Yogo::DataMethods)
       @model.send(:include,Yogo::Pagination) unless @model.included_modules.include?(Yogo::Pagination)
       @model.auto_migrate!
+      @model.properties.sort!
       flash[:notice] = 'The model was sucessfully created.'
       redirect_to(project_yogo_model_url(@project, @model.name.demodulize))
     else
@@ -92,22 +94,24 @@ class YogoModelsController < ApplicationController
       next if prop[:name].empty? || prop[:type].empty?
       name = prop[:name].squish.downcase.gsub(' ', '_')
       prop_type = Yogo::Types.human_to_dm(prop[:type])
+      prop_pos = prop[:position]
       
       next if name.blank?
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        cleaned_params << [name, prop_type]
+        cleaned_params << [name, prop_type, prop_pos]
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
     end unless params[:new_property].nil?
     
-    params[:property].each_pair do |prop, type|
+    params[:property].each_pair do |prop, options|
       name = prop.squish.downcase.gsub(' ', '_')
-      prop_type = Yogo::Types.human_to_dm(type)
+      prop_type = Yogo::Types.human_to_dm(options[:type])
+      prop_pos = options[:position]
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        cleaned_params << [name, prop_type]
+        cleaned_params << [name, prop_type, prop_pos]
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
@@ -116,11 +120,11 @@ class YogoModelsController < ApplicationController
     # Type Checking
     if errors.empty?
       cleaned_params.each do |prop|
-        
-        @model.send(:property, prop[0].to_sym, prop[1], :required => false)
+        @model.send(:property, prop[0].to_sym, prop[1], :required => false, :position => prop[2])
       end
       
       @model.auto_upgrade!
+      @model.properties.sort!
       @model.send(:include,Yogo::DataMethods)
       flash[:notice] = "Properties added"
       
