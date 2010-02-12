@@ -1,0 +1,4 @@
+<%= link_to_remote("#{proj.name}", :url => list_models_project_path(proj.id), 
+                                   :update => "project-#{proj.id}", 
+                                   :position => :bottom, 
+                                   :method => :get ) %>

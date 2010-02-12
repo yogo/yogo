@@ -113,6 +113,11 @@ class YogoDataController < ApplicationController
       redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
     end
   end
+
+  def histogram_attribute
+    @attribute_name = params[:attribute_name]
+    @histogram = Yogo::Navigation.values(@model, @attribute_name.to_sym)
+  end
   
   private
   

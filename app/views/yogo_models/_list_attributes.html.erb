@@ -1,0 +1,5 @@
+<ul>
+<% @attributes.each do |attr| %>
+  <li><div id="project-<%= @project.id %>-model-<%= @model.name.demodulize %>-<%= attr %>"><%= link_to("#{attr}", histogram_attribute_project_yogo_data_url(@project.id, @model.name.demodulize, :attribute_name => attr)) %></div></li>
+<% end %>
+</ul>

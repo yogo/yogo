@@ -5,7 +5,6 @@
 #
 # FILE: loader.rb
 # 
-#
 module Yogo
   class Loader
     ##

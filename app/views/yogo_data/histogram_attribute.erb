@@ -1,0 +1,5 @@
+<ul>
+<% @histogram.each do |key, value| %>
+  <li><%= link_to("#{key} (#{value})", '') %> </li>
+<% end%>
+</ul>

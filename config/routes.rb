@@ -9,15 +9,17 @@
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
   map.resources :projects, :except => [ :edit, :update ], 
-                :member => { :upload => :post }, 
-                :collection => { :rereflect => :post, :loadexample => :post, :search => :get } do |project|
+                :member => { :upload => :post, :list_models => :get }, 
+                :collection => { :rereflect => :post, :loadexample => :post, :search => :get} do |project|
     
     # /projects/:project_id/yogo_data/:model_name
     # /projects/:project_id/yogo_data/:model_name/:id
-    project.resources :yogo_data, :as => 'yogo_data/:model_id', :collection => { :upload => :post, :search => :get }
-    
+    project.resources :yogo_data, :as => 'yogo_data/:model_id', 
+                      :collection => { :upload => :post, :search => :get, :histogram_attribute => :get }
+                          
     # /projects/:project_id/yogo_models/:model_name
-    project.resources :yogo_models
+    project.resources :yogo_models,
+                      :member => { :list_attributes => :get }
     
   end
   map.resources :tutorial

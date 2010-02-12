@@ -13,7 +13,11 @@
         <div class="nav-items">
             <ul>
                 <% all_projects.each do |project|%>
-                 <%= add_menu_item(project.name, project_path(project))%>
+                <li>
+                <div id='project-<%= project.id %>'>
+                  <%= render :partial => 'layouts/expand_models', :locals => { :proj => project } %>
+                </div>
+                </li>
                 <% end %>
             </ul>
         </div>

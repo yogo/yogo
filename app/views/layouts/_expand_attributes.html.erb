@@ -1,0 +1,1 @@
+<li><div id="project-<%= proj.id%>-models-<%= mod %>"><%= link_to_remote("#{mod}", :url =>  list_attributes_project_yogo_model_url(proj.id, mod), :update => "project-#{proj.id}-models-#{mod}", :position => :after, :method => :get) %></div></li>

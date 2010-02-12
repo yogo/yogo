@@ -121,4 +121,14 @@ class ProjectsController < ApplicationController
     Yogo::Loader.load(:example, "Example Project")
     redirect_to :back
   end
+  
+  def list_models
+    @project = Project.get(params[:id])
+    @models = @project.models
+    
+    respond_to do |wants|
+      wants.html
+      wants.js  { render :partial => 'list_models' }
+    end
+  end
 end
