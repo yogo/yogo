@@ -14,7 +14,7 @@ class YogoDataController < ApplicationController
   #
   # * 10 data objects per page are displayed
   def index
-    @data = @model.paginate(:page => params[:page], :per_page => 10)
+    @data = @model.collect_navigation_results(params)#paginate(:page => params[:page], :per_page => 10)
     respond_to do |format|
       format.html
       format.json { @data = @model.all if params[:page].blank?; render( :json => @data.to_json )}

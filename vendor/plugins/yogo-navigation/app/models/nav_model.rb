@@ -18,7 +18,7 @@ class NavModel
   def fetch_attributes
     attributes = []
     self.nav_attributes.each do |attribute|
-        attributes << attribute if attribute.display
+        attributes << attribute #if attribute.display
     end if self.nav_attributes
     return attributes.sort_by { |x| x.display.to_s }
   end
