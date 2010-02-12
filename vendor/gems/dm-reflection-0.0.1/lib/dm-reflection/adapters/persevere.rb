@@ -58,9 +58,10 @@ module DataMapper
         schema = self.get_schema(table.gsub('__', '/'))[0]
         schema['properties'].each_pair do |key, value|
           property = {:name => key, :type => get_type(value) }
-          property.merge!({ :required => !value['optional'], 
-                         :default => value['default'], 
-                         :key => value.has_key?('index') && value['index'] }) unless property[:type] == DataMapper::Types::Serial
+          property.merge!({ :required => !value.delete('optional'),
+                         :default => value['default'],
+                         :position => value['position'],
+                         :key => value.has_key?('index') && value.delete('index') }) unless property[:type] == DataMapper::Types::Serial
           results << property
         end
         return results

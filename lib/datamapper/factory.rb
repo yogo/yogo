@@ -61,6 +61,7 @@ module DataMapper
       named_class = current_context.const_set(class_name, anon_class)
       
       named_class.send(:include, options[:modules]) if options.has_key?(:modules)
+      named_class.properties.sort!
       return named_class
     end
 
@@ -76,16 +77,16 @@ module DataMapper
     def self.make_model_from_csv(class_name, spec_array)
       scopes = class_name.split('::')
       spec_hash = { :name => scopes[-1], :properties => Hash.new }
-      spec_hash[:modules] = scopes[0..-2] unless scopes.length.eql?(1)                  
+      spec_hash[:modules] = scopes[0..-2] unless scopes.length.eql?(1)
       spec_array[0].each_index do |idx|
         prop_hash = Hash.new
         pname = spec_array[0][idx].tableize.singular.gsub(' ', '_')
         ptype = Yogo::Types.human_to_dm(spec_array[1][idx])
         punits = spec_array[2][idx]
         if pname == 'id'
-          prop_hash = { pname => { :type => DataMapper::Types::Serial } }
+          prop_hash = { pname => { :type => DataMapper::Types::Serial, :position => idx } }
         else
-          prop_hash = { pname => { :type => ptype, :required => false } }
+          prop_hash = { pname => { :type => ptype, :required => false, :position => idx } }
         end
         spec_hash[:properties].merge!(prop_hash) 
       end
