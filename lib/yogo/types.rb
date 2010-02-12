@@ -30,7 +30,7 @@ module Yogo
     end
     
     def self.human_to_dm(humantype)
-      @@HumanTM[humantype.capitalize]
+      @@HumanTM[humantype.split('/').each{|t| t.capitalize }.join('/')]
     end
     
     def self.human_types
