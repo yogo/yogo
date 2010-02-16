@@ -48,7 +48,7 @@ module ApplicationHelper
     end
     
     output = (link_to("<< First&nbsp;","?page=1") + output)
-    output << link_to("&nbsp;Last >>","?page=#{total_pages+1}")
+    output << link_to("&nbsp;Last >>","?page=#{total_pages}")
 
     output
   end

@@ -62,7 +62,7 @@ class YogoModelsController < ApplicationController
     
     if errors.empty? and (@model = @project.add_model(class_name, :properties => cleaned_options)) != false
       @model.send(:include,Yogo::DataMethods) unless @model.included_modules.include?(Yogo::DataMethods)
-      @model.send(:include,Yogo::Pagination) unless @model.included_modules.include?(Yogo::Pagination)
+      # @model.send(:include,Yogo::Pagination) unless @model.included_modules.include?(Yogo::Pagination)
       @model.auto_migrate!
       @model.properties.sort!
       flash[:notice] = 'The model was sucessfully created.'
