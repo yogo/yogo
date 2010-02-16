@@ -17,4 +17,3 @@ models = DataMapper::Reflection.reflect(:yogo) unless ENV['NO_PERSEVERE']
 
 models.each{|m| m.send(:include,Yogo::DataMethods) unless m.included_modules.include?(Yogo::DataMethods)}
 models.each{|m| m.properties.sort! }
-

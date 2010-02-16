@@ -8,6 +8,7 @@
 #
 
 # Require custom extensions to datamapper.
+require 'datamapper/paginate'
 require 'datamapper/property'
 require 'datamapper/search'
 require 'datamapper/paginate'
