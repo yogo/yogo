@@ -21,7 +21,7 @@ module DataMapper
           case type
           when 'serial'    then DataMapper::Types::Serial
           when 'integer'   then Integer
-          when 'number'    then BigDecimal 
+          # when 'number'    then BigDecimal 
           when 'number'    then Float      
           when 'boolean'   then DataMapper::Types::Boolean
           when 'string'    then 
