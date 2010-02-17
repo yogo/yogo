@@ -15,7 +15,7 @@ module Yogo
     def self.validate_csv(model, csv_data)
       prop_hash = Hash.new
       csv_data[0].each_index do |idx|
-        prop_hash[csv_data[0][idx].tableize.singularize.gsub!(' ', '_')] = csv_data[1][idx]
+        prop_hash[csv_data[0][idx].tableize.singularize.gsub(' ', '_')] = csv_data[1][idx]
       end
 
       valid = true
