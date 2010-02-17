@@ -15,9 +15,11 @@ pushd `dirname $0`
 echo "Configuring fresh yogo checkout for development..."
 git submodule init && \
 git submodule update && \
-$RUBY gem install bundler -v 0.8.1 &&
+
+$RUBY gem install bundler -v 0.8.1 && \
 $RUBY gem install rake && \
 $RUBY gem bundle && \
+
 $RUBY rake persvr:setup && \
 $RUBY rake yogo:setup && \
 $RUBY rake db:seed NO_PERSEVERE=true
