@@ -28,7 +28,7 @@ module ApplicationHelper
   # Returns navigation for links to paginated collection items
   # 
   def pagination_links(collection, cur_page = 1, per_page = 5)
-    total_pages = collection.model.page_count(:per_page => per_page)
+    total_pages = collection.page_count(:per_page => per_page)
     current_page = cur_page.nil? ? 1 : cur_page.to_i
 
     output = ""

@@ -1,0 +1,7 @@
+<div id="project-<%= @project.id %>-model-<%= @model.name.demodulize %>-attributes-<%= @attribute_name %>-values">
+<ul>
+<% @histogram.each do |key, value| %>
+  <li><%= link_to("#{key} (#{value})", pick_attribute_project_yogo_data_path(@project, @model.name.demodulize, :attribute => @attribute_name, :value => key)) %> </li>
+<% end%>
+</ul>
+</div>

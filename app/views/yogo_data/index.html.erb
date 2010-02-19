@@ -33,7 +33,7 @@
   </table>
 </div>
 <div id="pagination-links">
-  <%= pagination_links(@data, params[:page], 10) %>
+  <%= pagination_links(@query, params[:page], 10) %>
 </div>
 
 <%= render :partial => 'csv_form'%>

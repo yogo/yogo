@@ -17,14 +17,13 @@ gem "dm-aggregates"
 gem "dm-types"
 gem "dm-persevere-adapter", "0.35.0", :require_as => nil
 gem "do_sqlite3",           "0.10.1", :require_as => nil
-gem "do_mysql",             "0.10.1", :require_as => nil
-#gem "do_postgres",          "0.10.1", :require_as => nil
 gem "rails_datamapper"
 
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"
 gem "fastercsv"
 gem "carrierwave"
+#gem "crumble",                        :require_as => "breadcrumb"
 
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)
@@ -32,6 +31,9 @@ if defined?(JRUBY_VERSION)
   gem "ruby-debug-base",   "0.10.3.1", :require_as => nil, :only => [:development, :test],
                                        :path => "vendor/extra_gems/ruby-debug-base-0.10.3.1-java"
   gem "ruby-debug",                    :require_as => nil, :only => [:development, :test]
+  # When in "production" we run with jruby, so we include the adapters for other databases.
+  #gem "do_mysql",             "0.10.1", :require_as => nil
+  #gem "do_postgres",          "0.10.1", :require_as => nil
 else
   gem "json",      "1.2.0", :require_as => nil
 end

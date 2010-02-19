@@ -1,1 +1,16 @@
-<li><div id="project-<%= proj.id%>-models-<%= mod %>"><%= link_to_remote("#{mod}", :url =>  list_attributes_project_yogo_model_url(proj.id, mod), :update => "project-#{proj.id}-models-#{mod}", :position => :after, :method => :get) %></div></li>
+<li>
+  <div id="project-<%= proj.id%>-models-<%= mod %>">
+    <%= link_to_remote("#{mod}", :url =>  list_attributes_project_yogo_model_url(proj.id, mod), 
+                                 :update => "project-#{proj.id}-models-#{mod}",
+                                 :condition => 'check_navigation_element_state(this)',
+                                 :position => :bottom, 
+                                 :method => :get) %>
+                        
+    <%#- if !(session[:breadcrumbs].nil? || session[:breadcrumbs][:current_model].nil?) -%>         
+      <%#- current_model = session[:breadcrumbs][:current_model] -%>
+      <%#- if current_model.name.demodulize == mod -%>
+        <%#= render( :partial => 'yogo_models/list_attributes', :locals => { :model => current_model, :project => proj, :attributes => Yogo::Navigation.attributes(current_model) }) %>
+      <%#- end -%>
+    <%#- end -%>
+  </div>
+</li>

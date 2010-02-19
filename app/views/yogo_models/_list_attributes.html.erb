@@ -1,5 +1,13 @@
+<div id="project-<%= project.id %>-model-<%= model.name.demodulize %>-attributes">
 <ul>
-<% @attributes.each do |attr| %>
-  <li><div id="project-<%= @project.id %>-model-<%= @model.name.demodulize %>-<%= attr %>"><%= link_to("#{attr}", histogram_attribute_project_yogo_data_url(@project.id, @model.name.demodulize, :attribute_name => attr)) %></div></li>
+<% attributes.each do |attr| %>
+  <li><div id="project-<%= project.id %>-model-<%= model.name.demodulize %>-attributes-<%= attr %>">
+    <%= link_to_remote("#{attr}", :url => histogram_attribute_project_yogo_data_url(project.id, model.name.demodulize, :attribute_name => attr),
+                                  :update => "project-#{project.id}-model-#{model.name.demodulize}-attributes-#{attr}",
+                                  :condition => 'check_navigation_element_state(this)',
+                                  :position => :bottom,
+                                  :method => :get ) %>
+  </div></li>
 <% end %>
 </ul>
+</div>

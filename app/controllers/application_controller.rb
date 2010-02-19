@@ -8,10 +8,14 @@
 # Likewise, all the methods added will be available for all controllers.
 #
 class ApplicationController < ActionController::Base
-  before_filter :check_local_only
+  before_filter :check_local_only #, :set_breadcrumb_query
+
+  # include all helpers, all the time  
+  helper :all 
+  helper :breadcrumbs
   
-  helper :all # include all helpers, all the time
-  protect_from_forgery # See ActionController::RequestForgeryProtection for details
+  # See ActionController::RequestForgeryProtection for details
+  protect_from_forgery 
 
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
@@ -45,5 +49,22 @@ class ApplicationController < ActionController::Base
       render_optional_error_file(:forbidden)
     end
   end
+  
+  # def set_breadcrumb_query
+  #   #
+  #   # Maybe this should be a single value [Project, Model, UrlStack]
+  #   #
+  #   @query_scope = nil
+  #   if !(session[:breadcrumbs].nil? || session[:breadcrumbs][:current_model].nil?)
+  #     current_model = session[:breadcrumbs][:current_model]
+  #     @query_scope = current_model.all
+  #     if !session[:breadcrumbs][:terms].empty?
+  #       first_term = session[:breadcrumbs][:terms].first
+  #       @query_scope = current_model.all(first_term[0].to_sym => first_term[1])
+  #       # session[:breadcrumbs][:terms][1..-1].each{|term| @query = @query & @model.all(term[0].to_sym => term[1])}
+  #       session[:breadcrumbs][:terms][1..-1].each{|term| @query_scope = (@query_scope & current_model.all(term[0].to_sym => term[1])) }
+  #     end
+  #   end    
+  # end
   
 end

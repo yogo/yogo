@@ -9,6 +9,7 @@
 
 # Require custom extensions to datamapper.
 require 'datamapper/search'
+require 'datamapper/paginate'
 require 'datamapper/factory'
 require 'datamapper/types/yogo_file'
 

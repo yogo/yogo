@@ -14,10 +14,21 @@ class YogoDataController < ApplicationController
   # 
   # * 10 data objects per page are displayed
   def index
-    @data = @model.paginate(:page => params[:page], :per_page => 10)
+    # # If we are scoping this to the bread crumbs, construst our query
+    # if session[:breadcrumbs][:current_model].eql?(@model) && !session[:breadcrumbs][:terms].empty?
+    #   first_term = session[:breadcrumbs][:terms].first
+    #   @query = @model.all(first_term[0].to_sym => first_term[1])
+    #   session[:breadcrumbs][:terms][1..-1].each{|term| @query = @query & @model.all(term[0].to_sym => term[1])}
+    # else
+    #   # The query is everything.
+    #   @query = @model.all
+    # end
+    # @data = @query.paginate(:page => params[:page], :per_page => 10)
+    @query = @model.all
+    @data = @query.paginate(:page => params[:page], :per_page => 10)
     respond_to do |format|
       format.html
-      format.json { @data = @model.all if params[:page].blank?; render( :json => @data.to_json )}
+      format.json { @data = @query.all if params[:page].blank?; render( :json => @data.to_json )}
       format.csv { download_csv }
     end
   end
@@ -116,7 +127,48 @@ class YogoDataController < ApplicationController
 
   def histogram_attribute
     @attribute_name = params[:attribute_name]
-    @histogram = Yogo::Navigation.values(@model, @attribute_name.to_sym)
+    @histogram = nil
+    if @query_scope.nil? || @query_scope.name != @model.name
+      @histogram = Yogo::Navigation.values(@model, @attribute_name.to_sym)
+    else
+      @histogram = Yogo::Navigation.values(@query_scope, @attribute_name.to_sym)
+    end
+
+    
+    respond_to do |wants|
+      wants.html 
+      wants.js { render :partial => 'histogram_attribute' }
+    end
+  end
+  
+  def pick_attribute
+    # session[:breadcrumbs] ||= { :current_model => nil, :current_project => nil }
+    # 
+    # if session[:breadcrumbs][:current_model] != @model
+    #   session[:breadcrumbs][:current_project] = @project
+    #   session[:breadcrumbs][:current_model] = @model
+    #   session[:breadcrumbs][:terms] = []
+    # end
+    # 
+    # session[:breadcrumbs][:terms] << [ params[:attribute], params[:value] ]
+    
+    redirect_to( project_yogo_data_index_path(@project, @model.name.demodulize) )
+
+  end
+  
+  def remove_attribute
+    # base_attribute = params[:attribute]
+    # if session[:breadcrumbs][:current_model].name.demodulize == base_attribute
+    #   session[:breadcrumbs][:terms] = []
+    # else
+    #   found = false
+    #   session[:breadcrumbs][:terms]= session[:breadcrumbs][:terms].select do |t|
+    #     found = t[0] == base_attribute
+    #     found
+    #   end
+    # end
+    
+    redirect_to( project_yogo_data_index_path(@project, @model.name.demodulize) )
   end
   
   private

@@ -24,6 +24,7 @@
         <%- if flash[:error] -%>
             <div class='error notice'><p><%= h flash[:error] %></p></div>
         <%- end -%>
+        <div id='breadcrumbs'><%= crumbs %></div>
         <div><%= yield %></div>
         <div id='footnotes_holder'></div>
       </div>

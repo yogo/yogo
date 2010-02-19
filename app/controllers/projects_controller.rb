@@ -45,6 +45,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    # session[:breadcrumbs] = nil
     @project = Project.get(params[:id])
     @models = @project.models
   end
@@ -112,7 +113,7 @@ class ProjectsController < ApplicationController
   def rereflect
     models = DataMapper::Reflection.reflect(:yogo)
     models.each{|m| m.send(:include,Yogo::DataMethods) unless m.included_modules.include?(Yogo::DataMethods)}
-    models.each{|m| m.send(:include,Yogo::Pagination) unless m.included_modules.include?(Yogo::Pagination)}
+    # models.each{|m| m.send(:include,Yogo::Pagination) unless m.included_modules.include?(Yogo::Pagination)}
     redirect_to projects_url
   end
   
@@ -128,7 +129,7 @@ class ProjectsController < ApplicationController
     
     respond_to do |wants|
       wants.html
-      wants.js  { render :partial => 'list_models' }
+      wants.js  { render(:partial => 'list_models', :locals => { :models => @models, :project => @project }) }
     end
   end
 end
