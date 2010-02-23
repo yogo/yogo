@@ -17,10 +17,13 @@ production:
   port: 8080
 
 # run with bin/persvr -p 8081
-test:
+test: &TEST
   adapter: persevere
   host: localhost
   port: 8081
+
+cucumber:
+  <<: *TEST
 
 #
 # Example Data Repository

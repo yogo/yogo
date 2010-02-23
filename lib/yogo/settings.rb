@@ -15,7 +15,7 @@ module Yogo
 
     # property :id,    Serial
     property :name,   String, :key => true
-    property :value,   Object
+    property :value,  Object
   
     @@cache = {}
     # @@loaded_defaults = false
