@@ -1,0 +1,22 @@
+<div id="project-<%= project.id %>-models">
+  <ul>
+  <% models.each do |model| %>
+    <% mname = model.name.demodulize %>
+    <li>
+      <div id="project-<%= project.id%>-models-<%= mname %>">
+        <%# link_to_remote("#{mname}", :url =>  list_attributes_project_yogo_model_url(project.id, mname), 
+                                     :update => "project-#{project.id}-models-#{mname}",
+                                     :condition => 'check_navigation_element_state(this)',
+                                     :position => :bottom, 
+                                     :method => :get) %>
+
+        <%= link_to(mname, project_yogo_data_index_path(project, mname)) %>
+
+        <%- if @model == model -%>         
+          <%= render( :partial => 'yogo_models/list_attributes', :locals => { :model => model, :project => project, :attributes => Yogo::Navigation.attributes(model) }) %>
+        <%- end -%>
+      </div>
+    </li>
+  <% end %>
+  </ul>
+</div>

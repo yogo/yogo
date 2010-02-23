@@ -10,10 +10,9 @@
 
 class Project
   include DataMapper::Resource
-  # include Yogo::Pagination
   
   property :id, Serial
-  property :name, String, :required => true
+  property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
   
   validates_is_unique   :name

@@ -7,16 +7,23 @@
 # 
 #
 development: 
-  adapter: sqlite3
-  database: db/development.sqlite3
-
-test:
-  adapter: sqlite3
-  database: db/test.sqlite3
+  adapter: persevere
+  host: localhost
+  port: 8080
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+  adapter: persevere
+  host: localhost
+  port: 8080
+
+# run with bin/persvr -p 8081
+test: &TEST
+  adapter: persevere
+  host: localhost
+  port: 8081
+
+cucumber:
+  <<: *TEST
 
 #
 # Example Data Repository
@@ -24,24 +31,3 @@ production:
 example:
   adapter: sqlite3
   database: db/example/example.sqlite3
-
-# Persevere 1.0 beta
-#  gem install persevere
-#  gem install dm-persevere-adapter
-yogo_development:
-  adapter: persevere
-  host: localhost
-  port: 8080
-
-yogo_production:
-  adapter: persevere
-  host: localhost
-  port: 8080
-
-#
-# run with bin/persvr -p 8081
-#
-yogo_test:
-  adapter: persevere
-  host: localhost
-  port: 8080

@@ -5,7 +5,6 @@
 #
 # FILE: loader.rb
 # 
-#
 module Yogo
   class Loader
     ##
@@ -16,7 +15,8 @@ module Yogo
     #
     def self.load(repo, name)
       # Iterate through each model and make it in persevere, then copy instances
-      DataMapper::Reflection.reflect(repo).each do |model|
+      models = DataMapper::Reflection.reflect(repo, Object, true)
+      models.each do |model|
         mphash = Hash.new
         model.properties.each do |prop| 
           mphash[prop.name] = { :type => prop.type, :key => prop.key?, :serial => prop.serial? } 
@@ -30,6 +30,10 @@ module Yogo
         yogo_model.auto_migrate!
         # Create each instance of the class
         model.all.each{ |item| yogo_model.create!(item.attributes) }
+      end
+      models.each do |model|
+        DataMapper::Model.descendants.delete(model)
+        Object.send(:remove_const, model.name.to_sym) 
       end
       Project.create(:name => name)
       DataMapper::Reflection.reflect(:yogo)

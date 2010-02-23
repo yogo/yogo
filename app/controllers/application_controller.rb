@@ -8,10 +8,14 @@
 # Likewise, all the methods added will be available for all controllers.
 #
 class ApplicationController < ActionController::Base
-  before_filter :check_local_only
+  before_filter :check_local_only #, :set_breadcrumb_query
+
+  # include all helpers, all the time  
+  helper :all 
+  helper :breadcrumbs
   
-  helper :all # include all helpers, all the time
-  protect_from_forgery # See ActionController::RequestForgeryProtection for details
+  # See ActionController::RequestForgeryProtection for details
+  protect_from_forgery 
 
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password

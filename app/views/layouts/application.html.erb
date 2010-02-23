@@ -1,19 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <title>Yogo Data Management Toolkit: <%= controller.action_name %></title>
-    <%= stylesheet_link_tag 'yogo' %>
-    <%= javascript_include_tag 'jquery-1.4.1.min.js','application.js' %>
-		<%= javascript_include_tag :defaults %>
+
+    <%= stylesheet_link_tag 'jquery-ui-1.7.2.custom', 'yogo' %>
+    <%= javascript_include_tag 'jquery-1.3.2.min.js', 
+                               #'jquery-1.4.1.min.js', 
+                               'jquery-ui-1.7.2.custom.min.js', 
+                               'jrails.js', 
+                               'application.js' %>
+
+                               
    <link rel="shortcut icon" href="<%= image_path("favicon.png") %>">
   </head>
   <body>
     <div id="container"  class="clearfix">
       <%= render :partial => 'layouts/header' %>
       <%= render :partial => 'layouts/sidebar' %>
-			<%= render :partial => 'navigation/yogo_nav' %>
       <div id="content">
         <%- if flash[:notice] -%>
             <div class='notice'><p><%= h flash[:notice] %></p></div>
@@ -21,6 +26,7 @@
         <%- if flash[:error] -%>
             <div class='error notice'><p><%= h flash[:error] %></p></div>
         <%- end -%>
+        <div id='breadcrumbs'><%= crumbs %></div>
         <div><%= yield %></div>
         <div id='footnotes_holder'></div>
       </div>

@@ -7,15 +7,15 @@ describe 'Yogo CSV Module' do
   
   before(:all) do
     # Need a model and a CSV file.
-    @model = DataMapper::Model.new do
+    model = DataMapper::Model.new do
       property :id, DataMapper::Types::Serial
       property :name, String
       property :mass, Float
       property :charge, Float
     end
-    
-    CsvExampleModel = @model
-    @model.auto_migrate!
+
+    CsvExampleModel = model if !Object.const_defined?(:CsvExampleModel)
+    CsvExampleModel.auto_migrate!
     
     models_path = File.dirname(__FILE__) + '/../models'
     @csv_data = FasterCSV.read(models_path + '/csvtest.csv')
@@ -23,39 +23,39 @@ describe 'Yogo CSV Module' do
   end
   
   after(:all) do
-    @model.auto_migrate_down!
+    CsvExampleModel.auto_migrate_down!
   end
   
   before(:each) do
-    @model.auto_migrate!
+    CsvExampleModel.auto_migrate!
   end
   
   describe 'when reading csv data' do
     it 'should validate types are valid in the spreadsheet' do
-      result = Yogo::CSV.validate_csv(@model, @csv_data)
+      result = Yogo::CSV.validate_csv(CsvExampleModel, @csv_data)
       result.should be_true
     end
     
     it "should not validate invalid csv data" do
-      result = Yogo::CSV.validate_csv(@model, @bad_csv_data)
+      result = Yogo::CSV.validate_csv(CsvExampleModel, @bad_csv_data)
       result.should be_false
     end
     
     it "should load data into a model" do
-      result = Yogo::CSV.load_data(@model, @csv_data)
-      @model.count.should be(3)
+      result = Yogo::CSV.load_data(CsvExampleModel, @csv_data)
+      CsvExampleModel.count.should be(3)
     end
     
     it "should not load invalid data into a model" do
-      result = Yogo::CSV.load_data(@model, @bad_csv_data)
-      @model.count.should be(2)
+      result = Yogo::CSV.load_data(CsvExampleModel, @bad_csv_data)
+      CsvExampleModel.count.should be(0)
     end
   end
-
+  
   describe "when creating CSV" do
     it "should create a template when asked" do
-      Yogo::CSV.load_data(@model, @csv_data)
-      result = Yogo::CSV.make_csv(@model, false)
+      Yogo::CSV.load_data(CsvExampleModel, @csv_data)
+      result = Yogo::CSV.make_csv(CsvExampleModel, false)
       parsed_result = FasterCSV.parse(result)
       parsed_result.should be_kind_of(Array)
       parsed_result.length.should eql(3)
@@ -63,8 +63,8 @@ describe 'Yogo CSV Module' do
     end
     
     it "should create valid CSV" do
-      Yogo::CSV.load_data(@model, @csv_data)
-      result = Yogo::CSV.make_csv(@model, true)
+      Yogo::CSV.load_data(CsvExampleModel, @csv_data)
+      result = Yogo::CSV.make_csv(CsvExampleModel, true)
       parsed_result = FasterCSV.parse(result)
       parsed_result.should be_kind_of(Array)
       parsed_result.length.should eql(6)

@@ -147,6 +147,16 @@ class YogoModelsController < ApplicationController
     redirect_to project_url(@project)
   end
   
+  def list_attributes
+    @model = @project.get_model(params[:id])
+    @attributes = Yogo::Navigation.attributes(@model)
+    
+    respond_to do |wants|
+      wants.html 
+      wants.js { render(:partial => 'list_attributes', :locals => { :model => @model, :attributes => @attributes, :project => @project })}
+    end
+  end
+  
   private
   
   # Allows download of yogo project model data in CSV format

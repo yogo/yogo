@@ -28,7 +28,7 @@ module ApplicationHelper
   # Returns navigation for links to paginated collection items
   # 
   def pagination_links(collection, cur_page = 1, per_page = 5)
-    total_pages = collection.model.page_count(:per_page => per_page)
+    total_pages = collection.page_count(:per_page => per_page)
     current_page = cur_page.nil? ? 1 : cur_page.to_i
 
     output = ""
@@ -51,5 +51,33 @@ module ApplicationHelper
     output << link_to("&nbsp;Last >>","?page=#{total_pages}")
 
     output
+  end
+
+  # This is for the breadcrumbs
+  # It will create the breadcrumbs based on the request query_string
+  #
+  def query_params
+    ref_path = request.path_info;
+    ref_query = URI.decode(request.query_string)
+    query_options = ref_query.split('&').select{|r| !r.blank?}
+    res = []
+    query_path = []
+    
+    query_options[0..-2].each do |qo|
+      qo.match(/q\[(\w+)\]\[\]=(\w+)/)
+      attribute = $1
+      condition = $2
+      found = false
+      res << link_to("#{attribute.humanize}: #{condition}", ref_path+"?"+query_path.join("&"))
+      query_path << qo
+      
+    end
+    
+    query_options[-1].match(/q\[(\w+)\]\[\]=(\w+)/)
+    attribute = $1
+    condition = $2
+     res << "#{attribute.humanize}: #{condition}"
+     
+    return res.join(' > ')
   end
 end

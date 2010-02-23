@@ -15,10 +15,8 @@ gem "dm-ar-finders"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates"
 gem "dm-types"
-gem "dm-persevere-adapter", "0.36.0", :require_as => nil
+gem "dm-persevere-adapter", "0.37.0", :require_as => nil
 gem "do_sqlite3",           "0.10.1", :require_as => nil
-gem "do_mysql",             "0.10.1", :require_as => nil
-#gem "do_postgres",          "0.10.1", :require_as => nil
 gem "rails_datamapper"
 
 # Extra supporting gems
@@ -32,6 +30,9 @@ if defined?(JRUBY_VERSION)
   gem "ruby-debug-base",   "0.10.3.1", :require_as => nil, :only => [:development, :test],
                                        :path => "vendor/extra_gems/ruby-debug-base-0.10.3.1-java"
   gem "ruby-debug",                    :require_as => nil, :only => [:development, :test]
+  # When in "production" we run with jruby, so we include the adapters for other databases.
+  #gem "do_mysql",             "0.10.1", :require_as => nil
+  #gem "do_postgres",          "0.10.1", :require_as => nil
 else
   gem "json",      "1.2.0", :require_as => nil
 end
@@ -39,4 +40,8 @@ end
 # Testing-only gems
 gem 'rspec',        '1.3.0', :only => :test, :require_as => nil
 gem 'rspec-rails',  '1.3.2', :only => :test, :require_as => 'spec/rails'
-gem 'factory_girl', '1.2.3', :only => :test
+gem 'factory_girl', '1.2.3', :only => [:test, :cucumber]
+gem 'cucumber',              :only => [:test, :cucumber]
+gem 'cucumber-rails',        :only => [:test, :cucumber]
+gem 'webrat',                :only => [:test, :cucumber]
+gem 'selenium-client',       :only => [:test, :cucumber]

@@ -1,4 +1,5 @@
 <div id="sidebar">
+
     <div id="nav-home" class="nav-group">
       <div class="nav-title" id='home-title'><%= link_to("Home", projects_url) %></div>
     </div>
@@ -12,9 +13,21 @@
       <div class="nav-title" id='projects-title'>Projects</div>
         <div class="nav-items">
             <ul>
-                <% all_projects.each do |project|%>
-                 <%= add_menu_item(project.name, project_path(project))%>
-                <% end %>
+              <% all_projects.each do |project|%>
+                <li>
+                  <div id='project-<%= project.id %>'>
+                    <%# link_to_remote("#{project.name}", :url => list_models_project_path(project.id), 
+                                                       :update => "project-#{project.id}",
+                                                       :condition => 'check_navigation_element_state(this)',
+                                                       :position => :bottom,
+                                                       :method => :get ) %>
+                    <%= link_to(project.name, project_path(project)) %>
+                    <%- if @project == project -%>
+                      <%= render(:partial => 'projects/list_models', :locals => { :models => project.models, :project => project }) %>
+                    <%- end -%>
+                  </div>
+                </li>
+              <% end %>
             </ul>
         </div>
     </div>

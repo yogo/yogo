@@ -10,14 +10,31 @@
 class YogoDataController < ApplicationController
   before_filter :find_parent_items
  
-  # Display's paginated data items from the selected yogo project model
-  #
+  #  Display's paginated data items from the selected yogo project model
+  # 
   # * 10 data objects per page are displayed
   def index
-    @data = @model.collect_navigation_results(params)#paginate(:page => params[:page], :per_page => 10)
+    if !params[:q].nil?
+      queries =[]
+      params[:q].each_pair do |attribute, conditions|
+        q = @model.all(attribute.to_sym => conditions[0])
+        conditions[1..-1].each{ |c| q = q + @model.all(attribute.to_sym => c ) }
+        queries << q
+      end
+      
+      @query = queries.first
+      queries[1..-1].each{|q| @query = @query & q }
+      
+    else
+      # The query is everything.
+      @query = @model.all
+    end
+    # @data = @query.paginate(:page => params[:page], :per_page => 10)
+    # @query = @model.all
+    @data = @query.paginate(:page => params[:page], :per_page => 10)
     respond_to do |format|
       format.html
-      format.json { @data = @model.all if params[:page].blank?; render( :json => @data.to_json )}
+      format.json { @data = @query.all if params[:page].blank?; render( :json => @data.to_json )}
       format.csv { download_csv }
     end
   end
@@ -26,12 +43,13 @@ class YogoDataController < ApplicationController
   #
   def search
     search_term = params[:search_term]
-    @data = @model.search(search_term)
+    @query = @model.search(search_term)
     
+    @data = @query.paginate(:page => params[:page], :per_page => 10)
     respond_to do |format|
       format.html { render( :action => :index) }
-      format.json { render( :json => @data.to_json )}
-      format.csv { download_csv}
+      format.json {  @data = @query.all, render( :json => @data.to_json )}
+      format.csv  { download_csv}
     end
   end
   
@@ -112,6 +130,67 @@ class YogoDataController < ApplicationController
       end
       redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
     end
+  end
+
+  def histogram_attribute
+    ref_path, noop, ref_query = URI::split(request.referer)[5,3]
+
+    @attribute_name = params[:attribute_name]
+
+    if ref_query.nil?
+      @histogram = Yogo::Navigation.values(@model, @attribute_name.to_sym)
+    else
+      #what an ugly way to make a query scope.
+      query_options = ref_query.split('&').select{|r| !r.blank?}
+      query_options.each do |qo|
+        qo.match(/q\[(\w+)\]\[\]=(\w+)/)
+        attribute = $1
+        condition = $2
+        if @query_scope.nil?
+          @query_scope = @model.all(attribute.to_sym => condition)
+        else
+          @query_scope = @query_scope | @model.all(attribute.to_sym => condition)
+        end
+      end
+      # debugger
+      @histogram = Yogo::Navigation.values(@query_scope, @attribute_name.to_sym)
+    end
+
+    
+    respond_to do |wants|
+      wants.html 
+      wants.js { render :partial => 'histogram_attribute' }
+    end
+  end
+  
+  def pick_attribute
+    # session[:breadcrumbs] ||= { :current_model => nil, :current_project => nil }
+    # 
+    # if session[:breadcrumbs][:current_model] != @model
+    #   session[:breadcrumbs][:current_project] = @project
+    #   session[:breadcrumbs][:current_model] = @model
+    #   session[:breadcrumbs][:terms] = []
+    # end
+    # 
+    # session[:breadcrumbs][:terms] << [ params[:attribute], params[:value] ]
+    
+    redirect_to( project_yogo_data_index_path(@project, @model.name.demodulize) )
+
+  end
+  
+  def remove_attribute
+    # base_attribute = params[:attribute]
+    # if session[:breadcrumbs][:current_model].name.demodulize == base_attribute
+    #   session[:breadcrumbs][:terms] = []
+    # else
+    #   found = false
+    #   session[:breadcrumbs][:terms]= session[:breadcrumbs][:terms].select do |t|
+    #     found = t[0] == base_attribute
+    #     found
+    #   end
+    # end
+    
+    redirect_to( project_yogo_data_index_path(@project, @model.name.demodulize) )
   end
   
   private

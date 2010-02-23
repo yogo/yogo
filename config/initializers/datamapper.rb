@@ -11,6 +11,7 @@
 require 'datamapper/paginate'
 require 'datamapper/property'
 require 'datamapper/search'
+require 'datamapper/paginate'
 require 'datamapper/factory'
 require 'datamapper/types/yogo_file'
 
@@ -21,8 +22,9 @@ config = Rails.configuration.database_configuration
 # unnecessary: rails-datamapper handles this 
 DataMapper.setup(:default, config[Rails.env])
 
-# Setup the persevere repository for cool fun research!
-DataMapper.setup(:yogo, config["yogo_#{Rails.env}"]) unless ENV['NO_PERSEVERE']
+# Alias :default to :yogo so things work well
+#DataMapper::Repository.adapters[:yogo] = DataMapper::repository(:default)
+DataMapper.setup(:yogo, config[Rails.env])
 
 # Setup the persevere repository for cool fun research!
 DataMapper.setup(:example, config["example"])
