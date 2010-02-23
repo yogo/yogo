@@ -16,12 +16,12 @@
               <% all_projects.each do |project|%>
                 <li>
                   <div id='project-<%= project.id %>'>
-                    <%= link_to_remote("#{project.name}", :url => list_models_project_path(project.id), 
+                    <%# link_to_remote("#{project.name}", :url => list_models_project_path(project.id), 
                                                        :update => "project-#{project.id}",
                                                        :condition => 'check_navigation_element_state(this)',
                                                        :position => :bottom,
                                                        :method => :get ) %>
-
+                    <%= link_to(project.name, project_path(project)) %>
                     <%- if @project == project -%>
                       <%= render(:partial => 'projects/list_models', :locals => { :models => project.models, :project => project }) %>
                     <%- end -%>
