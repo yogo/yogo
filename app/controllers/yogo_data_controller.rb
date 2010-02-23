@@ -133,11 +133,26 @@ class YogoDataController < ApplicationController
   end
 
   def histogram_attribute
+    ref_path, noop, ref_query = URI::split(request.referer)[5,3]
+
     @attribute_name = params[:attribute_name]
-    @histogram = nil
-    if @query_scope.nil? || @query_scope.name != @model.name
+
+    if ref_query.nil?
       @histogram = Yogo::Navigation.values(@model, @attribute_name.to_sym)
     else
+      #what an ugly way to make a query scope.
+      query_options = ref_query.split('&').select{|r| !r.blank?}
+      query_options.each do |qo|
+        qo.match(/q\[(\w+)\]\[\]=(\w+)/)
+        attribute = $1
+        condition = $2
+        if @query_scope.nil?
+          @query_scope = @model.all(attribute.to_sym => condition)
+        else
+          @query_scope = @query_scope | @model.all(attribute.to_sym => condition)
+        end
+      end
+      # debugger
       @histogram = Yogo::Navigation.values(@query_scope, @attribute_name.to_sym)
     end
 
