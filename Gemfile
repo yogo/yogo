@@ -23,7 +23,6 @@ gem "rails_datamapper"
 # gem "authlogic",            "2.1.3"
 gem "fastercsv"
 gem "carrierwave"
-#gem "crumble",                        :require_as => "breadcrumb"
 
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)
