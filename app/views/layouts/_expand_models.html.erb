@@ -1,9 +1,0 @@
-<%= link_to_remote("#{proj.name}", :url => list_models_project_path(proj.id), 
-                                   :update => "project-#{proj.id}",
-                                   :condition => 'check_navigation_element_state(this)',
-                                   :position => :bottom,
-                                   :method => :get ) %>
-
-<%#- if !session[:breadcrumbs].nil? && session[:breadcrumbs][:current_project] == proj -%>
-  <%#= render(:partial => 'projects/list_models', :locals => { :models => proj.models, :project => proj }) %>
-<%#- end -%>
