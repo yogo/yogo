@@ -14,17 +14,23 @@ class YogoDataController < ApplicationController
   # 
   # * 10 data objects per page are displayed
   def index
-    # # If we are scoping this to the bread crumbs, construst our query
-    # if session[:breadcrumbs][:current_model].eql?(@model) && !session[:breadcrumbs][:terms].empty?
-    #   first_term = session[:breadcrumbs][:terms].first
-    #   @query = @model.all(first_term[0].to_sym => first_term[1])
-    #   session[:breadcrumbs][:terms][1..-1].each{|term| @query = @query & @model.all(term[0].to_sym => term[1])}
-    # else
-    #   # The query is everything.
-    #   @query = @model.all
-    # end
+    if !params[:q].nil?
+      queries =[]
+      params[:q].each_pair do |attribute, conditions|
+        q = @model.all(attribute.to_sym => conditions[0])
+        conditions[1..-1].each{ |c| q = q + @model.all(attribute.to_sym => c ) }
+        queries << q
+      end
+      
+      @query = queries.first
+      queries[1..-1].each{|q| @query = @query & q }
+      
+    else
+      # The query is everything.
+      @query = @model.all
+    end
     # @data = @query.paginate(:page => params[:page], :per_page => 10)
-    @query = @model.all
+    # @query = @model.all
     @data = @query.paginate(:page => params[:page], :per_page => 10)
     respond_to do |format|
       format.html
@@ -37,11 +43,12 @@ class YogoDataController < ApplicationController
   #
   def search
     search_term = params[:search_term]
-    @data = @model.search(search_term)
+    @query = @model.search(search_term)
     
+    @data = @query.paginate(:page => params[:page], :per_page => 10)
     respond_to do |format|
       format.html { render( :action => :index) }
-      format.json { render( :json => @data.to_json )}
+      format.json {  @data = @query.all, render( :json => @data.to_json )}
       format.csv  { download_csv}
     end
   end
