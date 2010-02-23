@@ -21,10 +21,10 @@ module DataMapper
           namespace.const_set(mod, Module.new) unless namespace.const_defined?(mod)
           namespace = Object.class_eval("#{namespace.name}::#{mod}", __FILE__, __LINE__)
         end
+        
         class_name = ctxtarray[-1]
-        if namespace.const_defined?(class_name) && ! overwrite
-          # Do nothing
-        else
+                
+        if ! namespace.const_defined?(class_name) || (namespace.const_defined?(class_name) && overwrite)
           unamed_class = DataMapper::Model.new do 
               self.class_eval("def self.default_repository_name; :#{repository}; end")
           end
