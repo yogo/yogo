@@ -52,4 +52,29 @@ module ApplicationHelper
 
     output
   end
+
+  # This is for the breadcrumbs to use
+  #
+  def query_params
+
+    query = params[:q].to_a
+    ref_path = request.path_info;
+    ref_query = URI.decode(request.query_string)
+    query_options = ref_query.split('&') #.select{|r| !r.blank?}
+    res = []
+    query_options[0..-2].each do |qo|
+      qo.match(/q\[(\w+)\]\[\]=(\w+)/)
+      attribute = $1
+      condition = $2
+       res << link_to("#{attribute.humanize}: #{condition}", ref_path+"?"+query_options.select{|q| q != qo }.join('&'))
+      
+    end
+    
+    query_options[-1].match(/q\[(\w+)\]\[\]=(\w+)/)
+    attribute = $1
+    condition = $2
+     res << "#{attribute.humanize}: #{condition}"
+     
+    return res.join(' > ')
+  end
 end
