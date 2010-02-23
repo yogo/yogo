@@ -16,8 +16,3 @@
 Dir[File.join(RAILS_ROOT, "app", "models", "**", "*.rb")].each{|f| require f}
 
 DataMapper.auto_migrate!
-
-NavModel.auto_migrate!
-NavAttribute.auto_migrate!
-NavDisplayValue.auto_migrate!
-NavDatabaseValue.auto_migrate!
