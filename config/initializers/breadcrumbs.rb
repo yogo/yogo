@@ -16,7 +16,8 @@ Breadcrumb.configure do
   trail :projects,    :search,        [:root, :project_search]
   trail :yogo_models, :index,         [:root, :project, :project_models ]
   trail :yogo_models, [:show, :edit], [:root, :project, :project_model ]
-  trail :yogo_data,   :index,         [:root, :project, :project_data_index, :q ]
+  trail :yogo_data,   :index,         [:root, :project, :project_data_index  ],    :if  =>  lambda { |controller| !controller.request.parameters.has_key?("q") }
+  trail :yogo_data,   :index,         [:root, :project, :project_data_index, :q ], :if  =>  lambda { |controller|  controller.request.parameters.has_key?("q") }
   trail :yogo_data,   [:show, :edit], [:root, :project, :project_data_index, :project_data ]
   trail :yogo_data,   :search,        [:root, :project, :project_data_index, :project_data_search]
 

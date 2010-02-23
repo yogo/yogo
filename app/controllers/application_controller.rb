@@ -50,21 +50,4 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  # def set_breadcrumb_query
-  #   #
-  #   # Maybe this should be a single value [Project, Model, UrlStack]
-  #   #
-  #   @query_scope = nil
-  #   if !(session[:breadcrumbs].nil? || session[:breadcrumbs][:current_model].nil?)
-  #     current_model = session[:breadcrumbs][:current_model]
-  #     @query_scope = current_model.all
-  #     if !session[:breadcrumbs][:terms].empty?
-  #       first_term = session[:breadcrumbs][:terms].first
-  #       @query_scope = current_model.all(first_term[0].to_sym => first_term[1])
-  #       # session[:breadcrumbs][:terms][1..-1].each{|term| @query = @query & @model.all(term[0].to_sym => term[1])}
-  #       session[:breadcrumbs][:terms][1..-1].each{|term| @query_scope = (@query_scope & current_model.all(term[0].to_sym => term[1])) }
-  #     end
-  #   end    
-  # end
-  
 end
