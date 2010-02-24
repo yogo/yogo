@@ -18,7 +18,8 @@ git submodule update && \
 
 $RUBY gem install bundler -v 0.8.1 && \
 $RUBY gem install rake && \
-$RUBY gem bundle && \
+$RUBY bundle install && \
+$RUBY bundle lock && \
 
 $RUBY rake persvr:setup && \
 $RUBY rake yogo:setup && \
