@@ -1,9 +1,0 @@
-<%#- if !session[:breadcrumbs].nil? -%>
-<%#- cur_project = session[:breadcrumbs][:current_project]  -%>
-<%#- cur_model = session[:breadcrumbs][:current_model]  -%>
-  <%#= link_to("Browse", project_path(cur_project) ) %> &gt; 
-  <%#= link_to(cur_model.name.demodulize, remove_attribute_project_yogo_data_path( cur_project, cur_model.name.demodulize, :attribute => cur_model.name.demodulize ) ) %> 
-  <%#- if !session[:breadcrumbs][:terms].empty? -%> 
-   <!-- &gt; -->  <%#= session[:breadcrumbs][:terms].collect{ |b| link_to("#{b[0]} : #{b[1]}",  remove_attribute_project_yogo_data_path( cur_project, cur_model.name.demodulize, :attribute => b[0] ) ) }.join("  &gt;  ") %>
-  <%#- end -%>
-<%#- end -%>

@@ -12,7 +12,7 @@
 
         <%= link_to(mname, project_yogo_data_index_path(project, mname)) %>
 
-        <%- if @model == model -%>         
+        <%- if @model == model && @project == project -%>         
           <%= render( :partial => 'yogo_models/list_attributes', :locals => { :model => model, :project => project, :attributes => Yogo::Navigation.attributes(model) }) %>
         <%- end -%>
       </div>
