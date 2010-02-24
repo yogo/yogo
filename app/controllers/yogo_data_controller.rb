@@ -149,10 +149,9 @@ class YogoDataController < ApplicationController
         if @query_scope.nil?
           @query_scope = @model.all(attribute.to_sym => condition)
         else
-          @query_scope = @query_scope + @model.all(attribute.to_sym => condition)
+          @query_scope = @query_scope & @model.all(attribute.to_sym => condition)
         end
       end
-      
       @histogram = Yogo::Navigation.values(@query_scope, @attribute_name.to_sym)
     end
 
