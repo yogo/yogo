@@ -27,25 +27,31 @@ if defined?(JRUBY_VERSION)
   gem "json_pure",         '1.2.0',    :require => nil
   gem "jruby-openssl",                 :require => nil
   # gem "ruby-debug-base",   "0.10.3.1", :require => nil,
-                                       # :path => "vendor/extra_gems/ruby-debug-base-0.10.3.1-java"
+  #                                      :path => "vendor/extra_gems/ruby-debug-base-0.10.3.1-java"
   
   # When in "production" we run with jruby, so we include the adapters for other databases.
   #gem "do_mysql",             "0.10.1", :require => nil
   #gem "do_postgres",          "0.10.1", :require => nil
 else
   gem "json",      "1.2.0", :require => nil
-  gem 'ruby-debug', :require => nil
+  gem 'ruby-debug',         :require => nil
 end
 
-# group :cucumber, :test do
-  gem 'rspec',        '1.3.0',  :require => nil
-  gem 'rspec-rails',  '1.3.2',  :require => 'spec/rails'
-  gem 'factory_girl', '1.2.3',  :require => nil
+group :test do
+  gem 'rspec',        '~> 1.3.0',  :require => nil
+  gem 'rspec-rails',  '~> 1.3.2',  :require => 'spec/rails'
+  gem 'factory_girl', '~> 1.2.3',  :require => nil
+end
+
+group :cucumber do
+  gem 'rspec',        '~> 1.3.0',  :require => nil
+  gem 'rspec-rails',  '~> 1.3.2',  :require => 'spec/rails'
+  gem 'factory_girl', '~> 1.2.3',  :require => nil
   gem 'cucumber',               :require => nil
-  gem 'cucumber-rails',         :require => nil
+  gem 'cucumber-rails'
   gem 'webrat',                 :require => nil
   gem 'selenium-client',        :require => nil
-# end
+end
 
 # A dev server that is slightly better then webrick
 gem 'mongrel', :require => nil
