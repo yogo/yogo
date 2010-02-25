@@ -19,6 +19,10 @@ $(document).ready(function(){
       $("#sortable li input:hidden").each(function(index){ this.value = index+1 })
     }
   });
+  $('#tabs').each(function(){
+    this.style.visibility = "visible";
+  })
+  $("#tabs").tabs();
 });
 
 function check_navigation_element_state(element){

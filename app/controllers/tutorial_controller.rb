@@ -11,6 +11,14 @@ class TutorialController < ApplicationController
   def index
     
   end
+  
+  def tutorial1
+    
+  end
+  
+  def csv_tutorial
+    
+  end
 end
 
 

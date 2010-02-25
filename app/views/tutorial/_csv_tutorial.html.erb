@@ -1,0 +1,55 @@
+
+<div id="cookbook-tutorial-csv">
+  <script>
+    $(function(){
+
+      var wrap2 = $('#wrapper');
+
+      				$('.action').click(function(){
+      					var action = $(this).attr('rel'); // get the appropriate action from the rel attribute
+      					wrap2.trigger(action+'.evtpaginate');
+      					return false;
+      				});
+
+      				$('select[name=perpage]').change(function(){
+      					wrap2.trigger('refresh.evtpaginate', { perPage : $(this).val() } );
+      					return false;
+      				});
+
+      				// listen out for events triggered by the plugin to update the counter
+
+      				wrap2.bind( 'initialized.evtpaginate', function(e, startnum, totalnum ){
+      					$('#count2').text(startnum);
+      					$('#total2').text(totalnum);
+      				}); 
+
+      				wrap2.bind( 'finished.evtpaginate', function(e, num, isFirst, isLast ){ $('#count2').text(num); } ); 	
+
+      				wrap2.evtpaginate({perPage:1, atEnd:'loop'}); // call the plugin!
+
+  });
+</script>
+  <a class="action" href="#" rel="first">first</a> | 
+  			<a class="action" href="#" rel="prev">prev</a>
+
+  			(<span id="count2"></span> / <span id="total2"></span>)
+  			<a class="action" href="#" rel="next">next</a> | 
+  			<a class="action" href="#" rel="last">last</a> | show :
+  			 <select name="perpage">
+  			 	<option value="1">1 per page</option>
+  				<option value="2">2 per page</option>
+
+  				<option value="5">5 per page</option>
+  			 </select>
+  <ul id="wrapper" class = "wrapper">  
+    <li>
+    <p>In this tutorial, that builds on the first part of the Cookbook tutorial, we will 
+    explain how CSV (Comma Separated Value) files can be used to: view data, upload new data
+    and create new models for a project.</p>
+    </li>
+  </ul>
+</div>  
+    
+    
+    
+    

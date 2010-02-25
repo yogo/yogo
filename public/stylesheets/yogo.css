@@ -359,7 +359,14 @@ th.data-index-table-actions {
 .wrapper { 
   border: 1px solid #CCC; 
 }
+.ui-tabs, .ui-widget {
+  padding: 0px;
+}
 
+.ui-widget-content {
+  border: 0px;
+  /*padding: 10px 10px 10px 10px;*/
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~ Footer ~~~~~~~~~~~~~~~~~~*/
