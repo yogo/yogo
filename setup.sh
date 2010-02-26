@@ -16,13 +16,13 @@ echo "Configuring fresh yogo checkout for development..."
 git submodule init && \
 git submodule update && \
 
-$RUBY gem install bundler -v 0.8.1 && \
+$RUBY gem install bundler && \
 $RUBY gem install rake && \
-$RUBY bundle install && \
-$RUBY bundle lock && \
+$RUBY bundle install
 
-$RUBY rake persvr:setup && \
-$RUBY rake yogo:setup && \
-$RUBY rake db:seed NO_PERSEVERE=true
+# $RUBY rake persvr:setup && \
+# $RUBY rake persvr:create && \
+# $RUBY rake yogo:setup && \
+# $RUBY rake db:seed NO_PERSEVERE=true
 
 popd
