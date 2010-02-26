@@ -18,7 +18,8 @@ git submodule update && \
 
 $RUBY gem install bundler && \
 $RUBY gem install rake && \
-$RUBY bundle install
+$RUBY bundle install #--disable-shared-gems
+
 
 # $RUBY rake persvr:setup && \
 # $RUBY rake persvr:create && \
