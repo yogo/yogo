@@ -40,12 +40,16 @@ end
 group :test do
   gem 'rspec',        '~> 1.3.0',  :require => nil
   gem 'rspec-rails',  '~> 1.3.2',  :require => 'spec/rails'
+  gem 'ZenTest',                   :require => nil
+  gem 'redgreen',                  :require => nil
   gem 'factory_girl', '~> 1.2.3',  :require => nil
 end
 
 group :cucumber do
   gem 'rspec',        '~> 1.3.0',  :require => nil
   gem 'rspec-rails',  '~> 1.3.2',  :require => 'spec/rails'
+  gem 'ZenTest',                   :require => nil
+  gem 'redgreen',                  :require => nil
   gem 'factory_girl', '~> 1.2.3',  :require => nil
   gem 'cucumber',               :require => nil
   gem 'cucumber-rails'
