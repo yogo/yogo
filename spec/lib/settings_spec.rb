@@ -22,9 +22,9 @@ module YogoSettingsSpec
     end
     
     it "should overwrite default values" do
-      Yogo::Settings[:first].should == 1
+      Yogo::Settings[:first].should eql(1)
       Yogo::Settings[:first] = 2
-      Yogo::Settings[:first].should == 2
+      Yogo::Settings[:first].should eql(2)
     end
     
     it "should should be '1'" do
