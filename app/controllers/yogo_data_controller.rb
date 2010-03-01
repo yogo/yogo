@@ -143,7 +143,7 @@ class YogoDataController < ApplicationController
       #what an ugly way to make a query scope.
       query_options = ref_query.split('&').select{|r| !r.blank?}
       query_options.each do |qo|
-        qo.match(/q\[(\w+)\]\[\]=(\w+)/)
+        qo.match(/q\[(\w+)\]\[\]=(.+)/)
         attribute = $1
         condition = $2
         if @query_scope.nil?
@@ -160,36 +160,6 @@ class YogoDataController < ApplicationController
       wants.html 
       wants.js { render :partial => 'histogram_attribute' }
     end
-  end
-  
-  def pick_attribute
-    # session[:breadcrumbs] ||= { :current_model => nil, :current_project => nil }
-    # 
-    # if session[:breadcrumbs][:current_model] != @model
-    #   session[:breadcrumbs][:current_project] = @project
-    #   session[:breadcrumbs][:current_model] = @model
-    #   session[:breadcrumbs][:terms] = []
-    # end
-    # 
-    # session[:breadcrumbs][:terms] << [ params[:attribute], params[:value] ]
-    
-    redirect_to( project_yogo_data_index_path(@project, @model.name.demodulize) )
-
-  end
-  
-  def remove_attribute
-    # base_attribute = params[:attribute]
-    # if session[:breadcrumbs][:current_model].name.demodulize == base_attribute
-    #   session[:breadcrumbs][:terms] = []
-    # else
-    #   found = false
-    #   session[:breadcrumbs][:terms]= session[:breadcrumbs][:terms].select do |t|
-    #     found = t[0] == base_attribute
-    #     found
-    #   end
-    # end
-    
-    redirect_to( project_yogo_data_index_path(@project, @model.name.demodulize) )
   end
   
   private

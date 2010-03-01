@@ -64,7 +64,7 @@ module ApplicationHelper
     query_path = []
     
     query_options[0..-2].each do |qo|
-      qo.match(/q\[(\w+)\]\[\]=(\w+)/)
+      qo.match(/q\[(\w+)\]\[\]=(.+)/)
       attribute = $1
       condition = $2
       found = false
@@ -73,7 +73,7 @@ module ApplicationHelper
       
     end
     
-    query_options[-1].match(/q\[(\w+)\]\[\]=(\w+)/)
+    query_options[-1].match(/q\[(\w+)\]\[\]=(.+)/)
     attribute = $1
     condition = $2
      res << "#{attribute.humanize}: #{condition}"
