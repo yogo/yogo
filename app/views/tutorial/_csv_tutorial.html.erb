@@ -3,7 +3,7 @@
   <script>
     $(function(){
 
-      var wrap2 = $('#wrapper');
+      var wrap2 = $('#wrapper2');
 
       				$('.action').click(function(){
       					var action = $(this).attr('rel'); // get the appropriate action from the rel attribute
@@ -19,11 +19,11 @@
       				// listen out for events triggered by the plugin to update the counter
 
       				wrap2.bind( 'initialized.evtpaginate', function(e, startnum, totalnum ){
-      					$('#count2').text(startnum);
-      					$('#total2').text(totalnum);
+      					$('#csv_count').text(startnum);
+      					$('#csv_total').text(totalnum);
       				}); 
 
-      				wrap2.bind( 'finished.evtpaginate', function(e, num, isFirst, isLast ){ $('#count2').text(num); } ); 	
+      				wrap2.bind( 'finished.evtpaginate', function(e, num, isFirst, isLast ){ $('#csv_count').text(num); } ); 	
 
       				wrap2.evtpaginate({perPage:1, atEnd:'loop'}); // call the plugin!
 
@@ -32,7 +32,7 @@
   <a class="action" href="#" rel="first">first</a> | 
   			<a class="action" href="#" rel="prev">prev</a>
 
-  			(<span id="count2"></span> / <span id="total2"></span>)
+  			(<span id="csv_count"></span> / <span id="csv_total"></span>)
   			<a class="action" href="#" rel="next">next</a> | 
   			<a class="action" href="#" rel="last">last</a> | show :
   			 <select name="perpage">
@@ -41,11 +41,88 @@
 
   				<option value="5">5 per page</option>
   			 </select>
-  <ul id="wrapper" class = "wrapper">  
+  <ul id="wrapper2" class = "wrapper">  
     <li>
-    <p>In this tutorial, that builds on the first part of the Cookbook tutorial, we will 
-    explain how CSV (Comma Separated Value) files can be used to: view data, upload new data
-    and create new models for a project.</p>
+      <p>
+        In this tutorial, that builds on the first part of the Cookbook tutorial, we will 
+        explain how CSV (Comma Separated Value) files can be used to: view data, upload new data
+        and create new models for a project.
+      </p>
+      <p>
+        So lets get started and go to the "Cookbook" project.  Just click the Cookbook link on
+        the sidebar.
+      </p>
+      <p ><img width=600 height=400
+      id="Picture 1" alt="homepage" class="csv_tutorial_image" 
+      src="/images/yogo_recipe_tutorial_files/CSV1.jpg"></p>
+    </li>
+    <li>
+      <p>
+        Now that we are on the "Cookbook" page the "Recipe" model is visible in the sidebar and
+        under the Data heading which should read (1) at the moment.  Either of those links will 
+        take us to the "Recipe" data page which is exactly where we need to go - so click one of 
+        those and we can get on with it.
+     </p>  
+     <p ><img width=600 height=400
+     id="Picture 2" alt="homepage" class="csv_tutorial_image" 
+     src="/images/yogo_recipe_tutorial_files/CSV2.jpg"></p>
+    </li>
+    <li>
+      <p ><img width=600 height=400
+       id="Picture 3" class="csv_tutorial_image" alt="homepage" 
+       src="/images/yogo_recipe_tutorial_files/CSV3.jpg"></p>
+      <p>
+        At the "Recipe" data page there are two links at the bottom of the page "Download CSV spreadsheet template" 
+        and "Download CSV spreadsheet containing current data". They are pretty self explanatory and the one we want 
+        to download first is the one with our recipe data. So click the second link and you will download a 
+        "recipe.csv" file.  
+      </p>
+    </li>
+    <li>
+       <p>  
+        The "recipe.csv" file can be opened in any text editor, Excel, Open Office or other spreadsheet 
+        application.  When you view the file in a text editor you should see the following:
+        <br><br>
+        Id,Name,Category,Ingredients,Directions<br>
+        Integer,Text,Text,Text,Text<br>
+        Units will go here when supported<br>
+        1,Boiling Water,Soup,1 cup of Water,Add 1 cup of water to a pot and boil.
+        <br><br>
+        In a spreadsheet application you should see something like:<br><br>
+
+        <table border=1>
+          <tr><td>Id</td><td>Name</td><td>Category</td><td>Ingredients</td><td>Directions</td></tr>
+          <tr><td>Integer</td><td>Text</td><td>Text</td><td>Text</td><td>Text</td></tr>
+          <tr><td colspan="5">Units will go here when supported</td></tr>
+          <tr><td>1</td><td>Boiling Water</td><td>Soup</td><td>1 cup of Water</td><td>Add 1 cup of water to a pot and boil.</td></tr>
+        </table><br>
+        He is the breakdown of how the file is organized: The first line is the name of all of the properties in a 
+        recipe, the second line is what the "Type" is for each property, the third line is, eventually, for the 
+        units of each property, and lines four is an actual recipe.  If we had more than one recipe then each line 
+        in the file after line three would contain the information for a recipe.
+      </p>
+      
+    </li>
+    <li>
+      <p>
+      So now that you have a CSV file what can you do with it besides look at it?  Well you can use a spreadsheet editor to add, in our case, recipes to it.  So try this- in your favorite spreadsheet application open "recipe.csv", go to line five and start entering the following information: <br><br>
+      <table cell-padding = "2">
+        <tr valign="top"><td>&nbsp;*</td><td>Id column type '2'</td></tr>
+        <tr valign="top"><td>&nbsp;*</td><td>Name column type 'Gilled Cheese Sandwich'</td></tr>
+        <tr valign="top"><td>&nbsp;*</td><td>Category column type 'Sandwich', Ingredients column type 'Two slice of white bread. One slice of cheese (American or your preference). One tablespoon of butter.'</td></tr>
+        <tr valign="top"><td>&nbsp;*</td><td>Directions column type 'Bring a frying pan up to medium heat and melt the butter.  Place the cheese between the two slices of bread and put in the pan and cover with a lid.  After one-two minutes, or when golden brown on one side, flip the sandwich to brown the other side and replace lid.  After one-two minutes check for the golden brown and once achieved  cut diagonal and serve - crusts optional.'</td></tr>
+        </table>
+      <br><br>
+      After entering the above information into the spreadsheet save the file.  To add this new data from our spreadsheet to the Yogo Data Management Toolkit we must be on the "Recipe" data page.
+      </p>
+    </li>
+    <li>
+      <p ><img width=600 height=400
+       id="Picture 4" class="csv_tutorial_image" alt="homepage" 
+       src="/images/yogo_recipe_tutorial_files/CSV3.jpg"></p>
+      <p>
+      On the "Recipe" data page there is a file upload box below the "Data File Management" heading.  Use the browse button to select CSV file you saved the new recipe in and then press the "Upload" button.
+      
     </li>
   </ul>
 </div>  
