@@ -13,7 +13,9 @@ module Yogo
                   "Integer"        => Integer,
                   "Text"           => String, 
                   "True/False"     => DataMapper::Types::Boolean, 
-                  "Date"           => DateTime,
+                  "Date"           => Date,
+                  "Time"           => Time,
+                  "DateTime"       => DateTime,
                   "File"           => DataMapper::Types::YogoFile }
                   
     @@DMTM = { Float                      => "Decimal",
@@ -21,7 +23,9 @@ module Yogo
                Integer                    => "Integer",
                String                     => "Text",
                DataMapper::Types::Boolean => "True/False",
-               DateTime                   => "Date",
+               Date                       => "Date",
+               Time                       => "Time",
+               DateTime                   => "DateTime",
                DataMapper::Types::Serial  => "Integer",
                DataMapper::Types::YogoFile     => "File" }
 

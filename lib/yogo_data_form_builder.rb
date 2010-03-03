@@ -8,7 +8,7 @@ class YogoDataFormBuilder < ActionView::Helpers::FormBuilder
     elsif param.type == DataMapper::Types::Boolean
       radio_button(param.name, true, *args) + " " + label(param.name, "True", :value => true) + "<br>" +
       radio_button(param.name, false, *args) + " " + label(param.name, "False", :value => false)
-    elsif param.type == DateTime
+    elsif param.type == Date
       options = args.last.is_a?(Hash) ? args.pop : {}
       args << (options.has_key?(:class) ? options.merge(:class => options[:class]+",date-picker") : options.merge(:class => 'date-picker'))
       text_field(param.name, *args)
