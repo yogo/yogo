@@ -50,6 +50,21 @@ describe 'Yogo CSV Module' do
       result = Yogo::CSV.load_data(CsvExampleModel, @bad_csv_data)
       CsvExampleModel.count.should be(0)
     end
+    
+    it "should ignore blank lines in data lines four and up" do
+      #test a file with blank lines (just carraige returns)
+      #stores no blank records
+    end
+    
+    it "should not have data when just a model is present" do
+      #test to make sure csv files with model definitions only 
+      #will contain no data when processed
+    end
+    
+    it "should not load line 1-3 as data" do
+      #test to be sure that none of the properties, types or units
+      #have been added as records.
+    end
   end
   
   describe "when creating CSV" do
@@ -69,6 +84,8 @@ describe 'Yogo CSV Module' do
       parsed_result.should be_kind_of(Array)
       parsed_result.length.should eql(6)
     end
+    
+    
   end
 
   
