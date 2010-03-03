@@ -47,8 +47,8 @@ module ApplicationHelper
       output += link_to("&nbsp;Next&nbsp;&gt;", "?page=#{current_page+1}")
     end
     
-    output = (link_to("<< First&nbsp;","?page=1") + output)
-    output << link_to("&nbsp;Last >>","?page=#{total_pages}")
+    output = (link_to("<< First&nbsp;","?page=1") + output) if current_page > 1
+    output << link_to("&nbsp;Last >>","?page=#{total_pages}") if current_page < total_pages
 
     output
   end
