@@ -19,9 +19,13 @@ $(document).ready(function(){
       $("#sortable li input:hidden").each(function(index){ this.value = index+1 })
     }
   });
+  
+  $(".date-picker").datepicker();
+  
   $('#tabs').each(function(){
     this.style.visibility = "visible";
-  })
+  });
+  
   $("#tabs").tabs();
 });
 
