@@ -77,7 +77,7 @@ class YogoDataController < ApplicationController
   def create
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
 
-    @item = @model.new(params[goober])
+    @item = @model.new(params[goober].delete_if{|key,value| value.empty? })
     
     if @item.valid?
       if @item.save
@@ -98,7 +98,7 @@ class YogoDataController < ApplicationController
   def update
     @item = @model.get(params[:id])
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
-    @item.attributes = params[goober]
+    @item.attributes = params[goober].delete_if{|key,value| value.empty? }
     @item.save
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end  
