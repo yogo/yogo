@@ -12,7 +12,7 @@ development:
 
 test:
   database: db/persvr/test
-  port: 8080
+  port: 8081
 
 production:
   database: db/persvr/production
