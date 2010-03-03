@@ -114,7 +114,8 @@ class YogoDataController < ApplicationController
   # 
   def upload
     if !params[:upload].nil? && datafile = params[:upload]['datafile']
-      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel','application/octet-stream','application/csv'].include?(datafile.content_type)
+      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
+            'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
       else
         # Read the data in

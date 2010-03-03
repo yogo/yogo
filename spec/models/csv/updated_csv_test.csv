@@ -1,0 +1,6 @@
+Name,ID,Mass,Charge
+Text,Integer,Decimal,Decimal
+NA,NA,kg,volts
+Ivan,1,22.0,1.2
+Insect,2,23.0,1.5
+Dea,3,23.0,3.2

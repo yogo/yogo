@@ -79,7 +79,7 @@ describe "A Project" do
 
   describe 'importing from csv' do
     it "should create a model from a csv" do
-      file_name = "#{Rails.root}/spec/models/csvtest.csv"
+      file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
       model_name = File.basename(file_name, ".csv").camelcase
       csv_data = FasterCSV.read(file_name)
       model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
@@ -87,7 +87,7 @@ describe "A Project" do
     end
 
     it "should import data from csv" do
-      file_name = "#{Rails.root}/spec/models/csvtest.csv"
+      file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
       model_name = File.basename(file_name, ".csv").camelcase
       csv_data = FasterCSV.read(file_name)
       model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])

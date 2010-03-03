@@ -14,7 +14,7 @@ module Yogo
     # @param [Array of Arrays] csv_data The CSV data to create models from
     # 
     def self.load_data(model, csv_data)
-      csv_data[3..csv_data.length].each do |line|
+      csv_data[3..-1].each do |line|
         line_data = Hash.new
         if !line.empty?  #ignore blank lines
           csv_data[0].each_index do |i| 
