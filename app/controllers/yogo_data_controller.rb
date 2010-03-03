@@ -114,8 +114,7 @@ class YogoDataController < ApplicationController
   # 
   def upload
     if !params[:upload].nil? && datafile = params[:upload]['datafile']
-      if ! ['text/csv', 'text/comma-separated-values',  
-             'application/vnd.ms-excel'].include?(datafile.content_type)
+      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel','application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
       else
         # Read the data in
@@ -123,7 +122,7 @@ class YogoDataController < ApplicationController
 
         if Yogo::CSV.validate_csv(@model, csv_data[0..1])
           Yogo::CSV.load_data(@model, csv_data)
-          flash[:notice] = "Model Data Successfully Uploaded."
+          flash[:notice] = "#{@model.name.demodulize} Data Successfully Uploaded."
         else
           flash[:error] = "CSV File improperly formatted. Data not uploaded."
         end
