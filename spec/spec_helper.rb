@@ -1,6 +1,33 @@
 # This file is copied to ~/spec when you run 'ruby script/generate rspec'
 # from the project root directory.
 ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path(File.join(File.dirname(__FILE__),'..','config','boot'))
+
+require 'rake'
+require 'rake/rdoctask'
+require 'rake/testtask'
+require 'tasks/rails'
+
+require 'net/http'
+
+# Start persvr
+Rake.application['persvr:drop'].invoke
+Rake.application['persvr:start'].invoke
+
+config = YAML.load_file(File.expand_path(File.join(File.dirname(__FILE__),'..','config','database.yml')))
+
+times_tried = 0
+begin
+  sleep 0.25
+  times_tried += 1
+  Net::HTTP.new(config[Rails.env]['host'], config[Rails.env]['port']).send_request('GET', '/', nil, {})
+rescue Exception => e
+  retry if times_tried < 20
+  puts 'The perserver server didn\'t come up properly.'
+  Rake.application['persvr:stop'].invoke
+  exit 1
+end
+ 
 
 require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
 
@@ -64,4 +91,15 @@ Spec::Runner.configure do |config|
   # == Notes
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
+  config.before(:all) {
+    # Start Persevere
+
+  }
+
+  config.after(:all) {
+    # puts "Stopping perserver"
+    # Rake.application['persvr:stop'].invoke
+  }
+
+  
 end
