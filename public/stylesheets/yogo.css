@@ -274,11 +274,10 @@ h3 {
     width:8em;
     text-align:right;
     margin-right:0.5em;
-    clear:both;
   }
   
   .model-edit-input {
-    margin-bottom:1em;
+    float: left;
   }
   
   .model-edit-input input {
@@ -378,4 +377,28 @@ th.data-index-table-actions {
 	height: 100px;
 	clear:both;
 	text-align:center;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~ Model Editor ~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+ul#sortable {
+  list-style: none;
+}
+
+ul#sortable li{
+  padding-top: 0.5em;
+  padding-bottom:0.5em;
+  display: block;
+  height: 1em;
+}
+
+ul#sortable li:hover{
+  background: blue;
+}
+
+ul#sortable .grippie {
+  float: right;
+  background-color: #F8F9F4;
 }
