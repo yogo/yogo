@@ -10,24 +10,25 @@ require 'tasks/rails'
 
 require 'net/http'
 
-# Start persvr
-Rake.application['persvr:drop'].invoke
-Rake.application['persvr:start'].invoke
+if not defined? JRUBY_VERSION
+  # Start persvr
+  Rake.application['persvr:drop'].invoke
+  Rake.application['persvr:start'].invoke
 
-config = YAML.load_file(File.expand_path(File.join(File.dirname(__FILE__),'..','config','database.yml')))
+  config = YAML.load_file(File.expand_path(File.join(File.dirname(__FILE__),'..','config','database.yml')))
 
-times_tried = 0
-begin
-  sleep 0.25
-  times_tried += 1
-  Net::HTTP.new(config[Rails.env]['host'], config[Rails.env]['port']).send_request('GET', '/', nil, {})
-rescue Exception => e
-  retry if times_tried < 20
-  puts 'The perserver server didn\'t come up properly.'
-  Rake.application['persvr:stop'].invoke
-  exit 1
+  times_tried = 0
+  begin
+    sleep 0.25
+    times_tried += 1
+    Net::HTTP.new(config[Rails.env]['host'], config[Rails.env]['port']).send_request('GET', '/', nil, {})
+  rescue Exception => e
+    retry if times_tried < 20
+    puts 'The perserver server didn\'t come up properly.'
+    Rake.application['persvr:stop'].invoke
+    exit 1
+  end
 end
- 
 
 require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
 
