@@ -36,8 +36,6 @@ DataObjects::Sqlserver.logger = Rails.logger if DataObjects.const_defined?(:Sqls
 DataObjects::Mysql.logger     = Rails.logger if DataObjects.const_defined?(:Mysql)
 DataObjects::Sqlite.logger    = Rails.logger if DataObjects.const_defined?(:Sqlite)
 
-debugger
-
 # Load the project model and migrate it if needed.
 proj_model_file = File.join(RAILS_ROOT, "app", "models", "project.rb")
 require proj_model_file
