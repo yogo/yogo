@@ -10,25 +10,33 @@ require 'tasks/rails'
 
 require 'net/http'
 
-if not defined? JRUBY_VERSION
-  # Start persvr
-  Rake.application['persvr:drop'].invoke
-  Rake.application['persvr:start'].invoke
+def startup_persevere
+  if not defined? JRUBY_VERSION
+    # Start persvr
+    Rake.application['persvr:drop'].invoke
+    Rake.application['persvr:start'].invoke
 
-  config = YAML.load_file(File.expand_path(File.join(File.dirname(__FILE__),'..','config','database.yml')))
+    config = YAML.load_file(File.expand_path(File.join(File.dirname(__FILE__),'..','config','database.yml')))
 
-  times_tried = 0
-  begin
-    sleep 0.25
-    times_tried += 1
-    Net::HTTP.new(config[Rails.env]['host'], config[Rails.env]['port']).send_request('GET', '/', nil, {})
-  rescue Exception => e
-    retry if times_tried < 20
-    puts 'The perserver server didn\'t come up properly.'
-    Rake.application['persvr:stop'].invoke
-    exit 1
+    times_tried = 0
+    begin
+      sleep 0.45
+      times_tried += 1
+      Net::HTTP.new(config[Rails.env]['host'], config[Rails.env]['port']).send_request('GET', '/', nil, {})
+    rescue Exception => e
+      retry if times_tried < 20
+      puts 'The perserver server didn\'t come up properly.'
+      Rake.application['persvr:stop'].execute
+      exit 1
+    end
   end
 end
+
+def stop_persevere
+  Rake.application['persvr:stop'].execute
+end
+
+startup_persevere
 
 require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
 
@@ -92,15 +100,21 @@ Spec::Runner.configure do |config|
   # == Notes
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
-  config.before(:all) {
+  
+  config.before(:suite) {
+    # We can't actually start perseve here.
+    # Perseve needs to be started before the environment is loaded
+    # line ( require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment')) )
+    # and this block will run after that line
     # Start Persevere
 
   }
 
-  config.after(:all) {
-    # puts "Stopping perserver"
-    # Rake.application['persvr:stop'].invoke
+  config.after(:suite) {
+    # This line is okay to run here.
+    stop_persevere
   }
 
   
 end
+  
