@@ -75,14 +75,16 @@ namespace :persvr do
   desc "Remove the persevere instance for the current environment."
   task :drop => [:version, :stop] do
     cfg = config(RAILS_ENV)
-    rm_rf RAILS_ROOT/cfg['database']
+    rm_rf RAILS_ROOT/cfg['database'] if File.exist?(RAILS_ROOT/cfg['database'])
   end
   
   desc "Clear the database of the persevere instance for the current environment."
   task :clear => [:version, :stop] do
     cfg = config(RAILS_ENV)
-    cd RAILS_ROOT/cfg['database'] do
-      sh "#{PERSVR_CMD} --eraseDB"
+    if File.exist?(RAILS_ROOT/cfg['database'])
+      cd RAILS_ROOT/cfg['database'] do
+        sh "#{PERSVR_CMD} --eraseDB"
+      end
     end
   end
   
@@ -118,11 +120,13 @@ namespace :persvr do
   desc "Stop the persevere instance for the current environment."
   task :stop => :version do
     cfg = config(RAILS_ENV)
-    cd RAILS_ROOT/cfg['database'] do
-      if File.exist? '.'/'WEB-INF'/'process'
-        sh "#{PERSVR_CMD} --stop"
-      else
-        puts "Persevere instance not running in #{RAILS_ROOT/cfg['database']}"
+    if File.exist?(RAILS_ROOT/cfg['database'])
+      cd RAILS_ROOT/cfg['database'] do
+        if File.exist? '.'/'WEB-INF'/'process'
+          sh "#{PERSVR_CMD} --stop"
+        else
+          puts "Persevere instance not running in #{RAILS_ROOT/cfg['database']}"
+        end
       end
     end
   end
