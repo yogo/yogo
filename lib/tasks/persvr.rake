@@ -41,7 +41,7 @@ namespace :persvr do
     end
     
     # unpack it in vendor/persevere
-    sh "unzip -o #{persvr_zip} -d #{vendor_dir} >& /dev/null"
+    sh "unzip -o #{persvr_zip} -d #{vendor_dir} > /dev/null 2>&1"
     
     # link vendor/persevere/bin/persvr to vendor/bundled/bin/persvr
     sh "ln -f -s #{vendor_dir}/persevere/bin/persvr #{vendor_dir}/bundled/bin/persvr"
