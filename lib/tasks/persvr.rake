@@ -83,7 +83,9 @@ namespace :persvr do
     cfg = config(RAILS_ENV)
     if File.exist?(RAILS_ROOT/cfg['database'])
       cd RAILS_ROOT/cfg['database'] do
-        sh "#{PERSVR_CMD} --eraseDB"
+        sh "#{PERSVR_CMD} --eraseDB" do |ok|
+          puts "No database to clear." if !ok
+        end
       end
     end
   end
