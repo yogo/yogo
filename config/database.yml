@@ -1,0 +1,33 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: database.yml.start
+# 
+#
+development: 
+  adapter: persevere
+  host: localhost
+  port: 8080
+
+production:
+  adapter: persevere
+  host: localhost
+  port: 8080
+
+# run with bin/persvr -p 8081
+test: &TEST
+  adapter: persevere
+  host: localhost
+  port: 8081
+
+cucumber:
+  <<: *TEST
+
+#
+# Example Data Repository
+#
+example:
+  adapter: sqlite3
+  database: <%= File.join(RAILS_ROOT, 'db/example/example.sqlite3') %>

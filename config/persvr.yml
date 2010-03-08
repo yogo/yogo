@@ -10,9 +10,12 @@ development:
   database: db/persvr/development
   port: 8080
 
-test:
+test: &TEST
   database: db/persvr/test
   port: 8081
+
+cucumber:
+  <<: *TEST
 
 production:
   database: db/persvr/production
