@@ -7,34 +7,44 @@ module DataMapper
     # @param [Boolean] overwrite indicates the reflected models should replace existing models or not.
     # @return [DataMapper::Model Array] the reflected models.
     #
-    def self.reflect(repository, namespace=Object, overwrite=false)
+    def self.reflect(repository, namespace = Object, overwrite = false)
       adapter = DataMapper.repository(repository).adapter
-      models = Array.new
-      old_namespace = namespace
-      adapter.get_storage_names.each do |model|
-        namespace = old_namespace
-        ctxtarray = model.split('__').map! do |item| 
-          Extlib::Inflection.singularize(item.split("_").map { |word| word.capitalize }.join("")) 
+
+      models  = []
+
+      adapter.get_storage_names.each do |storage_name|
+        namespace_parts = storage_name.split('__').map do |part|
+          Extlib::Inflection.classify(part)
         end
-        # Create the scoping for the class, if it doesn't already exist.
-        ctxtarray[0..-2].each do |mod|
-          namespace.const_set(mod, Module.new) unless namespace.const_defined?(mod)
-          namespace = Object.class_eval("#{namespace.name}::#{mod}", __FILE__, __LINE__)
+
+        model_name = namespace_parts.pop
+
+        namespace = if namespace_parts.any?
+          Object.make_module(namespace_parts.join('::'))
+        else
+          Object
         end
-        
-        class_name = ctxtarray[-1]
-                
-        if ! namespace.const_defined?(class_name) || (namespace.const_defined?(class_name) && overwrite)
-          unamed_class = DataMapper::Model.new do 
-              self.class_eval("def self.default_repository_name; :#{repository}; end")
+
+        next if namespace.const_defined?(model_name) && !overwrite
+
+        anonymous_model = DataMapper::Model.new do
+          unless repository == DataMapper::Repository.default_name
+            class_eval <<-RUBY, __FILE__, __LINE__
+              def self.default_repository_name
+                #{repository.inspect}
+              end
+            RUBY
           end
-          new_model = namespace.const_set(class_name, unamed_class)
-          adapter.get_properties(model).each do |attribute|
-            attribute.delete_if { |k,v| v.nil? }
-            new_model.property(attribute.delete(:name).to_sym, attribute.delete(:type), attribute)
-          end
-          models << new_model
         end
+
+        model = namespace.const_set(model_name, anonymous_model)
+
+        adapter.get_properties(storage_name).each do |attribute|
+          attribute.delete_if { |k,v| v.nil? }
+          model.property(attribute.delete(:name).to_sym, attribute.delete(:type), attribute)
+        end
+
+        models << model
       end
       models
     end
@@ -44,10 +54,10 @@ module DataMapper
     extendable do
       ##
       # Glue method that will register reflection extensions for adapters if the adapters are loaded.
-      # 
+      #
       # @param [Constant] const_name is the constant defined by the adapter.
       # @api private
-      # 
+      #
       def const_added(const_name)
         if DataMapper::Reflection.const_defined?(const_name)
           adapter = const_get(const_name)

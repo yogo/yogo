@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Martin Gamsjaeger (snusnu)"]
-  s.date = %q{2010-01-21}
+  s.date = %q{2010-03-06}
   s.description = %q{Generates datamapper models from existing database schemas and export them to files}
   s.email = %q{gamsnjaga@gmail.com}
   s.extra_rdoc_files = [
@@ -22,12 +22,19 @@ Gem::Specification.new do |s|
      "LICENSE",
      "README.rdoc",
      "Rakefile",
+     "VERSION",
      "dm-reflection.gemspec",
      "lib/dm-reflection.rb",
+     "lib/dm-reflection/adapters/mysql.rb",
+     "lib/dm-reflection/adapters/persevere.rb",
+     "lib/dm-reflection/adapters/postgres.rb",
+     "lib/dm-reflection/adapters/sqlite3.rb",
      "lib/dm-reflection/builders/source_builder.rb",
+     "lib/dm-reflection/reflection.rb",
      "lib/dm-reflection/version.rb",
      "measurements/report.txt",
      "spec/rcov.opts",
+     "spec/reflection_spec.rb",
      "spec/source_builder_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
@@ -41,7 +48,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/snusnu/dm-schema_reflection}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{Generates datamapper models from existing database schemas}
   s.test_files = [
     "spec/reflection_spec.rb",
@@ -55,16 +62,16 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<dm-core>, ["~> 0.10.2"])
-      s.add_development_dependency(%q<rspec>, ["~> 1.2.9"])
+      s.add_development_dependency(%q<rspec>, ["~> 1.3"])
       s.add_development_dependency(%q<yard>, ["~> 0.5"])
     else
       s.add_dependency(%q<dm-core>, ["~> 0.10.2"])
-      s.add_dependency(%q<rspec>, ["~> 1.2.9"])
+      s.add_dependency(%q<rspec>, ["~> 1.3"])
       s.add_dependency(%q<yard>, ["~> 0.5"])
     end
   else
     s.add_dependency(%q<dm-core>, ["~> 0.10.2"])
-    s.add_dependency(%q<rspec>, ["~> 1.2.9"])
+    s.add_dependency(%q<rspec>, ["~> 1.3"])
     s.add_dependency(%q<yard>, ["~> 0.5"])
   end
 end

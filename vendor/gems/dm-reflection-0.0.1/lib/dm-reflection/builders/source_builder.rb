@@ -142,8 +142,9 @@ module DataMapper
           private
 
           def option_string(relevant_options)
-            return '' if relevant_options.empty?
-            ", " + relevant_options.map { |pair| ":#{pair[0]} => #{pair[1]}" }.join(', ')
+            relevant_options.map do |key, value|
+              ", #{key.inspect} => #{value == 'Resource' ? value : value.inspect}"
+            end.join
           end
 
         end
@@ -254,7 +255,7 @@ module DataMapper
           def prioritized_options
             option_priorities.inject([]) do |memo, name|
               if name == :through && through = backend_options[:through]
-                value = through.is_a?(Symbol) ? ":#{through}" : Extlib::Inflection.demodulize(through)
+                value = through.is_a?(Symbol) ? through : Extlib::Inflection.demodulize(through)
                 memo << [ :through, value ]
               end
               memo
@@ -299,14 +300,22 @@ module DataMapper
             :has
           end
           def cardinality
-            max == Infinity ? "#{min}..n" : super
+            max_string = max == Infinity ? 'n' : max.to_s
+
+            if min == 0 || min == max
+              max_string
+            elsif max == Infinity
+              "#{min}..#{max_string}"
+            else
+              super
+            end
           end
         end
 
         class ManyToMany < OneToMany
         end
 
-        
+
       end
     end
   end

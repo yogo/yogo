@@ -46,7 +46,7 @@ Also, you can create models from a repository by doing the following:
 
   require 'dm-reflection'
   models = DataMapper::Reflection.reflect(:default)
-  
+
 == Note on Patches/Pull Requests
 
 * Fork the project.
@@ -66,12 +66,12 @@ Also, you can create models from a repository by doing the following:
   ** Migrate M to a repository
   ** Reflect M' from the repository
   ** M should == M'
-  
+
 * Having round tripping provably working is the first goal
 * Legacy reflection is something to make work after round tripping (because the assumptions DM makes won't always hold.)
-  
+
 == Copyright
 
 See LICENSE for details.
-Copyright (c) 2009 Martin Gamsjaeger (snusnu). 
+Copyright (c) 2009 Martin Gamsjaeger (snusnu).
 Copyright (c) 2010 Montana State University, Bozeman (The Yogo Data Management Team).
