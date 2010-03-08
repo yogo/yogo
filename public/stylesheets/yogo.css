@@ -392,13 +392,15 @@ ul#sortable li{
   padding-bottom:0.5em;
   display: block;
   height: 1em;
+  clear: both;
 }
 
-ul#sortable li:hover{
+/*ul#sortable li:hover{
   background: blue;
-}
+}*/
 
 ul#sortable .grippie {
   float: right;
   background-color: #F8F9F4;
+  cursor: move;
 }
