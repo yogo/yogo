@@ -74,9 +74,10 @@ namespace :yogo do
   end
   
   desc "Destroy the Yogo databases and restore everything to clean state."
-  task :clean => ['yogo:stop'] do
+  task :clean => ['yogo:stop', 'persvr:stop_all'] do
     puts "Clearing all yogo data and restoring to clean state!"
     Rake::Task['persvr:drop'].invoke
+    sh "git clean -X -d -f"
     Rake::Task['yogo:clean'].reenable
   end
   
