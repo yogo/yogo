@@ -13,7 +13,7 @@ namespace :yogo do
   task :open do
     times_tried = 0
     begin
-      sleep 0.45
+      sleep 3
       times_tried += 1
       Net::HTTP.new('localhost', '3000').send_request('GET', '/', nil, {})
     rescue Exception => e
