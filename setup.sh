@@ -16,6 +16,7 @@ echo "Configuring fresh yogo checkout for development..."
 
 $RUBY gem install bundler08 && \
 $RUBY gem install rake && \
+$RUBY gem install mongrel && \
 
 $RUBY gem bundle && \
 $RUBY rake persvr:setup
