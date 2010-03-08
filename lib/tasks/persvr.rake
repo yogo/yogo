@@ -132,10 +132,11 @@ namespace :persvr do
   end
   
   desc "Start the persevere instance for the current environment."
-  task :start => [:version, :create] do
+  task :start => [:version, :stop, :create] do
     start_persvr
     Rake::Task['persvr:stop'].reenable
     Rake::Task['persvr:stop_all'].reenable
+    sh "reset" # starting persvr seems to mess up the terminal sometimes; reset to fix
   end
   
   desc "Stop the persevere instance for the current environment."
