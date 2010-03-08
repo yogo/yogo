@@ -30,4 +30,4 @@ cucumber:
 #
 example:
   adapter: sqlite3
-  database: db/example/example.sqlite3
+  database: <%= File.join(RAILS_ROOT, 'db/example/example.sqlite3') %>
