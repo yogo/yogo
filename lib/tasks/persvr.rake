@@ -11,6 +11,8 @@ require 'slash_path'
 require 'yaml'
 require 'net/http'
 
+
+
 namespace :persvr do
   PERSVR_CMD = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || RAILS_ROOT/'vendor/bundled/bin/persvr' || 'persvr'
   
@@ -25,7 +27,7 @@ namespace :persvr do
   task :version do
     sh "#{PERSVR_CMD} --version" do |ok,resp|
       unless ok
-        raise "persvr was not found! Ensure persevere is installed and set PERSEVERE_HOME to the path of your persevere install."
+        fail "persvr was not found! Ensure persevere is installed and set PERSEVERE_HOME to the path of your persevere install."
       end
     end
   end
@@ -41,7 +43,7 @@ namespace :persvr do
     end
     
     # unpack it in vendor/persevere
-    sh "unzip -o #{persvr_zip} -d #{vendor_dir} >& /dev/null"
+    sh "unzip -o #{persvr_zip} -d #{vendor_dir} > /dev/null 2>&1"
     
     # link vendor/persevere/bin/persvr to vendor/bundled/bin/persvr
     sh "ln -f -s #{vendor_dir}/persevere/bin/persvr #{vendor_dir}/bundled/bin/persvr"
@@ -70,20 +72,27 @@ namespace :persvr do
     cd RAILS_ROOT do
       sh "#{PERSVR_CMD} --gen-server #{cfg['database']}" unless File.exist? RAILS_ROOT/cfg['database']
     end
+    Rake::Task['persvr:drop'].reenable
   end
   
   desc "Remove the persevere instance for the current environment."
   task :drop => [:version, :stop] do
     cfg = config(RAILS_ENV)
-    rm_rf RAILS_ROOT/cfg['database']
+    rm_rf RAILS_ROOT/cfg['database'] if File.exist?(RAILS_ROOT/cfg['database'])
+    Rake::Task['persvr:create'].reenable
   end
   
   desc "Clear the database of the persevere instance for the current environment."
   task :clear => [:version, :stop] do
     cfg = config(RAILS_ENV)
-    cd RAILS_ROOT/cfg['database'] do
-      sh "#{PERSVR_CMD} --eraseDB"
+    if File.exist?(RAILS_ROOT/cfg['database'])
+      cd RAILS_ROOT/cfg['database'] do
+        sh "#{PERSVR_CMD} --eraseDB" do |ok|
+          puts "No database to clear." if !ok
+        end
+      end
     end
+    Rake::Task['persvr:clear'].reenable
   end
   
   def start_persvr(interactive=false)
@@ -105,6 +114,18 @@ namespace :persvr do
             exec "#{PERSVR_CMD} --start --port #{cfg['port']} &> #{log}" 
           end
           Process.detach(pid)
+          
+          # Now we wait for the background process to come up
+          times_tried = 0
+          begin
+            sleep 0.45
+            times_tried += 1
+            Net::HTTP.new('localhost', cfg['port']).send_request('GET', '/', nil, {})
+          rescue Exception => e
+            retry if times_tried < 20
+            Rake.application['persvr:stop'].execute
+            fail 'The perserver server didn\'t come up properly.'
+          end
         end
       end
     end
@@ -113,18 +134,23 @@ namespace :persvr do
   desc "Start the persevere instance for the current environment."
   task :start => [:version, :create] do
     start_persvr
+    Rake::Task['persvr:stop'].reenable
+    Rake::Task['persvr:stop_all'].reenable
   end
   
   desc "Stop the persevere instance for the current environment."
   task :stop => :version do
     cfg = config(RAILS_ENV)
-    cd RAILS_ROOT/cfg['database'] do
-      if File.exist? '.'/'WEB-INF'/'process'
-        sh "#{PERSVR_CMD} --stop"
-      else
-        puts "Persevere instance not running in #{RAILS_ROOT/cfg['database']}"
+    if File.exist?(RAILS_ROOT/cfg['database'])
+      cd RAILS_ROOT/cfg['database'] do
+        if File.exist? '.'/'WEB-INF'/'process'
+          sh "#{PERSVR_CMD} --stop"
+        else
+          puts "Persevere instance not running in #{RAILS_ROOT/cfg['database']}"
+        end
       end
     end
+    Rake::Task['persvr:start'].reenable
   end
   
   task :stop_all => :version do
@@ -135,6 +161,7 @@ namespace :persvr do
           sh "#{PERSVR_CMD} --stop"
         end
       end
+      Rake::Task['persvr:start'].reenable
     end
   end
   
@@ -149,5 +176,6 @@ namespace :persvr do
         puts "STOPPED: #{dir}"
       end
     end
+    Rake::Task['persvr:status'].reenable
   end
 end
