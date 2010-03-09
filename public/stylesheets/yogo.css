@@ -108,7 +108,7 @@ h3 {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*~~~~~~~!~~~~ Container and Content ~~~~~~~~~~~*/
+/*~~~~~~~ Container, Content, Breadcrumbs ~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #container {
@@ -118,11 +118,16 @@ h3 {
 
 #content {
   float:left;
-  overflow: auto;
+  /*overflow: auto;*/
   width:700px;
   padding:20px 10px;
 }
 
+
+#breadcrumbs {
+  font-size:0.9em;
+  padding:0 0 12px 0;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~ Header and Users  ~~~~~~~~~~~~~*/
@@ -181,13 +186,6 @@ h3 {
     border-top:1px dotted #888;
   }
 
-  #projects-title {
-    border-bottom:5px solid #CCCC99;
-    margin:10px 0;
-    padding:0 0 0 3px;
-    width: 95%;
-  }
-
   #sidebar ul {
     padding:0px;
     margin:3px 5px 0 15px;
@@ -196,8 +194,16 @@ h3 {
   #sidebar ul li {
     margin-left: 10px;
     padding:5px 0 0 0px;
-/*    list-style-image: url("../images/bullet.gif");*/
+    list-style-image: url("../images/bullet.gif");
   }
+
+    #list-models ul li {
+      list-style-image: url("../images/nested_bullet.gif");
+    }
+
+    #list-attributes ul li {
+      list-style:none;
+    }
 
   #sidebar ul li.highlighted-menu-item {
     font-weight: bold;
@@ -219,13 +225,14 @@ h3 {
     margin:0px 12px 6px 0;
   }
 
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~ Projects ~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #project-remove-link {
-	padding:12px;
+  margin-top:12px;
+  border-top:1px dotted #888;
+	padding:8px 0 0 0;
 }
 
 #project-show, #model-show {
@@ -309,6 +316,13 @@ h3 {
   list-style-type: none;
 }
 
+#data-index {
+  float:left;
+  overflow: auto;
+  width:680px;
+  padding:20px 10px;
+}
+
 #data-index-table {
   border:1px dotted #214a5d;
   border-right:none;
@@ -336,13 +350,31 @@ h3 {
     background-color: #DDD !important;
   }
 
-th.data-index-table-actions {
-  min-width: 25px;
+  .data-index-table-actions {
+    text-align:center;
+  }
+  
+  th.data-index-table-actions {
+    min-width: 60px;
+  }
+
+#add-data-link {
+  font-size:1.2em;
+  padding:16px 0 0 0;
 }
 
 #pagination-links {
-	padding:12px;
+  width:720px;
+  float:left;
+  width:680px;
+  padding:20px 10px;
+	/*padding:12px;*/
 }
+
+  #pagination-links strong {
+    color:#214A5D;
+    font-size:1.1em;
+  }
 
 #search-data {
   margin-bottom:20px;

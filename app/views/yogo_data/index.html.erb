@@ -1,11 +1,9 @@
 <div id="search-data">
   <%- form_for(@model, :url => search_project_yogo_data_path(@project, @model.name.demodulize), :html => {:method => :get} ) do |f| -%>
     <%= text_field_tag("search_term") %>
-    <%= f.submit('Search') %>
+    <%= f.submit('Search within this set') %>
   <%- end -%>
 </div>
-
-<%= link_to(image_tag('add.gif')+' Add Data', new_project_yogo_data_path(@project, @model.name.demodulize))%>
 
 <div id="data-index">
 
@@ -23,7 +21,9 @@
     <tbody>
     <%- @data.each do |d| %>
       <tr class="<%=cycle("alternate-rows0","") %>">
-        <td class="data-index-table-actions"><%= link_to('View', project_yogo_data_path(@project, @model.name.demodulize, d.id)) %><%= link_to(image_tag('edit.png',:alt => "Edit Item", :title => "Edit Item"), edit_project_yogo_data_path(@project, @model.name.demodulize, d.id)) %><%= link_to(image_tag('remove.png',:alt => "Delete Item", :title => "Delete Item"), project_yogo_data_path(@project, @model.name.demodulize, d.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
+        <td class="data-index-table-actions"><%= link_to(image_tag('view.gif', :alt => "View Item", :title => "View Item"), project_yogo_data_path(@project, @model.name.demodulize, d.id)) %>
+        <%= link_to(image_tag('edit.png',:alt => "Edit Item", :title => "Edit Item"), edit_project_yogo_data_path(@project, @model.name.demodulize, d.id)) %>
+        <%= link_to(image_tag('remove.png',:alt => "Delete Item", :title => "Delete Item"), project_yogo_data_path(@project, @model.name.demodulize, d.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
         <%- @model.properties.each do |p| %>
         <td><%= d[p.name] %></td>
         <%- end %>
@@ -31,6 +31,9 @@
       <%- end %>
     </tbody>
   </table>
+  <div id="add-data-link">
+    <%= link_to(image_tag('add.gif')+' Add Data', new_project_yogo_data_path(@project, @model.name.demodulize))%>
+  </div>
 </div>
 <div id="pagination-links">
   <%= pagination_links(@query, params[:page], 10) %>
