@@ -11,27 +11,12 @@
 
   <H3><%= @model.name.demodulize.titleize %> (<%= @model.count %>)</H3>
 
-  <table id="data-index-table">
-    <thead>
-      <tr>
-        <th class="data-index-table-actions"></th>
-        <%- @model.properties.each do |h| %>
-        <th><%= h.name.to_s.titleize %></th>
-        <%- end %>
-      </tr>
-    </thead>
-    <tbody>
-    <%- @data.each do |d| %>
-      <tr class="<%=cycle("alternate-rows0","") %>">
-        <td class="data-index-table-actions"><%= link_to('View', project_yogo_data_path(@project, @model.name.demodulize, d.id)) %><%= link_to(image_tag('edit.png',:alt => "Edit Item", :title => "Edit Item"), edit_project_yogo_data_path(@project, @model.name.demodulize, d.id)) %><%= link_to(image_tag('remove.png',:alt => "Delete Item", :title => "Delete Item"), project_yogo_data_path(@project, @model.name.demodulize, d.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
-        <%- @model.properties.each do |p| %>
-        <td><%= d[p.name] %></td>
-        <%- end %>
-      </tr>
-      <%- end %>
-    </tbody>
-  </table>
+  <% cols = @model.properties.map { |prop| [ Yogo::Types.dm_to_gv(prop.type), Extlib::Inflection.humanize(prop.name.to_s) ] }%>
+  <% gvdata = @data.map { |item| @model.properties.map { |p| item[p.name]  } } %>
+  <% visualization("test_table", "Table", {:data => gvdata, :columns => cols }) { } %>
+  
 </div>
+
 <div id="pagination-links">
   <%= pagination_links(@query, params[:page], 10) %>
 </div>
