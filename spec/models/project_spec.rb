@@ -60,9 +60,26 @@ describe "A Project" do
     Project.should respond_to(:paginate)
   end
 
+  describe "searching" do
+    it "should be searchable" do
+      Project.should respond_to(:search)
+    end
+    
+    it "should search for a project by a name" do
+      Project.create(:name  => "Searchable Name")
+      Project.search('Name').length.should == 1
+    end
+    
+    it "should search with spaces" do
+      Project.create(:name => "A Long Name")
+      Project.search('A Long Name').length.should == 1
+    end
+    
+  end
+
   describe 'importing from csv' do
     it "should create a model from a csv" do
-      file_name = "#{Rails.root}/spec/models/csvtest.csv"
+      file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
       model_name = File.basename(file_name, ".csv").camelcase
       csv_data = FasterCSV.read(file_name)
       model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
@@ -70,7 +87,7 @@ describe "A Project" do
     end
 
     it "should import data from csv" do
-      file_name = "#{Rails.root}/spec/models/csvtest.csv"
+      file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
       model_name = File.basename(file_name, ".csv").camelcase
       csv_data = FasterCSV.read(file_name)
       model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
@@ -151,11 +168,12 @@ describe "A Project" do
           "name" => {"type" => "string"}
         }
       }
+      # debugger
       repository(:yogo).adapter.put_schema(persisted_model_hash)
       project = Factory(:project, :name => 'Persisted Data')
       project.models.should == []
       models = DataMapper::Reflection.reflect(:yogo)
-      project.models.map(&:name).should == ["Yogo::PersistedData::Cell"]
+      project.models.map(&:name).should == ["Yogo::PersistedDatum::Cell"]
       repository(:yogo).adapter.delete_schema(persisted_model_hash)
     end
 

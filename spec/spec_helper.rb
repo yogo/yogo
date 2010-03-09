@@ -1,6 +1,13 @@
 # This file is copied to ~/spec when you run 'ruby script/generate rspec'
 # from the project root directory.
 ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path(File.join(File.dirname(__FILE__),'..','config','boot'))
+
+require 'rake'
+require 'rake/rdoctask'
+require 'rake/testtask'
+require 'tasks/rails'
+
 
 require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
 
@@ -64,4 +71,20 @@ Spec::Runner.configure do |config|
   # == Notes
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
+  
+  config.before(:suite) {
+    # We can't actually start perseve here.
+    # Perseve needs to be started before the environment is loaded
+    # line ( require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment')) )
+    # and this block will run after that line
+    # Start Persevere
+
+  }
+
+  config.after(:suite) {
+
+  }
+
+  
 end
+  

@@ -14,6 +14,8 @@ class ApplicationController < ActionController::Base
   helper :all 
   helper :breadcrumbs
   
+  layout 'application'
+  
   # See ActionController::RequestForgeryProtection for details
   protect_from_forgery 
 

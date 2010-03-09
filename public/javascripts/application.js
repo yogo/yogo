@@ -15,13 +15,18 @@ $(document).ready(function(){
   
     // TODO: Scope into model editor better.
   $("#sortable").sortable({
+    handle: '.grippie',
     stop: function(event, ui) {
       $("#sortable li input:hidden").each(function(index){ this.value = index+1 })
     }
   });
+  
+  $(".date-picker").datepicker();
+  
   $('#tabs').each(function(){
     this.style.visibility = "visible";
-  })
+  });
+  
   $("#tabs").tabs();
 });
 

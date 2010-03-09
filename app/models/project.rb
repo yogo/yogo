@@ -22,7 +22,7 @@ class Project
   # @return [String] the project namespaced name
   #
   def namespace
-    name.split(/\W/).map{ |item| item.capitalize}.join("")
+    Extlib::Inflection.classify(path)
   end
   
   # @return [String] the project path name

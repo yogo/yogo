@@ -77,7 +77,7 @@ class YogoDataController < ApplicationController
   def create
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
 
-    @item = @model.new(params[goober])
+    @item = @model.new(params[goober].delete_if{|key,value| value.empty? })
     
     if @item.valid?
       if @item.save
@@ -98,7 +98,7 @@ class YogoDataController < ApplicationController
   def update
     @item = @model.get(params[:id])
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
-    @item.attributes = params[goober]
+    @item.attributes = params[goober].delete_if{|key,value| value.empty? }
     @item.save
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end  
@@ -114,8 +114,8 @@ class YogoDataController < ApplicationController
   # 
   def upload
     if !params[:upload].nil? && datafile = params[:upload]['datafile']
-      if ! ['text/csv', 'text/comma-separated-values',  
-             'application/vnd.ms-excel'].include?(datafile.content_type)
+      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
+            'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
       else
         # Read the data in
@@ -123,7 +123,7 @@ class YogoDataController < ApplicationController
 
         if Yogo::CSV.validate_csv(@model, csv_data[0..1])
           Yogo::CSV.load_data(@model, csv_data)
-          flash[:notice] = "Model Data Successfully Uploaded."
+          flash[:notice] = "#{@model.name.demodulize} Data Successfully Uploaded."
         else
           flash[:error] = "CSV File improperly formatted. Data not uploaded."
         end
@@ -143,7 +143,7 @@ class YogoDataController < ApplicationController
       #what an ugly way to make a query scope.
       query_options = ref_query.split('&').select{|r| !r.blank?}
       query_options.each do |qo|
-        qo.match(/q\[(\w+)\]\[\]=(\w+)/)
+        qo.match(/q\[(\w+)\]\[\]=(.+)/)
         attribute = $1
         condition = $2
         if @query_scope.nil?
@@ -160,36 +160,6 @@ class YogoDataController < ApplicationController
       wants.html 
       wants.js { render :partial => 'histogram_attribute' }
     end
-  end
-  
-  def pick_attribute
-    # session[:breadcrumbs] ||= { :current_model => nil, :current_project => nil }
-    # 
-    # if session[:breadcrumbs][:current_model] != @model
-    #   session[:breadcrumbs][:current_project] = @project
-    #   session[:breadcrumbs][:current_model] = @model
-    #   session[:breadcrumbs][:terms] = []
-    # end
-    # 
-    # session[:breadcrumbs][:terms] << [ params[:attribute], params[:value] ]
-    
-    redirect_to( project_yogo_data_index_path(@project, @model.name.demodulize) )
-
-  end
-  
-  def remove_attribute
-    # base_attribute = params[:attribute]
-    # if session[:breadcrumbs][:current_model].name.demodulize == base_attribute
-    #   session[:breadcrumbs][:terms] = []
-    # else
-    #   found = false
-    #   session[:breadcrumbs][:terms]= session[:breadcrumbs][:terms].select do |t|
-    #     found = t[0] == base_attribute
-    #     found
-    #   end
-    # end
-    
-    redirect_to( project_yogo_data_index_path(@project, @model.name.demodulize) )
   end
   
   private

@@ -14,7 +14,7 @@ class Person
   property :updated_at, DateTime
 
   has 1, :profile
-  has 0..n, :projects, :through => Resource
+  has n, :projects, :through => Resource
 
 end
 RUBY
@@ -48,9 +48,9 @@ class Project
   property :created_at, DateTime
   property :updated_at, DateTime
 
-  has 0..n, :project_tasks
-  has 0..n, :tasks, :through => :project_tasks
-  has 0..n, :people, :through => Resource
+  has n, :project_tasks
+  has n, :tasks, :through => :project_tasks
+  has 1..n, :people, :through => Resource
 
 end
 RUBY
@@ -67,8 +67,8 @@ class Task
   property :created_at, DateTime
   property :updated_at, DateTime
 
-  has 0..n, :project_tasks
-  has 0..n, :projects, :through => :project_tasks
+  has n, :project_tasks
+  has n, :projects, :through => :project_tasks
 
 end
 RUBY

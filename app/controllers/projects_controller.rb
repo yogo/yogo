@@ -96,25 +96,20 @@ class ProjectsController < ApplicationController
     
     if !params[:upload].nil?
       datafile = params[:upload]['datafile']
-      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel'].include?(datafile.content_type)
+      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
+            'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
-        redirect_to project_url(@project)
-      end
+        #redirect_to project_url(@project)
+      else
       # Check filename for .csv 
       @project.process_csv(datafile)
       flash[:notice]  = "File uploaded succesfully."
+      end
     else
        flash[:error] = "File upload area cannont be blank."
     end
     
     redirect_to project_url(@project)
-  end
-  
-  def rereflect
-    models = DataMapper::Reflection.reflect(:yogo)
-    models.each{|m| m.send(:include,Yogo::DataMethods) unless m.included_modules.include?(Yogo::DataMethods)}
-    # models.each{|m| m.send(:include,Yogo::Pagination) unless m.included_modules.include?(Yogo::Pagination)}
-    redirect_to projects_url
   end
   
   def loadexample

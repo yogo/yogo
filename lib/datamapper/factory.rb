@@ -31,16 +31,16 @@ module DataMapper
       full_name    = (module_names + [class_name]).join('::')
       
       # Create the scoping for the class, if it doesn't already exist.
-      current_context = Object
-      module_names.each do |mod|
-        current_context.const_set(mod, Module.new) unless current_context.const_defined?(mod)
-        current_context = Object.class_eval("#{current_context.name}::#{mod}", __FILE__, __LINE__)
+      namespace = if module_names.any?
+        Object.make_module(module_names.join('::'))
+      else
+        Object
       end
 
-      if current_context.const_defined?(class_name) # && options[:overwrite] == true
-        cur_class = current_context.const_get(class_name)
+      if namespace.const_defined?(class_name) # && options[:overwrite] == true
+        cur_class = namespace.const_get(class_name)
         DataMapper::Model.descendants.delete(cur_class)
-        current_context.send(:remove_const, class_name.to_sym)
+        namespace.send(:remove_const, class_name.to_sym)
       end
 
       # Define our anonymous class, anonymously.
@@ -58,7 +58,7 @@ module DataMapper
       end
 
       # Give the class a name.
-      named_class = current_context.const_set(class_name, anon_class)
+      named_class = namespace.const_set(class_name, anon_class)
       
       named_class.send(:include, options[:modules]) if options.has_key?(:modules)
       named_class.properties.sort!

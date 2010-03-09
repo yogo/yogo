@@ -35,7 +35,7 @@
     <ul id='sortable'>
        <%- @model.properties.each do |prop| %>
           <%- unless prop.name == :id -%>
-          <li>
+          <li >
             <div class="model-edit-label">
               <%= h prop.name.to_s.titleize %> :
             </div>
@@ -43,13 +43,14 @@
               <%= select_tag("property_#{prop.name}_type", options_for_select(@options, Yogo::Types.dm_to_human(prop.type)), :name => "property[#{prop.name}][type]") %>
               <%= hidden_field_tag("property_#{prop.name}_position", current_pos += 1, :name => "property[#{prop.name}][position]" ) %>
             </div>
+            <div class='grippie'>:::</div>
           </li>
           <%- end -%>
         <%- end %>
       
       <%- end -%>
     
-       <li class='new-property'>
+       <li class='new-property' >
           <div class="model-edit-label">
             <%= label_tag(:name, 'Property Name') %>:
           </div> 
@@ -61,8 +62,10 @@
             <%= hidden_field_tag("position", current_pos += 1, :name => "new_property[][position]" ) %>
             <%= link_to(image_tag('remove.png')+'Remove', '', :class => 'remove-new-property') %>
           </div>
+          <div class='grippie'>:::</div>
       </li>
     </ul>
+    <br>
     <%= link_to(image_tag('add.gif')+' Add a property', '', :id => 'add-property') %>
   <br><br>
   
@@ -83,4 +86,5 @@
     <%= hidden_field_tag("position", current_pos +=1, :name => "new_property[][position]" ) %>
     <%= link_to(image_tag('remove.png')+'Remove', '', :class => 'remove-new-property') %>
   </div>
+  <div class='grippie'>:::</div>
 </div>

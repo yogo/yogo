@@ -13,6 +13,6 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
 # 
-Dir[File.join(RAILS_ROOT, "app", "models", "**", "*.rb")].each{|f| require f}
-
-DataMapper.auto_migrate!
+# Dir[File.join(RAILS_ROOT, "app", "models", "**", "*.rb")].each{ |f| require f }
+# 
+# DataMapper.auto_migrate!

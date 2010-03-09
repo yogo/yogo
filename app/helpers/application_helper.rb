@@ -47,8 +47,8 @@ module ApplicationHelper
       output += link_to("&nbsp;Next&nbsp;&gt;", "?page=#{current_page+1}")
     end
     
-    output = (link_to("<< First&nbsp;","?page=1") + output)
-    output << link_to("&nbsp;Last >>","?page=#{total_pages}")
+    output = (link_to("<< First&nbsp;","?page=1") + output) if current_page > 1
+    output << link_to("&nbsp;Last >>","?page=#{total_pages}") if current_page < total_pages
 
     output
   end
@@ -64,7 +64,7 @@ module ApplicationHelper
     query_path = []
     
     query_options[0..-2].each do |qo|
-      qo.match(/q\[(\w+)\]\[\]=(\w+)/)
+      qo.match(/q\[(\w+)\]\[\]=(.+)/)
       attribute = $1
       condition = $2
       found = false
@@ -73,7 +73,7 @@ module ApplicationHelper
       
     end
     
-    query_options[-1].match(/q\[(\w+)\]\[\]=(\w+)/)
+    query_options[-1].match(/q\[(\w+)\]\[\]=(.+)/)
     attribute = $1
     condition = $2
      res << "#{attribute.humanize}: #{condition}"
