@@ -66,6 +66,7 @@ end
 
 Before do
   DataMapper.auto_migrate!
+  selenium.execution_delay=300 if Webrat.const_defined?(:Selenium)
 end
 
 After do
