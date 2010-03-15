@@ -10,7 +10,8 @@
                                'jquery-ui-1.8rc3.custom.min.js', 
                                'jrails.js', 
                                'application.js' %>
-
+    <%= include_visualization_api %>
+    <%= render_visualizations %>
                                
    <link rel="shortcut icon" href="<%= image_path("favicon.png") %>">
   </head>
