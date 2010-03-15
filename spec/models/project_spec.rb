@@ -168,11 +168,12 @@ describe "A Project" do
           "name" => {"type" => "string"}
         }
       }
+      # debugger
       repository(:yogo).adapter.put_schema(persisted_model_hash)
       project = Factory(:project, :name => 'Persisted Data')
       project.models.should == []
       models = DataMapper::Reflection.reflect(:yogo)
-      project.models.map(&:name).should == ["Yogo::PersistedData::Cell"]
+      project.models.map(&:name).should == ["Yogo::PersistedDatum::Cell"]
       repository(:yogo).adapter.delete_schema(persisted_model_hash)
     end
 

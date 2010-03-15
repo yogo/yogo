@@ -1,11 +1,9 @@
 <div id="search-data">
   <%- form_for(@model, :url => search_project_yogo_data_path(@project, @model.name.demodulize), :html => {:method => :get} ) do |f| -%>
     <%= text_field_tag("search_term") %>
-    <%= f.submit('Search') %>
+    <%= f.submit('Search within this set') %>
   <%- end -%>
 </div>
-
-<%= link_to(image_tag('add.gif')+' Add Data', new_project_yogo_data_path(@project, @model.name.demodulize))%>
 
 <div id="data-index">
 
@@ -15,12 +13,15 @@
   <% gvdata = @data.map { |item| @model.properties.map { |p| item[p.name]  } } %>
   <% visualization("test_table", "Table", {:data => gvdata, :columns => cols }) { } %>
   
+  <div id="add-data-link">
+    <%= link_to(image_tag('add.gif')+' Add Data', new_project_yogo_data_path(@project, @model.name.demodulize))%>
+  </div>
 </div>
 
 <div id="pagination-links">
   <%= pagination_links(@query, params[:page], 10) %>
 </div>
 
-<%= render :partial => 'csv_form'%>
+<%= render :partial => 'csv_form' %>
 
 
