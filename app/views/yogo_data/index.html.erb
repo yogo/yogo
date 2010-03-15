@@ -9,6 +9,11 @@
 
   <H3><%= @model.name.demodulize.titleize %> (<%= @model.count %>)</H3>
 
+  <!-- This is an alternative to the table using google visualiztion api (the javascript is now included in the app) -->
+  <%# cols = @model.properties.map { |prop| [ Yogo::Types.dm_to_gv(prop.type), Extlib::Inflection.humanize(prop.name.to_s) ] }%>
+  <%# gvdata = @data.map { |item| @model.properties.map { |p| item[p.name]  } } %>
+  <%# visualization("test_table", "Table", {:data => gvdata, :columns => cols }) { } %>
+
   <table id="data-index-table">
     <thead>
       <tr>
