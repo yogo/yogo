@@ -202,7 +202,8 @@ h3 {
     }
 
     #list-attributes ul li {
-      list-style:none;
+      /*list-style:none;*/
+      list-style-image: url("../images/nested_bullet_2.gif");
     }
 
   #sidebar ul li.highlighted-menu-item {
@@ -427,12 +428,8 @@ ul#sortable li{
   clear: both;
 }
 
-/*ul#sortable li:hover{
-  background: blue;
-}*/
-
 ul#sortable .grippie {
-  float: right;
-  background-color: #F8F9F4;
+  float: left;
+  padding:4px 0 0 3px;
   cursor: move;
 }
