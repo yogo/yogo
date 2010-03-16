@@ -95,14 +95,16 @@ class Project
   def add_model(hash_or_name, options = {})
     if hash_or_name.is_a?(String)
       return false unless valid_model_or_column_name?(hash_or_name)
-      hash_or_name = {:name => hash_or_name.camelize, 
-                      :modules => ['Yogo', self.namespace],
-                      :properties => options[:properties].merge({
-                      :id => DataMapper::Types::Serial }) 
-                  }
+      hash_or_name = {  :name => hash_or_name.camelize, 
+                        :modules => ['Yogo', self.namespace],
+                        :properties => options[:properties].merge({ :yogo_id => {
+                                                                                  :type => DataMapper::Types::Serial,
+                                                                                  :field => 'id'
+                                                                                } }) 
+                     }
                   
     end
-    return DataMapper::Factory.build(hash_or_name, :yogo)
+    return DataMapper::Factory.instance.build(hash_or_name, :yogo)
   end
   
   # Removes a model and all of its data from a project

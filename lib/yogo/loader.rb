@@ -14,6 +14,7 @@ module Yogo
     # @param [String] name the project name in normal form, e.g. "Example Project"
     #
     def self.load(repo, name)
+      factory = DataMapper::Factory.instance()
       # Iterate through each model and make it in persevere, then copy instances
       models = DataMapper::Reflection.reflect(repo, Object, true)
       models.each do |model|
@@ -26,7 +27,7 @@ module Yogo
                        :modules    => ["Yogo", name.camelize.gsub(/[^\w]/, '') ],
                        :properties => mphash
                      }
-        yogo_model = DataMapper::Factory.build(model_hash, :yogo)
+        yogo_model = factory.build(model_hash, :yogo)
         yogo_model.auto_migrate!
         # Create each instance of the class
         model.all.each{ |item| yogo_model.create!(item.attributes) }

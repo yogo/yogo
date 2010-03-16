@@ -9,6 +9,9 @@
 module DataMapper
   class Factory
     
+    # There is one factory to rule them all, and in the data bind them.
+    include Singleton
+    
     # This will look for a hash with certain keys in it. Those keys are:
     # * :modules    =>  [], and array of modules the class will be namespaced into by the order they are in the array
     # * :name       =>  'ClassName' The name of the class in camel case format.
@@ -24,7 +27,7 @@ module DataMapper
     # :associations => {} associations this class has with other classes.
     #++
     # This returns a datamapper model. 
-    def self.build(desc, repository_name = :default, options = {})
+    def build(desc, repository_name = :default, options = {})
       module_names = desc[:modules] || []
       class_name   = desc[:name]
       properties   = desc[:properties]
@@ -74,7 +77,7 @@ module DataMapper
     # 3. property units in [2][] - currently unsupported
     # 
     # Returns a DataMapper model with properties defined by spec_array
-    def self.make_model_from_csv(class_name, spec_array)
+    def make_model_from_csv(class_name, spec_array)
       scopes = class_name.split('::')
       spec_hash = { :name => scopes[-1], :properties => Hash.new }
       spec_hash[:modules] = scopes[0..-2] unless scopes.length.eql?(1)
@@ -91,8 +94,11 @@ module DataMapper
         spec_hash[:properties].merge!(prop_hash) 
       end
       # puts "CSV Spec Hash: #{spec_hash.inspect}"
-      self.build(spec_hash, :yogo)
+      build(spec_hash, :yogo)
     end
+    
+    # TODO: Rename and deprecate make_model_from_csv (it's an unclear name)
+    alias :make_model_from_array :make_model_from_csv
     
   end# class Factory
 end # module DataMapper

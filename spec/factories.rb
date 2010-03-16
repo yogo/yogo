@@ -8,7 +8,7 @@ end
 
 def build_reflected_model(name, project)
   project ||= Factory.build(:project)
-  DataMapper::Factory.build(
+ factory.build(
   {:name => "#{name}",
    :modules => ["Yogo", "#{project.project_key}"],
    :properties => {
