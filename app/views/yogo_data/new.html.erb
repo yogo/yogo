@@ -12,8 +12,8 @@
   <thead>
   </thead>
   <tbody>
-      <%- @model.properties.each do |p| %>
-        <% if p.name != :id %>
+      <%- @model.usable_properties.each do |p| %>
+        <% if p.name != :yogo_id %>
           <tr>
             <td><%= f.label(p.name, p.name.to_s.titleize) %>: </td>
             <td><%= f.field_for_param(p) %></td>

@@ -2,29 +2,48 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
 describe "A Factory" do
   
-  it "should create a model from a valid hash" do
-    valid_hash = { :name => 'Bacon',
+  before(:all) do
+    @factory = DataMapper::Factory.instance()
+    @valid_hash = { :name => 'Bacon',
                    :modules => [],
                    :properties => {
-                     :id => DataMapper::Types::Serial,
+                     :yogo_id => { :type => DataMapper::Types::Serial, :field => 'id' },
                      :fat_content => Float,
                      :hickory_smoked => { :type => DataMapper::Types::Boolean, :default => false }
                    }}
-                   
-    bacon_model = DataMapper::Factory.build(valid_hash)
+  end
+  
+  it "should exist" do
+    @factory.should_not be_nil
+  end
+  
+  it "should be a singleton" do
+    @factory.should === DataMapper::Factory.instance()
+  end
+  
+  it "should respond to build" do
+    @factory.should respond_to(:build)
+  end
+  
+  it "should create a model from a valid hash" do
+    bacon_model = @factory.build(@valid_hash)
 
     bacon_model.should_not be_nil
     bacon_model.should respond_to(:auto_migrate!)
     bacon_model.should respond_to(:auto_migrate_up!)
     bacon_model.should respond_to(:auto_migrate_down!)
+    bacon_model.properties.each do |prop|
+      @valid_hash[:properties].keys.should include(prop.name)
+    end
   end
-  
-  it "should exist" do
-    DataMapper::Factory.should_not be_nil
+    
+  it "should make a model from a properly formatted csv file"
+
+  it "should prefix attributes when given an attribute prefix" do
+    prefix = "testprefix"
+    bacon_model = @factory.build(@valid_hash, :default, { :attribute_prefix => prefix })
+    bacon_model.properties.each do |prop|
+      prop.field.should eql "#{prefix}___#{prop.name}"
+    end
   end
-  
-  it "should respond to build" do
-    DataMapper::Factory.should respond_to(:build)
-  end
-  
 end

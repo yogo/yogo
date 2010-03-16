@@ -7,7 +7,10 @@
 # 
 module Yogo
   module DataMethods
+    @@reserved_names = ["id"]
+    
     def self.included(base)
+      base.send(:extend, ClassMethods)
       base.class_eval do
 
         base.properties.each do |property|
@@ -32,5 +35,16 @@ module Yogo
       end
     end
     
+
+    
+    def self.map_attribute(name)
+      @@reserved_names.include?(name) ? "yogo___"+name : name
+    end
+    
+    module ClassMethods
+      def usable_properties
+        properties.select{|p| p.name != :yogo_id }
+      end
+    end
   end
 end

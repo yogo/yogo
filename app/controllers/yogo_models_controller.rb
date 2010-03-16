@@ -52,7 +52,8 @@ class YogoModelsController < ApplicationController
       next if name.blank?
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        cleaned_options[name] = { :type => prop_type, :position => prop_pos }
+        pfield = Yogo::DataMethods.map_attribute(name)
+        cleaned_options[name] = { :type => prop_type, :position => prop_pos, :field => pfield }
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
@@ -62,7 +63,6 @@ class YogoModelsController < ApplicationController
     
     if errors.empty? and (@model = @project.add_model(class_name, :properties => cleaned_options)) != false
       @model.send(:include,Yogo::DataMethods) unless @model.included_modules.include?(Yogo::DataMethods)
-      # @model.send(:include,Yogo::Pagination) unless @model.included_modules.include?(Yogo::Pagination)
       @model.auto_migrate!
       @model.properties.sort!
       flash[:notice] = 'The model was sucessfully created.'
@@ -99,7 +99,8 @@ class YogoModelsController < ApplicationController
       next if name.blank?
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        cleaned_params << [name, prop_type, prop_pos]
+        pfield = Yogo::DataMethods.map_attribute(name)
+        cleaned_params << [name, prop_type, prop_pos, pfield]
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
@@ -111,7 +112,8 @@ class YogoModelsController < ApplicationController
       prop_pos = options[:position]
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        cleaned_params << [name, prop_type, prop_pos]
+        pfield = Yogo::DataMethods.map_attribute(name)
+        cleaned_params << [name, prop_type, prop_pos, pfield]
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
@@ -120,7 +122,7 @@ class YogoModelsController < ApplicationController
     # Type Checking
     if errors.empty?
       cleaned_params.each do |prop|
-        @model.send(:property, prop[0].to_sym, prop[1], :required => false, :position => prop[2])
+        @model.send(:property, prop[0].to_sym, prop[1], :required => false, :position => prop[2], :field => prop[3])
       end
       
       @model.auto_upgrade!

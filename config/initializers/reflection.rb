@@ -15,5 +15,5 @@ Project.first
 # Reflect Yogo data into memory
 models = DataMapper::Reflection.reflect(:default)
 
-models.each{|m| m.send(:include,Yogo::DataMethods) unless m.included_modules.include?(Yogo::DataMethods)}
+models.each{|m| m.send(:include,Yogo::DataMethods) }
 models.each{|m| m.properties.sort! }

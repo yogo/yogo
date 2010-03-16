@@ -16,6 +16,10 @@ end
 
 describe "A Project" do
 
+  before(:all) do
+    @factory = DataMapper::Factory.instance()
+  end
+  
   it "should not be created without a name" do
     count = Project.all.length
     p = Project.new
@@ -82,7 +86,7 @@ describe "A Project" do
       file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
       model_name = File.basename(file_name, ".csv").camelcase
       csv_data = FasterCSV.read(file_name)
-      model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
+      model = @factory.make_model_from_csv(model_name, csv_data[0..2])
       Object.const_defined?(model_name).should be_true
     end
 
@@ -90,7 +94,7 @@ describe "A Project" do
       file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
       model_name = File.basename(file_name, ".csv").camelcase
       csv_data = FasterCSV.read(file_name)
-      model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
+      model = @factory.make_model_from_csv(model_name, csv_data[0..2])
       model.auto_migrate!
       csv_data[3..-1].each do |line| 
         line_data = Hash.new

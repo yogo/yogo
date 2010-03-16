@@ -33,8 +33,8 @@
 
 
     <ul id='sortable'>
-       <%- @model.properties.each do |prop| %>
-          <%- unless prop.name == :id -%>
+       <%- @model.usable_properties.each do |prop| %>
+          <%- unless prop.name == :yogo_id -%>
           <li >
             <div class="model-edit-label">
               <%= h prop.name.to_s.titleize %> :
