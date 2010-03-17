@@ -30,6 +30,3 @@ Then run: `git submodule update`
 - Run `rake persvr:drop` to drop and destroy the current persevere instance.
 - Run `rake -T persvr` to see other persevere related tasks.
 
-
-
-
