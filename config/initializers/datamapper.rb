@@ -14,6 +14,7 @@ require 'datamapper/search'
 require 'datamapper/paginate'
 require 'datamapper/factory'
 require 'datamapper/types/yogo_file'
+require 'yogo/reflection'
 
 # Read the configuration from the existing database.yml file
 config = Rails.configuration.database_configuration
