@@ -25,3 +25,5 @@ tmtags
 vendor/persevere/*
 public/files/*
 public/uploads/*
+.bundle/*
+Gemfile.lock

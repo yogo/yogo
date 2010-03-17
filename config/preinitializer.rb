@@ -8,8 +8,27 @@
 #
 require File.join(File.dirname(__FILE__), '..', 'lib', 'slash_path')
 begin
-  require File.dirname(__FILE__) / '..' / :vendor / :bundled / :environment
-rescue LoadError => e
-  puts "Bundler environment could not be loaded! Ensure bundler is installed and run 'gem bundle'."
-  exit 1
+  require File.dirname(__FILE__) / '..' / :'.bundle' / :environment
+rescue LoadError
+  # Fallback on doing the resolve at runtime.
+  require "rubygems"
+  require "bundler"
+  if Bundler::VERSION <= "0.9.10"
+    raise RuntimeError, "Bundler incompatible.\n" +
+      "Your bundler version is incompatible with Rails 2.3 and an unlocked bundle.\n" +
+      "Run `gem install bundler` to upgrade or `bundle lock` to lock."
+  else
+    Bundler.setup
+  end
 end
+
+# This ensures the gems load in the proper order.
+require 'dm-core'
+require "dm-reflection"
+require "dm-timestamps"
+require "dm-validations"
+require "dm-is-nested_set"
+require "dm-ar-finders"
+require "dm-serializer"
+require "dm-aggregates"
+require "dm-types"
