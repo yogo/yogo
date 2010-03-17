@@ -35,8 +35,6 @@ module Yogo
       end
     end
     
-
-    
     def self.map_attribute(name)
       @@reserved_names.include?(name) ? "yogo___"+name : name
     end
