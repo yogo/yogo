@@ -27,8 +27,8 @@
     <%- @data.each do |d| %>
       <tr class="<%=cycle("alternate-rows0","") %>">
         <td class="data-index-table-actions"><%= link_to(image_tag('view.gif', :alt => "View Item", :title => "View Item"), project_yogo_data_path(@project, @model.name.demodulize, d.id)) %>
-        <%= link_to(image_tag('edit.png',:alt => "Edit Item", :title => "Edit Item"), edit_project_yogo_data_path(@project, @model.name.demodulize, d.id)) %>
-        <%= link_to(image_tag('remove.png',:alt => "Delete Item", :title => "Delete Item"), project_yogo_data_path(@project, @model.name.demodulize, d.id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
+        <%= link_to(image_tag('edit.png',:alt => "Edit Item", :title => "Edit Item"), edit_project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id)) %>
+        <%= link_to(image_tag('remove.png',:alt => "Delete Item", :title => "Delete Item"), project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
         <%- @model.usable_properties.each do |p| %>
         <td><%= d[p.name] %></td>
         <%- end %>
