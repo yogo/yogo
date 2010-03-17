@@ -13,7 +13,7 @@ gem "dm-ar-finders"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates"
 gem "dm-types"
-gem "dm-persevere-adapter", "0.45.0", :require => nil
+gem "dm-persevere-adapter", "0.46.1", :require => nil
 gem "do_sqlite3",                     :require => nil
 gem "rails_datamapper",               :require => nil
 
@@ -21,6 +21,9 @@ gem "rails_datamapper",               :require => nil
 # gem "authlogic",            "2.1.3"
 gem "fastercsv"
 gem "carrierwave"
+
+# Build/CI gems that are just good for us to use.
+gem "yardstick"
 
 # JRUBY sensitive gems
 # if defined?(JRUBY_VERSION)
