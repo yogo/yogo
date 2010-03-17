@@ -55,7 +55,6 @@ class Project
     # Process the contents
     model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
     model.send(:include,Yogo::DataMethods) unless model.included_modules.include?(Yogo::DataMethods)
-    # model.send(:include,Yogo::Pagination) unless model.included_modules.include?(Yogo::Pagination)
     model.auto_migrate!
     
     # Load data

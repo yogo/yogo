@@ -1,4 +1,4 @@
-puts 'Loading file'
+
 module Yogo
   module Reflection
     module PersevereAdapter
