@@ -15,7 +15,7 @@ gem "dm-aggregates"
 gem "dm-types"
 gem "dm-persevere-adapter", "0.45.0", :require => nil
 gem "do_sqlite3",                     :require => nil
-gem "rails_datamapper"
+gem "rails_datamapper",               :require => nil
 
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"
