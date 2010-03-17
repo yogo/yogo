@@ -24,6 +24,9 @@ gem "rails_datamapper"
 gem "fastercsv"
 gem "carrierwave"
 
+# Build/CI gems that are just good for us to use.
+gem "yardstick"
+
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)
   gem "json_pure",         '~>1.2.0',    :require_as => nil
