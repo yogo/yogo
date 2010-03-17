@@ -39,11 +39,4 @@ describe "A Factory" do
     
   it "should make a model from a properly formatted csv file"
 
-  it "should prefix attributes when given an attribute prefix" do
-    prefix = "testprefix"
-    bacon_model = @factory.build(@valid_hash, :default, { :attribute_prefix => prefix })
-    bacon_model.properties.each do |prop|
-      prop.field.should eql "#{prefix}___#{prop.name}"
-    end
-  end
 end
