@@ -15,9 +15,9 @@ gem "dm-ar-finders"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates"
 gem "dm-types"
-gem "dm-persevere-adapter", "0.45.0", :require_as => nil
-gem "do_sqlite3",           "0.10.1", :require_as => nil
-gem "rails_datamapper"
+gem "rails_datamapper",               :require_as => 'dm-core' # We do this becuase :require_as => nil doesn't work.
+gem "dm-persevere-adapter", "0.45.0", :require_as => 'dm-core'
+gem "do_sqlite3",           "0.10.1", :require_as => 'dm-core'
 
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"
