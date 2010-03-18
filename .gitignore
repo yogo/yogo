@@ -1,4 +1,5 @@
 *~
+.rvmrc
 *.cache
 log/*.log*
 *.pid
