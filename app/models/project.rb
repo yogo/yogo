@@ -39,8 +39,10 @@ class Project
   
   # Creates a model and imports data from a CSV file
   #
-  # @param datafile [string] A path to the CSV file to read in
-  # @param model_name [string] the desired name of the model to be created
+  # @param [String] datafile A path to the CSV file to read in
+  # @param [String] model_name the desired name of the model to be created
+  #
+  # @returns [Array] Returns empty array if successful or an array of error messages if unsuccessful.
   #
   # * The csv datafile must be in the following format: 
   #   1. row 1 -> field names
@@ -52,22 +54,25 @@ class Project
     # Read the data in
     csv_data = FasterCSV.read(datafile)
 
-    # Look to see if there is already one of these models.
-    model = get_model(model_name)
-
-    # Process the contents
-
-    if model.nil?
-      # Get Model name
-      model_name = "Yogo::#{namespace}::#{model_name}"
-      model = DataMapper::Factory.instance.make_model_from_csv(model_name, csv_data[0..2])
-      model.send(:include,Yogo::DataMethods) unless model.included_modules.include?(Yogo::DataMethods)
-      model.auto_migrate!
-      puts 'I auto migrated!'
-    end
+    errors = Yogo::CSV.validate_csv(csv_data)
     
-    # Load data
-    Yogo::CSV.load_data(model, csv_data)
+    if errors.empty?
+      # Look to see if there is already one of these models.
+      model = get_model(model_name)
+
+      # Process the contents
+      if model.nil?
+        # Get Model name
+        model_name = "Yogo::#{namespace}::#{model_name}"
+        model = DataMapper::Factory.instance.make_model_from_csv(model_name, csv_data[0..2])
+        model.send(:include,Yogo::DataMethods) unless model.included_modules.include?(Yogo::DataMethods)
+        model.auto_migrate!
+      end
+      
+      # Load data
+      Yogo::CSV.load_data(model, csv_data)
+    end
+    errors
   end
   
   # @return [Array] of the models associated with current project namespace

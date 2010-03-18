@@ -80,12 +80,19 @@ describe "A Project" do
   it "should process a csv file" do
     file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
     p = Factory.create(:project)
-    p.process_csv(file_name, 'Csvtest')
+    p.process_csv(file_name, 'Csvtest').should be_empty
     results = p.search_models('csvtest')
     results.should be_an Array
     results.length.should eql(1)
     results[0].name.should eql("Yogo::#{p.namespace}::Csvtest")
     
+  end
+
+  it "should not process a bad csv file" do
+    file_name = "#{Rails.root}/spec/models/csv/bad_csvtest.csv"
+    p = Factory.create(:project)
+    errors = p.process_csv(file_name, 'Csvtest')
+    errors.should_not be_empty
   end
 
   it "should not overwrite a model that already exists" do
@@ -97,6 +104,7 @@ describe "A Project" do
     results.length.should eql(1)
     results[0].name.should eql("Yogo::#{p.namespace}::Csvtest")
     
+    "Yogo::#{p.namespace}::Csvtest".constantize.should_not be_nil
     old_count = results[0].count
     
     p.process_csv(file_name, 'Csvtest')
@@ -199,23 +207,27 @@ describe "A Project" do
         }
       }
       # debugger
-      repository(:yogo).adapter.put_schema(persisted_model_hash)
+      # repository.adapter.delete_schema(persisted_model_hash)
+      repository.adapter.put_schema(persisted_model_hash)
       project = Factory(:project, :name => 'Persisted Data')
       project.models.should == []
-      models = DataMapper::Reflection.reflect(:yogo)
+      models = DataMapper::Reflection.reflect(:default)
       project.models.map(&:name).should == ["Yogo::PersistedDatum::Cell"]
-      repository(:yogo).adapter.delete_schema(persisted_model_hash)
+      project.delete_models!
+      project.destroy
+      
     end
 
     it "should be able to delete its schemas" do
       persisted_model_hash = { 
-        "id" => "yogo/persisted_data/cell",
+        "id" => "yogo/persisted_bozon/cell",
         "properties" => {
           "name" => {"type" => "string"}
         }
       }
-      repository(:yogo).adapter.put_schema(persisted_model_hash)
-      project = Factory(:project, :name => 'Persisted Data')
+      repository.adapter.put_schema(persisted_model_hash)
+      project = Factory(:project, :name => 'Persisted Bozon')
+      DataMapper::Reflection.reflect(:default)
       project.models.should_not be_empty
       project.delete_models!
       project.models.should be_empty

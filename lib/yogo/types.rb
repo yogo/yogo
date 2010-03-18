@@ -17,7 +17,8 @@ module Yogo
                   "Time"           => Time,
                   "DateTime"       => DateTime,
                   "File"           => DataMapper::Types::YogoFile }
-                  
+    
+    # DataMapper Type Map
     @@DMTM = { Float                      => "Decimal",
                BigDecimal                 => "Decimal",
                Integer                    => "Integer",
@@ -29,6 +30,7 @@ module Yogo
                DataMapper::Types::Serial  => "Integer",
                DataMapper::Types::YogoFile     => "File" }
 
+   # Google Visual Type Map
    @@GVTM = { Float                      => "number",
               BigDecimal                 => "number",
               Integer                    => "number",
