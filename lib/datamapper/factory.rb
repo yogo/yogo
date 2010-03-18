@@ -84,15 +84,14 @@ module DataMapper
       spec_array[0].each_index do |idx|
         prop_hash = Hash.new
         pname = spec_array[0][idx].tableize.singular.gsub(' ', '_')
+        pfield = Yogo::DataMethods.map_attribute( pname )
+        puts pname
         ptype = Yogo::Types.human_to_dm(spec_array[1][idx])
         punits = spec_array[2][idx]
-        if pname == 'id'
-          prop_hash = { pname => { :type => DataMapper::Types::Serial, :position => idx } }
-        else
-          prop_hash = { pname => { :type => ptype, :required => false, :position => idx } }
-        end
-        spec_hash[:properties].merge!(prop_hash) 
+        prop_hash = { pname => { :type => ptype, :required => false, :position => idx, :field => pfield } }
+        spec_hash[:properties].merge!(prop_hash)
       end
+      spec_hash[:properties].merge!({ 'yogo_id' => {:type => DataMapper::Types::Serial, :field => 'id' }})
       # puts "CSV Spec Hash: #{spec_hash.inspect}"
       build(spec_hash, :yogo)
     end
