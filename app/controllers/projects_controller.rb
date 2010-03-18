@@ -102,7 +102,8 @@ class ProjectsController < ApplicationController
         #redirect_to project_url(@project)
       else
         # Check filename for .csv 
-        @project.process_csv(datafile)
+        @project.process_csv(datafile.path, 
+                             File.basename(datafile.original_filename, ".csv").singularize.camelcase)
         flash[:notice]  = "File uploaded succesfully."
       end
     else

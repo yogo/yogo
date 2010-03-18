@@ -15,10 +15,6 @@ def mock_uploader(file, type = 'text/csv')
 end
 
 describe "A Project" do
-
-  before(:all) do
-    @factory = DataMapper::Factory.instance()
-  end
   
   it "should not be created without a name" do
     count = Project.all.length
@@ -81,29 +77,59 @@ describe "A Project" do
     
   end
 
-  describe 'importing from csv' do
-    it "should create a model from a csv" do
-      file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
-      model_name = File.basename(file_name, ".csv").camelcase
-      csv_data = FasterCSV.read(file_name)
-      model = @factory.make_model_from_csv(model_name, csv_data[0..2])
-      Object.const_defined?(model_name).should be_true
-    end
+  it "should process a csv file" do
+    file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
+    p = Factory.create(:project)
+    p.process_csv(file_name, 'Csvtest')
+    results = p.search_models('csvtest')
+    results.should be_an Array
+    results.length.should eql(1)
+    results[0].name.should eql("Yogo::#{p.namespace}::Csvtest")
+    
+  end
 
-    it "should import data from csv" do
-      file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
-      model_name = File.basename(file_name, ".csv").camelcase
-      csv_data = FasterCSV.read(file_name)
-      model = @factory.make_model_from_csv(model_name, csv_data[0..2])
-      model.auto_migrate!
-      csv_data[3..-1].each do |line| 
-        line_data = Hash.new
-        csv_data[0].each_index { |i| line_data[csv_data[0][i].downcase] = line[i] }
-        model.create(line_data)
-      end
-      model.first(:name => "Bug").should be_true
-      model.auto_migrate_down!
-    end
+  it "should not overwrite a model that already exists" do
+    file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
+    p = Factory.create(:project)
+    p.process_csv(file_name, 'Csvtest')
+    results = p.search_models('csvtest')
+    results.should be_an Array
+    results.length.should eql(1)
+    results[0].name.should eql("Yogo::#{p.namespace}::Csvtest")
+    
+    old_count = results[0].count
+    
+    p.process_csv(file_name, 'Csvtest')
+    results2 = p.search_models('csvtest')
+    results2.should be_an Array
+    results2.length.should eql(1)
+    results2[0].name.should eql("Yogo::#{p.namespace}::Csvtest")
+    results2[0].count.should eql(old_count*2)
+  end
+
+  describe 'importing from csv' do
+    # it "should create a model from a csv" do
+    #   file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
+    #   model_name = File.basename(file_name, ".csv").camelcase
+    #   csv_data = FasterCSV.read(file_name)
+    #   model = @factory.make_model_from_csv(model_name, csv_data[0..2])
+    #   Object.const_defined?(model_name).should be_true
+    # end
+    # 
+    # it "should import data from csv" do
+    #   file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
+    #   model_name = File.basename(file_name, ".csv").camelcase
+    #   csv_data = FasterCSV.read(file_name)
+    #   model = @factory.make_model_from_csv(model_name, csv_data[0..2])
+    #   model.auto_migrate!
+    #   csv_data[3..-1].each do |line| 
+    #     line_data = Hash.new
+    #     csv_data[0].each_index { |i| line_data[csv_data[0][i].downcase] = line[i] }
+    #     model.create(line_data)
+    #   end
+    #   model.first(:name => "Bug").should be_true
+    #   model.auto_migrate_down!
+    # end
   end
 
   describe "contains references to reflected datamapper models" do
