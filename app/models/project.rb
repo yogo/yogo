@@ -64,7 +64,7 @@ class Project
       if model.nil?
         # Get Model name
         model_name = "Yogo::#{namespace}::#{model_name}"
-        model = DataMapper::Factory.instance.make_model_from_csv(model_name, csv_data[0..2])
+        model = DataMapper::Factory.instance.make_model_from_array(model_name, csv_data[0..2])
         model.send(:include,Yogo::DataMethods) unless model.included_modules.include?(Yogo::DataMethods)
         model.auto_migrate!
       end
