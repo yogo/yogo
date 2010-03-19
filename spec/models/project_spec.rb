@@ -26,7 +26,7 @@ describe "A Project" do
 
   it "should be created with a name" do
     count = Project.all.length
-    p = Factory.create(:project, :name => "Test Original Name")
+    p = Project.create(:name => "Test Original Name")
     p.should be_valid
     p.save
     count.should == Project.all.length - 1
@@ -34,14 +34,15 @@ describe "A Project" do
 
   it "should have a unique name" do
     count = Project.all.length
-    p = Factory.create(:project, :name => "A Project")
+    p = Project.create(:name => "Same Project")
     p.should be_valid
-    q = Factory.build(:project, :name => "A Project")
+    q = Project.new(:name => "Same Project")
     q.should_not be_valid
-    q.save
+    q.errors.on(:name).should_not be_empty
+    q.save.should be_false
     Project.all.length.should == count+1
   end
-
+  
   it "should respond to to_param with the id as a string" do
     p = Project.create(:name => "Test Project")
     p.to_param.should == p.id.to_s
@@ -79,7 +80,7 @@ describe "A Project" do
 
   it "should process a csv file" do
     file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
-    p = Factory.create(:project)
+    p = Project.create(:name => "CSV Test Project")
     p.process_csv(file_name, 'Csvtest').should be_empty
     results = p.search_models('csvtest')
     results.should be_an Array
@@ -90,59 +91,53 @@ describe "A Project" do
 
   it "should not process a bad csv file" do
     file_name = "#{Rails.root}/spec/models/csv/bad_csvtest.csv"
-    p = Factory.create(:project)
+    p = Project.create(:name => "Bad CSV Test Project")
     errors = p.process_csv(file_name, 'Csvtest')
     errors.should_not be_empty
   end
 
+  # This test fails if you do the following:
+  # 0. rake persvr:stop RAILS_ENV=test; reset
+  # 1. rake yogo:spec; reset
+  # 2. rake persvr:start RAILS_ENV=test; reset
+  # 3. rake spec # => success!
+  # 4. rake spec # => FAIL! # => SO MYSTERIOUS!
+  # n... rake spec # => subsequent successes (?!)
   it "should not overwrite a model that already exists" do
     file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
-    p = Factory.create(:project)
+    p = Project.create(:name => "Overwrite") # => destroys existing data
     p.process_csv(file_name, 'Csvtest')
     results = p.search_models('csvtest')
     results.should be_an Array
     results.length.should eql(1)
-    results[0].name.should eql("Yogo::#{p.namespace}::Csvtest")
+    results[0].name.should eql("Yogo::Overwrite::Csvtest")
     
-    "Yogo::#{p.namespace}::Csvtest".constantize.should_not be_nil
-    old_count = results[0].count
+    Yogo::Overwrite::Csvtest.should_not be_nil
+    results[0].count.should eql(3)
     
-    p.process_csv(file_name, 'Csvtest')
+    errors = p.process_csv(file_name, 'Csvtest')
+    errors.should be_empty
     results2 = p.search_models('csvtest')
     results2.should be_an Array
     results2.length.should eql(1)
-    results2[0].name.should eql("Yogo::#{p.namespace}::Csvtest")
-    results2[0].count.should eql(old_count*2)
+    results2[0].name.should eql("Yogo::Overwrite::Csvtest")
+    results2[0].count.should eql(6)
   end
-
-  describe 'importing from csv' do
-    # it "should create a model from a csv" do
-    #   file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
-    #   model_name = File.basename(file_name, ".csv").camelcase
-    #   csv_data = FasterCSV.read(file_name)
-    #   model = @factory.make_model_from_csv(model_name, csv_data[0..2])
-    #   Object.const_defined?(model_name).should be_true
-    # end
-    # 
-    # it "should import data from csv" do
-    #   file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
-    #   model_name = File.basename(file_name, ".csv").camelcase
-    #   csv_data = FasterCSV.read(file_name)
-    #   model = @factory.make_model_from_csv(model_name, csv_data[0..2])
-    #   model.auto_migrate!
-    #   csv_data[3..-1].each do |line| 
-    #     line_data = Hash.new
-    #     csv_data[0].each_index { |i| line_data[csv_data[0][i].downcase] = line[i] }
-    #     model.create(line_data)
-    #   end
-    #   model.first(:name => "Bug").should be_true
-    #   model.auto_migrate_down!
-    # end
+  
+  it  "should get the right model with get_model" do
+    models = ["a_giraffe", 'giraffe', 'gazelles', 'giraffes']
+    p = Project.new(:name => 'Zoo')
+    models.each do |m|
+      p.add_model(m, {:properties =>{:name => String}})
+    end
+    p.get_model('giraffe').name.should == 'Yogo::Zoo::Giraffe'
+    p.get_model('Giraffes').name.should == 'Yogo::Zoo::Giraffes'
+    p.get_model('aGiraffe').name.should == 'Yogo::Zoo::AGiraffe'
   end
 
   describe "contains references to reflected datamapper models" do
     it "should contain an array of reflected models" do
-      p = Factory.build(:project)
+      p = Project.create(:name => "Build Project")
       p.should respond_to(:models)
       p.models.should_not be_nil
       p.models.should be_instance_of(Array)
@@ -167,7 +162,7 @@ describe "A Project" do
     end
 
     it "should make the newly added model available via .models" do
-      project = Factory.create(:project, :name => "Test Project 1")
+      project = Project.create(:name => "Test Project 1")
       model_hash = { 
         :name => "Cell",
         :modules => ["Yogo", "TestProject1"],
@@ -183,7 +178,7 @@ describe "A Project" do
 
 
     it "should properly namespace an un-namespaced model hash" do
-      project = Factory.create(:project, :name => "Test Project 2")
+      project = Project.create(:name => "Test Project 2")
       model_hash = { 
         :name => "Monkey",
         :modules => ["Yogo", "TestProject2"],
@@ -206,17 +201,19 @@ describe "A Project" do
           "name" => {"type" => "string"}
         }
       }
-      # debugger
-      # repository.adapter.delete_schema(persisted_model_hash)
+      # Simulate a situation where a schema exists prior to the app starting
       repository.adapter.put_schema(persisted_model_hash)
-      project = Factory(:project, :name => 'Persisted Data')
-      project.models.should == []
-      models = DataMapper::Reflection.reflect(:default)
+      # Create a project associated with the pre-existing data
+      project = Project.create(:name => 'Persisted Data')
+      DataMapper::Reflection.reflect(:default)
+      # The models in the datastore should be reflected and exist
       project.models.map(&:name).should == ["Yogo::PersistedDatum::Cell"]
-      project.delete_models!
-      project.destroy
+      Yogo::PersistedDatum::Cell.should_not be_nil
       
+      #clean up
+      project.destroy # => destroys the PersistedDatum project object
     end
+    
 
     it "should be able to delete its schemas" do
       persisted_model_hash = { 
@@ -226,13 +223,35 @@ describe "A Project" do
         }
       }
       repository.adapter.put_schema(persisted_model_hash)
-      project = Factory(:project, :name => 'Persisted Bozon')
+      project = Project.new(:name => 'Persisted Bozon')
       DataMapper::Reflection.reflect(:default)
       project.models.should_not be_empty
       project.delete_models!
       project.models.should be_empty
+      project.destroy
+      # => TODO: Should this be true?, because it currently isn't.
+      # Yogo::PersistedBozon::Cell.should be_nil
+      # Yogo::PersistedBozon.should be_nil
     end
-  end
+  end 
+  
+  # This may not be a necessary test, since models should only be persisted to the database
+  # through datamapper, and this is testing a situation where the schema is inserted bypassing
+  # datamapper.  The correct test(s) should be:
+  # it should not save an invalid model (invalid type, etc)
+  # it should not fail if there is invalid data on the server (due to corruption or something)
 
-  it "should not save an invalid schema and return nil"
+  # it "should not save an invalid schema and return nil"  do
+  #     persisted_model_hash = { 
+  #       "id" => "yogo/persisted_mokney/cell",
+  #       "properties" => {
+  #         "name" => {"monkey" => "mokney"}
+  #       }
+  #     }
+  #     result = repository.adapter.put_schema(persisted_model_hash)
+  #     result.should be_nil
+  #     project = Factory(:project, :name => 'Persisted Mokney')
+  #     project.add_model(persisted_model_hash)
+  #     project.models.should be_empty
+  # end
 end

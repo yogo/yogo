@@ -53,7 +53,6 @@ class Project
   def process_csv(datafile, model_name)
     # Read the data in
     csv_data = FasterCSV.read(datafile)
-
     errors = Yogo::CSV.validate_csv(csv_data)
     
     if errors.empty?
@@ -86,11 +85,12 @@ class Project
   # @param [name] The name of the class to retrieve
   #  
   def get_model(name)
-    search_models(name).first
+    DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::#{name}$/i }[0]
   end
 
+  
   def search_models(search_term)
-    DataMapper::Model.descendants.select{ |m| m.name =~ /Yogo::#{namespace}::\w*#{search_term}\w*/i }
+    DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::\w*#{search_term}\w*$/i }
   end
 
   # @return [DataMapper::Model] a new model 
@@ -109,10 +109,12 @@ class Project
       return false unless valid_model_or_column_name?(hash_or_name)
       hash_or_name = {  :name => hash_or_name.camelize, 
                         :modules => ['Yogo', self.namespace],
-                        :properties => options[:properties].merge({ :yogo_id => {
-                                                                                  :type => DataMapper::Types::Serial,
-                                                                                  :field => 'id'
-                                                                                } }) 
+                        :properties => options[:properties].merge(
+                          { :yogo_id => {
+                              :type => DataMapper::Types::Serial,
+                              :field => 'id'
+                            } 
+                        }) 
                      }
                   
     end
