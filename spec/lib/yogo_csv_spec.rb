@@ -39,13 +39,16 @@ describe 'Yogo CSV Module' do
   
   describe 'when reading csv data' do
     it 'should validate types are valid in the spreadsheet' do
-      result = Yogo::CSV.validate_csv(CsvExampleModel, @csv_data)
-      result.should be_true
+      result = Yogo::CSV.validate_csv(@csv_data)
+      result.should be_empty
+      result.should_not be_false
     end
     
     it "should not validate invalid csv data" do
-      result = Yogo::CSV.validate_csv(CsvExampleModel, @bad_csv_data)
-      result.should be_false
+      result = Yogo::CSV.validate_csv(@bad_csv_data)
+      result.should be_kind_of(Array)
+      result.should_not be_empty
+      result.first.should eql("The datatype bozon for the ID column is invalid.")
     end
     
     it "should load data into a model" do
@@ -116,16 +119,4 @@ describe 'Yogo CSV Module' do
     
   end
 
-  
-  # describe 'csv file handling' do
-  #   describe 'data validation' do
-  #     it 'should validate types are valid in the spreadsheet'
-  #     it 'should return an error when bad types are used in the spreadsheet'
-  #   end
-  # 
-  #   describe 'data creation' do
-  #     it 'should create instances of the model from all valid rows of the spreadsheet'
-  #     it 'should warn about invalid instance/row data but continue to create subsequent instances'
-  #   end # csv handling
-  # end
 end

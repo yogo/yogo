@@ -10,8 +10,12 @@ module Yogo
     ##
     # This method loads csv data into a model
     # 
-    # @param [DataMapper::Model] model The model to load data into, creating instances of that model.
-    # @param [Array of Arrays] csv_data The CSV data to create models from
+    # @param [DataMapper::Model] model  The model to load data into, creating instances of that model.
+    # @param [Array of Arrays] csv_data The CSV data to create models. It is expected that this data
+    #                                   has been validated
+    #
+    # We don't care what it returns here.
+    # @return the result of csv_data eaching. Don't rely on this return value.
     # 
     def self.load_data(model, csv_data)
       csv_data[3..-1].each do |line|
@@ -35,18 +39,16 @@ module Yogo
     # 
     # @return [Boolean] Returns true if each of the columns in the CSV corresponds to an attribute with the same type of data.
     # 
-    def self.validate_csv(model, csv_data)
-      prop_hash = Hash.new
-      csv_data[0].each_index do |idx|
-        prop_hash[csv_data[0][idx].tableize.singularize.gsub(' ', '_')] = csv_data[1][idx]
+    def self.validate_csv(csv_data)
+      
+      errors = []
+      csv_data[1].each_with_index do |htype,idx|
+        if Yogo::Types.human_to_dm(htype).nil?
+          errors << "The datatype #{htype} for the #{csv_data[0][idx]} column is invalid."
+        end
       end
 
-      valid = true
-      model.properties.each do |prop|
-        valid = false unless (prop_hash.has_key?(prop.name.to_s) && 
-                              prop_hash[prop.name.to_s] == Yogo::Types.dm_to_human(prop.type))
-      end
-      valid
+      errors
     end
     
     ##
