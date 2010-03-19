@@ -77,7 +77,7 @@ module DataMapper
     # 3. property units in [2][] - currently unsupported
     # 
     # Returns a DataMapper model with properties defined by spec_array
-    def make_model_from_csv(class_name, spec_array)
+    def make_model_from_array(class_name, spec_array)
       scopes = class_name.split('::')
       spec_hash = { :name => scopes[-1], :properties => Hash.new }
       spec_hash[:modules] = scopes[0..-2] unless scopes.length.eql?(1)
@@ -93,9 +93,6 @@ module DataMapper
       # puts "CSV Spec Hash: #{spec_hash.inspect}"
       build(spec_hash, :yogo)
     end
-    
-    # TODO: Rename and deprecate make_model_from_csv (it's an unclear name)
-    alias :make_model_from_array :make_model_from_csv
     
   end# class Factory
 end # module DataMapper
