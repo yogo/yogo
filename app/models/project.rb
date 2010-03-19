@@ -53,7 +53,7 @@ class Project
     model_name = "Yogo::#{namespace}::#{File.basename(datafile.original_filename, ".csv").singularize.camelcase}"
     
     # Process the contents
-    model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
+    model = DataMapper::Factory.instance.make_model_from_array(model_name, csv_data[0..2])
     model.send(:include,Yogo::DataMethods) unless model.included_modules.include?(Yogo::DataMethods)
     model.auto_migrate!
     
