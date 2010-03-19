@@ -26,3 +26,5 @@ tmtags
 vendor/persevere/*
 public/files/*
 public/uploads/*
+.yardoc/*
+doc/yard/*

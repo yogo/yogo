@@ -25,6 +25,7 @@ gem "fastercsv"
 gem "carrierwave"
 
 # Build/CI gems that are just good for us to use.
+gem "yard"
 gem "yardstick"
 
 # JRUBY sensitive gems
