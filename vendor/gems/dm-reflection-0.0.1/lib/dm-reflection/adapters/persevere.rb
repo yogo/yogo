@@ -26,7 +26,7 @@ module DataMapper
           when 'boolean'   then DataMapper::Types::Boolean
           when 'string'    then
             case format
-              when nil         then String
+              when nil         then DataMapper::Types::Text
               when 'date-time' then DateTime
               when 'date'      then Date
               when 'time'      then Time
