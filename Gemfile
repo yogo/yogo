@@ -9,7 +9,6 @@ gem "dm-reflection",        "0.0.1", :path => "vendor/gems/dm-reflection-0.0.1"
 gem "dm-timestamps"  
 gem "dm-validations"
 gem "dm-is-nested_set"
-gem "dm-ar-finders"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates"
 gem "dm-types"
@@ -23,6 +22,7 @@ gem "fastercsv"
 gem "carrierwave"
 
 # Build/CI gems that are just good for us to use.
+gem "yard"
 gem "yardstick"
 
 # JRUBY sensitive gems

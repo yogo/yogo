@@ -39,26 +39,39 @@ class Project
   
   # Creates a model and imports data from a CSV file
   #
+  # @param [String] datafile A path to the CSV file to read in
+  # @param [String] model_name the desired name of the model to be created
+  #
+  # @returns [Array] Returns empty array if successful or an array of error messages if unsuccessful.
+  #
   # * The csv datafile must be in the following format: 
   #   1. row 1 -> field names
   #   2. row 2 -> type, 
   #   3. row 3 -> units
   #   4. rows 4+ -> data
   # 
-  def process_csv(datafile)
+  def process_csv(datafile, model_name)
     # Read the data in
-    csv_data = FasterCSV.read(datafile.path)
+    csv_data = FasterCSV.read(datafile)
+    errors = Yogo::CSV.validate_csv(csv_data)
+    
+    if errors.empty?
+      # Look to see if there is already one of these models.
+      model = get_model(model_name)
 
-    # Get Model name
-    model_name = "Yogo::#{namespace}::#{File.basename(datafile.original_filename, ".csv").singularize.camelcase}"
-    
-    # Process the contents
-    model = DataMapper::Factory.make_model_from_csv(model_name, csv_data[0..2])
-    model.send(:include,Yogo::DataMethods) unless model.included_modules.include?(Yogo::DataMethods)
-    model.auto_migrate!
-    
-    # Load data
-    Yogo::CSV.load_data(model, csv_data)
+      # Process the contents
+      if model.nil?
+        # Get Model name
+        model_name = "Yogo::#{namespace}::#{model_name}"
+        model = DataMapper::Factory.instance.make_model_from_array(model_name, csv_data[0..2])
+        model.send(:include,Yogo::DataMethods) unless model.included_modules.include?(Yogo::DataMethods)
+        model.auto_migrate!
+      end
+      
+      # Load data
+      Yogo::CSV.load_data(model, csv_data)
+    end
+    errors
   end
   
   # @return [Array] of the models associated with current project namespace
@@ -67,17 +80,17 @@ class Project
     DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{namespace}::/ }
   end
   
-  # @return [String] DataMapper models name from the  "name"
+  # @return [Model] DataMapper models name from the  "name"
   #
-  # * The csv datafile must be in the following format:
-  # =Example
+  # @param [name] The name of the class to retrieve
   #  
   def get_model(name)
-    DataMapper::Model.descendants.select{ |m| m.to_s.demodulize == name }.first
+    DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::#{name}$/i }[0]
   end
 
+  
   def search_models(search_term)
-    DataMapper::Model.descendants.select{ |m| m.name =~ /Yogo::#{namespace}::\w*#{search_term}\w*/i }
+    DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::\w*#{search_term}\w*$/i }
   end
 
   # @return [DataMapper::Model] a new model 
@@ -96,10 +109,12 @@ class Project
       return false unless valid_model_or_column_name?(hash_or_name)
       hash_or_name = {  :name => hash_or_name.camelize, 
                         :modules => ['Yogo', self.namespace],
-                        :properties => options[:properties].merge({ :yogo_id => {
-                                                                                  :type => DataMapper::Types::Serial,
-                                                                                  :field => 'id'
-                                                                                } }) 
+                        :properties => options[:properties].merge(
+                          { :yogo_id => {
+                              :type => DataMapper::Types::Serial,
+                              :field => 'id'
+                            } 
+                        }) 
                      }
                   
     end

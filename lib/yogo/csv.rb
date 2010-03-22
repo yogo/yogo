@@ -10,10 +10,14 @@ module Yogo
     ##
     # This method loads csv data into a model
     # 
-    # @param [DataMapper::Model] model The model to load data into, creating instances of that model.
-    # @param [Array of Arrays] csv_data The CSV data to create models from
+    # @param [DataMapper::Model] model  The model to load data into, creating instances of that model.
+    # @param [Array of Arrays] csv_data The CSV data to create models. It is expected that this data
+    #                                   has been validated
+    #
+    # We don't care what it returns here.
+    # @return the result of csv_data eaching. Don't rely on this return value.
     # 
-    def self.load_data(model, csv_data)
+    def self.load_data(model, csv_data)      
       csv_data[3..-1].each do |line|
         line_data = Hash.new
         if !line.empty?  #ignore blank lines
@@ -35,18 +39,16 @@ module Yogo
     # 
     # @return [Boolean] Returns true if each of the columns in the CSV corresponds to an attribute with the same type of data.
     # 
-    def self.validate_csv(model, csv_data)
-      prop_hash = Hash.new
-      csv_data[0].each_index do |idx|
-        prop_hash[csv_data[0][idx].tableize.singularize.gsub(' ', '_')] = csv_data[1][idx]
+    def self.validate_csv(csv_data)
+      
+      errors = []
+      csv_data[1].each_with_index do |htype,idx|
+        if Yogo::Types.human_to_dm(htype).nil?
+          errors << "The datatype #{htype} for the #{csv_data[0][idx]} column is invalid."
+        end
       end
 
-      valid = true
-      model.properties.each do |prop|
-        valid = false unless (prop_hash.has_key?(prop.name.to_s) && 
-                              prop_hash[prop.name.to_s] == Yogo::Types.dm_to_human(prop.type))
-      end
-      valid
+      errors
     end
     
     ##
@@ -59,9 +61,9 @@ module Yogo
     # 
     def self.make_csv(model, include_data=false)
       csv_output = FasterCSV.generate do |csv|
-        csv << model.properties.map{|prop| prop.name.to_s.humanize}
+        csv << model.properties.map{|prop| prop.name == :yogo_id ? "Yogo ID" : prop.name.to_s.humanize }
         csv << model.properties.map{|prop| Yogo::Types.dm_to_human(prop.type)}
-        csv << "Units will go here when supported"
+        csv << "Units will go in this row when supported; please do not modify the Yogo ID column."
       end
 
       model.all.each { |m| csv_output << m.to_csv } if include_data

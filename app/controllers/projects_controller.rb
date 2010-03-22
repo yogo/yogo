@@ -101,9 +101,15 @@ class ProjectsController < ApplicationController
         flash[:error] = "File type #{datafile.content_type} not allowed"
         #redirect_to project_url(@project)
       else
-        # Check filename for .csv 
-        @project.process_csv(datafile)
-        flash[:notice]  = "File uploaded succesfully."
+        class_name = File.basename(datafile.original_filename, ".csv").singularize.camelcase
+        
+         errors =  @project.process_csv(datafile.path, class_name)
+        
+        if errors.empty?
+          flash[:notice]  = "File uploaded succesfully."
+        else
+          flash[:error] = errors.join("\n")
+        end
       end
     else
        flash[:error] = "File upload area cannont be blank."

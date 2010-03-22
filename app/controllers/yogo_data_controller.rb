@@ -121,7 +121,7 @@ class YogoDataController < ApplicationController
         # Read the data in
         csv_data = FasterCSV.read(datafile.path)
 
-        if Yogo::CSV.validate_csv(@model, csv_data[0..1])
+        if Yogo::CSV.validate_csv(csv_data[0..2])
           Yogo::CSV.load_data(@model, csv_data)
           flash[:notice] = "#{@model.name.demodulize} Data Successfully Uploaded."
         else

@@ -1,6 +1,6 @@
-Name,ID,Mass,Charge
-Text,bozon,Decimal,Decimal
-NA,NA,kg,volts
-Sean,1,Bad Data,1.2
-Bug,2,23492.0,1.5
-Aed,3,233213.0,3.2
+Name,ID,Mass,Charge,index
+Text,bozon,Decimal,Decimal,DataMapper::Types::Serial
+NA,NA,kg,volts,nugget
+Sean,1,Bad Data,1.2,1
+Bug,2,23492.0,1.5,2
+Aed,3,233213.0,3.2,3

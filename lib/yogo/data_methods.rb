@@ -7,7 +7,7 @@
 # 
 module Yogo
   module DataMethods
-    @@reserved_names = ["id"]
+    @@reserved_names = ["id", "iD", "Id", "ID"]
     
     def self.included(base)
       base.send(:extend, ClassMethods)

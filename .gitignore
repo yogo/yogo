@@ -1,4 +1,5 @@
 *~
+.rvmrc
 *.cache
 log/*.log*
 *.pid
@@ -27,3 +28,5 @@ public/files/*
 public/uploads/*
 .bundle/*
 Gemfile.lock
+.yardoc/*
+doc/yard/*

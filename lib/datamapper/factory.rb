@@ -77,25 +77,23 @@ module DataMapper
     # 3. property units in [2][] - currently unsupported
     # 
     # Returns a DataMapper model with properties defined by spec_array
-    def make_model_from_csv(class_name, spec_array)
+    def make_model_from_array(class_name, spec_array)
       scopes = class_name.split('::')
       spec_hash = { :name => scopes[-1], :properties => Hash.new }
       spec_hash[:modules] = scopes[0..-2] unless scopes.length.eql?(1)
       spec_array[0].each_index do |idx|
         prop_hash = Hash.new
         pname = spec_array[0][idx].tableize.singular.gsub(' ', '_')
+        pfield = Yogo::DataMethods.map_attribute( pname )
         ptype = Yogo::Types.human_to_dm(spec_array[1][idx])
         punits = spec_array[2][idx]
-        prop_hash = { pname => { :type => ptype, :required => false, :position => idx } }
+        prop_hash = { pname => { :type => ptype, :required => false, :position => idx, :field => pfield } }
         spec_hash[:properties].merge!(prop_hash)
       end
       spec_hash[:properties].merge!({ 'yogo_id' => {:type => DataMapper::Types::Serial, :field => 'id' }})
       # puts "CSV Spec Hash: #{spec_hash.inspect}"
       build(spec_hash, :yogo)
     end
-    
-    # TODO: Rename and deprecate make_model_from_csv (it's an unclear name)
-    alias :make_model_from_array :make_model_from_csv
     
   end# class Factory
 end # module DataMapper
