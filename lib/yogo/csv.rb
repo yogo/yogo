@@ -17,7 +17,7 @@ module Yogo
     # We don't care what it returns here.
     # @return the result of csv_data eaching. Don't rely on this return value.
     # 
-    def self.load_data(model, csv_data)
+    def self.load_data(model, csv_data)      
       csv_data[3..-1].each do |line|
         line_data = Hash.new
         if !line.empty?  #ignore blank lines
@@ -61,9 +61,9 @@ module Yogo
     # 
     def self.make_csv(model, include_data=false)
       csv_output = FasterCSV.generate do |csv|
-        csv << model.properties.map{|prop| prop.name.to_s.humanize}
+        csv << model.properties.map{|prop| prop.name == :yogo_id ? "Yogo ID" : prop.name.to_s.humanize }
         csv << model.properties.map{|prop| Yogo::Types.dm_to_human(prop.type)}
-        csv << "Units will go here when supported"
+        csv << "Units will go in this row when supported; please do not modify the Yogo ID column."
       end
 
       model.all.each { |m| csv_output << m.to_csv } if include_data
