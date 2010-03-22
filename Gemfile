@@ -24,12 +24,13 @@ gem "fastercsv"
 gem "carrierwave"
 
 # Build/CI gems that are just good for us to use.
-gem "yard"
-gem "yardstick"
+gem "yard",           :require_as => 'dm-core' # We do this becuase :require_as => nil doesn't work.
+gem "yardstick",      :require_as => 'dm-core'
+gem "bluecloth",      :require_as => 'dm-core'
 
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)
-  gem "json_pure",         '~>1.2.0',    :require_as => nil
+  gem "json_pure",         '~>1.2.0',  :require_as => nil
   gem "ruby-debug-base",   "0.10.3.1", :require_as => nil, :only => [:development, :test],
                                        :path => "vendor/extra_gems/ruby-debug-base-0.10.3.1-java"
   gem "ruby-debug",                    :require_as => nil, :only => [:development, :test]
