@@ -3,7 +3,7 @@ class YogoDataFormBuilder < ActionView::Helpers::FormBuilder
   # Analysis (Analyze?) a DataMapper parameter to create the correct form element type.
   #
   def field_for_param(param, *args)
-    if param.type == DataMapper::Types::YogoFile
+    if param.type == DataMapper::Types::YogoFile || param.type == DataMapper::Types::YogoImage
       file_field(param.name, *args)
     elsif param.type == DataMapper::Types::Boolean
       radio_button(param.name, true, *args) + " " + label(param.name, "True", :value => true) + "<br>" +
