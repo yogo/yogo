@@ -1,0 +1,10 @@
+<%- form_for([:yogo_setting], :builder => YogoDataFormBuilder) do |f| -%>
+
+  <%- if @value.is_a?(TrueClass) || @value.is_a?(FalseClass) -%>
+    <%= radio_button_tag(true) %> <%= label("True", :value => true) %>
+    radio_button_tag(false) + " " + label(param.name, "False", :value => false)
+  <%- else -%>
+  <%= label_tag(@key) %>: <%= text_field_tag(@value) %>
+  <%- end -%>
+  <%= f.submit %>
+<%- end -%>
