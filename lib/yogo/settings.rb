@@ -5,8 +5,12 @@
 #
 # FILE: settings.rb
 # Implementing a settings configuration class.
-# 
+
 module Yogo
+  
+  # This allows for storing and retrieving settings across Yogo Applications
+  # 
+  # @author Robbie Lamb robbie.lamb@gmail.com
   class Settings
     include DataMapper::Resource  
 
@@ -17,12 +21,18 @@ module Yogo
     property :name,   String, :key => true
     property :value,  Object
   
+    # @private
     @@cache = {}
-    # @@loaded_defaults = false
+    # @private
     @@settings_files = []
+    # @private
     @@settings_setup = false
     
     # Loads YAML files for the default settings to be used.
+    # @param [Array] files An array of files to load the defaults from
+    # 
+    # @return [Array] files This isn't very useful.
+    # @author Robbie Lamb robbie.lamb@gmail.com
     def self.load_defaults(*files)
       files.each do |file|
         @@settings_files << Dir.glob(file)
@@ -35,7 +45,12 @@ module Yogo
       }
     end
   
-    
+    # Used to query the settings basied on a key
+    #
+    # @param [String or Symbol] key The key to retrieve
+    # @return [Object or nil] Returns the object at the key or nil if it doesn't exist.
+    #
+    # @author Robbie Lamb robbie.lamb@gmail.com
     def self.[](key)
       key = key.to_s if key.is_a? Symbol
       self.setup unless @@settings_setup
@@ -50,6 +65,12 @@ module Yogo
       end
     end
   
+    # Used to set a value for a particular key
+    # 
+    # @param [String or Symbol] key key to store
+    # @param [Object] value Any object to be stored in the key
+    # 
+    # @author Robbie Lamb robbie.lamb@gmail.com
     def self.[]=(key,value)
       key = key.to_s if key.is_a? Symbol
       self.setup unless @@settings_setup
@@ -57,31 +78,47 @@ module Yogo
       self.store_database(key,value)
     end
   
+    # @author Robbie Lamb robbie.lamb@gmail.com
+    # @return [Array] an array of all of the keys in the current settings
+    def self.keys
+      @@cache.keys
+    end
+  
     private
   
+    # @author Robbie Lamb robbie.lamb@gmail.com
+    # @private
     def self.check_cache(key)
       # puts "Checking cache for #{key}"
       # repository(:yogo_settings_cache) { self.get(key) }
       @@cache[key] if @@cache.has_key?(key)
     end
   
+    # @author Robbie Lamb robbie.lamb@gmail.com
+    # @private
     def self.check_database(key)   
       # puts "Checking database for #{key}"
       result = repository(:default) { self.get(key) }
       return result.value unless result.nil?
     end
   
+    # @author Robbie Lamb robbie.lamb@gmail.com
+    # @private
     def self.store_cache(key, value)
       # puts "Storing #{key} in cache"
       # self.store(key, value, :yogo_settings_cache)
       @@cache[key] = value
     end
   
+    # @author Robbie Lamb robbie.lamb@gmail.com
+    # @private
     def self.store_database(key,value)
       # puts "Storing #{key} in database"
       self.store(key, value, :default)
     end
   
+    # @author Robbie Lamb robbie.lamb@gmail.com
+    # @private
     def self.store(key, value, storage_name)
       repository(storage_name) do
         record = self.get(key) || self.new(:name => key)
@@ -90,6 +127,8 @@ module Yogo
       end
     end
     
+    # @author Robbie Lamb robbie.lamb@gmail.com
+    # @private
     def self.setup
       begin
         self.reset_database! unless self.storage_exists?(:default)
@@ -100,16 +139,22 @@ module Yogo
       end unless @@settings_setup
     end
     
+    # @author Robbie Lamb robbie.lamb@gmail.com
+    # @private
     def self.reset!
       self.reset_database!
       self.reset_cache!
       @@settings_setup = true
     end
     
+    # @author Robbie Lamb robbie.lamb@gmail.com
+    # @private
     def self.reset_database!
       self.auto_migrate!
     end
     
+    # @author Robbie Lamb robbie.lamb@gmail.com
+    # @private
     def self.reset_cache!
       @@cache = {}
       if @@settings_files.empty?
