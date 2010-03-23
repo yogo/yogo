@@ -16,8 +16,8 @@ module DataMapper
       prefix = options.delete(:prefix)
       self.prefix = prefix.nil?  ? "" : prefix
 
+      separator = options.delete(:separator)
       if ! self.prefix.empty?
-        separator = options.delete(:separator)
         self.separator = separator.nil?  ? "__" : separator
       else
         self.separator = ""
@@ -26,6 +26,7 @@ module DataMapper
       self.display_name = name
       
       name = (self.prefix + self.separator + name.to_s).to_sym
+      puts options.inspect
       original_initialize(model, name, type, options)
     end
       

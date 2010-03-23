@@ -63,8 +63,9 @@ module DataMapper
                               :key => value.has_key?('index') && value.delete('index') }) unless property[:type] == DataMapper::Types::Serial
             value.delete('type')
             value.delete('format')
-            value.delete("unique")
-            value.delete("index")
+            value.delete('unique')
+            value.delete('index')
+            value.keys.each { |key| value[key.to_sym] = value[key]; value.delete(key) }
             property.merge!(value)
             results << property
           end

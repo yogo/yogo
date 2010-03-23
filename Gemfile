@@ -15,7 +15,7 @@ gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2
 gem "dm-aggregates"
 gem "dm-types"
 gem "rails_datamapper",               :require_as => 'dm-core' # We do this becuase :require_as => nil doesn't work.
-gem "dm-persevere-adapter", "0.47.0", :require_as => 'dm-core'
+gem "dm-persevere-adapter", "0.47.1", :require_as => 'dm-core'
 gem "do_sqlite3",           "0.10.1", :require_as => 'dm-core'
 
 # Extra supporting gems
@@ -24,7 +24,7 @@ gem "fastercsv"
 gem "carrierwave"
 
 # Build/CI gems that are just good for us to use.
-gem "yard",           :require_as => 'dm-core' # We do this becuase :require_as => nil doesn't work.
+gem "yard",           :require_as => 'dm-core' # We do this because :require_as => nil doesn't work.
 gem "yardstick",      :require_as => 'dm-core'
 gem "bluecloth",      :require_as => 'dm-core'
 

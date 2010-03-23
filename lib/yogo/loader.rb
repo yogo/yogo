@@ -28,9 +28,16 @@ module Yogo
                        :properties => mphash
                      }
         yogo_model = factory.build(model_hash, :yogo, { :attribute_prefix => "yogo" } )
+        yogo_model.send(:include, Yogo::DataMethods)
         yogo_model.auto_migrate!
         # Create each instance of the class
-        model.all.each{ |item| yogo_model.create!(item.attributes) }
+        model.all.each do |item| 
+          newitems = Hash.new
+          item.attributes.each_pair do |attr, val|
+            newitems["yogo__#{attr}"] = val
+          end
+          yogo_model.create!(newitems)
+        end
       end
       models.each do |model|
         DataMapper::Model.descendants.delete(model)
