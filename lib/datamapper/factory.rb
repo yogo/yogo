@@ -32,6 +32,7 @@ module DataMapper
       class_name   = desc[:name]
       properties   = desc[:properties]
       full_name    = (module_names + [class_name]).join('::')
+      attribute_prefix = options[:attribute_prefix]
       
       # Create the scoping for the class, if it doesn't already exist.
       namespace = if module_names.any?
@@ -52,10 +53,11 @@ module DataMapper
         properties.each_pair do |property, opts|
           if opts.is_a?(Hash)
             opts[:type] = :'DataMapper::Types::Serial' if opts[:type].to_s == 'Serial'
+            opts[:prefix] = attribute_prefix
             property( property.to_sym, eval(opts[:type].to_s), opts.reject{|k,v| k == :type })
           else
             opts = :'DataMapper::Types::Serial' if opts.to_s == 'Serial'
-            property( property.to_sym, eval(opts.to_s))
+            property( property.to_sym, eval(opts.to_s), { :prefix => attribute_prefix })
           end
         end
       end
@@ -92,7 +94,7 @@ module DataMapper
       end
       spec_hash[:properties].merge!({ 'yogo_id' => {:type => DataMapper::Types::Serial, :field => 'id' }})
       # puts "CSV Spec Hash: #{spec_hash.inspect}"
-      build(spec_hash, :yogo)
+      build(spec_hash, :yogo, { :attribute_prefix => "yogo" } )
     end
     
   end# class Factory

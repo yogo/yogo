@@ -30,7 +30,7 @@ namespace :yogo do
       #    model_hash = { :name       => model.name.camelcase, 
       #                   :modules    => ["Yogo", args[:name].camelcase], 
       #                   :properties => mphash }
-      #    yogo_model =factory.build(model_hash, :yogo)
+      #    yogo_model =factory.build(model_hash, :yogo, { :attribute_prefix => "yogo" })
       #    yogo_model.auto_migrate!
       #    print "Created #{yogo_model}, importing data..."
       #    # Create each instance of the class

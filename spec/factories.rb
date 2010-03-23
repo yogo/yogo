@@ -8,13 +8,13 @@ end
 
 def build_reflected_model(name, project)
   project ||= Factory.build(:project)
- factory.build(
-  {:name => "#{name}",
-   :modules => ["Yogo", "#{project.project_key}"],
-   :properties => {
-      "id"        => Serial,
-      "name"      => String,
-      "parent_id" => Integer
-   }
-  })
+  factory.build(
+   {:name => "#{name}",
+    :modules => ["Yogo", "#{project.project_key}"],
+    :properties => {
+       "id"        => Serial,
+       "name"      => String,
+       "parent_id" => Integer
+    }
+   }, :default, { :attribute_prefix => "yogo" } )
 end

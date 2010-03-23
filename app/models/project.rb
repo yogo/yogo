@@ -118,7 +118,7 @@ class Project
                      }
                   
     end
-    return DataMapper::Factory.instance.build(hash_or_name, :yogo)
+    return DataMapper::Factory.instance.build(hash_or_name, :yogo, { :attribute_prefix => "yogo" })
   end
   
   # Removes a model and all of its data from a project
