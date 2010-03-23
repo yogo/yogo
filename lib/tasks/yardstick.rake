@@ -9,6 +9,6 @@ namespace :yardstick do
   end
 
   Yardstick::Rake::Verify.new(:verify) do |verify|
-    verify.threshold = 65
+    verify.threshold = 100
   end
 end
