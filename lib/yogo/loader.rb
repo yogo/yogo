@@ -27,7 +27,7 @@ module Yogo
                        :modules    => ["Yogo", name.camelize.gsub(/[^\w]/, '') ],
                        :properties => mphash
                      }
-        yogo_model = factory.build(model_hash, :yogo)
+        yogo_model = factory.build(model_hash, :yogo, { :attribute_prefix => "yogo" } )
         yogo_model.auto_migrate!
         # Create each instance of the class
         model.all.each{ |item| yogo_model.create!(item.attributes) }
