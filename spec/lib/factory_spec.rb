@@ -41,9 +41,9 @@ describe "A Factory" do
 
   it "should prefix attributes for a model when passed an attribute prefix" do
     bacon_model = @factory.build(@valid_hash, :default, { :attribute_prefix => "yogotest" } )
-    
+
     bacon_model.properties.each do |prop|
-      prop.name.should eql "yogotest__#{prop.display_name}".to_sym
+      prop.name.should eql "yogotest__#{prop.display_name}".to_sym unless prop.name == :yogo_id
     end
   end
 end

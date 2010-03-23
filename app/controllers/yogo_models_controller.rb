@@ -24,7 +24,7 @@ class YogoModelsController < ApplicationController
   #
   def show
     @model = @project.get_model(params[:id])
-    
+
     respond_to do |format|
       format.html
       format.json { render( :json => @model.to_json_schema )}
@@ -122,7 +122,7 @@ class YogoModelsController < ApplicationController
     # Type Checking
     if errors.empty?
       cleaned_params.each do |prop|
-        @model.send(:property, prop[0].to_sym, prop[1], :required => false, :position => prop[2], :field => prop[3])
+        @model.send(:property, prop[0].to_sym, prop[1], :required => false, :position => prop[2], :field => prop[3], :separator => '__', :prefix => 'yogo')
       end
       
       @model.auto_upgrade!

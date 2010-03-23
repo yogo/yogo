@@ -34,10 +34,10 @@
 
     <ul id='sortable'>
        <%- @model.usable_properties.each do |prop| %>
-          <%- unless prop.name == :yogo_id -%>
+
           <li >
             <div class="model-edit-label">
-              <%= h prop.name.to_s.titleize %> :
+              <%= h prop.display_name.to_s.titleize %> :
             </div>
             <div class="model-edit-input">  
               <%= select_tag("property_#{prop.name}_type", options_for_select(@options, Yogo::Types.dm_to_human(prop.type)), :name => "property[#{prop.name}][type]") %>
@@ -45,7 +45,7 @@
             </div>
             <div class='grippie'><%= image_tag('grippie.gif') %></div>
           </li>
-          <%- end -%>
+
         <%- end %>
       
       <%- end -%>

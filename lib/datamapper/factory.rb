@@ -53,11 +53,12 @@ module DataMapper
         properties.each_pair do |property, opts|
           if opts.is_a?(Hash)
             opts[:type] = :'DataMapper::Types::Serial' if opts[:type].to_s == 'Serial'
-            opts[:prefix] = attribute_prefix
+            opts[:prefix] = attribute_prefix unless property.to_sym == :yogo_id
             property( property.to_sym, eval(opts[:type].to_s), opts.reject{|k,v| k == :type })
           else
             opts = :'DataMapper::Types::Serial' if opts.to_s == 'Serial'
-            property( property.to_sym, eval(opts.to_s), { :prefix => attribute_prefix })
+            options = property.to_sym == :yogo_id ? {} : { :prefix => attribute_prefix }
+            property( property.to_sym, eval(opts.to_s), options)
           end
         end
       end

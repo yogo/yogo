@@ -9,7 +9,7 @@
   <tbody>
       <%- @model.usable_properties.each do |p| %>
       <tr>
-      <td><%= label(p.name, p.name.to_s.titleize) %></td>
+      <td><%= p.display_name.titleize %></td>
       <td><%= @item[p.name]%></td>
       </tr>
       <%- end %>

@@ -19,7 +19,7 @@
       <tr>
         <th class="data-index-table-actions"></th>
         <%- @model.usable_properties.each do |h| %>
-        <th><%= h.name.to_s.titleize %></th>
+          <th><%= h.display_name.to_s.titleize %></th>
         <%- end %>
       </tr>
     </thead>

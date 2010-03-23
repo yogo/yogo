@@ -50,7 +50,8 @@ module Yogo
     
     # TODO: This should handle having the name "yogo___" for a variable name.
     def self.map_attribute(name)
-      @@reserved_names.include?(name) ? "yogo___"+name : name
+      # @@reserved_names.include?(name) ? "yogo___"+name : name
+      name
     end
     
     module ClassMethods

@@ -23,10 +23,10 @@ module DataMapper
         self.separator = ""
       end
       
-      self.display_name = name
+      self.display_name = name.to_s.gsub("#{self.prefix}#{self.separator}", "")
       
-      name = (self.prefix + self.separator + name.to_s).to_sym
-      puts options.inspect
+      name = (self.prefix + self.separator + display_name).to_sym
+      
       original_initialize(model, name, type, options)
     end
       

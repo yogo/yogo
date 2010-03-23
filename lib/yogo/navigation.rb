@@ -20,7 +20,7 @@ module Yogo
     # 
     # @return [Array of Strings] Attributes array ready for use in views.
     def self.attributes(model)
-      model.usable_properties.map { |prop| prop.name.to_s }
+      model.usable_properties.map { |prop| prop.display_name.to_s }
     end
     
     ##

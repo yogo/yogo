@@ -18,9 +18,14 @@ module Yogo
       # Iterate through each model and make it in persevere, then copy instances
       models = DataMapper::Reflection.reflect(repo, Object, true)
       models.each do |model|
-        mphash = Hash.new
+        mphash = { :yogo_id => {
+                                 :type => DataMapper::Types::Serial,
+                                 :field => 'id'
+                               }
+                 }
         model.properties.each do |prop| 
-          mphash[prop.name] = { :type => prop.type, :key => prop.key?, :serial => prop.serial? } 
+          type = prop.type == String ? DataMapper::Types::Text : prop.type
+          mphash[prop.name] = { :type => type, :key => prop.key?, :serial => prop.serial? } 
           mphash[prop.name].merge!({:default => prop.default}) if prop.default? 
         end
         model_hash = { :name       => model.name.capitalize.gsub(/[^\w]/, '_'),
