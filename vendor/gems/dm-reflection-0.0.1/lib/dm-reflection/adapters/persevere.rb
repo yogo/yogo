@@ -61,8 +61,10 @@ module DataMapper
             property = {:name => key, :type => get_type(value) }
             property.merge!({ :required => !value.delete('optional'),
                               :key => value.has_key?('index') && value.delete('index') }) unless property[:type] == DataMapper::Types::Serial
-            value.delete(type)
-            value.delete(format)
+            value.delete('type')
+            value.delete('format')
+            value.delete("unique")
+            value.delete("index")
             property.merge!(value)
             results << property
           end
