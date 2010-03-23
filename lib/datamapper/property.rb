@@ -1,24 +1,33 @@
 
 module DataMapper
 
+  # TODO: Document this file
   class Property
     attr_accessor :position
-
+    attr_accessor :display_name
+    attr_accessor :prefix
+    attr_accessor :separator
+    
     alias original_initialize initialize
-    def initialize(model, name, type, options = {})
+    def initialize(model, name, type, options = { })
       pos = options.delete(:position)
       self.position = pos.nil? ? nil : pos.to_i
+      
+      prefix = options.delete(:prefix)
+      self.prefix = prefix.nil?  ? "" : prefix
+
+      if ! self.prefix.empty?
+        separator = options.delete(:separator)
+        self.separator = separator.nil?  ? "__" : separator
+      else
+        self.separator = ""
+      end
+      
+      self.display_name = name
+      
+      name = (self.prefix + self.separator + name.to_s).to_sym
       original_initialize(model, name, type, options)
     end
-  
-    # alias to_json_schema_hash_without_positon to_json_schema_hash
-    # 
-    # def to_json_schema_hash_with_position(repo)
-    #   json_hash = to_json_schema_hash_without_positon(repo)
-    #   json_hash.merge!({"position" => @position }) unless @position.nil?
-    # end
-    # 
-    # alias to_json_schema_hash to_json_schema_hash_with_positon
       
     def <=>(other)
       return  0 if self.position.nil? && other.position.nil?
