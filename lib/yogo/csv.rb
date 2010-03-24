@@ -7,12 +7,12 @@
 #
 module Yogo
   class CSV
-    ##
-    # This method loads csv data into a model
+    # FIXME make me shorter
+    # @return [Array] loads csv data into a model
     # 
     # @param [DataMapper::Model] model The model to load data into, creating instances of that model.
     # @param [Array of Arrays] csv_data The CSV data to create models from
-    # 
+    # FIXME @api private, semipublic, or public
     def self.load_data(model, csv_data)
       csv_data[3..-1].each do |line|
         line_data = Hash.new
@@ -28,13 +28,13 @@ module Yogo
     end
     
     ##
-    # This method validates that csv data conforms matches what the model expects.
+    # @return [Array] validates csv data conforms matches what the model expects
     # 
     # @param [DataMapper::Model] model The model to validate the csv against.
     # @param [Array of Arrays] csv_data The top three rows that define the structure of the CSV file.
     # 
     # @return [Boolean] Returns true if each of the columns in the CSV corresponds to an attribute with the same type of data.
-    # 
+    # FIXME @api private, semipublic, or public
     def self.validate_csv(model, csv_data)
       prop_hash = Hash.new
       csv_data[0].each_index do |idx|
@@ -50,13 +50,12 @@ module Yogo
     end
     
     ##
-    # This method makes a csv file from a model and optionally populates that file with csv data corresponding to the instances of the model.
+    # @return [String] Returns a string that is formatted as a CSV file that can be read back in by the Yogo Toolkit
     # 
-    # @param [DataMapper::Model] model The model that is being downloaded as a csv file.
-    # @param [Boolean] include_data The boolean flag that will include all instances as data when true.
+    # @param [DataMapper::Model] model The model that is being downloaded as a csv file
+    # @param [Boolean] include_data The boolean flag that will include all instances as data when true
     # 
-    # @return [String] Returns a string that is formatted as a CSV file that can be read back in by the Yogo Toolkit.
-    # 
+    # FIXME @api private, semipublic, or public
     def self.make_csv(model, include_data=false)
       csv_output = FasterCSV.generate do |csv|
         csv << model.properties.map{|prop| prop.name.to_s.humanize}

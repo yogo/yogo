@@ -22,7 +22,8 @@ module Yogo
     @@settings_files = []
     @@settings_setup = false
     
-    # Loads YAML files for the default settings to be used.
+    # FIXME @return [] loads YAML files for the default settings to be used
+    # FIXME @api private, semipublic, or public
     def self.load_defaults(*files)
       files.each do |file|
         @@settings_files << Dir.glob(file)

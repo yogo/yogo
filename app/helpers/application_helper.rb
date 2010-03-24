@@ -12,8 +12,8 @@ module ApplicationHelper
   # 
   include GoogleVisualization
   
-  # Returns a link formatted for a menu as a list item
-  #
+  # FIXME @return [] a link formatted for a menu as a list item
+  # FIXME @api private, semipublic, or public
   def add_menu_item(name, url = {}, html_options = {})
     css_class = ''
     css_class = 'highlighted-menu-item' if request.url.include?(h(url))
@@ -29,8 +29,8 @@ module ApplicationHelper
     Project.all
   end
 
-  # Returns navigation for links to paginated collection items
-  # 
+  # @return [String, Array] navigation for links to paginated collection items
+  # FIXME @api private, semipublic, or public
   def pagination_links(collection, cur_page = 1, per_page = 5)
     total_pages = collection.page_count(:per_page => per_page)
     current_page = cur_page.nil? ? 1 : cur_page.to_i
@@ -65,9 +65,8 @@ module ApplicationHelper
     output
   end
 
-  # This is for the breadcrumbs
-  # It will create the breadcrumbs based on the request query_string
-  #
+  # @return [String] creates breadcrumbs based on the request query_string
+  # FIXME @api private, semipublic, or pubic
   def query_params
     ref_path = request.path_info;
     ref_query = URI.decode(request.query_string)

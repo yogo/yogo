@@ -26,18 +26,19 @@ class Project
   end
   
   # @return [String] the project path name
-  #
+  # @api private
   def path
     name.downcase.gsub(/[^\w]/, '_')
   end
   
-  # to_param is called by rails for routing and such
-  # 
+  # @return [String] the object id as url param
+  # @api private
   def to_param
     id.to_s
   end
   
-  # Creates a model and imports data from a CSV file
+  # FIXME make me shorter
+  #Creates a model and imports data from a CSV file
   #
   # @param datafile [string] A path to the CSV file to read in
   # @param model_name [string] the desired name of the model to be created
@@ -47,7 +48,9 @@ class Project
   #   2. row 2 -> type, 
   #   3. row 3 -> units
   #   4. rows 4+ -> data
-  # 
+  #  @example loading data from a CSV file into a project model
+  #  "aproject.process_csv('mydata.csv','MyModel')"
+  # FIXME @api private, semipublic, or public
   def process_csv(datafile, model_name)
     # Read the data in
     csv_data = FasterCSV.read(datafile)
@@ -71,13 +74,12 @@ class Project
   end
   
   # @return [Array] of the models associated with current project namespace
-  #
+  # @api private, semipublic, or public
   def models
     DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{namespace}::/ }
   end
   
   # @return [Model] DataMapper models name from the  "name"
-  #
   # @param [name] The name of the class to retrieve
   #  
   def get_model(name)
@@ -114,9 +116,8 @@ class Project
     return DataMapper::Factory.instance.build(hash_or_name, :yogo)
   end
   
-  # Removes a model and all of its data from a project
-  #
-  #
+  # @return [String] Removes a model and all of its data from a project
+  # FIXME @api private, semipublic, or public
   def delete_model(model)
     model = get_model(model) if model.class == String
     name = model.name.demodulize
@@ -130,9 +131,8 @@ class Project
     end
   end
 
-  # Removes all models and all of the data from a project
-  #
-  # * performed before project.destroy
+  # @return [Model] Removes all models and all of the data from a project
+  # FIXME @api private, semipublic, or public
   def delete_models!
     models.each do |model|
       delete_model(model)
@@ -141,6 +141,8 @@ class Project
   
   private
   
+  # FIXME @return []
+  # FIXME @api private, semipublic, or public
   def valid_model_or_column_name?(potential_name)
     !potential_name.match(/^\d|\.|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)/)
   end

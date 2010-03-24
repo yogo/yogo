@@ -1,7 +1,7 @@
 class YogoDataFormBuilder < ActionView::Helpers::FormBuilder
   
-  # Analysis (Analyze?) a DataMapper parameter to create the correct form element type.
-  #
+  # @return [String] Analyze a DataMapper parameter to create the correct form element type
+  # FIXME @api private, semipubic, or private
   def field_for_param(param, *args)
     if param.type == DataMapper::Types::YogoFile
       file_field(param.name, *args)

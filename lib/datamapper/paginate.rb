@@ -1,9 +1,10 @@
 module DataMapper
   module Model
-    # Returns a subset of objects in the datastore for pagination.
+    # @returns [Array] subset of objects in the datastore for pagination.
     # 
     # options :page What page to get, default 1
     #         :per_page How many items per page, default 5
+    # FIXME @api private, semipublic, or public
     def paginate(options = {})
       page = options.delete(:page) || 1
       per_page = options.delete(:per_page) || 5
@@ -16,7 +17,8 @@ module DataMapper
       all(options)
     end
 
-    # Returns how many pages there are in the database.
+    # @returns [Array] how many pages there are in the database.
+    # FIXME @api private, semipublic, or public
     def page_count(options = {})
       per_page = options.delete(:per_page) || 5
 
@@ -25,10 +27,11 @@ module DataMapper
   end
   
   class Collection
-    # Returns a subset of objects in the datastore for pagination.
+    # @return [Array] a subset of objects in the datastore for pagination.
     # 
     # options :page What page to get, default 1
     #         :per_page How many items per page, default 5
+    # FIXME @api private, semipublic, or public
     def paginate(options = {})
       page = options.delete(:page) || 1
       per_page = options.delete(:per_page) || 5
@@ -41,7 +44,8 @@ module DataMapper
       all(options)
     end
 
-    # Returns how many pages there are in the database.
+    # @return [Array] how many pages there are in the database
+    # FIXME @api private, semipublic, or public
     def page_count(options = {})
       per_page = options.delete(:per_page) || 5
 

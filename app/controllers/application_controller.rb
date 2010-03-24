@@ -26,7 +26,8 @@ class ApplicationController < ActionController::Base
   ##
   #  Create a custom error handler
   # @param [String] status_code the code to return
-  # 
+  # FIXME @return []
+  # FIXME @api semipublic or private 
     def render_optional_error_file(status_code)
       status = interpret_status(status_code)
       # TODO: Support I18n internationalization
@@ -40,9 +41,9 @@ class ApplicationController < ActionController::Base
     end
     
   private
-  ##
-  # Checks requests to ensure they are local only
-  #
+  ## 
+  # @return [ String] Checks requests to ensure they are local only
+  # FIXME @api
   def check_local_only
     return true if Rails.env == "test"
     
