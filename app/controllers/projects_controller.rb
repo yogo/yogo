@@ -11,14 +11,24 @@
 
 class ProjectsController < ApplicationController
   
-# @return [ Array ] Retrives all project and passes them to the veiw
-# @api public
+  ##
+  # Show all the projects
+  # 
+  # @return [ Array ] Retrives all project and passes them to the veiw
+  # 
+  # @api public
+  # 
   def index
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
   
+  ##
+  # Find a project or projects and show the result
+  # 
   # @return [Model] searches for data across all project all models all content of models
-  # FIXME @api private, public or semipublic
+  #
+  # @api public
+  # 
   def search
     search_term = params[:search_term]
     
@@ -43,9 +53,7 @@ class ProjectsController < ApplicationController
 
   end
 
-#
   def show
-    # session[:breadcrumbs] = nil
     @project = Project.get(params[:id])
     @models = @project.models
   end
