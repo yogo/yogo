@@ -17,14 +17,14 @@ module Yogo
     # We don't care what it returns here.
     # @return the result of csv_data eaching. Don't rely on this return value.
     # 
-    def self.load_data(model, csv_data)      
+    def self.load_data(model, csv_data)
       csv_data[3..-1].each do |line|
         line_data = Hash.new
         if !line.empty?  #ignore blank lines
           csv_data[0].each_index do |i| 
             attr_name = csv_data[0][i].tableize.singularize.gsub(' ', '_')
-            prop = model.properties[attr_name]
-            line_data[attr_name] = prop.typecast(line[i]) unless line[i].nil? || prop.nil?
+            prop = model.properties["yogo__#{attr_name}"]
+            line_data["yogo__#{attr_name}"] = prop.typecast(line[i]) unless line[i].nil? || prop.nil?
           end
           model.create(line_data)
         end 
@@ -60,8 +60,9 @@ module Yogo
     # @return [String] Returns a string that is formatted as a CSV file that can be read back in by the Yogo Toolkit.
     # 
     def self.make_csv(model, include_data=false)
+      model.properties.sort!
       csv_output = FasterCSV.generate do |csv|
-        csv << model.properties.map{|prop| prop.name == :yogo_id ? "Yogo ID" : prop.name.to_s.humanize }
+        csv << model.properties.map{|prop| prop.name == :yogo_id ? "Yogo ID" : prop.display_name.to_s.humanize }
         csv << model.properties.map{|prop| Yogo::Types.dm_to_human(prop.type)}
         csv << "Units will go in this row when supported; please do not modify the Yogo ID column."
       end
