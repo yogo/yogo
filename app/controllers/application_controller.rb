@@ -26,8 +26,9 @@ class ApplicationController < ActionController::Base
   ##
   #  Create a custom error handler
   # @param [String] status_code the code to return
-  # FIXME @return []
-  # FIXME @api semipublic or private 
+  # @return [HTML Content to browser] This returns a dynamically generated error page.
+  # @api semipublic
+  # 
     def render_optional_error_file(status_code)
       status = interpret_status(status_code)
       # TODO: Support I18n internationalization
