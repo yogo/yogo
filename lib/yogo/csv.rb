@@ -7,15 +7,14 @@
 #
 module Yogo
   class CSV
-    ##
-    # This method loads csv data into a model
-    # 
+    # FIXME make me shorter
+    # @return the result of csv_data eaching. Don't rely on this return value.
+    # FIXME @api private, semipublic, or public
     # @param [DataMapper::Model] model  The model to load data into, creating instances of that model.
-    # @param [Array of Arrays] csv_data The CSV data to create models. It is expected that this data
+    # @param [Array<Arrays>] csv_data The CSV data to create models. It is expected that this data
     #                                   has been validated
     #
     # We don't care what it returns here.
-    # @return the result of csv_data eaching. Don't rely on this return value.
     # 
     def self.load_data(model, csv_data)
       return unless validate_csv(csv_data).empty?
@@ -34,12 +33,19 @@ module Yogo
     end
     
     ##
-    # This method validates that csv data conforms matches what the model expects.
+    # @return [Array] validates csv data conforms matches what the model expects
     # 
     # @param [DataMapper::Model] model The model to validate the csv against.
     # @param [Array of Arrays] csv_data The top three rows that define the structure of the CSV file.
     # 
     # @return [Boolean] Returns true if each of the columns in the CSV corresponds to an attribute with the same type of data.
+<<<<<<< HEAD
+    # FIXME @api private, semipublic, or public
+    def self.validate_csv(model, csv_data)
+      prop_hash = Hash.new
+      csv_data[0].each_index do |idx|
+        prop_hash[csv_data[0][idx].tableize.singularize.gsub(' ', '_')] = csv_data[1][idx]
+=======
     # 
     def self.validate_csv(csv_data)
       
@@ -48,19 +54,19 @@ module Yogo
         if Yogo::Types.human_to_dm(htype).nil?
           errors << "The datatype #{htype} for the #{csv_data[0][idx]} column is invalid."
         end
+>>>>>>> 053b593408ea1be19a25304ca97c26dbcbeb8948
       end
 
       errors
     end
     
     ##
-    # This method makes a csv file from a model and optionally populates that file with csv data corresponding to the instances of the model.
+    # @return [String] Returns a string that is formatted as a CSV file that can be read back in by the Yogo Toolkit
     # 
-    # @param [DataMapper::Model] model The model that is being downloaded as a csv file.
-    # @param [Boolean] include_data The boolean flag that will include all instances as data when true.
+    # @param [DataMapper::Model] model The model that is being downloaded as a csv file
+    # @param [Boolean] include_data The boolean flag that will include all instances as data when true
     # 
-    # @return [String] Returns a string that is formatted as a CSV file that can be read back in by the Yogo Toolkit.
-    # 
+    # FIXME @api private, semipublic, or public
     def self.make_csv(model, include_data=false)
       model.properties.sort!
       csv_output = FasterCSV.generate do |csv|

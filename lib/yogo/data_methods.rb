@@ -8,7 +8,8 @@
 module Yogo
   module DataMethods
     @@reserved_names = ["id", "iD", "Id", "ID"]
-    
+    # FIXME @return []
+    # FIXME @api private, semipublic, or public
     def self.included(base)
       base.send(:extend, ClassMethods)
       base.class_eval do
@@ -48,13 +49,18 @@ module Yogo
       end
     end
     
-    # TODO: This should handle having the name "yogo___" for a variable name.
+    # @return [String] makes "yogo___" for variable name
+    # FIXME @api private, semipublic, or public
     def self.map_attribute(name)
       # @@reserved_names.include?(name) ? "yogo___"+name : name
       name
     end
     
     module ClassMethods
+      # FIXME @return []
+      # FIXME @api private, semipublic, or public
+      end
+      
       def usable_properties
         properties.select{|p| p.name != :yogo_id }
       end

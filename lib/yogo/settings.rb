@@ -28,10 +28,11 @@ module Yogo
     # @private
     @@settings_setup = false
     
+    # @return [Array] files This isn't very useful
+    # FIXME @api private, semipublic, or public
     # Loads YAML files for the default settings to be used.
     # @param [Array] files An array of files to load the defaults from
     # 
-    # @return [Array] files This isn't very useful.
     # @author Robbie Lamb robbie.lamb@gmail.com
     def self.load_defaults(*files)
       files.each do |file|

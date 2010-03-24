@@ -10,9 +10,9 @@
 class YogoDataController < ApplicationController
   before_filter :find_parent_items
  
-  #  Display's paginated data items from the selected yogo project model
-  # 
-  # * 10 data objects per page are displayed
+  # FIXME summery less then 80 characters @return [Array] Display's paginated data items from selected yogo project model
+  # FIXME shorter summery *10 data objects per page are displayed
+  # FIXME @api public, private or semipublic
   def index
     if !params[:q].nil?
       queries =[]
@@ -39,8 +39,8 @@ class YogoDataController < ApplicationController
     end
   end
   
-  # Search the current model for the search parameters.
-  #
+  # @return [Array] Search the current model for the search parameters.
+  # FIXME @api private, semipublic, or public
   def search
     search_term = params[:search_term]
     @query = @model.search(search_term)
@@ -53,8 +53,8 @@ class YogoDataController < ApplicationController
     end
   end
   
-  # Displays a yogo project model data item's properites and values
-  # 
+  # @return [Model] Displays a yogo project model data item's properites and values
+  # FIXME @api public, semipublic, or private
   def show
     @item = @model.get(params[:id])
     
@@ -68,12 +68,14 @@ class YogoDataController < ApplicationController
     @item = @model.new
   end
   
-  # Allows a user to edit a yogo project model data item's values
-  #
+  # @return [Model] Allows a user to edit a yogo project model data item's values
+  # FIXME @api public, semipublic, or private
   def edit
     @item = @model.get(params[:id])
   end
 
+  # FIXME @return []
+  # FIXME @api private, semipublic, or public
   def create
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
 
@@ -93,8 +95,8 @@ class YogoDataController < ApplicationController
     end
   end
   
-  # Updates a data item to the current yogo project model
-  #
+  # @return [Model, String] Updates a data item to the current yogo project model
+  # FIXME @api private, semipublic, or public
   def update
     @item = @model.get(params[:id])
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
@@ -103,15 +105,15 @@ class YogoDataController < ApplicationController
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end  
   
-  # Deletes a yogo project model's selected datum
-  # 
+  # @return [Model] Deletes a yogo project model's selected datum
+  # FIXME @api private, semipublic, or private
   def destroy
     @model.get(params[:id]).destroy!
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end
   
-  # Accepts the upload of a CSV file
-  # 
+  # @return [String] Accepts the upload of a CSV file
+  # FIXME @api private, semipublic, or public
   def upload
     if !params[:upload].nil? && datafile = params[:upload]['datafile']
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
@@ -132,6 +134,8 @@ class YogoDataController < ApplicationController
     end
   end
 
+  # FIXME @return []
+  # FIXME @api private, semipublic, or public
   def histogram_attribute
     ref_path, noop, ref_query = URI::split(request.referer)[5,3]
 
@@ -164,8 +168,8 @@ class YogoDataController < ApplicationController
   
   private
   
-  # Allows download of yogo project model data in CSV format
-  # 
+  # FIXME @return [] Allows download of yogo project model data in CSV format
+  # FIXME @api []
   def download_csv
     send_data(Yogo::CSV.make_csv(@model, true), 
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
@@ -173,6 +177,8 @@ class YogoDataController < ApplicationController
               :disposition => 'attachment')
   end
   
+  # FIXME @return []
+  # FIXME @api private, semipublic, or public
   def find_parent_items
     @project = Project.get(params[:project_id])
     @model = @project.get_model(params[:model_id])
