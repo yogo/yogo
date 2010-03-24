@@ -8,12 +8,15 @@
 # Likewise, all the methods added will be available for all controllers.
 #
 class ApplicationController < ActionController::Base
-  before_filter :check_local_only #, :set_breadcrumb_query
+  
+  # Check for local connections before anything else
+  before_filter :check_local_only 
 
   # include all helpers, all the time  
   helper :all 
   helper :breadcrumbs
   
+  # Specify the layout for the yogo application
   layout 'application'
   
   # See ActionController::RequestForgeryProtection for details
@@ -23,12 +26,11 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password
   
   protected
+  
   ##
   # Create a custom error handler
   # 
-  #   if Yogo::Settings[:local_only] && !["127.0.0.1"].include?(request.env["REMOTE_ADDR"])
-  #     render_optional_error_file(:forbidden)
-  #   end
+  #   render_optional_error_file(:forbidden) if Yogo::Settings[:local_only] && !["127.0.0.1"].include?(request.env["REMOTE_ADDR"])
   # 
   # @param [String] status_code the code to return
   # @return [HTML Content to browser] This returns a dynamically generated error page.
@@ -48,6 +50,7 @@ class ApplicationController < ActionController::Base
     end
     
   private
+  
   ##
   # Method to see if incoming connections are local (and allowed) 
   # 
