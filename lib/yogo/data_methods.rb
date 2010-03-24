@@ -57,12 +57,16 @@ module Yogo
     end
 
     module ClassMethods
-      # FIXME @return []
-      # FIXME @api private, semipublic, or public
-    end
-
-    def usable_properties
-      properties.select{|p| p.name != :yogo_id }
+      # The properties on a model for human consumption.
+      # 
+      # @example @model.usable_properties.each{|prop| puts prop.display_name }
+      # 
+      # @return [Array] properties that are usable by human consumption
+      # 
+      # @api public
+      def usable_properties
+        properties.select{|p| p.name != :yogo_id }
+      end
     end
   end
 end
