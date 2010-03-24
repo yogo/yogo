@@ -1,0 +1,7 @@
+
+
+<ul>
+<%- for key in Yogo::Settings.keys -%>
+  <li>Key:<%= link_to(key, edit_yogo_setting_path(key)) %>  Value:<%= Yogo::Settings[key] %></li>
+<%- end -%>
+</ul>

@@ -34,6 +34,7 @@ module DataMapper
       class_name   = desc[:name]
       properties   = desc[:properties]
       full_name    = (module_names + [class_name]).join('::')
+      attribute_prefix = options[:attribute_prefix]
       
       # Create the scoping for the class, if it doesn't already exist.
       namespace = if module_names.any?
@@ -54,10 +55,12 @@ module DataMapper
         properties.each_pair do |property, opts|
           if opts.is_a?(Hash)
             opts[:type] = :'DataMapper::Types::Serial' if opts[:type].to_s == 'Serial'
+            opts[:prefix] = attribute_prefix unless property.to_sym == :yogo_id
             property( property.to_sym, eval(opts[:type].to_s), opts.reject{|k,v| k == :type })
           else
             opts = :'DataMapper::Types::Serial' if opts.to_s == 'Serial'
-            property( property.to_sym, eval(opts.to_s))
+            options = property.to_sym == :yogo_id ? {} : { :prefix => attribute_prefix }
+            property( property.to_sym, eval(opts.to_s), options)
           end
         end
       end
@@ -81,7 +84,7 @@ module DataMapper
     # 
     # Returns a DataMapper model with properties defined by spec_array
     # FIXME @api private, semipublic, or public
-    def make_model_from_csv(class_name, spec_array)
+    def make_model_from_array(class_name, spec_array)
       scopes = class_name.split('::')
       spec_hash = { :name => scopes[-1], :properties => Hash.new }
       spec_hash[:modules] = scopes[0..-2] unless scopes.length.eql?(1)
@@ -89,20 +92,16 @@ module DataMapper
         prop_hash = Hash.new
         pname = spec_array[0][idx].tableize.singular.gsub(' ', '_')
         pfield = Yogo::DataMethods.map_attribute( pname )
-        puts pname
         ptype = Yogo::Types.human_to_dm(spec_array[1][idx])
         punits = spec_array[2][idx]
-        prop_hash = { pname => { :type => ptype, :required => false, :position => idx, :field => pfield } }
+        prop_hash = { pname => { :type => ptype, :required => false, :position => idx } }
         spec_hash[:properties].merge!(prop_hash)
       end
       spec_hash[:properties].merge!({ 'yogo_id' => {:type => DataMapper::Types::Serial, :field => 'id' }})
-      # FIXME @return [] puts "CSV Spec Hash: #{spec_hash.inspect}"
-      # FIXME @api private, semipublic, or public
-      build(spec_hash, :yogo)
+      # puts "CSV Spec Hash: #{spec_hash.inspect}"
+      build(spec_hash, :yogo, { :attribute_prefix => "yogo" } )
+
     end
-    
-    # TODO: Rename and deprecate make_model_from_csv (it's an unclear name)
-    alias :make_model_from_array :make_model_from_csv
     
   end# class Factory
 end # module DataMapper

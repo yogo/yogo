@@ -14,6 +14,7 @@ require 'datamapper/search'
 require 'datamapper/paginate'
 require 'datamapper/factory'
 require 'datamapper/types/yogo_file'
+require 'datamapper/types/yogo_image'
 require 'yogo/reflection'
 
 # Read the configuration from the existing database.yml file

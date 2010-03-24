@@ -20,7 +20,7 @@ module Yogo
     # 
     # FIXME @api private, semipublic, or public
     def self.attributes(model)
-      model.usable_properties.map { |prop| prop.name.to_s }
+      model.usable_properties.map { |prop| prop.display_name.to_s }
     end
     
     ##

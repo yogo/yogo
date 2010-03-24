@@ -26,7 +26,7 @@ module DataMapper
           when 'boolean'   then DataMapper::Types::Boolean
           when 'string'    then
             case format
-              when nil         then String
+              when nil         then DataMapper::Types::Text
               when 'date-time' then DateTime
               when 'date'      then Date
               when 'time'      then Time
@@ -60,9 +60,13 @@ module DataMapper
           schema['properties'].each_pair do |key, value|
             property = {:name => key, :type => get_type(value) }
             property.merge!({ :required => !value.delete('optional'),
-                           :default => value['default'],
-                           :position => value['position'],
-                           :key => value.has_key?('index') && value.delete('index') }) unless property[:type] == DataMapper::Types::Serial
+                              :key => value.has_key?('index') && value.delete('index') }) unless property[:type] == DataMapper::Types::Serial
+            value.delete('type')
+            value.delete('format')
+            value.delete('unique')
+            value.delete('index')
+            value.keys.each { |key| value[key.to_sym] = value[key]; value.delete(key) }
+            property.merge!(value)
             results << property
           end
           return results

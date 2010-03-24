@@ -5,7 +5,7 @@ require 'yardstick/rake/verify'
 namespace :yardstick do
   Yardstick::Rake::Measurement.new(:measure) do |measurement|
     measurement.path = ['lib/**/*.rb', 'app/**/*.rb']
-    measurement.output = File.join((ENV['CC_BUILD_ARTIFACTS'] || 'doc'), 'yardstick-report.txt')
+    measurement.output = File.join('doc', 'yardstick', 'index.html')
   end
 
   Yardstick::Rake::Verify.new(:verify) do |verify|

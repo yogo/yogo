@@ -10,10 +10,11 @@ describe 'Yogo CSV Module' do
   before(:all) do
     # Need a model and a CSV file.
     model = DataMapper::Model.new do
-      property :id, DataMapper::Types::Serial
-      property :name, String
-      property :mass, Float
-      property :charge, Float
+      property :yogo_id, DataMapper::Types::Serial, :field => 'id'
+      property :id,   Integer,  :prefix => 'yogo'
+      property :name, String,  :prefix => 'yogo'
+      property :mass, Float,   :prefix => 'yogo'
+      property :charge, Float, :prefix => 'yogo'
     end
 
     CsvExampleModel = model if !Object.const_defined?(:CsvExampleModel)
@@ -39,13 +40,16 @@ describe 'Yogo CSV Module' do
   
   describe 'when reading csv data' do
     it 'should validate types are valid in the spreadsheet' do
-      result = Yogo::CSV.validate_csv(CsvExampleModel, @csv_data)
-      result.should be_true
+      result = Yogo::CSV.validate_csv(@csv_data)
+      result.should be_empty
+      result.should_not be_false
     end
     
     it "should not validate invalid csv data" do
-      result = Yogo::CSV.validate_csv(CsvExampleModel, @bad_csv_data)
-      result.should be_false
+      result = Yogo::CSV.validate_csv(@bad_csv_data)
+      result.should be_kind_of(Array)
+      result.should_not be_empty
+      result.first.should eql("The datatype bozon for the ID column is invalid.")
     end
     
     it "should load data into a model" do
@@ -72,10 +76,10 @@ describe 'Yogo CSV Module' do
       Yogo::CSV.load_data(CsvExampleModel, @one_line)
       CsvExampleModel.count.should eql(1)
       result = CsvExampleModel.first
-      result.name.should eql('Sean')
-      result.id.should eql(1)
-      result.mass.should eql(1283.0)
-      result.charge.should eql(1.2)
+      result.yogo__name.should eql('Sean')
+      result.yogo__id.should eql(1)
+      result.yogo__mass.should eql(1283.0)
+      result.yogo__charge.should eql(1.2)
     end
     
     it "should update existing records with new data" do
@@ -83,11 +87,11 @@ describe 'Yogo CSV Module' do
       Yogo::CSV.load_data(CsvExampleModel, @updated_csv_data)
       CsvExampleModel.count.should eql(3)
       result = CsvExampleModel.get(1)
-      result.name.should eql('Ivan')
-      result.mass.should eql(22.0)
+      result.yogo__name.should eql('Ivan')
+      result.yogo__mass.should eql(22.0)
       result = CsvExampleModel.get(3)
-      result.name.should eql('Dea')
-      result.mass.should eql(23.0)
+      result.yogo__name.should eql('Dea')
+      result.yogo__mass.should eql(23.0)
     end
   end
   
@@ -116,16 +120,4 @@ describe 'Yogo CSV Module' do
     
   end
 
-  
-  # describe 'csv file handling' do
-  #   describe 'data validation' do
-  #     it 'should validate types are valid in the spreadsheet'
-  #     it 'should return an error when bad types are used in the spreadsheet'
-  #   end
-  # 
-  #   describe 'data creation' do
-  #     it 'should create instances of the model from all valid rows of the spreadsheet'
-  #     it 'should warn about invalid instance/row data but continue to create subsequent instances'
-  #   end # csv handling
-  # end
 end

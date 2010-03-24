@@ -1,17 +1,37 @@
 
 module DataMapper
 
+  # TODO: Document this file
   class Property
     attr_accessor :position
-
-    alias original_initialize initialize
+    attr_accessor :display_name
+    attr_accessor :prefix
+    attr_accessor :separator
+    
+    alias original_initialize initialize\
     # FIXME @return []
     # FIXME @api public, semipublic, or private
-    def initialize(model, name, type, options = {})
+    def initialize(model, name, type, options = { })
       pos = options.delete(:position)
       self.position = pos.nil? ? nil : pos.to_i
+      
+      prefix = options.delete(:prefix)
+      self.prefix = prefix.nil?  ? "" : prefix
+
+      separator = options.delete(:separator)
+      if ! self.prefix.empty?
+        self.separator = separator.nil?  ? "__" : separator
+      else
+        self.separator = ""
+      end
+      
+      self.display_name = name.to_s.gsub("#{self.prefix}#{self.separator}", "")
+      
+      name = (self.prefix + self.separator + display_name).to_sym
+      
       original_initialize(model, name, type, options)
     end
+
     
     # alias to_json_schema_hash_without_positon to_json_schema_hash
     # 

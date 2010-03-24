@@ -13,9 +13,8 @@
   </thead>
   <tbody>
     <%- @model.usable_properties.each do |prop| %>
-      <%- next if prop.name == :yogo_id -%>
       <tr id="model-show-row" class="<%= cycle('alternate-rows0', 'alternate-rows1') %>">
-        <td><%= prop.name.to_s.titleize %></td>
+        <td><%= prop.display_name.to_s.titleize %></td>
         <td><%= Yogo::Types.dm_to_human(prop.type) %></td>
       <tr>
     <%- end %>

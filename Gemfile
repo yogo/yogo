@@ -11,12 +11,11 @@ gem "dm-reflection",        "0.0.1", :path => "vendor/gems/dm-reflection-0.0.1"
 gem "dm-timestamps"  
 gem "dm-validations"
 gem "dm-is-nested_set"
-gem "dm-ar-finders"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates"
 gem "dm-types"
 gem "rails_datamapper",               :require_as => 'dm-core' # We do this becuase :require_as => nil doesn't work.
-gem "dm-persevere-adapter", "0.46.1", :require_as => 'dm-core'
+gem "dm-persevere-adapter", "0.47.1", :require_as => 'dm-core'
 gem "do_sqlite3",           "0.10.1", :require_as => 'dm-core'
 
 # Extra supporting gems
@@ -25,11 +24,13 @@ gem "fastercsv"
 gem "carrierwave"
 
 # Build/CI gems that are just good for us to use.
-gem "yardstick"
+gem "yard",           :require_as => 'dm-core' # We do this because :require_as => nil doesn't work.
+gem "yardstick",      :require_as => 'dm-core'
+gem "bluecloth",      :require_as => 'dm-core'
 
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)
-  gem "json_pure",         '~>1.2.0',    :require_as => nil
+  gem "json_pure",         '~>1.2.0',  :require_as => nil
   gem "ruby-debug-base",   "0.10.3.1", :require_as => nil, :only => [:development, :test],
                                        :path => "vendor/extra_gems/ruby-debug-base-0.10.3.1-java"
   gem "ruby-debug",                    :require_as => nil, :only => [:development, :test]

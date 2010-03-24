@@ -11,34 +11,40 @@ module Yogo
     # Constant for the supported Human readable datatypes
     @@HumanTM = { "Decimal"        => Float, 
                   "Integer"        => Integer,
-                  "Text"           => String, 
+                  "Text"           => DataMapper::Types::Text, 
                   "True/False"     => DataMapper::Types::Boolean, 
                   "Date"           => Date,
                   "Time"           => Time,
                   "DateTime"       => DateTime,
-                  "File"           => DataMapper::Types::YogoFile }
-                  
+                  "File"           => DataMapper::Types::YogoFile,
+                  "Image"          => DataMapper::Types::YogoImage }
+    
+    # DataMapper Type Map
     @@DMTM = { Float                      => "Decimal",
                BigDecimal                 => "Decimal",
                Integer                    => "Integer",
-               String                     => "Text",
+               DataMapper::Types::Text    => "Text",
                DataMapper::Types::Boolean => "True/False",
                Date                       => "Date",
                Time                       => "Time",
                DateTime                   => "DateTime",
                DataMapper::Types::Serial  => "Integer",
-               DataMapper::Types::YogoFile     => "File" }
+               DataMapper::Types::YogoFile     => "File",
+               DataMapper::Types::YogoImage    => "Image" }
 
-   @@GVTM = { Float                      => "number",
-              BigDecimal                 => "number",
-              Integer                    => "number",
-              String                     => "string",
-              DataMapper::Types::Boolean => "string",
-              Date                       => "date",
-              Time                       => "string",
-              DateTime                   => "datetime",
-              DataMapper::Types::Serial  => "number",
-              DataMapper::Types::YogoFile     => "string" }
+   # Google Visual Type Map
+   @@GVTM = { Float                           => "number",
+              BigDecimal                      => "number",
+              Integer                         => "number",
+              DataMapper::Types::Text         => "string",
+              String                          => "string",
+              DataMapper::Types::Boolean      => "string",
+              Date                            => "date",
+              Time                            => "string",
+              DateTime                        => "datetime",
+              DataMapper::Types::Serial       => "number",
+              DataMapper::Types::YogoFile     => "string",
+              DataMapper::Types::YogoImage    => "string" }
 
     def self.dm_to_human(dmtype)
       @@DMTM[dmtype]
