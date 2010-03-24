@@ -39,13 +39,7 @@ module Yogo
     # @param [Array of Arrays] csv_data The top three rows that define the structure of the CSV file.
     # 
     # @return [Boolean] Returns true if each of the columns in the CSV corresponds to an attribute with the same type of data.
-<<<<<<< HEAD
     # FIXME @api private, semipublic, or public
-    def self.validate_csv(model, csv_data)
-      prop_hash = Hash.new
-      csv_data[0].each_index do |idx|
-        prop_hash[csv_data[0][idx].tableize.singularize.gsub(' ', '_')] = csv_data[1][idx]
-=======
     # 
     def self.validate_csv(csv_data)
       
@@ -54,7 +48,6 @@ module Yogo
         if Yogo::Types.human_to_dm(htype).nil?
           errors << "The datatype #{htype} for the #{csv_data[0][idx]} column is invalid."
         end
->>>>>>> 053b593408ea1be19a25304ca97c26dbcbeb8948
       end
 
       errors
