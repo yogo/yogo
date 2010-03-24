@@ -42,7 +42,7 @@ class Project
   # @param [String] datafile A path to the CSV file to read in
   # @param [String] model_name the desired name of the model to be created
   #
-  # @returns [Array] Returns empty array if successful or an array of error messages if unsuccessful.
+  # @return [Array] Returns empty array if successful or an array of error messages if unsuccessful.
   #
   # * The csv datafile must be in the following format: 
   #   1. row 1 -> field names
@@ -97,12 +97,12 @@ class Project
   # Adds a model to the current project
   #
   # @param [Hash] hash contains all the modules, name and properties to define the model
-  # @options hash [String] :name The models name
-  # @options hash [Array] :modules An array of the modules to namespace the model
-  # @options hash [Hash] :properties All the models properties
-  # @options properties [Hash] prop_name This is the actual property name and is the hash-key
-  # @options prop_name [String] :type The datatype of the property   
-  # @options prop_name [Boolean] :required  If the property can be null or not  
+  # @option hash [String] :name The models name
+  # @option hash [Array] :modules An array of the modules to namespace the model
+  # @option hash [Hash] :properties All the models properties
+  # @option properties [Hash] prop_name This is the actual property name and is the hash-key
+  # @option prop_name [String] :type The datatype of the property   
+  # @option prop_name [Boolean] :required  If the property can be null or not  
   # 
   def add_model(hash_or_name, options = {})
     if hash_or_name.is_a?(String)
