@@ -30,7 +30,10 @@ class ApplicationController < ActionController::Base
   ##
   # Create a custom error handler
   # 
-  #   render_optional_error_file(:forbidden) if Yogo::Settings[:local_only] && !["127.0.0.1"].include?(request.env["REMOTE_ADDR"])
+  # @example Render an error if the connection is not allowed.
+  #   if Yogo::Settings[:local_only] && !["127.0.0.1"].include?(request.env["REMOTE_ADDR"])
+  #     render_optional_error_file(:forbidden) 
+  #   end
   # 
   # @param [String] status_code the code to return
   # @return [HTML Content to browser] This returns a dynamically generated error page.
@@ -54,6 +57,7 @@ class ApplicationController < ActionController::Base
   ##
   # Method to see if incoming connections are local (and allowed) 
   # 
+  # @example If the connection is local, render the view.
   #   if check_local_only
   #     render :partial => 'dataview'
   #   end
