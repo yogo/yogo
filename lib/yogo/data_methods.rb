@@ -23,47 +23,46 @@ module Yogo
             anon_file_handler = Class.new(CarrierWave::Uploader::Base)
             anon_file_handler.instance_eval do 
               storage :file
-              
+
               self.class_eval("def store_dir; '#{path}'; end")
-              
+
             end
-            
+
             named_class = Object.class_eval("#{self.name}::#{property.name.to_s.camelcase}File = anon_file_handler")
             mount_uploader property.name, named_class
 
           elsif property.type == DataMapper::Types::YogoImage
-              path = Rails.root / 'public' / 'images' 
-              self.name.split('::').each{ |mod| path = path / mod }
-              storage_dir = path.to_s
-              anon_file_handler = Class.new(CarrierWave::Uploader::Base)
-              anon_file_handler.instance_eval do 
-                storage :file
-                self.class_eval("def store_dir; '#{path}'; end")
-              end
+            path = Rails.root / 'public' / 'images' 
+            self.name.split('::').each{ |mod| path = path / mod }
+            storage_dir = path.to_s
+            anon_file_handler = Class.new(CarrierWave::Uploader::Base)
+            anon_file_handler.instance_eval do 
+              storage :file
+              self.class_eval("def store_dir; '#{path}'; end")
+            end
 
-              named_class = Object.class_eval("#{self.name}::#{property.name.to_s.camelcase}File = anon_file_handler")
-              mount_uploader property.name, named_class
-            
+            named_class = Object.class_eval("#{self.name}::#{property.name.to_s.camelcase}File = anon_file_handler")
+            mount_uploader property.name, named_class
+
           end
         end
       end
     end
-    
+
     # @return [String] makes "yogo___" for variable name
     # FIXME @api private, semipublic, or public
     def self.map_attribute(name)
       # @@reserved_names.include?(name) ? "yogo___"+name : name
       name
     end
-    
+
     module ClassMethods
       # FIXME @return []
       # FIXME @api private, semipublic, or public
-      end
-      
-      def usable_properties
-        properties.select{|p| p.name != :yogo_id }
-      end
+    end
+
+    def usable_properties
+      properties.select{|p| p.name != :yogo_id }
     end
   end
 end
