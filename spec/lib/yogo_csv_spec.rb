@@ -10,10 +10,11 @@ describe 'Yogo CSV Module' do
   before(:all) do
     # Need a model and a CSV file.
     model = DataMapper::Model.new do
-      property :id, DataMapper::Types::Serial
-      property :name, String
-      property :mass, Float
-      property :charge, Float
+      property :yogo_id, DataMapper::Types::Serial, :field => 'id'
+      property :id,   Integer,  :prefix => 'yogo'
+      property :name, String,  :prefix => 'yogo'
+      property :mass, Float,   :prefix => 'yogo'
+      property :charge, Float, :prefix => 'yogo'
     end
 
     CsvExampleModel = model if !Object.const_defined?(:CsvExampleModel)
@@ -75,10 +76,10 @@ describe 'Yogo CSV Module' do
       Yogo::CSV.load_data(CsvExampleModel, @one_line)
       CsvExampleModel.count.should eql(1)
       result = CsvExampleModel.first
-      result.name.should eql('Sean')
-      result.id.should eql(1)
-      result.mass.should eql(1283.0)
-      result.charge.should eql(1.2)
+      result.yogo__name.should eql('Sean')
+      result.yogo__id.should eql(1)
+      result.yogo__mass.should eql(1283.0)
+      result.yogo__charge.should eql(1.2)
     end
     
     it "should update existing records with new data" do
@@ -86,11 +87,11 @@ describe 'Yogo CSV Module' do
       Yogo::CSV.load_data(CsvExampleModel, @updated_csv_data)
       CsvExampleModel.count.should eql(3)
       result = CsvExampleModel.get(1)
-      result.name.should eql('Ivan')
-      result.mass.should eql(22.0)
+      result.yogo__name.should eql('Ivan')
+      result.yogo__mass.should eql(22.0)
       result = CsvExampleModel.get(3)
-      result.name.should eql('Dea')
-      result.mass.should eql(23.0)
+      result.yogo__name.should eql('Dea')
+      result.yogo__mass.should eql(23.0)
     end
   end
   

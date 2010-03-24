@@ -90,7 +90,7 @@ module DataMapper
         pfield = Yogo::DataMethods.map_attribute( pname )
         ptype = Yogo::Types.human_to_dm(spec_array[1][idx])
         punits = spec_array[2][idx]
-        prop_hash = { pname => { :type => ptype, :required => false, :position => idx, :field => pfield } }
+        prop_hash = { pname => { :type => ptype, :required => false, :position => idx } }
         spec_hash[:properties].merge!(prop_hash)
       end
       spec_hash[:properties].merge!({ 'yogo_id' => {:type => DataMapper::Types::Serial, :field => 'id' }})

@@ -18,13 +18,15 @@ module Yogo
     # @return the result of csv_data eaching. Don't rely on this return value.
     # 
     def self.load_data(model, csv_data)
+      return unless validate_csv(csv_data).empty?
       csv_data[3..-1].each do |line|
         line_data = Hash.new
         if !line.empty?  #ignore blank lines
           csv_data[0].each_index do |i| 
             attr_name = csv_data[0][i].tableize.singularize.gsub(' ', '_')
-            prop = model.properties["yogo__#{attr_name}"]
-            line_data["yogo__#{attr_name}"] = prop.typecast(line[i]) unless line[i].nil? || prop.nil?
+            attr_name = "yogo__#{attr_name}" unless attr_name.eql?("yogo_id")
+            prop = model.properties[attr_name]
+            line_data[attr_name] = prop.typecast(line[i]) unless line[i].nil? || prop.nil?
           end
           model.create(line_data)
         end 
