@@ -1,19 +1,48 @@
 
 module DataMapper
 
-  # TODO: Document this file
+  # This extends the DataMapper property class to include extra properties.
+  # 
+  # @todo Add more information here.
+  #   We need to add more documentation for the options we added here.
+  # 
+  # @author Robbie Lamb robbie.lamb@gmail.com
+  # @author Ivan Judson irjudson@gmail.com
   class Property
+    
+    # @return [Integer]
     attr_accessor :position
+    
+    # Human readable display name.
+    # @return [String]
     attr_accessor :display_name
+    
+    # @return [String]
     attr_accessor :prefix
+    
+    # @return [String]
     attr_accessor :separator
     
-    alias original_initialize initialize\
-    # FIXME @return []
-    # FIXME @api public, semipublic, or private
+    # @return [String]
+    attr_accessor :units
+    
+    alias original_initialize initialize
+    
+    # Initializer for the Property class.
+    # 
+    # @param [Model] model a Datamapper model the property is to be added to
+    # @param [String or Symbol] name The name of the property to be added
+    # @param [Class] type The class the property should be
+    # @param [Hash] options The options hash
+    #   
+    # @return [Property] the property that was created. Not useful.
+    # 
+    # @api public, semipublic, or private
     def initialize(model, name, type, options = { })
       pos = options.delete(:position)
       self.position = pos.nil? ? nil : pos.to_i
+      
+      self.units = options.delete(:units)
       
       prefix = options.delete(:prefix)
       self.prefix = prefix.nil?  ? "" : prefix
@@ -32,18 +61,19 @@ module DataMapper
       original_initialize(model, name, type, options)
     end
 
-    
-    # alias to_json_schema_hash_without_positon to_json_schema_hash
+    # Compairson method for properties based on the position.
+    # This is primairly useful for sort methods.
     # 
-    # def to_json_schema_hash_with_position(repo)
-    #   json_hash = to_json_schema_hash_without_positon(repo)
-    #   json_hash.merge!({"position" => @position }) unless @position.nil?
-    # end
+    # @example
+    #   property<=>other_property
     # 
-    # alias to_json_schema_hash to_json_schema_hash_with_positon
-    
-    # FIXME @return []
-    # FIXME @api private, semipublic, or public
+    # @param [Property] other The Property to compair to self.
+    # 
+    # @return [Integer]
+    # 
+    # @author Robbie Lamb robbie.lamb@gmail.com
+    # 
+    # @api public
     def <=>(other)
       return  0 if self.position.nil? && other.position.nil?
       return  1 if other.position.nil?

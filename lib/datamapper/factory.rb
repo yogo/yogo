@@ -91,7 +91,6 @@ module DataMapper
       spec_array[0].each_index do |idx|
         prop_hash = Hash.new
         pname = spec_array[0][idx].tableize.singular.gsub(' ', '_')
-        pfield = Yogo::DataMethods.map_attribute( pname )
         ptype = Yogo::Types.human_to_dm(spec_array[1][idx])
         punits = spec_array[2][idx]
         prop_hash = { pname => { :type => ptype, :required => false, :position => idx } }

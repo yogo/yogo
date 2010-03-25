@@ -52,8 +52,7 @@ class YogoModelsController < ApplicationController
       next if name.blank?
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        pfield = Yogo::DataMethods.map_attribute(name)
-        cleaned_options[name] = { :type => prop_type, :position => prop_pos, :field => pfield }
+        cleaned_options[name] = { :type => prop_type, :position => prop_pos }
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
@@ -99,8 +98,7 @@ class YogoModelsController < ApplicationController
       next if name.blank?
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        pfield = Yogo::DataMethods.map_attribute(name)
-        cleaned_params << [name, prop_type, prop_pos, pfield]
+        cleaned_params << [name, prop_type, prop_pos]
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
@@ -112,8 +110,7 @@ class YogoModelsController < ApplicationController
       prop_pos = options[:position]
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        pfield = Yogo::DataMethods.map_attribute(name)
-        cleaned_params << [name, prop_type, prop_pos, pfield]
+        cleaned_params << [name, prop_type, prop_pos]
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end

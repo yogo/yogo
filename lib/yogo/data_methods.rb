@@ -63,6 +63,8 @@ module Yogo
       # 
       # @return [Array] properties that are usable by human consumption
       # 
+      # @author Robbie Lamb robbie.lamb@gmail.com
+      # 
       # @api public
       def usable_properties
         properties.select{|p| p.name != :yogo_id }
