@@ -61,7 +61,7 @@ class YogoModelsController < ApplicationController
     @model = false
     
     if errors.empty? and (@model = @project.add_model(class_name, :properties => cleaned_options)) != false
-      @model.send(:include,Yogo::DataMethods) unless @model.included_modules.include?(Yogo::DataMethods)
+      @model.send(:include,Yogo::Model) unless @model.included_modules.include?(Yogo::Model)
       @model.auto_migrate!
       @model.properties.sort!
       flash[:notice] = 'The model was sucessfully created.'
@@ -119,12 +119,12 @@ class YogoModelsController < ApplicationController
     # Type Checking
     if errors.empty?
       cleaned_params.each do |prop|
-        @model.send(:property, prop[0].to_sym, prop[1], :required => false, :position => prop[2], :field => prop[3], :separator => '__', :prefix => 'yogo')
+        @model.send(:property, prop[0].to_sym, prop[1], :required => false, :position => prop[2], :separator => '__', :prefix => 'yogo')
       end
       
       @model.auto_upgrade!
       @model.properties.sort!
-      @model.send(:include,Yogo::DataMethods)
+      @model.send(:include,Yogo::Model)
       flash[:notice] = "Properties added"
       
       redirect_to project_yogo_model_url(@project, @model.name.demodulize)
@@ -161,7 +161,7 @@ class YogoModelsController < ApplicationController
   # Allows download of yogo project model data in CSV format
   # 
   def download_csv
-    send_data(Yogo::CSV.make_csv(@model, false), 
+    send_data(@model.make_csv(false),
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')

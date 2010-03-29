@@ -33,7 +33,7 @@ module Yogo
                        :properties => mphash
                      }
         yogo_model = factory.build(model_hash, :yogo, { :attribute_prefix => "yogo" } )
-        yogo_model.send(:include, Yogo::DataMethods)
+        yogo_model.send(:include, Yogo::Model)
         yogo_model.auto_migrate!
         # Create each instance of the class
         model.all.each do |item| 

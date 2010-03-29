@@ -52,28 +52,24 @@ class Project
   #   4. rows 4+ -> data
   #  @example loading data from a CSV file into a project model
   #  "aproject.process_csv('mydata.csv','MyModel')"
-  # FIXME @api private, semipublic, or public
+  # 
+  # 
+  # @api public
   def process_csv(datafile, model_name)
     # Read the data in
     csv_data = FasterCSV.read(datafile)
-    errors = Yogo::CSV.validate_csv(csv_data)
     
-    if errors.empty?
-      # Look to see if there is already one of these models.
-      model = get_model(model_name)
+    # Look to see if there is already one of these models.
+    model = get_model(model_name)
 
-      # Process the contents
-      if model.nil?
-        # Get Model name
-        model_name = "Yogo::#{namespace}::#{model_name}"
-        model = DataMapper::Factory.instance.make_model_from_array(model_name, csv_data[0..2])
-        model.send(:include,Yogo::DataMethods) unless model.included_modules.include?(Yogo::DataMethods)
-        model.auto_migrate!
-      end
-      
-      # Load data
-      Yogo::CSV.load_data(model, csv_data)
+    # Generate a model with no properties.
+    if model.nil?
+      model = generate_empty_model(model_name)
+      model.auto_migrate!
     end
+    
+    # Load data
+    errors = model.load_csv_data(csv_data)
     errors
   end
   
@@ -124,7 +120,7 @@ class Project
   end
   
   # @return [String] Removes a model and all of its data from a project
-  # FIXME @api private, semipublic, or public
+  # @api public
   def delete_model(model)
     model = get_model(model) if model.class == String
     name = model.name.demodulize
@@ -139,7 +135,7 @@ class Project
   end
 
   # @return [Model] Removes all models and all of the data from a project
-  # FIXME @api private, semipublic, or public
+  # @api public
   def delete_models!
     models.each do |model|
       delete_model(model)
@@ -148,10 +144,38 @@ class Project
   
   private
   
-  # FIXME @return []
-  # FIXME @api private, semipublic, or public
+  # @param [String] potential_name
+  #   The name to check for validity.
+  # 
+  # @return [TrueClass or FalseClass]
+  #  If the string passed in can be a valid model or colum name
+  # 
+  # @api private
   def valid_model_or_column_name?(potential_name)
     !potential_name.match(/^\d|\.|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)/)
+  end
+  
+  # Generated a model with the only property being :yogo_id in this project's namespace.
+  # It will not be automigrated.
+  # 
+  # @param [String] name
+  #   The name to give to the class.
+  # 
+  # @return [Class]
+  #   The class that has been generated.
+  #
+  # @author Robbie Lamb robbie.lamb@gmail.com
+  # 
+  # @api private
+  def generate_empty_model(model_name)
+    spec_hash = { :modules => ["Yogo", namespace],
+                  :name => model_name, 
+                  :properties => { 'yogo_id' => {:type => DataMapper::Types::Serial, :field => 'id' }}
+                }
+
+    model = DataMapper::Factory.instance.build(spec_hash, :yogo, { :attribute_prefix => "yogo" } )
+    model.send(:include,Yogo::Model)
+    
   end
   
 end

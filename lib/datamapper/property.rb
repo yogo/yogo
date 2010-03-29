@@ -6,6 +6,8 @@ module DataMapper
   # @todo Add more information here.
   #   We need to add more documentation for the options we added here.
   # 
+  # @see http://rdoc.info/projects/datamapper/dm-core DataMapper documentation
+  # 
   # @author Robbie Lamb robbie.lamb@gmail.com
   # @author Ivan Judson irjudson@gmail.com
   class Property

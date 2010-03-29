@@ -122,15 +122,17 @@ class YogoDataController < ApplicationController
       else
         # Read the data in
         csv_data = FasterCSV.read(datafile.path)
-
-        if Yogo::CSV.validate_csv(csv_data[0..2])
-          Yogo::CSV.load_data(@model, csv_data)
+        errors = @model.load_csv_data(csv_data)
+        if errors.empty?
           flash[:notice] = "#{@model.name.demodulize} Data Successfully Uploaded."
         else
+          @errors = errors
           flash[:error] = "CSV File improperly formatted. Data not uploaded."
         end
       end
-      redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
+      respond_to do |format|
+        format.html { redirect_to project_yogo_data_index_url(@project, @model.name.demodulize) }
+      end
     end
   end
 
@@ -171,7 +173,7 @@ class YogoDataController < ApplicationController
   # FIXME @return [] Allows download of yogo project model data in CSV format
   # FIXME @api []
   def download_csv
-    send_data(Yogo::CSV.make_csv(@model, true), 
+    send_data(@model.make_csv(true),
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')
