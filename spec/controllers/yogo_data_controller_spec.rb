@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/csv_shared_controller_spec')
 
 #
 # This should have all the basic CRUD tests, plus anything the controller is doing special
@@ -16,7 +15,5 @@ describe YogoDataController do
   
   describe 'DELETE' do
   end # DELETE tests
-  
-  it_should_behave_like 'CSV File Loading Support'
   
 end # YogoDataController

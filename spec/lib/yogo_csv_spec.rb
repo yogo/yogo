@@ -112,7 +112,6 @@ describe 'Yogo CSV Module' do
     
     it "should update existing records with new data" do
       CsvExampleModel.load_csv_data(@csv_data)
-      # debugger
       errors = CsvExampleModel.load_csv_data(@updated_csv_data)
       errors.should be_empty
       CsvExampleModel.count.should eql(3)
@@ -125,6 +124,7 @@ describe 'Yogo CSV Module' do
     end
     
     it "should not load bad data" do
+      # debugger
       errors = CsvExampleModel.load_csv_data(@bad_data)
       errors.should_not be_empty
       

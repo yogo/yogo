@@ -69,6 +69,7 @@ module Yogo
       # 
       def load_csv_data(csv_data)
         errors = validate_csv_data(csv_data)
+        all_objects = []
         if errors.empty?
           attr_names = csv_data[0].map{|name| name.tableize.singularize.gsub(' ', '_') }
           attr_names = attr_names.map {|name| name.eql?("yogo_id") ? "yogo_id" : "yogo__#{name}" }
@@ -82,10 +83,21 @@ module Yogo
                 prop = props[i]
                 line_data[attr_names[i]] = prop.typecast(line[i]) unless line[i].nil? || prop.nil?
               end
-              create(line_data)
+              obj = self.new(line_data)
+              if obj.valid?
+                all_objects << obj
+              else
+                obj.errors.each_pair do |key,value|
+                  # debugger
+                  value.each do |msg|
+                    errors << "Line #{idx+3} column #{key.to_s.gsub("yogo__", '')} #{msg.split[2..-1].join}"
+                  end
+                end
+              end
             end 
           end
         end
+        all_objects.each{|o| o.save } if errors.empty?
         return errors
       end
 

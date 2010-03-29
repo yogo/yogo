@@ -37,22 +37,26 @@ class Project
     id.to_s
   end
   
-  # FIXME make me shorter
-  #Creates a model and imports data from a CSV file
+  # Creates a model and imports data from a CSV file
   #
-  # @param [String] datafile A path to the CSV file to read in
-  # @param [String] model_name the desired name of the model to be created
+  # @param [String] datafile 
+  #   A path to the CSV file to read in
+  # @param [String] model_name 
+  #   The desired name of the model to be created
   #
-  # @return [Array] Returns empty array if successful or an array of error messages if unsuccessful.
+  # @return [Array] 
+  #   Returns empty array if successful or an array of error messages if unsuccessful.
   #
   # * The csv datafile must be in the following format: 
   #   1. row 1 -> field names
   #   2. row 2 -> type, 
   #   3. row 3 -> units
   #   4. rows 4+ -> data
-  #  @example loading data from a CSV file into a project model
-  #  "aproject.process_csv('mydata.csv','MyModel')"
   # 
+  #  @example loading data from a CSV file into a project model
+  #    "aproject.process_csv('mydata.csv','MyModel')"
+  # 
+  # @author Robbie Lamb
   # 
   # @api public
   def process_csv(datafile, model_name)
@@ -70,7 +74,7 @@ class Project
     
     # Load data
     errors = model.load_csv_data(csv_data)
-    errors
+    return errors
   end
   
   # @return [Array] of the models associated with current project namespace

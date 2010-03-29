@@ -105,8 +105,7 @@ class YogoDataController < ApplicationController
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end  
   
-  # @return [Model] Deletes a yogo project model's selected datum
-  # FIXME @api private, semipublic, or private
+  # @api public
   def destroy
     @model.get(params[:id]).destroy!
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)

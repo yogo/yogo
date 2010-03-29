@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/csv_shared_controller_spec')
 
 describe ProjectsController do
 
@@ -175,12 +174,10 @@ describe ProjectsController do
       end
     end # failure
   end # POST tests
-
-  it_should_behave_like 'CSV File Loading Support'
   
   describe 'creating a model from a csv file' do
     # Model tests
-    it 'should create a new model (overwriting any existing one)'
+    it 'should create a new model'
   end # csv handling
   
 end # projects controller
