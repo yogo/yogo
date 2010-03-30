@@ -44,7 +44,7 @@ end
 # Testing-only gems
 gem 'rspec',        '~>1.3.0', :only => :test, :require_as => nil
 gem 'rspec-rails',  '~>1.3.2', :only => :test, :require_as => 'spec/rails'
-gem 'factory_girl', '~>1.2.3', :only => [:test, :cucumber]
+# gem 'factory_girl', '~>1.2.3', :only => [:test, :cucumber]
 gem 'ZenTest',               :only => [:test, :cucumber]
 gem 'redgreen',              :only => [:test, :cucumber]
 gem 'cucumber',              :only => [:test, :cucumber]
