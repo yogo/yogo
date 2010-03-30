@@ -8,6 +8,8 @@
  # a project and the project is where the models and data will be namespaced.
  #
 
+# Class for a Yogo Project. A project contains a name, a description, and access to all of the models
+# that are part of the project.
 class Project
   include DataMapper::Resource
   
@@ -19,7 +21,13 @@ class Project
   
   before :destroy, :delete_models!
 
-  # @return [String] the project namespaced name
+  # Returns the namespace Yogo Models will be in.
+  # 
+  # @example
+  #   my_project.namespace 
+  # 
+  # @return [String] 
+  #   the project namespaced name
   #
   def namespace
     Extlib::Inflection.classify(path)
@@ -31,6 +39,7 @@ class Project
     name.downcase.gsub(/[^\w]/, '_')
   end
   
+  # Compatability method for rails' route generation helpers
   # @return [String] the object id as url param
   # @api private
   def to_param
@@ -53,7 +62,7 @@ class Project
   #   3. row 3 -> units
   #   4. rows 4+ -> data
   # 
-  #  @example loading data from a CSV file into a project model
+  # @example loading data from a CSV file into a project model
   #    "aproject.process_csv('mydata.csv','MyModel')"
   # 
   # @author Robbie Lamb
@@ -77,8 +86,11 @@ class Project
     return errors
   end
   
-  # @return [Array] of the models associated with current project namespace
-  # @api private, semipublic, or public
+  # Returns all of the Yogo::Models assocated with the project.
+  # 
+  # @return [Array] 
+  #   All of the models associated with current project namespace
+  # @api public
   def models
     DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{namespace}::/ }
   end
