@@ -1,0 +1,34 @@
+<div id="content">
+  <div id="sidebar">
+      <div id="nav-home" class="nav-group">
+        <div class="nav-title" id='home-title'><%= link_to("Home", projects_url) %></div>
+      </div>
+      <div id="sidebar-search">
+        <%- form_for(:model, :url => search_projects_path, :html => {:method => :get} ) do |f| -%>
+          <%= text_field_tag("search_term") %>
+          <%= f.submit('Search') %>
+        <%- end -%>
+      </div>
+      <div id="nav-projects" class="nav-group">
+        <div class="nav-title" id='projects-title'>Projects</div>
+          <div class="nav-items">
+              <ul>
+                <% all_projects.each do |project|%>
+                  <li>
+                    <div id='project-<%= project.id %>'>
+                      <%= link_to(project.name, project_path(project)) %>
+                      <%- if @project == project -%>
+                        <%= render(:partial => 'projects/list_models', :locals => { :models => project.models, :project => project }) %>
+                      <%- end -%>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+          </div>
+      </div>
+  </div>
+  <div id='breadcrumbs'><%= crumbs %></div>
+  <div id="mock-browse">
+    Hi, I browse.
+  </div>
+</div>

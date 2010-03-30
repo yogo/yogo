@@ -1,0 +1,21 @@
+<div id="container"  class="clearfix">
+  <div id='header'>
+    <div id="header-img">
+      <%= image_tag('title.png') %>
+    </div>
+  </div>
+   <div id='tabs' style="visibility:hidden" class="not-so-styled">
+     <ul>
+       <li><a href="#edit">Edit Mockup</a></li>
+       <li><a href="#browse">Browse Mockup</a></li>    
+     </ul>
+       <div id="edit">
+           <%= render :partial => 'editing' %>
+       </div>
+       <div id="browse">
+          <%= render :partial => "browsing" %>
+       </div>
+   </div>
+  <br style="clear:both;" />
+
+  </div>
