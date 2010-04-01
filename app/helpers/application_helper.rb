@@ -15,6 +15,9 @@ module ApplicationHelper
   ##
   # Adds items to the menu in the view
   #
+  # @example
+  #  add_menu_item(Bacon, bacon)
+  #
   # @param [String] name
   #  The name of the item to link to
   # @param [String] url
@@ -27,6 +30,7 @@ module ApplicationHelper
   # @author Yogo Team
   #
   # @api public
+  #
   def add_menu_item(name, url = {}, html_options = {})
     css_class = ''
     css_class = 'highlighted-menu-item' if request.url.include?(h(url))
@@ -39,6 +43,9 @@ module ApplicationHelper
   ##
   # Returns all projects
   # 
+  # @example
+  #  all_projects
+  #
   # @return [Array <Objects>] returns an array of projects
   #
   # @author Yogo Team
@@ -52,6 +59,9 @@ module ApplicationHelper
   ##
   # Generates the links needed for pagination
   #
+  # @example
+  #  pagiation_links(yogo_collection, 1, 20)
+  #
   # @param [object] collection
   #  Yogo collection object
   # @param [Integer] cur_page
@@ -64,6 +74,7 @@ module ApplicationHelper
   # @author Robbie Lamb
   #
   # @api public
+  #
   def pagination_links(collection, cur_page = 1, per_page = 5)
     total_pages = collection.page_count(:per_page => per_page)
     current_page = cur_page.nil? ? 1 : cur_page.to_i
@@ -101,11 +112,15 @@ module ApplicationHelper
   ##
   # Creates breadcrumbs based on the request query_string
   #
+  # @example
+  #   query_params
+  #
   # @return [String] a string of links of breadcrumbs based on the request query_string
   #
   # @author Yogo Team
   #
   # @api public
+  #
   def query_params
     ref_path = request.path_info;
     ref_query = URI.decode(request.query_string)
