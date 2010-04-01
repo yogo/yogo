@@ -12,23 +12,33 @@ module DataMapper
     # There is one factory to rule them all, and in the data bind them.
     include Singleton
     
-    # FIXME make me shorter
-    # FIXME @reture [] This will look for a hash with certain keys in it. Those keys are:
-    # * :modules    =>  [], and array of modules the class will be namespaced into by the order they are in the array
-    # * :name       =>  'ClassName' The name of the class in camel case format.
-    # * :properties =>  {}, a hash of properties
+    # Created a datamapper model based on the description passed in.
     # 
-    #     Each key in the property hash is the name of the property.
-    #     if the key points to a string or symbol, that will be used as the property type.
-    #     The property type should be a valid DataMapper property type.
-    #--
-    #     If the key points to a hash, dum, Dum, DUM!? What will happen?!
+    # @param [Hash] desc
+    #   The description of the class in a hash.
+    # @option desc [Array] :modules array of modules the class will be namespaced into by the order they are in the array
+    # @option desc [String or Symbol] :name The name of the class in camel case format.
+    # @option desc [Hash] :properties a hash of properties
+    # 
+    # @param [Symbol] repository_name 
+    #   Repository name from the class
+    # 
+    # @param [Hash] options
+    #   Other options for the class
+    # 
+    # @return [Class] 
+    #   The named class
+    #     
+    # Each key in the property hash is the name of the property.
+    # if the key points to a string or symbol, that will be used as the property type.
+    # The property type should be a valid DataMapper property type.
     #
-    #  TODO : Implement support for relationships/associations
-    # :associations => {} associations this class has with other classes.
-    #++
-    # This returns a datamapper model
-    # FIXME @api private, semipublic, or public
+    # If the key points to a hash, dum, Dum, DUM!? What will happen?!
+    #
+    # @todo Implement support for relationships/associations
+    #   :associations => {} associations this class has with other classes.
+    #
+    # @api public
     def build(desc, repository_name = :default, options = {})
       module_names = desc[:modules] || []
       class_name   = desc[:name]
