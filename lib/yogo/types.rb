@@ -100,7 +100,7 @@ module Yogo
     #
     # @author Yogo Team
     #
-    #
+    # @api public
     def self.dm_to_gv(dmtype)
       @@GVTM[dmtype]
     end

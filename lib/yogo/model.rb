@@ -7,9 +7,14 @@ module Yogo
   # @api private
   module Model
       ##
-      # This method should never be called directly.
+      # This method should never be called directly
+      #
       # @see http://ruby-doc.org/core-1.8.7/classes/Module.html#M000402 Ruby Doc for more info
+      #
+      # @return [boolean]
+      #
       # @author Robbie Lamb robbie.lamb@gmail.com
+      #
       # @api private
       def self.included(base)
         base.send(:extend, ClassMethods)

@@ -31,6 +31,10 @@ module Yogo
     ##
     # Loads YAML files for the default settings to be used
     # 
+    # @example
+    # @setting.load_defaults(Dir.glob(Rails.root.to_s+"/vendor/gems/**/config/settings.yml")
+    #                  Dir.glob(Rails.root.to_s+"/config/settings.yml")
+    #                 )
     # @param [Array] files 
     #   An array of files to load the defaults from
     # 
@@ -54,6 +58,8 @@ module Yogo
     ##
     # Used to query the settings basied on a key
     #
+    # @example
+    #   @setting.[](local_only)
     # @param [String or Symbol] key 
     #  The key to retrieve
     # 
@@ -80,6 +86,8 @@ module Yogo
     ##
     # Used to set a value for a particular key
     # 
+    # @example
+    #   @setting.[]=(local_only, false)
     # @param [String or Symbol] key 
     #   key to store
     # @param [Object] value 

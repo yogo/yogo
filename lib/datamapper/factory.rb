@@ -16,12 +16,12 @@ module DataMapper
     #  Builds a DataMapper Model
     #
     # @param [Hash] desc
-    # @options desc [Hash] :modules
-    # @options desc [String] :name
-    # @options desc [Hash] :properties
+    # @option desc [Hash] :modules
+    # @option desc [String] :name
+    # @option desc [Hash] :properties
     # @option properties [Hash] pname 
     #  This is the actual property name and is the hash-key
-    # @options pname [String] :ptype 
+    # @option pname [String] :ptype 
     #  The datatype of the property   
     # @option pname [Boolean] :required  
     #  If the property can be null or not
@@ -30,7 +30,7 @@ module DataMapper
     # @param [String] repository_name 
     #  The name of the repository to associate the DataMapper Model with
     # @param [Hash] options
-    # @options options [String] :attribute_prefix
+    # @option options [String] :attribute_prefix
     #
     # @return [Hash] This will look for a hash with certain keys in it. Those keys are:
     # * :modules    =>  [], an array of modules the class will be namespaced 
@@ -49,7 +49,7 @@ module DataMapper
     #++
     # @author Yogo Team
     #
-    # @api public
+    # @api private
     def build(desc, repository_name = :default, options = {})
       module_names = desc[:modules] || []
       class_name   = desc[:name]

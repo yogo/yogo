@@ -1,10 +1,11 @@
 
 module DataMapper
 
-  # This extends the DataMapper property class to include extra properties.
+  # This extends the DataMapper property class to include extra properties
   # 
-  # @todo Add more information here.
-  #   We need to add more documentation for the options we added here.
+  #
+  # @todo Add more information here
+  #   We need to add more documentation for the options we added here
   # 
   # @see http://rdoc.info/projects/datamapper/dm-core DataMapper documentation
   # 
@@ -12,26 +13,39 @@ module DataMapper
   # @author Ivan Judson irjudson@gmail.com
   class Property
     
+    # @example property.position
     # @return [Integer]
+    # @api public
     attr_accessor :position
     
-    # Human readable display name.
+    # Human readable display name
+    # @example property.display_name
     # @return [String]
+    # @api public
     attr_accessor :display_name
     
+    # @example property.prefix
     # @return [String]
+    # @api public
     attr_accessor :prefix
     
+    # @example property.seperator
     # @return [String]
+    # @api public
     attr_accessor :separator
     
+    # @example property.units
     # @return [String]
+    # @api public
     attr_accessor :units
     
     alias original_initialize initialize
     
-    # Initializer for the Property class.
-    # 
+    # Initializer for the Property class
+    #
+    # @example
+    #   initializer(Yogo::SampleModel, "height", float)
+    #
     # @param [Model] model a Datamapper model the property is to be added to
     # @param [String or Symbol] name The name of the property to be added
     # @param [Class] type The class the property should be
@@ -39,7 +53,9 @@ module DataMapper
     #   
     # @return [Property] the property that was created. Not useful.
     # 
-    # @api public, semipublic, or private
+    # @author Yogo Team
+    #
+    # @api public
     def initialize(model, name, type, options = { })
       pos = options.delete(:position)
       self.position = pos.nil? ? nil : pos.to_i
@@ -63,13 +79,14 @@ module DataMapper
       original_initialize(model, name, type, options)
     end
 
-    # Compairson method for properties based on the position.
-    # This is primairly useful for sort methods.
+    # Compairson method for properties based on the position
+    #
+    # This is primairly useful for sort methods
     # 
     # @example
     #   property<=>other_property
     # 
-    # @param [Property] other The Property to compair to self.
+    # @param [Property] other The Property to compair to self
     # 
     # @return [Integer]
     # 
