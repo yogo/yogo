@@ -24,9 +24,26 @@ gem "fastercsv"
 gem "carrierwave"
 
 # Build/CI gems that are just good for us to use.
-gem "yard",           :require_as => 'dm-core' # We do this because :require_as => nil doesn't work.
-gem "yardstick",      :require_as => 'dm-core'
-gem "bluecloth",      :require_as => 'dm-core'
+# We :require_as => 'dm-core' because :require_as => nil doesn't work.
+gem "yard",           :require_as => 'dm-core', :only => [:test, :development]
+gem "yardstick",      :require_as => 'dm-core', :only => [:test, :development]
+gem "bluecloth",      :require_as => 'dm-core', :only => [:test, :development]
+gem "hoe",            :require_as => 'dm-core', :only => [:test, :development]
+gem "ruby_parser",    :require_as => 'dm-core', :only => [:test, :development]
+gem "flay",           :require_as => 'dm-core', :only => [:test, :development]
+gem "flog",           :require_as => 'dm-core', :only => [:test, :development]
+gem "chronic",        :require_as => 'dm-core', :only => [:test, :development]
+gem "fattr",          :require_as => 'dm-core', :only => [:test, :development]
+gem "arrayfields",    :require_as => 'dm-core', :only => [:test, :development]
+gem "main",           :require_as => 'dm-core', :only => [:test, :development]
+gem "hirb",           :require_as => 'dm-core', :only => [:test, :development]
+gem "churn",          :require_as => 'dm-core', :only => [:test, :development]
+gem "Saikuro",        :require_as => 'dm-core', :only => [:test, :development]
+gem "reek",           :require_as => 'dm-core', :only => [:test, :development]
+gem "ruby2ruby",      :require_as => 'dm-core', :only => [:test, :development]
+gem "roodi",          :require_as => 'dm-core', :only => [:test, :development]
+gem "googlecharts",   :require_as => 'dm-core', :only => [:test, :development]
+gem "metric_fu",      :require_as => 'dm-core', :only => [:test, :development]
 
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)
