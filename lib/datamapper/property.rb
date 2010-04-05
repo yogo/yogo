@@ -43,8 +43,8 @@ module DataMapper
     
     # Initializer for the Property class
     #
-    # @example
-    #   initializer(Yogo::SampleModel, "height", float)
+    # This should never be called directly.
+    #   
     #
     # @param [Model] model a Datamapper model the property is to be added to
     # @param [String or Symbol] name The name of the property to be added
@@ -55,7 +55,9 @@ module DataMapper
     # 
     # @author Yogo Team
     #
-    # @api public
+    # @see http://rdoc.info/projects/datamapper/dm-core
+    # 
+    # @api semipublic
     def initialize(model, name, type, options = { })
       pos = options.delete(:position)
       self.position = pos.nil? ? nil : pos.to_i
