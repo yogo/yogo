@@ -12,12 +12,13 @@ module DataMapper
     # There is one factory to rule them all, and in the data bind them.
     include Singleton
     
-    # Created a datamapper model based on the description passed in
+    # Create a datamapper model based on the description passed in
     #
     # @param [Hash] desc
     # @option desc [Array] :modules array of modules the class will be namespaced into by the order they are in the array
     # @option desc [String or Symbol] :name The name of the class in camel case format.
     # @option desc [Hash] :properties a hash of properties
+    # 
     # @option properties [Hash] pname 
     #  This is the actual property name and is the hash-key
     # @option pname [String] :ptype 
@@ -33,24 +34,15 @@ module DataMapper
     # @param [Hash] options
     # @option options [String] :attribute_prefix
     #
-    # @return [Hash] This will look for a hash with certain keys in it. Those keys are:
-    # * :modules    =>  [], an array of modules the class will be namespaced 
-    #   into by the order they are in the array
-    # *  :name       =>  'ClassName' The name of the class in camel case format.
-    # * :properties =>  {}, a hash of properties
-    #   Each key in the property hash is the name of the property.
-    #   if the key points to a string or symbol, that will be used as the property type.
-    #   The property type should be a valid DataMapper property type.
+    # @return [Class] The class the factory created
     # 
     #
-    #     If the key points to a hash, dum, Dum, DUM!? What will happen?!
-    #
-    #  TODO : Implement support for relationships/associations
-    # :associations => {} associations this class has with other classes.
+    # @todo Implement support for relationships/associations
+    #   This ill need to handle associations somehow :associations => {} associations this class has with other classes.
     #
     # @author Yogo Team
     #
-    # @api private
+    # @api public
     def build(desc, repository_name = :default, options = {})
       module_names = desc[:modules] || []
       class_name   = desc[:name]
