@@ -7,7 +7,10 @@
 # 
 module Enumerable
   ##
-  # FIXME @return [Hash]
+  # @example
+  #   to_histogram
+  # @return [Hash]
+  #
   # @author Ivan Judson
   #
   # @api public

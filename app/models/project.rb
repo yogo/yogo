@@ -106,7 +106,7 @@ class Project
   end
   
   ##
-  # Returns all of the Yogo::Models assocated with the project.
+  # Returns all of the Yogo::Models assocated with the project
   # 
   # @example
   #  models
@@ -263,6 +263,7 @@ class Project
   
   ##
   # Generates a model with the property :yogo_id in the project's namespace
+  #
   # It will not be automigrated
   # 
   # @param [String] name

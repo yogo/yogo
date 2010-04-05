@@ -28,14 +28,14 @@ module Yogo
     # @author Robbie Lamb
     module Csv
       ##
-      # Returns a csv file of this model.
+      # Returns a csv file of this model
       # 
       # @example
       #   @model.make_csv(true)  # To include all of the model's data
       #   @model.make_csv(false) # Only a spreadsheet template
       # 
       # @param [Boolean] include_data Include all of the data this model represents, or just the headers
-      #    Defaults to false, just show the headers.
+      #    Defaults to false, just show the headers
       # 
       # @return [String] The CSV in a string
       # 
@@ -54,6 +54,7 @@ module Yogo
 
         csv_output
       end
+      
       ##
       # Loads a CSV file into the model
       # 
