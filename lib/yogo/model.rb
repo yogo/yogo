@@ -1,6 +1,12 @@
 
 module Yogo
+  # This module contains methods for a Yogo model
+  #
+  # @author Robbie Lamb
+  #
+  # @api private
   module Model
+      ##
       # This method should never be called directly.
       # @see http://ruby-doc.org/core-1.8.7/classes/Module.html#M000402 Ruby Doc for more info
       # @author Robbie Lamb robbie.lamb@gmail.com
@@ -44,9 +50,15 @@ module Yogo
           end
         end
       end
-  
+      ##
+      # This module contains the public methods for a Yogo model
+      #
+      # @author Robbie Lamb
+      #
+      # @api public
       module ClassMethods
-        # The properties on a model for human consumption.
+        ##
+        # The properties on a model for human consumption
         # 
         # @example @model.usable_properties.each{|prop| puts prop.display_name }
         # 

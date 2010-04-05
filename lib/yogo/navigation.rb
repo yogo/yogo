@@ -6,6 +6,11 @@
 # FILE: navigation.rb
 # 
 module Enumerable
+  ##
+  # FIXME @return [Hash]
+  # @author Ivan Judson
+  #
+  # @api public
   def to_histogram
     inject(Hash.new(0)) { |h, x| h[x] += 1; h}
   end
@@ -18,7 +23,9 @@ module Yogo
     # 
     # @param [Class] Model The model to get the attributes from
     # 
-    # FIXME @api private, semipublic, or public
+    # @author Ivan Judson
+    #
+    # @api public
     def self.attributes(model)
       model.usable_properties.map { |prop| prop.display_name.to_s }
     end
@@ -31,7 +38,9 @@ module Yogo
     # 
     # @return [Hash] Histogram of values for the model, attribute
     #
-    # FIXME @api private, semipublic, or public
+    # @author Ivan Judson
+    #
+    # @api public
     def self.values(model, attribute)
       values = model.all.map { |m| m[attribute.to_sym] }
       values.to_histogram

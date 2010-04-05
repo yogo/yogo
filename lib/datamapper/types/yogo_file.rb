@@ -5,14 +5,17 @@ module DataMapper
       primitive String
       length    2000
       
+      # @api private
       def self.load(value, property)
         value.to_s
       end
       
+      # @api private
       def self.dump(value, property)
         value.to_s
       end
       
+      # @api private
       def self.typecast(value, property)
         value.to_s
       end

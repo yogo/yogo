@@ -8,9 +8,10 @@
 # @author Robbie Lamb robbie.lamb@gmail.com
 module Yogo
   module Model
-    # This file contans methods for importing and exporting CSV from a model.
+    ##
+    # This file contans methods for importing and exporting CSV from a model
     # 
-    # We expect a very particular format for the CSV files.
+    # We expect a very particular format for the CSV files
     # 
     # The first three rows contains information about the types of data in the file.
     # 
@@ -18,22 +19,22 @@ module Yogo
     # 
     # The second row is the type of data the column contains. Valid types for this row is one of the Human Types defined in Yogo::Types
     # 
-    # The third row contains unit information for the column.
+    # The third row contains unit information for the column
     # 
-    # A special column labeled Yogo ID should not be touched by the end user.
+    # A special column labeled Yogo ID should not be touched by the end user
     # 
     # @see Yogo::Types
     # 
     # @author Robbie Lamb
     module Csv
-      
+      ##
       # Returns a csv file of this model.
       # 
       # @example
       #   @model.make_csv(true)  # To include all of the model's data
       #   @model.make_csv(false) # Only a spreadsheet template
       # 
-      # @param [Boolean] include_data Include all of the data this model represents, or just the headers.
+      # @param [Boolean] include_data Include all of the data this model represents, or just the headers
       #    Defaults to false, just show the headers.
       # 
       # @return [String] The CSV in a string
@@ -53,7 +54,7 @@ module Yogo
 
         csv_output
       end
-      
+      ##
       # Loads a CSV file into the model
       # 
       # @example
@@ -61,7 +62,7 @@ module Yogo
       # 
       # @param [Array] csv_data Arraified CSV data. Parsed with FasterCSV
       # 
-      # @return [Array] This will return an array of errors or an emty array if there were none.
+      # @return [Array] This will return an array of errors or an emty array if there were none
       # 
       # @author Robbie Lamb robbie.lamb@gmail.com
       # 
@@ -102,20 +103,21 @@ module Yogo
       end
 
       private
-      
-      # Checks the columns in the file vs. the properties on the current model.
-      #   If there are new columns, they are created.
-      #   If there are columns that exist, but have different types, we should throw an approporate error.
+      ##
+      # Checks the columns in the file vs. the properties on the current model
       #
-      # This should only be run after validate_csv_format on the file.
+      #   If there are new columns, they are created.
+      #   If there are columns that exist, but have different types, 
+      #   we should throw an approporate error
+      #
+      # This should only be run after validate_csv_format on the file
       # 
       # @example errors = verify_csv_columns
       # 
       # @param [Array] csv_data
       #   Array of Arrays of CSV data.
       # 
-      # #return [Array]
-      #   Returns an erray of errors. They array is empty if there are no errors.
+      # @return [Array] Returns an array of errors. The array is empty if there are no errors
       # 
       # @api private
       def validate_csv_data(csv_data)

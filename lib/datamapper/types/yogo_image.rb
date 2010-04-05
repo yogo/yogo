@@ -5,14 +5,17 @@ module DataMapper
       primitive String
       length    2000
       
+      # @api private
       def self.load(value, property)
         value.to_s
       end
       
+      # @api private
       def self.dump(value, property)
         value.to_s
       end
       
+      # @api private
       def self.typecast(value, property)
         value.to_s
       end
@@ -25,6 +28,7 @@ module DataMapper
       extend Chainable
       
       chainable do
+        # @api private
         def type_map
           @yogo_file_type_map ||= {
             DataMapper::Types::YogoImage => { :primitive => 'string', :yogo_image => 'true'}
@@ -33,6 +37,7 @@ module DataMapper
       end
       
       chainable do
+        # @api private
         def get_type(dm_type)
           if dm_type['type'].gsub(/\(\d*\)/, '') == 'string' && dm_type.has_key?('yogo_image')
             return DataMapper::Types::YogoImage
@@ -47,6 +52,7 @@ module DataMapper
   
   module Adapters
     extendable do
+      # @api private
       def const_added(const_name)
         super 
         if DataMapper::YogoImageAdapterExtensions.const_defined?(const_name)
