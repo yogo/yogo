@@ -8,11 +8,18 @@
 module Yogo
   class Loader
     ##
-    # @return [Model] load a repository into a new project
-    # 
+    # Loads a repository into a new project
+    #
+    # @example TODO
+    #
     # @param [Slug] repo the repository to load the project from
     # @param [String] name the project name in normal form, e.g. "Example Project"
-    # FIXME @api private, semipublic, or public
+    #
+    # @return [Model] load a repository into a new project
+    # 
+    # @author Yogo Team
+    #
+    # @api public
     def self.load(repo, name)
       factory = DataMapper::Factory.instance()
       # Iterate through each model and make it in persevere, then copy instances

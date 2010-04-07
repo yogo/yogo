@@ -13,6 +13,7 @@ module DataMapper
   # @author Ivan Judson irjudson@gmail.com
   class Property
     
+    # Position
     # @example property.position
     # @return [Integer]
     # @api public
@@ -24,21 +25,28 @@ module DataMapper
     # @api public
     attr_accessor :display_name
     
+    # Prefix
     # @example property.prefix
     # @return [String]
     # @api public
     attr_accessor :prefix
     
+    # Separator
     # @example property.seperator
     # @return [String]
     # @api public
     attr_accessor :separator
     
+    # Units
     # @example property.units
     # @return [String]
     # @api public
     attr_accessor :units
     
+    # Original Initialize
+    # @example orginal_initialize
+    # @return 
+    # @api public
     alias original_initialize initialize
     
     # Initializer for the Property class

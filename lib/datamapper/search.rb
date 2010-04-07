@@ -1,7 +1,19 @@
 module DataMapper
   module Model
-    # @return [Spring] Searches over all of the fields with a like
-    # FIXME @api private, semipublic, or public
+    ##
+    # Does a search
+    #
+    # @example
+    #   search("me")
+    #
+    # @param [String] value
+    # @param [Hash] options 
+    #
+    # @return [String] Searches over all of the fields with a like
+    #
+    # @author Yogo Team
+    #
+    # @api public
     def search(value, options = {})
       # Datamapper doesn't perform an actual query until the query object is looked at.
       # So we create a bunch individual query objects, and 'or' them together.
@@ -24,8 +36,21 @@ module DataMapper
   end
   
   class Collection
+    
+    ##
+    # Does a search
+    #
+    # @example
+    #   search("me")
+    #
+    # @param [String] value
+    # @param [Hash] options 
+    #
     # @return [String] Searches over all of the fields with a like
-    # FIXME @api private, semipublic, or public
+    #
+    # @author Yogo Team
+    #
+    # @api public
     def search(value, options = {})
       # Datamapper doesn't perform an actual query until the query object is looked at.
       # So we create a bunch individual query objects, and 'or' them together.

@@ -4,17 +4,20 @@ module DataMapper
     class YogoImage < DataMapper::Type
       primitive String
       length    2000
-      
+      # load
+      # @return [String]
       # @api private
       def self.load(value, property)
         value.to_s
       end
-      
+      # dump
+      # @return [String]
       # @api private
       def self.dump(value, property)
         value.to_s
       end
-      
+      # typecast
+      # @return [String]
       # @api private
       def self.typecast(value, property)
         value.to_s

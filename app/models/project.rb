@@ -141,7 +141,21 @@ class Project
     DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::#{name}$/i }[0]
   end
 
-  
+  ##
+  # Used to retreive the DataMapper model that have search term in their name
+  #
+  # @example
+  #  search_models("Baccon")
+  #
+  # @param [String] search_term
+  #  The term to search for
+  #
+  # @return [Models] the DataMapper models
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  #
   def search_models(search_term)
     DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::\w*#{search_term}\w*$/i }
   end
