@@ -1,7 +1,17 @@
 class YogoDataFormBuilder < ActionView::Helpers::FormBuilder
-  
+  ##
+  # Creates the correct form field element for a DataMapper Type
+  #
+  # @example field_for_param(DM_Object_Boolean, {:checked => "checked"})
+  #
+  # @param [Object] param has a .type and .name
+  # @param [Hash] *args hash of options
+  #
   # @return [String] Analyze a DataMapper parameter to create the correct form element type
-  # FIXME @api private, semipubic, or private
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def field_for_param(param, *args)
     if param.type == DataMapper::Types::YogoFile || param.type == DataMapper::Types::YogoImage
       file_field(param.name, *args)
