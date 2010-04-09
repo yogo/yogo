@@ -4,18 +4,58 @@
       <%= image_tag('title.png') %>
     </div>
   </div>
-   <div id='tabs' style="visibility:hidden" class="not-so-styled">
-     <ul>
-       <li><a href="#edit">Edit Mockup</a></li>
-       <li><a href="#browse">Browse Mockup</a></li>    
-     </ul>
-       <div id="edit">
-           <%= render :partial => 'editing' %>
-       </div>
-       <div id="browse">
-          <%= render :partial => "browsing" %>
-       </div>
-   </div>
-  <br style="clear:both;" />
+  
+  <div id="content">
+    <div id="mockup-intro">
+      <H2>Yogo Dashboard</H2>
+      <div class="mock-button-small">
+        <%= link_to(image_tag("create-project-small.jpg"), "/mockup/name_project") %>
+      </div>
+      <div class="mock-project-block">
+        <div class="mock-project-icon">
+          <%= link_to(image_tag('mock-project-icon.jpg'), "/mockup/show_project1") %>
+        </div>
+        <div class="mock-project-text">
+          <%= link_to("Parkinson's Disease Research", "/mockup/show_project1") %>
+          <p><strong>Parkinson's Disease Research:</strong> This project contains data from three components of our research: Neuropsych evaluations, fMRI analysis results, and Magnetoencephalography (MEG) results. </p>
+          <!-- <p>Recently added/edited data - a count? </p>
+                    <p>stats - total number of rows</p>
+                    <p>control panel-y: </p>
+                    <p>edit, manage data or import from spreadsheet</p> -->
+        </div>
+      </div>
 
-  </div>
+      <div class="mock-project-block">
+        <div class="mock-project-icon">
+          <%= link_to(image_tag('mock-project-icon.jpg'), "") %>
+        </div>
+        <div class="mock-project-text">
+          <%= link_to("Field Experiments", "") %>
+          <p><strong>Field Experiments:</strong> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+        </div>
+      </div>
+        
+      <div class="mock-project-block">
+        <div class="mock-project-icon">
+          <%= link_to(image_tag('mock-project-icon.jpg'), "") %>
+        </div>
+        <div class="mock-project-text">
+          <%= link_to("Protein Assays", "") %>
+          <p><strong>Protein Assays:</strong> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+        
+      <div class="mock-project-block">
+        <div class="mock-project-icon">
+          <%= link_to(image_tag('mock-project-icon.jpg'), "") %>
+        </div>
+        <div class="mock-project-text">
+          <%= link_to("Data Mining", "") %>
+          <p><strong>Data Mining:</strong> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+        </div>
+      </div>
+    </div> <!-- End mockup-intro div -->
+  
+  </div>  <!-- End content div -->
+  
+</div>
