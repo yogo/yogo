@@ -1,0 +1,42 @@
+<div id="container"  class="clearfix">
+  <div id='header'>
+    <div id="header-img">
+      <%= image_tag('title.png') %>
+    </div>
+  </div>
+  <div id="mock-search-tab">
+    <%= image_tag('mock-search-tab.png') %>
+  </div>
+  <div id="content">
+    <div id="sidebar">
+        <div id="nav-home" class="nav-group">
+          <div class="nav-title" id='home-title'><%= link_to("Home", projects_url) %></div>
+        </div>
+        <div id="nav-projects" class="nav-group">
+          <div class="nav-title" id='projects-title'>Parkinson's Disease Research</div>
+            <div class="nav-items">
+                <ul>
+                    <li><%= link_to("Neuropsych evaluations", "") %></li>
+                    <li><%= link_to("fMRI analysis", "") %></li>
+                    <li><%= link_to("MEG results", "") %></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div id="mockup-show-project">
+      <h2>Parkinson's Disease Research</h2>
+
+      <%= link_to(image_tag('edit_big.png')+"Edit dataset descriptions", "/mockup/edit") %>
+      <br /><br />
+      <div class="mock-model-block">
+        <%= link_to(image_tag("mock-expanded-div.jpg"), "/mockup/show_project2") %>
+      </div>
+      <div class="mock-model-block">
+        <%= image_tag("mock-collapsed-divs.jpg") %>
+      </div>
+    </div>
+    
+  </div>  <!-- End content div -->
+    
+</div>
