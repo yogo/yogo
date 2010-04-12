@@ -6,7 +6,7 @@
   </div>
   
   <div class="nav-group" style="float:left; margin-left:20px;">
-    <div class="nav-title" id='home-title'><%= link_to("Home", "/mockup/index_no_projects") %></div>
+    <div class="nav-title" id='home-title'><%= link_to("Home", "/mockup") %></div>
   </div>
   
   <div id="mock-roadmap">
@@ -18,13 +18,15 @@
       <div id="nav-home" class="nav-group">
         <h5 style="margin-left:42px;">Data Types</h5>
        <%= image_tag('mock-palette.jpg') %>
+       <h5 style="margin-left:48px;">Protocol</h5>
+       <button style="margin:8px 0 0 20px;">Upload a protocol</button>
       </div>
     </div>
     <div id="mockup-edit">
       Dataset name: <input /><br />
       <%= image_tag('mock-workspace.jpg') %>
       <p style="margin-left:200px;"><%= image_tag('add.gif') %> Describe another dataset?</p>
-      <p style="text-align:right;"><%= link_to(image_tag('mock-save.jpg'), "/mockup/show_project1") %></p>
+      <p style="text-align:right;"><%= link_to(image_tag('mock-save.jpg'), "/mockup/show_project") %></p>
     </div>
   </div>
 </div>

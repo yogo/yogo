@@ -13,15 +13,78 @@
       </div>
       <div class="mock-project-block">
         <div class="mock-project-icon">
-          <%= link_to(image_tag('mock-project-icon.jpg'), "/mockup/show_project1") %>
+          <%= link_to(image_tag('mock-project-icon.jpg'), "/mockup/show_project") %>
         </div>
         <div class="mock-project-text">
-          <%= link_to("Parkinson's Disease Research", "/mockup/show_project1") %>
+          <%= link_to("Parkinson's Disease Research", "/mockup/show_project") %>
           <p><strong>Parkinson's Disease Research:</strong> This project contains data from three components of our research: Neuropsych evaluations, fMRI analysis results, and Magnetoencephalography (MEG) results. </p>
-          <!-- <p>Recently added/edited data - a count? </p>
-                    <p>stats - total number of rows</p>
-                    <p>control panel-y: </p>
-                    <p>edit, manage data or import from spreadsheet</p> -->
+          <table class="dashboard-table">
+            <thead>
+              <th>Dataset</th>
+              <th>New</th>
+              <th>Total</th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </thead>
+            <tr>
+              <td style="text-align:left;">Neuropsych evaluations
+              </td>
+              <td>
+                <%= link_to("3", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to("86", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('manage.png', :title => "Manage Data"), "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('edit.png', :title => "Describe Dataset"), "/mockup/edit") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('import.png', :title => "Import Data"), "") %>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:left;">fMRI analysis
+              </td>
+              <td>
+                <%= link_to("1", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to("32", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('manage.png', :title => "Manage Data"), "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('edit.png', :title => "Describe Dataset"), "/mockup/edit") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('import.png', :title => "Import Data"), "") %>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:left;">MEG results
+              </td>
+              <td>
+                <%= link_to("17", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to("17", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('manage.png', :title => "Manage Data"), "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('edit.png', :title => "Describe Dataset"), "/mockup/edit") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('import.png', :title => "Import Data"), "") %>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
 
