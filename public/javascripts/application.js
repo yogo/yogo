@@ -28,6 +28,15 @@ $(document).ready(function(){
   });
   
   $("#tabs").tabs();
+
+  //Hide (Collapse) the toggle containers on load
+  $(".toggle_container").hide();
+
+  //Slide up and down & toggle the Class on click
+  $('h2.trigger').click(function(){
+  $(this).toggleClass('active').next('.toggle_container').slideToggle('slow');
+  });
+
 });
 
 function check_navigation_element_state(element){
