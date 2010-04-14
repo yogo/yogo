@@ -11,6 +11,8 @@ require 'slash_path'
 require 'yaml'
 require 'net/http'
 
+
+
 namespace :persvr do
   PERSVR_CMD = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || RAILS_ROOT/'vendor/bundled/bin/persvr' || 'persvr'
   
@@ -109,7 +111,7 @@ namespace :persvr do
           pid = Process.fork do
             puts "Starting background persvr #{RAILS_ENV} instance in #{RAILS_ROOT/cfg['database']}..."
             puts "...logging persvr output to #{log}."
-            exec "#{PERSVR_CMD} --start --port #{cfg['port']} >& #{log}" 
+            exec "nohup -- #{PERSVR_CMD} --start --port #{cfg['port']}" 
           end
           Process.detach(pid)
           
