@@ -7,28 +7,14 @@ describe 'The DataMapper reflection module' do
   end
 
   describe 'reflected model instance' do
-    # it 'should respond to is_reflected? and return true for a reflected model'
     it 'should respond to default_repository_name? and return the correct repo for a reflected model'
   end
 
-  describe 'persevere adapter' do
-    it 'should respond to fetch_storage_names and return an array of models'
+  describe 'reflective adapter' do
+    it 'should respond to get_storage_names and return an array of models' do
+      repository(:default).adapter.should respond_to(:get_storage_names)
+      repository(:default).adapter.get_storage_names.should be_kind_of(Array)
+    end
   end
 
-  describe 'mysql adapter' do
-    it 'should respond to fetch_storage_names and return an array of models'
-  end
-
-  describe 'sqlite3 adapter' do
-    it 'should respond to fetch_storage_names and return an array of models'
-  end
-
-  describe 'postgres adapter' do
-    it 'should respond to fetch_storage_names and return an array of models'
-  end
-
-  describe 'csv utilities' do
-    it 'should parse the first three lines of a well formatted csv file, create and return a model'
-    it 'should parse the remaining lines of a well formatted csv file and create instances of the model'
-  end
 end

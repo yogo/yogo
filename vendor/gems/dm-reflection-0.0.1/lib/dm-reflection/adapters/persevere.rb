@@ -15,10 +15,12 @@ module DataMapper
       #
       chainable do
         def get_type(db_type)
-          type = db_type['type'].gsub(/\(\d*\)/, '')
+          type = db_type['type']
           format = db_type['format']
 
           case type
+          when Hash        then DataMapper::Types::JsonReference
+          when 'array'     then DataMapper::Types::JsonReferenceCollection
           when 'serial'    then DataMapper::Types::Serial
           when 'integer'   then Integer
           # when 'number'    then BigDecimal
@@ -51,16 +53,26 @@ module DataMapper
       #       It would probably require passing in a Model Object.
       #
       # @param [String] table the name of the schema to get attribute specifications for
-      # @return [Hash] the column specs are returned in a hash keyed by `:name`, `:field`, `:type`, `:required`, `:default`, `:key`
+      # @return [Array] of hashes the column specs are returned in a hash keyed by `:name`, `:field`, `:type`, `:required`, `:default`, `:key`
       #
       chainable do
         def get_properties(table)
           results = Array.new
           schema = self.get_schema(table.gsub('__', '/'))[0]
           schema['properties'].each_pair do |key, value|
-            property = {:name => key, :type => get_type(value) }
+            type = get_type(value)
+            property = {:name => key, :type => type }
             property.merge!({ :required => !value.delete('optional'),
                               :key => value.has_key?('index') && value.delete('index') }) unless property[:type] == DataMapper::Types::Serial
+                              
+            if type.kind_of?(DataMapper::Types::JsonReference)
+              property.merge!( {:reference => derive_relationship_model(value[:type]["$ref"])} )
+            end
+            
+            if type.kind_of?(DataMapper::Types::JsonReferenceCollection)
+              property.merge!( {:reference => derive_relationship_model(value[:items]["$ref"])} )
+            end
+            
             value.delete('type')
             value.delete('format')
             value.delete('unique')
@@ -73,6 +85,13 @@ module DataMapper
         end
       end
 
+      private
+      
+      # Turns 'class_path/class' into 'ClassPath::Class
+      def derive_relationship_model(input)
+        input.match(/(Class)?\/([a-z\-\/\_]+)$/)[-1].split('/').map{|i| ExtLib::Inflection.classify(i) }.join("::")
+      end
+      
     end # module PersevereAdapter
   end # module Reflection
 end # module DataMapper
