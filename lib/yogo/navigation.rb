@@ -7,8 +7,11 @@
 # 
 module Enumerable
   ##
+  # Returns a histogram
+  #
   # @example
-  #   to_histogram
+  #   object.to_histogram
+  #
   # @return [Hash]
   #
   # @author Ivan Judson
@@ -22,6 +25,10 @@ end
 module Yogo
   class Navigation
     ##
+    # Gets the list of attributes prepared for use in views
+    #
+    # @example TODO
+    #
     # @return [Array<String>] gets the list of attributes prepared for use in views
     # 
     # @param [Class] Model The model to get the attributes from
@@ -34,6 +41,10 @@ module Yogo
     end
     
     ##
+    # Generates a Histogram in a hash that is keyed by attribute value
+    #
+    # @example TODO
+    #
     # @return [Hash] generates a histogram in a hash that is keyed by attribute value 
     # 
     # @param [Class] Model The model to get the histogram from

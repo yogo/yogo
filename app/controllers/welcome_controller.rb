@@ -7,7 +7,17 @@
 # 
 #
 class WelcomeController < ApplicationController
-  
+  ##
+  # Loads welcome page
+  #
+  # @example http://localhost:3000/welcome
+  #
+  # @return Displays welcome page
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  #
   def index
   end
 end

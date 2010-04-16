@@ -14,6 +14,8 @@ module DataMapper
     
     # Create a datamapper model based on the description passed in
     #
+    # @example an example should go here!
+    #
     # @param [Hash] desc
     # @option desc [Array] :modules array of modules the class will be namespaced into by the order they are in the array
     # @option desc [String or Symbol] :name The name of the class in camel case format.
