@@ -53,6 +53,11 @@ module DataMapper
     #
     # This should never be called directly.
     #   
+    # @example
+    #   class ExampleClass
+    #     include DataMapper::Resource
+    #     property :id, Serial
+    #   end
     #
     # @param [Model] model a Datamapper model the property is to be added to
     # @param [String or Symbol] name The name of the property to be added
