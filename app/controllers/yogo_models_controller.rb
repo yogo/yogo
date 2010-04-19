@@ -67,7 +67,7 @@ class YogoModelsController < ApplicationController
     
     @options = Yogo::Types.human_types.map{|key| [key,key] }
   end
-  ##
+  
   # creates new model
   #
   # @example http://localhost:3000/yogo_model/create
@@ -115,7 +115,7 @@ class YogoModelsController < ApplicationController
       redirect_to( new_project_yogo_model_url(@project) )
     end
   end
-  ##
+
   # Allows a user to add a field/property to an existing model
   #
   # @example http://localhost:3000/yogo_model/edit/1
@@ -129,12 +129,11 @@ class YogoModelsController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  #
   def edit
     @model = @project.get_model(params[:id])
     @options = Yogo::Types.human_types.map{|key| [key,key] } 
   end
-  ##
+
   # Processes adding a field/property to an existing model
   # 
   # models are migrated up so no data is lost
@@ -151,7 +150,6 @@ class YogoModelsController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-
   def update
     @model = @project.get_model(params[:id])
     # This stuff need to be pushed down into the model. In due time.
