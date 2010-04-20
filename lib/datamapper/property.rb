@@ -72,6 +72,9 @@ module DataMapper
     # 
     # @api semipublic
     def initialize(model, name, type, options = { })
+      options.delete(:yogo_file)
+      options.delete(:yogo_image)
+      
       pos = options.delete(:position)
       self.position = pos.nil? ? nil : pos.to_i
       
