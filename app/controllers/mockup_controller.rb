@@ -1,5 +1,5 @@
 class MockupController < ApplicationController
-  ##
+
   # View for the mockup
   #
   # @example http://localhost:3000/mockup/
@@ -8,8 +8,7 @@ class MockupController < ApplicationController
   #
   # @author Yogo Team
   #
-  # @api public
-  
+  # @api public  
   def index
     render :layout => 'mockup'
   end

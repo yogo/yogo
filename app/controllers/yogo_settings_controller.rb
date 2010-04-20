@@ -9,7 +9,6 @@
 #
 class YogoSettingsController < ApplicationController
   
-  ##
   # displays settings index page
   #
   # @example http://localhost:3000/yogo_settings
@@ -23,7 +22,6 @@ class YogoSettingsController < ApplicationController
     
   end
   
-  ##
   # this shows yogo setting
   #
   # @example http://localhost:3000/yogo_settings
@@ -44,7 +42,7 @@ class YogoSettingsController < ApplicationController
       format.html
     end
   end
-  ##
+
   # displays an edit page
   #
   # @example http://localhost:3000/yogo_settings/edit/1
@@ -66,7 +64,7 @@ class YogoSettingsController < ApplicationController
       format.html
     end
   end
-  ##
+
   # updates settings
   #
   # @example http://localhost:3000/yogo_settings/update
