@@ -16,13 +16,13 @@
    <link rel="shortcut icon" href="<%= image_path("favicon.png") %>">
   </head>
   <body>
-    <div id="container"  class="clearfix">
-      
-      <div id='header'>
-        <div id="header-img">
-          <%= image_tag('title.png') %>
-        </div>
+    <div id='header'>
+      <div id="header-img">
+        <%= image_tag('title.png') %>
       </div>
+    </div>
+    
+    <div id="container"  class="clearfix">
       
       <%= render :partial => 'layouts/sidebar' if @side_bar %>
       

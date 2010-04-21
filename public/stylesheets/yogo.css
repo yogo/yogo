@@ -20,10 +20,6 @@ to do cross-browser testing to make sure they're not needed.*/
 /*body > #container {height: auto; min-height: 100%;} 
 #main {padding-bottom: 100px;}*/  /* must be same height as the footer */
 
-#container {
-  
-}
-
 a {
   text-decoration: none;
   color:#703824;
@@ -70,7 +66,7 @@ h3 {
   text-align:center;
   padding:12px;
   background:#eee;
-  margin-bottom: 12px;
+/*  margin-bottom: 12px;*/
 }
 
 
@@ -123,18 +119,37 @@ h3 {
 /*~~~~~~~ Container, Content, Breadcrumbs ~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+#header {
+  width: 950px;
+  margin: auto;
+  padding:0;
+  background:url('../images/header.png') no-repeat;
+  height:111px;
+}
+
 #container {
-  width:950px;
-  margin:auto;
+  width: 950px;
+  margin: auto;
+  text-align: center;
+  overflow: none;
+  clear: both;
+  padding: 0px 0px 20px 0px;
 }
 
 #content {
-  float:left;
-  /*overflow: auto;*/
-  width:700px;
+  text-align: left;
+  margin: auto;
+  width:860px;
   padding: 0px 10px 20px 10px;
 }
 
+#footer {
+/*  position: relative;*/
+/*  margin-top: -100px; /* negative value of footer height */*/
+	height: 100px;
+	clear:both;
+	text-align:center;
+}
 
 #breadcrumbs {
   font-size:0.9em;
@@ -142,14 +157,10 @@ h3 {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*~~~~~~~~~~~~~~ Header and Users  ~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~ Users  ~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-#header {
-  padding:0;
-  background:url('../images/header.png') no-repeat;
-  height:111px;
-}
+
 
 #user-bar {
   float:right;
@@ -180,10 +191,10 @@ h3 {
   margin-right:8px;
   border-right:1px solid #ddd;
 }
-	
-	.nav-group {
-		margin:12px 0;
-	}
+
+  .nav-group {
+    margin:12px 0;
+  }
 
   #home-title {
     width:48px;
@@ -242,6 +253,15 @@ h3 {
 /*~~~~~~~~~~~~~~~~~~ Projects ~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+.project-block {
+  margin:12px 0 0 120px; 
+  float:left;
+  border-bottom: 1px dotted #888;
+}
+  
+.project-icon {width:80px; float:left;}
+.project-text {float:left; width:460px;}
+
 #project-remove-link {
   margin-top:12px;
   border-top:1px dotted #888;
@@ -262,6 +282,9 @@ h3 {
   list-style-type:none;
 }
 
+.dashboard-table {font-size:0.8em; margin-left:32px;}
+.dashboard-table th {font-weight:normal; min-width:50px;}
+.dashboard-table td {text-align:center;}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~ Models ~~~~~~~~~~~~~~~~~~*/
@@ -366,10 +389,10 @@ h3 {
 	/*padding:12px;*/
 }
 
-  #pagination-links strong {
-    color:#214A5D;
-    font-size:1.1em;
-  }
+#pagination-links strong {
+  color:#214A5D;
+  font-size:1.1em;
+}
 
 #search-data {
   margin-bottom:20px;
@@ -458,18 +481,6 @@ form .box label {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*~~~~~~~~~~~~~~~~~~~~ Footer ~~~~~~~~~~~~~~~~~~*/
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-#footer {
-/*  position: relative;*/
-/*  margin-top: -100px; /* negative value of footer height */*/
-	height: 100px;
-	clear:both;
-	text-align:center;
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~ Model Editor ~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -491,6 +502,9 @@ ul#sortable .grippie {
   cursor: move;
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~ Unmangled stuff ~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 #no-projects, #wizard-content {
   margin-left: 120px;
   width: 700px;
@@ -506,6 +520,8 @@ ul#sortable .grippie {
 }
 
 .button-big {text-align:center; margin-bottom:60px;}
+.left { float: left;}
+.right { float:right; }
 
 /*
 #mockup-intro {margin-left:30px; width:860px;}

@@ -4,6 +4,11 @@ class YogoFormBuilder < ActionView::Helpers::FormBuilder
   %w(collection_select select country_select time_zone_select) -
   %w(hidden_field label fields_for)
 
+  # Creates the correct form field element for a DataMapper Type
+  #
+  # @author Robbie Lamb robbie.lamb@gmail.com
+  #
+  # @api private
   helpers.each do |name|
     define_method(name) do |field, *args|
       options = args.last.is_a?(Hash) ? args.pop : {}

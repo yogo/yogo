@@ -55,11 +55,12 @@
     
   </head>
   <body>
+    <div id='header'>
+      <div id="header-img">
+        <%= image_tag('title.png') %>
+      </div>
+    </div>
     <div id="container"  class="clearfix">
-      <div id='header'>
-        <div id="header-img">
-          <%= image_tag('title.png') %>
-        </div>
         <%= yield %>
     </div>
     
