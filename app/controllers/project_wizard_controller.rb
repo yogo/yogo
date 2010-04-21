@@ -28,23 +28,6 @@ class ProjectWizardController < ApplicationController
     end
   end
   
-  # Give a project a name
-  # 
-  # @example
-  #   post /project_wizard/set_name # with the project paramaters name
-  # 
-  # This controller action is used to provide a name to a new project
-  # 
-  # @return [Object] nothing
-  # 
-  # @author Robbie Lamb robbie.lamb@gmail.com
-  # @author Pol LLouuvettee
-  # 
-  # @api public
-  def set_name
-    
-  end
-  
   # Put data via csv
   # 
   # @example

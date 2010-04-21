@@ -24,7 +24,7 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :yogo_settings
   map.resources :tutorial
-  map.resources :dashboard, :only => [ :index ]
+  map.resources :dashboard, :only => [ :index, :show ]
 
   map.connect "/mockup/:action", :controller => 'mockup'
   
