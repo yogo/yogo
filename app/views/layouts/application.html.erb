@@ -17,7 +17,10 @@
   </head>
   <body>
     <div id="container"  class="clearfix">
-      <%= render :partial => 'layouts/header' %>
+      <div id='header'>
+        <div id="header-img">
+          <%= image_tag('title.png') %>
+        </div>
       <%= render :partial => 'layouts/sidebar' %>
       <div id="content">
         <%- if flash[:notice] -%>
@@ -30,10 +33,12 @@
         <div><%= yield %></div>
         <div id='footnotes_holder'></div>
       </div>
-
     </div>
+    
     <div id="footer">
-      <%= render :partial => 'layouts/footer' %>
+      <div id='yogo-brand'>
+        <%= link_to(image_tag("yogo.png", :alt => "The Yogo Data Management Toolkit Logo"), 'http://yogo.msu.montana.edu/') %>
+      </div>
     </div>
   </body>
 </html>
