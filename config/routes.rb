@@ -24,9 +24,13 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :yogo_settings
   map.resources :tutorial
+  map.resources :dashboard, :only => [ :index ]
 
   map.connect "/mockup/:action", :controller => 'mockup'
   
+  # Wizard stuff
+  map.start_wizard "/project_wizard/name", :controller => 'project_wizard', :action => 'name'
+  
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => "welcome"
+  map.root :controller => "dashboard"
 end

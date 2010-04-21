@@ -29,6 +29,10 @@ a {
   color:#703824;
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
 a img {
   border: none;
 }
@@ -43,10 +47,6 @@ p {
   margin: 0.8em;
 }
 
-input {
-  border: 1px solid #AAA;
-  padding: 3px;
-}
 
 h1 {
   color:#333;
@@ -61,10 +61,18 @@ h2 {
 }
 
 h3 {
-  color:#333;
+  color:#255d71;
   font-size:1.2em;
-  font-weight:normal;
+  font-weight:bold;
 }
+
+.section-title {
+  text-align:center;
+  padding:12px;
+  background:#eee;
+  margin-bottom: 12px;
+}
+
 
 .errorExplanation h2 {
   font-size:16px;
@@ -124,7 +132,7 @@ h3 {
   float:left;
   /*overflow: auto;*/
   width:700px;
-  padding:20px 10px;
+  padding: 0px 10px 20px 10px;
 }
 
 
@@ -254,23 +262,6 @@ h3 {
   list-style-type:none;
 }
 
-#project-new label {
-  vertical-align:top;
-  float:left;
-  width:9em;
-  text-align:right;
-  margin-right:0.5em;
-  clear:both;
-}
-
-#project-new input {
-  margin-bottom:2em;
-}
-
-#project-new textarea {
-  height:100px;
-}
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~ Models ~~~~~~~~~~~~~~~~~~*/
@@ -389,6 +380,69 @@ h3 {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~ Forms ~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+form .buttons{
+  width: 50%;
+  float: right;
+  margin-top: 20px;
+  border: 1px solid #999;
+/*  text-align: right;*/
+}
+
+form .form-element {
+  width: 100%;
+  display: block;
+  padding: 10px 0px;
+  overflow: hidden;
+}
+
+form .cancel {
+  margin-left: 50px;
+}
+
+form input, form textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+input {
+  border: 1px solid #AAA;
+  padding: 3px;
+}
+
+form label {
+  vertical-align:top;
+  float:left;
+  width:9em;
+  text-align:right;
+  margin-right:0.5em;
+  clear:both;
+}
+
+form textarea {
+  height:100px;
+  width: 60%;
+}
+
+
+form .box {
+  display: block;
+  width: 30%;
+  float: left;
+  padding-right: 0.8em;
+}
+
+form .box label {
+  display: block;
+  float: right;
+  padding: 2px 0px 2px 0px;
+/*  outline: black thin solid;*/
+}
+
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~ Tutorial~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 .wrapper { 
@@ -435,4 +489,59 @@ ul#sortable .grippie {
   float: left;
   padding:4px 0 0 3px;
   cursor: move;
+}
+
+#no-projects, #wizard-content {
+  margin-left: 120px;
+  width: 700px;
+}
+#centered-content {
+  width: 500px;
+  margin: 20px auto;
+}
+
+#roadmap {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.button-big {text-align:center; margin-bottom:60px;}
+
+/*
+#mockup-intro {margin-left:30px; width:860px;}
+#mockup-intro h2, #mockup-new-user h2 {text-align:center; padding:12px; background:#eee;}
+#mockup-new-user {margin-left:120px; width:700px;}
+#mockup-new-user h3 {color:#255d71; margin-left:100px; font-weight:bold; margin-top:12px;}
+#mockup-new-user p {width:500px; margin-left:120px;}
+#mock-roadmap {text-align:center;}
+#mockup-name-project, #mockup-csv-question {margin-left:200px; width:600px;}
+#mock-search-tab {margin-left:490px; margin-top:-5px;}
+#mockup-show-project {float:left; width:500px;}
+.mock-project-block {margin:12px 0 0 120px; float:left; border-bottom: 1px dotted #888;}
+.mock-project-icon {width:80px; float:left;}
+.mock-project-text {float:left; width:460px;}
+.mock-button-row {text-align:center; width:940px; margin:auto;}
+.mock-button {display:inline; padding:0 30px 0 40px; }
+.mock-button-small {float:right;}
+.mock-data, .mock-data-zoom {padding:8px 0 12px 20px; margin-left:8px; border-left:2px solid #888;}
+.mock-data-zoom {border:none; padding-left:0;}
+.mock-data td, .mock-data-zoom td {min-width:100px; padding:2px 4px 2px 4px;}
+.mock-table-input {border:1px solid #888;}
+.dashboard-table {font-size:0.8em; margin-left:32px;}
+.dashboard-table th {font-weight:normal; min-width:50px;}
+.dashboard-table td {text-align:center;}
+*/
+/*-- These are the sliding divs on the Manage Data page --*/
+h2.trigger {
+  background: url("../images/mock-div-button.jpg") no-repeat;
+  height: 31px;
+  width: 260px;
+  padding: 2px 16px 2px 2px;
+}
+h2.trigger a {
+  color: #000;
+  font-size:0.8em;
+  text-decoration: none;
+  padding: 8px 0 2px 16px;
+  display: block;
 }

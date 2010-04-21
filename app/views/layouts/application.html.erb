@@ -17,11 +17,15 @@
   </head>
   <body>
     <div id="container"  class="clearfix">
+      
       <div id='header'>
         <div id="header-img">
           <%= image_tag('title.png') %>
         </div>
-      <%= render :partial => 'layouts/sidebar' %>
+      </div>
+      
+      <%= render :partial => 'layouts/sidebar' if @side_bar %>
+      
       <div id="content">
         <%- if flash[:notice] -%>
             <div class='notice'><p><%= h flash[:notice] %></p></div>
@@ -29,11 +33,10 @@
         <%- if flash[:error] -%>
             <div class='error notice'><p><%= h flash[:error] %></p></div>
         <%- end -%>
-        <div id='breadcrumbs'><%= crumbs %></div>
-        <div><%= yield %></div>
+        <%= yield %>
         <div id='footnotes_holder'></div>
-      </div>
-    </div>
+      </div> <!-- end content -->
+    </div> <!-- end container -->
     
     <div id="footer">
       <div id='yogo-brand'>

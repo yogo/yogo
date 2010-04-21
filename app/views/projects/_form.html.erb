@@ -1,6 +1,4 @@
 <div id="project-new">
-  <%= label_tag(:project_name, "Project Name: ") %>
-  <%= f.text_field :name %> <br>
-  <%= label_tag(:project_description, "Project Description: ")%>
-  <%= f.text_area :description %>
+  <%= f.text_field :name, :label => "Project Name:" %>
+  <%= f.text_area(:description, :label => "Project Description: ") %>
 </div>
