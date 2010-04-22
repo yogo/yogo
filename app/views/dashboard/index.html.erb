@@ -14,7 +14,7 @@
       <strong><%=h project.name %>:</strong> <%=h project.description %>
     </p>
     <%- if project.models.empty? -%>
-      <p>There are no datasets associated with this project. Make some?</p>
+      <p>There are no datasets associated with this project. <%= link_to('Make some?', csv_question_path(project)) %></p>
     <%- else -%>
       <table class="dashboard-table">
         <thead>
@@ -28,6 +28,7 @@
           </tr>
         </thead>
         <%- for dataset in project.models -%>
+        <%# TODO: Make this use real data!q %>
           <tr>
             <td style="text-align:left;"><%= h dataset.name %></td>
             <td><%= link_to("3", "/mockup/show_project") %></td>

@@ -27,11 +27,11 @@ class ProjectWizardController < ApplicationController
       format.html
     end
   end
-  
-  # Put data via csv
+
+  # Give a project a name
   # 
   # @example
-  #   get /project_wizard/csv 
+  #   get /project_wizard/csv_question/1
   # 
   # This controller action is used to provide a name to a new project
   # 
@@ -41,7 +41,28 @@ class ProjectWizardController < ApplicationController
   # @author Pol LLouuvettee
   # 
   # @api public
-  def csv
+  def csv_question
+    @project = Project.get(params[:id])
+    
+    respond_to do |format|
+      format.html
+    end
+  end
+  
+  # Put data via csv
+  # 
+  # @example
+  #   get /project_wizard/import_csv 
+  # 
+  # This controller action is used to provide a name to a new project
+  # 
+  # @return [Object] nothing
+  # 
+  # @author Robbie Lamb robbie.lamb@gmail.com
+  # @author Pol LLouuvettee
+  # 
+  # @api public
+  def import_csv
     
   end
   

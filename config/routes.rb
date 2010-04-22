@@ -30,6 +30,8 @@ ActionController::Routing::Routes.draw do |map|
   
   # Wizard stuff
   map.start_wizard "/project_wizard/name", :controller => 'project_wizard', :action => 'name'
+  map.csv_question "/project_wizard/csv_question/:id", :controller => 'project_wizard', :action => 'csv_question'
+  map.import_csv   "/project_wizard/import_csv/:id", :controller => 'project_wizard', :action => 'import_csv'
   
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
   map.root :controller => "dashboard"
