@@ -4,14 +4,10 @@ describe "A Yogo Model" do
   
   before(:each) do
     @project = Project.create(:name => "Same Project")
-    @model_hash = { 
-      :name => "Cell",
-      :modules => ["Yogo", "SameProject"],
-      :properties => {
-        "yogo_id" => {:type => "Serial"},
-        "name"    => {:type => "String"},
-        "id"      => {:type => "Integer"}
-      }
+
+    @properties_hash = {
+      "name"    => {:type => String},
+      "id"      => {:type => Integer}
     }
   end
   
@@ -20,7 +16,7 @@ describe "A Yogo Model" do
   end
   
   it "should be name spaced to the project it was added to" do
-    @project.add_model(@model_hash)
+    @project.add_model("Cell", @properties_hash)
     Yogo::SameProject::Cell.should_not be_nil
   end
   
@@ -29,7 +25,7 @@ describe "A Yogo Model" do
   describe "after Yogo::Model is included" do
   
     before(:each) do
-      @model = @project.add_model(@model_hash)
+      @model = @project.add_model("Cell", @properties_hash)
       @model.send(:include, Yogo::Model)
     end
   

@@ -3,10 +3,8 @@ module Yogo
   # This module contains methods for a Yogo model
   #
   # @author Robbie Lamb
-  #
-  # @api private
   module Model
-      ##
+
       # This method should never be called directly
       #
       # @see http://ruby-doc.org/core-1.8.7/classes/Module.html#M000402 Ruby Doc for more info
@@ -17,6 +15,7 @@ module Yogo
       #
       # @api private
       def self.included(base)
+        base.send(:include, DataMapper::Timestamps)
         base.send(:extend, ClassMethods)
         base.send(:extend, Csv)
         base.class_eval do
@@ -55,14 +54,14 @@ module Yogo
           end
         end
       end
-      ##
+
       # This module contains the public methods for a Yogo model
       #
       # @author Robbie Lamb
       #
       # @api public
       module ClassMethods
-        ##
+
         # The properties on a model for human consumption
         # 
         # @example @model.usable_properties.each{|prop| puts prop.display_name }
@@ -73,7 +72,21 @@ module Yogo
         # 
         # @api public
         def usable_properties
-          properties.select{|p| p.name != :yogo_id }
+          properties.select{|p| ![:yogo_id, :created_at, :updated_at].include?(p.name) }
+        end
+        
+        # The name of the model humanized.
+        # 
+        # @example 
+        #   @model.public_name
+        # 
+        # @return [String] humanized name of the class
+        # 
+        # @author Robbie Lamb robbie.lamb@gmail.com
+        # 
+        # @api public
+        def public_name
+          @_public_name ||= self.name.split('::')[-1].humanize
         end
       end
   end
