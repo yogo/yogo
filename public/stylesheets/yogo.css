@@ -12,13 +12,17 @@ Header Turq: #214A5D
 	padding:0;
 } 
 
-html, body, #container {
+html, body {
 	height: 100%;
 }
 /*LKW's note: I took out these bits (from sticky footer) but need 
 to do cross-browser testing to make sure they're not needed.*/
 /*body > #container {height: auto; min-height: 100%;} 
 #main {padding-bottom: 100px;}*/  /* must be same height as the footer */
+
+#container {
+  
+}
 
 a {
   text-decoration: none;
@@ -404,8 +408,8 @@ h3 {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #footer {
-	position: relative;
-	margin-top: -100px; /* negative value of footer height */
+/*  position: relative;*/
+/*  margin-top: -100px; /* negative value of footer height */*/
 	height: 100px;
 	clear:both;
 	text-align:center;
