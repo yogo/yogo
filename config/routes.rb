@@ -34,5 +34,6 @@ ActionController::Routing::Routes.draw do |map|
   map.import_csv   "/project_wizard/import_csv/:id", :controller => 'project_wizard', :action => 'import_csv'
   
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
+  map.welcome "/welcome", :controller => "welcome"
   map.root :controller => "dashboard"
 end
