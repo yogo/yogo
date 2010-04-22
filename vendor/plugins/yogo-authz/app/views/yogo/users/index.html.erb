@@ -1,0 +1,22 @@
+<table>
+  <thead>
+    <tr>
+      <th>Name</th><th>Email</th><th>Edit</th><th></th><th>Destroy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- for user in @users -%>
+      <tr>
+        <td><%= link_to(h(user.name), user_path(user)) %></td>
+        <td><%=h user.email %></td>
+        <td><%= link_to("Memberships", user_membership_path(user)) %></td>
+        <td><%= link_to("Edit", edit_user_path(user)) %></td>
+        <td><%= link_to("Destroy", user_path(user), 
+                        :method => :delete, 
+                        :confirm => "Are you sure?") %></td>
+      </tr>
+    <%- end -%>    
+  </tbody>
+</table>
+
+<%= link_to("Create a new User", new_user_path()) %>

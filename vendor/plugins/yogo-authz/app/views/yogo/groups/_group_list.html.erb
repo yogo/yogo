@@ -1,0 +1,10 @@
+<table>
+  <tbody>
+    <%- for group in groups -%>
+      <tr>
+        <td><%= link_to(group.name, group_path(group.id)) %></td>
+        <td><%= link_to("Permissions", group_permission_path(group.id)) %></td>
+      </tr>
+    <%- end -%>
+  </tbody>
+</table>

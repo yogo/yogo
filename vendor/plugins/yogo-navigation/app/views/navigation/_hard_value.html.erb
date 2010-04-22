@@ -1,0 +1,17 @@
+<div id="add_<%= counter %>" style="border: 3px #003FB8 solid;">
+	<table>
+		<tr>
+			<td>
+				<div>
+					Display Value:  <%= text_field_tag "nav_model[attributes][#{params['attr_name']}][values][hard#{counter}][display_value]", '', :size => 20 %>
+				</div>
+			</td>
+			<td>
+				<div>
+					Database Value: <%= text_field_tag "nav_model[attributes][#{params['attr_name']}][values][hard#{counter}][database_value]", '', :size => 20 %>
+				</div>
+			</td>
+		</tr>
+		<span onClick='$("add_<%= counter %>").remove();'>Remove</span>
+	</table>
+</div>

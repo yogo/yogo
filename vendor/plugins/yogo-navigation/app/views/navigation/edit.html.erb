@@ -1,0 +1,94 @@
+<% form_tag( {:controller => :navigation, :action => :update}, :with =>{:id => params[:id]}, :method => :get, :name => "thing", :id => @nav_model.id) do %>
+<table>
+	<tr>
+			<td>
+			<h3><%= @nav_model.name %> <!--change to? <%#= text_field_tag 'nav_model[name]', @nav_model.name, :size => 20 %> --></h3><br>
+			<ul>
+				<table>
+					<tr>
+						<td><li>Display?:</td> 
+						<td><%= select_tag 'nav_model[display]', options_for_select([ 'true', 'false' ], :selected => @nav_model.display.to_s)  %></li></td>
+					</tr>
+					<tr>
+						<td><li>Model ID:</td> 
+						<td><%= text_field_tag 'nav_model[model_id]', @nav_model.model_id, :size => 20 %></li></td>
+					</tr>	
+					<tr>
+						<td><li>Display Name:</td> 
+						<td><%= text_field_tag 'nav_model[display_name]', @nav_model.display_name, :size => 20 %></li></td>
+					</tr>	
+					<!-- <tr>
+						<td><li>Display Count?:</td> 
+						<td><%#= select_tag 'nav_model[display_count]', options_for_select([ 'true', 'false' ], :selected => @nav_model.display_count.to_s) %></li></td>
+					</tr> -->
+				</table>
+			</ul>
+			<h5>Attributes:</h5><br>
+			<% @nav_model.nav_attributes.each do |attrib| %>
+				<h5><%= attrib.name %>:</h5> Remove <%= check_box_tag "nav_model[attributes_to_delete][#{attrib.id}]" %>
+				<ul>
+					<table>
+						<tr>
+							<td>
+								<table>
+									<tr>
+										<td><li>Display?:</td> 
+										<td><%= select_tag "nav_model[attributes][#{attrib.name}][display]", 
+										        	options_for_select([ 'true', 'false' ], 
+										        	:selected => attrib.display.to_s) %></li></td>
+									</tr>
+									<tr>
+										<td><li>Display Name:</td> 
+										<td><%= text_field_tag "nav_model[attributes][#{attrib.name}][display_name]", 
+										        	attrib.display_name, :size => 20 %></li></td>
+									</tr>
+									<tr>
+										<td><li>Display Count?:</td> 
+										<td><%= select_tag "nav_model[attributes][#{attrib.name}][display_count]", 
+										        	options_for_select([ 'true', 'false' ], 
+										        	:selected => attrib.display_count.to_s) %></li></td>
+									</tr>
+									<tr>
+										<td><li>Range?:</td> 
+										<td><%= select_tag "nav_model[attributes][#{attrib.name}][range]", 
+										        	options_for_select([ 'true', 'false' ], 
+										        	:selected => attrib.range.to_s, 
+										        	:id => "#{@nav_model.name}_#{attrib.name}") %></li>
+									</tr>
+									<tr>
+										<td>
+											<%= link_to_remote('Add Values', :url => {:controller => :navigation, :action => :add_value}, :update => "add_value_#{@nav_model.name}_#{attrib.name}", :position => :bottom, 
+											:with => "'value_type='+$('nav_model_attributes_#{attrib.name}_range').value + '&model_name=' + '#{@nav_model.name}' + '&attr_name=' + '#{attrib.name}'") %>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<table>
+									<% unless attrib.nav_display_values.empty? %>
+									<th>Current Values</th>
+									<th>Remove?</th>
+									<% end %>
+										<% attrib.nav_display_values.sort_by {|x| x.value.to_s}.each do |values| %>
+									<tr>
+										<td>
+									<%= values.value + " : " + values.nav_database_value.value %><br>
+										</td>
+										<td>
+											<%= check_box_tag "nav_model[remove][#{attrib.id}][#{values.id}]"%>
+											</td>
+									</tr>
+									<% end %>
+								</table>
+								<div id='<%= "add_value_#{@nav_model.name}_#{attrib.name}" %>'></div>
+							</td>
+						</tr>
+					</table>
+				</ul>
+			<% end %>
+			</td>
+	</tr>
+</table>
+<%= hidden_field_tag("id", value = @nav_model.id, options = {}) %>
+<%= submit_tag %>
+<% end %>
