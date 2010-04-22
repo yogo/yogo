@@ -22,14 +22,31 @@
   <div id="content-with-sidebar">
     <h2>Parkinson's Disease Research</h2>
     <%= link_to(image_tag('edit_big.png')+"Edit dataset descriptions", "/mockup/edit") %>
-    <br /><br />
     
+    <%- for dataset in @project.models -%>
+      <h2 class="trigger"><a href="#"><%= dataset.public_name %></a></h2>
+      <div class='toggle-container'>
+        <div class="block">
+          <table class="mock-data" >
+            <thead>
+              <tr>
+                <th colspan="2">Control - 4 Digit Delay RT</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+            </tbody>
+        </div>
+      </div>
+    <%- end -%>
     <h2 class="trigger"><a href="#">Neuropsych evaluations</a></h2>
-    <div class="toggle_container">
+    <div class="toggle-container">
       <div class="block">
         <table class="mock-data" >
           <thead>
-            <th colspan="2">Control - 4 Digit Delay RT</th>
+            <tr>
+              <th colspan="2">Control - 4 Digit Delay RT</th>
+            </tr>
           </thead>
           <tr class="<%=cycle("alternate-rows0","") %>">
             <td>Subject ID</td>
@@ -131,14 +148,14 @@
     </div>
 
     <h2 class="trigger"><a href="#">fMRI analysis</a></h2>
-    <div class="toggle_container">
+    <div class="toggle-container">
       <div class="block">
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
       </div>
     </div>
 
     <h2 class="trigger"><a href="#">MEG results</a></h2>
-    <div class="toggle_container">
+    <div class="toggle-container">
       <div class="block">
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
       </div>
