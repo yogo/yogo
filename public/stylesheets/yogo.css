@@ -142,6 +142,15 @@ h3 {
   width:860px;
   padding: 0px 10px 20px 10px;
 }
+#content-with-sidebar {
+  float: left;
+  width: 500px;
+}
+#search-tab {
+  position: relative;
+  top: -5px;
+  padding-left:450px;
+}
 
 #footer {
 /*  position: relative;*/
@@ -151,13 +160,26 @@ h3 {
 	text-align:center;
 }
 
+.large-centered-content {
+  width: 700px;
+  margin: 0px auto;
+}
+.medium-centered-content {
+  width:600px;
+  margin: 0px auto;
+}
+.small-centered-content {
+  width: 500px;
+  margin: 20px auto;
+}
+
 #breadcrumbs {
   font-size:0.9em;
   padding:0 0 12px 0;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*~~~~~~~~~~~~~~ Users  ~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~ Users  ~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
@@ -505,14 +527,25 @@ ul#sortable .grippie {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~ Unmangled stuff ~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-#no-projects, #wizard-content {
-  margin-left: 120px;
-  width: 700px;
+
+.button-list {
+  width: 100%;
+/*  margin: 0px auto;*/
+  text-align: center;
+/*  border: 1px solid #999;*/
+  overflow: auto;
+  padding-left: 40px;
 }
-#centered-content {
-  width: 500px;
-  margin: 20px auto;
+
+.button-list > .button-to {
+/*  width: 30%;*/
+  margin: 0px 10px;
+  float: left;
 }
+.button-list > .button-to > input {
+/*  margin: 0px auto;*/
+}
+
 
 #roadmap {
   text-align: center;

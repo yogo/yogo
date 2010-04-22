@@ -1,34 +1,149 @@
-<h1><%= @project.name %>: <em>Overview</em></h1>
-<div id="project-overview">
-  <%#= @project.description%>
+
+<div id="search-tab">
+  <%= image_tag('mock-search-tab.png') %>
 </div>
 
-<table id="project-show">
-  <thead>
-    <tr>
-      <th><%#= "Models" if @models.length > 0 %></th>
-      <th><%#= "Data" if @models.length > 0 %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <%- @models.each do |m| %>
-      <tr id="project-show-row" class="<%= cycle('alternate-rows0', 'alternate-rows1') %>">
-        <td><%= link_to(image_tag('view.gif', :alt => "View", :title => "View"), project_yogo_model_path(@project, m.name.demodulize)) %></td>
-        <td><%= link_to(image_tag('edit.png', :alt => "Edit", :title => "Edit"), edit_project_yogo_model_path(@project, m.name.demodulize)) %></td>
-        <td><%= link_to(image_tag('remove.png', :alt => "Remove", :title => "Remove"), project_yogo_model_path(@project, m.name.demodulize), :method => :delete, :confirm => 'Removing this model will also destroy all data associated with the model. Continue?') %></td>
-        <td><%= m.name.demodulize.titleize %></td>
-        <!-- <td>(<%#= link_to(m.count, project_yogo_data_index_path(@project, m.name.demodulize)) %>)</td> -->
-      </tr>
-    <%- end %>
-  </tbody>
-</table>
+  <div id="sidebar">
+      <div id="nav-home" class="nav-group">
+        <div class="nav-title" id='home-title'><%= link_to("Home", "/mockup") %></div>
+      </div>
+      <div id="nav-projects" class="nav-group">
+        <div class="nav-title" id='projects-title'><%= @project.name %></div>
+          <div class="nav-items">
+              <ul>
+                <%- for dataset in @project.models -%>
+                  <li><%= link_to(dataset.usable_name, "/mockup/dataset1") %></li>
+                <%- end -%>
+              </ul>
+          </div>
+      </div>
+  </div>
+  
+  <div id="content-with-sidebar">
+    <h2>Parkinson's Disease Research</h2>
+    <%= link_to(image_tag('edit_big.png')+"Edit dataset descriptions", "/mockup/edit") %>
+    <br /><br />
+    
+    <h2 class="trigger"><a href="#">Neuropsych evaluations</a></h2>
+    <div class="toggle_container">
+      <div class="block">
+        <table class="mock-data" >
+          <thead>
+            <th colspan="2">Control - 4 Digit Delay RT</th>
+          </thead>
+          <tr class="<%=cycle("alternate-rows0","") %>">
+            <td>Subject ID</td>
+            <td>PreTEST</td>
+            <td>Training 1</td>
+            <td>Training 2</td>
+            <td>Training 3</td>
+            <td>Training 4</td>
+            <td>Training 5</td>
+            <td>Training 6</td>
+            <td>Training 7</td>
+            <td>Training 8</td>
+            <td>Training 9</td>
+            <td>Training 10</td>
+            <td>Training 11</td>
+            <td>Training 12</td>
+            <td>PostTEST</td>
+            <td></td>
+          </tr>
+          <tr class="<%=cycle("alternate-rows0","") %>">
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td class="mock-table-input"></td>
+            <td><%= image_tag('mock-save-button.jpg') %></td>
+          </tr>
+          <tr class="<%=cycle("alternate-rows0","") %>">
+            <td>KTG_01</td>
+             <td>2013</td>
+             <td>1898</td>
+             <td>1938</td>
+             <td>1701</td>
+             <td>1564</td>
+             <td>1434</td>
+             <td>1452</td>
+             <td>1476</td>
+             <td>1453</td>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td>1582</td>
+             <td></td>
+          </tr>
+          <tr class="<%=cycle("alternate-rows0","") %>">
+            <td>BRT_02</td>
+            <td>1433</td>
+            <td>1172</td>
+            <td>1065</td>
+            <td>988</td>
+            <td>983</td>
+            <td>1055</td>
+            <td>943</td>
+            <td>923</td>
+            <td>1007</td>
+            <td>938</td>
+            <td>947</td>
+            <td>936</td>
+            <td>913</td>
+            <td>882</td>
+            <td></td>
+          </tr>
+          <tr class="<%=cycle("alternate-rows0","") %>">
+            <td>CMJ_03</td>
+            <td>1857</td>
+            <td>1766</td>
+            <td>1350</td>
+            <td>1292</td>
+            <td>1274</td>
+            <td>1325</td>
+            <td>1190</td>
+            <td>1233</td>
+            <td>1218</td>
+            <td>1241</td>
+            <td>1319</td>
+            <td></td>
+            <td></td>
+            <td>1303</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <%= link_to("See more...", "/mockup/dataset1") %>
+            </td>
+          </tr>
+        </table>
+    	</div>
+    </div>
 
-<%= link_to(image_tag('add.gif', :alt => "Create a new model", :title => "Create a new model") + " Create a new model", new_project_yogo_model_path(@project)) %>
+    <h2 class="trigger"><a href="#">fMRI analysis</a></h2>
+    <div class="toggle_container">
+      <div class="block">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </div>
+    </div>
 
-<div id="upload">
-  <%= render :partial => 'upload' %>
-</div>
+    <h2 class="trigger"><a href="#">MEG results</a></h2>
+    <div class="toggle_container">
+      <div class="block">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </div>
+    </div>
 
-<div id="project-remove-link">
-  <%= link_to(image_tag('remove.png')+"Remove this project", project_path(@project), :method => :delete, :confirm => "Removing this project will destroy all data associated with it.\n Continue?") %>
-</div>
+  </div>
+  
+  

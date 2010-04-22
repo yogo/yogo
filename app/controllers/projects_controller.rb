@@ -7,36 +7,35 @@
 # The projects controller provides all the CRUD functionality for the project
 # and additionally: upload of CSV files, an example project and rereflection
 # of the yogo repository.
-#
+
 
 class ProjectsController < ApplicationController
   
-  ##
+
   # Show all the projects
   #
-  # @example http://localhost:3000/project
+  # @example 
+  #   get /projects
   #
-  # @return [ Array ] Retrives all project and passes them to the veiw
+  # @return [Array] Retrives all project and passes them to the veiw
   #
   # @author Yogo Team
   #
   # @api public
-  # 
   def index
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
-  
-  ##
+
   # Find a project or projects and show the result
   #
-  # @example http://localhost:3000/project/search
+  # @example 
+  #   get /projects/search?q=search-term
   #
   # @return [Model] searches for data across all project all models all content of models
   #
   # @author Yogo Team
   #
   # @api public
-  # 
   def search
     search_term = params[:search_term]
     
@@ -61,42 +60,47 @@ class ProjectsController < ApplicationController
 
   end
 
-  ##
   # Shows a project
   #
-  # @example http://localhost:3000/project/1
-  #  shows project with an id of 1
+  # @example 
+  #   get /projects/1 # Returnes project with an id of 1
   #
   # @return [Object] returns a web page displaying a project
   #
   # @author Yogo Team
   #
   # @api public
-  #
   def show
     @project = Project.get(params[:id])
     @models = @project.models
+    
+    respond_to do |format|
+      format.html
+    end
   end
 
-  ##
-  # Creates a new project
+  # Returns a form for creating a new project
   #
-  # @example http://localhost:3000/project/new
+  # @example 
+  #   get /projects/new
   #
   # @return [Object] returns an empty project
   #
   # @author Yogo Team
   #
   # @api public
-  #
   def new
     @project = Project.new
+    
+    respond_to do |format|
+      format.html
+    end
   end
-  
-  ##
-  # Saves attributes of new project
+
+  # Creates a new project based on the attributes
   #
-  # @example http://localhost:3000/project/create/
+  # @example 
+  #   post /projects
   #
   # @param [Hash] params
   # @option params [Hash] :project this is the attributes of a project
@@ -107,23 +111,21 @@ class ProjectsController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  #
   def create
     @project = Project.new(params[:project])
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
-      redirect_to projects_url
+      redirect_to csv_question_path(@project)
     else
       flash[:error] = "Project could not be created."
       render :action => :new
     end
   end
 
-  ##
   # load project for editing
   #
-  # @example http://localhost:3000/project/edit/1/
-  #  edits project with an id of 1
+  # @example 
+  #  get /projects/1/edit # edits project with an id of 1
   #
   # @param [Hash] params
   # @option params [String]:id
@@ -133,15 +135,18 @@ class ProjectsController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  #
   def edit
     @project = Project.get(params[:id])
+    
+    respond_to do |format|
+      format.html
+    end
   end
 
-  ##
-  # load project for editing
+  # Updates project with new values
   #
-  # @example http://localhost:3000/project/update/
+  # @example 
+  #   put /projects/1
   #
   # @param [Hash] params
   # @option params [String]:id
@@ -153,7 +158,6 @@ class ProjectsController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  #
   def update
     @project = Project.get(params[:id])
     @project.attributes = params[:project]
@@ -166,10 +170,10 @@ class ProjectsController < ApplicationController
     end
   end
 
-  ##
   # deletes a project
   #
-  # @example http://localhost:3000/project/destroy/1
+  # @example 
+  #   destroy /projects/1
   #
   # @param [Hash] params
   # @option params [String]:id
@@ -180,7 +184,6 @@ class ProjectsController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  #
   def destroy
     @project = Project.get(params[:id])
     if @project.destroy
@@ -191,10 +194,10 @@ class ProjectsController < ApplicationController
     redirect_to projects_url
   end
 
-  ##
-  # alows us to upload csv file to be processed into a model
+  # Create a new dataset on the project with a CSV file
   #
-  # @example http://localhost:3000/project/upload/1/
+  # @example 
+  #  post /projects/upload/1 # with a CSV file
   #
   # @param [Hash] params
   # @option params [String]:id
@@ -205,7 +208,6 @@ class ProjectsController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  #
   def upload
     @project = Project.get(params[:id])
     
@@ -232,26 +234,27 @@ class ProjectsController < ApplicationController
     
     redirect_to project_url(@project)
   end
-  ##
+
   # loads example project and models in Yogo
   #
-  # @example http://localhost:3000/project/loadexample
+  # @example 
+  #   get /projects/loadexample
   #
   # @return redirects to project index page
   #
   # @author Yogo Team
   #
   # @api public
-  #
   def loadexample
     # Load the project and data 
     Yogo::Loader.load(:example, "Example Project")
     redirect_to :back
   end
-  ##
-  # lists all models for a selected project
+
+  # List all models for a selected project
   #
-  # @example http://localhost:3000/project/1/
+  # @example 
+  #   get /projects/1/list_models
   #
   # @param [Hash] params
   # @option params [String]:id
@@ -260,8 +263,7 @@ class ProjectsController < ApplicationController
   #
   # @author Yogo Team
   #
-  # @api public
-  #
+  # @api semipublic
   def list_models
     @project = Project.get(params[:id])
     @models = @project.models
