@@ -103,8 +103,7 @@ class YogoModelsController < ApplicationController
     
     @model = false
     
-    if errors.empty? and (@model = @project.add_model(class_name, :properties => cleaned_options)) != false
-      @model.send(:include,Yogo::Model) unless @model.included_modules.include?(Yogo::Model)
+    if errors.empty? and (@model = @project.add_model(class_name, cleaned_options)) != false
       @model.auto_migrate!
       @model.properties.sort!
       flash[:notice] = 'The model was sucessfully created.'
