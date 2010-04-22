@@ -94,7 +94,7 @@ module DataMapper
       original_initialize(model, name, type, options)
     end
 
-    # Compairson method for properties based on the position
+    # Comparison method for properties based on the position
     #
     # This is primairly useful for sort methods
     # 
