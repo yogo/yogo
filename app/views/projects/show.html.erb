@@ -12,7 +12,7 @@
           <div class="nav-items">
               <ul>
                 <%- for dataset in @project.models -%>
-                  <li><%= link_to(dataset.usable_name, "/mockup/dataset1") %></li>
+                  <li><%= link_to(dataset.public_name, "/mockup/dataset1") %></li>
                 <%- end -%>
               </ul>
           </div>
