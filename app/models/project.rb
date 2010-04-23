@@ -287,6 +287,9 @@ class Project
                       },
                       :updated_by_id => {
                         :type => Integer
+                      },
+                      :change_summary => {
+                        :type => Text
                       }
                     }
                 }
