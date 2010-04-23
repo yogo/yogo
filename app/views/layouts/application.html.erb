@@ -29,10 +29,10 @@
       
       <div id="content">
         <%- if flash[:notice] -%>
-            <div class='notice'><p><%= h flash[:notice] %></p></div>
+            <div class='notice'><p><%= flash[:notice] %></p></div>
         <%- end -%>
         <%- if flash[:error] -%>
-            <div class='error notice'><p><%= h flash[:error] %></p></div>
+            <div class='error notice'><p><%= flash[:error] %></p></div>
         <%- end -%>
         <%= yield %>
         <div id='footnotes_holder'></div>

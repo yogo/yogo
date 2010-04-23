@@ -118,7 +118,7 @@ class ProjectsController < ApplicationController
       flash[:notice] = "Project \"#{@project.name}\" has been created."
       redirect_to csv_question_path(@project)
     else
-      flash[:error] = "Project could not be created."
+      flash.now[:error] = "Project could not be created."
       render :action => :new
     end
   end
