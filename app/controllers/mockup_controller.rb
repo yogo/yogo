@@ -8,7 +8,7 @@ class MockupController < ApplicationController
   #
   # @author Yogo Team
   #
-  # @api public  
+  # @api public
   def index
     render :layout => 'mockup'
   end
