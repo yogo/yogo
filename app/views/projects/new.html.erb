@@ -1,4 +1,12 @@
-<% form_for(@project) do |form| %>
-  <%= render :partial => 'projects/form', :locals => {:f => form} %>
-  <%= form.submit 'Create' %>
-<% end %>
+<div class='small-centered-content boxed'>
+  <% form_for(@project, :builder => YogoFormBuilder) do |form| %>
+    <%= render :partial => 'projects/form', :locals => {:f => form} %>
+    
+    <div class='form-element'>
+      <div class='box' >&nbsp;</div>
+      <%= form.submit('Create', :class => 'button-link') %>
+      <%= link_to('Cancel', root_path, :class => 'cancel') %>
+    </div>
+    
+  <% end %>
+</div>

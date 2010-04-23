@@ -3,7 +3,7 @@
 </div>
 
 
-<div class="medium-centered-content">
+<div class="large-centered-content">
   <h3>A whole lotta info about CSV.</h3>
   <p>
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut 
@@ -19,8 +19,8 @@
     cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
     culpa qui officia deserunt mollit anim id est laborum.
   </p>
-  <div class='button-list'>
-    <%= button_to('Import CSV', project_path, :method => 'get') %>
-    <%= button_to('Design Data from Scratch', :method => 'get') %>
+  <div class='button-links'>
+    <%= link_to('Import CSV', project_path, :class => 'button-link') %>
+    <%= link_to('Design Data from Scratch', project_path, :class => 'button-link') %>
   </div>
 </div> 

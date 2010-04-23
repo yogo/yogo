@@ -59,7 +59,7 @@ class ProjectWizardController < ApplicationController
   # @return [Object] nothing
   # 
   # @author Robbie Lamb robbie.lamb@gmail.com
-  # @author Pol LLouuvettee
+  # @author Pol LLouuvettee 
   # 
   # @api public
   def import_csv
@@ -80,7 +80,7 @@ class ProjectWizardController < ApplicationController
   # @author Pol LLouuvettee
   # 
   # @api public
-  def describe_data
+  def describe_dataset
     
   end
   

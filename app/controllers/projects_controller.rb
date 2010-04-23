@@ -73,6 +73,7 @@ class ProjectsController < ApplicationController
   def show
     @project = Project.get(params[:id])
     @models = @project.models
+    @sidebar = true
     
     respond_to do |format|
       format.html

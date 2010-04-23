@@ -3,24 +3,9 @@
   <%= image_tag('mock-search-tab.png') %>
 </div>
 
-  <div id="sidebar">
-      <div id="nav-home" class="nav-group">
-        <div class="nav-title" id='home-title'><%= link_to("Home", "/mockup") %></div>
-      </div>
-      <div id="nav-projects" class="nav-group">
-        <div class="nav-title" id='projects-title'><%= @project.name %></div>
-          <div class="nav-items">
-              <ul>
-                <%- for dataset in @project.models -%>
-                  <li><%= link_to(dataset.public_name, "/mockup/dataset1") %></li>
-                <%- end -%>
-              </ul>
-          </div>
-      </div>
-  </div>
   
   <div id="content-with-sidebar">
-    <h2>Parkinson's Disease Research</h2>
+    <h3><%= @project.name %></h2>
     <%= link_to(image_tag('edit_big.png')+"Edit dataset descriptions", "/mockup/edit") %>
     
     <%- for dataset in @project.models -%>
