@@ -37,6 +37,8 @@ describe "A Yogo Model" do
       @model.usable_properties.length.should eql(2)
     end
   
+    it "should not save when a comment is missing and comments are required"
+  
   end
   
 end
