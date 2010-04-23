@@ -1,9 +1,0 @@
-data:             cells.csv
-imgpath:          images/reconstructions
-reconstructions:  reconsructions
-cellimages:       {imgpath}/cell
-fullimages:       {imgpath}/full
-highlightimages:  {imgpath}/highlight
-indeximages:      {imgpath}/index
-insetimages:      {imgpath}/inset
-thumbnails:       {imgpath}/thumb                 
