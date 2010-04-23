@@ -39,17 +39,23 @@ class Project
   
   # Used to get the current project path name
   #
+  # @example
+  #   @project.path
+  # 
   # @return [String] the project path name
   #
   # @author Yogo Team
   #
-  # @api public
+  # @api semipublic
   def path
     name.downcase.gsub(/[^\w]/, '_')
   end
 
   # Compatability method for rails' route generation helpers
   #
+  # @example
+  #   @project.to_param # returns the ID as a string
+  # 
   # @return [String] the object id as url param
   #
   # @author Yogo Team

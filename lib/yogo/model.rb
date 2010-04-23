@@ -75,7 +75,7 @@ module Yogo
           properties.select{|p| p.name.to_s.match(/^yogo__/) }
         end
         
-        # The name of the model humanized.
+        # The name of the model humanized
         # 
         # @example 
         #   @model.public_name
