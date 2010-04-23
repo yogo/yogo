@@ -72,7 +72,7 @@ module Yogo
         # 
         # @api public
         def usable_properties
-          properties.select{|p| ![:yogo_id, :created_at, :updated_at].include?(p.name) }
+          properties.select{|p| p.name.to_s.match(/^yogo__/) }
         end
         
         # The name of the model humanized.

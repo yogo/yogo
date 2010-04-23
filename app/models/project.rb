@@ -275,6 +275,12 @@ class Project
                       },
                       :updated_at => {
                         :type => DateTime
+                      },
+                      :created_by_id => {
+                        :type => Integer
+                      },
+                      :updated_by_id => {
+                        :type => Integer
                       }
                     }
                 }
