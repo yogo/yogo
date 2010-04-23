@@ -72,7 +72,6 @@ class YogoDataController < ApplicationController
     end
   end
   
-  ##
   # this shows a model
   #
   # @example http://localhost:3000/yogo_data
@@ -93,7 +92,7 @@ class YogoDataController < ApplicationController
       format.json { render( :json => @item.to_json )}
     end
   end
-  ##
+
   # Creates a new data object
   #
   # @example http://localhost:3000/yogo_data/new
@@ -103,7 +102,6 @@ class YogoDataController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  #
   def new
     @item = @model.new
   end

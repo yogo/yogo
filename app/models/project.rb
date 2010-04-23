@@ -37,32 +37,34 @@ class Project
     Extlib::Inflection.classify(path)
   end
   
-  ##
   # Used to get the current project path name
   #
+  # @example
+  #   @project.path
+  # 
   # @return [String] the project path name
   #
   # @author Yogo Team
   #
-  # @api private
-  #
+  # @api semipublic
   def path
     name.downcase.gsub(/[^\w]/, '_')
   end
-  ##
+
   # Compatability method for rails' route generation helpers
   #
+  # @example
+  #   @project.to_param # returns the ID as a string
+  # 
   # @return [String] the object id as url param
   #
   # @author Yogo Team
   #
-  # @api private
-  #
+  # @api public
   def to_param
     id.to_s
   end
   
-  ##
   # Creates a model and imports data from a CSV file
   #
   # @example 
@@ -86,7 +88,6 @@ class Project
   # @author Robbie Lamb
   # 
   # @api public
-  #
   def process_csv(datafile, model_name)
     # Read the data in
     csv_data = FasterCSV.read(datafile)
@@ -160,58 +161,38 @@ class Project
     DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::\w*#{search_term}\w*$/i }
   end
 
-  ##
+
   # Adds a model to the current project
   #
   # @example
   #  add_model("CDs")
   #
-  # @param [Hash or String] hash_or_name contains all the modules, name and properties to define the model
-  # @option hash_or_name [String] :name 
-  #  The models name
-  # @option hash_or_name [Array] :modules 
-  #  An array of the modules to namespace the model
-  # @option hash_or_name [Hash] :properties 
-  #  All the models properties
-  # @option properties [Hash] prop_name 
-  #  This is the actual property name and is the hash-key
-  # @option prop_name [String] :type 
-  #  The datatype of the property   
-  # @option prop_name [Boolean] :required  
-  #  If the property can be null or not
-  # @param [Hash] options
-  #  contains an addtional hash of the properties - used if the hash_or_name parameter is a "String"
-  # @option properties [Hash] prop_name 
-  #   This is the actual property name and is the hash-key
-  # @option prop_name [String] :type 
-  #  The datatype of the property   
-  # @option prop_name [Boolean] :required  
-  #  If the property can be null or not 
+  # @param [String] name the name of the model to be created
+  # @param [Hash] properties Each key in the property is a new property name. The key points to an 
+  #     options hash for the property. The key 'type' is required. All other keys are optional and
+  #     the same as a normal datamapper property options hash. 
+  # 
   #
   # @return [DataMapper::Model] a new model 
   #
-  # @author Yogo Team
+  # @author Robbie Lamb robbie.lamb@gmail.com
   #
+  # @see http://datamapper.org/docs/properties
+  # 
   # @api public
-  #
-  def add_model(hash_or_name, options = {})
-    if hash_or_name.is_a?(String)
-      return false unless valid_model_or_column_name?(hash_or_name)
-      hash_or_name = {  :name => hash_or_name.camelize, 
-                        :modules => ['Yogo', self.namespace],
-                        :properties => options[:properties].merge(
-                          { :yogo_id => {
-                              :type => DataMapper::Types::Serial,
-                              :field => 'id'
-                            } 
-                        }) 
-                     }
-                  
+  def add_model(name, properties = {})
+    name = name.split('_').map{|p| p.capitalize}.join('')
+    return false unless valid_model_or_column_name?(name)
+
+    a_model = generate_empty_model(name)
+    
+    properties.each do |name, options|
+      a_model.send(:property, name, options.delete(:type), options.merge(:prefix => 'yogo'))
     end
-    return DataMapper::Factory.instance.build(hash_or_name, :yogo, { :attribute_prefix => "yogo" })
+
+    return a_model
   end
   
-  ##
   # Removes a model and any data contianed with from a project
   #
   # @example
@@ -225,7 +206,6 @@ class Project
   # @author Yogo Team
   #
   # @api public
-  #
   def delete_model(model)
     model = get_model(model) if model.class == String
     name = model.name.demodulize
@@ -275,7 +255,6 @@ class Project
     !potential_name.match(/^\d|\.|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)/)
   end
   
-  ##
   # Generates a model with the property :yogo_id in the project's namespace
   #
   # It will not be automigrated
@@ -289,16 +268,35 @@ class Project
   # @author Robbie Lamb robbie.lamb@gmail.com
   # 
   # @api private
-  #
   def generate_empty_model(model_name)
     spec_hash = { :modules => ["Yogo", namespace],
                   :name => model_name, 
-                  :properties => { 'yogo_id' => {:type => DataMapper::Types::Serial, :field => 'id' }}
+                  :properties => { 
+                    'yogo_id' => {
+                      :type => DataMapper::Types::Serial, 
+                      :field => 'id' 
+                      },
+                      :created_at => {
+                        :type => DateTime 
+                      },
+                      :updated_at => {
+                        :type => DateTime
+                      },
+                      :created_by_id => {
+                        :type => Integer
+                      },
+                      :updated_by_id => {
+                        :type => Integer
+                      },
+                      :change_summary => {
+                        :type => Text
+                      }
+                    }
                 }
 
-    model = DataMapper::Factory.instance.build(spec_hash, :yogo, { :attribute_prefix => "yogo" } )
+    model = DataMapper::Factory.instance.build(spec_hash, :yogo )
     model.send(:include,Yogo::Model)
-    
+    return model
   end
   
 end
