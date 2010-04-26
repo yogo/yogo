@@ -226,6 +226,7 @@ class YogoDataController < ApplicationController
       end
     end
   end
+
   ##
   # gets a histrogram from an attribute name
   #
@@ -267,6 +268,27 @@ class YogoDataController < ApplicationController
       wants.html 
       wants.js { render :partial => 'histogram_attribute' }
     end
+  end
+
+  ##
+  # gets an asset associated with an attribute
+  #
+  # @example http://localhost:3000/project/download_asset
+  #
+  # @param [Hash] params
+  # @option params [String] :attribute_name
+  #
+  # @return [File Download] returns a mime-type and file to the browser of the asset requested
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  def download_asset    
+    instance = @model.get(params[:id])
+    @attribute_name = params[:attribute_name]
+    filename = File.join(Rails.root, Yogo::Setting['asset_directory'], @model.asset_path, instance[@attribute_name])
+    content_type = MIME::Types.type_for(filename)[0].content_type
+    send_file filename, :type => content_type #, :x_sendfile => true # TODO: if we use lightd or Apache 2
   end
   
   private
