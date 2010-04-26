@@ -286,7 +286,7 @@ class YogoModelsController < ApplicationController
   #
   # @api private
   def valid_model_or_column_name?(potential_name)
-    # TODO: Validations shoulnd't be here.
+    # TODO: Validations should not be here.
     !potential_name.match(/^\d|\.|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-/)
   end
 end

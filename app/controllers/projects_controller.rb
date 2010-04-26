@@ -248,7 +248,16 @@ class ProjectsController < ApplicationController
   # @api public
   def loadexample
     # Load the project and data 
-    Yogo::Loader.load(:example, "Example Project")
+    #Yogo::Loader.load(:example, "Example Project")
+        
+    # Load the cercal db from CSV
+    @project = Project.create(:name => "Cricket Cercal System DB")
+    errors = @project.process_csv(Rails.root.join("dist", "example_data", "cercaldb", "cells.csv"), "Cell")
+    if errors.empty?
+      flash[:notice]  = "File uploaded succesfully."
+    else
+      flash[:error] = errors.join("\n")
+    end
     redirect_to :back
   end
 
