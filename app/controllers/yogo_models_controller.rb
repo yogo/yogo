@@ -105,6 +105,7 @@ class YogoModelsController < ApplicationController
     
     if errors.empty? and (@model = @project.add_model(class_name, cleaned_options)) != false
       @model.auto_migrate!
+      @model.send(:include, Yogo::Model)
       @model.properties.sort!
       flash[:notice] = 'The model was sucessfully created.'
       redirect_to(project_yogo_model_url(@project, @model.name.demodulize))

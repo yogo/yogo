@@ -145,4 +145,17 @@ module ApplicationHelper
      
     return res.join(' > ')
   end
+  
+  def yogo_show_helper(item, property, asset_path)
+    if property.type == DataMapper::Types::YogoFile
+      file = item[property.name]
+      puts "HM: #{file.inspect} #{file.class}"
+      link_to(file, File.join(asset_path, file))
+    elsif property.type == DataMapper::Types::YogoImage 
+      file = item[property.name]
+      link_to(file, File.join(asset_path, file))
+    else 
+      item[property.name]
+    end
+  end
 end
