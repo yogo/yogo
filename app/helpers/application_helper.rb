@@ -147,7 +147,8 @@ module ApplicationHelper
   end
   
   ## 
-  # This method creates the appropriate contents to show an attribute on a model
+  # Creates the appropriate HTML for attributes on a model
+  # 
   # For attributes that are files or images it makes a download link work for them
   # 
   # @example 
