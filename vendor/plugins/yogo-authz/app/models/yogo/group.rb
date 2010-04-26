@@ -24,7 +24,7 @@ class Yogo::Group
   
   
   has n, :memberships, :model => 'Yogo::Membership'
-  has n, :users, :through => :memberships,  :model => Yogo::Settings[:user_class]
+  has n, :users, :through => :memberships,  :model => Yogo::Setting[:user_class]
   
   has n, :permissions, :model => 'Yogo::Permission'
   

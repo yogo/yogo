@@ -11,10 +11,10 @@ module Yogo
   # This allows for storing and retrieving settings across Yogo Applications
   # 
   # @author Robbie Lamb robbie.lamb@gmail.com
-  class Settings
+  class Setting
     include DataMapper::Resource  
 
-    storage_names[:default] = 'yogo_settings'
+    storage_names[:default] = 'yogo__settings'
     # storage_names[:yogo_settings_cache] = 'yogo_settings'
 
     # property :id,    Serial
@@ -31,7 +31,7 @@ module Yogo
     # Used to query the settings basied on a key
     #
     # @example
-    #   if Yogo::Settings[local_only]
+    #   if Yogo::Setting[local_only]
     #     # Be useful
     #   end
     # 
@@ -60,7 +60,7 @@ module Yogo
     # Used to set a value for a particular key
     # 
     # @example
-    #   Yogo::Settings[local_only] = false
+    #   Yogo::Setting[local_only] = false
     # 
     # @param [String or Symbol] key 
     #   key to store
@@ -82,7 +82,7 @@ module Yogo
     # Used to get the keys of the current setting
     #
     # @example
-    #   Yogo::Settings.keys
+    #   Yogo::Setting.keys
     #
     # @return [Array] an array of all of the keys in the current settings
     #
@@ -98,7 +98,7 @@ module Yogo
     # This is primairly used during testing.
     # 
     # @example
-    #   Yogo::Settingsload_defaults(Dir.glob(Rails.root.to_s+"/vendor/gems/**/config/settings.yml")
+    #   Yogo::Settingload_defaults(Dir.glob(Rails.root.to_s+"/vendor/gems/**/config/settings.yml")
     #                  Dir.glob(Rails.root.to_s+"/config/settings.yml")
     #                 )
     # 
@@ -127,7 +127,7 @@ module Yogo
     # Used to check the cache for the existence of a key
     #
     # @example
-    #  Yogo::Settings.check_cache("key_name")
+    #  Yogo::Setting.check_cache("key_name")
     #
     # @param [String] key
     #  the name of a key to check in the cache

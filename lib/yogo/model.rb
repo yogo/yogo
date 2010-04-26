@@ -26,8 +26,7 @@ module Yogo
         base.properties.each do |property|
           # Create carrierwave class for this property.
           if property.type == DataMapper::Types::YogoFile
-            path = Rails.root / 'public' / 'files' 
-            self.name.split('::').each{ |mod| path = path / mod }
+            path = File.join(Rails.root, Yogo::Setting['asset_directory'], asset_path)
             storage_dir = path.to_s
             anon_file_handler = Class.new(CarrierWave::Uploader::Base)
             anon_file_handler.instance_eval do 
@@ -39,8 +38,7 @@ module Yogo
             mount_uploader property.name, named_class
 
           elsif property.type == DataMapper::Types::YogoImage
-            path = Rails.root / 'public' / 'images' 
-            self.name.split('::').each{ |mod| path = path / mod }
+            path = File.join(Rails.root, Yogo::Setting['asset_directory'], asset_path)
             storage_dir = path.to_s
             anon_file_handler = Class.new(CarrierWave::Uploader::Base)
             anon_file_handler.instance_eval do 
@@ -76,6 +74,21 @@ module Yogo
         properties.select{|p| p.name.to_s.match(/^yogo__/) }
       end
 
+      ##
+      # Create the asset path so we can reuse it
+      # 
+      # @return [String] The string path to the directory/folder to storage for assets of this model.
+      # 
+      # @example Get the path to the asset directory for a model
+      #   Model.asset_path => "module/class"
+      # 
+      # @author Ivan Judson
+      # 
+      # @api public
+      def asset_path
+        self.name.gsub('::', '/')
+      end
+
       # The name of the model humanized
       # 
       # @example 
@@ -103,7 +116,7 @@ module Yogo
       # 
       # @api private
       def require_change_summary?
-        Yogo::Settings[:require_change_sumary] && !new_record?
+        Yogo::Setting[:require_change_sumary] && !new_record?
       end
     end
 
