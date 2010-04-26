@@ -10,7 +10,7 @@
       <%- @model.usable_properties.each do |p| %>
       <tr>
       <td><%= p.display_name.titleize %></td>
-      <td><%= yogo_show_helper(@item, p, @model.asset_path) %>
+      <td><%= yogo_show_helper(@item, p, @project, @model) %>
       </tr>
       <%- end %>
   </tbody>

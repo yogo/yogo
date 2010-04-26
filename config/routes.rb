@@ -15,7 +15,11 @@ ActionController::Routing::Routes.draw do |map|
     # /projects/:project_id/yogo_data/:model_name
     # /projects/:project_id/yogo_data/:model_name/:id
     project.resources :yogo_data, :as => 'yogo_data/:model_id', 
-                      :collection => { :upload => :post, :search => :get, :histogram_attribute => :get, :pick_attribute => :get, :remove_attribute => :get }
+                      :collection => { :upload => :post, :search => :get, 
+                                       :histogram_attribute => :get, 
+                                       :pick_attribute => :get, 
+                                       :remove_attribute => :get},
+                      :member => { :download_asset => :get }
                           
     # /projects/:project_id/yogo_models/:model_name
     project.resources :yogo_models,

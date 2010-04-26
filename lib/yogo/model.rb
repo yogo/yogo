@@ -26,7 +26,7 @@ module Yogo
         base.properties.each do |property|
           # Create carrierwave class for this property.
           if property.type == DataMapper::Types::YogoFile
-            path = File.join(Rails.root, 'yogo_assets', asset_path)
+            path = File.join(Rails.root, Yogo::Settings['asset_directory'], asset_path)
             storage_dir = path.to_s
             anon_file_handler = Class.new(CarrierWave::Uploader::Base)
             anon_file_handler.instance_eval do 
@@ -38,7 +38,7 @@ module Yogo
             mount_uploader property.name, named_class
 
           elsif property.type == DataMapper::Types::YogoImage
-            path = File.join(Rails.root, 'yogo_assets', asset_path)
+            path = File.join(Rails.root, Yogo::Settings['asset_directory'], asset_path)
             storage_dir = path.to_s
             anon_file_handler = Class.new(CarrierWave::Uploader::Base)
             anon_file_handler.instance_eval do 
