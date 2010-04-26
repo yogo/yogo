@@ -11,10 +11,10 @@ module Yogo
   # This allows for storing and retrieving settings across Yogo Applications
   # 
   # @author Robbie Lamb robbie.lamb@gmail.com
-  class Settings
+  class Setting
     include DataMapper::Resource  
 
-    storage_names[:default] = 'yogo_settings'
+    storage_names[:default] = 'yogo__settings'
     # storage_names[:yogo_settings_cache] = 'yogo_settings'
 
     # property :id,    Serial
@@ -31,7 +31,7 @@ module Yogo
     # Used to query the settings basied on a key
     #
     # @example
-    #   if Yogo::Settings[local_only]
+    #   if Yogo::Setting[local_only]
     #     # Be useful
     #   end
     # 
