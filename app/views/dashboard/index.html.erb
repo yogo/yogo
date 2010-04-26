@@ -32,9 +32,9 @@
           <%# TODO: Make this use real data!q %>
             <tr>
               <td style="text-align:left;"><%= h dataset.public_name %></td>
-              <td><%= link_to(dataset.count(:created_at.lt => 1.week.ago), "/mockup/show_project") %></td>
+              <td><%= link_to(dataset.count(:created_at.gt => 1.week.ago), "/mockup/show_project") %></td>
               <td><%= link_to(dataset.count, "/mockup/show_project") %></td>
-              <td><%= link_to(image_tag('manage.png', :title => "Manage Data"), "/mockup/dataset1") %></td>
+              <td><%= link_to(image_tag('manage.png', :title => "Manage Data"), project_yogo_data_index_path(project, dataset)) %></td>
               <td><%= link_to(image_tag('edit.png', :title => "Describe Dataset"), "/mockup/edit") %></td>
               <td><%= link_to(image_tag('import.png', :title => "Import Data"), "") %></td>
             </tr>

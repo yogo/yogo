@@ -102,9 +102,37 @@ module Yogo
       def public_name
         @_public_name ||= self.name.split('::')[-1].humanize
       end
+      
+      # Compatability method for rails' route generation helpers
+      #
+      # @example
+      #   @model.to_param # returns the ID as a string
+      # 
+      # @return [String] the object id as url param
+      #
+      # @author Yogo Team
+      #
+      # @api public
+      def to_param
+        self.name.demodulize
+      end
     end
 
     module InstanceMethods
+     
+      # Compatability method for rails' route generation helpers
+      #
+      # @example
+      #   instance.to_param # returns the ID as a string
+      # 
+      # @return [String] the object id as url param
+      #
+      # @author Yogo Team
+      #
+      # @api public
+      def to_param
+        self.yogo__id.to_s
+      end
       
       private
       
