@@ -1,20 +1,23 @@
-<h1><%= @project.name %></h1>
-<!-- <div id="project-overview">
+<h1><%= @project.name %>: <em>Overview</em></h1>
+<div id="project-overview">
   <%#= @project.description%>
-</div> -->
+</div>
 
 <table id="project-show">
   <thead>
     <tr>
-      <th><%= "Models" if @models.length > 0 %></th>
-      <th><%= "Data" if @models.length > 0 %></th>
+      <th><%#= "Models" if @models.length > 0 %></th>
+      <th><%#= "Data" if @models.length > 0 %></th>
     </tr>
   </thead>
   <tbody>
     <%- @models.each do |m| %>
       <tr id="project-show-row" class="<%= cycle('alternate-rows0', 'alternate-rows1') %>">
-        <td><%= link_to(m.name.demodulize.titleize, project_yogo_model_path(@project, m.name.demodulize)) %></td>
-        <td>(<%= link_to(m.count, project_yogo_data_index_path(@project, m.name.demodulize)) %>)</td>
+        <td><%= link_to(image_tag('view.gif', :alt => "View", :title => "View"), project_yogo_model_path(@project, m.name.demodulize)) %></td>
+        <td><%= link_to(image_tag('edit.png', :alt => "Edit", :title => "Edit"), edit_project_yogo_model_path(@project, m.name.demodulize)) %></td>
+        <td><%= link_to(image_tag('remove.png', :alt => "Remove", :title => "Remove"), project_yogo_model_path(@project, m.name.demodulize), :method => :delete, :confirm => 'Removing this model will also destroy all data associated with the model. Continue?') %></td>
+        <td><%= m.name.demodulize.titleize %></td>
+        <!-- <td>(<%#= link_to(m.count, project_yogo_data_index_path(@project, m.name.demodulize)) %>)</td> -->
       </tr>
     <%- end %>
   </tbody>

@@ -6,6 +6,17 @@
 # FILE: navigation.rb
 # 
 module Enumerable
+  ##
+  # Returns a histogram
+  #
+  # @example
+  #   object.to_histogram
+  #
+  # @return [Hash]
+  #
+  # @author Ivan Judson
+  #
+  # @api public
   def to_histogram
     inject(Hash.new(0)) { |h, x| h[x] += 1; h}
   end
@@ -14,24 +25,36 @@ end
 module Yogo
   class Navigation
     ##
-    # This method gets the list of attributes prepared for use in views
+    # Gets the list of attributes prepared for use in views
+    #
+    # @example TODO
+    #
+    # @return [Array<String>] gets the list of attributes prepared for use in views
     # 
     # @param [Class] Model The model to get the attributes from
     # 
-    # @return [Array of Strings] Attributes array ready for use in views.
+    # @author Ivan Judson
+    #
+    # @api public
     def self.attributes(model)
-      model.usable_properties.map { |prop| prop.name.to_s }
+      model.usable_properties.map { |prop| prop.display_name.to_s }
     end
     
     ##
-    # This method generates a histogram in a hash that is keyed by attribute value 
-    # and value is the frequency of that value.
+    # Generates a Histogram in a hash that is keyed by attribute value
+    #
+    # @example TODO
+    #
+    # @return [Hash] generates a histogram in a hash that is keyed by attribute value 
     # 
     # @param [Class] Model The model to get the histogram from
     # @param [String] Attribute Name The attribute to histogram
     # 
     # @return [Hash] Histogram of values for the model, attribute
-    # 
+    #
+    # @author Ivan Judson
+    #
+    # @api public
     def self.values(model, attribute)
       values = model.all.map { |m| m[attribute.to_sym] }
       values.to_histogram

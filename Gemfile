@@ -5,14 +5,14 @@ source      "http://rubygems.org"
 gem "rails",                "2.3.5", :require => nil
 gem "rake",                          :require => nil
 gem "dm-core",              "0.10.2"
-gem "dm-reflection",        "0.0.1", :path => "vendor/gems/dm-reflection-0.0.1"
+gem "dm-reflection",        "0.0.2", :git => "git://github.com/yogo/dm-reflection.git" # :path => "vendor/gems/dm-reflection-0.0.1"
 gem "dm-timestamps"  
 gem "dm-validations"
 gem "dm-is-nested_set"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates"
 gem "dm-types"
-gem "dm-persevere-adapter", "0.46.1", :require => nil
+gem "dm-persevere-adapter", "0.51",   :require => nil
 gem "do_sqlite3",                     :require => nil
 gem "rails_datamapper",               :require => nil
 
@@ -20,32 +20,36 @@ gem "rails_datamapper",               :require => nil
 # gem "authlogic",            "2.1.3"
 gem "fastercsv"
 gem "carrierwave"
+gem "json",      "~>1.2.0",           :require => nil
 
-# Build/CI gems that are just good for us to use.
-gem "yard"
-gem "yardstick"
-
-# JRUBY sensitive gems
-# if defined?(JRUBY_VERSION)
-#   gem "json_pure",         '~>1.2.0',    :require => nil
-#   gem "jruby-openssl",                 :require => nil
-#   # gem "ruby-debug-base",   "0.10.3.1", :require => nil,
-#   #                                      :path => "vendor/extra_gems/ruby-debug-base-0.10.3.1-java"
-#   
-#   # When in "production" we run with jruby, so we include the adapters for other databases.
-#   #gem "do_mysql",             "0.10.1", :require => nil
-#   #gem "do_postgres",          "0.10.1", :require => nil
-# else
-  gem "json",      "~>1.2.0", :require => nil
-  gem 'ruby-debug',         :require => nil
-# end
+gem 'ruby-debug',         :require => nil, :group => :development
 
 group :test do
+  gem 'ruby-debug',                :require => nil
   gem 'rspec',        '~>1.3.0',   :require => nil
   gem 'rspec-rails',  '~>1.3.2',   :require => 'spec/rails'
   gem 'ZenTest',                   :require => nil
   gem 'redgreen',                  :require => nil
   gem 'factory_girl', '~>1.2.3',   :require => nil
+  gem "yard",                      :require => nil
+  gem "yardstick",                 :require => nil
+  gem "bluecloth",                 :require => nil
+  gem "hoe",                       :require => nil
+  gem "ruby_parser",               :require => nil
+  gem "flay",                      :require => nil
+  gem "flog",                      :require => nil
+  gem "chronic",                   :require => nil
+  gem "fattr",                     :require => nil
+  gem "arrayfields",               :require => nil
+  gem "main",                      :require => nil
+  gem "hirb",                      :require => nil
+  gem "churn",                     :require => nil
+  gem "Saikuro",                   :require => nil
+  gem "reek",                      :require => nil
+  gem "ruby2ruby",                 :require => nil
+  gem "roodi",                     :require => nil
+  gem "googlecharts",              :require => nil
+  gem "metric_fu",                 :require => nil
 end
 
 group :cucumber do

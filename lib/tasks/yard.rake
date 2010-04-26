@@ -1,7 +1,7 @@
 require 'yard'
 
 YARD::Rake::YardocTask.new do |t|
-  t.files   = ['apps/**/*.rb','lib/**/*.rb']   # optional
+  t.files   = ['app/**/*.rb','lib/**/*.rb']   # optional
   t.options = [ '-o./doc/yard' ]  # optional
 end
 

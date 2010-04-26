@@ -54,4 +54,15 @@ namespace :yogo do
       raise e
     end
   end
+  
+  desc "Run metrics. Sets up, starts, and cleans up the required persvr instance."
+  task :metrics => ['yogo:persvr_test'] do
+    begin
+      Rake::Task['metrics:all'].invoke
+      Rake::Task['yogo:persvr_test_cleanup'].invoke
+    rescue Exception => e
+      Rake::Task['yogo:persvr_test_cleanup'].invoke
+      raise e
+    end
+  end
 end

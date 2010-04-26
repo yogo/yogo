@@ -13,8 +13,8 @@ require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environ
 
 require 'spec/autorun'
 require 'spec/rails'
-require 'factory_girl'
-require 'factories'
+# require 'factory_girl'
+#require 'factories'
 require 'datamapper/factory'
 
 begin

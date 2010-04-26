@@ -128,7 +128,7 @@ describe "A Project" do
     models = ["a_giraffe", 'giraffe', 'gazelles', 'giraffes']
     p = Project.new(:name => 'Zoo')
     models.each do |m|
-      p.add_model(m, {:properties =>{:name => String}})
+      p.add_model(m, {:name => {:type => String}})
     end
     p.get_model('giraffe').name.should == 'Yogo::Zoo::Giraffe'
     p.get_model('Giraffes').name.should == 'Yogo::Zoo::Giraffes'
@@ -148,30 +148,22 @@ describe "A Project" do
 
     it "should respond to an add_model method that creates a model" do
       project = Project.create(:name => "Test Project 1")
-      model_hash = { 
-        :name => "Cell",
-        :modules => ["Yogo", "TestProject1"],
-        :properties => {
-          "name" => {:type => "String"},
-          "id"   => {:type => "Serial"}
-        }
+      property_hash = {
+        "name" => {:type => String},
+        "id"   => {:type => DataMapper::Types::Serial}
       }
-      m = project.add_model(model_hash)
+      m = project.add_model("Cell", property_hash)
       m.should == Yogo::TestProject1::Cell
       Yogo::TestProject1::Cell.ancestors.should include(DataMapper::Resource)
     end
 
     it "should make the newly added model available via .models" do
       project = Project.create(:name => "Test Project 1")
-      model_hash = { 
-        :name => "Cell",
-        :modules => ["Yogo", "TestProject1"],
-        :properties => {
-          "name" => {:type => "String"},
-          "id"   => {:type => "Serial"}
-        }
+      property_hash = {
+        "name" => {:type => String},
+        "id"   => {:type => DataMapper::Types::Serial}
       }
-      project.add_model(model_hash)
+      project.add_model("Cell",property_hash)
       model_names = project.models.map(&:name)
       model_names.map{|m| m.match(/^Yogo::#{project.namespace}::Cell/)}.compact.should_not be_empty
     end
@@ -179,15 +171,12 @@ describe "A Project" do
 
     it "should properly namespace an un-namespaced model hash" do
       project = Project.create(:name => "Test Project 2")
-      model_hash = { 
-        :name => "Monkey",
-        :modules => ["Yogo", "TestProject2"],
-        :properties => {
-          "name" => {:type => "String"},
-          "id"   => {:type => "Serial"}
-        }
+      property_hash = {
+        "name" => {:type => String},
+        "id"   => {:type => DataMapper::Types::Serial}
       }
-      project.add_model(model_hash)
+      
+      project.add_model("Monkey",property_hash)
       model_names = project.models.map(&:name)
       model_names.map{|m| m.match(/^Yogo::#{project.namespace}::Monkey/)}.compact.should_not be_empty
     end

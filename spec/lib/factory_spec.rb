@@ -36,7 +36,12 @@ describe "A Factory" do
       @valid_hash[:properties].keys.should include(prop.name)
     end
   end
-    
-  it "should make a model from a properly formatted csv file"
 
+  it "should prefix attributes for a model when passed an attribute prefix" do
+    bacon_model = @factory.build(@valid_hash, :default, { :attribute_prefix => "yogotest" } )
+
+    bacon_model.properties.each do |prop|
+      prop.name.should eql "yogotest__#{prop.display_name}".to_sym unless prop.name == :yogo_id
+    end
+  end
 end

@@ -11,8 +11,6 @@ require 'slash_path'
 require 'yaml'
 require 'net/http'
 
-
-
 namespace :persvr do
   PERSVR_CMD = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || RAILS_ROOT/'vendor/bundled/bin/persvr' || 'persvr'
   
@@ -136,7 +134,7 @@ namespace :persvr do
     start_persvr
     Rake::Task['persvr:stop'].reenable
     Rake::Task['persvr:stop_all'].reenable
-    # sh "reset" # starting persvr seems to mess up the terminal sometimes; reset to fix
+    #sh "reset" # starting persvr seems to mess up the terminal sometimes; reset to fix
   end
   
   desc "Stop the persevere instance for the current environment."

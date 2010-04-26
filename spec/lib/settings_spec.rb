@@ -51,5 +51,12 @@ module YogoSettingsSpec
       Yogo::Settings[:something_nested].should be_instance_of(Hash)
       Yogo::Settings[:something_nested]['first_layer'].should eql('first layer')
     end
+    
+    it "should return the keys in the settings" do
+      Yogo::Settings.keys.should be_an(Array)
+      Yogo::Settings.keys.should_not be_empty
+      Yogo::Settings.keys.should include('first')
+      Yogo::Settings.keys.should include('something_nested')
+    end
   end
 end

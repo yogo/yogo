@@ -8,8 +8,16 @@
 # 
 class YogoModelsController < ApplicationController
   before_filter :find_parent_items
-
+  ##
   # Provides a list of the models for the current project
+  #
+  # @example http://localhost:3000/yogo_model
+  #
+  # @return Displays list of all the models for the project
+  #
+  # @author Yogo Team
+  #
+  # @api public
   # 
   def index
     @models = @project.models
@@ -19,12 +27,23 @@ class YogoModelsController < ApplicationController
       format.json { render( :json => "[#{@models.collect{|m| m.to_json_schema }.join(', ')}}" )}
     end
   end
-  
+  ##
   # Display a model schema with Human readable datatypes
+  #
+  # @example http://localhost:3000/yogo_model/1
+  #
+  # @param [Hash] params
+  # @option params [String] :id
+  #
+  # @return [Model] Displays a yogo project model
+  #
+  # @author Yogo Team
+  #
+  # @api public
   #
   def show
     @model = @project.get_model(params[:id])
-    
+
     respond_to do |format|
       format.html
       format.json { render( :json => @model.to_json_schema )}
@@ -32,13 +51,37 @@ class YogoModelsController < ApplicationController
     end
 
   end
-  
+  ##
+  # Creates a new model object
+  #
+  # @example http://localhost:3000/yogo_model/new
+  #
+  # @return [Object] returns an empty model
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  #
   def new
     @model = Class.new
     
     @options = Yogo::Types.human_types.map{|key| [key,key] }
   end
   
+  # creates new model
+  #
+  # @example http://localhost:3000/yogo_model/create
+  #
+  # @param [Hash] params
+  # @option params [String] :class_name
+  # @option params [Hash] :new_property it has name, type, and position keys
+  #
+  # @return redirects to show model page if save was sucessful 
+  #   else redirects to new
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def create
     class_name = params[:class_name].titleize.gsub(' ', '')
     cleaned_options = {}
@@ -52,8 +95,7 @@ class YogoModelsController < ApplicationController
       next if name.blank?
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        pfield = Yogo::DataMethods.map_attribute(name)
-        cleaned_options[name] = { :type => prop_type, :position => prop_pos, :field => pfield }
+        cleaned_options[name] = { :type => prop_type, :position => prop_pos }
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
@@ -61,8 +103,7 @@ class YogoModelsController < ApplicationController
     
     @model = false
     
-    if errors.empty? and (@model = @project.add_model(class_name, :properties => cleaned_options)) != false
-      @model.send(:include,Yogo::DataMethods) unless @model.included_modules.include?(Yogo::DataMethods)
+    if errors.empty? and (@model = @project.add_model(class_name, cleaned_options)) != false
       @model.auto_migrate!
       @model.properties.sort!
       flash[:notice] = 'The model was sucessfully created.'
@@ -73,9 +114,20 @@ class YogoModelsController < ApplicationController
       redirect_to( new_project_yogo_model_url(@project) )
     end
   end
-  
+
   # Allows a user to add a field/property to an existing model
   #
+  # @example http://localhost:3000/yogo_model/edit/1
+  #  edits data model 1
+  #
+  # @param [Hash] params
+  # @option params [String] :id
+  #
+  # @return [Model] Allows a user to edit a yogo project model attributes
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def edit
     @model = @project.get_model(params[:id])
     @options = Yogo::Types.human_types.map{|key| [key,key] } 
@@ -83,7 +135,20 @@ class YogoModelsController < ApplicationController
 
   # Processes adding a field/property to an existing model
   # 
-  # * models are migrated up so no data is lost
+  # models are migrated up so no data is lost
+  #  
+  # @example http://localhost:3000/yogo_model/update
+  #
+  # @param [Hash] params
+  # @option params [String] :id
+  # @option params [Hash] :new_property it has name, type, and position keys
+  # @option params [Hash] :property it has name, type, and position keys
+  #
+  # @return [Model] Updates a model
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def update
     @model = @project.get_model(params[:id])
     # This stuff need to be pushed down into the model. In due time.
@@ -99,8 +164,7 @@ class YogoModelsController < ApplicationController
       next if name.blank?
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        pfield = Yogo::DataMethods.map_attribute(name)
-        cleaned_params << [name, prop_type, prop_pos, pfield]
+        cleaned_params << [name, prop_type, prop_pos]
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
@@ -112,8 +176,7 @@ class YogoModelsController < ApplicationController
       prop_pos = options[:position]
       
       if valid_model_or_column_name?(name) && !prop_type.nil?
-        pfield = Yogo::DataMethods.map_attribute(name)
-        cleaned_params << [name, prop_type, prop_pos, pfield]
+        cleaned_params << [name, prop_type, prop_pos]
       else #error
         errors[name] = " is a malformed name or an invalid type."
       end
@@ -122,12 +185,12 @@ class YogoModelsController < ApplicationController
     # Type Checking
     if errors.empty?
       cleaned_params.each do |prop|
-        @model.send(:property, prop[0].to_sym, prop[1], :required => false, :position => prop[2], :field => prop[3])
+        @model.send(:property, prop[0].to_sym, prop[1], :required => false, :position => prop[2], :separator => '__', :prefix => 'yogo')
       end
       
       @model.auto_upgrade!
       @model.properties.sort!
-      @model.send(:include,Yogo::DataMethods)
+      @model.send(:include,Yogo::Model)
       flash[:notice] = "Properties added"
       
       redirect_to project_yogo_model_url(@project, @model.name.demodulize)
@@ -139,16 +202,39 @@ class YogoModelsController < ApplicationController
     end
 
   end  
-  
+  ##
   # Removes a model from the project (including data)
-  # 
-  # * The table and data associated with this model will be removed from the repo
+  #
+  # the table and data associated with this model will be removed from the repo
+  #
+  # @example http://localhost:3000/yogo_model/destroy/1
+  #
+  # @param [Hash] params
+  # @option params [String] :id
+  #
+  # @return redirects to model index
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def destroy
     model = @project.get_model(params[:id])
     @project.delete_model(model)
     redirect_to project_url(@project)
   end
-  
+  ##
+  # List attributes for a model
+  #
+  # @example http://localhost:3000/yogo_model/1/list_attributes
+  #
+  # @param [Hash] params
+  # @option params [String] :id
+  #
+  # @return renders list of the attributes
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def list_attributes
     @model = @project.get_model(params[:id])
     @attributes = Yogo::Navigation.attributes(@model)
@@ -160,24 +246,47 @@ class YogoModelsController < ApplicationController
   end
   
   private
-  
-  # Allows download of yogo project model data in CSV format
-  # 
+  ##
+  # pulls model data into a CSV file format
+  #
+  # @return [File] Allows download of yogo project model data in CSV format
+  #
+  # @author Yogo Team
+  #
+  # @api private
   def download_csv
-    send_data(Yogo::CSV.make_csv(@model, false), 
+    send_data(@model.make_csv(false),
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')
   end
   
-  # Sets @project to the current project_id parameter
+  ##
+  # returns a project
   #
+  # @param [Hash] params
+  # @option params [String] :project_id
+  #
+  # @return [Model] returns a project
+  #
+  # @author Yogo Team
+  #
+  # @api private
   def find_parent_items
     @project = Project.get(params[:project_id])
   end
-  
-  # TODO: Validations shoulnd't be here.
+  ##
+  # validates model name or column name
+  #
+  # @param [String] potential name
+  #
+  # @return [Boolean] returns true or false
+  #
+  # @author Yogo Team
+  #
+  # @api private
   def valid_model_or_column_name?(potential_name)
+    # TODO: Validations shoulnd't be here.
     !potential_name.match(/^\d|\.|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-/)
   end
 end

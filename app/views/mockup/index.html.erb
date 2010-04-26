@@ -1,0 +1,126 @@
+<div id="container"  class="clearfix">
+  <div id='header'>
+    <div id="header-img">
+      <%= image_tag('title.png') %>
+    </div>
+  </div>
+  
+  <div id="content">
+    <div id="mockup-intro">
+      <H2>Yogo Dashboard</H2>
+      <div class="mock-button-small">
+        <%= link_to(image_tag("create-project-small.jpg"), "/mockup/name_project") %>
+      </div>
+      <div class="mock-project-block">
+        <div class="mock-project-icon">
+          <%= link_to(image_tag('mock-project-icon.jpg'), "/mockup/show_project") %>
+        </div>
+        <div class="mock-project-text">
+          <%= link_to("Parkinson's Disease Research", "/mockup/show_project") %>
+          <p><strong>Parkinson's Disease Research:</strong> This project contains data from three components of our research: Neuropsych evaluations, fMRI analysis results, and Magnetoencephalography (MEG) results. </p>
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Dataset</th>
+                <th>New</th>
+                <th>Total</th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tr>
+              <td style="text-align:left;">Neuropsych evaluations
+              </td>
+              <td>
+                <%= link_to("3", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to("6", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('manage.png', :title => "Manage Data"), "/mockup/dataset1") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('edit.png', :title => "Describe Dataset"), "/mockup/edit") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('import.png', :title => "Import Data"), "") %>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:left;">fMRI analysis
+              </td>
+              <td>
+                <%= link_to("1", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to("8", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('manage.png', :title => "Manage Data"), "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('edit.png', :title => "Describe Dataset"), "/mockup/edit") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('import.png', :title => "Import Data"), "") %>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:left;">MEG results
+              </td>
+              <td>
+                <%= link_to("17", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to("17", "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('manage.png', :title => "Manage Data"), "/mockup/show_project") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('edit.png', :title => "Describe Dataset"), "/mockup/edit") %>
+              </td>
+              <td>
+                <%= link_to(image_tag('import.png', :title => "Import Data"), "") %>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="mock-project-block">
+        <div class="mock-project-icon">
+          <%= link_to(image_tag('mock-project-icon.jpg'), "") %>
+        </div>
+        <div class="mock-project-text">
+          <%= link_to("Field Experiments", "") %>
+          <p><strong>Field Experiments:</strong> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+        </div>
+      </div>
+        
+      <div class="mock-project-block">
+        <div class="mock-project-icon">
+          <%= link_to(image_tag('mock-project-icon.jpg'), "") %>
+        </div>
+        <div class="mock-project-text">
+          <%= link_to("Protein Assays", "") %>
+          <p><strong>Protein Assays:</strong> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+        
+      <div class="mock-project-block">
+        <div class="mock-project-icon">
+          <%= link_to(image_tag('mock-project-icon.jpg'), "") %>
+        </div>
+        <div class="mock-project-text">
+          <%= link_to("Data Mining", "") %>
+          <p><strong>Data Mining:</strong> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+        </div>
+      </div>
+    </div> <!-- End mockup-intro div -->
+  
+  </div>  <!-- End content div -->
+  
+</div>

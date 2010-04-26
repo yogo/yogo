@@ -9,10 +9,19 @@
 #
 class YogoDataController < ApplicationController
   before_filter :find_parent_items
- 
-  #  Display's paginated data items from the selected yogo project model
-  # 
-  # * 10 data objects per page are displayed
+  ##
+  # 10 data objects per page are displayed
+  #
+  # @example http://localhost:3000/yogo_data
+  #
+  # @param [Hash] params
+  # @option params [String] :q this is a querry
+  #
+  # @return [Array] Display's paginated data items from selected yogo project model
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def index
     if !params[:q].nil?
       queries =[]
@@ -38,9 +47,19 @@ class YogoDataController < ApplicationController
       format.csv { download_csv }
     end
   end
-  
-  # Search the current model for the search parameters.
+  ##
+  # this searches projects and models for seach_term
   #
+  # @example http://localhost:3000/yogo_data
+  #
+  # @param [Hash] params
+  # @option params [String] :search_term
+  #
+  # @return [Array] Search the current model for the search parameters
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def search
     search_term = params[:search_term]
     @query = @model.search(search_term)
@@ -53,8 +72,18 @@ class YogoDataController < ApplicationController
     end
   end
   
-  # Displays a yogo project model data item's properites and values
-  # 
+  # this shows a model
+  #
+  # @example http://localhost:3000/yogo_data
+  #
+  # @param [Hash] params
+  # @option params [String] :id
+  #
+  # @return [Model] Displays a yogo project model data item's properites and values
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def show
     @item = @model.get(params[:id])
     
@@ -63,17 +92,50 @@ class YogoDataController < ApplicationController
       format.json { render( :json => @item.to_json )}
     end
   end
-  
+
+  # Creates a new data object
+  #
+  # @example http://localhost:3000/yogo_data/new
+  #
+  # @return [Object] returns an empty data object
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def new
     @item = @model.new
   end
-  
-  # Allows a user to edit a yogo project model data item's values
+  ##
+  # edits a data object
   #
+  # @example http://localhost:3000/yogo_data/edit/1
+  #  edits data object 1
+  #
+  # @param [Hash] params
+  # @option params [String] :id
+  #
+  # @return [Model] Allows a user to edit a yogo project model data item's values
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def edit
     @item = @model.get(params[:id])
   end
-
+  ##
+  # creates new data object
+  #
+  # @example http://localhost:3000/yogo_data/create
+  #
+  # @param [Hash] params
+  # @option params [String] goober
+  #
+  # @return redirects to show data page if save was sucessful 
+  #   else redirects to new
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def create
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
 
@@ -92,9 +154,20 @@ class YogoDataController < ApplicationController
       render :action => :new
     end
   end
-  
-  # Updates a data item to the current yogo project model
+  ##
+  # updates a data object
   #
+  # @example http://localhost:3000/yogo_data/update
+  #
+  # @param [Hash] params
+  # @option params [String] goober
+  # @option params [String] :id
+  #
+  # @return [Model, String] Updates a data item to the current yogo project model
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def update
     @item = @model.get(params[:id])
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
@@ -102,16 +175,36 @@ class YogoDataController < ApplicationController
     @item.save
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end  
-  
-  # Deletes a yogo project model's selected datum
-  # 
+  ##
+  # destroys a data object
+  #
+  # @example http://localhost:3000/yogo_data/destroy/1
+  #
+  # @param [Hash] params
+  # @option params [String] :id
+  #
+  # @return redirects to data index
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def destroy
     @model.get(params[:id]).destroy!
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end
-  
-  # Accepts the upload of a CSV file
-  # 
+  ##
+  # alows us to upload csv file to be processed into data
+  #
+  # @example http://localhost:3000/project/upload/1/
+  #
+  # @param [Hash] params
+  # @option params [Hash] :upload
+  #
+  # @return [String] Accepts the upload of a CSV file
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def upload
     if !params[:upload].nil? && datafile = params[:upload]['datafile']
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
@@ -120,18 +213,32 @@ class YogoDataController < ApplicationController
       else
         # Read the data in
         csv_data = FasterCSV.read(datafile.path)
-
-        if Yogo::CSV.validate_csv(csv_data[0..2])
-          Yogo::CSV.load_data(@model, csv_data)
+        errors = @model.load_csv_data(csv_data)
+        if errors.empty?
           flash[:notice] = "#{@model.name.demodulize} Data Successfully Uploaded."
         else
+          @errors = errors
           flash[:error] = "CSV File improperly formatted. Data not uploaded."
         end
       end
-      redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
+      respond_to do |format|
+        format.html { redirect_to project_yogo_data_index_url(@project, @model.name.demodulize) }
+      end
     end
   end
-
+  ##
+  # gets a histrogram from an attribute name
+  #
+  # @example http://localhost:3000/project/histogram_attribute
+  #
+  # @param [Hash] params
+  # @option params [String] :attribute_name
+  #
+  # @return [Historgram] returns a histogram of Yogo navigational values 
+  #
+  # @author Yogo Team
+  #
+  # @api public
   def histogram_attribute
     ref_path, noop, ref_query = URI::split(request.referer)[5,3]
 
@@ -164,15 +271,32 @@ class YogoDataController < ApplicationController
   
   private
   
-  # Allows download of yogo project model data in CSV format
-  # 
+  ##
+  # pulls model data into a CSV file format
+  #
+  # @return [File] Allows download of yogo project model data in CSV format
+  #
+  # @author Yogo Team
+  #
+  # @api private
   def download_csv
-    send_data(Yogo::CSV.make_csv(@model, true), 
+    send_data(@model.make_csv(true),
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')
   end
-  
+  ##
+  # returns a projects model
+  #
+  # @param [Hash] params
+  # @option params [String] :project_id
+  # @option params [String] :model_id
+  #
+  # @return [Model] returns a project's model
+  #
+  # @author Yogo Team
+  #
+  # @api private
   def find_parent_items
     @project = Project.get(params[:project_id])
     @model = @project.get_model(params[:model_id])

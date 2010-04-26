@@ -1,1 +1,2 @@
 local_only: true
+require_change_summary: false

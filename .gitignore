@@ -30,3 +30,4 @@ public/uploads/*
 Gemfile.lock
 .yardoc/*
 doc/yard/*
+doc/yardstick/*
