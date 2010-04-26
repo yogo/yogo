@@ -286,7 +286,7 @@ class YogoDataController < ApplicationController
   def download_asset    
     instance = @model.get(params[:id])
     @attribute_name = params[:attribute_name]
-    filename = File.join(Rails.root, Yogo::Settings['asset_directory'], @model.asset_path, instance[@attribute_name])
+    filename = File.join(Rails.root, Yogo::Setting['asset_directory'], @model.asset_path, instance[@attribute_name])
     content_type = MIME::Types.type_for(filename)[0].content_type
     send_file filename, :type => content_type #, :x_sendfile => true # TODO: if we use lightd or Apache 2
   end

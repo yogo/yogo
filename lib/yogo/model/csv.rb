@@ -162,7 +162,7 @@ module Yogo
             property(name, options.delete(:type), options)
           end
           self.auto_upgrade!
-          self.send(:include, Yogo::Model)
+          # self.send(:include, Yogo::Model)
           properties.sort!
         end
         
