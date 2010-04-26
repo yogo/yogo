@@ -146,6 +146,19 @@ module ApplicationHelper
     return res.join(' > ')
   end
   
+  ## 
+  # This method creates the appropriate contents to show an attribute on a model
+  # For attributes that are files or images it makes a download link work for them
+  # 
+  # @example 
+  #   <%- @model.usable_properties.each do |p| %>
+  #     <%= yogo_show_helper(d, p, @project, @model) %>
+  #   <%- end %>
+  # 
+  # @return [HTML Fragment] the HTML is either a string or a link to the file/image.
+  # 
+  # @api public
+  
   def yogo_show_helper(item, property, project, model)
     if property.type == DataMapper::Types::YogoFile || property.type == DataMapper::Types::YogoImage
       file = item[property.name]
