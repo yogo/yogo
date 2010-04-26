@@ -146,14 +146,24 @@ module ApplicationHelper
     return res.join(' > ')
   end
   
-  def yogo_show_helper(item, property, asset_path)
-    if property.type == DataMapper::Types::YogoFile
+  ## 
+  # Creates the appropriate HTML for attributes on a model
+  # 
+  # For attributes that are files or images it makes a download link work for them
+  # 
+  # @example 
+  #   <%- @model.usable_properties.each do |p| %>
+  #     <%= yogo_show_helper(d, p, @project, @model) %>
+  #   <%- end %>
+  # 
+  # @return [HTML Fragment] the HTML is either a string or a link to the file/image.
+  # 
+  # @api public
+  
+  def yogo_show_helper(item, property, project, model)
+    if property.type == DataMapper::Types::YogoFile || property.type == DataMapper::Types::YogoImage
       file = item[property.name]
-      puts "HM: #{file.inspect} #{file.class}"
-      link_to(file, File.join(asset_path, file))
-    elsif property.type == DataMapper::Types::YogoImage 
-      file = item[property.name]
-      link_to(file, File.join(asset_path, file))
+      link_to(file, download_asset_project_yogo_data_path(project, model.name.demodulize, item.yogo_id, :attribute_name => property.name))
     else 
       item[property.name]
     end
