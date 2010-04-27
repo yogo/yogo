@@ -148,8 +148,7 @@ module Yogo
       # 
       # @api private
       def create_uploader(name, type)
-        path = File.join(Rails.root, Yogo::Setting['asset_directory'], asset_path)
-        storage_dir = path.to_s
+        path = File.join(Rails.root, Yogo::Setting['asset_directory'], asset_path, name.to_s )
         anon_file_handler = Class.new(CarrierWave::Uploader::Base)
         anon_file_handler.instance_eval do 
           storage :file

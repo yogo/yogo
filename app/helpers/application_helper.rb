@@ -162,11 +162,11 @@ module ApplicationHelper
   def yogo_show_helper(item, property, project, model)
     if property.type == DataMapper::Types::YogoFile
       file = item[property.name]
-      link_to(file, download_asset_project_yogo_data_path(project, model.name.demodulize, item.yogo_id, :attribute_name => property.name))
+      link_to(file, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))
     elsif property.type == DataMapper::Types::YogoImage
       file = item[property.name]
-      img = image_tag(download_asset_project_yogo_data_path(project, model.name.demodulize, item.yogo_id, :attribute_name => property.name), :width => '100px')
-      link_to(img, download_asset_project_yogo_data_path(project, model.name.demodulize, item.yogo_id, :attribute_name => property.name))      
+      img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
+      link_to(img, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))      
     else 
       item[property.name]
     end
