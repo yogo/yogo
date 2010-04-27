@@ -1,37 +1,20 @@
 <div id="sidebar">
-
-    <div id="nav-home" class="nav-group">
-      <div class="nav-title" id='home-title'><%= link_to("Home", projects_url) %></div>
-    </div>
-    <div id="nav-create-project" class="nav-group">
-      <%= link_to(image_tag('add.gif')+" Create a Project", new_project_url) %>
-    </div>
-    <div id="nav-projects" class="nav-group">
-      <div class="nav-title" id='projects-title'>Projects</div>
-        <div class="nav-items">
-            <ul>
-              <% all_projects.each do |project|%>
-                <li>
-                  <div id='project-<%= project.id %>'>
-                    <%# link_to_remote("#{project.name}", :url => list_models_project_path(project.id), 
-                                                       :update => "project-#{project.id}",
-                                                       :condition => 'check_navigation_element_state(this)',
-                                                       :position => :bottom,
-                                                       :method => :get ) %>
-                    <%= link_to(project.name, project_path(project)) %>
-                    <%- if @project == project -%>
-                      <%= render(:partial => 'projects/list_models', :locals => { :models => project.models, :project => project }) %>
-                    <%- end -%>
-                  </div>
-                </li>
-              <% end %>
-            </ul>
-        </div>
-    </div>
-    <div id="sidebar-search">
-      <%- form_for(:model, :url => search_projects_path, :html => {:method => :get} ) do |f| -%>
-        <%= text_field_tag("search_term") %>
-        <%= f.submit('Search') %>
-      <%- end -%>
-    </div>
+  <div class='bold'><%= link_to("Yogo Dashboard", root_url) %></div>
+  <div><%= @project.name %></div>
+  <div class="nav-items">
+    <ul id ="list-models">
+      <% @project.models.each do |model| %>
+        <li id="models-<%= model.to_param %>">
+          <%= link_to(model.to_param, project_yogo_data_index_path(@project, model.to_param)) %>
+          <ul id="<%= model.to_param %>-attributes">
+            <% model.usable_properties.each do |attr| %>
+              <li id="model-<%= model.name.demodulize %>-attributes-<%= attr.display_name %>">
+                <%= attr.display_name.titleize %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 </div>

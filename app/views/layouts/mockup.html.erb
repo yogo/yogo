@@ -55,15 +55,17 @@
     
   </head>
   <body>
-
-        <div><%= yield %></div>
-
-
+    <div id='header'>
+        <%= image_tag('header.png') %>
+    </div>
+    <div id="container"  class="clearfix">
+        <%= yield %>
+    </div>
+    
     <div id="footer">
       <div id='yogo-brand'>
         <%= link_to(image_tag("yogo.png", :alt => "The Yogo Data Management Toolkit Logo"), 'http://yogo.msu.montana.edu/') %>
       </div>
-      
     </div>
   </body>
 </html>

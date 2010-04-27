@@ -24,7 +24,7 @@ module Yogo
         property :password_salt,        String, :required => true,  :length => 128
         property :persistence_token,    String, :required => true,  :length => 128, :index => true
         
-        if Yogo::Settings[:allow_api_key] == true
+        if Yogo::Setting[:allow_api_key] == true
           property :single_access_token,  String, :required => false, :length => 128, :index => true
         end
         

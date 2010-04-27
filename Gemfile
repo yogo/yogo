@@ -5,7 +5,7 @@ source      "http://rubygems.org"
 gem "rails",                "2.3.5", :require => nil
 gem "rake",                          :require => nil
 gem "dm-core",              "0.10.2"
-gem "dm-reflection",        "0.0.2", :git => "git://github.com/yogo/dm-reflection.git" # :path => "vendor/gems/dm-reflection-0.0.1"
+gem "dm-reflection",        "0.0.2",  :git => "git://github.com/yogo/dm-reflection.git" # :path => "vendor/gems/dm-reflection-0.0.1"
 gem "dm-timestamps"  
 gem "dm-validations"
 gem "dm-is-nested_set"
@@ -15,6 +15,7 @@ gem "dm-types"
 gem "dm-persevere-adapter", "0.51",   :require => nil
 gem "do_sqlite3",                     :require => nil
 gem "rails_datamapper",               :require => nil
+gem "mime-types",                     :require => nil
 
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"
@@ -22,7 +23,7 @@ gem "fastercsv"
 gem "carrierwave"
 gem "json",      "~>1.2.0",           :require => nil
 
-gem 'ruby-debug',         :require => nil, :group => :development
+gem 'ruby-debug',                     :group => :development
 
 group :test do
   gem 'ruby-debug',                :require => nil
@@ -50,6 +51,7 @@ group :test do
   gem "roodi",                     :require => nil
   gem "googlecharts",              :require => nil
   gem "metric_fu",                 :require => nil
+
 end
 
 group :cucumber do
