@@ -1,9 +1,8 @@
-<h2 class='section-title'>Yogo Dashboard</h2>
+<h1 class='section-title'>Yogo Dashboard</h1>
 <div class="button-small" id='create-project-button'>
   <%= link_to(image_tag("create-project-small.jpg"), start_wizard_path()) %>
 </div>
-
-<div class='large-centered-content'>
+<div id='fitted-content'>
   <%- for project in @projects -%>
   <div class="project-block">
     <div class="project-icon">
@@ -41,7 +40,7 @@
           <%- end -%>
         </table>
       <%- end -%>
-    
+  
     </div>
   </div>
   <%- end -%>
