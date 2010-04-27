@@ -24,7 +24,7 @@ namespace :yogo do
     
     default_group = Yogo::Group.create(:name => 'default')
     
-    Yogo::Group.create(:name => Yogo::Settings[:anonymous_user_group], :foreign_id => -1)
+    Yogo::Group.create(:name => Yogo::Setting[:anonymous_user_group], :foreign_id => -1)
     
     Yogo::Group.create(:parent      => default_group, 
                             :name        => 'sysadmin',

@@ -36,7 +36,7 @@ class YogoSettingsController < ApplicationController
   # @api public
   def show
     @key = params[:id]
-    @value = Yogo::Settings[@key]
+    @value = Yogo::Setting[@key]
     
     respond_to do |format|
       format.html
@@ -58,7 +58,7 @@ class YogoSettingsController < ApplicationController
   # @api public
   def edit
     @key = params[:id]
-    @value = Yogo::Settings[@key]
+    @value = Yogo::Setting[@key]
     
     respond_to do |format|
       format.html

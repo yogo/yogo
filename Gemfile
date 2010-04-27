@@ -7,7 +7,7 @@ source      "http://gemcutter.org"
 gem "rails",                "2.3.5"
 gem "rake"                 
 gem "dm-core",              "0.10.2"
-gem "dm-reflection",        "0.0.2",:git => "git://github.com/yogo/dm-reflection.git" # :path => "vendor/gems/dm-reflection-0.0.1"
+gem "dm-reflection",        "0.0.2",  :git => "git://github.com/yogo/dm-reflection.git" # :path => "vendor/gems/dm-reflection-0.0.1"
 gem "dm-timestamps"  
 gem "dm-validations"
 gem "dm-is-nested_set"
@@ -15,8 +15,9 @@ gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2
 gem "dm-aggregates"
 gem "dm-types"
 gem "rails_datamapper",               :require_as => 'dm-core' # We do this becuase :require_as => nil doesn't work.
-gem "dm-persevere-adapter", "0.51", :require_as => 'dm-core'
+gem "dm-persevere-adapter", "0.52",   :require_as => 'dm-core'
 gem "do_sqlite3",           "0.10.1", :require_as => 'dm-core'
+gem "mime-types",                     :require_as => 'mime/types'
 
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"

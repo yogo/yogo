@@ -69,7 +69,7 @@ module Yogo
       # 
       # @api public
       # 
-      def load_csv_data(csv_data)
+      def load_csv_data(csv_data, path='.')
         errors = validate_csv_data(csv_data)
         all_objects = []
         if errors.empty?
@@ -83,7 +83,13 @@ module Yogo
             if !line.empty?  #ignore blank lines
               csv_data[0].each_index do |i| 
                 prop = props[i]
-                line_data[attr_names[i]] = prop.typecast(line[i]) unless line[i].nil? || prop.nil?
+                
+                if prop.type == DataMapper::Types::YogoFile || prop.type == DataMapper::Types::YogoImage
+                  column_value = File.open(File.join(path, line[i]))
+                  line_data[attr_names[i]] = column_value unless column_value.nil? || prop.nil?
+                else
+                  line_data[attr_names[i]] = prop.typecast(line[i]) unless line[i].nil? || prop.nil?
+                end  
               end
               obj = self.new(line_data)
               if obj.valid?
@@ -155,7 +161,8 @@ module Yogo
           properties_to_add.each_pair do |name,options|
             property(name, options.delete(:type), options)
           end
-          self.auto_upgrade! 
+          self.auto_upgrade!
+
           properties.sort!
         end
         

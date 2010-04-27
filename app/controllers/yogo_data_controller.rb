@@ -9,7 +9,7 @@
 #
 class YogoDataController < ApplicationController
   before_filter :find_parent_items
-  ##
+
   # 10 data objects per page are displayed
   #
   # @example http://localhost:3000/yogo_data
@@ -47,7 +47,7 @@ class YogoDataController < ApplicationController
       format.csv { download_csv }
     end
   end
-  ##
+
   # this searches projects and models for seach_term
   #
   # @example http://localhost:3000/yogo_data
@@ -105,7 +105,7 @@ class YogoDataController < ApplicationController
   def new
     @item = @model.new
   end
-  ##
+
   # edits a data object
   #
   # @example http://localhost:3000/yogo_data/edit/1
@@ -122,7 +122,7 @@ class YogoDataController < ApplicationController
   def edit
     @item = @model.get(params[:id])
   end
-  ##
+
   # creates new data object
   #
   # @example http://localhost:3000/yogo_data/create
@@ -154,7 +154,7 @@ class YogoDataController < ApplicationController
       render :action => :new
     end
   end
-  ##
+
   # updates a data object
   #
   # @example http://localhost:3000/yogo_data/update
@@ -175,7 +175,7 @@ class YogoDataController < ApplicationController
     @item.save
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end  
-  ##
+
   # destroys a data object
   #
   # @example http://localhost:3000/yogo_data/destroy/1
@@ -192,7 +192,7 @@ class YogoDataController < ApplicationController
     @model.get(params[:id]).destroy!
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end
-  ##
+
   # alows us to upload csv file to be processed into data
   #
   # @example http://localhost:3000/project/upload/1/
@@ -226,7 +226,7 @@ class YogoDataController < ApplicationController
       end
     end
   end
-  ##
+
   # gets a histrogram from an attribute name
   #
   # @example http://localhost:3000/project/histogram_attribute
@@ -267,6 +267,26 @@ class YogoDataController < ApplicationController
       wants.html 
       wants.js { render :partial => 'histogram_attribute' }
     end
+  end
+
+  # gets an asset associated with an attribute
+  #
+  # @example http://localhost:3000/project/download_asset
+  #
+  # @param [Hash] params
+  # @option params [String] :attribute_name
+  #
+  # @return [File Download] returns a mime-type and file to the browser of the asset requested
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  def download_asset    
+    instance = @model.get(params[:id])
+    @attribute_name = params[:attribute_name]
+    filename = File.join(Rails.root, Yogo::Setting['asset_directory'], @model.asset_path, instance[@attribute_name])
+    content_type = MIME::Types.type_for(filename)[0].content_type
+    send_file filename, :type => content_type #, :x_sendfile => true # TODO: if we use lightd or Apache 2
   end
   
   private

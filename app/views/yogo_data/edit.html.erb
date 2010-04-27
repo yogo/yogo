@@ -10,7 +10,7 @@
   <tbody>
       <%- @model.usable_properties.each do |p| %>
       <tr>
-      <td><%= f.label(p.name, p.name.to_s.titleize) %></td>
+      <td><%= f.label(p.display_name, p.display_name.to_s.titleize) %></td>
       <td><%= f.field_for_param(p) %></td>
       </tr>
       <%- end %>
