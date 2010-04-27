@@ -19,7 +19,7 @@ ActionController::Routing::Routes.draw do |map|
                                        :histogram_attribute => :get, 
                                        :pick_attribute => :get, 
                                        :remove_attribute => :get},
-                      :member => { :download_asset => :get }
+                      :member => { :download_asset => :get, :show_asset => :get }
                           
     # /projects/:project_id/yogo_models/:model_name
     project.resources :yogo_models,

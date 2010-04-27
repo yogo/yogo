@@ -28,6 +28,15 @@ class ApplicationController < ActionController::Base
   protected
   
   ##
+  # Show the sidebar in the layout (this is usually called by a before-filter)
+  # 
+  # @api semipublic
+  #
+  def show_sidebar
+    @sidebar = true
+  end
+  
+  ##
   # Create a custom error handler
   # 
   # @example Render an error if the connection is not allowed.

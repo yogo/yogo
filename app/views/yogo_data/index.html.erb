@@ -1,3 +1,5 @@
+<%= render(:partial => 'layouts/search')%>
+
 <div id="search-data">
   <%- form_for(@model, :url => search_project_yogo_data_path(@project, @model.name.demodulize), :html => {:method => :get} ) do |f| -%>
     <%= text_field_tag("search_term") %>
@@ -5,9 +7,9 @@
   <%- end -%>
 </div>
 
-<div id="data-index">
 
-  <H3><%= @model.name.demodulize.titleize %> (<%= @model.count %>)</H3>
+<div id="liquid-content">
+    <h2><%= @model.name.demodulize.titleize %> (<%= @model.count %>)</h2>
 
   <!-- This is an alternative to the table using google visualiztion api (the javascript is now included in the app) -->
   <%# cols = @model.usable_properties.map { |prop| [ Yogo::Types.dm_to_gv(prop.type), Extlib::Inflection.humanize(prop.name.to_s) ] }%>
@@ -24,6 +26,18 @@
       </tr>
     </thead>
     <tbody>
+      <% @item = @model.new %>
+      <%- form_for(@item, 
+            :url => project_yogo_data_index_path(@project, @model), 
+            :html => { :enctype => 'multipart/form-data' },
+            :builder => YogoDataFormBuilder) do |f| -%>
+    <tr>
+      <td><%= f.submit %></td>
+      <%- @model.usable_properties.each do |p| %>
+        <td><%= f.field_for_param(p) %></td>
+      <% end %>
+    </tr>
+    <% end %>
     <%- @data.each do |d| %>
       <tr class="<%=cycle("alternate-rows0","") %>">
         <td class="data-index-table-actions"><%= link_to(image_tag('view.gif', :alt => "View Item", :title => "View Item"), project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id)) %>
@@ -37,15 +51,15 @@
     </tbody>
   </table>
 
-  <div id="add-data-link">
-    <%= link_to(image_tag('add.gif')+' Add Data', new_project_yogo_data_path(@project, @model.name.demodulize))%>
+  <!-- <div id="add-data-link">
+    <%#= link_to(image_tag('add.gif')+' Add Data', new_project_yogo_data_path(@project, @model.name.demodulize))%>
+  </div> -->
+  <div id="pagination-links">
+    <%= pagination_links(@query, params[:page], 10) %>
   </div>
+
 </div>
 
-<div id="pagination-links">
-  <%= pagination_links(@query, params[:page], 10) %>
-</div>
-
-<%= render :partial => 'csv_form' %>
+<%#= render :partial => 'csv_form' %>
 
 

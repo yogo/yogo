@@ -411,10 +411,6 @@ h4 {
     max-height: 20px;
   }
 
-  #data-index-table tr:hover, #data-show tr:hover {
-    background-color: #DDD !important;
-  }
-
   .data-index-table-actions {
     text-align:center;
   }

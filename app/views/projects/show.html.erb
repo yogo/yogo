@@ -1,7 +1,4 @@
-
-<div id="search-tab">
-  <%= image_tag('mock-search-tab.png') %>
-</div>
+<%= render(:partial => 'layouts/search')%>
 
 <div id="liquid-content">
     <h2><%= @project.name %></h2>
@@ -14,7 +11,9 @@
           <table class="mock-data" >
             <thead>
               <tr>
-                <th colspan="2">Control - 4 Digit Delay RT</th>
+                <%- for column in dataset.usable_properties %>
+                <th><%= column.display_name.titleize %></th>
+                <% end %>
               </tr>
             </thead>
             <tbody>

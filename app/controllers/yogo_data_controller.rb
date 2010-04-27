@@ -8,7 +8,7 @@
 # Additionally upload and download of data via CSV is provided
 #
 class YogoDataController < ApplicationController
-  before_filter :find_parent_items
+  before_filter :find_parent_items, :show_sidebar
 
   # 10 data objects per page are displayed
   #
@@ -271,7 +271,7 @@ class YogoDataController < ApplicationController
 
   # gets an asset associated with an attribute
   #
-  # @example http://localhost:3000/project/download_asset
+  # @example http://localhost:3000/project/download_asset/:
   #
   # @param [Hash] params
   # @option params [String] :attribute_name
@@ -287,6 +287,26 @@ class YogoDataController < ApplicationController
     filename = File.join(Rails.root, Yogo::Setting['asset_directory'], @model.asset_path, instance[@attribute_name])
     content_type = MIME::Types.type_for(filename)[0].content_type
     send_file filename, :type => content_type #, :x_sendfile => true # TODO: if we use lightd or Apache 2
+  end
+  
+  # gets an asset associated with an attribute
+  #
+  # @example http://localhost:3000/project/:project_id/yogo_data/:id/show_asset/:attribute_name
+  #
+  # @param [Hash] params
+  # @option params [String] :attribute_name
+  #
+  # @return [File Download] returns a mime-type and file to the browser of the asset requested
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  def show_asset    
+    instance = @model.get(params[:id])
+    @attribute_name = params[:attribute_name]
+    filename = File.join(Rails.root, Yogo::Setting['asset_directory'], @model.asset_path, instance[@attribute_name])
+    content_type = MIME::Types.type_for(filename)[0].content_type
+    send_file filename, :type => content_type, :disposition => :inline #, :x_sendfile => true # TODO: if we use lightd or Apache 2
   end
   
   private
