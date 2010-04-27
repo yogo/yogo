@@ -7,5 +7,5 @@ Feature: The welcome page
   Scenario: My first time launching the app is a tautology
     When I go to the welcome page
     Then I should be on the welcome page
-    And  I should see "Welcome to the Yogo Data Management Toolkit!"
-    And  I should see "Home"
+    And  I should see "Yogo"
+    

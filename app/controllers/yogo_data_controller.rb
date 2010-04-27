@@ -282,9 +282,9 @@ class YogoDataController < ApplicationController
   #
   # @api public
   def download_asset    
+    property = @model.properties[params[:attribute_name].to_sym]
     instance = @model.get(params[:id])
-    @attribute_name = params[:attribute_name]
-    filename = File.join(Rails.root, Yogo::Setting['asset_directory'], @model.asset_path, instance[@attribute_name])
+    filename = instance.send(property.name).path
     content_type = MIME::Types.type_for(filename)[0].content_type
     send_file filename, :type => content_type #, :x_sendfile => true # TODO: if we use lightd or Apache 2
   end
@@ -301,12 +301,12 @@ class YogoDataController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  def show_asset    
+  def show_asset
+    property = @model.properties[params[:attribute_name].to_sym]
     instance = @model.get(params[:id])
-    @attribute_name = params[:attribute_name]
-    filename = File.join(Rails.root, Yogo::Setting['asset_directory'], @model.asset_path, instance[@attribute_name])
+    filename = instance.send(property.name).path
     content_type = MIME::Types.type_for(filename)[0].content_type
-    send_file filename, :type => content_type, :disposition => :inline #, :x_sendfile => true # TODO: if we use lightd or Apache 2
+    send_file filename, :type => content_type, :disposition => 'inline' #, :x_sendfile => true # TODO: if we use lightd or Apache 2
   end
   
   private

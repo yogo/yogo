@@ -10,4 +10,3 @@ Feature: Working with projects
    @focus
   Scenario: I would like to create a new project
    Given I am on "the Welcome page"
-   When  I follow "Create a Project"
