@@ -70,12 +70,12 @@ module Yogo
       # @api semipublic
       def new_property(name, type, options = {})
         puts 'THIS IS MY PROPERTY!!!!'
-        original_property(name, type, options)
+        prop = original_property(name, type, options)
 
         if type == DataMapper::Types::YogoFile || type == DataMapper::Types::YogoImage
-          create_uploader(name, type)
+          create_uploader(prop.name, prop.type)
         end
-
+        return prop
       end
 
       # The properties on a model for human consumption
@@ -141,8 +141,8 @@ module Yogo
           self.class_eval("def store_dir; '#{path}'; end")
         end
 
-        named_class = Object.class_eval("#{self.name}::#{name.to_s.camelcase}File = anon_file_handler")
-        mount_uploader name, named_class
+        # named_class = Object.class_eval("#{self.name}::#{name.to_s.camelcase}File = anon_file_handler")
+        mount_uploader name, anon_file_handler
         
       end
     end
