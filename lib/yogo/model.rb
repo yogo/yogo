@@ -175,7 +175,7 @@ module Yogo
       #
       # @api public
       def to_param
-        self.yogo__id.to_s
+        self.yogo_id.to_s
       end
       
       private
