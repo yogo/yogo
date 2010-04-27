@@ -47,11 +47,13 @@ p {
 h1,h2,h3,h4,h5{
   color:#333;  
   font-weight: normal;
-  margin: 0em .5em .5em .5em;
+  margin: 0px 10px 10px 10px;
 }
 
 h1 {
   font-size:1.5em;
+  margin: 0px 0px 10px -20px;
+  width: 856px;
 }
 
 h2 {
@@ -128,39 +130,30 @@ h4 {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 #header {
-  width: 950px;
-  margin: auto;
-  padding:0;
-  background:url('../images/header.png') no-repeat;
-  height:111px;
+  height:93px;
+  background-color: #666;
+  margin-bottom: 10px;
 }
 
 #container {
-  width: 950px;
-  margin: auto;
-  text-align: center;
-  overflow: none;
-  clear: both;
-  padding: 0px 0px 20px 0px;
+  padding: 0px 10px 10px 10px;
+  margin: 0px;
 }
 
 #content {
-  overflow: auto;
-  text-align: left;
-  margin: auto;
-  width: 860px;
   padding: 0px 10px 20px 10px;
 }
-#content-with-sidebar {
-  margin-top: 50px;
-  float: left;
-  width: 500px;
+#fitted-content {
+  width: 860px;
+}
+#liquid-content{
+  padding-left: 200px;
 }
 #search-tab {
-  position: absolute;
-  top: 105px;
-  left: 125px;
-  padding-left: 450px;
+  left:125px;
+  padding-left:313px;
+  position:absolute;
+  top:100px;
 }
 
 #footer {
@@ -303,7 +296,7 @@ h4 {
 #create-project-button{
   position: absolute;
   top: 160px;
-  left: 800px;
+  left: 730px;
 }
   
 .project-icon {
@@ -483,15 +476,6 @@ form input, form textarea {
   font-size: inherit;
 }
 
-form label {
-  vertical-align:top;
-  float:left;
-  width:9em;
-  text-align:right;
-  margin-right:0.5em;
-  clear:both;
-}
-
 form textarea {
   height:100px;
   width: 60%;
@@ -541,7 +525,7 @@ ul#sortable li{
   padding-top: 0.5em;
   padding-bottom:0.5em;
   display: block;
-  height: 1em;
+/*  height: 2em;*/
   clear: both;
 }
 
@@ -584,7 +568,7 @@ ul#sortable .grippie {
 
 #roadmap {
   text-align: center;
-  margin-bottom: 40px;
+  margin: 10px 10px 40px 10px;
 }
 
 .button-big {text-align:center; margin-bottom:60px;}
