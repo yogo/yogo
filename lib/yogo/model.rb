@@ -36,7 +36,7 @@ module Yogo
         # @api public
         class << self
           alias_method :original_property, :property
-          alias_method :property, :new_property
+          alias_method :property, :property_with_carrierwave
         end
         
       end
@@ -68,8 +68,7 @@ module Yogo
       # @see http://rdoc.info/projects/datamapper/dm-core
       # 
       # @api semipublic
-      def new_property(name, type, options = {})
-        puts 'THIS IS MY PROPERTY!!!!'
+      def property_with_carrierwave(name, type, options = {})
         prop = original_property(name, type, options)
 
         if type == DataMapper::Types::YogoFile || type == DataMapper::Types::YogoImage
@@ -128,6 +127,8 @@ module Yogo
       # 
       # @param [Symbol or String] name the name of the property to add a handler to
       # @param [Class] type the type of property this is
+      # 
+      # @return [Object] nothing useful
       # 
       # @author Robbie Lamb robbie.lamb@gmail.com
       # 
