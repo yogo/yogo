@@ -1,34 +1,37 @@
-<h1><%= @project.name %>: <em>Overview</em></h1>
-<div id="project-overview">
-  <%#= @project.description%>
-</div>
+<%= render(:partial => 'layouts/search')%>
 
-<table id="project-show">
-  <thead>
-    <tr>
-      <th><%#= "Models" if @models.length > 0 %></th>
-      <th><%#= "Data" if @models.length > 0 %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <%- @models.each do |m| %>
-      <tr id="project-show-row" class="<%= cycle('alternate-rows0', 'alternate-rows1') %>">
-        <td><%= link_to(image_tag('view.gif', :alt => "View", :title => "View"), project_yogo_model_path(@project, m.name.demodulize)) %></td>
-        <td><%= link_to(image_tag('edit.png', :alt => "Edit", :title => "Edit"), edit_project_yogo_model_path(@project, m.name.demodulize)) %></td>
-        <td><%= link_to(image_tag('remove.png', :alt => "Remove", :title => "Remove"), project_yogo_model_path(@project, m.name.demodulize), :method => :delete, :confirm => 'Removing this model will also destroy all data associated with the model. Continue?') %></td>
-        <td><%= m.name.demodulize.titleize %></td>
-        <!-- <td>(<%#= link_to(m.count, project_yogo_data_index_path(@project, m.name.demodulize)) %>)</td> -->
-      </tr>
-    <%- end %>
-  </tbody>
-</table>
-
-<%= link_to(image_tag('add.gif', :alt => "Create a new model", :title => "Create a new model") + " Create a new model", new_project_yogo_model_path(@project)) %>
-
-<div id="upload">
-  <%= render :partial => 'upload' %>
-</div>
-
-<div id="project-remove-link">
-  <%= link_to(image_tag('remove.png')+"Remove this project", project_path(@project), :method => :delete, :confirm => "Removing this project will destroy all data associated with it.\n Continue?") %>
-</div>
+<div id="liquid-content">
+    <h2><%= @project.name %></h2>
+    <%= link_to(image_tag('edit_big.png')+"Edit dataset descriptions", "/mockup/edit") %>
+    
+    <%- for dataset in @project.models -%>
+      <h2 class="trigger"><a href="#"><%= dataset.public_name %></a></h2>
+      <div class='toggle-container'>
+        <div class="block">
+          <table class="mock-data" >
+            <thead>
+              <tr>
+                <%- for column in dataset.usable_properties %>
+                <th><%= column.display_name.titleize %></th>
+                <% end %>
+              </tr>
+            </thead>
+            <tbody>
+              <%- for data in dataset[0..2] -%>
+                <tr class="<%= cycle("alternate-rows0", "") %>">
+                  <%- for param in dataset.usable_properties -%>
+                    <td><%= yogo_show_helper(data, param, @project, dataset) %></td>
+                  <%- end -%>
+                </tr>
+              <%- end -%>
+              <tr>
+                <td colspan="3"><%= link_to("See More...", project_yogo_data_index_path(@project, dataset)) %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <%- end -%>
+  </div>
+  
+  

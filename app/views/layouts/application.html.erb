@@ -1,6 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html>
+
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <title>Yogo Data Management Toolkit: <%= controller.action_name %></title>
@@ -15,25 +15,33 @@
                                
    <link rel="shortcut icon" href="<%= image_path("favicon.png") %>">
   </head>
+  
   <body>
+    <div id='header'>
+      <%= image_tag('header.png') %>
+    </div>
+    
     <div id="container"  class="clearfix">
-      <%= render :partial => 'layouts/header' %>
-      <%= render :partial => 'layouts/sidebar' %>
+      
+      <%= render :partial => 'layouts/sidebar' if @sidebar %>
+      
       <div id="content">
         <%- if flash[:notice] -%>
-            <div class='notice'><p><%= h flash[:notice] %></p></div>
+            <div class='notice'><p><%= flash[:notice] %></p></div>
         <%- end -%>
         <%- if flash[:error] -%>
-            <div class='error notice'><p><%= h flash[:error] %></p></div>
+            <div class='error notice'><p><%= flash[:error] %></p></div>
         <%- end -%>
-        <div id='breadcrumbs'><%= crumbs %></div>
-        <div><%= yield %></div>
+        <%= yield %>
         <div id='footnotes_holder'></div>
-      </div>
-
-    </div>
+      </div> <!-- end content -->
+      <br clear='all'>
+    </div> <!-- end container -->
+    
     <div id="footer">
-      <%= render :partial => 'layouts/footer' %>
+      <div id='yogo-brand'>
+        <%= link_to(image_tag("yogo.png", :alt => "The Yogo Data Management Toolkit Logo"), 'http://yogo.msu.montana.edu/') %>
+      </div>
     </div>
   </body>
 </html>
