@@ -5,6 +5,7 @@
     <ul id ="list-models">
       <% @project.models.each do |model| %>
         <li id="models-<%= model.to_param %>">
+          <%= image_tag('bullet.gif', :onclick => "$('##{model.to_param}-attributes').toggle();") %>
           <%= link_to(model.to_param, project_yogo_data_index_path(@project, model.to_param)) %>
           <ul id="<%= model.to_param %>-attributes">
             <% model.usable_properties.each do |attr| %>
