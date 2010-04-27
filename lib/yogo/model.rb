@@ -90,7 +90,7 @@ module Yogo
         properties.select{|p| p.name.to_s.match(/^yogo__/) }
       end
 
-      ##
+
       # Create the asset path so we can reuse it
       # 
       # @return [String] The string path to the directory/folder to storage for assets of this model.
@@ -117,6 +117,20 @@ module Yogo
       # @api public
       def public_name
         @_public_name ||= self.name.split('::')[-1].humanize
+      end
+      
+      # Compatability method for rails' route generation helpers
+      #
+      # @example
+      #   @model.to_param # returns the ID as a string
+      # 
+      # @return [String] the object id as url param
+      #
+      # @author Yogo Team
+      #
+      # @api public
+      def to_param
+        name.demodulize
       end
       
       private
@@ -153,7 +167,7 @@ module Yogo
       # Compatability method for rails' route generation helpers
       #
       # @example
-      #   @model.to_param # returns the ID as a string
+      #   instance.to_param # returns the ID as a string
       # 
       # @return [String] the object id as url param
       #
