@@ -1,13 +1,5 @@
 <%= render(:partial => 'layouts/search')%>
 
-<div id="search-data">
-  <%- form_for(@model, :url => search_project_yogo_data_path(@project, @model.name.demodulize), :html => {:method => :get} ) do |f| -%>
-    <%= text_field_tag("search_term") %>
-    <%= f.submit('Search within this set') %>
-  <%- end -%>
-</div>
-
-
 <div id="liquid-content">
     <h2><%= @model.name.demodulize.titleize %> (<%= @model.count %>)</h2>
 

@@ -148,12 +148,28 @@ h4 {
 }
 #liquid-content{
   padding-left: 200px;
+  margin-top: 50px;
 }
 #search-tab {
-  left:125px;
-  padding-left:313px;
+  background-image: url(../images/shadow-bk.png) repeat-x fixed top;
   position:absolute;
   top:100px;
+  left:420px;
+  border:2px solid #255d71;
+  border-top: 1px solid transparent;
+  font-size:0.9em;
+  padding: 7px 3px 4px 3px;
+  text-align:center;
+  width:450px;
+}
+
+#search-tab form{
+  font-size: .9em;
+}
+
+#search-tab .button-link{
+  font-size: .9em;
+  padding: 3px 2px 2px 2px
 }
 
 #footer {
@@ -219,7 +235,6 @@ h4 {
 
 #sidebar {
   width:175px;
-  margin-top: 50px;
   float:left;
   padding-left:8px;
   margin-right:8px;
@@ -245,13 +260,13 @@ h4 {
 
   #sidebar ul {
     padding:0px;
-    margin:3px 5px 0 15px;
+    margin:3px 5px 0 5px;
+    list-style: none;
   }
 
   #sidebar ul li {
     margin-left: 10px;
     padding:5px 0 0 0px;
-    list-style-image: url("../images/bullet.gif");
   }
 
     #list-models ul li {
@@ -270,10 +285,6 @@ h4 {
     background-color: #EEE;
   }
 
-  #sidebar ul li:hover {
-    background-color: #EEE;
-  }
-  
   #sidebar-search {
     text-align:center;
     margin-top:20px;
@@ -467,7 +478,7 @@ form .cancel {
   margin-left: 50px;
 }
 
-form input, form textarea {
+form input, form textarea, form select {
   font-family: inherit;
   font-size: inherit;
 }
