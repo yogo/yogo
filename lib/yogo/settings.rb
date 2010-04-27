@@ -98,7 +98,7 @@ module Yogo
     # This is primairly used during testing.
     # 
     # @example
-    #   Yogo::Settingload_defaults(Dir.glob(Rails.root.to_s+"/vendor/gems/**/config/settings.yml")
+    #   Yogo::Setting.load_defaults(Dir.glob(Rails.root.to_s+"/vendor/gems/**/config/settings.yml")
     #                  Dir.glob(Rails.root.to_s+"/config/settings.yml")
     #                 )
     # 
