@@ -19,133 +19,21 @@
               </tr>
             </thead>
             <tbody>
-              
+              <%- for data in dataset[0..2] -%>
+                <tr class="<%= cycle("alternate-rows0", "") %>">
+                  <%- for param in dataset.usable_properties -%>
+                    <td><%= yogo_show_helper(data, param, @project, dataset) %></td>
+                  <%- end -%>
+                </tr>
+              <%- end -%>
+              <tr>
+                <td colspan="3"><%= link_to("See More...", project_yogo_data_index_path(@project, dataset)) %></td>
+              </tr>
             </tbody>
+          </table>
         </div>
       </div>
     <%- end -%>
-    <h2 class="trigger"><a href="#">Neuropsych evaluations</a></h2>
-    <div class="toggle-container">
-      <div class="block">
-        <table class="mock-data" >
-          <thead>
-            <tr>
-              <th colspan="2">Control - 4 Digit Delay RT</th>
-            </tr>
-          </thead>
-          <tr class="<%=cycle("alternate-rows0","") %>">
-            <td>Subject ID</td>
-            <td>PreTEST</td>
-            <td>Training 1</td>
-            <td>Training 2</td>
-            <td>Training 3</td>
-            <td>Training 4</td>
-            <td>Training 5</td>
-            <td>Training 6</td>
-            <td>Training 7</td>
-            <td>Training 8</td>
-            <td>Training 9</td>
-            <td>Training 10</td>
-            <td>Training 11</td>
-            <td>Training 12</td>
-            <td>PostTEST</td>
-            <td></td>
-          </tr>
-          <tr class="<%=cycle("alternate-rows0","") %>">
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td class="mock-table-input"></td>
-            <td><%= image_tag('mock-save-button.jpg') %></td>
-          </tr>
-          <tr class="<%=cycle("alternate-rows0","") %>">
-            <td>KTG_01</td>
-             <td>2013</td>
-             <td>1898</td>
-             <td>1938</td>
-             <td>1701</td>
-             <td>1564</td>
-             <td>1434</td>
-             <td>1452</td>
-             <td>1476</td>
-             <td>1453</td>
-             <td></td>
-             <td></td>
-             <td></td>
-             <td></td>
-             <td>1582</td>
-             <td></td>
-          </tr>
-          <tr class="<%=cycle("alternate-rows0","") %>">
-            <td>BRT_02</td>
-            <td>1433</td>
-            <td>1172</td>
-            <td>1065</td>
-            <td>988</td>
-            <td>983</td>
-            <td>1055</td>
-            <td>943</td>
-            <td>923</td>
-            <td>1007</td>
-            <td>938</td>
-            <td>947</td>
-            <td>936</td>
-            <td>913</td>
-            <td>882</td>
-            <td></td>
-          </tr>
-          <tr class="<%=cycle("alternate-rows0","") %>">
-            <td>CMJ_03</td>
-            <td>1857</td>
-            <td>1766</td>
-            <td>1350</td>
-            <td>1292</td>
-            <td>1274</td>
-            <td>1325</td>
-            <td>1190</td>
-            <td>1233</td>
-            <td>1218</td>
-            <td>1241</td>
-            <td>1319</td>
-            <td></td>
-            <td></td>
-            <td>1303</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>
-              <%= link_to("See more...", "/mockup/dataset1") %>
-            </td>
-          </tr>
-        </table>
-    	</div>
-    </div>
-
-    <h2 class="trigger"><a href="#">fMRI analysis</a></h2>
-    <div class="toggle-container">
-      <div class="block">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      </div>
-    </div>
-
-    <h2 class="trigger"><a href="#">MEG results</a></h2>
-    <div class="toggle-container">
-      <div class="block">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      </div>
-    </div>
-
   </div>
   
   

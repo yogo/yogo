@@ -130,7 +130,7 @@ module Yogo
       #
       # @api public
       def to_param
-        name.demodulize
+        self.name.demodulize
       end
       
       private
