@@ -6,21 +6,20 @@
 
   <div class="large-centered-content">
 
-    <h3>A whole lotta info about CSV.</h3>
+    <h3>Pre-loading your data with a spreadshhet.</h3>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut 
-      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-      laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-      voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-      non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      If you already have your data in a spreadsheet, you can load in your data and dataset description all at once.  This is a convenient way to get started.
     </p>
-    <h3>With some pictures, too.</h3>
+    <h3>Requirements</h3>
+    <p>1. The spreadsheets that can be loaded into the Yogo Data Management Toolkit must be in a particular format.  First, they must be in "comma separated values" format (often described as a "CSV" file).  Any modern spreadsheet application can export a spreadsheet in CSV format.</p>
+    <p>2. The top three rows of the spreadsheet are special header information that the Yogo Data Management Toolkit needs to determine the character of the data columns.</p>
     <p>
-      And some more text.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-      aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-      culpa qui officia deserunt mollit anim id est laborum.
+      &mdash; The first row contains the names of the variables (the column name)<br />
+      &mdash; The second row contains the type of the values (text, number, etc.)<br />
+      &mdash; The third row contains the units for the values (centimeters, degrees, etc.)<br />
     </p>
+    <h3>Example</h3>
+    <p>For example, a CSV file of </p>
     <div class='button-links'>
       <%= link_to('Import CSV', project_path, :class => 'button-link') %>
       <%= link_to('Design Data from Scratch', new_project_yogo_model_path(@project), :class => 'button-link') %>

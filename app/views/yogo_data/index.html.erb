@@ -24,7 +24,7 @@
             :html => { :enctype => 'multipart/form-data' },
             :builder => YogoDataFormBuilder) do |f| -%>
     <tr>
-      <td><%= f.submit %></td>
+      <td><%= f.submit('Submit', :class => 'button-link') %></td>
       <%- @model.usable_properties.each do |p| %>
         <td><%= f.field_for_param(p) %></td>
       <% end %>
