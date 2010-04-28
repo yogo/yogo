@@ -31,6 +31,8 @@ a:hover {
 
 a img {
   border: none;
+  padding: 0px;
+  margin: 0px;
 }
 
 body {
@@ -57,19 +59,37 @@ h1 {
 }
 
 h2 {
-  font-size:1.3em;
+  font-size:1.4em;
+  margin-top: 20px;
+  font-weight: bold;
 }
 
 h3 {
-  font-size:1.2em;
+  font-size:1.1em;
+  margin-top: 20px;
   font-weight:bold;
 }
 
 h4 {
-  font-size:1.1em;
+  font-size:0.9em;
+  margin-top: 20px;
   font-weight:bold;
 }
 
+ul, ol {
+  padding:0px;
+  margin:0.5em;
+  list-style: inside;
+}
+
+ul li, ol li {
+  margin-left: 1em;
+/*  padding:0.5em;*/
+}
+
+img {
+  margin: 0.5em 1.0em;
+}
 
 .section-title {
   text-align:center;
