@@ -24,7 +24,8 @@ class YogoModelsController < ApplicationController
     
     respond_to do |format|
       format.html
-      format.json { render( :json => "[#{@models.collect{|m| m.to_json_schema }.join(', ')}}" )}
+      format.json { render( :json => {"items" => @models.map{|m| model_definition_for(m)},
+                                      "count" => @models.size } )}
     end
   end
   ##
@@ -43,10 +44,13 @@ class YogoModelsController < ApplicationController
   #
   def show
     @model = @project.get_model(params[:id])
-
+    
     respond_to do |format|
-      format.html
-      format.json { render( :json => @model.to_json_schema )}
+      # format.html
+      format.json do
+        
+        render( :json => { "Model" => model_definition_for(@model)} )
+      end
       format.csv { download_csv }
     end
 
@@ -151,6 +155,26 @@ class YogoModelsController < ApplicationController
   #
   # @api public
   def update
+    model = @project.get_model(params[:id])
+    model_def = params['Model']
+    logger.debug { model_def.inspect }
+    
+    update_model_with_definition(model_def, model)
+    
+    updated_model_def = model_definition_for(model)
+    logger.debug { model }
+    logger.debug { model.properties.map {|p| [p.name, p.type, p.display_name] }.inspect }
+    logger.debug { updated_model_def.inspect }
+    respond_to do |format|
+      # format.html
+      format.json do
+        render( :json => { "Model" => updated_model_def } )
+      end
+    end
+  end
+  
+  def update_old
+    puts params.inspect
     @model = @project.get_model(params[:id])
     # This stuff need to be pushed down into the model. In due time.
     errors = {}
