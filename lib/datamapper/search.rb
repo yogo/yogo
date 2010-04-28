@@ -1,17 +1,19 @@
 module DataMapper
   module Model
-    ##
-    # Does a search
+
+    # Perform a search on a datamapper model.
     #
     # @example
-    #   search("me")
+    #   DataMapperModel.search("me")
     #
-    # @param [String] value
+    # @param [String] value 
+    #   A string to query on
     # @param [Hash] options 
+    #   Any other valid datamapper query option
     #
     # @return [String] Searches over all of the fields with a like
     #
-    # @author Yogo Team
+    # @author Robbie Lamb robbie.lamb@gmail.com
     #
     # @api public
     def search(value, options = {})
@@ -20,7 +22,7 @@ module DataMapper
       # only 1 query is performed in the end.
       queries = []
       properties.each do |prop|
-        if prop.type == String
+        if prop.type == String || prop.type == DataMapper::Types::Text
           queries << all( options.merge(prop.name.like => "%#{value}%") )
         end
       end
@@ -37,18 +39,20 @@ module DataMapper
   
   class Collection
     
-    ##
-    # Does a search
+    # Perform a search on a datamapper collection.
     #
     # @example
-    #   search("me")
+    #   new_collection = Person.all(:name => 'Steve')
+    #   new_collection.search("me")
     #
-    # @param [String] value
+    # @param [String] value 
+    #   A string to query on
     # @param [Hash] options 
+    #   Any other valid datamapper query option
     #
     # @return [String] Searches over all of the fields with a like
     #
-    # @author Yogo Team
+    # @author Robbie Lamb robbie.lamb@gmail.com
     #
     # @api public
     def search(value, options = {})
@@ -57,7 +61,7 @@ module DataMapper
       # only 1 query is performed in the end.
       queries = []
       properties.each do |prop|
-        if prop.type == String
+        if prop.type == String || prop.type == DataMapper::Types::Text
           queries << all( options.merge(prop.name.like => "%#{value}%") )
         end
       end

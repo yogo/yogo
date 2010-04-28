@@ -37,25 +37,34 @@ class ProjectsController < ApplicationController
   #
   # @api public
   def search
+    search_scope = params[:search_scope]
     search_term = params[:search_term]
-    
-    @projects = Project.search(search_term)
+    if search_scope == 'everywhere' || params[:model_name].blank?
+      @projects = Project.search(search_term)
 
-    @proj_models = []
-    Project.all.each do |project|
-      @proj_models << [project, project.search_models(search_term).flatten ]
-    end
-
-    @proj_models_data = []
-    Project.all.each do |project|
-      project.models.each do |model|
-        count = model.search(search_term).count
-        @proj_models_data << [project, model, count] if count > 0
+      @proj_models = []
+      Project.all.each do |project|
+        @proj_models << [project, project.search_models(search_term).flatten ]
       end
-    end
-    
-    respond_to do |format|
-      format.html
+
+      @proj_models_data = []
+      Project.all.each do |project|
+        project.models.each do |model|
+          count = model.search(search_term).count
+          @proj_models_data << [project, model, count] if count > 0
+        end
+      end
+      
+      respond_to do |format|
+        format.html
+      end
+      
+    else
+      project = Project.get(params[:project_id])
+      model = project.get_model(params[:model_name])
+      respond_to do |format|
+        format.html { redirect_to search_project_yogo_data_url(project, model, :search_term => search_term) }
+      end
     end
 
   end
@@ -161,13 +170,14 @@ class ProjectsController < ApplicationController
   # @api public
   def update
     @project = Project.get(params[:id])
+    params[:project].delete(:name)
     @project.attributes = params[:project]
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been updated."
       redirect_to projects_url
     else
       flash[:error] = "Project could not be updated."
-      render :action => :edit
+      render( :action => :edit )
     end
   end
 

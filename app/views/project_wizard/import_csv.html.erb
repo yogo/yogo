@@ -1,23 +1,10 @@
 <div id='fitted-content' >
   <div id="roadmap">
-    <%= image_tag('mock-roadmap-2.jpg') %>
+    <%= image_tag('mock-roadmap-3.jpg') %>
   </div>
 
   <div class="large-centered-content">
-    <h2>Describe your data or upload spreadsheets</h2>
-
-    <p>
-      Before continuing we need to know about the data you would like to store.
-      There are two ways to describe your data. Either by describing your data directly, or by uploading a CSV file.
-    </p>
-
-    <h3>Describe your Data Models</h3>
-    
-    <p>
-      If you don't have any data yet, you can describe the data you anticipate on collecting.
-      The description is flexible, and allows you to update the description at any time.
-    </p>
-
+   
     <h3>Pre-loading your data with a spreadsheet.</h3>
     <p>
       If you already have your data in a spreadsheet, you can load in your data and dataset description all at once.  This is a convenient way to get started.
@@ -46,11 +33,20 @@
    3,       Sonic,   51213.8,  3.2
     </pre>
 
-    <h3>How would you like to describe your data?</h3>
-    <div class='button-links'>
       <!-- Choose your destiny! -->
-      <%= link_to('Import CSV', import_csv_path(@project), :class => 'button-link') %>
-      <%= link_to('Design Data from Scratch', new_project_yogo_model_path(@project), :class => 'button-link') %>
-    </div>
+      <% form_for(@project, upload_project_path(@project), :multipart => true, :builder => YogoFormBuilder) do |f| -%>
+
+          <%= f.file_field( 'datafile', :label => 'Select file:', :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel") %><br>
+          
+          <div class='form-element'>
+            <!-- <div class='box' >&nbsp;</div> -->
+            <%= f.submit( "Upload", :class => 'button-link') %>
+            <%= f.submit("Upload and finish", :class => 'button-link') %>
+            <%= link_to("Finished", nil, :class => 'button-link') %>
+          </div>
+
+
+          
+      <% end -%>
   </div> 
 </div>

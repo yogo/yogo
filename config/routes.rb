@@ -8,7 +8,7 @@
 #
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
-  map.resources :projects, :except => [ :edit, :update ], 
+  map.resources :projects, 
                 :member => { :upload => :post, :list_models => :get }, 
                 :collection => { :loadexample => :post, :search => :get} do |project|
     
