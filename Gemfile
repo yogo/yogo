@@ -46,7 +46,7 @@ gem "roodi",          :require_as => 'dm-core', :only => [:test, :development]
 gem "googlecharts",   :require_as => 'dm-core', :only => [:test, :development]
 gem "metric_fu",      :require_as => 'dm-core', :only => [:test, :development]
 
-gem "rails-footnotes", :only => [:development]
+# gem "rails-footnotes", :only => [:development]
 
 # JRUBY sensitive gems
 if defined?(JRUBY_VERSION)
