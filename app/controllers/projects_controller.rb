@@ -170,13 +170,14 @@ class ProjectsController < ApplicationController
   # @api public
   def update
     @project = Project.get(params[:id])
+    params[:project].delete(:name)
     @project.attributes = params[:project]
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been updated."
       redirect_to projects_url
     else
       flash[:error] = "Project could not be updated."
-      render :action => :edit
+      render( :action => :edit )
     end
   end
 
