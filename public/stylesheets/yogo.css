@@ -42,7 +42,7 @@ body {
 }
 
 p {
-  margin: 0.5em;
+  margin: 0.8em;
   line-height: 1.1em;
 }
 
@@ -198,6 +198,7 @@ img {
   height: 100px;
   clear: both;
   text-align: center;
+  width: 845px;
 }
 
 .large-centered-content {
@@ -595,12 +596,15 @@ ul#sortable .grippie {
 
 #roadmap {
   text-align: center;
-  margin: 10px 10px 40px 10px;
+  margin: 10px 10px 20px 10px;
 }
 
-.button-big {text-align:center; margin-bottom:60px;}
-.left { float: left;}
+.button-big {text-align:center; margin-bottom:60px; }
+.left { float: left; }
 .right { float:right; }
+.half { width:50%; }
+.text-center { text-align: center; }
+.center{ margin: auto auto; }
 
 /*
 #mockup-intro {margin-left:30px; width:860px;}
