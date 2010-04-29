@@ -22,16 +22,16 @@ describe 'Yogo CSV Module' do
     CsvExampleModel.auto_migrate!
     # CsvExampleModel.send(:include, Yogo::Model)
     
-    models_path = File.dirname(__FILE__) + '/../models/csv'
-    @csv_data = FasterCSV.read(models_path + '/csvtest.csv')
-    @bad_data = FasterCSV.read(models_path + '/bad_data.csv')
-    @bad_csv_data = FasterCSV.read(models_path + '/bad_csvtest.csv')
-    @with_blank_lines = FasterCSV.read(models_path + '/with_blank_lines.csv')
-    @only_model = FasterCSV.read(models_path + '/only_model.csv')
-    @one_line = FasterCSV.read(models_path + '/one_line.csv')
-    @updated_csv_data = FasterCSV.read(models_path + '/updated_csv_test.csv')
-    @ten_lines = FasterCSV.read(models_path + '/10_lines_of_data.csv')
-    @new_properties = FasterCSV.read(models_path + '/new_properties.csv')
+    models_path       = File.dirname(__FILE__) + '/../models/csv'
+    @csv_data         = models_path + '/csvtest.csv'
+    @bad_data         = models_path + '/bad_data.csv'
+    @bad_csv_data     = models_path + '/bad_csvtest.csv'
+    @with_blank_lines = models_path + '/with_blank_lines.csv'
+    @only_model       = models_path + '/only_model.csv'
+    @one_line         = models_path + '/one_line.csv'
+    @updated_csv_data = models_path + '/updated_csv_test.csv'
+    @ten_lines        = models_path + '/10_lines_of_data.csv'
+    @new_properties   = models_path + '/new_properties.csv'
   end
   
   after(:all) do
@@ -141,6 +141,8 @@ describe 'Yogo CSV Module' do
       CsvExampleModel.load_csv_data(@new_properties)
       CsvExampleModel.properties.length.should eql(6)
     end
+    
+    it "should load images and files"
     
   end
 

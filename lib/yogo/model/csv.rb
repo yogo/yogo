@@ -55,22 +55,31 @@ module Yogo
         csv_output
       end
       
-      ##
       # Loads a CSV file into the model
+      #
+      # Loads CSV data into a model. If the csv file contains image paths, a path will need to be 
+      # provided to locate the images.
       # 
+      # TODO: Write a description of the CSV model here.
+      #  
       # @example
       #   @model.load_csv_data(csv_data)
       # 
-      # @param [Array] csv_data Arraified CSV data. Parsed with FasterCSV
+      # @param [String] csv_file
+      #   Path the the CSV file
+      # 
       # 
       # @return [Array] This will return an array of errors or an emty array if there were none
       # 
       # @author Robbie Lamb robbie.lamb@gmail.com
       # 
       # @api public
-      # 
-      def load_csv_data(csv_data, path='.')
+      def load_csv_data(csv_file)
+        csv_data = FasterCSV.read(csv_file)
+        path = File.dirname(csv_file)
+        
         errors = validate_csv_data(csv_data)
+        
         all_objects = []
         if errors.empty?
           attr_names = csv_data[0].map{|name| name.tableize.singularize.gsub(' ', '_') }
@@ -110,7 +119,7 @@ module Yogo
       end
 
       private
-      ##
+
       # Checks the columns in the file vs. the properties on the current model
       #
       #   If there are new columns, they are created.
