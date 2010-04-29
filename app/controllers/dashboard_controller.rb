@@ -9,7 +9,8 @@ class DashboardController < ApplicationController
   #
   # @author Yogo Team
   #
-  # @api public  
+  # @api public
+  #   
   def index
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
 

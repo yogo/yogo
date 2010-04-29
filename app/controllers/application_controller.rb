@@ -26,14 +26,6 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password
   
   protected
-  
-  # Show the sidebar in the layout (this is usually called by a before-filter)
-  # 
-  # @api semipublic
-  def show_sidebar
-    @sidebar = true
-  end
-  
 
   # Create a custom error handler
   # 
@@ -79,6 +71,18 @@ class ApplicationController < ActionController::Base
       # Raise a 403 exception or perhaps just redirect.
       render_optional_error_file(:forbidden)
     end
+  end
+  
+  # Show the sidebar in the layout (this is usually called by a before-filter)
+  # 
+  # @example
+  #   before_filter :show_sidebar
+  # 
+  # @return [Trueclass]
+  # 
+  # @api private
+  def show_sidebar
+    @sidebar = true
   end
   
 end
