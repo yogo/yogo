@@ -69,7 +69,7 @@ module Yogo
       #   Path the the CSV file
       # 
       # 
-      # @return [Array] This will return an array of errors or an emty array if there were none
+      # @return [Array] This will return an array of errors or an empty array if there were none
       # 
       # @author Robbie Lamb robbie.lamb@gmail.com
       # 

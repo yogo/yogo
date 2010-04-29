@@ -33,16 +33,18 @@
    3,       Sonic,   51213.8,  3.2
     </pre>
 
+
+    <p>There are currently <%= @project.models.count %> models.</p>
       <!-- Choose your destiny! -->
-      <% form_for(@project, upload_project_path(@project), :multipart => true, :builder => YogoFormBuilder) do |f| -%>
+      <% form_for(@project, :url => upload_csv_wizard_path(@project), :html => { :method => :post, :multipart => true}, :builder => YogoFormBuilder) do |f| -%>
 
           <%= f.file_field( 'datafile', :label => 'Select file:', :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel") %><br>
           
           <div class='form-element'>
             <!-- <div class='box' >&nbsp;</div> -->
-            <%= f.submit( "Upload", :class => 'button-link') %>
-            <%= f.submit("Upload and finish", :class => 'button-link') %>
-            <%= link_to("Finished", nil, :class => 'button-link') %>
+            <%= f.submit( "Upload and Continue", :class => 'button-link') %>
+            <%= f.submit("Upload and Finish", :class => 'button-link') %>
+            <%= link_to("Finished", project_path(@project), :class => 'button-link') %>
           </div>
 
 
