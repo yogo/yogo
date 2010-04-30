@@ -49,7 +49,7 @@ class YogoModelsController < ApplicationController
       # format.html
       format.json do
         
-        render( :json => { "Model" => model_definition_for(@model)} )
+        render( :json => { "Model" => @model.to_model_definition } )
       end
       format.csv { download_csv }
     end
@@ -159,9 +159,10 @@ class YogoModelsController < ApplicationController
     model_def = params['Model']
     logger.debug { model_def.inspect }
     
-    update_model_with_definition(model_def, model)
+    #update_model_with_definition(model_def, model)
+    model.update_model_definition(model_def)
     
-    updated_model_def = model_definition_for(model)
+    updated_model_def = model.to_model_definition
     logger.debug { model }
     logger.debug { model.properties.map {|p| [p.name, p.type, p.display_name] }.inspect }
     logger.debug { updated_model_def.inspect }
