@@ -268,7 +268,7 @@ class ProjectsController < ApplicationController
     else
       flash[:error] = errors.join("\n")
     end
-    redirect_to :back
+    redirect_to project_url(@project)
   end
 
   # List all models for a selected project
