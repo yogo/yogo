@@ -8,10 +8,8 @@
 # and additionally: upload of CSV files, an example project and rereflection
 # of the yogo repository.
 
-
 class ProjectsController < ApplicationController
   
-
   # Show all the projects
   #
   # @example 
@@ -37,25 +35,34 @@ class ProjectsController < ApplicationController
   #
   # @api public
   def search
+    search_scope = params[:search_scope]
     search_term = params[:search_term]
-    
-    @projects = Project.search(search_term)
+    if search_scope == 'everywhere' || params[:model_name].blank?
+      @projects = Project.search(search_term)
 
-    @proj_models = []
-    Project.all.each do |project|
-      @proj_models << [project, project.search_models(search_term).flatten ]
-    end
-
-    @proj_models_data = []
-    Project.all.each do |project|
-      project.models.each do |model|
-        count = model.search(search_term).count
-        @proj_models_data << [project, model, count] if count > 0
+      @proj_models = []
+      Project.all.each do |project|
+        @proj_models << [project, project.search_models(search_term).flatten ]
       end
-    end
-    
-    respond_to do |format|
-      format.html
+
+      @proj_models_data = []
+      Project.all.each do |project|
+        project.models.each do |model|
+          count = model.search(search_term).count
+          @proj_models_data << [project, model, count] if count > 0
+        end
+      end
+      
+      respond_to do |format|
+        format.html
+      end
+      
+    else
+      project = Project.get(params[:project_id])
+      model = project.get_model(params[:model_name])
+      respond_to do |format|
+        format.html { redirect_to search_project_yogo_data_url(project, model, :search_term => search_term) }
+      end
     end
 
   end
@@ -161,13 +168,14 @@ class ProjectsController < ApplicationController
   # @api public
   def update
     @project = Project.get(params[:id])
+    params[:project].delete(:name)
     @project.attributes = params[:project]
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been updated."
       redirect_to projects_url
     else
       flash[:error] = "Project could not be updated."
-      render :action => :edit
+      render( :action => :edit )
     end
   end
 
@@ -214,21 +222,23 @@ class ProjectsController < ApplicationController
     
     if !params[:upload].nil?
       datafile = params[:upload]['datafile']
-      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
+      
+      if !['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
         #redirect_to project_url(@project)
       else
         class_name = File.basename(datafile.original_filename, ".csv").singularize.camelcase
-        
-         errors =  @project.process_csv(datafile.path, class_name)
-        
+
+        errors =  @project.process_csv(datafile.path, class_name)
+
         if errors.empty?
           flash[:notice]  = "File uploaded succesfully."
         else
           flash[:error] = errors.join("\n")
         end
       end
+      
     else
        flash[:error] = "File upload area cannont be blank."
     end

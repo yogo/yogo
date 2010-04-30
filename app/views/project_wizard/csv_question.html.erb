@@ -1,29 +1,33 @@
 <div id='fitted-content' >
-
   <div id="roadmap">
     <%= image_tag('mock-roadmap-2.jpg') %>
   </div>
 
-  <div class="large-centered-content">
-
-    <h3>A whole lotta info about CSV.</h3>
+  <div class="large-centered-content boxed">
+    <h2>Describe your data or upload spreadsheets</h2>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut 
-      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-      laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-      voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-      non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      Before continuing we need to know about the data you would like to store.
+      There are two ways to describe your data. Either by describing your data directly (from scratch), or by uploading a CSV spreadsheet file.
     </p>
-    <h3>With some pictures, too.</h3>
-    <p>
-      And some more text.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-      aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-      culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <div class='button-links'>
-      <%= link_to('Import CSV', project_path, :class => 'button-link') %>
-      <%= link_to('Design Data from Scratch', new_project_yogo_model_path(@project), :class => 'button-link') %>
+    <div class='left half'>
+      <div class='text-center'>
+        <!-- Choose your destiny! -->
+        <%= link_to('Design Data from Scratch', new_project_yogo_model_path(@project), :class => 'button-link center') %>
+      </div>
+      <p>
+        If you don't have any data yet, you can describe the data you anticipate on collecting.
+        The description is flexible, and allows you to update the description at any time.
+      </p>
     </div>
+
+    <div class='left half'>
+      <div class='text-center'>
+        <%= link_to('Import Spreadsheet CSV', import_csv_path(@project), :class => 'button-link center') %>
+      </div>
+      <p>
+        If you already have your data in a spreadsheet, you can load in your data and dataset description all at once.  This is a convenient way to get started.
+      </p>
+    </div>
+    <br style='clear: both'>
   </div> 
 </div>

@@ -24,6 +24,7 @@ gem "carrierwave"
 gem "json",      "~>1.2.0",           :require => nil
 
 gem 'ruby-debug',                     :group => :development
+# gem "rails-footnotes",                :group => :development
 
 group :test do
   gem 'ruby-debug',                :require => nil
@@ -51,7 +52,6 @@ group :test do
   gem "roodi",                     :require => nil
   gem "googlecharts",              :require => nil
   gem "metric_fu",                 :require => nil
-
 end
 
 group :cucumber do

@@ -12,7 +12,6 @@ module ApplicationHelper
   # 
   include GoogleVisualization
   
-  ##
   # Adds items to the menu in the view
   #
   # @example
@@ -30,7 +29,6 @@ module ApplicationHelper
   # @author Yogo Team
   #
   # @api public
-  #
   def add_menu_item(name, url = {}, html_options = {})
     css_class = ''
     css_class = 'highlighted-menu-item' if request.url.include?(h(url))
@@ -40,7 +38,6 @@ module ApplicationHelper
     "</li>"
   end
   
-  ##
   # Returns all projects
   # 
   # @example
@@ -51,12 +48,10 @@ module ApplicationHelper
   # @author Yogo Team
   #
   # @api public
-  #
   def all_projects
     Project.all
   end
 
-  ##
   # Generates the links needed for pagination
   #
   # @example
@@ -74,7 +69,6 @@ module ApplicationHelper
   # @author Robbie Lamb
   #
   # @api public
-  #
   def pagination_links(collection, cur_page = 1, per_page = 5)
     total_pages = collection.page_count(:per_page => per_page)
     current_page = cur_page.nil? ? 1 : cur_page.to_i
@@ -109,7 +103,7 @@ module ApplicationHelper
     output
   end
 
-  ##
+  
   # Creates breadcrumbs based on the request query_string
   #
   # @example
@@ -146,7 +140,6 @@ module ApplicationHelper
     return res.join(' > ')
   end
   
-  ## 
   # Creates the appropriate HTML for attributes on a model
   # 
   # For attributes that are files or images it makes a download link work for them
@@ -162,11 +155,11 @@ module ApplicationHelper
   def yogo_show_helper(item, property, project, model)
     if property.type == DataMapper::Types::YogoFile
       file = item[property.name]
-      link_to(file, download_asset_project_yogo_data_path(project, model.name.demodulize, item.yogo_id, :attribute_name => property.name))
+      link_to(file, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))
     elsif property.type == DataMapper::Types::YogoImage
       file = item[property.name]
-      img = image_tag(download_asset_project_yogo_data_path(project, model.name.demodulize, item.yogo_id, :attribute_name => property.name), :width => '100px')
-      link_to(img, download_asset_project_yogo_data_path(project, model.name.demodulize, item.yogo_id, :attribute_name => property.name))      
+      img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
+      link_to(img, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))      
     else 
       item[property.name]
     end

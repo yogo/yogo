@@ -62,8 +62,8 @@ class YogoDataController < ApplicationController
   # @api public
   def search
     search_term = params[:search_term]
+
     @query = @model.search(search_term)
-    
     @data = @query.paginate(:page => params[:page], :per_page => 10)
     respond_to do |format|
       format.html { render( :action => :index) }
@@ -212,8 +212,7 @@ class YogoDataController < ApplicationController
         flash[:error] = "File type #{datafile.content_type} not allowed"
       else
         # Read the data in
-        csv_data = FasterCSV.read(datafile.path)
-        errors = @model.load_csv_data(csv_data)
+        errors = @model.load_csv_data(datafile.path)
         if errors.empty?
           flash[:notice] = "#{@model.name.demodulize} Data Successfully Uploaded."
         else
@@ -282,9 +281,9 @@ class YogoDataController < ApplicationController
   #
   # @api public
   def download_asset    
+    property = @model.properties[params[:attribute_name].to_sym]
     instance = @model.get(params[:id])
-    @attribute_name = params[:attribute_name]
-    filename = File.join(Rails.root, Yogo::Setting['asset_directory'], @model.asset_path, instance[@attribute_name])
+    filename = instance.send(property.name).path
     content_type = MIME::Types.type_for(filename)[0].content_type
     send_file filename, :type => content_type #, :x_sendfile => true # TODO: if we use lightd or Apache 2
   end
@@ -301,17 +300,16 @@ class YogoDataController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  def show_asset    
+  def show_asset
+    property = @model.properties[params[:attribute_name].to_sym]
     instance = @model.get(params[:id])
-    @attribute_name = params[:attribute_name]
-    filename = File.join(Rails.root, Yogo::Setting['asset_directory'], @model.asset_path, instance[@attribute_name])
+    filename = instance.send(property.name).path
     content_type = MIME::Types.type_for(filename)[0].content_type
-    send_file filename, :type => content_type, :disposition => :inline #, :x_sendfile => true # TODO: if we use lightd or Apache 2
+    send_file filename, :type => content_type, :disposition => 'inline' #, :x_sendfile => true # TODO: if we use lightd or Apache 2
   end
   
   private
   
-  ##
   # pulls model data into a CSV file format
   #
   # @return [File] Allows download of yogo project model data in CSV format
@@ -325,8 +323,8 @@ class YogoDataController < ApplicationController
               :type        => "text/csv", 
               :disposition => 'attachment')
   end
-  ##
-  # returns a projects model
+  
+  # Returns a projects model
   #
   # @param [Hash] params
   # @option params [String] :project_id

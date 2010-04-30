@@ -66,8 +66,9 @@ describe ProjectsController do
         Project.stub!(:new).and_return(
           mock_project(:save => true, :name => 'Test Project')
         )
-        post :create, :yogo => {}
-        response.should redirect_to(projects_url)
+        post :create, :yogo => { :name => 'Test Project' }
+        
+        response.should redirect_to(csv_question_url(mock_project))
       end
     end
 

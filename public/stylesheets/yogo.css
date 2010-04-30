@@ -31,6 +31,8 @@ a:hover {
 
 a img {
   border: none;
+  padding: 0px;
+  margin: 0px;
 }
 
 body {
@@ -40,7 +42,7 @@ body {
 }
 
 p {
-  margin: 0.5em;
+  margin: 0.8em;
   line-height: 1.1em;
 }
 
@@ -57,19 +59,37 @@ h1 {
 }
 
 h2 {
-  font-size:1.3em;
+  font-size:1.4em;
+  margin-top: 20px;
+  font-weight: bold;
 }
 
 h3 {
-  font-size:1.2em;
+  font-size:1.1em;
+  margin-top: 20px;
   font-weight:bold;
 }
 
 h4 {
-  font-size:1.1em;
+  font-size:0.9em;
+  margin-top: 20px;
   font-weight:bold;
 }
 
+ul, ol {
+  padding:0px;
+  margin:0.5em;
+  list-style: inside;
+}
+
+ul li, ol li {
+  margin-left: 1em;
+/*  padding:0.5em;*/
+}
+
+img {
+  margin: 0.5em 1.0em;
+}
 
 .section-title {
   text-align:center;
@@ -135,6 +155,11 @@ h4 {
   margin-bottom: 10px;
 }
 
+#header img {
+  margin: 0px;
+  padding: 0px;
+}
+
 #container {
   padding: 0px 10px 10px 10px;
   margin: 0px;
@@ -148,12 +173,28 @@ h4 {
 }
 #liquid-content{
   padding-left: 200px;
+  margin-top: 50px;
 }
 #search-tab {
-  left:125px;
-  padding-left:313px;
+  background-image: url(../images/shadow-bk.png) repeat-x fixed top;
   position:absolute;
   top:100px;
+  left:420px;
+  border:2px solid #255d71;
+  border-top: 1px solid transparent;
+  font-size:0.9em;
+  padding: 7px 3px 4px 3px;
+  text-align:center;
+  width:450px;
+}
+
+#search-tab form{
+  font-size: .9em;
+}
+
+#search-tab .button-link{
+  font-size: .9em;
+  padding: 3px 2px 2px 2px
 }
 
 #footer {
@@ -162,6 +203,7 @@ h4 {
   height: 100px;
   clear: both;
   text-align: center;
+  width: 845px;
 }
 
 .large-centered-content {
@@ -219,7 +261,6 @@ h4 {
 
 #sidebar {
   width:175px;
-  margin-top: 50px;
   float:left;
   padding-left:8px;
   margin-right:8px;
@@ -245,13 +286,13 @@ h4 {
 
   #sidebar ul {
     padding:0px;
-    margin:3px 5px 0 15px;
+    margin:3px 5px 0 5px;
+    list-style: none;
   }
 
   #sidebar ul li {
     margin-left: 10px;
     padding:5px 0 0 0px;
-    list-style-image: url("../images/bullet.gif");
   }
 
     #list-models ul li {
@@ -270,10 +311,6 @@ h4 {
     background-color: #EEE;
   }
 
-  #sidebar ul li:hover {
-    background-color: #EEE;
-  }
-  
   #sidebar-search {
     text-align:center;
     margin-top:20px;
@@ -467,7 +504,7 @@ form .cancel {
   margin-left: 50px;
 }
 
-form input, form textarea {
+form input, form textarea, form select {
   font-family: inherit;
   font-size: inherit;
 }
@@ -564,12 +601,15 @@ ul#sortable .grippie {
 
 #roadmap {
   text-align: center;
-  margin: 10px 10px 40px 10px;
+  margin: 10px 10px 20px 10px;
 }
 
-.button-big {text-align:center; margin-bottom:60px;}
-.left { float: left;}
+.button-big {text-align:center; margin-bottom:60px; }
+.left { float: left; }
 .right { float:right; }
+.half { width:50%; }
+.text-center { text-align: center; }
+.center{ margin: auto auto; }
 
 /*
 #mockup-intro {margin-left:30px; width:860px;}
