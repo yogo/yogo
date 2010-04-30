@@ -15,10 +15,11 @@ gem "dm-types"
 gem "dm-persevere-adapter", "0.51",   :require => nil
 gem "do_sqlite3",                     :require => nil
 gem "rails_datamapper",               :require => nil
-gem "mime-types",                     :require => nil
+
 
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"
+gem "mime-types",                     :require => 'mime/types'
 gem "fastercsv"
 gem "carrierwave"
 gem "json",      "~>1.2.0",           :require => nil
