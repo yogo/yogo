@@ -21,6 +21,7 @@ class ProjectsController < ApplicationController
   #
   # @api public
   def index
+    redirect_to dashboard_index_url and return
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
 

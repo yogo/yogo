@@ -1,4 +1,4 @@
-<div id='fitted-content' >
+<div class='fitted-content' >
   <div id="roadmap">
     <%= image_tag('mock-roadmap-3.jpg') %>
   </div>
@@ -30,11 +30,11 @@
    NA,      NA,      kg,       volts
    1,       Mickey,  1283.5,   1.2
    2,       Mario,   23492.2,  1.5
-   3,       Sonic,   51213.8,  3.2
+   3,       Sonic,   521213.8, 3.2
     </pre>
 
 
-    <p>There are currently <%= @project.models.count %> models.</p>
+    <p>There are currently <%= @project.models.count %> datasets.</p>
       <!-- Choose your destiny! -->
       <% form_for(@project, :url => upload_csv_wizard_path(@project), :html => { :method => :post, :multipart => true}, :builder => YogoFormBuilder) do |f| -%>
 
