@@ -87,6 +87,32 @@ class YogoModelsController < ApplicationController
   #
   # @api public
   def create
+    model_def = params['Model'].symbolize_keys
+    @model = nil
+    class_name = nil
+    
+    if model_def[:guid]
+      class_name = model_def[:guid]
+    else
+      raise "Cannot create a Model without a name or id"
+    end
+    
+    @model = @project.add_model(class_name, {})
+    logger.debug(class_name)
+    logger.debug(@model.guid)
+    @model.auto_migrate!
+    @model.update_model_definition(model_def)
+    
+    respond_to do |format|
+      format.html { redirect_to(project_yogo_model_url(@project, @model.name.demodulize)) }
+      format.json do
+        render( :json => { "Model" => @model.to_model_definition } )
+      end
+    end
+    
+  end
+  
+  def create_old
     class_name = params[:class_name].titleize.gsub(' ', '')
     cleaned_options = {}
     errors = {}
