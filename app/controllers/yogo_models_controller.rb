@@ -24,7 +24,7 @@ class YogoModelsController < ApplicationController
     
     respond_to do |format|
       format.html
-      format.json { render( :json => {"items" => @models.map{|m| model_definition_for(m)},
+      format.json { render( :json => {"models" => @models.map{|m| m.to_model_definition },
                                       "count" => @models.size } )}
     end
   end
