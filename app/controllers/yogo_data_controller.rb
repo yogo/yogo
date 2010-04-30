@@ -212,8 +212,7 @@ class YogoDataController < ApplicationController
         flash[:error] = "File type #{datafile.content_type} not allowed"
       else
         # Read the data in
-        csv_data = FasterCSV.read(datafile.path)
-        errors = @model.load_csv_data(csv_data)
+        errors = @model.load_csv_data(datafile.path)
         if errors.empty?
           flash[:notice] = "#{@model.name.demodulize} Data Successfully Uploaded."
         else
@@ -311,7 +310,6 @@ class YogoDataController < ApplicationController
   
   private
   
-  ##
   # pulls model data into a CSV file format
   #
   # @return [File] Allows download of yogo project model data in CSV format
@@ -325,8 +323,8 @@ class YogoDataController < ApplicationController
               :type        => "text/csv", 
               :disposition => 'attachment')
   end
-  ##
-  # returns a projects model
+  
+  # Returns a projects model
   #
   # @param [Hash] params
   # @option params [String] :project_id

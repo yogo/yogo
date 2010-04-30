@@ -12,7 +12,6 @@ module ApplicationHelper
   # 
   include GoogleVisualization
   
-  ##
   # Adds items to the menu in the view
   #
   # @example
@@ -30,7 +29,6 @@ module ApplicationHelper
   # @author Yogo Team
   #
   # @api public
-  #
   def add_menu_item(name, url = {}, html_options = {})
     css_class = ''
     css_class = 'highlighted-menu-item' if request.url.include?(h(url))
@@ -40,7 +38,6 @@ module ApplicationHelper
     "</li>"
   end
   
-  ##
   # Returns all projects
   # 
   # @example
@@ -51,12 +48,10 @@ module ApplicationHelper
   # @author Yogo Team
   #
   # @api public
-  #
   def all_projects
     Project.all
   end
 
-  ##
   # Generates the links needed for pagination
   #
   # @example
@@ -74,7 +69,6 @@ module ApplicationHelper
   # @author Robbie Lamb
   #
   # @api public
-  #
   def pagination_links(collection, cur_page = 1, per_page = 5)
     total_pages = collection.page_count(:per_page => per_page)
     current_page = cur_page.nil? ? 1 : cur_page.to_i
@@ -109,7 +103,7 @@ module ApplicationHelper
     output
   end
 
-  ##
+  
   # Creates breadcrumbs based on the request query_string
   #
   # @example
@@ -146,7 +140,6 @@ module ApplicationHelper
     return res.join(' > ')
   end
   
-  ## 
   # Creates the appropriate HTML for attributes on a model
   # 
   # For attributes that are files or images it makes a download link work for them

@@ -26,17 +26,7 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password
   
   protected
-  
-  ##
-  # Show the sidebar in the layout (this is usually called by a before-filter)
-  # 
-  # @api semipublic
-  #
-  def show_sidebar
-    @sidebar = true
-  end
-  
-  ##
+
   # Create a custom error handler
   # 
   # @example Render an error if the connection is not allowed.
@@ -44,11 +34,12 @@ class ApplicationController < ActionController::Base
   #     render_optional_error_file(:forbidden) 
   #   end
   # 
-  # @param [String] status_code the code to return
+  # @param [String] status_code 
+  #   The code to return
+  # 
   # @return [HTML Content to browser] This returns a dynamically generated error page.
   # 
   # @api semipublic
-  # 
     def render_optional_error_file(status_code)
       status = interpret_status(status_code)
       # TODO: Support I18n internationalization
@@ -63,7 +54,6 @@ class ApplicationController < ActionController::Base
     
   private
   
-  ##
   # Method to see if incoming connections are local (and allowed) 
   # 
   # @example If the connection is local, render the view.
@@ -72,6 +62,7 @@ class ApplicationController < ActionController::Base
   #   end
   # 
   # @return [ String] Checks requests to ensure they are local only
+  # 
   # @api private
   def check_local_only
     return true if Rails.env == "test"
@@ -80,6 +71,18 @@ class ApplicationController < ActionController::Base
       # Raise a 403 exception or perhaps just redirect.
       render_optional_error_file(:forbidden)
     end
+  end
+  
+  # Show the sidebar in the layout (this is usually called by a before-filter)
+  # 
+  # @example
+  #   before_filter :show_sidebar
+  # 
+  # @return [Trueclass]
+  # 
+  # @api private
+  def show_sidebar
+    @sidebar = true
   end
   
 end

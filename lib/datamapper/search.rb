@@ -1,7 +1,7 @@
 module DataMapper
   module Model
 
-    # Perform a search on a datamapper model.
+    # Perform a search on a datamapper model
     #
     # @example
     #   DataMapperModel.search("me")
@@ -39,7 +39,7 @@ module DataMapper
   
   class Collection
     
-    # Perform a search on a datamapper collection.
+    # Perform a search on a datamapper collection
     #
     # @example
     #   new_collection = Person.all(:name => 'Steve')

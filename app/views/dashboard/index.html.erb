@@ -46,4 +46,7 @@
     </div>
   </div>
   <%- end -%>
+  <div id="pagination-links">
+    <%= pagination_links(Project, params[:page], 5) %>
+  </div>
 </div>
