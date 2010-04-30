@@ -1,8 +1,8 @@
 <h1 class='section-title'>Yogo Dashboard</h1>
-<div class="button-small" id='create-project-button'>
-  <%= link_to(image_tag("create-project-small.jpg"), start_wizard_path()) %>
+<div class="fitted-content" id='create-project-button'>
+  <%= link_to(image_tag("create-project-small.jpg"), start_wizard_path(), :class => 'right') %>
 </div>
-<div id='fitted-content'>
+<div class='fitted-content'>
   <%- for project in @projects -%>
   <div class="project-block">
     <div class="project-icon">
@@ -11,7 +11,7 @@
     <div class="project-text">
       <h4><%= link_to(project.name, project_path(project) ) %></h4>
       <p>
-        <em><%=h project.description || "[No Description]" %></em> 
+        <%= link_to(image_tag('report_edit.png'), edit_project_path(project)) %>&nbsp;<em><%=h project.description || "[No Description]" %></em> 
       </p>
       <%- if project.models.empty? -%>
         <p>There are no datasets associated with this project.<br /><%= link_to('Add a Dataset', csv_question_path(project)) %></p>
@@ -28,16 +28,14 @@
             </tr>
           </thead>
           <%- for dataset in project.models -%>
-          <%# TODO: Make this use real data!q %>
             <tr>
               <td style="text-align:left;"><%= h dataset.public_name %></td>
               <td><%= link_to(dataset.count(:created_at.gt => 1.week.ago), project_yogo_data_index_path(project, dataset)) %></td>
               <td><%= link_to(dataset.count, project_yogo_data_index_path(project, dataset)) %></td>
-              <td><%= link_to(image_tag('manage.png', :title => "Manage Data"), project_yogo_data_index_path(project, dataset)) %></td>
+              <td><%= link_to(image_tag('table_edit.png', :title => "Browse Data") + " Browse", project_yogo_data_index_path(project, dataset)) %></td>
               <!-- TODO: Show the model editor -->
-              <td><%= link_to(image_tag('edit.png', :title => "Describe Dataset"), "/mockup/edit") %></td>
-              <!-- TODO: Show import data page -->
-              <td><%= link_to(image_tag('import.png', :title => "Import Data"), "") %></td>
+              <td><%= link_to(image_tag('layout_edit.png', :title => "Describe Dataset") + " Describe", "/mockup/edit") %></td>
+              <td><%= link_to(image_tag('table_add.png', :title => "Import Spreadsheet") + " Import", import_csv_path(project)) %></td>
             </tr>
           <%- end -%>
         </table>
@@ -46,4 +44,7 @@
     </div>
   </div>
   <%- end -%>
+  <div id="pagination-links">
+    <%= pagination_links(Project, params[:page], 5) %>
+  </div>
 </div>

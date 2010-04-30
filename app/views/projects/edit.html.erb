@@ -1,4 +1,19 @@
-<% form_for(@project) do |form| %>
-  <%= render :partial => 'projects/form', :locals => {:f => form} %>
-  <%= form.submit 'Update' %>
-<% end %>
+<div class='small-centered-content boxed'>
+  <% form_for(@project, :builder => YogoFormBuilder) do |f| %>
+  
+    <div class='form-element'>
+      <div class='box' >
+        <%= f.label(:name, "Project Name:") %>
+      </div>
+      <%= @project.name %>
+    </div>
+
+     <%= f.text_area(:description, :label => "Project Description: ") %>
+
+    <div class='form-element'>
+      <div class='box' >&nbsp;</div>
+      <%= f.submit('Update', :class => 'button-link') %>
+      <%= link_to('Cancel', project_path(@project), :class => 'cancel') %>
+    </div>
+  <% end %>
+</div>

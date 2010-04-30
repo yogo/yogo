@@ -7,6 +7,7 @@
 # @todo Describe Me
 class ProjectWizardController < ApplicationController
   
+  before_filter :no_search
   # Give a project a name
   # 
   # @example
@@ -52,7 +53,7 @@ class ProjectWizardController < ApplicationController
   # Put data via csv
   # 
   # @example
-  #   get /project_wizard/import_csv 
+  #   get /project_wizard/import_csv/:id
   # 
   # This controller action is used to provide a name to a new project
   # 
@@ -63,8 +64,62 @@ class ProjectWizardController < ApplicationController
   # 
   # @api public
   def import_csv
+    @project = Project.get(params[:id])
+    
+    respond_to do |format|
+      format.html
+    end
   end
   
+  # Put data via csv
+  # 
+  # @example
+  #   POST /project_wizard/upload_csv/:id 
+  # 
+  # This controller action is used to provide a name to a new project
+  # 
+  # Robbie doesn't like this method.
+  # 
+  # @return [Object] nothing
+  # 
+  # @author Robbie Lamb robbie.lamb@gmail.com
+  # @author Pol LLouuvettee 
+  # 
+  # @api public
+  def upload_csv
+    redirect_to(root_url) and return if params[:id].blank?
+    
+    @project = Project.get(params[:id])
+    
+    redirect_to(import_csv_url(@project)) and return unless request.post?
+
+    datafile = params[:project][:datafile]
+    
+    if !['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
+          'application/octet-stream','application/csv'].include?(datafile.content_type)
+      flash[:error] = "File type #{datafile.content_type} not allowed"
+      #redirect_to project_url(@project)
+    else
+      class_name = File.basename(datafile.original_filename, ".csv").singularize.camelcase
+      errors = @project.process_csv(datafile.path, class_name)
+      
+      if errors.empty?
+        flash[:notice]  = "File uploaded succesfully."
+      else
+        flash[:error] = errors.join("\n")
+      end
+      
+    end
+    respond_to do |format|
+      if !errors.empty? || params[:submit] == 'Upload and Continue'
+        format.html { redirect_to(import_csv(@project)) }
+      else
+        format.html { render(:action => 'import_csv') }
+      end
+    end
+    
+    
+  end
   
   # Put data via csv
   # 
@@ -83,21 +138,22 @@ class ProjectWizardController < ApplicationController
     
   end
   
+  private
+  
+  
   # Put data via csv
   # 
-  # @example
-  #   get /project_wizard/csv 
   # 
-  # This controller action is used to provide a name to a new project
+  # This private method is used to set a view-aware variable for displaying the search-tab
   # 
-  # @return [Object] nothing
+  # @return [TrueClass] The return value is useless
   # 
   # @author Robbie Lamb robbie.lamb@gmail.com
   # @author Pol LLouuvettee
   # 
-  # @api public
-  def manage
-    
+  # @api private
+  def no_search
+    @no_search = true
   end
   
 end

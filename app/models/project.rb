@@ -89,9 +89,6 @@ class Project
   # 
   # @api public
   def process_csv(datafile, model_name)
-    # Read the data in
-    csv_data = FasterCSV.read(datafile)
-    df_path = File.dirname(datafile)
     
     # Look to see if there is already one of these models.
     model = get_model(model_name)
@@ -103,7 +100,7 @@ class Project
     end
     
     # Load data
-    errors = model.load_csv_data(csv_data, df_path)
+    errors = model.load_csv_data(datafile)
     return errors
   end
   
