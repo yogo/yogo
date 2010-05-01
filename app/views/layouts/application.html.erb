@@ -5,7 +5,12 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <title>Yogo Data Management Toolkit: <%= controller.action_name %></title>
 
-    <%= stylesheet_link_tag 'jquery-ui-1.8rc3.custom', 'yogo' %>
+    <!-- <%= stylesheet_link_tag 'jquery-ui-1.8rc3.custom', 'yogo' %> -->
+    <%= stylesheet_link_tag 'compiled/screen.css' %>
+    <%= stylesheet_link_tag 'compiled/print.css' %>
+    <!--[if IE]>
+    <%= stylesheet_link_tag 'compiled/ie.css' %>
+    <![endif]-->
     <%= javascript_include_tag 'jquery-1.4.2.min.js', 
                                'jquery-ui-1.8rc3.custom.min.js', 
                                'jrails.js', 
@@ -16,12 +21,13 @@
    <link rel="shortcut icon" href="<%= image_path("favicon.png") %>">
   </head>
   
-  <body>
+  <body class="bp three-col">
+    <div id="container">
     <div id='header'>
       <%= image_tag('header.png') %>
     </div>
     
-    <div id="container"  class="clearfix">
+    
       
       <%= render(:partial => 'layouts/sidebar') if @sidebar %>
       <%= render(:partial => 'layouts/search') unless @no_search%>
@@ -39,12 +45,13 @@
         <div id='footnotes_holder'></div>
       </div> <!-- end content -->
       <br clear='all'>
-    </div> <!-- end container -->
+    
     
     <div id="footer">
       <div id='yogo-brand'>
         <%= link_to(image_tag("yogo.png", :alt => "The Yogo Data Management Toolkit Logo"), 'http://yogo.msu.montana.edu/') %>
       </div>
     </div>
+    </div> <!-- end container -->
   </body>
 </html>
