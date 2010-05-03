@@ -1,5 +1,5 @@
 <div id="search-tab">
-  <%- form_for(@project, :url => search_projects_path, 
+  <%- form_for(:project, :url => search_projects_path, 
         :html => {:method => :get} ) do |f| -%>
     Search <%= select_tag('search_scope', options_for_select([['project','project'],['dataset','dataset'],['everywhere','everywhere']])) %>
     for
