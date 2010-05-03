@@ -68,7 +68,7 @@ class YogoDataController < ApplicationController
     respond_to do |format|
       format.html { render( :action => :index) }
       format.json {  @data = @query.all, render( :json => @data.to_json )}
-      format.csv  { download_csv}
+      format.csv  { download_csv }
     end
   end
   
@@ -172,6 +172,7 @@ class YogoDataController < ApplicationController
     @item = @model.get(params[:id])
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
     @item.attributes = params[goober].delete_if{|key,value| value.empty? }
+    #TODO: THIS IS BROKEN!
     @item.save
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end  

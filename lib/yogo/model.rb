@@ -19,6 +19,7 @@ module Yogo
       base.send(:extend,  ClassMethods)
       base.send(:include, InstanceMethods)
       base.send(:extend,  Csv)
+      base.send(:extend, ModelEditor)
       base.class_eval do
 
         validates_present :change_summary, :if => :require_change_summary?

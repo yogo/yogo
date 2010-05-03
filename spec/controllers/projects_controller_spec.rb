@@ -14,13 +14,14 @@ describe ProjectsController do
   end
 
   describe "GET projects/" do
-  
-    it "assigns all projects as @projects" do
-      projects = [mock_project]
-      Project.should_receive(:all).and_return(projects)
-      get :index
-      assigns[:projects].should equal(projects)
-    end
+    
+    # this doesn't happen any more.
+    # it "assigns all projects as @projects" do
+    #      projects = [mock_project]
+    #      Project.should_receive(:all).and_return(projects)
+    #      get :index
+    #      assigns[:projects].should equal(projects)
+    #    end
   
   end
 

@@ -179,7 +179,7 @@ class Project
   # 
   # @api public
   def add_model(name, properties = {})
-    name = name.split('_').map{|p| p.capitalize}.join('')
+    name = name.classify
     return false unless valid_model_or_column_name?(name)
 
     a_model = generate_empty_model(name)

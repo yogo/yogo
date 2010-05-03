@@ -21,6 +21,7 @@ class ProjectsController < ApplicationController
   #
   # @api public
   def index
+    redirect_to dashboard_index_url and return
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
 
@@ -268,7 +269,7 @@ class ProjectsController < ApplicationController
     else
       flash[:error] = errors.join("\n")
     end
-    redirect_to :back
+    redirect_to project_url(@project)
   end
 
   # List all models for a selected project

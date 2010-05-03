@@ -7,6 +7,7 @@
 # @todo Describe Me
 class ProjectWizardController < ApplicationController
   
+  before_filter :no_search
   # Give a project a name
   # 
   # @example
@@ -73,7 +74,7 @@ class ProjectWizardController < ApplicationController
   # Put data via csv
   # 
   # @example
-  #   POST /project_wizard/import_csv/:id 
+  #   POST /project_wizard/upload_csv/:id 
   # 
   # This controller action is used to provide a name to a new project
   # 
@@ -86,7 +87,6 @@ class ProjectWizardController < ApplicationController
   # 
   # @api public
   def upload_csv
-    debugger
     redirect_to(root_url) and return if params[:id].blank?
     
     @project = Project.get(params[:id])
@@ -112,9 +112,9 @@ class ProjectWizardController < ApplicationController
     end
     respond_to do |format|
       if !errors.empty? || params[:submit] == 'Upload and Continue'
-        format.html { redirect_to(import_csv(@project)) }
-      else
         format.html { render(:action => 'import_csv') }
+      else
+        format.html { redirect_to(project_yogo_models_url(@project)) }
       end
     end
     
@@ -136,6 +136,24 @@ class ProjectWizardController < ApplicationController
   # @api public
   def describe_dataset
     
+  end
+  
+  private
+  
+  
+  # Put data via csv
+  # 
+  # 
+  # This private method is used to set a view-aware variable for displaying the search-tab
+  # 
+  # @return [TrueClass] The return value is useless
+  # 
+  # @author Robbie Lamb robbie.lamb@gmail.com
+  # @author Pol LLouuvettee
+  # 
+  # @api private
+  def no_search
+    @no_search = true
   end
   
 end

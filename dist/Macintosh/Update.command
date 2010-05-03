@@ -13,8 +13,13 @@ if [ ! -d yogo ]
   
 else
   cd yogo
+  
+  git clean -f -q
 
-  rake yogo:update
+  git pull
+
+  ./setup.sh
+  
 fi
 
 popd

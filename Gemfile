@@ -12,10 +12,9 @@ gem "dm-is-nested_set"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates"
 gem "dm-types"
-gem "dm-persevere-adapter", "0.51",   :require => nil
+gem "dm-persevere-adapter", "0.52.1", :require => nil
 gem "do_sqlite3",                     :require => nil
 gem "rails_datamapper",               :require => nil
-
 
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"
