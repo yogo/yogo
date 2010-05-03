@@ -1,16 +1,20 @@
 class DashboardController < ApplicationController
 
-  # @example http://localhost:3000/mockup/
+  # The root of the website
+  # 
+  # @example 
+  #   get / or get /dashboard
   #
   # @return [Webpage] renders webpage
   #
   # @author Yogo Team
   #
-  # @api public  
+  # @api public
+  #   
   def index
-    #todo PAGINATE
-    @projects = Project.all
-    
+    @no_search = true
+    @projects = Project.paginate(:page => params[:page], :per_page => 5)
+
     respond_to do |format|
       if @projects.empty?
         format.html { render('no_projects') }

@@ -1,56 +1,33 @@
-<div id='fitted-content' >
+<div class='fitted-content' >
   <div id="roadmap">
     <%= image_tag('mock-roadmap-2.jpg') %>
   </div>
 
-  <div class="large-centered-content">
+  <div class="large-centered-content boxed">
     <h2>Describe your data or upload spreadsheets</h2>
-
     <p>
       Before continuing we need to know about the data you would like to store.
-      There are two ways to describe your data. Either by describing your data directly, or by uploading a CSV file.
+      There are two ways to describe your data. Either by describing your data directly (from scratch), or by uploading a CSV spreadsheet file.
     </p>
-
-    <h3>Describe your Data Models</h3>
-    
-    <p>
-      If you don't have any data yet, you can describe the data you anticipate on collecting.
-      The description is flexible, and allows you to update the description at any time.
-    </p>
-
-    <h3>Pre-loading your data with a spreadsheet.</h3>
-    <p>
-      If you already have your data in a spreadsheet, you can load in your data and dataset description all at once.  This is a convenient way to get started.
-    </p>
-    
-    <h4>Requirements</h4>
-    <p>1. The spreadsheets that can be loaded into the Yogo Data Management Toolkit must be in a particular format.  First, they must be in "comma separated values" format (often described as a "CSV" file).  Any modern spreadsheet application can export a spreadsheet in CSV format.</p>
-    <p>2. The top three rows of the spreadsheet are special header information that the Yogo Data Management Toolkit needs to determine the character of the data columns.</p>
-    <ul>
-      <li>The first row contains the names of the variables (the column name)</li>
-      <li>The second row contains the type of the values (text, number, etc.)</li>
-      <li>The third row contains the units for the values (centimeters, degrees, etc.)</li>
-    </ul>
-    
-    <h4>Example</h4>
-    <p>For example, the contents of a spreadsheet might look something like the following image:</p>
-    <%= image_tag('spreadsheet-example.png') %>
-    
-    <p>When the spreadsheet is exported as CSV, the resulting file would have following contents:</p>
-    <pre>
-   ID,      Name,    Mass,     Charge
-   Integer, Text,    Decimal,  Decimal
-   NA,      NA,      kg,       volts
-   1,       Mickey,  1283.5,   1.2
-   2,       Mario,   23492.2,  1.5
-   3,       Sonic,   51213.8,  3.2
-    </pre>
-
-    <h3>How would you like to describe your data?</h3>
-    <div class='button-links'>
-      <!-- Choose your destiny! -->
-      <%= link_to('Import CSV', import_csv_path(@project), :class => 'button-link') %>
-      <%= link_to('Design Data from Scratch', new_project_yogo_model_path(@project), :class => 'button-link') %>
+    <div class='left half'>
+      <div class='text-center'>
+        <!-- Choose your destiny! -->
+        <%= link_to('Design Data from Scratch', new_project_yogo_model_path(@project), :class => 'button-link center') %>
+      </div>
+      <p>
+        If you don't have any data yet, you can describe the data you anticipate on collecting.
+        The description is flexible, and allows you to update the description at any time.
+      </p>
     </div>
+
+    <div class='left half'>
+      <div class='text-center'>
+        <%= link_to('Import Spreadsheet CSV', import_csv_path(@project), :class => 'button-link center') %>
+      </div>
+      <p>
+        If you already have your data in a spreadsheet, you can load in your data and dataset description all at once.  This is a convenient way to get started.
+      </p>
+    </div>
+    <br style='clear: both'>
   </div> 
 </div>

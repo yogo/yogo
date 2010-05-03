@@ -8,10 +8,8 @@
 # and additionally: upload of CSV files, an example project and rereflection
 # of the yogo repository.
 
-
 class ProjectsController < ApplicationController
   
-
   # Show all the projects
   #
   # @example 
@@ -23,6 +21,7 @@ class ProjectsController < ApplicationController
   #
   # @api public
   def index
+    redirect_to dashboard_index_url and return
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
   end
 
@@ -224,21 +223,23 @@ class ProjectsController < ApplicationController
     
     if !params[:upload].nil?
       datafile = params[:upload]['datafile']
-      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
+      
+      if !['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
         #redirect_to project_url(@project)
       else
         class_name = File.basename(datafile.original_filename, ".csv").singularize.camelcase
-        
-         errors =  @project.process_csv(datafile.path, class_name)
-        
+
+        errors =  @project.process_csv(datafile.path, class_name)
+
         if errors.empty?
           flash[:notice]  = "File uploaded succesfully."
         else
           flash[:error] = errors.join("\n")
         end
       end
+      
     else
        flash[:error] = "File upload area cannont be blank."
     end
@@ -268,7 +269,7 @@ class ProjectsController < ApplicationController
     else
       flash[:error] = errors.join("\n")
     end
-    redirect_to :back
+    redirect_to project_url(@project)
   end
 
   # List all models for a selected project

@@ -42,7 +42,7 @@ body {
 }
 
 p {
-  margin: 0.5em;
+  margin: 0.8em;
   line-height: 1.1em;
 }
 
@@ -155,6 +155,11 @@ img {
   margin-bottom: 10px;
 }
 
+#header img {
+  margin: 0px;
+  padding: 0px;
+}
+
 #container {
   padding: 0px 10px 10px 10px;
   margin: 0px;
@@ -162,8 +167,9 @@ img {
 
 #content {
   padding: 0px 10px 20px 10px;
+/*  margin-top: 60px;*/
 }
-#fitted-content {
+.fitted-content {
   width: 860px;
 }
 #liquid-content{
@@ -171,16 +177,18 @@ img {
   margin-top: 50px;
 }
 #search-tab {
-  background-image: url(../images/shadow-bk.png) repeat-x fixed top;
-  position:absolute;
-  top:100px;
-  left:420px;
+  background: transparent url(../images/shadow-bk.png) repeat-x fixed top;
+/*  position:absolute;*/
+/*  top:100px;*/
+/*  left:420px;*/
+  margin: -4px 0px 0px 400px;
   border:2px solid #255d71;
   border-top: 1px solid transparent;
   font-size:0.9em;
   padding: 7px 3px 4px 3px;
   text-align:center;
   width:450px;
+
 }
 
 #search-tab form{
@@ -193,11 +201,10 @@ img {
 }
 
 #footer {
-/*  position: relative;*/
-/*  margin-top: -100px; /* negative value of footer height */*/
   height: 100px;
   clear: both;
   text-align: center;
+  width: 845px;
 }
 
 .large-centered-content {
@@ -258,6 +265,7 @@ img {
   float:left;
   padding-left:8px;
   margin-right:8px;
+  margin-top: 50px;
   border-right:1px solid #ddd;
 }
 
@@ -324,11 +332,11 @@ img {
   border-bottom: 1px dotted #888;
 }
 
-#create-project-button{
+/*#create-project-button{
   position: absolute;
   top: 160px;
   left: 730px;
-}
+}*/
   
 .project-icon {
   width:80px; 
@@ -592,15 +600,17 @@ ul#sortable .grippie {
   text-decoration: none;
 }
 
-
 #roadmap {
   text-align: center;
-  margin: 10px 10px 40px 10px;
+  margin: 10px 10px 20px 10px;
 }
 
-.button-big {text-align:center; margin-bottom:60px;}
-.left { float: left;}
+.button-big {text-align:center; margin-bottom:60px; }
+.left { float: left; }
 .right { float:right; }
+.half { width:50%; }
+.text-center { text-align: center; }
+.center{ margin: auto auto; }
 
 /*
 #mockup-intro {margin-left:30px; width:860px;}
