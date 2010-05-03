@@ -125,13 +125,12 @@ describe "A Project" do
   end
   
   it  "should get the right model with get_model" do
-    models = ["a_giraffe", 'giraffe', 'gazelles', 'giraffes']
+    models = ["a_giraffe", 'gazelles', 'giraffes']
     p = Project.new(:name => 'Zoo')
     models.each do |m|
       p.add_model(m, {:name => {:type => String}})
     end
     p.get_model('giraffe').name.should == 'Yogo::Zoo::Giraffe'
-    p.get_model('Giraffes').name.should == 'Yogo::Zoo::Giraffes'
     p.get_model('aGiraffe').name.should == 'Yogo::Zoo::AGiraffe'
   end
 
