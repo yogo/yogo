@@ -28,6 +28,19 @@ body.three-col
     +container
   #header, #footer
     +column(!blueprint_grid_columns)
+  #header
+    border-bottom: 2px solid #367AF8
+    margin: 2.5em 0
+    #logo
+      +column(!blueprint_grid_columns / 4)
+      +append(!blueprint_grid_columns / 4)
+      img
+        margin: 0 0 1em 0
+    #search-tab
+      +column(2 * !blueprint_grid_columns / 4, true)
+      text-align: right
+      vertical-align: middle
+      padding: 10px 0
   #sidebar
     // One third of the grid columns, rounding down. With 24 cols, this is 8.
     !sidebar_columns = floor(!blueprint_grid_columns / 4)
@@ -40,3 +53,5 @@ body.three-col
     +column(!content_columns, true)
     #liquid-content
       overflow: auto
+      border: 1px solid silver
+      padding: 1em

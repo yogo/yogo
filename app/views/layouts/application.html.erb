@@ -24,13 +24,13 @@
   <body class="bp three-col">
     <div id="container">
     <div id='header'>
-      <%= image_tag('header.png') %>
+      <div id="logo"><%= image_tag('header.png') %></div>
+      <%= render(:partial => 'layouts/search') unless @no_search%>
     </div>
     
     
       
       <%= render(:partial => 'layouts/sidebar') if @sidebar %>
-      <%= render(:partial => 'layouts/search') unless @no_search%>
       
       <div id="content">
         <div class='fitted-content' >
