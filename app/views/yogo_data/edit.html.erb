@@ -1,6 +1,6 @@
 <H3><%= @model.name.demodulize.titleize %></H3>
 <br />
-<%- form_for(@item, :url => project_yogo_data_path(@project, @model.name.demodulize, @item.id), 
+<%- form_for(@item, :url => project_yogo_data_path(@project, @model, @item),
 
                     :html => { :enctype => 'multipart/form-data' },
                     :builder => YogoDataFormBuilder) do |f| -%>
@@ -10,13 +10,15 @@
   <tbody>
       <%- @model.usable_properties.each do |p| %>
       <tr>
-      <td><%= f.label(p.display_name, p.display_name.to_s.titleize) %></td>
-      <td><%= f.field_for_param(p) %></td>
+        <td><%= f.label(p.display_name, p.display_name.to_s.titleize) %></td>
+        <td><%= f.field_for_param(p) %></td>
       </tr>
       <%- end %>
+      <tr>
+        <td></td><td><%= f.submit %></td>
+      </tr>
   </tbody>
 </table>
-<br />
-<%= f.submit %>
+
 <%- end -%>
 

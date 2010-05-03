@@ -1,5 +1,6 @@
 <div id="liquid-content">
     <h2><%= @model.name.demodulize.titleize %> (<%= @model.count %>)</h2>
+<p>    <%= link_to("Download CSV", project_yogo_data_index_path(@project, @model, :format => 'csv')) %></p>
 
   <!-- This is an alternative to the table using google visualiztion api (the javascript is now included in the app) -->
   <%# cols = @model.usable_properties.map { |prop| [ Yogo::Types.dm_to_gv(prop.type), Extlib::Inflection.humanize(prop.name.to_s) ] }%>
