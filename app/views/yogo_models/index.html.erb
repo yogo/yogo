@@ -1,3 +1,7 @@
 <%= render(:partial => 'model_editor') %>
-<br>
-<%= link_to("View Data Link...", project_path(@project)) %>
+
+<div class='fitted-content'>
+<div class='right'>
+ <%= link_to("Finish", project_path(@project), :class => 'button-link') %>
+</div>
+</div>

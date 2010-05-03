@@ -1,6 +1,6 @@
 <div id="liquid-content">
     <h2><%= @project.name %></h2>
-    <%= link_to(image_tag('edit_big.png')+"Edit dataset descriptions", "/mockup/edit") %>
+    <%= link_to(image_tag('edit_big.png')+"Edit dataset descriptions", project_yogo_models_path(@project)) %>
     <%- for dataset in @project.models -%>
     <% @item = dataset.new %>
     <%- form_for(@item, 

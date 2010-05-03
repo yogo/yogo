@@ -27,14 +27,16 @@
       <%= render(:partial => 'layouts/search') unless @no_search%>
       
       <div id="content">
-        <div class='fitted-content' >
-          <%- if flash[:notice] -%>
-              <div class='notice'><p><%= flash[:notice] %></p></div>
-          <%- end -%>
-          <%- if flash[:error] -%>
-              <div class='error notice'><p><%= flash[:error] %></p></div>
-          <%- end -%>
-        </div>
+        <%- if !flash.empty? -%>
+          <div class='fitted-content' >
+            <%- if flash[:notice] -%>
+                <div class='notice'><p><%= flash[:notice] %></p></div>
+            <%- end -%>
+            <%- if flash[:error] -%>
+                <div class='error notice'><p><%= flash[:error] %></p></div>
+            <%- end -%>
+          </div>
+        <%- end -%>
         <%= yield %>
         <div id='footnotes_holder'></div>
       </div> <!-- end content -->
