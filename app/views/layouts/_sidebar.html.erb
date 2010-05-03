@@ -1,7 +1,6 @@
 <div id="sidebar">
   <div class='bold'><%= link_to("Yogo Dashboard", root_url) %></div>
   <div><%= @project.name %></div>
-              <li>Export to a spreadsheet</li>
   <div class="nav-items">
     <ul id ="list-models">
       <% @project.models.each do |model| %>

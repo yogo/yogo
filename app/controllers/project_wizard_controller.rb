@@ -112,9 +112,9 @@ class ProjectWizardController < ApplicationController
     end
     respond_to do |format|
       if !errors.empty? || params[:submit] == 'Upload and Continue'
-        format.html { redirect_to(import_csv(@project)) }
-      else
         format.html { render(:action => 'import_csv') }
+      else
+        format.html { redirect_to(project_yogo_models_url(@project)) }
       end
     end
     

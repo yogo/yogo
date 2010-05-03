@@ -1,6 +1,6 @@
 <div id="liquid-content">
     <h2><%= @project.name %></h2>
-    <%= link_to(image_tag('edit_big.png')+"Edit dataset descriptions", "/mockup/edit") %>
+    <%= link_to(image_tag('edit_big.png')+"Edit dataset descriptions", project_yogo_models_path(@project)) %>
     <%- for dataset in @project.models -%>
     <% @item = dataset.new %>
     <%- form_for(@item, 
@@ -39,7 +39,8 @@
                 </tr>
               <%- end -%>
               <tr>
-                <td colspan="3"><%= link_to("See More...", project_yogo_data_index_path(@project, dataset)) %></td>
+                <td colspan="2"><%= link_to("See More", project_yogo_data_index_path(@project, dataset)) %></td>
+                <td colspan="2"><%= link_to("Download CSV", project_yogo_data_index_path(@project, dataset, :format => 'csv')) %></td>
               </tr>
             </tbody>
           </table>
