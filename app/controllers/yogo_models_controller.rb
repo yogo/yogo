@@ -8,6 +8,7 @@
 # 
 class YogoModelsController < ApplicationController
   before_filter :find_parent_items
+  
   ##
   # Provides a list of the models for the current project
   #
@@ -18,7 +19,6 @@ class YogoModelsController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  # 
   def index
     @models = @project.models
     
@@ -28,6 +28,7 @@ class YogoModelsController < ApplicationController
                                       "count" => @models.size } )}
     end
   end
+  
   ##
   # Display a model schema with Human readable datatypes
   #
@@ -41,7 +42,6 @@ class YogoModelsController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  #
   def show
     @model = @project.get_model(params[:id])
     
@@ -55,6 +55,7 @@ class YogoModelsController < ApplicationController
     end
 
   end
+  
   ##
   # Creates a new model object
   #
@@ -65,7 +66,6 @@ class YogoModelsController < ApplicationController
   # @author Yogo Team
   #
   # @api public
-  #
   def new
     @model = Class.new
     
@@ -110,40 +110,6 @@ class YogoModelsController < ApplicationController
       end
     end
     
-  end
-  
-  def create_old
-    class_name = params[:class_name].titleize.gsub(' ', '')
-    cleaned_options = {}
-    errors = {}
-    
-    params[:new_property].each do |prop|
-      name = prop[:name].squish.downcase.gsub(' ', '_')
-      prop_type = Yogo::Types.human_to_dm(prop[:type])
-      prop_pos = prop[:position]
-      
-      next if name.blank?
-      
-      if valid_model_or_column_name?(name) && !prop_type.nil?
-        cleaned_options[name] = { :type => prop_type, :position => prop_pos }
-      else #error
-        errors[name] = " is a malformed name or an invalid type."
-      end
-    end
-    
-    @model = false
-    
-    if errors.empty? and (@model = @project.add_model(class_name, cleaned_options)) != false
-      @model.auto_migrate!
-
-      @model.properties.sort!
-      flash[:notice] = 'The model was sucessfully created.'
-      redirect_to(project_yogo_model_url(@project, @model.name.demodulize))
-    else
-      flash[:notice] = 'There were errors creating your model'
-      flash[:model_errors] = errors
-      redirect_to( new_project_yogo_model_url(@project) )
-    end
   end
 
   # Allows a user to add a field/property to an existing model
@@ -200,60 +166,6 @@ class YogoModelsController < ApplicationController
     end
   end
   
-  def update_old
-    puts params.inspect
-    @model = @project.get_model(params[:id])
-    # This stuff need to be pushed down into the model. In due time.
-    errors = {}
-    cleaned_params = []
-    
-    params[:new_property].each do |prop|
-      next if prop[:name].empty? || prop[:type].empty?
-      name = prop[:name].squish.downcase.gsub(' ', '_')
-      prop_type = Yogo::Types.human_to_dm(prop[:type])
-      prop_pos = prop[:position]
-      
-      next if name.blank?
-      
-      if valid_model_or_column_name?(name) && !prop_type.nil?
-        cleaned_params << [name, prop_type, prop_pos]
-      else #error
-        errors[name] = " is a malformed name or an invalid type."
-      end
-    end unless params[:new_property].nil?
-    
-    params[:property].each_pair do |prop, options|
-      name = prop.squish.downcase.gsub(' ', '_')
-      prop_type = Yogo::Types.human_to_dm(options[:type])
-      prop_pos = options[:position]
-      
-      if valid_model_or_column_name?(name) && !prop_type.nil?
-        cleaned_params << [name, prop_type, prop_pos]
-      else #error
-        errors[name] = " is a malformed name or an invalid type."
-      end
-    end
-
-    # Type Checking
-    if errors.empty?
-      cleaned_params.each do |prop|
-        @model.send(:property, prop[0].to_sym, prop[1], :required => false, :position => prop[2], :separator => '__', :prefix => 'yogo')
-      end
-      
-      @model.auto_upgrade!
-      @model.properties.sort!
-
-      flash[:notice] = "Properties added"
-      
-      redirect_to project_yogo_model_url(@project, @model.name.demodulize)
-
-    else
-      flash[:notice] = "Properties were not added."
-      flash[:model_errors] = errors
-      redirect_to edit_project_yogo_model_url(@project, @model.name.demodulize)
-    end
-
-  end  
   ##
   # Removes a model from the project (including data)
   #
@@ -274,6 +186,7 @@ class YogoModelsController < ApplicationController
     @project.delete_model(model)
     redirect_to project_url(@project)
   end
+  
   ##
   # List attributes for a model
   #
@@ -298,10 +211,13 @@ class YogoModelsController < ApplicationController
   end
   
   private
+  
   ##
-  # converts the yogo model into the format used by the sproutcore
-  # model editor.
+  # converts the yogo model into the format used by the sproutcore model editor
   #
+  # @return [String]
+  #  The model definition in JSON
+  # 
   # @api private
   def model_definition_for(model)
     model_def = {}
@@ -338,6 +254,10 @@ class YogoModelsController < ApplicationController
   ##
   # Updates the yogo model to match the new model definition
   # 
+  # @return [Object] 
+  #   the updated model
+  # 
+  # @api private
   def update_model_with_definition(definition, model)
     definition_name = definition[:name] || raise("model definition must have a 'name' property")
     model_name = model.name.split('::').last.gsub('_', ' ')
@@ -413,6 +333,7 @@ class YogoModelsController < ApplicationController
   def find_parent_items
     @project = Project.get(params[:project_id])
   end
+  
   ##
   # validates model name or column name
   #
