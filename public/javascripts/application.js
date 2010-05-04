@@ -1,27 +1,9 @@
 
 $(document).ready(function(){
-
-  // TODO: Scope into model editor better.
-  $('#add-property').bind('click', function(event){
-    $('#sortable').append("<li class=\"new-property\">" + $('#form-template').html() + "</li>")
-    return false;
-  });
-
-  // TODO: Scope into model editor better.  
-  $('.remove-new-property').live('click', function(event){
-    $(this).parents('li.new-property').hide().remove();
-    return false;
-  });
-  
-    // TODO: Scope into model editor better.
-  $("#sortable").sortable({
-    handle: '.grippie',
-    stop: function(event, ui) {
-      $("#sortable li input:hidden").each(function(index){ this.value = index+1 })
-    }
-  });
   
   $(".date-picker").datepicker();
+  
+  $('#project_model_name').textdropdown();
   
   $('#tabs').each(function(){
     this.style.visibility = "visible";
@@ -159,3 +141,40 @@ function check_navigation_element_state(element){
 	function isLastPage( opts, internalPageNum ) { return ( internalPageNum === opts.totalPages-1 ); }
 	
 })(jQuery);
+
+
+jQuery.fn.textdropdown = function() {
+  with ($(this)) {
+    with (next('ul:first')) {
+      find('li').click(function() {
+        $(this).parent().prev('.textdropdown-outer').find('input:first').attr('value', $(this).html());
+        $(this).parent().hide();
+      });
+      hide();
+    } 
+
+    keypress(function() { 
+      $(this).parent().next('ul:first').hide();
+    });
+
+    change(function() { 
+      $(this).parent().next('ul:first').hide();
+    });
+
+    wrap('<div class="textdropdown-outer" style="width: ' + width() + 'px; height: ' + (height() + 5) + 'px"></div>');
+    var btn = parent().prepend('<div class="textdropdown-btn">&nbsp;V</div>').find('.textdropdown-btn');
+    width(width() - btn.width() - 5);
+    css("border", "0");
+
+    btn.click(function() {
+      var p = parent();
+      with (p.next('ul:first')) {
+        css('position', 'absolute');
+        css('width',    p.width());
+        css('left',     p.position().left);
+        css('top',      p.position().top + p.height() + 1);
+        toggle();
+      }
+    });
+  }
+};

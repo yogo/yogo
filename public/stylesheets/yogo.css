@@ -513,27 +513,6 @@ form .box label {
   /*padding: 10px 10px 10px 10px;*/
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*~~~~~~~~~~~~~~~~~ Model Editor ~~~~~~~~~~~~~~~*/
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-ul#sortable {
-  list-style: none;
-}
-
-ul#sortable li{
-  padding-top: 0.5em;
-  padding-bottom:0.5em;
-  display: block;
-/*  height: 2em;*/
-  clear: both;
-}
-
-ul#sortable .grippie {
-  float: left;
-  padding:4px 0 0 3px;
-  cursor: move;
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~ Unmangled stuff ~~~~~~~~~~~~~~~*/
@@ -568,6 +547,37 @@ ul#sortable .grippie {
 #roadmap {
   text-align: center;
   margin: 10px 10px 20px 10px;
+}
+
+.textdropdown-outer {
+  border: 1px solid #ccc;
+  float: left;
+}
+ 
+.textdropdown-btn {
+  width: 20px;
+  float: right;
+  background: url(dropdown-arrow.gif) no-repeat center;
+  cursor: pointer;
+}
+
+ul.textdropdown {
+  border: 1px solid #ccc;
+  padding: 0px;
+  list-style: none;
+  margin: 0px;
+}
+ 
+ul.textdropdown li {
+  padding: 2px;
+  display: block;
+  list-style: none;
+  margin: 0px;
+}
+ 
+ul.textdropdown li:hover {
+  background-color: #efefef;
+  cursor: pointer;
 }
 
 .button-big {text-align:center; margin-bottom:60px; }
