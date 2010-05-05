@@ -4,9 +4,9 @@
 # License -> see license.txt
 #
 # FILE: database.yml.start
-# 
 #
-development: 
+#
+development:
   adapter: persevere
   host: localhost
   port: 8080
@@ -24,10 +24,3 @@ test: &TEST
 
 cucumber:
   <<: *TEST
-
-#
-# Example Data Repository
-#
-example:
-  adapter: sqlite3
-  database: <%= File.join(RAILS_ROOT, 'db/example/example.sqlite3') %>
