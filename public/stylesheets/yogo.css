@@ -116,8 +116,14 @@ img {
   padding: 5px 10px;
   border:1px solid #aaa;
 }
+.notice p, .error p{
+  margin: .1em;
+  line-height: 1em;
+}
+
 .notice{background-color:#DFD;}
 .error{ background-color:#FDD;}
+
 
 /*Used to distinguish alternating rows in lists, wherever they occur*/
 .alternate-rows0 {
