@@ -36,7 +36,7 @@ namespace :persvr do
     vendor_dir = RAILS_ROOT/:vendor
     # Grab persevere from http://persevere-framework.googlecode.com/files/persevere1.0.1.rc2.zip
     Net::HTTP.start("persevere-framework.googlecode.com") do |http|
-      resp = http.get("/files/persevere1.0.2rc1.zip")
+      resp = http.get("/files/persevere1.0.1.rc2.zip")
       open(persvr_zip, "wb") { |file| file.write(resp.body) }
     end
     
