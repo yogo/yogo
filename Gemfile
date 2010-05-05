@@ -18,9 +18,6 @@ gem "rails_datamapper",               :require_as => 'dm-core' # We do this becu
 gem "dm-persevere-adapter", "0.52.1", :require_as => 'dm-core'
 gem "mime-types",                     :require_as => 'mime/types'
 
-# No longer needed
-#gem "do_sqlite3",           "0.10.1", :require_as => 'dm-core'
-
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"
 gem "fastercsv"
