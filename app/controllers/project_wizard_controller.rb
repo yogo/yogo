@@ -94,13 +94,14 @@ class ProjectWizardController < ApplicationController
     redirect_to(import_csv_url(@project)) and return unless request.post?
 
     datafile = params[:project][:datafile]
+    class_name = params[:model_name]
     
     if !['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
           'application/octet-stream','application/csv'].include?(datafile.content_type)
       flash[:error] = "File type #{datafile.content_type} not allowed"
       #redirect_to project_url(@project)
     else
-      class_name = File.basename(datafile.original_filename, ".csv").singularize.camelcase
+      # class_name = File.basename(datafile.original_filename, ".csv").singularize.camelcase
       errors = @project.process_csv(datafile.path, class_name)
       
       if errors.empty?

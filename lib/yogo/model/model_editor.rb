@@ -33,10 +33,34 @@ module Yogo
     #   }
     module ModelEditor
       
+      ##
+      # Returns an approporate guid for the model
+      # 
+      # @example
+      #   model.guid
+      # 
+      # @return [String]
+      #  The guid for the model
+      # 
+      # @author Ryan Heimbuch
+      # 
+      # @api public
       def guid
         name.split('::').last
       end
       
+      ##
+      # Returns a model JSON defination for sproutcore
+      # 
+      # @example
+      #   model.to_model_definition
+      # 
+      # @return [Hash]
+      #   The model definition
+      # 
+      # @author Ryan Heimbuch
+      #
+      # @api public
       def to_model_definition
         model = self # This should be the actual model class
         
@@ -72,6 +96,21 @@ module Yogo
         return model_def
       end
       
+      ##
+      # Updates the model definition from a hash
+      # 
+      # @example
+      #   model.update_model_definition(definition)
+      # 
+      # @param [Hash] definition
+      #   The updated model definition as a hash
+      #   
+      # @return [Model]
+      #   Not useful
+      # 
+      # @author Ryan Heimbuch
+      #
+      # @api public
       def update_model_definition(definition)
         model = self # this should be the actual model class
         
