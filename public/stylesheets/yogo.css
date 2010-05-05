@@ -557,7 +557,7 @@ form .box label {
 .textdropdown-btn {
   width: 20px;
   float: right;
-  background: url(dropdown-arrow.gif) no-repeat center;
+  background: url(../images/arrow_down_16.png) no-repeat center;
   cursor: pointer;
 }
 

@@ -162,7 +162,7 @@ jQuery.fn.textdropdown = function() {
     });
 
     wrap('<div class="textdropdown-outer" style="width: ' + width() + 'px; height: ' + (height() + 5) + 'px"></div>');
-    var btn = parent().prepend('<div class="textdropdown-btn">&nbsp;V</div>').find('.textdropdown-btn');
+    var btn = parent().prepend('<div class="textdropdown-btn">&nbsp;</div>').find('.textdropdown-btn');
     width(width() - btn.width() - 5);
     css("border", "0");
 
