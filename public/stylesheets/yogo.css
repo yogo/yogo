@@ -580,7 +580,7 @@ ul.textdropdown li:hover {
   cursor: pointer;
 }
 
-.button-big {text-align:center; margin-bottom:60px; }
+.button-big {text-align:center;}
 .left { float: left; }
 .right { float:right; }
 .half { width:50%; }
