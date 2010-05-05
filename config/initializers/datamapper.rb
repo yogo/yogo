@@ -5,7 +5,6 @@
 #
 # FILE: datamapper.rb
 # 
-#
 
 # Require custom extensions to datamapper.
 require 'datamapper/paginate'
@@ -26,18 +25,16 @@ config = Rails.configuration.database_configuration
 DataMapper.setup(:default, config[Rails.env])
 
 # Alias :default to :yogo so things work well
-#DataMapper::Repository.adapters[:yogo] = DataMapper::repository(:default)
 DataMapper.setup(:yogo, config[Rails.env])
-
-# Setup the persevere repository for cool fun research!
-#DataMapper.setup(:example, config["example"])
 
 # Map the datamapper logging to rails logging
 DataMapper.logger             = Rails.logger
-DataObjects::Postgres.logger  = Rails.logger if DataObjects.const_defined?(:Postgres)
-DataObjects::Sqlserver.logger = Rails.logger if DataObjects.const_defined?(:Sqlserver)
-DataObjects::Mysql.logger     = Rails.logger if DataObjects.const_defined?(:Mysql)
-DataObjects::Sqlite.logger    = Rails.logger if DataObjects.const_defined?(:Sqlite)
+if Object.const_defined?(:DataObjects)
+  DataObjects::Postgres.logger  = Rails.logger if DataObjects.const_defined?(:Postgres)
+  DataObjects::Sqlserver.logger = Rails.logger if DataObjects.const_defined?(:Sqlserver)
+  DataObjects::Mysql.logger     = Rails.logger if DataObjects.const_defined?(:Mysql)
+  DataObjects::Sqlite.logger    = Rails.logger if DataObjects.const_defined?(:Sqlite)
+end
 
 # Load the project model and migrate it if needed.
 proj_model_file = File.join(RAILS_ROOT, "app", "models", "project.rb")
