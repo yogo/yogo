@@ -30,7 +30,7 @@ DataMapper.setup(:default, config[Rails.env])
 DataMapper.setup(:yogo, config[Rails.env])
 
 # Setup the persevere repository for cool fun research!
-DataMapper.setup(:example, config["example"])
+#DataMapper.setup(:example, config["example"])
 
 # Map the datamapper logging to rails logging
 DataMapper.logger             = Rails.logger
