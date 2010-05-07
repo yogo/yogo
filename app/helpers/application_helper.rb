@@ -159,7 +159,7 @@ module ApplicationHelper
     elsif property.type == DataMapper::Types::YogoImage
       file = item[property.name]
       img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
-      link_to(img, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))      
+      link_to(file, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'), :class => 'fancybox')      
     else 
       item[property.name]
     end

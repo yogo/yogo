@@ -1,6 +1,11 @@
 <h1 class='section-title'>Yogo Dashboard</h1>
 <div class="fitted-content" id='create-project-button'>
-  <%= link_to(image_tag("create-project-small.jpg"), start_wizard_path(), :class => 'right') %>
+  <div class='right' style='width: 170px;'>
+    <%= link_to("Create a Project", start_wizard_path, :class => 'button-link') %>
+      <br />
+      <%= link_to("Load Example Project", loadexample_projects_path, 
+                    :class => 'button-link', :method => :post) %>
+  </div>
 </div>
 <div class='fitted-content'>
   <%- for project in @projects -%>

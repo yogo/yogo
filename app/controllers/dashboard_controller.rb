@@ -13,6 +13,7 @@ class DashboardController < ApplicationController
   #   
   def index
     @no_search = true
+    @no_menu   = true 
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
 
     respond_to do |format|
