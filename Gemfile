@@ -22,6 +22,8 @@ gem "mime-types",                     :require_as => 'mime/types'
 # gem "authlogic",            "2.1.3"
 gem "fastercsv"
 gem "carrierwave"
+gem "compass"
+gem "haml"
 
 # Build/CI gems that are just good for us to use.
 # We :require_as => 'dm-core' because :require_as => nil doesn't work.
