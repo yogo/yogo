@@ -37,7 +37,8 @@ if Object.const_defined?(:DataObjects)
 end
 
 # Load the project model and migrate it if needed.
-proj_model_file = File.join(RAILS_ROOT, "app", "models", "project.rb")
-require proj_model_file
+# proj_model_file = File.join(RAILS_ROOT, "app", "models", "project.rb")
+# require proj_model_file
 
 Project.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name)
+SchemaBackup.auto_migrate! unless DataMapper.repository(:default).storage_exists?(SchemaBackup.storage_name)

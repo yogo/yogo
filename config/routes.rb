@@ -23,6 +23,7 @@ ActionController::Routing::Routes.draw do |map|
                           
     # /projects/:project_id/yogo_models/:model_name
     project.resources :yogo_models,
+                      :collection => { :refresh_attributes => :post },
                       :member => { :list_attributes => :get }
     
   end
