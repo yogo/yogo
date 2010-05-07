@@ -5,7 +5,13 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <title>Yogo Data Management Toolkit: <%= controller.action_name %></title>
 
-    <%= stylesheet_link_tag 'jquery-ui-1.8.1.custom', 'jquery.fancybox-1.3.1', 'yogo' %>
+    <!-- <%= stylesheet_link_tag 'jquery-ui-1.8rc3.custom', 'yogo' %> -->
+    <%= stylesheet_link_tag 'compiled/screen.css' %>
+    <%= stylesheet_link_tag 'compiled/print.css' %>
+    <%= stylesheet_link_tag 'jquery-ui-1.8.1.custom', 'jquery.fancybox-1.3.1' %>
+    <!--[if IE]>
+    <%= stylesheet_link_tag 'compiled/ie.css' %>
+    <![endif]-->
     <%= javascript_include_tag 'jquery-1.4.2.min.js', 
                                'jquery-ui-1.8.1.custom.min.js', 
                                'jquery.fancybox-1.3.1.pack.js',
@@ -17,9 +23,11 @@
    <link rel="shortcut icon" href="<%= image_path("favicon.png") %>">
   </head>
   
-  <body>
+  <body class="bp three-col">
+    <div id="container">
     <div id='header'>
-      <%= image_tag('header.png') %>
+      <div id="logo"><%= image_tag('header.png') %></div>
+      <%= render(:partial => 'layouts/search') unless @no_search%>
     </div>
     <div id='menu'>
       <%= render(:partial => 'layouts/menu_links') unless @no_menu %>
@@ -40,13 +48,13 @@
         <%= yield %>
         <div id='footnotes_holder'></div>
       </div> <!-- end content -->
-      <br clear='all' style='clear: both;'>
     </div> <!-- end container -->
-    
+    <br clear='all' style='clear: both;'>    
     <div id="footer">
       <div id='yogo-brand'>
         <%= link_to(image_tag("yogo.png", :alt => "The Yogo Data Management Toolkit Logo"), 'http://yogo.msu.montana.edu/') %>
       </div>
     </div>
+    </div> <!-- end container -->
   </body>
 </html>
