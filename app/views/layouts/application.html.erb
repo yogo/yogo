@@ -23,17 +23,16 @@
    <link rel="shortcut icon" href="<%= image_path("favicon.png") %>">
   </head>
   
-  <body class="bp three-col">
+  <body class="bp showgrid">
     <div id="container">
-    <div id='header'>
-      <div id="logo"><%= image_tag('header.png') %></div>
-      <%= render(:partial => 'layouts/search') unless @no_search%>
-    </div>
-    <div id='menu'>
-      <%= render(:partial => 'layouts/menu_links') unless @no_menu %>
-      <%= render(:partial => 'layouts/search') unless @no_search %>
-    </div>
-    <div id="container"  class="clearfix">
+      <div id='header'>
+        <div id="logo"><%= image_tag('header.png') %></div>
+        <%= render(:partial => 'layouts/search') unless @no_search%>
+      </div>
+      <div id='menu'>
+        <%= render(:partial => 'layouts/menu_links') unless @no_menu %>
+        <%= render(:partial => 'layouts/search') unless @no_search %>
+      </div>
       <div id="content">
         <%- if !flash.empty? -%>
           <div class='fitted-content' >
@@ -48,7 +47,7 @@
         <%= yield %>
         <div id='footnotes_holder'></div>
       </div> <!-- end content -->
-    </div> <!-- end container -->
+
     <br clear='all' style='clear: both;'>    
     <div id="footer">
       <div id='yogo-brand'>
