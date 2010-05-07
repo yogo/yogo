@@ -21,6 +21,7 @@ class YogoModelsController < ApplicationController
   # @api public
   def index
     @models = @project.models
+    @no_search = true
     
     respond_to do |format|
       format.html

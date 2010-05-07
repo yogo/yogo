@@ -21,12 +21,11 @@
     <div id='header'>
       <%= image_tag('header.png') %>
     </div>
-    
+    <div id='menu'>
+      <%= render(:partial => 'layouts/menu_links') unless @no_menu %>
+      <%= render(:partial => 'layouts/search') unless @no_search %>
+    </div>
     <div id="container"  class="clearfix">
-      
-      <%= render(:partial => 'layouts/sidebar') if @sidebar %>
-      <%= render(:partial => 'layouts/search') unless @no_search%>
-      
       <div id="content">
         <%- if !flash.empty? -%>
           <div class='fitted-content' >
@@ -41,7 +40,7 @@
         <%= yield %>
         <div id='footnotes_holder'></div>
       </div> <!-- end content -->
-      <br clear='all'>
+      <br clear='all' style='clear: both;'>
     </div> <!-- end container -->
     
     <div id="footer">

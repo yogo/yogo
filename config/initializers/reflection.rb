@@ -17,5 +17,5 @@ Yogo::Setting
 # Reflect Yogo data into memory
 models = DataMapper::Reflection.reflect(:default)
 
-models.each{|m| m.send(:include,Yogo::Model) }
-models.each{|m| m.properties.sort! }
+models.each{|m| m[1].send(:include,Yogo::Model) }
+models.each{|m| m[1].properties.sort! }

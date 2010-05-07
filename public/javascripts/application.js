@@ -18,6 +18,18 @@ $(document).ready(function(){
   $('h2.trigger').click(function(){
   $(this).toggleClass('active').next('.toggle-container').slideToggle('slow');
   });
+  
+  //Initialization for the lightbox-style image popups
+  $("a.fancybox").fancybox();
+  
+  $("a[rel=gallery]").fancybox({
+    'transitionIn'  : 'none',
+    'transitionOut' : 'none',
+    'titlePosition' : 'over',
+    'titleFormat'   : function(title, currentArray, currentIndex, currentOpts) {
+      return '<span id="fancybox-title-over">Image ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
+    }
+  });
 
 });
 
