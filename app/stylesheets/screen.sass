@@ -12,48 +12,142 @@
 
 //Recommended Blueprint configuration with scoping and semantic layout:
 +blueprint-typography("body.bp")
-+blueprint-scaffolding("body.bp")
 body.bp
-  +blueprint-utilities
   +blueprint-debug
   +blueprint-interaction
   // Remove the scaffolding when you're ready to start doing visual design.
   // Or leave it in if you're happy with how blueprint looks out-of-the-box
+
 form.bp
   +blueprint-form
 
+
 // Page layout can be done using mixins applied to your semantic classes and IDs:
 body.bp
+  a 
+    text-decoration: none
+    &:hover
+      text-decoration: underline
+
+  // Header
+  #header
+    height:65px
+    margin-bottom: 10px
+    width: 100%
+    #menu
+      background: #EEE url(../images/shadow-bk.png) repeat-x fixed top
+      margin-top: -10px
+      font-size:0.9em
+      width: 880px
+      #menu-links
+        float: left
+        padding: 10px 3px 4px 3px
+        margin-left: 10px
+      #search-tab
+        float: right
+        padding: 7px 3px 4px 3px
+        width: 360px
+        .button-link
+          font-size: .9em
+          padding: 3px 2px 2px 2px
+
   #container
     +container
-  #header, #footer
+    // To left align the grid
+    margin: 0px
+    #flash
+      +prepend(4)
+      +column(14)
+      +append(4)
+      +last
+      text-align: center
+      height: 1em
+      margin-bottom: 1em
+      .error, .notice
+        margin: 0px
+        padding: 0px
+        
+    .action-links
+      margin-top: -1em
+
+  #footer
     +column(!blueprint_grid_columns)
-  #header
-    height:93px
-    background-color: #666
-    margin-bottom: 10px
-    margin-top: -40px
-    #logo
-      +column(!blueprint_grid_columns / 4)
-      +append(!blueprint_grid_columns / 4)
-      img
-        margin: 0 0 1em 0
-    #search-tab
-      +column(2 * !blueprint_grid_columns / 4, true)
-      text-align: right
-      vertical-align: middle
-      padding: 10px 0
+    text-align: center
+
   #sidebar
-    // One third of the grid columns, rounding down. With 24 cols, this is 8.
     !sidebar_columns = floor(!blueprint_grid_columns / 4)
     +column(!sidebar_columns)
+
   #content
-    // Two thirds of the grid columns, rounding up.
-    // With 24 cols, this is 16.
-    !content_columns = ceil(3 * !blueprint_grid_columns / 4)
-    // true means it's the last column in the row
-    +column(!content_columns, true)
-    #liquid-content
-      overflow: auto
+    margin-top: 10px
+    +column(!blueprint_grid_columns)
+    h1#content-title
+      +column(7)
+      margin-bottom: -1px
+      padding-bottom: 5px
       border: 1px solid silver
-      padding: 1em
+    #content-actions
+      +column(7)
+      +prepend(8)
+      +last
+      line-height: 3.1em
+    #content-block
+      +column(!blueprint_grid_columns - 2)
+      border: 1px solid silver
+    // Yogo Dashboard
+    .project-block
+      .project-icon
+        +column(2)
+      .project-text
+        +column(9)
+      .project-datasets
+        +column(11)
+        +last
+    // centered content containers
+    .small-centered
+      +prepend(4)
+      +column(14)
+      +append(4)
+      +last
+    .medium-centered
+      +prepend(3)
+      +column(16)
+      +append(3)
+      +last
+      .left-column
+        +column(8)
+        +border(#000)
+      .right-column
+        +column(8)
+        +last
+    .large-centered
+      +prepend(2)
+      +column(18)
+      +append(2)
+      +last
+
+.text-center
+  text-align: center
+  
+.boxed
+  
+.button-links 
+  overflow: auto
+  margin: 0px auto
+  width: 505px
+  a
+    width: 230px
+    margin: 5px
+    float: left
+    text-align: center
+    display: block
+
+.button-link 
+  border: 1px solid #666
+  padding: 5px
+  background-color: #F2F2F2
+  color: #703824
+  line-height: 2em
+  &:hover
+    background-color: #E2E2E2
+    text-decoration: none
