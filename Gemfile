@@ -19,7 +19,7 @@ gem "do_sqlite3",                     :require => nil
 gem "rails_datamapper",               :require => nil
 
 # Extra supporting gems
-# gem "authlogic",            "2.1.3"
+gem "authlogic"
 gem "mime-types",                     :require => 'mime/types'
 gem "fastercsv"                       # unless RUBY 1.9
 gem "carrierwave"
