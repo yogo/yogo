@@ -42,3 +42,5 @@ end
 
 Project.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name)
 SchemaBackup.auto_migrate! unless DataMapper.repository(:default).storage_exists?(SchemaBackup.storage_name)
+User.auto_migrate! unless DataMapper.repository(:default).storage_exists?(User.storage_name)
+Yogo::Setting

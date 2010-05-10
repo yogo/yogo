@@ -8,7 +8,8 @@
 # Likewise, all the methods added will be available for all controllers.
 #
 class ApplicationController < ActionController::Base
-
+  include SentientController
+  include AuthenticatedSystem
   
   # Check for local connections before anything else
   before_filter :check_local_only 
