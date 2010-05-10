@@ -14,7 +14,7 @@ module Yogo
   class Setting
     include DataMapper::Resource  
 
-    storage_names[:default] = 'yogo__settings'
+    # storage_names[:default] = 'yogo__settings'
     # storage_names[:yogo_settings_cache] = 'yogo_settings'
 
     # property :id,    Serial

@@ -126,7 +126,7 @@ describe "A Project" do
   
   it  "should get the right model with get_model" do
     models = ["a_giraffe", 'gazelles', 'giraffes']
-    p = Project.new(:name => 'Zoo')
+    p = Project.create(:name => 'Zoo')
     models.each do |m|
       p.add_model(m, {:name => {:type => String}})
     end
@@ -157,7 +157,7 @@ describe "A Project" do
     end
 
     it "should make the newly added model available via .models" do
-      project = Project.create(:name => "Test Project 1")
+      project = Project.create(:name => "Test Project 8")
       property_hash = {
         "name" => {:type => String},
         "id"   => {:type => DataMapper::Types::Serial}

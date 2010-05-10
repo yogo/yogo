@@ -5,8 +5,9 @@ source      "http://rubygems.org"
 gem "rails",                "2.3.5", :require => nil
 gem "rake",                          :require => nil
 gem "dm-core",              "0.10.2"
-gem "dm-reflection",        "0.10.2",:git => "git://github.com/yogo/dm-reflection.git" # :path => "vendor/gems/dm-reflection-0.0.1"
-gem "dm-timestamps"  
+
+gem "dm-reflection",        "0.10.2", :git => "git://github.com/yogo/dm-reflection.git" # :path => "vendor/gems/dm-reflection-0.0.1"
+gem "dm-timestamps" 
 gem "dm-validations"
 gem "dm-is-nested_set"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
@@ -21,10 +22,10 @@ gem "rails_datamapper",               :require => nil
 gem "mime-types",                     :require => 'mime/types'
 gem "fastercsv"
 gem "carrierwave"
-gem "json",      "~>1.2.0",           :require => nil
+gem "json",           "~>1.2.0",      :require => nil
 
-gem 'ruby-debug',                     :group => :development
-# gem "rails-footnotes",                :group => :development
+gem 'ruby-debug',                  :group => :development
+gem "rails-footnotes",             :group => :development
 
 group :test do
   gem 'ruby-debug',                :require => nil
@@ -53,6 +54,7 @@ group :test do
   gem "googlecharts",              :require => nil
   gem "metric_fu",                 :require => nil
 end
+
 
 group :cucumber do
   gem 'rspec',        '~>1.3.0',   :require => nil

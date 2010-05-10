@@ -7,6 +7,10 @@
   <%# gvdata = @data.map { |item| @model.usable_properties.map { |p| item[p.name]  } } %>
   <%# visualization("test_table", "Table", {:data => gvdata, :columns => cols }) { } %>
 
+<div>
+I'm gunna be a form.  
+</div>
+
    <% @item = @model.new %>
   <%- form_for(@item, 
           :url => project_yogo_data_index_path(@project, @model), 

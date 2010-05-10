@@ -81,6 +81,7 @@ describe 'Yogo CSV Module' do
     
     it "should load data into a model" do
       result = CsvExampleModel.load_csv_data(@csv_data)
+      result.should be_empty
       CsvExampleModel.count.should == 3
     end
     
@@ -91,7 +92,9 @@ describe 'Yogo CSV Module' do
     end
     
     it "should ignore blank lines in data lines four and up" do
-      CsvExampleModel.load_csv_data(@with_blank_lines)
+      result = CsvExampleModel.load_csv_data(@with_blank_lines)
+      result.should be_empty
+      # debugger if CsvExampleModel.count == 0
       CsvExampleModel.count.should eql(3)
     end
     
@@ -127,12 +130,13 @@ describe 'Yogo CSV Module' do
       # debugger
       errors = CsvExampleModel.load_csv_data(@bad_data)
       errors.should_not be_empty
-      
+
       CsvExampleModel.count.should eql(0)
     end
     
     it "should load 10 lines" do
-      CsvExampleModel.load_csv_data(@ten_lines)
+      result = CsvExampleModel.load_csv_data(@ten_lines)
+      result.should be_empty
       CsvExampleModel.count.should eql(10)
     end
     
