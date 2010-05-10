@@ -7,6 +7,7 @@ require File.dirname(__FILE__) + '/yogo/authenticated_system'
 require File.dirname(__FILE__) + '/yogo/authorization_system'
 require File.dirname(__FILE__) + '/yogo/controller_helpers'
 require File.dirname(__FILE__) + '/yogo/authlogic_dm/compatability'
+require File.dirname(__FILE__) + '/yogo/model_authorization_system'
 
 # TODO: Play with these load paths for gem usage.
 # %w{ models controllers }.each do |dir|

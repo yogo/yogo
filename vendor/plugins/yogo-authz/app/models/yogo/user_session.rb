@@ -15,8 +15,8 @@ class Yogo::UserSession < Authlogic::Session::Base
   find_by_login_method :find_by_login
 
 
-  if Yogo::Setting[:allow_api_key] == true
-    params_key Yogo::Setting[:api_key_name]
+  if Yogo::Settings[:allow_api_key] == true
+    params_key Yogo::Settings[:api_key_name]
   end
 
   ## Should be commented out for right now.

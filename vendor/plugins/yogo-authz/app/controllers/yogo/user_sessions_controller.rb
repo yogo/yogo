@@ -5,10 +5,7 @@
 # The UserSessions Controller is used for logging people in and out of the system.
 class Yogo::UserSessionsController < ApplicationController
   unloadable
-  
-  # before_filter :require_no_user, :only => [:new, :create]
-  # before_filter :require_user, :only => :destroy
-  
+
   require_user    :for => :destroy
   require_no_user :for => [:new, :create]
   # authorize_group :default

@@ -1,0 +1,4 @@
+<% form_for(@group, :url => send("#{@parent.class.name.underscore}_groups_path")) do |f| %>
+  <%= f.text_field(:name) %>
+  <%= f.submit %>
+<%- end -%>

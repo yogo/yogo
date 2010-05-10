@@ -1,0 +1,14 @@
+
+Groups for <%= @parent.class.name %> <%= @parent.name || @parent.id %>
+Groups:
+
+<%- unless @groups.blank? -%>
+<ul>
+  <%- for group in @groups -%>
+    <li><%= group.name %></li>
+  <%- end -%>
+</ul>
+<%- end -%>
+
+<%= link_to("Create a new Group", send("#{@parent.class.name.underscore}_groups_path(#{@parent.id})")) %>
+

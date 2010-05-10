@@ -6,13 +6,12 @@
 # end
 
 require "rubygems"
-require "active_record"
 require 'dm-core'
 require 'dm-timestamps'
 require 'dm-validations'
 require 'dm-is-nested_set'
 require 'authlogic'
-require File.dirname(__FILE__) + '/../lib/yogo_'
+require File.dirname(__FILE__) + '/../lib/yogo'
 require 'factory_girl'
 
 DataMapper.setup(:default, 'sqlite3::memory:')
