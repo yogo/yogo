@@ -90,6 +90,8 @@ class Project
   # @api public
   def process_csv(datafile, model_name)
     
+    model_name = model_name.gsub(/\s/,'_').classify
+    
     # Look to see if there is already one of these models.
     model = get_model(model_name)
 
