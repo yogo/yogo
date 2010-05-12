@@ -1,43 +1,61 @@
 // This import applies a global reset to any page that imports this stylesheet.
-@import blueprint/reset.sass
+@import "blueprint/reset"
+
 // To configure blueprint, edit the partials/base.sass file.
-@import partials/base.sass
+@import "partials/base.sass"
+
 // Import all the default blueprint modules so that we can access their mixins.
-@import blueprint
+@import "blueprint"
+
 // Import the non-default scaffolding module.
-@import blueprint/modules/scaffolding.sass
+@import "blueprint/modules/scaffolding"
 
-// To generate css equivalent to the blueprint css but with your configuration applied, uncomment:
-// +blueprint
+// Border Mixins
+=borders
+  border: 1px solid #305D6E
+  margin: -1px
 
-//Recommended Blueprint configuration with scoping and semantic layout:
-+blueprint-typography("body.bp")
+=border-top
+  border-top: 1px solid #305D6E
+  margin-top: -1px
+
+=border-right
+  border-right: 1px solid #305D6E
+  margin-right: -1px
+
+=border-bottom
+  border-bottom: 1px solid #305D6E
+  margin-bottom: -1px
+
+=border-left
+  border-left: 1px solid #305D6E
+  margin-left: -1px
+
 body.bp
   +blueprint-debug
   +blueprint-interaction
-  // Remove the scaffolding when you're ready to start doing visual design.
-  // Or leave it in if you're happy with how blueprint looks out-of-the-box
+  +blueprint-typography(true)
 
 form.bp
   +blueprint-form
 
-
 // Page layout can be done using mixins applied to your semantic classes and IDs:
 body.bp
-  a 
+  // Links
+  a
     text-decoration: none
     &:hover
       text-decoration: underline
 
   // Header
   #header
-    height:65px
+    height: 65px
     margin-bottom: 10px
     width: 100%
     #menu
-      background: #EEE url(../images/shadow-bk.png) repeat-x fixed top
+      background: #eeeeee url(image_url("shadow-bk.png")) repeat-x fixed top
       margin-top: -10px
-      font-size:0.9em
+      font-size: 0.9em
       width: 880px
       #menu-links
         float: left
@@ -48,9 +66,8 @@ body.bp
         padding: 7px 3px 4px 3px
         width: 360px
         .button-link
-          font-size: .9em
+          font-size: 0.9em
           padding: 3px 2px 2px 2px
-
   #container
     +container
     // To left align the grid
@@ -64,41 +81,45 @@ body.bp
       height: 1em
       margin-bottom: 1em
       .error, .notice
+        padding: 0
         p
-          margin: 0px
-          padding: 0px
-        
+          margin: 0
+          padding: 0
     .action-links
       margin-top: -1em
-
   #footer
-    +column(!blueprint_grid_columns)
+    +column($blueprint_grid_columns)
     text-align: center
-
   #sidebar
-    !sidebar_columns = floor(!blueprint_grid_columns / 4)
-    +column(!sidebar_columns)
-
+    $sidebar_columns: floor($blueprint_grid_columns / 4)
+    +column($sidebar_columns)
   #content
     margin-top: 10px
-    +column(!blueprint_grid_columns)
+    +column($blueprint_grid_columns)
     h1#content-title
       +column(7)
+      +borders
       margin-bottom: -1px
-      padding-bottom: 5px
-      border: 1px solid silver
+      margin-left: 0px
+      padding: 5px 0
+      margin-top: 0px
+      text-align: center
     #content-actions
       +column(7)
       +prepend(8)
       +last
       line-height: 3.1em
     #content-block
-      +column(!blueprint_grid_columns - 2)
-      border: 1px solid silver
+      +column($blueprint_grid_columns - 2)
     // Yogo Dashboard
     .project-block
+      +column(22)
+      +last
+      +borders
+      margin: 0
       .project-icon
         +column(2)
+        padding-top: 1em
       .project-text
         +column(9)
       .project-datasets
@@ -117,7 +138,7 @@ body.bp
       +last
       .left-column
         +column(8)
-        +border(#000)
+        +border(black)
       .right-column
         +column(8)
         +last
@@ -127,12 +148,14 @@ body.bp
       +append(2)
       +last
 
+//General Styles
 .text-center
   text-align: center
-  
-.boxed
-  
-.button-links 
+
+img
+  border: 0px
+
+.button-links
   overflow: auto
   margin: 0px auto
   width: 505px
@@ -143,12 +166,12 @@ body.bp
     text-align: center
     display: block
 
-.button-link 
-  border: 1px solid #666
+.button-link
+  border: 1px solid #666666
   padding: 5px
-  background-color: #F2F2F2
+  background-color: #f2f2f2
   color: #703824
   line-height: 2em
   &:hover
-    background-color: #E2E2E2
+    background-color: #e2e2e2
     text-decoration: none
