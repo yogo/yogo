@@ -80,6 +80,7 @@ class ProjectsController < ApplicationController
   # @api public
   def show
     @project = Project.get(params[:id])
+    # raise exception if project isn't found?
     @models = @project.models
     @sidebar = true
     

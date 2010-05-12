@@ -39,8 +39,10 @@ end
 # Load the project model and migrate it if needed.
 # proj_model_file = File.join(RAILS_ROOT, "app", "models", "project.rb")
 # require proj_model_file
-
-Project.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name)
-SchemaBackup.auto_migrate! unless DataMapper.repository(:default).storage_exists?(SchemaBackup.storage_name)
-User.auto_migrate! unless DataMapper.repository(:default).storage_exists?(User.storage_name)
-Yogo::Setting
+Project
+SchemaBackup
+User
+DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
+                                DataMapper.repository(:default).storage_exists?(SchemaBackup.storage_name) &&
+                                DataMapper.repository(:default).storage_exists?(User.storage_name)
+                                

@@ -27,6 +27,7 @@ class User
   property :last_request_at,    DateTime
   property :last_login_at,      DateTime
   property :current_login_at,   DateTime
+  
   # Long enough for an ipv6 address.
   property :last_login_ip,      String, :length => 36
   property :current_login_ip,   String, :length => 36
@@ -36,6 +37,8 @@ class User
 
   property :updated_at, DateTime
   property :updated_on, Date
+
+  has n, :projects, :through => Resource
 
   acts_as_authentic do |config| 
     config.instance_eval do
@@ -76,6 +79,21 @@ class User
   # @api public
   def to_param
     self.id.to_s
+  end
+  
+  ##
+  # Returns the user first and last name in one string
+  # 
+  # @example
+  #   <%= current_user.name %>
+  # 
+  # @returns [String]
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def name
+    "#{first_name} #{last_name}"
   end
   
 end

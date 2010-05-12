@@ -7,12 +7,19 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 #
+# 
+
 class ApplicationController < ActionController::Base
-  include SentientController
   include AuthenticatedSystem
+  include AuthorizationSystem
   
   # Check for local connections before anything else
-  before_filter :check_local_only 
+  before_filter :check_local_only
+  
+  # Set the current user for the models to use.
+  before_filter do |c|
+    User.current = c.send(:current_user)
+  end
 
   # include all helpers, all the time  
   helper :all 
@@ -26,6 +33,8 @@ class ApplicationController < ActionController::Base
 
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
+  
+  rescue_from AuthorizationError, :with => :authorization_denied
   
   protected
 
@@ -56,6 +65,7 @@ class ApplicationController < ActionController::Base
     
   private
   
+  ##
   # Method to see if incoming connections are local (and allowed) 
   # 
   # @example If the connection is local, render the view.
@@ -75,6 +85,7 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  ##
   # Show the sidebar in the layout (this is usually called by a before-filter)
   # 
   # @example
@@ -85,6 +96,10 @@ class ApplicationController < ActionController::Base
   # @api private
   def show_sidebar
     @sidebar = true
+  end
+  
+  def method_name
+    
   end
   
 end

@@ -2,11 +2,15 @@
 class AuthorizationError < StandardError
 end
 
-class AuthorizationMissingPermissions < AuthorizationError
-end
+# class AuthorizationMissingPermissions < AuthorizationError
+# end
+# 
+# class AuthorizationExpressionInvalid < AuthorizationError
+# end
+# 
+# class UserMethodOnAnonymousUser < StandardError
+# end
+# 
 
-class AuthorizationExpressionInvalid < AuthorizationError
-end
-
-class UserMethodOnAnonymousUser < StandardError
+class AuthenticationError < StandardError
 end

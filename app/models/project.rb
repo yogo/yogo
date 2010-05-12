@@ -16,10 +16,13 @@ class Project
   property :id, Serial
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
+  property :public, Boolean, :required => true, :default => true
   
   validates_is_unique   :name
   
   before :destroy, :delete_models!
+  
+  has n, :users, :through => Resource
   
   # The number of items to be displayed (by default) per page
   # 
@@ -28,6 +31,21 @@ class Project
   # @api public
   def self.per_page
     15
+  end
+  
+  ##
+  # Returns all projects that have been marked public
+  # 
+  # @example
+  #   Project.public
+  # 
+  # @return [DataMapper::Collection]
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def self.public
+    all(:public => true)
   end
   
   ##
@@ -47,6 +65,7 @@ class Project
     Extlib::Inflection.classify(path)
   end
   
+  ##
   # Used to get the current project path name
   #
   # @example
@@ -61,6 +80,7 @@ class Project
     name.downcase.gsub(/[^\w]/, '_')
   end
 
+  ##
   # Compatability method for rails' route generation helpers
   #
   # @example
@@ -75,6 +95,7 @@ class Project
     id.to_s
   end
   
+  ##
   # Creates a model and imports data from a CSV file
   #
   # @example 
@@ -171,7 +192,7 @@ class Project
     DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::\w*#{search_term}\w*$/i }
   end
 
-
+  ##
   # Adds a model to the current project
   #
   # @example
@@ -353,4 +374,21 @@ class Project
   end
 
   
+  ##
+  # Check to see if the current user is allowed to perform the current action
+  # 
+  # @example
+  #   if permit_current_user?
+  #     # do something
+  #   end
+  # 
+  # @return [TrueClass or FalseClass]
+  #
+  # @author lamb
+  # @api private
+  def permit_current_user?
+    users.include?(User.current)
+  end
 end
+
+require 'project_observer'

@@ -1,0 +1,5 @@
+<%- form_for(@user, password_path(@user), :builder => YogoFormBuilder ) do |f| -%>
+  <%= f.password %>
+  <%= f.password_confirmation %>
+  <%= f.submit %>
+<%- end -%>

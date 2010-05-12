@@ -6,11 +6,11 @@
 class AnonymousUser
   
   def name
-    Yogo::Settings[:anonymous_user_name]
+    Yogo::Setting[:anonymous_user_name]
   end
   
   def has_group?(value)
-    return value.to_s.eql?(Yogo::Settings[:anonymous_user_group])
+    return value.to_s.eql?(Yogo::Setting[:anonymous_user_group])
   end
   
   def method_missing(method, *args)
@@ -19,6 +19,9 @@ class AnonymousUser
     else
       raise NoMethodError.new("undefined method '#{method}' for #{self}")
     end
-    
+  end
+  
+  def id
+    0
   end
 end
