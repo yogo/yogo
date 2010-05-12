@@ -23,7 +23,7 @@
    <link rel="shortcut icon" href="<%= image_path("favicon.png") %>">
   </head>
   
-  <body class="bp showgrid">
+  <body class="bp">
     <!-- Header (including optional menus) -->
     <div id='header' class='last'>
       <div id="logo"><%= image_tag('header.png') %></div>
@@ -32,6 +32,7 @@
         <%= render(:partial => 'layouts/search') unless @no_search %>
       </div>  
     </div>
+    <br clear='all' style='clear: both;'>    
     <!-- Grid Container -->
     <div id="container"> 
       <div id='flash' >
