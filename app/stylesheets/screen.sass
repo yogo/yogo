@@ -60,15 +60,19 @@ body.bp
       background: #eeeeee url(image_url("shadow-bk.png")) repeat-x fixed top
       margin-top: -10px
       font-size: 0.9em
-      width: 880px
+      +column(22)
+      +last
       #menu-links
-        float: left
-        padding: 10px 3px 4px 3px
-        margin-left: 10px
+        +column(13)
+        //float: left
+        padding: 10px 0px
+        //margin-left: 10px
       #search-tab
-        float: right
-        padding: 7px 3px 4px 3px
-        width: 360px
+        +column(9)
+        +last
+        //float: right
+        padding: 7px 0
+        text-align: right
         .button-link
           font-size: 0.9em
           padding: 3px 2px 2px 2px
@@ -99,13 +103,19 @@ body.bp
     margin-top: 10px
     +column($blueprint_grid_columns)
     h1#content-title
-      +column(7)
+      +column(8)
       +borders
       margin:
         bottom: -1px
         top: 0
       padding: 5px 0
       text-align: center
+    #content-actions
+      text-align: right
+      +column(7)
+      +prepend(7)
+      +last
+      line-height: 3em
     h1#project-title
       margin-top: 0
     #content-block
