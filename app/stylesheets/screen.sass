@@ -60,7 +60,7 @@ body.bp
       background: #eeeeee url(image_url("shadow-bk.png")) repeat-x fixed top
       margin-top: -1em
       font-size: 0.9em
-      +column(22)
+      +column($blueprint_grid_columns - 2)
       +last
       #menu-links
         +column(13)
@@ -90,8 +90,12 @@ body.bp
         p
           margin: 0
           padding: 0
+  #pagination-links
+    text-align: right
+    +column($blueprint_grid_columns - 2)
+    +last
   #footer
-    +column($blueprint_grid_columns)
+    +column($blueprint_grid_columns - 2)
     text-align: center
   #sidebar
     $sidebar_columns: floor($blueprint_grid_columns / 4)
@@ -100,25 +104,27 @@ body.bp
     margin-top: 10px
     +column($blueprint_grid_columns)
     h1#content-title
-      +column(8)
-      +borders
-      margin:
-        bottom: -1px
-        top: 0
-      padding: 5px 0
-      text-align: center
-    #content-actions
-      text-align: right
-      +column(7)
-      +prepend(7)
+      margin-top: 0
+      text-align: left
+      +column($blueprint_grid_columns - 2)
       +last
-      line-height: 3em
+    #content-actions
+      +column(22)
+      +last
+      margin: -.5em 0 1em 0
+      .content-action-links
+        +column(16)
+      .content-pagination-links
+        text-align: right
+        line-height: 2em
+        +column(6)
+        +last
     h1#project-title
       margin-top: 0
     #content-block
       +column($blueprint_grid_columns - 2)
     // Yogo Dashboard
-    .project-block
+    .content-row-block
       +column(22)
       +last
       +borders
@@ -137,14 +143,20 @@ body.bp
       margin-top: 1px
       overflow: auto
       +borders
-    h2.dataset-name
-      +column(7)
-      margin: 5px 0
+    .dataset-name
+      +column(6)
+      +colborder
+      h2
+        text-align: center
+        margin: .25em 0
+      p
+        margin-left: 10px
+        +column(6)
     .dataset-info
-      +column(23)
-      margin-top: -.5em
-      padding-bottom: 2px
-      +borders
+      +column(15)
+      +last
+      .action-links
+        text-align: right
     // centered content containers
     .small-centered
       +prepend(4)

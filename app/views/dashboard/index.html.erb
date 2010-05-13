@@ -1,11 +1,14 @@
 <h1 id='content-title'>Dashboard</h1>
 <div id='content-actions'>
+  <div class='content-action-links'>
   <%= link_to("Create a Project", start_wizard_path, :class => 'button-link') %>
   <%= link_to("Load Example Project", loadexample_projects_path, :class => 'button-link', :method => :post) %>
+  </div>
+  <div class='content-pagination-links'><%= pagination_links(Project, params[:page], 5) %></div>
 </div>
 <div id='content-block'>
   <%- for project in @projects -%>
-  <div class="project-block">
+  <div class="content-row-block">
     <div class="project-icon">
       <%= link_to(image_tag('mock-project-icon.jpg'), project_path(project) ) %>
     </div>
