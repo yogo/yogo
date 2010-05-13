@@ -13,6 +13,7 @@ gem "dm-is-nested_set"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates"
 gem "dm-types"
+gem "dm-observer"
 gem "dm-persevere-adapter", "0.52.1", :require => nil
 gem "do_sqlite3",                     :require => nil
 gem "rails_datamapper",               :require => nil
@@ -20,25 +21,30 @@ gem "rails_datamapper",               :require => nil
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"
 gem "mime-types",                     :require => 'mime/types'
-gem "fastercsv"
+gem "fastercsv"                       # unless RUBY 1.9
 gem "carrierwave"
-gem "json",           "~>1.2.0",      :require => nil
 gem "compass"
 gem "haml"
 
-gem 'ruby-debug',                  :group => :development
+
+if defined?(JRUBY_VERSION)
+  gem "json_pure",      "~>1.2.0",      :require => nil
+else
+  gem "json",           "~>1.2.0",      :require => nil  
+end
+
+
+gem 'ruby-debug',                  :group => :development unless defined?(JRUBY_VERSION)
 gem "rails-footnotes",             :group => :development
 
 group :test do
-  gem 'ruby-debug',                :require => nil
+  gem 'ruby-debug',                :require => nil unless defined?(JRUBY_VERSION)
   gem 'rspec',        '~>1.3.0',   :require => nil
   gem 'rspec-rails',  '~>1.3.2',   :require => 'spec/rails'
   gem 'ZenTest',                   :require => nil
   gem 'redgreen',                  :require => nil
-  gem 'factory_girl', '~>1.2.3',   :require => nil
   gem "yard",                      :require => nil
   gem "yardstick",                 :require => nil
-  gem "bluecloth",                 :require => nil
   gem "hoe",                       :require => nil
   gem "ruby_parser",               :require => nil
   gem "flay",                      :require => nil
@@ -71,5 +77,6 @@ group :cucumber do
 end
 
 # A dev server that is slightly better then webrick
-gem 'mongrel', :require => nil
-
+gem 'mongrel',                     :require => nil
+gem 'thin',                        :require => nil unless defined?(JRUBY_VERSION)
+gem 'glassfish',                   :require => nil if     defined?(JRUBY_VERSION)
