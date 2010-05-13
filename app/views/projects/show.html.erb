@@ -1,30 +1,30 @@
-<div id="liquid-content">
-    <h2><%= @project.name %></h2>
-    <div class='action-links'>
-      <%= link_to("Edit Datasets", project_yogo_models_path(@project)) %> |
-      <%= link_to("Delete Project", project_path(@project), :method => :delete ) %>
-    </div>
-    <%#= render(:partial => 'layouts/sidebar') %>
-    <%- for dataset in @project.models -%>
-    <% @item = dataset.new %>
-    <%- form_for(@item, 
-            :url => project_yogo_data_index_path(@project, dataset), 
-            :html => { :enctype => 'multipart/form-data' },
-            :builder => YogoDataFormBuilder) do |f| -%>
+<h1 id='project-title'><%= @project.name %></h1>
+<div id='content-actions'>
+  <%= link_to("Edit Datasets", project_yogo_models_path(@project)) %> |
+  <%= link_to("Delete Project", project_path(@project), :method => :delete ) %>
+</div>
 
-      <h3 class='dataset-name'><%= dataset.public_name %></h3>
-      <div></div>
-      <div class='dataset-info'>
-        <div class="action-links">
-          Browse All Data | 
-          Edit Dataset |
-          Query Data |
-          Download CSV
-        </div>
-        <div class='project-stats'>
-        </div>
-        <h4 onClick="$('#<%= dataset.to_param %>-quick-data').toggle();">QuickView</h4>
-        <table class="mock-data" id='<%= dataset.to_param %>-quick-data' >
+<%#= render(:partial => 'layouts/sidebar') %>
+
+<%- for dataset in @project.models -%>
+  <% @item = dataset.new %>
+  <h2 class='dataset-name'><%= dataset.public_name %></h2>
+  <div class='dataset-info'>
+    <div id="action-links">
+      <%= link_to("Browse All Data", project_yogo_data_index_path(@project, dataset)) %>
+      | Edit Dataset
+      | Query Data
+      | <%= link_to("Download CSV", project_yogo_data_index_path(@project, dataset, :format => 'csv')) %>
+    </div>
+    <div class='project-stats'></div>
+    <a class='button-link' onClick="$('#<%= dataset.to_param %>-quick-data').toggle('fast');">QuickView</a>
+    <div class='quickview-data'  id='<%= dataset.to_param %>-quick-data'>
+      <%- form_for(@item, 
+              :url => project_yogo_data_index_path(@project, dataset), 
+              :html => { :enctype => 'multipart/form-data' },
+              :builder => YogoDataFormBuilder) do |f| -%>
+
+        <table>
           <thead>
             <tr>
               <th class="data-index-table-actions"></th>
@@ -34,32 +34,25 @@
             </tr>
           </thead>
           <tbody>
-
             <tr>
               <td><%= f.submit %></td>
               <%- dataset.usable_properties.each do |p| %>
                 <td><%= f.field_for_param(p) %></td>
               <% end %>
-           </tr>
-              <%- for data in dataset[0..2] -%>
-              <tr class="<%= cycle("alternate-rows0", "") %>">
-                <td class="data-index-table-actions"><%= link_to(image_tag('view.gif', :alt => "View Item", :title => "View Item"), project_yogo_data_path(@project, dataset, data)) %>
-                <%= link_to(image_tag('edit.png',:alt => "Edit Item", :title => "Edit Item"), edit_project_yogo_data_path(@project, dataset, data)) %>
-                <%= link_to(image_tag('remove.png',:alt => "Delete Item", :title => "Delete Item"), project_yogo_data_path(@project, dataset, data), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
-                <%- for param in dataset.usable_properties -%>
-                  <td><%= yogo_show_helper(data, param, @project, dataset) %></td>
-                <%- end -%>
-              </tr>
-            <%- end -%>
-            <tr>
-              <td colspan="2"><%= link_to("See More", project_yogo_data_index_path(@project, dataset)) %></td>
-              <td colspan="2"><%= link_to("Download CSV", project_yogo_data_index_path(@project, dataset, :format => 'csv')) %></td>
             </tr>
+          <%- for data in dataset[0..2] -%>
+            <tr class="<%= cycle("alternate-rows0", "") %>">
+              <td class="data-index-table-actions"><%= link_to(image_tag('view.gif', :alt => "View Item", :title => "View Item"), project_yogo_data_path(@project, dataset, data)) %>
+              <%= link_to(image_tag('edit.png',:alt => "Edit Item", :title => "Edit Item"), edit_project_yogo_data_path(@project, dataset, data)) %>
+              <%= link_to(image_tag('remove.png',:alt => "Delete Item", :title => "Delete Item"), project_yogo_data_path(@project, dataset, data), :method => :delete, :confirm => "There is no undo.\n Continue?") %></td>
+              <%- for param in dataset.usable_properties -%>
+                <td><%= yogo_show_helper(data, param, @project, dataset) %></td>
+              <%- end -%>
+            </tr>
+          <%- end -%>
           </tbody>
         </table>
-      </div>
-    <%- end -%>
-    <%- end -%>
+      <%- end -%>
+    </div>
   </div>
-  
-  
+<%- end -%>

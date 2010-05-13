@@ -13,7 +13,6 @@
 // Border Mixins
 =borders
   border: 1px solid #305D6E
-  margin: -1px
 
 =border-top
   border-top: 1px solid #305D6E
@@ -46,7 +45,12 @@ body.bp
     text-decoration: none
     &:hover
       text-decoration: underline
-
+  // Tables
+  table
+    th
+      padding: 0
+      line-height: 1em
+      background-color: #f2f2f2
   // Header
   #header
     height: 65px
@@ -85,8 +89,6 @@ body.bp
         p
           margin: 0
           padding: 0
-    .action-links
-      margin-top: -1em
   #footer
     +column($blueprint_grid_columns)
     text-align: center
@@ -99,16 +101,13 @@ body.bp
     h1#content-title
       +column(7)
       +borders
-      margin-bottom: -1px
-      margin-left: 0px
+      margin:
+        bottom: -1px
+        top: 0
       padding: 5px 0
-      margin-top: 0px
       text-align: center
-    #content-actions
-      +column(7)
-      +prepend(8)
-      +last
-      line-height: 3.1em
+    h1#project-title
+      margin-top: 0
     #content-block
       +column($blueprint_grid_columns - 2)
     // Yogo Dashboard
@@ -125,6 +124,20 @@ body.bp
       .project-datasets
         +column(11)
         +last
+    // Project Dashboard
+    .quickview-data
+      display: none
+      margin-top: 1px
+      overflow: auto
+      +borders
+    h2.dataset-name
+      +column(7)
+      margin: 5px 0
+    .dataset-info
+      +column(23)
+      margin-top: -.5em
+      padding-bottom: 2px
+      +borders
     // centered content containers
     .small-centered
       +prepend(4)
@@ -175,3 +188,4 @@ img
   &:hover
     background-color: #e2e2e2
     text-decoration: none
+    cursor: pointer
