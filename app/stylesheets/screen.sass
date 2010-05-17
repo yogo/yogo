@@ -90,6 +90,7 @@ body.bp
         p
           margin: 0
           padding: 0
+          
   #pagination-links
     text-align: right
     +column($blueprint_grid_columns - 2)
@@ -138,25 +139,55 @@ body.bp
         +column(11)
         +last
     // Project Dashboard
-    .quickview-data
-      display: none
-      margin-top: 1px
-      overflow: auto
-      +borders
     .dataset-name
       +column(6)
-      +colborder
+      //+column(22)
+      +last
       h2
         text-align: center
         margin: .25em 0
       p
-        margin-left: 10px
-        +column(6)
-    .dataset-info
-      +column(15)
-      +last
+        margin-left: 20px
+        font-style: italic
+        font-size: .8em
       .action-links
-        text-align: right
+        text-align: center
+        margin-bottom: 1em
+    .dataset-info
+      +column(16)
+      +last
+      .action-tabs
+        margin:
+          top: .5em
+          bottom: .5em
+        +column(16)
+        +last
+      .dataset-table
+        +column(16)
+        +last
+        +borders
+        height: 12em
+        padding: 0px
+        overflow: auto
+        font-size: .9em
+        th
+          border-bottom: 1px solid #CCC
+          padding-bottom: 2px
+        .cycle-even
+          background-color: #F2F2F2
+        .data-index-table-actions
+          padding: 0px
+          .actions
+            width: 60px
+            text-align: center
+      // Jquery UI Overrides
+      .ui-tabs .ui-tabs-nav li a
+        padding: 0.3em 0.5em
+      .ui-tabs .ui-tabs-nav
+        padding: 0.1em 0
+        font-size: .9em
+      .ui-tabs .ui-tabs-panel 
+        padding: 0px
     // centered content containers
     .small-centered
       +prepend(4)
