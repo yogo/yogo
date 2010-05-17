@@ -1,0 +1,30 @@
+%h1#content-title= @project.name
+
+#content-actions
+  = link_to("Edit Datasets", project_yogo_models_path(@project), :class => 'button-link')
+  = link_to("Delete Project", project_path(@project), 
+    :method => :delete, :class => 'button-link', :confirm => "There is no undo.\n Continue?" ) 
+
+//= render(:partial => 'layouts/sidebar') %>
+
+#content-block
+  - for dataset in @project.models
+    - @item = dataset.new
+    .content-row-block
+      .dataset-name
+        %h2= dataset.public_name
+        %p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        .action-links
+          = link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
+              :class => 'button-link')
+          = link_to("Download CSV", project_yogo_data_index_path(@project, dataset, 
+              :format => 'csv'), :class => 'button-link')
+      .dataset-info
+        .action-tabs
+          %ul
+            %li <a href="##{dataset.to_param}-dataset-details">Dataset Details</a>
+            %li <a href="##{dataset.to_param}-query">Query</a>
+            %li <a href="##{dataset.to_param}-quickview">Quickview</a>
+          = render(:partial => 'yogo_models/dataset', :locals => {:dataset => dataset})
+          = render(:partial => 'projects/build_query', :locals => {:dataset => dataset})
+          = render(:partial => 'yogo_data/quickview', :locals => {:dataset => dataset})
