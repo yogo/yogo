@@ -249,7 +249,7 @@ class Project
   # @api private
   def reload_schemas_from_backup!
     models.each do |m|
-      sb = SchemaBackup.get_first_by_name(m.name.to_s) 
+      sb = SchemaBackup.get_or_create_by_name(m.name.to_s) 
       repository.adapter.update_schema(JSON.parse(sb.schema))
     end
     

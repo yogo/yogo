@@ -23,6 +23,8 @@ gem "mime-types",                     :require => 'mime/types'
 gem "fastercsv"
 gem "carrierwave"
 gem "json",           "~>1.2.0",      :require => nil
+gem "compass"
+gem "haml"
 
 gem 'ruby-debug',                  :group => :development
 gem "rails-footnotes",             :group => :development

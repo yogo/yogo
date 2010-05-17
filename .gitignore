@@ -33,3 +33,4 @@ Gemfile.lock
 doc/yard/*
 doc/yardstick/*
 yogo_assets/*
+public/stylesheets/compiled

@@ -1,27 +1,26 @@
-<h1 class='section-title'>Yogo Dashboard</h1>
-<div class="fitted-content" id='create-project-button'>
-  <div class='right' style='width: 170px;'>
-    <%= link_to("Create a Project", start_wizard_path, :class => 'button-link') %>
-      <br />
-      <%= link_to("Load Example Project", loadexample_projects_path, 
-                    :class => 'button-link', :method => :post) %>
+<h1 id='content-title'>Dashboard</h1>
+<div id='content-actions'>
+  <div class='content-action-links'>
+  <%= link_to("Create a Project", start_wizard_path, :class => 'button-link') %>
+  <%= link_to("Load Example Project", loadexample_projects_path, :class => 'button-link', :method => :post) %>
   </div>
+  <div class='content-pagination-links'><%= pagination_links(Project, params[:page], 5) %></div>
 </div>
-<div class='fitted-content'>
+<div id='content-block'>
   <%- for project in @projects -%>
-  <div class="project-block">
+  <div class="content-row-block">
     <div class="project-icon">
       <%= link_to(image_tag('mock-project-icon.jpg'), project_path(project) ) %>
     </div>
     <div class="project-text">
-      <h4><%= link_to(project.name, project_path(project) ) %></h4>
-      <p>
-        <%= link_to(image_tag('report_edit.png'), edit_project_path(project)) %>&nbsp;<em><%=h project.description || "[No Description]" %></em> 
-      </p>
+      <h2><%= link_to(project.name, project_path(project) ) %></h2>
+      <p><%= link_to(image_tag('report_edit.png'), edit_project_path(project)) %>&nbsp;<em><%=h project.description || "[No Description]" %></em></p>
+    </div>
+    <div class='project-datasets'>
       <%- if project.models.empty? -%>
         <p>There are no datasets associated with this project.<br /><%= link_to('Add a Dataset', csv_question_path(project)) %></p>
       <%- else -%>
-        <table class="dashboard-table">
+        <table>
           <thead>
             <tr>
               <th>Dataset</th>
@@ -44,12 +43,12 @@
             </tr>
           <%- end -%>
         </table>
-      <%- end -%>
-  
-    </div>
-  </div>
+      <%- end -%>  
+    </div> <!-- project-text -->
+  </div> <!-- project-block -->
   <%- end -%>
-  <div id="pagination-links">
-    <%= pagination_links(Project, params[:page], 5) %>
-  </div>
+</div> <!-- content-block -->
+
+<div id="pagination-links">
+  <%= pagination_links(Project, params[:page], 5) %>
 </div>

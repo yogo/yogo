@@ -12,12 +12,12 @@ class DashboardController < ApplicationController
   # @api public
   #   
   def index
-    @no_search = true
-    @no_menu   = true 
     @projects = Project.paginate(:page => params[:page], :per_page => 5)
 
     respond_to do |format|
       if @projects.empty?
+        @no_search = true
+        @no_menu   = true 
         format.html { render('no_projects') }
       else
         format.html 
