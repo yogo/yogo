@@ -13,7 +13,7 @@ pushd `dirname $0`
 
 
 echo "Configuring fresh yogo checkout for development..."
-
+$RUBY gem uninstall bundler08 
 $RUBY gem install bundler && \
 $RUBY gem install rake && \
 $RUBY gem install mongrel && \

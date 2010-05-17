@@ -28,9 +28,9 @@ gem "haml"
 
 
 if defined?(JRUBY_VERSION)
-  gem "json_pure",      "~>1.2.0",      :require => nil
+  gem "json_pure",            :require => nil
 else
-  gem "json",           "~>1.2.0",      :require => nil  
+  gem "json",                 :require => nil  
 end
 
 
