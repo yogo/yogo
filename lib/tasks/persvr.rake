@@ -12,7 +12,7 @@ require 'yaml'
 require 'net/http'
 
 namespace :persvr do
-  PERSVR_CMD = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || RAILS_ROOT/'vendor/bundled/bin/persvr' || 'persvr'
+  PERSVR_CMD = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || RAILS_ROOT/'vendor/persevere/bin/persvr' || 'persvr'
   
   def config(env)
     cfg = YAML.load_file(RAILS_ROOT/:config/'persvr.yml')[env]
@@ -44,7 +44,7 @@ namespace :persvr do
     sh "unzip -o #{persvr_zip} -d #{vendor_dir} > /dev/null 2>&1"
     
     # link vendor/persevere/bin/persvr to vendor/bundled/bin/persvr
-    sh "ln -f -s #{vendor_dir}/persevere/bin/persvr #{vendor_dir}/bundled/bin/persvr"
+    # sh "ln -f -s #{vendor_dir}/persevere/bin/persvr #{vendor_dir}/bundled/bin/persvr"
     
     # Chmod +x
     sh "chmod +x #{vendor_dir}/persevere/bin/persvr"
@@ -58,7 +58,7 @@ namespace :persvr do
     vendor_dir = RAILS_ROOT/:vendor
     
     # Remove the link
-    sh "rm #{vendor_dir}/bundled/bin/persvr"
+    # sh "rm #{vendor_dir}/bundled/bin/persvr"
     
     # Remove the installed code
     sh "rm -rf #{vendor_dir}/persevere"
