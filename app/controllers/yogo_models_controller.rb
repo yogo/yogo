@@ -21,6 +21,7 @@ class YogoModelsController < ApplicationController
   # @api public
   def index
     @models = @project.models
+    @no_search = true
     
     respond_to do |format|
       format.html
@@ -210,6 +211,24 @@ class YogoModelsController < ApplicationController
     end
   end
   
+  ##
+  # Reloads the models from our special backup Hopefully temporary
+  # 
+  # @example
+  #   post /yogo_model/1/refresh_attributes
+  # 
+  # @return redirects to originating page
+  # 
+  # @author lamb
+  # @api public
+  def refresh_attributes
+    @project.reload_schemas_from_backup!
+    
+    respond_to do |format|
+      format.html { redirect_to(:back) }
+    end
+  end
+  
   private
   
   ##
@@ -219,37 +238,37 @@ class YogoModelsController < ApplicationController
   #  The model definition in JSON
   # 
   # @api private
-  def model_definition_for(model)
-    model_def = {}
-    model_def[:name] = model.name.split('::').last.gsub('_', ' ')
-    model_def[:properties] = []
-    
-    properties = model.usable_properties
-    
-    excluded_property_options = DataMapper::Property::OPTIONS.dup
-    excluded_property_options << :separator << :prefix << :position
-    
-    properties.each_with_index do |prop, index|
-      prop_options = prop.options.dup.symbolize_keys
-      prop_position = prop_options[:position] || index
-      
-      prop_options.reject!{|k,v| excluded_property_options.include?(k) }
-      
-      prop_type = Yogo::Types.dm_to_human(prop.type)
-      prop_name = prop.display_name.to_s.titleize
-      
-      prop_def = {
-        :type => prop_type,
-        :name => prop_name,
-        :options => prop_options.dup
-      }
-      
-      prop_position_offset = model_def[:properties][prop_position] ? properties.size : 0
-      model_def[:properties][prop_position+prop_position_offset] = prop_def
-    end
-    
-    return model_def
-  end
+  # def model_definition_for(model)
+  #   model_def = {}
+  #   model_def[:name] = model.name.split('::').last.gsub('_', ' ')
+  #   model_def[:properties] = []
+  #   
+  #   properties = model.usable_properties
+  #   
+  #   excluded_property_options = DataMapper::Property::OPTIONS.dup
+  #   excluded_property_options << :separator << :prefix << :position
+  #   
+  #   properties.each_with_index do |prop, index|
+  #     prop_options = prop.options.dup.symbolize_keys
+  #     prop_position = prop_options[:position] || index
+  #     
+  #     prop_options.reject!{|k,v| excluded_property_options.include?(k) }
+  #     
+  #     prop_type = Yogo::Types.dm_to_human(prop.type)
+  #     prop_name = prop.display_name.to_s.titleize
+  #     
+  #     prop_def = {
+  #       :type => prop_type,
+  #       :name => prop_name,
+  #       :options => prop_options.dup
+  #     }
+  #     
+  #     prop_position_offset = model_def[:properties][prop_position] ? properties.size : 0
+  #     model_def[:properties][prop_position+prop_position_offset] = prop_def
+  #   end
+  #   
+  #   return model_def
+  # end
   
   ##
   # Updates the yogo model to match the new model definition
@@ -258,51 +277,52 @@ class YogoModelsController < ApplicationController
   #   the updated model
   # 
   # @api private
-  def update_model_with_definition(definition, model)
-    definition_name = definition[:name] || raise("model definition must have a 'name' property")
-    model_name = model.name.split('::').last.gsub('_', ' ')
-    
-    (model_name == definition_name) || raise("model definition for #{definition_name} cannot be applied to #{model.name}")
-    
-    # We're going to be evil and REMOVE all the user-defined properties from the model
-    user_props = model.usable_properties.dup
-    hidden_props = model.properties.reject{|p| user_props.include? p}
-    
-    model.instance_variable_get(:@properties).each_value do |prop_set|
-      prop_set.instance_variable_get(:@properties).clear
-      prop_set.clear
-      hidden_props.each {|hp| prop_set << hp}
-    end
-    
-    logger.debug { model.usable_properties.map{|p| p.name}.inspect }
-    logger.debug { model.properties.map{|p| p.name}.inspect }
-    
-    property_definitions = definition[:properties]
-    # These options are fixed and should be merged into every property
-    default_property_options = {:required => false, 
-                                :separator => '__', 
-                                :prefix => 'yogo'}
-    property_definitions.each_with_index do |prop_def, index|
-      def_type = prop_def[:type].to_s
-      def_name = prop_def[:name].to_s
-      next if def_type.empty? || def_name.empty?
-      
-      prop_def = prop_def.dup.symbolize_keys!
-      property_type = Yogo::Types.human_to_dm(def_type)
-      property_name = def_name.squish.downcase.gsub(' ', '_').to_sym
-      property_options = {}.reverse_merge(default_property_options).reverse_merge(prop_def[:options] || {})
-      property_options[:position] = index
-      property_options = property_options.symbolize_keys
-      logger.debug { "model.send(:property, #{property_name.inspect}, #{property_type.inspect}, #{property_options.inspect})"}
-      model.send(:property, property_name, property_type, property_options)
-      
-    end
-    # Type Mapping: prop_type = Yogo::Types.human_to_dm(model_def_type_name)
-    
-    # update model props: model.send(:property, :prop_name.to_sym, prop_type, :required => false, :position => prop[2], :separator => '__', :prefix => 'yogo')
-    model.auto_upgrade!
-    return model
-  end
+  # def update_model_with_definition(definition, model)
+  #    definition_name = definition[:name] || raise("model definition must have a 'name' property")
+  #    model_name = model.name.split('::').last.gsub('_', ' ')
+  #    
+  #    (model_name == definition_name) || raise("model definition for #{definition_name} cannot be applied to #{model.name}")
+  #    
+  #    # We're going to be evil and REMOVE all the user-defined properties from the model
+  #    user_props = model.usable_properties.dup
+  #    hidden_props = model.properties.reject{|p| user_props.include? p}
+  #    
+  #    model.instance_variable_get(:@properties).each_value do |prop_set|
+  #      prop_set.instance_variable_get(:@properties).clear
+  #      prop_set.clear
+  #      hidden_props.each {|hp| prop_set << hp}
+  #    end
+  #    
+  #    logger.debug { model.usable_properties.map{|p| p.name}.inspect }
+  #    logger.debug { model.properties.map{|p| p.name}.inspect }
+  #    
+  #    property_definitions = definition[:properties]
+  #    # These options are fixed and should be merged into every property
+  #    default_property_options = {:required => false, 
+  #                                :separator => '__', 
+  #                                :prefix => 'yogo'}
+  #    property_definitions.each_with_index do |prop_def, index|
+  #      def_type = prop_def[:type].to_s
+  #      def_name = prop_def[:name].to_s
+  #      next if def_type.empty? || def_name.empty?
+  #      
+  #      prop_def = prop_def.dup.symbolize_keys!
+  #      property_type = Yogo::Types.human_to_dm(def_type)
+  #      property_name = def_name.squish.downcase.gsub(' ', '_').to_sym
+  #      property_options = {}.reverse_merge(default_property_options).reverse_merge(prop_def[:options] || {})
+  #      property_options[:position] = index
+  #      property_options = property_options.symbolize_keys
+  #      logger.debug { "model.send(:property, #{property_name.inspect}, #{property_type.inspect}, #{property_options.inspect})"}
+  #      model.send(:property, property_name, property_type, property_options)
+  #      
+  #    end
+  #    # Type Mapping: prop_type = Yogo::Types.human_to_dm(model_def_type_name)
+  #    
+  #    # update model props: model.send(:property, :prop_name.to_sym, prop_type, :required => false, :position => prop[2], :separator => '__', :prefix => 'yogo')
+  #    model.auto_upgrade!
+  #    model.backup_schema!
+  #    return model
+  #  end
   
   ##
   # pulls model data into a CSV file format

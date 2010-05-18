@@ -1,9 +1,9 @@
-<iframe id="editor-frame" width="846" height="400"></iframe>
+<iframe id="editor_frame" width="950" height="400"></iframe>
 
 <script>
     var baseUrl = '/projects';
     var projectId = <%= @project.id %>;
-    var editor_frame = $('iframe#editor-frame');
+    var editor_frame = $('iframe#editor_frame');
     editor_frame.attr('src', '/model_editor.html');
     editor_frame.load(function() {
         console.debug(this);

@@ -13,12 +13,12 @@ pushd `dirname $0`
 
 
 echo "Configuring fresh yogo checkout for development..."
-
-$RUBY gem install bundler08 && \
+$RUBY gem uninstall bundler08 
+$RUBY gem install bundler && \
 $RUBY gem install rake && \
 $RUBY gem install mongrel && \
 
-$RUBY gem bundle && \
+$RUBY bundle install && \
 $RUBY rake persvr:setup
 
 popd

@@ -7,7 +7,7 @@
 # @todo Describe Me
 class ProjectWizardController < ApplicationController
   
-  before_filter :no_search
+  before_filter :no_headers
   # Give a project a name
   # 
   # @example
@@ -142,10 +142,9 @@ class ProjectWizardController < ApplicationController
   private
   
   
-  # Put data via csv
+  # Disable menu and search tab
   # 
-  # 
-  # This private method is used to set a view-aware variable for displaying the search-tab
+  # This private method is used to set a view-aware variable for displaying the search-tab and menu
   # 
   # @return [TrueClass] The return value is useless
   # 
@@ -153,8 +152,9 @@ class ProjectWizardController < ApplicationController
   # @author Pol LLouuvettee
   # 
   # @api private
-  def no_search
+  def no_headers
     @no_search = true
+    @no_menu = true
   end
   
 end

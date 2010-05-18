@@ -27,7 +27,10 @@ tmtags
 vendor/persevere/*
 public/files/*
 public/uploads/*
+.bundle/*
+Gemfile.lock
 .yardoc/*
 doc/yard/*
 doc/yardstick/*
 yogo_assets/*
+public/stylesheets/compiled

@@ -68,14 +68,14 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<dm-core>, ["~> 0.10.2"])
       s.add_runtime_dependency(%q<fastercsv>, ["~> 1.5.0"])
-      s.add_runtime_dependency(%q<json_pure>, ["~> 1.2.0"])
+      s.add_runtime_dependency(%q<json_pure>, ["~> 1.4.0"])
       s.add_development_dependency(%q<nokogiri>, ["~> 1.4.1"])
       s.add_development_dependency(%q<rspec>, ["~> 1.2.9"])
       s.add_development_dependency(%q<yard>, ["~> 0.4.0"])
     else
       s.add_dependency(%q<dm-core>, ["~> 0.10.2"])
       s.add_dependency(%q<fastercsv>, ["~> 1.5.0"])
-      s.add_dependency(%q<json_pure>, ["~> 1.2.0"])
+      s.add_dependency(%q<json_pure>, ["~> 1.4.0"])
       s.add_dependency(%q<nokogiri>, ["~> 1.4.1"])
       s.add_dependency(%q<rspec>, ["~> 1.2.9"])
       s.add_dependency(%q<yard>, ["~> 0.4.0"])
@@ -83,7 +83,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<dm-core>, ["~> 0.10.2"])
     s.add_dependency(%q<fastercsv>, ["~> 1.5.0"])
-    s.add_dependency(%q<json_pure>, ["~> 1.2.0"])
+    s.add_dependency(%q<json_pure>, ["~> 1.4.0"])
     s.add_dependency(%q<nokogiri>, ["~> 1.4.1"])
     s.add_dependency(%q<rspec>, ["~> 1.2.9"])
     s.add_dependency(%q<yard>, ["~> 0.4.0"])

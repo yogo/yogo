@@ -140,6 +140,20 @@ module ApplicationHelper
     return res.join(' > ')
   end
   
+  # Helper method for making a float breaking block level element
+  #
+  # @example 
+  #   <%= clear_break %>
+  #   renders:
+  #   <br clear='all' style='clear: both;'/>
+  # 
+  # @return [HTML Fragment] 
+  # 
+  # @api public
+  def clear_break
+    "<br clear='all' style='clear: both;'/>"
+  end
+  
   # Creates the appropriate HTML for attributes on a model
   # 
   # For attributes that are files or images it makes a download link work for them
@@ -159,7 +173,7 @@ module ApplicationHelper
     elsif property.type == DataMapper::Types::YogoImage
       file = item[property.name]
       img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
-      link_to(img, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))      
+      link_to(file, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'), :class => 'fancybox')      
     else 
       item[property.name]
     end

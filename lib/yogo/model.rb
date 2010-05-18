@@ -134,7 +134,22 @@ module Yogo
         self.name.demodulize
       end
       
+      ##
+      # Backup the schema into our special table
+      # @example
+      #   model.backup_schema!
+      # 
+      # @return [SchemaBackup]
+      #   The backup object for this model.
+      # 
+      # @api private
+      def backup_schema!
+        SchemaBackup.get_or_create_by_name(self.name).update(:schema => self.to_json_schema)
+      end
+      
       private
+      
+      ##
       # Creates a carrierwave uploader for the specified field
       # 
       # @example 

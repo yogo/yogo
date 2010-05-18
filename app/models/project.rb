@@ -1,12 +1,12 @@
- # Yogo Data Management Toolkit
- # Copyright (c) 2010 Montana State University
- #
- # License -> see license.txt
- #
- # FILE: project.rb
- # The project model is where the action starts.  Every yogo instance starts with a 
- # a project and the project is where the models and data will be namespaced.
- #
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: project.rb
+# The project model is where the action starts.  Every yogo instance starts with a 
+# a project and the project is where the models and data will be namespaced.
+#
 
 # Class for a Yogo Project. A project contains a name, a description, and access to all of the models
 # that are part of the project.
@@ -90,6 +90,8 @@ class Project
   # @api public
   def process_csv(datafile, model_name)
     
+    model_name = model_name.gsub(/\s/,'_').classify
+    
     # Look to see if there is already one of these models.
     model = get_model(model_name)
 
@@ -97,6 +99,7 @@ class Project
     if model.nil?
       model = generate_empty_model(model_name)
       model.auto_migrate!
+      model.backup_schema!
     end
     
     # Load data
@@ -188,6 +191,8 @@ class Project
       a_model.send(:property, name, options.delete(:type), options.merge(:prefix => 'yogo'))
     end
 
+    a_model.backup_schema!
+
     return a_model
   end
   
@@ -233,6 +238,34 @@ class Project
     models.each do |model|
       delete_model(model)
     end
+  end
+  
+  ##
+  # Reloads the models for this schema from the backups
+  # @return [Array]
+  #   An array of models that have been refreshed
+  #
+  # @author robbie.lamb@gmail.com
+  # @api private
+  def reload_schemas_from_backup!
+    models.each do |m|
+      sb = SchemaBackup.get_or_create_by_name(m.name.to_s) 
+      repository.adapter.update_schema(JSON.parse(sb.schema))
+    end
+    
+    models.each do |model|
+      namespace_parts = model.name.split("::")
+      name = namespace_parts.pop
+      namespace = namespace_parts.join("::")
+      
+      DataMapper::Model.descendants.delete(model)
+      namespace.constantize.send(:remove_const, name.to_sym)
+    end
+    
+    new_models = DataMapper::Reflection.reflect(:default)
+
+    new_models.each{|m| m.send(:include,Yogo::Model) }
+    new_models.each{|m| m.properties.sort! }
   end
   
   private

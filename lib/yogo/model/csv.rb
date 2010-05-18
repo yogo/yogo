@@ -171,6 +171,7 @@ module Yogo
             property(name, options.delete(:type), options)
           end
           self.auto_upgrade!
+          self.backup_schema!
 
           properties.sort!
         end

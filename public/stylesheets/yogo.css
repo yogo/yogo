@@ -49,7 +49,7 @@ p {
 h1,h2,h3,h4,h5{
   color:#333;  
   font-weight: normal;
-  margin: 0px 10px 10px 10px;
+  margin: 0px 10px 10px 0px;
 }
 
 h1 {
@@ -133,7 +133,6 @@ img {
 /*This is here (in part) so the footer will stay at the bottom of pages*/
 .clearfix:after {
   content: ".";
-  display: block;
   height: 0;
   clear: both;
   visibility: hidden;
@@ -141,14 +140,6 @@ img {
 .clearfix {
  display: inline-block;
 }
-/* Hides from IE-mac \*/
-* html .clearfix { 
-  height: 1%;
-}
-.clearfix {
-  display: block;
-}
-/* End hide from IE-mac */
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -159,6 +150,7 @@ img {
   height:93px;
   background-color: #666;
   margin-bottom: 10px;
+  margin-top: -40px;
 }
 
 #header img {
@@ -167,30 +159,40 @@ img {
 }
 
 #container {
-  padding: 0px 10px 10px 10px;
   margin: 0px;
 }
 
 #content {
   padding: 0px 10px 20px 10px;
-/*  margin-top: 60px;*/
 }
 .fitted-content {
   width: 860px;
 }
 #liquid-content{
-  padding-left: 200px;
-  margin-top: 50px;
+  margin-top: 10px;
 }
-#search-tab {
-  background: transparent url(../images/shadow-bk.png) repeat-x fixed top;
-  margin: -4px 0px 0px 400px;
-  border:2px solid #255d71;
-  border-top: 1px solid transparent;
+#menu{
+  background: #EEE url(../images/shadow-bk.png) repeat-x fixed top;
+  margin-top: -4px;
   font-size:0.9em;
+  height: 35px;
+  width: 880px;
+}
+
+#menu-links{
+  float: left;
+  padding: 10px 3px 4px 3px;
+  margin-left: 10px;
+}
+
+#search-tab {
+  float: right;
   padding: 7px 3px 4px 3px;
-  text-align:center;
-  width:450px;
+  width: 355px;
+}
+
+.action-links{
+  font-size: .8em;
 }
 
 #search-tab form{
@@ -199,7 +201,7 @@ img {
 
 #search-tab .button-link{
   font-size: .9em;
-  padding: 3px 2px 2px 2px
+  padding: 3px 2px 2px 2px;
 }
 
 #footer {
@@ -209,6 +211,9 @@ img {
   width: 845px;
 }
 
+#footnotes_holder{
+  width: 900px;
+}
 .large-centered-content {
   width: 700px;
   margin: 20px auto;
@@ -378,6 +383,19 @@ img {
   margin: 10px 0px 10px 0px;
 }
 
+.dataset-name{
+  border: 1px solid silver;
+  padding: 5px;
+  margin-bottom: 0px;
+  width: 200px;
+}
+
+.dataset-info{
+  border: 1px solid silver;
+  margin-top: -1px;
+  padding: 5px;
+}
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~ Data ~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -543,6 +561,7 @@ form .box label {
   padding: 5px;
   background-color: #F2F2F2;
   color: #703824;
+  line-height: 2em;
 }
 
 .button-link:hover{
@@ -563,7 +582,10 @@ form .box label {
 .textdropdown-btn {
   width: 20px;
   float: right;
-  background: url(../images/arrow_down_16.png) no-repeat center;
+  background-color: transparent;
+  background-image: url(../images/arrow_down_16.png);
+  background-repeat: no-repeat;
+  background-position: center;
   cursor: pointer;
 }
 
