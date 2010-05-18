@@ -22,6 +22,9 @@ class YogoFormBuilder < ActionView::Helpers::FormBuilder
   
   # Set the default rows/cols for a text_area to look prettier
   #
+  # @return [String]
+  #   The applicable HTML for the text area element.
+  # 
   # @author Pol Llovet pol.llovet@gmail.com
   #
   # @api private
