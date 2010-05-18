@@ -38,11 +38,10 @@ class YogoDataController < ApplicationController
       # The query is everything.
       @query = @model.all
     end
-    # @data = @query.paginate(:page => params[:page], :per_page => 10)
-    # @query = @model.all
-    @data = @query.paginate(:page => params[:page], :per_page => 10)
+    
+    @data = @query.paginate(:page => params[:page], :per_page => 15)
     respond_to do |format|
-      format.html
+      format.html { @no_blueprint = true }
       format.json { @data = @query.all if params[:page].blank?; render( :json => @data.to_json )}
       format.csv { download_csv }
     end

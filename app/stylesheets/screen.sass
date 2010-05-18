@@ -33,25 +33,14 @@
 body.bp
   +blueprint-debug
   +blueprint-interaction
-  +blueprint-typography(true)
 
 form.bp
   +blueprint-form
 
-// Page layout can be done using mixins applied to your semantic classes and IDs:
-body.bp
-  // Links
-  a
-    text-decoration: none
-    &:hover
-      text-decoration: underline
-  // Tables
-  table
-    th
-      padding: 0
-      line-height: 1em
-      background-color: #f2f2f2
-  // Header
+// Base Body Styles
+body
+  +blueprint-typography(true)
+  // Header (always blueprint layout)
   #header
     height: 65px
     margin-bottom: 10px
@@ -73,31 +62,55 @@ body.bp
         .button-link
           font-size: 0.9em
           padding: 3px 2px 2px 2px
+  // Flash Notices always use blueprint layout
+  #flash
+    +prepend(4)
+    +column(14)
+    +append(4)
+    +last
+    text-align: center
+    height: 1em
+    margin-bottom: 1em
+    .error, .notice
+      padding: 0
+      p
+        margin: 0
+        padding: 0
+  // Footer
+  #footer
+    +column($blueprint_grid_columns - 2)
+    text-align: center
+  // Pagination Links
+  #pagination-links
+    text-align: center
+    +column($blueprint_grid_columns - 2)
+    +last
+  // Tables
+  table
+    th
+      padding: 0
+      line-height: 1em
+      background-color: #f2f2f2
+    .cycle-even
+      background-color: #F2F2F2
+    .data-table-actions
+      padding: 0px
+      .actions
+        width: 60px
+        text-align: center
+  // Links
+  a
+    text-decoration: none
+    &:hover
+      text-decoration: underline
+
+// Blueprint Body Container
+body.bp
+  // Header
   #container
     +container
     // To left align the grid
     margin: 0px
-    #flash
-      +prepend(4)
-      +column(14)
-      +append(4)
-      +last
-      text-align: center
-      height: 1em
-      margin-bottom: 1em
-      .error, .notice
-        padding: 0
-        p
-          margin: 0
-          padding: 0
-          
-  #pagination-links
-    text-align: right
-    +column($blueprint_grid_columns - 2)
-    +last
-  #footer
-    +column($blueprint_grid_columns - 2)
-    text-align: center
   #sidebar
     $sidebar_columns: floor($blueprint_grid_columns / 4)
     +column($sidebar_columns)
@@ -141,7 +154,6 @@ body.bp
     // Project Dashboard
     .dataset-name
       +column(6)
-      //+column(22)
       +last
       h2
         text-align: center
@@ -173,13 +185,6 @@ body.bp
         th
           border-bottom: 1px solid #CCC
           padding-bottom: 2px
-        .cycle-even
-          background-color: #F2F2F2
-        .data-index-table-actions
-          padding: 0px
-          .actions
-            width: 60px
-            text-align: center
       // Jquery UI Overrides
       .ui-tabs .ui-tabs-nav li a
         padding: 0.3em 0.5em
@@ -210,6 +215,7 @@ body.bp
       +column(18)
       +append(2)
       +last
+      
 
 //General Styles
 .text-center
