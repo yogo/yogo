@@ -40,6 +40,7 @@ form.bp
 // Base Body Styles
 body
   +blueprint-typography(true)
+  margin-left: 10px
   // Header (always blueprint layout)
   #header
     height: 65px
@@ -87,6 +88,9 @@ body
     +last
   // Tables
   table
+    border-collapse: collapse
+    td
+      border: 1px dotted #AAA
     th
       padding: 0
       line-height: 1em
@@ -111,9 +115,17 @@ body.bp
     +container
     // To left align the grid
     margin: 0px
+  // Sidebar
   #sidebar
     $sidebar_columns: floor($blueprint_grid_columns / 4)
     +column($sidebar_columns)
+  // Model Editor iFrame
+  #editor_frame
+    +column(22)
+    +last
+    height: 400px
+    margin-bottom: 2em
+  // Content Frame
   #content
     margin-top: 10px
     +column($blueprint_grid_columns)
@@ -184,7 +196,7 @@ body.bp
         font-size: .9em
         th
           border-bottom: 1px solid #CCC
-          padding-bottom: 2px
+            padding-bottom: 2px
       // Jquery UI Overrides
       .ui-tabs .ui-tabs-nav li a
         padding: 0.3em 0.5em
