@@ -27,8 +27,6 @@ module Yogo
       models = DataMapper::Reflection.reflect(repo, Object, true)
       
       models.each do |model|
-        
-        model_name = model.name.capitalize.gsub(/[^\w]/, '_')
         mphash = {}
         
         model.properties.each do |prop| 

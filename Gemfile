@@ -17,6 +17,8 @@ gem "dm-types"
 gem "rails_datamapper",               :require_as => 'dm-core' # We do this becuase :require_as => nil doesn't work.
 gem "dm-persevere-adapter", "0.52.1", :require_as => 'dm-core'
 gem "mime-types",                     :require_as => 'mime/types'
+gem "do_sqlite3"
+gem "do_mysql"
 
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"
