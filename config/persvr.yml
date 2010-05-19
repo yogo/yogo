@@ -1,0 +1,22 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: persvr.yml
+# 
+#
+development: 
+  database: db/persvr/development
+  port: 8080
+
+test: &TEST
+  database: db/persvr/test
+  port: 8081
+
+cucumber:
+  <<: *TEST
+
+production:
+  database: db/persvr/production
+  port: 8080

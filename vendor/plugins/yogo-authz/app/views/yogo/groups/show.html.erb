@@ -1,0 +1,27 @@
+<div id="show_permissions">
+  <h2>Permissions</h2>
+</div>
+
+<h2><%=h @group.name %></h2>
+
+<p>
+  <%= link_to("Edit", edit_group_path(@group.id)) %>
+  <%= link_to("Delete", group_path(@group.id), :confirm => "Are you sure?", :method => :delete) %>
+</p>
+
+<h3>Description</h3>
+<p><%=h @group.description %></p>
+
+<h3>Parent Group (<%= @group.ancestors.length %>)</h3>
+<%= link_to(@group.parent.name, group_path(@group.parent.id)) if @group.parent %>
+
+<h3>Child Group (<%= @group.children.length %>)</h3>
+<%= render( :partial => 'group_list',
+            :locals  => {:groups => @group.children}) %>
+
+<h3>Group Members (<%= @group.users.length %>)</h3>
+<ul>
+  <%- for user in @group.users -%>
+    <li><%= h(user.name) %></li>
+  <%- end -%>
+</ul>

@@ -1,0 +1,15 @@
+<div id="project-<%= @project.id %>-model-<%= @model.name.demodulize %>-attributes-<%= @attribute_name %>-values">
+<ul>
+<% @histogram.each do |key, value| %>
+  <li>
+     <%- ref_path, noop, ref_query = URI::split(request.referer)[5,3] -%>
+    <%- if  ref_path.split('/')[-1] == @model.name.demodulize  -%>
+      <%- ref_query += '&' unless ref_query.nil? -%>
+      <%= link_to("#{key} (#{value})", ref_path+"?#{ref_query}q[#{@attribute_name}][]=#{key}")  %>
+    <%- else -%>
+      <%= link_to("#{key} (#{value})", project_yogo_data_index_path(@project, @model.name.demodulize, :"q[#{@attribute_name}][]" => key )) %>
+    <%- end -%>
+  </li>
+<% end%>
+</ul>
+</div>

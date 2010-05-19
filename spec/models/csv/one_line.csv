@@ -1,0 +1,4 @@
+Name,ID,Mass,Charge
+Text,Integer,Decimal,Decimal
+NA,NA,kg,volts
+Sean,1,1283.0,1.2

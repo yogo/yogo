@@ -1,0 +1,25 @@
+<div id="sidebar">
+  <div><%= @project.name %></div>
+  <div>Edit Datasets</div>
+  <div>Delete Project</div>
+  <hr />
+  <div>Cell</div>
+  <div>- Export CSV</div>
+  <!-- <div class="nav-items">
+    <ul id ="list-models">
+      <% @project.models.each do |model| %>
+        <li id="models-<%= model.to_param %>">
+          <%= image_tag('bullet.gif', :onclick => "$('##{model.to_param}-attributes').toggle();") %>
+          <%= link_to(model.to_param, project_yogo_data_index_path(@project, model.to_param)) %>
+          <ul id="<%= model.to_param %>-attributes">
+            <% model.usable_properties.each do |attr| %>
+              <li id="model-<%= model.name.demodulize %>-attributes-<%= attr.display_name %>">
+                <%= attr.display_name.titleize %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  </div> -->
+</div>

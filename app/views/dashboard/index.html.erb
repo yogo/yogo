@@ -1,0 +1,54 @@
+<h1 id='content-title'>Dashboard</h1>
+<div id='content-actions'>
+  <div class='content-action-links'>
+  <%= link_to("Create a Project", start_wizard_path, :class => 'button-link') %>
+  <%= link_to("Load Example Project", loadexample_projects_path, :class => 'button-link', :method => :post) %>
+  </div>
+  <div class='content-pagination-links'><%= pagination_links(Project, params[:page], 5) %></div>
+</div>
+<div id='content-block'>
+  <%- for project in @projects -%>
+  <div class="content-row-block">
+    <div class="project-icon">
+      <%= link_to(image_tag('mock-project-icon.jpg'), project_path(project) ) %>
+    </div>
+    <div class="project-text">
+      <h2><%= link_to(project.name, project_path(project) ) %></h2>
+      <p><%= link_to(image_tag('report_edit.png'), edit_project_path(project)) %>&nbsp;<em><%=h project.description || "[No Description]" %></em></p>
+    </div>
+    <div class='project-datasets'>
+      <%- if project.models.empty? -%>
+        <p>There are no datasets associated with this project.<br /><%= link_to('Add a Dataset', csv_question_path(project)) %></p>
+      <%- else -%>
+        <table>
+          <thead>
+            <tr>
+              <th>Dataset</th>
+              <th>New</th>
+              <th>Total</th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <%- for dataset in project.models -%>
+            <tr>
+              <td style="text-align:left;"><%= h dataset.public_name %></td>
+              <td><%= link_to(dataset.count(:created_at.gt => 1.week.ago), project_yogo_data_index_path(project, dataset)) %></td>
+              <td><%= link_to(dataset.count, project_yogo_data_index_path(project, dataset)) %></td>
+              <td><%= link_to(image_tag('table_edit.png', :title => "Browse Data") + " Browse", project_yogo_data_index_path(project, dataset)) %></td>
+              <!-- TODO: Show the model editor -->
+              <td><%= link_to(image_tag('layout_edit.png', :title => "Describe Dataset") + " Describe", project_yogo_models_path(project)) %></td>
+              <td><%= link_to(image_tag('table_add.png', :title => "Import Spreadsheet") + " Import", import_csv_path(project)) %></td>
+            </tr>
+          <%- end -%>
+        </table>
+      <%- end -%>  
+    </div> <!-- project-text -->
+  </div> <!-- project-block -->
+  <%- end -%>
+</div> <!-- content-block -->
+
+<div id="pagination-links">
+  <%= pagination_links(Project, params[:page], 5) %>
+</div>

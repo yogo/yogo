@@ -1,0 +1,8 @@
+first: 1
+second: 2
+true_boolean: true
+false_boolean: no
+
+something_nested:
+  first_layer: first layer
+  a_hash: true

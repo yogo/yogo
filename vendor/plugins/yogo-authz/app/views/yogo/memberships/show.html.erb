@@ -1,0 +1,24 @@
+
+<h2>User's groups</h2>
+<ul>
+  <%- for membership in @user_memberships -%>
+    <li>
+      <%= membership.group.name %>
+      <%= link_to("Remove", 
+                  user_membership_path(@user.id, :membership_id => membership.id), 
+                  :method => :delete) %>
+    </li>
+  <%- end -%>
+</ul>
+
+<h2>Other Groups</h2>
+<ul>
+  <%- for group in @groups -%>
+    <li>
+      <%= group.name %> 
+      <%= link_to("Add", 
+                  user_membership_path(@user.id, :group_id => group.id), 
+                  :method => 'post' ) %>
+    </li>  
+  <%- end -%>
+</ul>

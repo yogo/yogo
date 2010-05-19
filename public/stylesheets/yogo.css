@@ -1,0 +1,631 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~ Overall Layout Elements ~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/*
+Link Brown: #703824
+Header Turq: #214A5D
+*/
+
+* {
+	margin:0;
+	padding:0;
+} 
+
+html, body {
+	height: 100%;
+}
+/*LKW's note: I took out these bits (from sticky footer) but need 
+to do cross-browser testing to make sure they're not needed.*/
+/*body > #container {height: auto; min-height: 100%;} 
+#main {padding-bottom: 100px;}*/  /* must be same height as the footer */
+
+a {
+  text-decoration: none;
+  color:#703824;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a img {
+  border: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica, Arial, Verdana, Sans-Serif;
+}
+
+p {
+  margin: 0.8em;
+  line-height: 1.1em;
+}
+
+h1,h2,h3,h4,h5{
+  color:#333;  
+  font-weight: normal;
+  margin: 0px 10px 10px 0px;
+}
+
+h1 {
+  font-size:1.5em;
+  margin: 0px 0px 10px -20px;
+  width: 856px;
+}
+
+h2 {
+  font-size:1.4em;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+h3 {
+  font-size:1.1em;
+  margin-top: 20px;
+  font-weight:bold;
+}
+
+h4 {
+  font-size:0.9em;
+  margin-top: 20px;
+  font-weight:bold;
+}
+
+ul, ol {
+  padding:0px;
+  margin:0.5em;
+  list-style: inside;
+}
+
+ul li, ol li {
+  margin-left: 1em;
+/*  padding:0.5em;*/
+}
+
+img {
+  margin: 0.5em 1.0em;
+}
+
+.section-title {
+  text-align:center;
+  padding:12px;
+  background:#eee;
+/*  margin-bottom: 12px;*/
+}
+
+
+.errorExplanation h2 {
+  font-size:16px;
+  color:#990000;
+  font-weight:bold;
+}
+
+.fieldWithErrors {
+  display:inline;
+}
+
+.notice, .error {
+  text-align: center;
+  width:500px;
+  margin:0px auto;
+  padding: 5px 10px;
+  border:1px solid #aaa;
+}
+.notice p, .error p{
+  margin: .1em;
+  line-height: 1em;
+}
+
+.notice{background-color:#DFD;}
+.error{ background-color:#FDD;}
+
+
+/*Used to distinguish alternating rows in lists, wherever they occur*/
+.alternate-rows0 {
+  background:#EEE;
+}
+
+/*This is here (in part) so the footer will stay at the bottom of pages*/
+.clearfix:after {
+  content: ".";
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.clearfix {
+ display: inline-block;
+}
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~ Container, Content, Breadcrumbs ~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+#header {
+  height:93px;
+  background-color: #666;
+  margin-bottom: 10px;
+  margin-top: -40px;
+}
+
+#header img {
+  margin: 0px;
+  padding: 0px;
+}
+
+#container {
+  margin: 0px;
+}
+
+#content {
+  padding: 0px 10px 20px 10px;
+}
+.fitted-content {
+  width: 860px;
+}
+#liquid-content{
+  margin-top: 10px;
+}
+#menu{
+  background: #EEE url(../images/shadow-bk.png) repeat-x fixed top;
+  margin-top: -4px;
+  font-size:0.9em;
+  height: 35px;
+  width: 880px;
+}
+
+#menu-links{
+  float: left;
+  padding: 10px 3px 4px 3px;
+  margin-left: 10px;
+}
+
+#search-tab {
+  float: right;
+  padding: 7px 3px 4px 3px;
+  width: 355px;
+}
+
+.action-links{
+  font-size: .8em;
+}
+
+#search-tab form{
+  font-size: .9em;
+}
+
+#search-tab .button-link{
+  font-size: .9em;
+  padding: 3px 2px 2px 2px;
+}
+
+#footer {
+  height: 100px;
+  clear: both;
+  text-align: center;
+  width: 845px;
+}
+
+#footnotes_holder{
+  width: 900px;
+}
+.large-centered-content {
+  width: 700px;
+  margin: 20px auto;
+}
+
+.medium-centered-content {
+  width:600px;
+  margin: 20px auto;
+}
+
+.small-centered-content {
+  width: 500px;
+  margin: 20px auto;
+}
+
+.boxed {
+  border: 1px dotted #999;
+  padding: 10px;
+}
+
+#breadcrumbs {
+  font-size:0.9em;
+  padding:0 0 12px 0;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~ Users  ~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+#user-bar {
+  float:right;
+  padding:8px 20px 0 0;
+}
+
+  #log-link {
+    font-size:15px;
+  }
+
+#user-session-login {
+  margin:auto;
+  padding:20px;
+  width:400px;
+  text-align:center;
+  background:#ffffdd;
+  border:2px solid #ddd;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~ Sidebar ~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+#sidebar {
+  width:175px;
+  float:left;
+  padding-left:8px;
+  margin-right:8px;
+  margin-top: 50px;
+  border-right:1px solid #ddd;
+}
+
+  .nav-group {
+    margin:12px 0;
+  }
+
+  #home-title {
+    width:48px;
+    padding:0 0 0 3px;
+    margin:10px 0;
+    border-bottom:5px #cccc99 solid;
+  }
+  
+  #nav-tools {
+    margin-top:24px;
+    padding:6px 0 0 0;
+    border-top:1px dotted #888;
+  }
+
+  #sidebar ul {
+    padding:0px;
+    margin:3px 5px 0 5px;
+    list-style: none;
+  }
+
+  #sidebar ul li {
+    margin-left: 10px;
+    padding:5px 0 0 0px;
+  }
+
+    #list-models ul li {
+      list-style-image: url("../images/nested_bullet.gif");
+    }
+
+    #list-attributes ul li {
+      /*list-style:none;*/
+      list-style-image: url("../images/nested_bullet_2.gif");
+    }
+
+  #sidebar ul li.highlighted-menu-item {
+    font-weight: bold;
+    border-left: 1px solid #888;
+    padding-left:2px;
+    background-color: #EEE;
+  }
+
+  #sidebar-search {
+    text-align:center;
+    margin-top:20px;
+  }
+  
+  #sidebar-search input {
+    margin:0px 12px 6px 0;
+  }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~ Projects ~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+.project-block {
+  padding-top: 10px;
+  overflow: auto;
+  border-bottom: 1px dotted #888;
+}
+
+/*#create-project-button{
+  position: absolute;
+  top: 160px;
+  left: 730px;
+}*/
+  
+.project-icon {
+  width:80px; 
+  float:left;
+}
+
+.project-text {
+  float:left; 
+  width:500px;
+}
+
+#project-remove-link {
+  margin-top:12px;
+  border-top:1px dotted #888;
+	padding:8px 0 0 0;
+}
+
+#project-show, #model-show {
+	padding:12px 0;
+}
+
+#project-show-row td, #model-show-row td {
+	padding:3px 8px;
+  border-bottom:1px dotted #888;
+  vertical-align:bottom;
+}
+
+#project-search ul {
+  list-style-type:none;
+}
+
+.dashboard-table {font-size:0.8em; margin-left:32px;}
+.dashboard-table th {font-weight:normal; min-width:50px;}
+.dashboard-table td {text-align:center;}
+
+#editor-frame {
+  width: 860px;
+  height: 450px;
+  margin: 10px 0px 10px 0px;
+}
+
+.dataset-name{
+  border: 1px solid silver;
+  padding: 5px;
+  margin-bottom: 0px;
+  width: 200px;
+}
+
+.dataset-info{
+  border: 1px solid silver;
+  margin-top: -1px;
+  padding: 5px;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~ Data ~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+#yogo-data-list ul {
+  margin:0;
+  padding:0;
+}
+
+#yogo-data-list ul li {
+  list-style-type: none;
+}
+
+#data-index {
+  float:left;
+  overflow: auto;
+  width:680px;
+  padding:20px 10px;
+}
+
+#data-index-table {
+  border:1px dotted #214a5d;
+  border-right:none;
+  border-left:none;
+  padding:12px;
+  margin-top:20px;
+  border-collapse: collapse;
+}
+
+  #data-index-table h3 {
+    text-align:center;
+  }
+
+  #data-index-table th, #data-show th {
+  	padding:8px;
+  }
+
+  #data-index-table td, #data-show td {
+    padding:4px;
+    border: 1px dotted #AAA;
+    max-height: 20px;
+  }
+
+  .data-index-table-actions {
+    text-align:center;
+  }
+  
+  th.data-index-table-actions {
+    min-width: 60px;
+  }
+
+#add-data-link {
+  font-size:1.2em;
+  padding:16px 0 0 0;
+}
+
+#pagination-links {
+  width:720px;
+  float:left;
+  width:680px;
+  padding:20px 10px;
+	/*padding:12px;*/
+}
+
+#pagination-links strong {
+  color:#214A5D;
+  font-size:1.1em;
+}
+
+#search-data {
+  margin-bottom:20px;
+}
+
+#upload {
+	margin:20px 0;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~ Forms ~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+form .buttons{
+  width: 50%;
+  float: right;
+  margin-top: 20px;
+  border: 1px solid #999;
+/*  text-align: right;*/
+}
+
+form .form-element {
+  width: 100%;
+  display: block;
+  padding: 10px 0px;
+  overflow: hidden;
+}
+
+form .cancel {
+  margin-left: 50px;
+}
+
+form input, form textarea, form select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+form textarea {
+  height:100px;
+  width: 60%;
+}
+
+
+form .box {
+  display: block;
+  width: 30%;
+  float: left;
+  padding-right: 0.8em;
+}
+
+form .box label {
+  display: block;
+  float: right;
+  padding: 2px 0px 2px 0px;
+/*  outline: black thin solid;*/
+}
+
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~ Tutorial~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+.wrapper { 
+  border: 1px solid #CCC; 
+}
+.ui-tabs, .ui-widget {
+  padding: 0px;
+}
+
+.ui-widget-content {
+  border: 0px;
+  /*padding: 10px 10px 10px 10px;*/
+}
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~ Unmangled stuff ~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+.button-links {
+  overflow: auto;
+  margin: 0px auto;
+  width: 505px;
+}
+
+.button-links a {
+  width: 230px;
+  margin: 5px;
+  float: left;
+  text-align: center;
+  display: block;
+}
+
+.button-link {
+  border: 1px solid #666;  
+  padding: 5px;
+  background-color: #F2F2F2;
+  color: #703824;
+  line-height: 2em;
+}
+
+.button-link:hover{
+  background-color: #E2E2E2;
+  text-decoration: none;
+}
+
+#roadmap {
+  text-align: center;
+  margin: 10px 10px 20px 10px;
+}
+
+.textdropdown-outer {
+  border: 1px solid #ccc;
+  float: left;
+}
+ 
+.textdropdown-btn {
+  width: 20px;
+  float: right;
+  background-color: transparent;
+  background-image: url(../images/arrow_down_16.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+ul.textdropdown {
+  border: 1px solid #ccc;
+  padding: 0px;
+  list-style: none;
+  margin: 0px;
+}
+ 
+ul.textdropdown li {
+  padding: 2px;
+  display: block;
+  list-style: none;
+  margin: 0px;
+}
+ 
+ul.textdropdown li:hover {
+  background-color: #efefef;
+  cursor: pointer;
+}
+
+.button-big {text-align:center;}
+.left { float: left; }
+.right { float:right; }
+.half { width:50%; }
+.text-center { text-align: center; }
+.center{ margin: auto auto; }
+
+
+h2.trigger {
+  background: url("../images/mock-div-button.jpg") no-repeat;
+  height: 31px;
+  width: 260px;
+  padding: 2px 16px 2px 2px;
+}
+h2.trigger a {
+  color: #000;
+  font-size:0.8em;
+  text-decoration: none;
+  padding: 8px 0 2px 16px;
+  display: block;
+}

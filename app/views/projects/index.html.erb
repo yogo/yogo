@@ -1,0 +1,9 @@
+<h3>This is the projects index page.</h3>
+<p>In time it will become clearer what should go here.</p>
+<%- @projects.each do |p| %>
+    <%= link_to(p.name, project_url(p)) %><br />
+<%- end %>
+
+<div id="pagination-links">
+  <%= pagination_links(Project, params[:page], 5) %>
+</div>

@@ -1,0 +1,6 @@
+Name,ID,Mass,Charge,Bacon
+Text,Integer,Decimal,Decimal,Integer
+NA,NA,kg,volts,watts
+Sean,1,1283.0,1.2,3
+Bug,2,23492.0,1.5,4
+Aed,3,233213.0,3.2,6

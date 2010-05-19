@@ -1,0 +1,25 @@
+<H3><%= @model.name.demodulize.titleize.singularize %></H3>
+<br />
+<%- form_for(@item, :url => project_yogo_data_index_path(@project, @model.name.demodulize), 
+                    :builder => YogoDataFormBuilder,
+                    :html => { :method => :post, :enctype => 'multipart/form-data' } ) do |f| -%>
+                     
+ <%- for error in @item.errors -%>
+  <%= error %>
+ <%- end -%>
+                     
+<table>
+  <thead>
+  </thead>
+  <tbody>
+      <%- @model.usable_properties.each do |p| %>
+          <tr>
+            <td><%= f.label(p.display_name, p.display_name.to_s.titleize) %>: </td>
+            <td><%= f.field_for_param(p) %></td>
+          </tr>
+      <%- end %>
+  </tbody>
+</table>
+<br />
+<%= f.submit %>
+<%- end -%>

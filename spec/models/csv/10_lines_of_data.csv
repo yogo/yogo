@@ -1,0 +1,13 @@
+Name,ID,Mass,Charge
+Text,Integer,Decimal,Decimal
+NA,NA,kg,volts
+Sean,1,1283.0,1.2
+Bug,2,23492.0,1.5
+Aed,3,233213.0,3.2
+Ivan,4,22.0,1.2
+Insect,5,23.0,1.5
+Dea,6,23.0,3.2
+Ivan2,7,22.0,1.2
+Insect2,8,23.0,1.5
+Dea2,9,29.0,3.2
+Robbie Lamb,10,29.0,3.2

@@ -1,0 +1,8 @@
+<%= render(:partial => 'model_editor') %>
+
+<div class='fitted-content'>
+<div class='right'>
+  <%= link_to("Refresh Attributes", refresh_attributes_project_yogo_models_path(@project), :method => :post, :class => 'button-link') %>
+  <%= link_to("Finish", project_path(@project), :class => 'button-link') %>
+</div>
+</div>

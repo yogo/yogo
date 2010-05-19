@@ -1,0 +1,11 @@
+<div id="upload">
+  <strong>Data File Management</strong>
+  <%- form_tag(upload_project_yogo_data_path( @project.id, @model.name.demodulize.titleize), :multipart => true ) do -%>
+      <label for="upload_file">Select File</label> : 
+      <%= file_field('upload', 'datafile', :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel") %>
+      <%= submit_tag("Upload") %>
+  <%- end -%>
+  <br />
+  <%= link_to("Download CSV spreadsheet template", project_yogo_model_path( @project, @model, :format => :csv ), :method => :get ) %><br/>
+  <%= link_to("Download CSV spreadsheet containing current data", project_yogo_data_index_path( @project, @model, :format => :csv ), :method => :get ) %>
+</div>

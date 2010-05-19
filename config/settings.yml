@@ -1,0 +1,3 @@
+local_only: true
+require_change_summary: false
+asset_directory: yogo_assets
