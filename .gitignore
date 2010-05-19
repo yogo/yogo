@@ -1,6 +1,5 @@
 *~
 SourceImages
-.rvmrc
 *.cache
 log/*.log*
 *.pid
