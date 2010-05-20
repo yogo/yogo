@@ -12,22 +12,18 @@
 
 // Border Mixins
 =borders
-  border: 1px solid #305D6E
-
+  border: 1px solid $border_color
 =border-top
-  border-top: 1px solid #305D6E
+  border-top: 1px solid $border_color
   margin-top: -1px
-
 =border-right
-  border-right: 1px solid #305D6E
+  border-right: 1px solid $border_color
   margin-right: -1px
-
 =border-bottom
-  border-bottom: 1px solid #305D6E
+  border-bottom: 1px solid $border_color
   margin-bottom: -1px
-
 =border-left
-  border-left: 1px solid #305D6E
+  border-left: 1px solid $border_color
   margin-left: -1px
 
 body.bp
@@ -40,11 +36,11 @@ form.bp
 // Base Body Styles
 body
   +blueprint-typography(true)
-  margin-left: 10px
+  margin-left: 1em
   // Header (always blueprint layout)
   #header
     height: 65px
-    margin-bottom: 10px
+    margin-bottom: 1em
     width: 100%
     #menu
       background: #eeeeee url(image_url("shadow-bk.png")) repeat-x fixed top
@@ -107,6 +103,55 @@ body
     text-decoration: none
     &:hover
       text-decoration: underline
+  // Button Links
+  .button-links
+    overflow: auto
+    margin: 0px auto
+    width: 505px
+    a
+      width: 230px
+      margin: .5em
+      float: left
+      text-align: center
+      display: block
+  .button-link
+    border: 1px solid #666666
+    padding: .5em
+    background-color: #f2f2f2
+    color: #703824
+    line-height: 2em
+    &:hover
+      background-color: #e2e2e2
+      text-decoration: none
+      cursor: pointer
+  // H* Tags
+  h1 
+    font-size: 2.5em
+    line-height: 1
+    margin-bottom: 0.5em
+  h2 
+    font-size: 1.9em
+    margin-bottom: 0.75em
+  h3 
+    font-size: 1.5em
+    line-height: 1
+    margin-bottom: 1em
+  h4 
+    font-size: 1.2em
+    line-height: 1.25
+    margin-bottom: 1.25em
+  h5 
+    font-size: 1em
+    font-weight: bold
+    margin-bottom: 1.5em
+  h6 
+    font-size: 1em
+    font-weight: bold
+  //General Styles
+  .text-center
+    text-align: center
+  img
+    border: 0
 
 // Blueprint Body Container
 body.bp
@@ -114,7 +159,7 @@ body.bp
   #container
     +container
     // To left align the grid
-    margin: 0px
+    margin: 0
   // Sidebar
   #sidebar
     $sidebar_columns: floor($blueprint_grid_columns / 4)
@@ -127,7 +172,7 @@ body.bp
     margin-bottom: 2em
   // Content Frame
   #content
-    margin-top: 10px
+    margin-top: 1em
     +column($blueprint_grid_columns)
     h1#content-title
       margin-top: 0
@@ -161,6 +206,7 @@ body.bp
       .project-text
         +column(9)
       .project-datasets
+        margin-top: 1em
         +column(11)
         +last
     // Project Dashboard
@@ -171,7 +217,7 @@ body.bp
         text-align: center
         margin: .25em 0
       p
-        margin-left: 20px
+        margin-left: 2em
         font-style: italic
         font-size: .8em
       .action-links
@@ -196,7 +242,7 @@ body.bp
         font-size: .9em
         th
           border-bottom: 1px solid #CCC
-            padding-bottom: 2px
+          padding-bottom: 2px
       // Jquery UI Overrides
       .ui-tabs .ui-tabs-nav li a
         padding: 0.3em 0.5em
@@ -228,32 +274,3 @@ body.bp
       +append(2)
       +last
       
-
-//General Styles
-.text-center
-  text-align: center
-
-img
-  border: 0px
-
-.button-links
-  overflow: auto
-  margin: 0px auto
-  width: 505px
-  a
-    width: 230px
-    margin: 5px
-    float: left
-    text-align: center
-    display: block
-
-.button-link
-  border: 1px solid #666666
-  padding: 5px
-  background-color: #f2f2f2
-  color: #703824
-  line-height: 2em
-  &:hover
-    background-color: #e2e2e2
-    text-decoration: none
-    cursor: pointer
