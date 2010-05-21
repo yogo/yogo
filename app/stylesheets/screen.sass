@@ -245,6 +245,12 @@ body.bp
         +append(2)
         +last
         margin-top: 4em
+    // CSV Question
+    .scratch, .spreadsheet
+      +column(6)
+      height: 150px
+    .spreadsheet
+      +last
     // Yogo Dashboard
     .content-row-block
       +column(22)
@@ -313,12 +319,6 @@ body.bp
       +column(16)
       +append(3)
       +last
-      .left-column
-        +column(8)
-        +border(black)
-      .right-column
-        +column(8)
-        +last
     .large-centered
       +prepend(2)
       +column(18)
