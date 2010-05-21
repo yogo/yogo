@@ -133,13 +133,15 @@ body
     font-size: 1.25em
   // Boxen
   .rbox
-    border: 1px solid $border-color
+    border: 1px solid $border-color + #553
     +border-radius
     padding: 1.5em
     &.happy
       background-color: #EFE
     &.tight
       padding: .5em
+    &.dashed
+      border-style: dashed
   // H* Tags
   h1 
     font-size: 2.5em
@@ -163,6 +165,9 @@ body
   h6 
     font-size: 1em
     font-weight: bold
+  // Forms
+  .form-element
+    margin-bottom: 1em
   //General Styles
   .text-center
     text-align: center
