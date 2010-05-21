@@ -99,11 +99,13 @@ class ProjectsController < ApplicationController
   #
   # @api public
   def new
-    @project = Project.new
-    
-    respond_to do |format|
-      format.html
-    end
+    # @project = Project.new
+    # 
+    # respond_to do |format|
+    #   format.html 
+    # end
+    # 
+    redirect_to start_wizard_path
   end
 
   # Creates a new project based on the attributes
