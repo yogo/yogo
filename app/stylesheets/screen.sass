@@ -1,3 +1,6 @@
+// Let's use some CSS3
+@import "compass/css3"
+
 // This import applies a global reset to any page that imports this stylesheet.
 @import "blueprint/reset"
 
@@ -114,7 +117,7 @@ body
       float: left
       text-align: center
       display: block
-  .button-link
+  .button-link, .big-button-link, .medium-button-link
     border: 1px solid #666666
     padding: .5em
     background-color: #f2f2f2
@@ -124,6 +127,19 @@ body
       background-color: #e2e2e2
       text-decoration: none
       cursor: pointer
+  .big-button-link
+    font-size: 1.75em
+  .medium-button-link
+    font-size: 1.25em
+  // Boxen
+  .box
+    border: 1px solid $border-color
+    +border-radius
+    padding: 1.5em
+    &.happy
+      background-color: #EFE
+    &.tight
+      padding: .5em
   // H* Tags
   h1 
     font-size: 2.5em
@@ -179,6 +195,12 @@ body.bp
       text-align: left
       +column($blueprint_grid_columns - 2)
       +last
+      &.no-gap
+        margin-top: -1.2em
+      &.center
+        +prepend(1)
+        +column(16)
+        text-align: center
     #content-actions
       +column(22)
       +last
@@ -194,6 +216,30 @@ body.bp
       margin-top: 0
     #content-block
       +column($blueprint_grid_columns - 2)
+    // No Project Index
+    .description-column, .title-column
+      h3
+        text-align: center
+    .description-column
+      margin-top: -2em
+      +column(7)
+      +prepend(1)
+      p
+        margin-bottom: 0
+      .box
+        margin-bottom: 1em
+    .title-column
+      margin-top: -2em
+      +column(14)
+      +last
+      h1
+        margin-bottom: 1.5em
+      #getting-started
+        +prepend(2)
+        +column(10)
+        +append(2)
+        +last
+        margin-top: 4em
     // Yogo Dashboard
     .content-row-block
       +column(22)
