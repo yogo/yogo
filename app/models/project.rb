@@ -20,6 +20,16 @@ class Project
   validates_is_unique   :name
   
   before :destroy, :delete_models!
+  
+  # The number of items to be displayed (by default) per page
+  # 
+  # @return [Fixnum]
+  # 
+  # @api public
+  def self.per_page
+    15
+  end
+  
   ##
   # Returns the namespace Yogo Models will be in
   # 

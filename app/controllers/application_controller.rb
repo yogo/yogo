@@ -85,13 +85,4 @@ class ApplicationController < ActionController::Base
     @sidebar = true
   end
   
-  # The number of items to be displayed (by default) per page
-  # 
-  # @return [Fixnum]
-  # 
-  # @api private  
-  def per_page
-    15
-  end
-  
 end

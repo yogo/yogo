@@ -39,7 +39,7 @@ class YogoDataController < ApplicationController
       @query = @model.all
     end
     
-    @data = @query.paginate(:page => params[:page], :per_page => per_page)
+    @data = @query.paginate(:page => params[:page], :per_page => Project.per_page)
     respond_to do |format|
       format.html { @no_blueprint = true }
       format.json { @data = @query.all if params[:page].blank?; render( :json => @data.to_json )}
@@ -63,7 +63,7 @@ class YogoDataController < ApplicationController
     search_term = params[:search_term]
 
     @query = @model.search(search_term)
-    @data = @query.paginate(:page => params[:page], :per_page => per_page)
+    @data = @query.paginate(:page => params[:page], :per_page => Project.per_page)
     respond_to do |format|
       format.html { render( :action => :index) }
       format.json {  @data = @query.all, render( :json => @data.to_json )}

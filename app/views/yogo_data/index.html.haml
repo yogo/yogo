@@ -46,7 +46,7 @@
 /   = link_to(image_tag('add.gif')+' Add Data', 
 /       new_project_yogo_data_path(@project, @model.name.demodulize))
 
-#pagination-links= pagination_links(@query, params[:page], 10)
+#pagination-links= pagination_links(@query, params[:page], Project.per_page)
 
 /= render :partial => 'csv_form'
 
