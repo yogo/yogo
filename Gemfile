@@ -25,6 +25,7 @@ gem "fastercsv"                       # unless RUBY 1.9
 gem "carrierwave"
 gem "compass"
 gem "haml"
+gem "uuidtools"
 
 
 if defined?(JRUBY_VERSION)
