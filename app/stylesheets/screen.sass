@@ -69,8 +69,7 @@ body
     +append(4)
     +last
     text-align: center
-    height: 1em
-    margin-bottom: 1em
+    height: 2em
     .error, .notice
       padding: 0
       p
@@ -131,6 +130,14 @@ body
     font-size: 1.75em
   .medium-button-link
     font-size: 1.25em
+  // Tooltip Dialogs
+  .tooltip
+    font-size: .9em
+  .tooltip-snippet
+    &:hover
+      cursor: pointer
+    .more
+      color: $link_color
   // Boxen
   .rbox
     border: 1px solid $border-color + #553
@@ -193,7 +200,6 @@ body.bp
     margin-bottom: 2em
   // Content Frame
   #content
-    margin-top: 1em
     +column($blueprint_grid_columns)
     h1#content-title
       margin-top: 0
