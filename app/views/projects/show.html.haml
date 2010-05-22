@@ -13,7 +13,9 @@
     .content-row-block
       .dataset-name
         %h2= dataset.public_name
-        %p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        %p= tooltip(@project.dataset_description(dataset.name), 
+                    dataset.public_name + ' Description',
+                    200)
         .action-links
           = link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
               :class => 'button-link')

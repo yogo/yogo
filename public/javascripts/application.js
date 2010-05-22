@@ -33,6 +33,9 @@ $(document).ready(function(){
   
   // Dataset tab behavior (for the project show page)
   $(".action-tabs").tabs();
+  
+  // Tooltip dialogs
+  $('.tooltip').dialog({autoOpen:false, width:600});
 
 });
 

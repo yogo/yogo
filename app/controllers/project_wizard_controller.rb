@@ -8,6 +8,7 @@
 class ProjectWizardController < ApplicationController
   
   before_filter :no_headers
+  
   # Give a project a name
   # 
   # @example
@@ -26,6 +27,31 @@ class ProjectWizardController < ApplicationController
     
     respond_to do |format|
       format.html
+    end
+  end
+  
+  # Creates a new project based on the attributes
+  #
+  # @example 
+  #   post /project_wizard/
+  #
+  # @param [Hash] params
+  # @option params [Hash] :project this is the attributes of a project
+  #
+  # @return if the project saves correctly it redirects to show project 
+  #  else it redirects to new project page
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  def create
+    @project = Project.new(params[:project])
+    if @project.save
+      flash[:notice] = "Project \"#{@project.name}\" has been created."
+      redirect_to csv_question_url(@project)
+    else
+      flash.now[:error] = "Project could not be created."
+      render(:action => :name)
     end
   end
 

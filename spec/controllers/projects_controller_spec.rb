@@ -35,11 +35,12 @@ describe ProjectsController do
   end
 
   describe "GET projects/new"   do
-    it "assigns a new project as @project" do
-      Project.stub!(:new).and_return(mock_project)
+    
+    it "redirects to the project_wizard" do
       get :new
-      assigns[:project].should equal(mock_project)
+      response.should redirect_to(start_wizard_url)
     end
+    
   end
 
   # describe "GET projects/edit" do

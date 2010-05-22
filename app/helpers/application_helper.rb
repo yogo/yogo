@@ -154,6 +154,16 @@ module ApplicationHelper
     "<br clear='all' style='clear: both;'/>"
   end
   
+  def tooltip(body, title = nil, length = 10)
+    id = UUIDTools::UUID.random_create
+    <<-TT
+    <div id='#{id}' class='tooltip' title='#{title || "Click to see full text."}'>#{body}</div>
+    <p class='tooltip-snippet' onClick="$('##{id}').dialog('open')">
+      #{body[0..length]}<span class='more'>&#8230; more</span>
+    </p>
+    TT
+  end
+  
   # Creates the appropriate HTML for attributes on a model
   # 
   # For attributes that are files or images it makes a download link work for them
@@ -174,6 +184,12 @@ module ApplicationHelper
       file = item[property.name]
       img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
       link_to(file, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'), :class => 'fancybox')      
+    elsif property.type == DataMapper::Types::Text
+      if item[property.name] && item[property.name].length > 15
+        tooltip(item[property.name])
+      else
+        item[property.name]
+      end
     else 
       item[property.name]
     end
