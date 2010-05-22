@@ -22,10 +22,10 @@
         - @model.usable_properties.each do |h|
           %th= h.display_name.to_s.titleize
 
-      /%tr
-      /  %td= f.submit
-      /  - @model.usable_properties.each do |p|
-      /    %td= f.field_for_param(p)
+      %tr
+        %td= f.submit
+        - @model.usable_properties.each do |p|
+          %td= f.field_for_param(p)
 
       - @data.each do |d| 
         %tr{:class => cycle("cycle-odd","cycle-even")}
