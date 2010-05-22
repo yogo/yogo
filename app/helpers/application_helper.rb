@@ -158,9 +158,9 @@ module ApplicationHelper
     id = UUIDTools::UUID.random_create
     <<-TT
     <div id='#{id}' class='tooltip' title='#{title || "Click to see full text."}'>#{body}</div>
-    <p class='tooltip-snippet' onClick="$('##{id}').dialog('open')">
+    <span class='tooltip-snippet' onClick="$('##{id}').dialog('open')">
       #{body[0..length]}<span class='more'>&#8230; more</span>
-    </p>
+    </span>
     TT
   end
   
