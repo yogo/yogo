@@ -26,7 +26,7 @@
   / Header (including optional menus)
   #header
     #logo= image_tag('header.png')
-    #menu
+    #menu.rbox
       = render(:partial => 'layouts/menu_links') unless @no_menu 
       = render(:partial => 'layouts/search') unless @no_search 
   =clear_break 

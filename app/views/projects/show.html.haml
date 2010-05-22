@@ -4,6 +4,7 @@
   = link_to("Edit Datasets", project_yogo_models_path(@project), :class => 'button-link')
   = link_to("Delete Project", project_path(@project), 
     :method => :delete, :class => 'button-link', :confirm => "There is no undo.\n Continue?" ) 
+  = link_to("Import CSV", import_csv_path(@project), :class => 'button-link') 
 
 //= render(:partial => 'layouts/sidebar') %>
 
@@ -12,10 +13,10 @@
     - @item = dataset.new
     .content-row-block
       .dataset-name
-        %h2= dataset.public_name
-        %p= tooltip(@project.dataset_description(dataset.name), 
-                    dataset.public_name + ' Description',
-                    200)
+        %h2= link_to dataset.public_name, project_yogo_data_index_path(@project, dataset)
+        .description= tooltip(@project.dataset_description(dataset.name), 
+                      dataset.public_name + ' Description',
+                      200)
         .action-links
           = link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
               :class => 'button-link')

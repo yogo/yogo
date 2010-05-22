@@ -3,7 +3,7 @@ $(document).ready(function(){
   
   $(".date-picker").datepicker();
   
-  $('#project_model_name').textdropdown();
+  //$('#project_model_name').textdropdown();
   
   $('#tabs').each(function(){
     this.style.visibility = "visible";

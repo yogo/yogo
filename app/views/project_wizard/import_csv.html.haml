@@ -12,7 +12,9 @@
       - if @project.models.count.eql?(1)
         %p There is currently #{@project.models.count} dataset.
       - else
-        %p There are currently #{@project.models.count} datasets.
+        %p 
+          There are currently #{@project.models.count} datasets:
+          #{@project.models.map{|d|d.public_name}.join(', ')}
       = f.label('model_name', 'Dataset Name:')
       = text_field_tag('model_name', nil, :id => 'project_model_name')
       %ul.textdropdown
