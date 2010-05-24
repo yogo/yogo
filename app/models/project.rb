@@ -389,6 +389,34 @@ class Project
   def permit_current_user?
     users.include?(User.current)
   end
+  
 end
 
-require 'project_observer'
+# require 'project_observer'
+  
+# class ProjectObserver
+#   include DataMapper::Observer
+#   
+#   observe Project
+#   
+#   before :save do
+#     puts 'This is before a save of some sort!'
+#   end
+#   
+#   before :add_model do
+#     puts 'This should raise an error.'
+#     raise AuthorizationError, "You can't do that!"
+#   end
+#   
+#   before :destroy do
+#     raise AuthorizationError, "You can't do that!"
+#   end
+#   
+#   before :delete_model do
+#     raise AuthorizationError, "You can't do that!"
+#   end
+#   
+#   before :delete_models! do
+#     raise AuthorizationError, "You can't do that!"
+#   end
+# end

@@ -33,10 +33,10 @@ module AuthenticatedSystem
     # @author lamb
     # 
     # @api semipublic
-    def current_user_session
-      return @current_user_session if defined?(@current_user_session)
-      @current_user_session = UserSession.find
-    end
+    # def current_user_session
+    #   return @current_user_session if defined?(@current_user_session)
+    #   @current_user_session = UserSession.find
+    # end
 
     ##
     # Returns the current user session, if they are logged in.
@@ -47,10 +47,10 @@ module AuthenticatedSystem
     # @author lamb
     # 
     # @api semipublic
-    def current_user
-      return @current_user if defined?(@current_user)
-      @current_user = (current_user_session && current_user_session.record) || AnonymousUser.new
-    end
+    # def current_user
+    #   return @current_user if defined?(@current_user)
+    #   @current_user = (current_user_session && current_user_session.record) || AnonymousUser.new
+    # end
 
     ##
     # Checks to see if the current user has been authenticated
@@ -66,9 +66,9 @@ module AuthenticatedSystem
     # @author lamb
     # 
     # @api public
-    def logged_in?
-      (current_user_session && current_user_session.record)
-    end
+    # def logged_in?
+    #   (current_user_session && current_user_session.record)
+    # end
 
     ##
     # Checks to see if the current user has been authenticated

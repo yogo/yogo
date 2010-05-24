@@ -1,21 +1,20 @@
-require 'datamapper/authlogic/compatability'
+# require 'datamapper/authlogic/compatability'
 class User
   include DataMapper::Resource
-  include DataMapper::Authlogic::Compatability
+  # include DataMapper::Authlogic::Compatability
   include SentientUser
 
-  attr_accessor :password_confirmation
+  attr_accessor :password, :password_confirmation
 
   property :id,                 DataMapper::Types::Serial
   property :login,              String, :required => true, :index => true
-  property :email,              String, :required => true, :length => 256
-  property :first_name,         String, :required => true, :length => 50
-  property :last_name,          String, :required => true, :length => 50  
+  # property :email,              String, :required => true, :length => 256
+  # property :first_name,         String, :required => true, :length => 50
+  # property :last_name,          String, :required => true, :length => 50  
 
   # TODO: Make sure a length of 128 is long enough for various encryption algorithms.
-  property :crypted_password,     String, :required => true,  :length => 128
-  property :password_salt,        String, :required => true,  :length => 128
-  property :persistence_token,    String, :required => true,  :length => 128, :index => true
+  property :crypted_password,     BCryptHash, :required => true,  :length => 128
+  # property :persistence_token,    String, :required => true,  :length => 128, :index => true
 
   if Yogo::Setting[:allow_api_key] == true
     property :single_access_token,  String, :required => false, :length => 128, :index => true
@@ -38,15 +37,17 @@ class User
   property :updated_at, DateTime
   property :updated_on, Date
 
-  has n, :projects, :through => Resource
+  # has n, :projects, :through => Resource
 
-  acts_as_authentic do |config| 
-    config.instance_eval do
-      validates_uniqueness_of_email_field_options :scope => :id
-      validate_login_field false
-    end
-  end
-  
+  validates_is_confirmed :password
+
+  # acts_as_authentic do |config| 
+  #   config.instance_eval do
+  #     validates_uniqueness_of_email_field_options :scope => :id
+  #     validate_login_field false
+  #   end
+  # end
+  # 
   ##
   # Finds a user by their login.
   # 
@@ -94,6 +95,11 @@ class User
   # @api public
   def name
     "#{first_name} #{last_name}"
+  end
+  
+  def password=(pass)
+    @password = pass
+    self.crypted_password = pass
   end
   
 end

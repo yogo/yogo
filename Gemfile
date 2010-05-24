@@ -12,6 +12,7 @@ gem "dm-validations"
 gem "dm-is-nested_set"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates"
+gem 'bcrypt-ruby'
 gem "dm-types"
 gem "dm-observer"
 gem "dm-persevere-adapter", "0.60.2", :require => nil
@@ -19,7 +20,6 @@ gem "do_sqlite3",                     :require => nil
 gem "rails_datamapper",               :require => nil
 
 # Extra supporting gems
-gem "authlogic"
 gem "mime-types",                     :require => 'mime/types'
 gem "fastercsv"                       # unless RUBY 1.9
 gem "carrierwave"
@@ -27,6 +27,7 @@ gem "compass"
 gem "haml"
 gem "uuidtools"
 
+gem 'rails_warden'
 
 if defined?(JRUBY_VERSION)
   gem "json_pure",            :require => nil
@@ -35,7 +36,7 @@ else
 end
 
 
-gem 'ruby-debug',                  :group => :development unless defined?(JRUBY_VERSION)
+gem 'ruby-debug',                  :require => nil, :group => :development unless defined?(JRUBY_VERSION)
 gem "rails-footnotes",             :group => :development
 
 group :test do

@@ -3,7 +3,12 @@ class ProjectObserver
   
   observe Project
   
+  before :save do
+    puts 'This is before a save of some sort!'
+  end
+  
   before :add_model do
+    puts 'This should raise an error.'
     raise AuthorizationError, "You can't do that!"
   end
   

@@ -1,5 +1,5 @@
 <div id="user-session-login">
-  <% form_for( @user_session, :url => user_session_path, :builder => YogoFormBuilder )do |f| %>
+  <% form_for( :user_session, :url => user_session_path, :builder => YogoFormBuilder )do |f| %>
     <%= f.error_messages %>
 
     <%= f.text_field(:login, :label => "User Name:") %>

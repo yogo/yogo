@@ -49,7 +49,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :password, :only => [ :update, :edit ]
 
   # Login & Logout stuff
-  map.resource :user_session, :controller => "user_sessions", :only => [ :new, :create, :destory ]
+  map.resource :user_session, :only => [ :show, :new, :create, :destory ]
   map.logout '/logout', :controller => 'user_sessions', :action => 'destroy'
   map.login '/login', :controller => 'user_sessions', :action => 'new'
   
