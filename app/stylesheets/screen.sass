@@ -154,6 +154,12 @@ body
     font-size: 2.5em
     line-height: 1
     margin-bottom: 0.5em
+    &.no-gap
+      margin-top: -1.2em
+    &.center
+      +prepend(1)
+      +column(16)
+      text-align: center
   h2 
     font-size: 1.9em
     margin-bottom: 0.75em
@@ -175,6 +181,8 @@ body
   // Forms
   .form-element
     margin-bottom: 1em
+  .form-actions
+    margin-top: 1em
   //General Styles
   .text-center
     text-align: center
@@ -188,6 +196,11 @@ body.bp
     +container
     // To left align the grid
     margin: 0
+  #content-title
+    margin-top: 0
+    text-align: left
+    +column($blueprint_grid_columns - 2)
+    +last
   // Sidebar
   #sidebar
     $sidebar_columns: floor($blueprint_grid_columns / 4)
@@ -201,17 +214,6 @@ body.bp
   // Content Frame
   #content
     +column($blueprint_grid_columns)
-    h1#content-title
-      margin-top: 0
-      text-align: left
-      +column($blueprint_grid_columns - 2)
-      +last
-      &.no-gap
-        margin-top: -1.2em
-      &.center
-        +prepend(1)
-        +column(16)
-        text-align: center
     #content-actions
       +column(22)
       +last
@@ -257,6 +259,21 @@ body.bp
       height: 150px
     .spreadsheet
       +last
+    // CSV Import
+    .import-form
+      +prepend(6)
+      +column(10)
+      +append(6)
+      +last
+    .instructions
+      +prepend(1)
+      +column(12)
+    .example
+      +prepend(1)
+      +column(8)
+      +last
+      p
+        font-style: italic
     // Yogo Dashboard
     .content-row-block
       +column(22)
