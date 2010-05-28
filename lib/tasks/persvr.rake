@@ -12,7 +12,10 @@ require 'yaml'
 require 'net/http'
 
 namespace :persvr do
-  PERSVR_CMD = ENV['PERSVR'] || (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || RAILS_ROOT/'vendor/persevere/bin/persvr' || 'persvr'
+  PERSVR_CMD = ENV['PERSVR'] || 
+              (ENV['PERSEVERE_HOME'] && ENV['PERSEVERE_HOME']/:bin/:persvr) || 
+              (File.exists?(RAILS_ROOT/'vendor/persevere/bin/persvr') && RAILS_ROOT/'vendor/persevere/bin/persvr') || 
+              'persvr'
   
   def config(env)
     cfg = YAML.load_file(RAILS_ROOT/:config/'persvr.yml')[env]
@@ -109,18 +112,18 @@ namespace :persvr do
           pid = Process.fork do
             puts "Starting background persvr #{RAILS_ENV} instance in #{RAILS_ROOT/cfg['database']}..."
             puts "...logging persvr output to #{log}."
-            exec "#{PERSVR_CMD} --start --port #{cfg['port']} > #{log} 2>&1" 
+            exec "#{PERSVR_CMD} --start --port #{cfg['port']} > #{log} 2>&1 &" 
           end
           Process.detach(pid)
           
           # Now we wait for the background process to come up
           times_tried = 0
           begin
-            sleep 0.45
+            sleep 1.0
             times_tried += 1
             Net::HTTP.new('localhost', cfg['port']).send_request('GET', '/', nil, {})
           rescue Exception => e
-            retry if times_tried < 20
+            retry if times_tried < 200
             Rake.application['persvr:stop'].execute
             fail 'The perserver server didn\'t come up properly.'
           end
