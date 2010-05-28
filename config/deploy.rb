@@ -35,8 +35,14 @@ task :user_settings do
     set :user, "#{temp_user}"
   end
 end
-before :deploy, :user_settings
-before 'deploy:cleanup', :user_settings
+
+[ "bundle:install", "deploy", "deploy:check", "deploy:cleanup", "deploy:cold", "deploy:migrate",
+  "deploy:migrations", "deploy:pending", "deploy:pending:diff", "deploy:rollback", "deploy:rollback:code",
+  "deploy:setup", "deploy:symlink", "deploy:update", "deploy:update_code", "deploy:upload", "deploy:web:disable",
+  "deploy:web:enable", "invoke", "persvr:setup", "persvr:start", "persvr:stop", "persvr:drop",
+  "persvr:version", "shell" ].each do |task|
+  before task, :user_settings
+end
 
 namespace :deploy do
   task :start do ; end
@@ -79,6 +85,12 @@ task :setup_for_server do
 end
 after "deploy:update_code", "setup_for_server"
 
+namespace :bundle do
+  desc "Run bundle install on the server"
+  task :install do
+    run("bash -c 'cd #{current_path} && bundle install'")
+  end
+end
 
 namespace :persvr do
   desc "Setup Persevere on the server"
