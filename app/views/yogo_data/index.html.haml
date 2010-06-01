@@ -1,10 +1,13 @@
-%h1#content-title= @model.name.demodulize.titleize + " (#{@model.count})"
+%h1#content-title
+  = link_to(@project.name, project_path(@project))
+  &gt;
+  = @model.name.demodulize.titleize + " (#{@model.count})"
 
 #content-actions
   = link_to("Download CSV", project_yogo_data_index_path(@project, @model, :format => 'csv'), 
     :class => "button-link")
 
-  / <-- This is an alternative to the table using google visualiztion api (the javascript is now included in the app) -->
+  / This is an alternative to the table using google visualiztion api (the javascript is now included in the app)
   / <%# cols = @model.usable_properties.map { |prop| [ Yogo::Types.dm_to_gv(prop.type), Extlib::Inflection.humanize(prop.name.to_s) ] }%>
   / <%# gvdata = @data.map { |item| @model.usable_properties.map { |p| item[p.name]  } } %>
   / <%# visualization("test_table", "Table", {:data => gvdata, :columns => cols }) { } %>
@@ -22,10 +25,10 @@
         - @model.usable_properties.each do |h|
           %th= h.display_name.to_s.titleize
 
-      /%tr
-      /  %td= f.submit
-      /  - @model.usable_properties.each do |p|
-      /    %td= f.field_for_param(p)
+      %tr
+        %td= f.submit
+        - @model.usable_properties.each do |p|
+          %td= f.field_for_param(p)
 
       - @data.each do |d| 
         %tr{:class => cycle("cycle-odd","cycle-even")}
@@ -46,7 +49,7 @@
 /   = link_to(image_tag('add.gif')+' Add Data', 
 /       new_project_yogo_data_path(@project, @model.name.demodulize))
 
-#pagination-links= pagination_links(@query, params[:page], 10)
+#pagination-links= pagination_links(@query, params[:page], Project.per_page)
 
 /= render :partial => 'csv_form'
 

@@ -3,7 +3,7 @@ $(document).ready(function(){
   
   $(".date-picker").datepicker();
   
-  $('#project_model_name').textdropdown();
+  //$('#project_model_name').textdropdown();
   
   $('#tabs').each(function(){
     this.style.visibility = "visible";
@@ -33,6 +33,9 @@ $(document).ready(function(){
   
   // Dataset tab behavior (for the project show page)
   $(".action-tabs").tabs();
+  
+  // Tooltip dialogs
+  $('.tooltip').dialog({autoOpen:false, width:600});
 
 });
 

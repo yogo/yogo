@@ -99,11 +99,13 @@ class ProjectsController < ApplicationController
   #
   # @api public
   def new
-    @project = Project.new
-    
-    respond_to do |format|
-      format.html
-    end
+    # @project = Project.new
+    # 
+    # respond_to do |format|
+    #   format.html 
+    # end
+    # 
+    redirect_to start_wizard_path
   end
 
   # Creates a new project based on the attributes
@@ -234,14 +236,14 @@ class ProjectsController < ApplicationController
         errors =  @project.process_csv(datafile.path, class_name)
 
         if errors.empty?
-          flash[:notice]  = "File uploaded succesfully."
+          flash[:notice]  = "Spreadsheet imported succesfully."
         else
           flash[:error] = errors.join("\n")
         end
       end
       
     else
-       flash[:error] = "File upload area cannont be blank."
+       flash[:error] = "Spreadsheet import error, please try the upload again."
     end
     
     redirect_to project_url(@project)
@@ -265,7 +267,7 @@ class ProjectsController < ApplicationController
     @project = Project.create(:name => "Cricket Cercal System DB")
     errors = @project.process_csv(Rails.root.join("dist", "example_data", "cercaldb", "cells.csv"), "Cell")
     if errors.empty?
-      flash[:notice]  = "File uploaded succesfully."
+      flash[:notice]  = "Example Project imported succesfully."
     else
       flash[:error] = errors.join("\n")
     end

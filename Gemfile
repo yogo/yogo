@@ -2,7 +2,7 @@
 source      "http://rubygems.org"
 
 # Required core gems
-gem "rails",                "2.3.5", :require => nil
+gem "rails",                "2.3.8", :require => nil
 gem "rake",                          :require => nil
 gem "dm-core",              "0.10.2"
 
@@ -25,6 +25,7 @@ gem "fastercsv"                       # unless RUBY 1.9
 gem "carrierwave"
 gem "compass"
 gem "haml"
+gem "uuidtools"
 
 
 if defined?(JRUBY_VERSION)

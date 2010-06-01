@@ -1,0 +1,57 @@
+.small-centered.text-center
+  = image_tag('mock-roadmap-2.jpg')
+
+.medium-centered.text-center
+  %h2 Import Data and Dataset Descriptions From a Spreadsheet
+
+
+.import-form
+  .dashed.rbox
+    %h3 Import into Project: #{@project.name}
+    - form_for(:project, :url => upload_csv_wizard_path(@project), :html => { :method => :post, :multipart => true}) do |f|
+      - if @project.models.count.eql?(1)
+        %p There is currently #{@project.models.count} dataset.
+      - else
+        %p 
+          There are currently #{@project.models.count} datasets:
+          #{@project.models.map{|d|d.public_name}.join(', ')}
+      = f.label('model_name', 'Dataset Name:')
+      = text_field_tag('model_name', nil, :id => 'project_model_name')
+      %ul.textdropdown
+        - for model in @project.models
+          %li= model.public_name
+      = f.label('datafile', 'Select file:')
+      = f.file_field( 'datafile', 
+          :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel")
+      = clear_break
+      .form-actions.text-center
+        / .box &nbsp;
+        = f.submit( "Upload and Continue", :class => 'button-link') 
+        = f.submit("Upload and Finish", :class => 'button-link')
+        = link_to("Finish", project_yogo_models_path(@project), :class => 'button-link')
+
+.instructions
+  %h2 Instructions
+  %p If you already have your data in a spreadsheet, you can load in your data and dataset description all at once.  This is a convenient way to get started.
+  
+  %h4 Requirements
+  %p 1. The spreadsheets that can be loaded into the Yogo Data Management Toolkit must be in a particular format.  First, they must be in "comma separated values" format (often described as a "CSV" file).  Any modern spreadsheet application can export a spreadsheet in CSV format.
+  %p 2. The top three rows of the spreadsheet are special header information that the Yogo Data Management Toolkit needs to determine the character of the data columns.
+  %ul
+    %li The first row contains the names of the variables (the column name)
+    %li The second row contains the type of the values (text, number, etc.)
+    %li The third row contains the units for the values (centimeters, degrees, etc.)
+  
+.example
+  %h2.text-center Example
+  %p For example, the contents of a spreadsheet might look something like the following image:
+  = image_tag('spreadsheet-example.png')
+  %p When the spreadsheet is exported as CSV, the resulting file would have following contents:
+  %pre 
+    :preserve
+      ID,      Name,    Mass,     Charge
+      Integer, Text,    Decimal,  Decimal
+      NA,      NA,      kg,       volts
+      1,       Mickey,  1283.5,   1.2
+      2,       Mario,   23492.2,  1.5
+      3,       Sonic,   521213.8, 3.2

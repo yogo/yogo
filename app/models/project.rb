@@ -20,6 +20,16 @@ class Project
   validates_is_unique   :name
   
   before :destroy, :delete_models!
+  
+  # The number of items to be displayed (by default) per page
+  # 
+  # @return [Fixnum]
+  # 
+  # @api public
+  def self.per_page
+    15
+  end
+  
   ##
   # Returns the namespace Yogo Models will be in
   # 
@@ -268,6 +278,19 @@ class Project
     new_models.each{|m| m.properties.sort! }
   end
   
+  ## 
+  # Return the description for a dataset
+  # 
+  # @param [String] dataset name
+  # 
+  # @return [String or Nil]
+  # 
+  # @author Pol Llovet pol.llovet@gmail.com
+  # 
+  def dataset_description(dataset)
+    "Directionally selective mechanosensory afferents in the cricket cercal sensory system form a map of air current direction in the terminal abdominal ganglion. The global organization of this map was revealed by studying the anatomical relationships between an ensemble of sensory afferents that represented the entire range of receptor hair directional sensitivities on the sensory epithelium. The shapes and three-dimensional positions of the terminal arborizations of these cells were highly conserved across animals. Afferents with similar directional sensitivities arborized near each other within the map, and their terminal arborizations showed significant anatomical overlap. There was a clear global organization pattern of afferents within the map: they were organized into a spiral shape, with stimulus direction mapped continuously around the spiral. These results demonstrate that this map is not formed via a direct point-to-point topographic projection from the sensory epithelium to the CNS. Rather, the continuous representation of air current direction is synthesized within the CNS via an anatomical reorganization of the afferent terminal arbors. The arbors are reorganized according to a functional property that is independent of the location of the mechanoreceptor in the epithelium. The ensemble data were used to derive predictions of the patterns of steady-state excitation throughout the map for different directional stimuli. These images represent quantitative and testable predictions of functional characteristics of the entire neural map."
+  end
+  
   private
   
   ##
@@ -329,5 +352,6 @@ class Project
     model.send(:include,Yogo::Model)
     return model
   end
+
   
 end
