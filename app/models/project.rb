@@ -109,7 +109,6 @@ class Project
     if model.nil?
       model = generate_empty_model(model_name)
       model.auto_migrate!
-      model.backup_schema!
     end
     
     # Load data

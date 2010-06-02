@@ -22,6 +22,9 @@ module Yogo
       base.send(:extend, ModelEditor)
       base.class_eval do
 
+        after_class_method :auto_migrate!, :backup_schema!
+        after_class_method :auto_upgrade!, :backup_schema!
+
         validates_present :change_summary, :if => :require_change_summary?
 
         base.properties.each do |property|

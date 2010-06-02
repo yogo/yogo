@@ -156,7 +156,6 @@ module Yogo
 
         # update model props: model.send(:property, :prop_name.to_sym, prop_type, :required => false, :position => prop[2], :separator => '__', :prefix => 'yogo')
         model.auto_upgrade!
-        model.backup_schema!
         return model
       end
     end
