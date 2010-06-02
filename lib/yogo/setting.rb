@@ -17,7 +17,7 @@ module Yogo
     # storage_names[:default] = 'yogo__settings'
     # storage_names[:yogo_settings_cache] = 'yogo_settings'
 
-    property :id,    Serial
+    property :id,     Serial
     property :name,   String
     property :value,  Object
   
@@ -158,7 +158,7 @@ module Yogo
     # @api private
     def self.check_database(key)   
       # puts "Checking database for #{key}"
-      result = repository(:default) { self.all(:name => key).first }
+      result = repository(:default) { first(:name => key) }
       return result.value unless result.nil?
     end
     
@@ -222,7 +222,7 @@ module Yogo
     # @api private
     def self.store(key, value, storage_name)
       repository(storage_name) do
-        record = self.all(:name => key).first || self.new(:name => key)
+        record = first(:name => key) || self.create(:name => key)
         record.value = value
         record.save
       end

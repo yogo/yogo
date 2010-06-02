@@ -144,7 +144,9 @@ module Yogo
       # 
       # @api private
       def backup_schema!
-        SchemaBackup.get_or_create_by_name(self.name).update(:schema => self.to_json_schema)
+        schema_backup = SchemaBackup.get_or_create_by_name(self.name)
+        schema_backup.schema =  self.to_json_schema
+        schema_backup.save
       end
       
       private
