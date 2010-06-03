@@ -7,7 +7,7 @@ class User
   attr_accessor :password, :password_confirmation
 
   property :id,                 DataMapper::Types::Serial
-  property :login,              String, :required => true, :index => true
+  property :login,              String, :required => true, :index => true, :unique => true
   # property :email,              String, :required => true, :length => 256
   # property :first_name,         String, :required => true, :length => 50
   # property :last_name,          String, :required => true, :length => 50  

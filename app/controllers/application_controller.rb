@@ -16,9 +16,10 @@ class ApplicationController < ActionController::Base
   # Check for local connections before anything else
   before_filter :check_local_only
   
-  # # Set the current user for the models to use.
+  # Set the current user for the models to use.
   before_filter do |c|
-    User.current = c.send(:current_user)
+    # TODO: This is a hack until we are on rspec 2.0 and rails 3
+    User.current = c.current_user # unless Rails.env == 'test'
   end
 
   # include all helpers, all the time  

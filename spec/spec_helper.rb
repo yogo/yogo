@@ -78,11 +78,14 @@ Spec::Runner.configure do |config|
     # line ( require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment')) )
     # and this block will run after that line
     # Start Persevere
-
   }
 
   config.after(:suite) {
 
+  }
+  
+  config.before(:each) {
+    # DataMapper.auto_migrate!
   }
 
   
