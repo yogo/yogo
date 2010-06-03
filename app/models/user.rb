@@ -37,7 +37,7 @@ class User
   property :updated_at, DateTime
   property :updated_on, Date
 
-  # has n, :projects, :through => Resource
+  has n, :groups, :through => Resource
 
   validates_is_confirmed :password
 
@@ -97,9 +97,39 @@ class User
     "#{first_name} #{last_name}"
   end
   
+  
+  ##
+  # Password setter
+  # 
+  # @example
+  #   current_user.password = 'a password'
+  # 
+  # @param [String] pass
+  #   A password to set. Note that password_confirmation also needs to be set.
+  # 
+  # @return [String] the string that was passed in
+  # 
+  # @api public
   def password=(pass)
     @password = pass
     self.crypted_password = pass
+  end
+  
+  ##
+  # Check if the user belongs to a given group
+  # 
+  # @example
+  #   current_user.has_group?(:group_name)
+  # 
+  # @param [Symbol or String] group
+  # 
+  # @return [TrueClass or FalseClass]
+  #   True if the user belongs to the group or False if the user doesn't belong to the group
+  # 
+  # @api public
+  def has_group?(group_name)
+    @_user_groups ||= groups.collect(&:name)
+    @_user_groups.include?(group_name.to_s)
   end
   
 end

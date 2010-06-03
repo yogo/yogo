@@ -6,7 +6,6 @@
 # FILE: project.rb
 # The project model is where the action starts.  Every yogo instance starts with a 
 # a project and the project is where the models and data will be namespaced.
-#
 
 # Class for a Yogo Project. A project contains a name, a description, and access to all of the models
 # that are part of the project.
@@ -22,7 +21,7 @@ class Project
   
   before :destroy, :delete_models!
   
-  has n, :users, :through => Resource
+  has n, :groups, :through => Resource
   
   # The number of items to be displayed (by default) per page
   # 

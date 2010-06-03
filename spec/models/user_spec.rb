@@ -3,7 +3,8 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 describe User do
   
   before :each do
-    User.all.each{ |u| u.destroy }
+    User.all.destroy
+    Group.all.destroy
   end
   
   it "should have a login" do
@@ -46,7 +47,27 @@ describe User do
     "#{u.crypted_password}".should_not eql('pass')
   end
   
+  it "should belong to certain groups" do
+    u = standard_user
+    u.save
+    
+    g = standard_group
+    g.save
+    
+    u.groups << g
+    u.save
+    
+    User.first.has_group?(:super).should eql(true)
+    
+    Group.first.users.first.login.should eql('robbie')
+    
+  end
+  
   def standard_user(opts = {})
     User.new({:login => 'robbie', :password => "pass", :password_confirmation => 'pass'}.merge(opts))
+  end
+  
+  def standard_group(opts = {})
+    Group.new({:name => 'super'}.merge(opts))
   end
 end

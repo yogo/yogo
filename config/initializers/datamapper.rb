@@ -42,6 +42,7 @@ end
 Project
 SchemaBackup
 User
+Group
 DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(SchemaBackup.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(User.storage_name)
