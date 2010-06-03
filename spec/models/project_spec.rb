@@ -14,7 +14,7 @@ def mock_uploader(file, type = 'text/csv')
   uploader
 end
 
-describe "A Project" do
+describe Project do
   
   it "should not be created without a name" do
     count = Project.all.length
@@ -60,6 +60,14 @@ describe "A Project" do
     Project.should respond_to(:page_count)
     Project.should respond_to(:paginate)
   end
+  
+  it "should be created with a set of default groups" do
+    p = Project.new(:name => 'blah', :public => false)
+    p.save
+
+    p.groups.should_not be_empty
+    Project.first(:name => 'blah').groups.should_not be_empty
+  end
 
   describe "searching" do
     it "should be searchable" do
@@ -86,6 +94,7 @@ describe "A Project" do
     results.should be_an Array
     results.length.should eql(1)
     results[0].name.should eql("Yogo::#{p.namespace}::Csvtest")
+    p.delete_models!
     
   end
 
@@ -94,6 +103,7 @@ describe "A Project" do
     p = Project.create(:name => "Bad CSV Test Project")
     errors = p.process_csv(file_name, 'Csvtest')
     errors.should_not be_empty
+    p.delete_models!
   end
 
   # This test fails if you do the following:
@@ -105,7 +115,7 @@ describe "A Project" do
   # n... rake spec # => subsequent successes (?!)
   it "should not overwrite a model that already exists" do
     file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
-    p = Project.create(:name => "Overwrite") # => destroys existing data
+    p = Project.create(:name => "Overwrite") 
     p.process_csv(file_name, 'Csvtest')
     results = p.search_models('csvtest')
     results.should be_an Array
@@ -122,6 +132,9 @@ describe "A Project" do
     results2.length.should eql(1)
     results2[0].name.should eql("Yogo::Overwrite::Csvtest")
     results2[0].count.should eql(6)
+    
+    p.delete_models!
+    p.destroy
   end
   
   it  "should get the right model with get_model" do
@@ -223,23 +236,4 @@ describe "A Project" do
     end
   end 
   
-  # This may not be a necessary test, since models should only be persisted to the database
-  # through datamapper, and this is testing a situation where the schema is inserted bypassing
-  # datamapper.  The correct test(s) should be:
-  # it should not save an invalid model (invalid type, etc)
-  # it should not fail if there is invalid data on the server (due to corruption or something)
-
-  # it "should not save an invalid schema and return nil"  do
-  #     persisted_model_hash = { 
-  #       "id" => "yogo/persisted_mokney/cell",
-  #       "properties" => {
-  #         "name" => {"monkey" => "mokney"}
-  #       }
-  #     }
-  #     result = repository.adapter.put_schema(persisted_model_hash)
-  #     result.should be_nil
-  #     project = Factory(:project, :name => 'Persisted Mokney')
-  #     project.add_model(persisted_model_hash)
-  #     project.models.should be_empty
-  # end
 end

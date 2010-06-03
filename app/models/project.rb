@@ -21,6 +21,8 @@ class Project
   
   before :destroy, :delete_models!
   
+  after :create, :create_default_groups
+  
   has n, :groups, :through => Resource
   
   # The number of items to be displayed (by default) per page
@@ -43,8 +45,8 @@ class Project
   # @author lamb
   # 
   # @api public
-  def self.public
-    all(:public => true)
+  def self.public(opts = {})
+    all( opts.merge({:public => true}) )
   end
   
   ##
@@ -371,22 +373,12 @@ class Project
     model.send(:include,Yogo::Model)
     return model
   end
-
   
-  ##
-  # Check to see if the current user is allowed to perform the current action
-  # 
-  # @example
-  #   if permit_current_user?
-  #     # do something
-  #   end
-  # 
-  # @return [TrueClass or FalseClass]
-  #
-  # @author lamb
-  # @api private
-  def permit_current_user?
-    users.include?(User.current)
+  def create_default_groups
+    owner_group = Group.new(:name => 'owner')
+    owner_group.users << User.current unless User.current.nil?
+    self.groups << owner_group
+    self.save
   end
   
 end
