@@ -28,6 +28,7 @@ module Yogo
     # @private
     @@settings_setup = false
   
+    ##
     # Used to query the settings basied on a key
     #
     # @example
@@ -57,6 +58,7 @@ module Yogo
       end
     end
   
+    ##
     # Used to set a value for a particular key
     # 
     # @example
@@ -79,6 +81,7 @@ module Yogo
       self.store_database(key,value)
     end
   
+    ##
     # Used to get the keys of the current setting
     #
     # @example
@@ -92,7 +95,8 @@ module Yogo
     def self.keys
       @@cache.keys
     end
-  
+
+    ##
     # Loads YAML files for the default settings to be used
     # 
     # This is primairly used during testing.
@@ -121,9 +125,10 @@ module Yogo
         @@cache.merge!(config) unless config == false
       }
     end
-  
+
     private
-    
+
+    ##
     # Used to check the cache for the existence of a key
     #
     # @example
@@ -138,11 +143,10 @@ module Yogo
     #
     # @api private
     def self.check_cache(key)
-      # puts "Checking cache for #{key}"
-      # repository(:yogo_settings_cache) { self.get(key) }
       @@cache[key] if @@cache.has_key?(key)
     end
-  
+
+    ##
     # Used to check the database for the given key
     #
     # @example
@@ -157,7 +161,6 @@ module Yogo
     #
     # @api private
     def self.check_database(key)   
-      # puts "Checking database for #{key}"
       result = repository(:default) { first(:name => key) }
       return result.value unless result.nil?
     end
@@ -178,31 +181,10 @@ module Yogo
     #
     # @api private
     def self.store_cache(key, value)
-      # puts "Storing #{key} in cache"
-      # self.store(key, value, :yogo_settings_cache)
       @@cache[key] = value
     end
-    
-    # Used to store key-value pair in the database
-    #
-    # @example
-    #  store_database("key_name", 112)
-    #
-    # @param [String] key
-    #  the name of a key to store in the cache
-    # @param [Object] value
-    #  the value to store in the cache associated with the key, can be any type or object
-    #
-    # @return [Object] returns the object stored
-    #
-    # @author Robbie Lamb robbie.lamb@gmail.com
-    #
-    # @api private
-    def self.store_database(key,value)
-      # puts "Storing #{key} in database"
-      self.store(key, value, :default)
-    end
   
+    ##
     # Used to store key-value pair in a specified storage_location
     #
     # @example
@@ -220,7 +202,7 @@ module Yogo
     # @author Robbie Lamb robbie.lamb@gmail.com
     #
     # @api private
-    def self.store(key, value, storage_name)
+    def self.store_database(key, value, storage_name = :default)
       repository(storage_name) do
         record = first(:name => key) || self.create(:name => key)
         record.value = value
@@ -228,6 +210,7 @@ module Yogo
       end
     end
     
+    ##
     # Used to setup the storage and cache
     #
     # @example
