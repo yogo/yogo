@@ -8,6 +8,7 @@
 # Likewise, all the methods added will be available for all controllers.
 #
 class ApplicationController < ActionController::Base
+
   
   # Check for local connections before anything else
   before_filter :check_local_only 
@@ -49,7 +50,7 @@ class ApplicationController < ActionController::Base
         path = "/errors/#{status[0,3]}.html.erb"
       # end
        
-      render :template => path || "/errors/unknown.html.erb", :status => status, :layout => 'error.html.erb'
+      render :template => path || "/errors/unknown.html.erb", :status => status
     end
     
   private
