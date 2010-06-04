@@ -26,6 +26,9 @@ module Yogo
       # Iterate through each model and make it in persevere, then copy instances
       models = DataMapper::Reflection.reflect(repo, Object, true)
       
+      yogo_models = Array.new
+      
+      # Create models
       models.each do |model|
         mphash = {}
         
@@ -34,12 +37,28 @@ module Yogo
           mphash[prop.name] = { :type => type } 
           mphash[prop.name].merge!({:default => prop.default}) if prop.default? 
         end
+        yogo_models << project.add_model(model.name, mphash)
+      end
 
-        yogo_model = project.add_model(model_name, mphash)
+      # Wire up relationships
+      models.each do |model|
+        rhash = {}
+        # Deal with relationships
+        model.relationships.each do |key,relation|
+          puts "Relationship: #{key} => #{relation.inspect}"
+        end
+      end
 
-        yogo_model.auto_migrate!
+      # Migrate them now that they're full of properties and relationships
+      yogo_models.each do |model|
+        model.auto_migrate!
+      end
+      
+      # Load up instances
+      models.each_index do |idx|        
+        model = models[idx]
+        yogo_model = yogo_models[idx]
         
-        # Create each instance of the class
         model.all.each do |item| 
           newitems = Hash.new
           item.attributes.each_pair do |attr, val|
@@ -48,7 +67,8 @@ module Yogo
           yogo_model.create(newitems)
         end
       end
-      
+
+      # Nuke origional reflected models
       models.each do |model|
         DataMapper::Model.descendants.delete(model)
         Object.send(:remove_const, model.name.to_sym) 
