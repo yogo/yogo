@@ -120,7 +120,7 @@ module Yogo
       # 
       # @api public
       def public_name
-        @_public_name ||= self.name.split('::')[-1].humanize
+        @_public_name ||= self.name.demodulize.titleize
       end
       
       # Compatability method for rails' route generation helpers
