@@ -1,10 +1,10 @@
 %h1#content-title
   = link_to(@project.name, project_path(@project))
   &gt;
-  = @model.name.demodulize.titleize + " (#{@model.count})"
+  = @model.public_name + " (#{@model.count})"
 
 #content-actions
-  = link_to("Download CSV", project_yogo_data_index_path(@project, @model, :format => 'csv'), 
+  = link_to("Download CSV", project_yogo_data_index_path(@project, @model, :format => 'csv'),
     :class => "button-link")
 
   / This is an alternative to the table using google visualiztion api (the javascript is now included in the app)
@@ -13,9 +13,9 @@
   / <%# visualization("test_table", "Table", {:data => gvdata, :columns => cols }) { } %>
 %br(clear = 'all')
 
-- @item = @model.new 
-- form_for(@item, 
-          :url => project_yogo_data_index_path(@project, @model), 
+- @item = @model.new
+- form_for(@item,
+          :url => project_yogo_data_index_path(@project, @model),
           :html => { :enctype => 'multipart/form-data' },
           :builder => YogoDataFormBuilder) do |f|
   %table#data-table
@@ -30,7 +30,7 @@
         - @model.usable_properties.each do |p|
           %td= f.field_for_param(p)
 
-      - @data.each do |d| 
+      - @data.each do |d|
         %tr{:class => cycle("cycle-odd","cycle-even")}
           %td.data-table-actions
             .actions
@@ -39,14 +39,14 @@
               = link_to(image_tag('edit.png',:alt => "Edit Item", :title => "Edit Item"),
                   edit_project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id))
               = link_to(image_tag('remove.png',:alt => "Delete Item", :title => "Delete Item"),
-                  project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id), 
+                  project_yogo_data_path(@project, @model.name.demodulize, d.yogo_id),
                   :method => :delete, :confirm => "There is no undo.\n Continue?")
-              
+
           - @model.usable_properties.each do |p|
             %td= yogo_show_helper(d, p, @project, @model)
 
 / #add-data-link
-/   = link_to(image_tag('add.gif')+' Add Data', 
+/   = link_to(image_tag('add.gif')+' Add Data',
 /       new_project_yogo_data_path(@project, @model.name.demodulize))
 
 #pagination-links= pagination_links(@query, params[:page], Project.per_page)
