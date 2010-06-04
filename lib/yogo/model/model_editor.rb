@@ -156,6 +156,14 @@ module Yogo
 
         # update model props: model.send(:property, :prop_name.to_sym, prop_type, :required => false, :position => prop[2], :separator => '__', :prefix => 'yogo')
         model.auto_upgrade!
+
+        begin
+          model.backup_schema!
+        rescue ArgumentError => e
+          Rails.logger.warn("Schema Backup Failed!")
+          Rails.logger.error(e)
+        end
+
         return model
       end
     end
