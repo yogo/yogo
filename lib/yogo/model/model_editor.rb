@@ -155,9 +155,8 @@ module Yogo
         # Type Mapping: prop_type = Yogo::Types.human_to_dm(model_def_type_name)
 
         # update model props: model.send(:property, :prop_name.to_sym, prop_type, :required => false, :position => prop[2], :separator => '__', :prefix => 'yogo')
-        model.auto_upgrade!
-
         begin
+          model.auto_upgrade!
           model.backup_schema!
         rescue ArgumentError => e
           Rails.logger.warn("Schema Backup Failed!")
