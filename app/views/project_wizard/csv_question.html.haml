@@ -7,7 +7,7 @@
   / Choose Your Destiny!
   .scratch.rbox
     %h4.text-center
-      = link_to('Design Data from Scratch', project_yogo_models_path(@project), :class => 'button-link center')
+      = link_to('Design Data from Scratch', "/model_editor.html#projects/#{@project.id}", :class => 'button-link center', :target => 'model_editor')
     %p If you don't have any data yet, you can describe the data you anticipate on collecting. The description is flexible, and allows you to update the description at any time.
   .spreadsheet.rbox
     %h4.text-center
