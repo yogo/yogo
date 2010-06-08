@@ -19,13 +19,16 @@ describe User do
   end
   
   it "should do a search by login" do
-    standard_user.save
-    u = User.find_by_login('robbie')
+    u = standard_user
+    login = u.login
+    u.save
+    
+    u = User.find_by_login(login)
     u.should_not be_nil
     u.should_not eql false
     u.should be_kind_of(User)
     
-    u.login.should eql('robbie')
+    u.login.should eql(login)
     u.destroy
   end
   
@@ -39,8 +42,10 @@ describe User do
   end
   
   it "should should validate passwords" do
-    standard_user.save
-    u = User.find_by_login('robbie')
+    u = standard_user
+    login = u.login
+    u.save
+    u = User.find_by_login(login)
 
     (u.crypted_password == 'pass').should eql(true)
     (u.crypted_password == 'bad_pass').should eql(false)
@@ -49,25 +54,18 @@ describe User do
   
   it "should belong to certain groups" do
     u = standard_user
+    login = u.login
     u.save
     
     g = standard_group
+    group_name = g.name
     g.save
     
     u.groups << g
     u.save
-    
-    User.first.has_group?(:super).should eql(true)
-    
-    Group.first.users.first.login.should eql('robbie')
-    
+
+    User.first.has_group?(group_name).should eql(true)
+    Group.first.users.first.login.should eql(login)
   end
-  
-  def standard_user(opts = {})
-    User.new({:login => 'robbie', :password => "pass", :password_confirmation => 'pass'}.merge(opts))
-  end
-  
-  def standard_group(opts = {})
-    Group.new({:name => 'super'}.merge(opts))
-  end
+
 end

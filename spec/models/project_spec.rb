@@ -16,6 +16,17 @@ end
 
 describe Project do
   
+  before(:each) do
+    Project.auto_migrate!
+    Group.auto_migrate!
+    User.auto_migrate!
+    User.current = nil
+  end
+  
+  after(:each) do
+    User.current = nil
+  end
+  
   it "should not be created without a name" do
     count = Project.all.length
     p = Project.new
@@ -23,15 +34,15 @@ describe Project do
     p.save
     count.should == Project.all.length
   end
-
+  
   it "should be created with a name" do
     count = Project.all.length
-    p = Project.create(:name => "Test Original Name")
+    p = Project.new(:name => "Test Original Name")
     p.should be_valid
     p.save
     count.should == Project.all.length - 1
   end
-
+  
   it "should have a unique name" do
     count = Project.all.length
     p = Project.create(:name => "Same Project")
@@ -47,7 +58,7 @@ describe Project do
     p = Project.create(:name => "Test Project")
     p.to_param.should == p.id.to_s
   end
-
+  
   it "should create a namespace from the project id and name (with non-alphas stripped)" do
     ['Test:Project', 'Test Project', 'Test&Project', 'Test!Project'].each do |name|
       p = Project.create(:name => name)
@@ -55,7 +66,7 @@ describe Project do
       p.destroy!
     end
   end
-
+  
   it "should be paginated" do
     Project.should respond_to(:page_count)
     Project.should respond_to(:paginate)
@@ -64,9 +75,42 @@ describe Project do
   it "should be created with a set of default groups" do
     p = Project.new(:name => 'blah', :public => false)
     p.save
-
+  
     p.groups.should_not be_empty
     Project.first(:name => 'blah').groups.should_not be_empty
+    p.destroy
+    Group.all.destroy
+  end
+  
+  it "should have 2 groups named 'managers' and 'users" do
+    p = Project.create(:name => 'test project')
+    
+    
+    group_names = Project.first.groups.map(&:name)
+    group_names.should include('managers')
+    group_names.should include('users')
+    group_names.length.should eql 2
+    p.destroy
+    Group.all.destroy
+  end
+  
+  it "should set a logged in user to belong to the 'manager' group" do
+    u = standard_user
+    user_login = u.login
+    u.save
+
+    User.current = u
+    
+    p = Project.create(:name => 'test project')
+
+    Project[0].groups.all(:name => 'managers').users.length.should eql 1
+    
+    Project[0].groups.all(:name => 'managers').users[0].login.should eql user_login
+
+    User.current = nil
+    p.destroy
+    Group.all.destroy
+    User.all.destroy
   end
 
   describe "searching" do
@@ -85,7 +129,7 @@ describe Project do
     end
     
   end
-
+  
   it "should process a csv file" do
     file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
     p = Project.create(:name => "CSV Test Project")
@@ -97,7 +141,7 @@ describe Project do
     p.delete_models!
     
   end
-
+  
   it "should not process a bad csv file" do
     file_name = "#{Rails.root}/spec/models/csv/bad_csvtest.csv"
     p = Project.create(:name => "Bad CSV Test Project")
@@ -105,7 +149,7 @@ describe Project do
     errors.should_not be_empty
     p.delete_models!
   end
-
+  
   # This test fails if you do the following:
   # 0. rake persvr:stop RAILS_ENV=test; reset
   # 1. rake yogo:spec; reset
@@ -146,7 +190,7 @@ describe Project do
     p.get_model('giraffe').name.should == 'Yogo::Zoo::Giraffe'
     p.get_model('aGiraffe').name.should == 'Yogo::Zoo::AGiraffe'
   end
-
+  
   describe "contains references to reflected datamapper models" do
     it "should contain an array of reflected models" do
       p = Project.create(:name => "Build Project")
@@ -157,7 +201,7 @@ describe Project do
         m.should be_instance_of(DataMapper::Property)
       end
     end
-
+  
     it "should respond to an add_model method that creates a model" do
       project = Project.create(:name => "Test Project 1")
       property_hash = {
@@ -168,19 +212,19 @@ describe Project do
       m.should == Yogo::TestProject1::Cell
       Yogo::TestProject1::Cell.ancestors.should include(DataMapper::Resource)
     end
-
+  
     it "should make the newly added model available via .models" do
       project = Project.create(:name => "Test Project 8")
       property_hash = {
         "name" => {:type => String},
-        "id"   => {:type => DataMapper::Types::Serial}
+        "id"   => {:type => Integer}
       }
       project.add_model("Cell",property_hash)
       model_names = project.models.map(&:name)
       model_names.map{|m| m.match(/^Yogo::#{project.namespace}::Cell/)}.compact.should_not be_empty
     end
-
-
+  
+  
     it "should properly namespace an un-namespaced model hash" do
       project = Project.create(:name => "Test Project 2")
       property_hash = {
@@ -192,7 +236,7 @@ describe Project do
       model_names = project.models.map(&:name)
       model_names.map{|m| m.match(/^Yogo::#{project.namespace}::Monkey/)}.compact.should_not be_empty
     end
-
+  
     it "should save a valid schema which should be persisted to the datastore" do
       # This is already in the test database and should be pre-populated for 
       # the above project
@@ -215,7 +259,7 @@ describe Project do
       project.destroy # => destroys the PersistedDatum project object
     end
     
-
+  
     it "should be able to delete its schemas" do
       persisted_model_hash = { 
         "id" => "yogo/persisted_bozon/cell",
@@ -235,5 +279,16 @@ describe Project do
       # Yogo::PersistedBozon.should be_nil
     end
   end 
+  
+  def project_builder(opts = {})
+    u = standard_user
+    u.save
+    p = Project.create({:name => 'Test Project'}.merge(opts))
+    group = p.groups.first(:name => 'owner')
+    group.users << u
+    group.save
+    debugger
+  end
+  
   
 end

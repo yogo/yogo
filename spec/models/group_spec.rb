@@ -5,6 +5,7 @@ describe Group do
   before(:each) do
     User.all.destroy
     Group.all.destroy
+    Project.all.destroy
   end
   
   it "should persist to the database" do
@@ -15,8 +16,16 @@ describe Group do
     Group.count.should eql 1
   end
   
-  
-  def standard_group
-    Group.new(:name => 'A Group')
+  it "should be able to not belong to a project" do
+    p = Project.create(:name => 'test_project')
+    
+    g = standard_group(:name => 'test')
+    g.save
+    
+    Group.count.should eql 3
+    Group.count(:project => p).should eql 2
+    
+    Group.all(:project => nil).length.should eql 1
   end
+  
 end

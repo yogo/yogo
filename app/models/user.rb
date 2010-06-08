@@ -127,8 +127,8 @@ class User
   #   True if the user belongs to the group or False if the user doesn't belong to the group
   # 
   # @api public
-  def has_group?(group_name)
-    @_user_groups ||= groups.collect(&:name)
+  def has_group?(group_name, project = nil)
+    @_user_groups ||= Group.all(:project => project, :users => self).collect(&:name)
     @_user_groups.include?(group_name.to_s)
   end
   

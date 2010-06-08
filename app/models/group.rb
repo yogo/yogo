@@ -13,6 +13,6 @@ class Group
   property :name, String, :required => true
   
   has n, :users, :through => Resource
-  has n, :projects, :through => Resource
-  
+  belongs_to :project, :required => false
+
 end

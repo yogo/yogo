@@ -23,7 +23,7 @@ class Project
   
   after :create, :create_default_groups
   
-  has n, :groups, :through => Resource
+  has n, :groups
   
   # The number of items to be displayed (by default) per page
   # 
@@ -375,9 +375,13 @@ class Project
   end
   
   def create_default_groups
-    owner_group = Group.new(:name => 'owner')
-    owner_group.users << User.current unless User.current.nil?
-    self.groups << owner_group
+    DataMapper.logger.debug { "Creating default groups" }
+    manager_group = Group.new(:name => 'managers')
+    user_group = Group.new(:name => 'users')
+    manager_group.users << User.current unless User.current.nil?
+    # manager_group.save
+    self.groups.push( manager_group, user_group )
+    # owner_group.save
     self.save
   end
   
