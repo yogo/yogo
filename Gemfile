@@ -6,7 +6,7 @@ gem "rails",                "2.3.8", :require => nil
 gem "rake",                          :require => nil
 gem "dm-core",              "0.10.2"
 
-gem "dm-reflection",        "0.10.2", :git => "git://github.com/yogo/dm-reflection.git" # :path => "vendor/gems/dm-reflection-0.0.1"
+gem "dm-reflection",        "0.11.0", :git => "git://github.com/yogo/dm-reflection.git" # :path => "vendor/gems/dm-reflection-0.0.1"
 gem "dm-timestamps" 
 gem "dm-validations"
 gem "dm-is-nested_set"
