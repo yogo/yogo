@@ -28,4 +28,64 @@ describe Group do
     Group.all(:project => nil).length.should eql 1
   end
   
+  it "should contain permissions do perform certain actions" do
+    g = standard_group(:name => 'test')
+    
+    g.should respond_to(:permissions)
+  end
+  
+  it "should start of with no permissions" do
+    g = standard_group
+    g.save
+    
+    g.permissions.should be_empty
+  end
+  
+  it "should be able to have new permissions added to it" do
+    g = standard_group
+    
+    g.add_permission(:edit_project)
+    
+    g.have_permission?(:edit_project).should be_true
+  end
+  
+  it "should not be able to add permissions that don't exist" do
+    g = standard_group
+    
+    lambda {
+      g.add_permission('dummy_permission')
+    }.should raise_exception(NonExistantPermissionError, "dummy_permission is not a valid permission")
+
+    lambda{ 
+      g.have_permission?('dummy_permission')
+    }.should raise_exception(NonExistantPermissionError, "dummy_permission is not a valid permission")
+    
+  end
+  
+  it "should be able to have permissions removed from it" do
+    g = standard_group
+    
+    g.add_permission( :create_projects )
+    g.add_permission( :edit_project )
+    
+    g.have_permission?(:create_projects).should be_true
+    g.remove_permission(:create_projects)
+
+    g.have_permission?(:create_projects).should_not be_true
+  end
+  
+  it "should save and load permissions from a database" do
+    g = standard_group
+    
+    g.add_permission( :create_projects )
+    g.add_permission( :edit_project )
+    
+    g.save
+
+    g = Group.first
+    
+    g.have_permission?(:create_projects).should be_true
+    g.have_permission?(:edit_project).should be_true
+    
+  end
 end
