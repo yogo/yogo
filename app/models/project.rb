@@ -27,6 +27,9 @@ class Project
   
   # The number of items to be displayed (by default) per page
   # 
+  # @example
+  #   Project.per_page
+  # 
   # @return [Fixnum]
   # 
   # @api public

@@ -12,7 +12,6 @@ require 'exceptions'
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem
   include AuthorizationSystem
-
   
   # Check for local connections before anything else
   before_filter :check_local_only
@@ -98,10 +97,6 @@ class ApplicationController < ActionController::Base
   # @api private
   def show_sidebar
     @sidebar = true
-  end
-  
-  def method_name
-    
   end
   
 end
