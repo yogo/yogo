@@ -1,26 +1,67 @@
 class UserSessionsController < ApplicationController
 
-  # require_user    :for => :destroy
-  # require_no_user :for => [:new, :create]
-  # authorize_group :default
   before_filter :require_no_user, :only => [:new,:create]
   before_filter :require_user,    :only => [:destroy]
   
-  # before_filter :require_auth, :only => [:destroy]
-  
+  ##
+  # Redirects to new user_session action
+  # 
+  # @example 
+  #   get /user_sessions/new
+  # 
+  # @return [Redirect] Redirects to login url 
+  # 
+  # @author lamb
+  # 
+  # @api public
   def show
     redirect_to login_url
   end
   
+  ##
+  # Renders a login page
+  # 
+  # @example 
+  #   get /user_sessions/new
+  #   get /login
+  # 
+  # @return [HTML] The login page
+  # 
+  # @author lamb
+  # 
+  # @api public
   def new
     render :action => 'new'
   end
   
+  ##
+  # Renders a login page
+  # 
+  # @example 
+  #   get /user_sessions/new
+  #   get /login
+  #   get /unauthenticated
+  # 
+  # @return [HTML] The login page
+  # 
+  # @author lamb
+  # 
+  # @api public
   alias :unauthenticated :new
   
+  ##
+  # Logs a user in or rerenders the login page
+  # 
+  # @example 
+  #   post /user_sessions
+  # 
+  # @return [Redirect or HTML] 
+  #   Redirects or rerenders the login page
+  # 
+  # @author lamb
+  # 
+  # @api public
   def create
-    # @user_session = UserSession.new(params[:user_session])
-    # if @user_session.save
     if authenticate!
       flash[:notice] = "Login successful!"
       redirect_back_or_default root_url
@@ -29,21 +70,22 @@ class UserSessionsController < ApplicationController
     end
   end
   
+  ##
+  # Logs out a user
+  # 
+  # @example 
+  #   delete /user_sessions/
+  #   delete /logout
+  # 
+  # @return [HTML] The login page
+  # 
+  # @author lamb
+  # 
+  # @api public
   def destroy
-    # current_user_session.destroy
     logout
     flash[:notice] = "Logout successful!"
     redirect_back_or_default root_url
-  end
-  
-  private
-  
-  def require_auth
-    authenticated?
-  end
-
-  def require_no_auth
-    !logged_in?
   end
   
 end

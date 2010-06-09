@@ -4,6 +4,12 @@ class User
   # include DataMapper::Authlogic::Compatability
   include SentientUser
 
+  # I'm confused. What is this doing?
+  # @example
+  #   An example for this is silly
+  # 
+  # @return [String] returns the password
+  # @api public
   attr_accessor :password, :password_confirmation
 
   property :id,                 DataMapper::Types::Serial
@@ -47,9 +53,9 @@ class User
   #     validate_login_field false
   #   end
   # end
-  # 
+  
   ##
-  # Finds a user by their login.
+  # Finds a user by their login
   # 
   # @example
   #   User.find_by_login('lamb') # Returns a user
@@ -88,7 +94,7 @@ class User
   # @example
   #   <%= current_user.name %>
   # 
-  # @returns [String]
+  # @return [String]
   # 
   # @author lamb
   # 
@@ -122,14 +128,35 @@ class User
   #   current_user.has_group?(:group_name)
   # 
   # @param [Symbol or String] group
+  # @param [optional, Project] optional project for context
   # 
-  # @return [TrueClass or FalseClass]
+  # @return [Boolean]
   #   True if the user belongs to the group or False if the user doesn't belong to the group
   # 
   # @api public
   def has_group?(group_name, project = nil)
-    @_user_groups ||= Group.all(:project => project, :users => self).collect(&:name)
-    @_user_groups.include?(group_name.to_s)
+    @_user_group_names ||= Group.all(:project => project, :users => self).collect(&:name)
+    @_user_group_names.include?(group_name.to_s)
+  end
+  
+  ##
+  # Check to see if the current user can perform the action
+  # 
+  # @example
+  #   current_user.has_permission(:destroy_model, @current_project)
+  # 
+  # @param [Symbol or String] action
+  #   The action in question
+  # 
+  # @param [optional, Project] optional project for context
+  # 
+  # @return [Boolean]
+  #   True if the user has permission or false if the user doesn't have permission
+  # 
+  # @api public
+  def has_permission?(action, project = nil)
+    @_user_groups ||= Group.all(:project => project, :users => self)
+    raise Exception, "Not yet implemented!"
   end
   
 end

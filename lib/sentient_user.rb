@@ -1,6 +1,10 @@
 # Grabbed from http://github.com/bokmann/sentient_user
 module SentientUser
   
+  ##
+  # Callback for inclusion into a User
+  # @return [nil]
+  # @api private
   def self.included(base)
     base.class_eval {
       

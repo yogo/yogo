@@ -61,7 +61,8 @@ module DataMapper
     #     end
     #   end
     # end
-    # 
+
+
     # This should never ever be called
     # @return [Object] nothing!
     # @api private

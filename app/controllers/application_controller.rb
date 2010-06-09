@@ -8,10 +8,11 @@
 # Likewise, all the methods added will be available for all controllers.
 #
 # 
-
+require 'exceptions'
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem
-  # include AuthorizationSystem
+  include AuthorizationSystem
+
   
   # Check for local connections before anything else
   before_filter :check_local_only
@@ -35,7 +36,7 @@ class ApplicationController < ActionController::Base
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
   
-  # rescue_from AuthorizationError, :with => :authorization_denied
+  rescue_from AuthorizationError, :with => :authorization_denied
   
   protected
 

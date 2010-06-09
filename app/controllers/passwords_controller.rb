@@ -2,6 +2,17 @@ class PasswordsController < ApplicationController
 
   before_filter :require_user
   
+  ##
+  # Gets password edit form for a user
+  # 
+  # @example 
+  #   get /passwords/edit
+  # 
+  # @return [Page] the rendered webpage for editing a password
+  # 
+  # @author lamb
+  # 
+  # @api public
   def edit
     @user = current_user
     
@@ -10,6 +21,17 @@ class PasswordsController < ApplicationController
     end
   end
   
+  ##
+  # Updates the password for the current user
+  # 
+  # @example 
+  #   post /passwords
+  # 
+  # @return [Page] the rendered webpage for editing a password
+  # 
+  # @author lamb
+  # 
+  # @api public
   def update
     @user = current_user
     @user.attributes = params[:user]

@@ -1,24 +1,30 @@
 module AuthenticatedSystem
 
+  ##
+  # Callback for inclusion into a controller
+  # @example
+  #   included
+  # @return [nil]
+  # @api private
   def self.included(base)
     base.send(:include, AuthenticatedSystemInstanceMethods)
-    base.send(:extend,  AuthenticatedSystemClassMethods)
+    # base.send(:extend,  AuthenticatedSystemClassMethods)
     
     base.send(:helper_method, :logged_in?, :current_user)
   end
 
-  module AuthenticatedSystemClassMethods
-    
-    def require_user(options = {})
-      authorize_group(:default, options)
-    end
-    
-    alias_method :login_required, :require_user
-
-    def require_no_user(options = {})
-      authorize_group(:anonymous, options)
-    end
-  end
+  # module AuthenticatedSystemClassMethods
+  #   
+  #   def require_user(options = {})
+  #     authorize_group(:default, options)
+  #   end
+  #   
+  #   alias_method :login_required, :require_user
+  # 
+  #   def require_no_user(options = {})
+  #     authorize_group(:anonymous, options)
+  #   end
+  # end
 
 
   module AuthenticatedSystemInstanceMethods
@@ -27,7 +33,7 @@ module AuthenticatedSystem
     ##
     # Returns the current user session, if they are logged in.
     # 
-    # @returns [UserSession]
+    # @return [UserSession]
     #   The current user session
     # 
     # @author lamb
@@ -41,7 +47,7 @@ module AuthenticatedSystem
     ##
     # Returns the current user session, if they are logged in.
     # 
-    # @returns [User or AnonymousUser]
+    # @return [User or AnonymousUser]
     #   Returns the current user for the sessions
     # 
     # @author lamb
@@ -60,7 +66,7 @@ module AuthenticatedSystem
     #     # do something
     #   end
     # 
-    # @returns [TrueClass or FalseClass]
+    # @return [TrueClass or FalseClass]
     #   Returns true if the current user has been authenticated
     # 
     # @author lamb
@@ -78,16 +84,28 @@ module AuthenticatedSystem
     #     # do something
     #   end
     # 
-    # @returns [TrueClass or FalseClass]
+    # @return [TrueClass or FalseClass]
     #   Returns true if the current user has not been authenticated
     # 
     # @author lamb
     # 
-    # @api public
+    # @api semipublic
     def not_logged_in?
       !logged_in?
     end
 
+    ##
+    # Makes sure a user is logged in
+    # 
+    # @example
+    #   require_user
+    # 
+    # @return [nil or False]
+    #  Redirects to the login page if the user isn't currently logged in
+    # 
+    # @author lamb
+    # 
+    # @api semipublic
     def require_user
       unless logged_in?
         store_location
@@ -97,6 +115,18 @@ module AuthenticatedSystem
       end
     end
 
+    ##
+    # Makes sure a user is not logged in
+    # 
+    # @example
+    #   require_no_user
+    # 
+    # @return [nil or False]
+    #  Redirects to the '/' if the user is currently logged in
+    # 
+    # @author lamb
+    # 
+    # @api semipublic
     def require_no_user
       if logged_in?
         store_location
@@ -106,6 +136,18 @@ module AuthenticatedSystem
       end
     end
 
+    ##
+    # Saves the location of a request in the esssion
+    # 
+    # @example
+    #   store_location
+    # 
+    # @return [nil]
+    #   Nothing useful
+    # 
+    # @author lamb
+    # 
+    # @api semipublic
     def store_location
       if request.method.eql?(:get)
         session[:return_to] = request.request_uri
@@ -116,6 +158,18 @@ module AuthenticatedSystem
       end
     end
 
+    ##
+    # Redirects to what's saved in the session or the passed in path
+    # 
+    # @example
+    #   redirect_back_or_default('/')
+    # 
+    # @return [nil]
+    #   Nothing useful
+    # 
+    # @author lamb
+    # 
+    # @api semipublic
     def redirect_back_or_default(default)
       redirect_to(session[:return_to] || default)
       session[:return_to] = nil
