@@ -48,8 +48,7 @@ describe "A Model that supports an editing-tool," do
       end.should_not raise_exception
       
       model_def = @model.to_model_definition
-      #debugger
-      puts model_def.inspect
+      
       model_def.should have_valid_model_id('guid')
       model_def['guid'].should == @model.guid
       model_def.should have_property('Foo', 'Text')
