@@ -38,6 +38,7 @@ end
 
 gem 'ruby-debug',                  :require => nil, :group => :development unless defined?(JRUBY_VERSION)
 gem "rails-footnotes",             :group => :development
+gem "bluecloth",                   :require => nil # Required for YARD
 
 group :test do
   gem 'ruby-debug',                :require => nil unless defined?(JRUBY_VERSION)
