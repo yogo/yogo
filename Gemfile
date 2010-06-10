@@ -31,14 +31,15 @@ gem 'rails_warden'
 
 if defined?(JRUBY_VERSION)
   gem "json_pure",            :require => nil
+  gem "BlueCloth",            :require => nil # Required for YARD
 else
-  gem "json",                 :require => nil  
+  gem "json",                 :require => nil
+  gem "bluecloth",            :require => nil # Required for YARD
 end
 
 
 gem 'ruby-debug',                  :require => nil, :group => :development unless defined?(JRUBY_VERSION)
 gem "rails-footnotes",             :group => :development
-gem "bluecloth",                   :require => nil # Required for YARD
 
 group :test do
   gem 'ruby-debug',                :require => nil unless defined?(JRUBY_VERSION)
