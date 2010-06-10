@@ -46,7 +46,7 @@ ActionController::Routing::Routes.draw do |map|
                         :controller => 'project_wizard', :action => 'upload_csv'
   
 
-  map.resource :password, :only => [ :update, :edit ]
+  map.resource :password, :only => [ :show, :update, :edit ]
 
   # Login & Logout stuff
   map.resource :user_session, :only => [ :show, :new, :create, :destory ]

@@ -3,6 +3,21 @@ class PasswordsController < ApplicationController
   before_filter :require_user
   
   ##
+  # Redirects to new user_session action
+  # 
+  # @example 
+  #   get /user_sessions/new
+  # 
+  # @return [Redirect] Redirects to login url 
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def show
+    redirect_to( edit_password_url )
+  end
+  
+  ##
   # Gets password edit form for a user
   # 
   # @example 
@@ -39,7 +54,7 @@ class PasswordsController < ApplicationController
     respond_to do |format|
       if @user.save
         flash[:notice] = 'Password successfully updated'
-        format.html
+        format.html { redirect_back_or_default('/') }
       else
         format.html { render(:action => 'edit') }
       end
