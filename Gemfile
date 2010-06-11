@@ -19,7 +19,7 @@ gem "dm-persevere-adapter", "0.60.2", :require => nil
 gem "rails_datamapper",               :require => nil
 
 # These are required so we can make it simple to interact with legacy data
-gem "do_mysql",                       :require => nil
+#gem "do_mysql",                       :require => nil
 #gem "do_postgres",                   :require => nil
 #gem "do_sqlite3",                    :require => nil
 #gem "do_sqlserver",                  :require => nil
