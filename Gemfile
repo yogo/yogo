@@ -15,8 +15,12 @@ gem "dm-aggregates"
 gem "dm-types"
 gem "dm-observer"
 gem "dm-persevere-adapter", "0.60.0", :require => nil
-gem "do_sqlite3",                     :require => nil
 gem "rails_datamapper",               :require => nil
+
+# These are required so we can make it simple to interact with legacy data
+gem "do_sqlite3",                     :require => nil
+gem "do_mysql",                       :require => nil
+#gem "do_sqlserver",                   :require => nil
 
 # Extra supporting gems
 # gem "authlogic",            "2.1.3"
@@ -33,7 +37,6 @@ if defined?(JRUBY_VERSION)
 else
   gem "json",                 :require => nil  
 end
-
 
 gem 'ruby-debug',                  :group => :development unless defined?(JRUBY_VERSION)
 gem "rails-footnotes",             :group => :development
@@ -63,7 +66,6 @@ group :test do
   gem "googlecharts",              :require => nil
   gem "metric_fu",                 :require => nil
 end
-
 
 group :cucumber do
   gem 'rspec',        '~>1.3.0',   :require => nil
