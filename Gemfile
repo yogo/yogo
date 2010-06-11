@@ -6,17 +6,17 @@ gem "rails",                "2.3.8", :require => nil
 gem "rake",                          :require => nil
 gem "dm-core",              "0.10.2"
 
-gem "dm-reflection",        "0.11.0", :git => "git://github.com/yogo/dm-reflection.git" # :path => "vendor/gems/dm-reflection-0.0.1"
-gem "dm-timestamps" 
-gem "dm-validations"
+gem "dm-reflection",        "0.11.0", :git => "git://github.com/yogo/dm-reflection.git"
+gem "dm-timestamps",        "0.10.2"
+gem "dm-validations",       "0.10.2"
 gem "dm-is-nested_set"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
-gem "dm-aggregates"
+gem "dm-aggregates",        "0.10.2"
 gem 'bcrypt-ruby'
-gem "dm-types"
-gem "dm-observer"
+gem "dm-types",             "0.10.2"
+gem "dm-observer",          "0.10.2"
 gem "dm-persevere-adapter", "0.60.2", :require => nil
-gem "rails_datamapper",               :require => nil
+gem "rails_datamapper",     "0.10.2", :require => nil
 
 # These are required so we can make it simple to interact with legacy data
 #gem "do_mysql",                       :require => nil
