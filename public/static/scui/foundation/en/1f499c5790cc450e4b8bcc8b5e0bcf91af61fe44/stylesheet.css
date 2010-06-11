@@ -1,0 +1,7 @@
+.scui-combobox-view .scui-combobox-dropdown-button-view{background:green;}.loadingSpinner{background-repeat:no-repeat;}
+.loadingSpinner.darkTrans{background-image:url('/static/scui/foundation/en/1f499c5790cc450e4b8bcc8b5e0bcf91af61fe44/images/spinner-dark-trans.png');}
+.loadingSpinner.lightTrans{background-image:url('/static/scui/foundation/en/1f499c5790cc450e4b8bcc8b5e0bcf91af61fe44/images/spinner-light-trans.png');}
+.loadingSpinner.darkSolidAqua{background-image:url('/static/scui/foundation/en/1f499c5790cc450e4b8bcc8b5e0bcf91af61fe44/images/spinner-dark-solid-aqua.png');}
+.loadingSpinner.darkSolidWhite{background-image:url('/static/scui/foundation/en/1f499c5790cc450e4b8bcc8b5e0bcf91af61fe44/images/spinner-dark-solid-white.png');}
+.loadingSpinner.lightSolidBlack{background-image:url('/static/scui/foundation/en/1f499c5790cc450e4b8bcc8b5e0bcf91af61fe44/images/spinner-light-solid-black.png');}
+.loadingSpinner.lightSolidGreen{background-image:url('');}

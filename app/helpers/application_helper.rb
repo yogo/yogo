@@ -209,4 +209,8 @@ module ApplicationHelper
       item[property.name]
     end
   end
+  
+  def link_to_edit_project_models(project, link_text, options={})
+    link_to(link_text, "/model_editor.html#projects/#{project.id}&from=#{request.env['PATH_INFO']}", options)
+  end
 end

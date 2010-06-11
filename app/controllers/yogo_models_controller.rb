@@ -88,7 +88,7 @@ class YogoModelsController < ApplicationController
   #
   # @api public
   def create
-    model_def = params['Model'].symbolize_keys
+    model_def = HashWithIndifferentAccess.new(params['Model'])
     @model = nil
     class_name = nil
     
@@ -101,6 +101,7 @@ class YogoModelsController < ApplicationController
     @model = @project.add_model(class_name, {})
     logger.debug(class_name)
     logger.debug(@model.guid)
+    logger.debug(model_def.inspect)
     @model.auto_migrate!
     @model.update_model_definition(model_def)
     
@@ -185,7 +186,11 @@ class YogoModelsController < ApplicationController
   def destroy
     model = @project.get_model(params[:id])
     @project.delete_model(model)
-    redirect_to project_url(@project)
+    # redirect_to project_url(@project)
+    respond_to do |request|
+      request.html { redirect_to project_url(@project) }
+      request.json { head :ok }
+    end
   end
   
   ##
