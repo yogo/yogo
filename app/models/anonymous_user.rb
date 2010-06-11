@@ -3,6 +3,7 @@
 #
 # FILE: anonymous_user.rb
 # Anonymous user object. Returned when a user isn't logged in.
+# NOTE: This is not currently being used
 class AnonymousUser
   
   ##

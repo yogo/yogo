@@ -6,7 +6,7 @@ class User
 
   # I'm confused. What is this doing?
   # @example
-  #   An example for this is silly
+  #   An example for this is silly (I don't know how to document attr_accessor methods)
   # 
   # @return [String] returns the password
   # @api public
