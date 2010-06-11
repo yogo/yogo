@@ -42,7 +42,7 @@ module DataMapper
       chainable do
         # @api private
         def get_type(dm_type)
-          if dm_type['type'].gsub(/\(\d*\)/, '') == 'string' && dm_type.has_key?('yogo_image')
+          if dm_type['type'].is_a?(String) && dm_type['type'].gsub(/\(\d*\)/, '') == 'string' && dm_type.has_key?('yogo_image')
             return DataMapper::Types::YogoImage
           else
             return super

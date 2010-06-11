@@ -42,7 +42,7 @@ module DataMapper
       
       chainable do
         def get_type(dm_type)
-          if dm_type['type'].gsub(/\(\d*\)/, '') == 'string' && dm_type.has_key?('yogo_file')
+          if  dm_type['type'].is_a?(String) && dm_type['type'].gsub(/\(\d*\)/, '') == 'string' && dm_type.has_key?('yogo_file')
             return DataMapper::Types::YogoFile
           else
             return super
