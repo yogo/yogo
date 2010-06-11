@@ -13,7 +13,7 @@ gem "dm-is-nested_set"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates",        "0.10.2"
 gem 'bcrypt-ruby'
-gem "dm-types",             "0.10.2"
+gem "dm-types",             "0.10.2", :path => "vendor/gems/dm-types-0.10.2"
 gem "dm-observer",          "0.10.2"
 gem "dm-persevere-adapter", "0.60.2", :require => nil
 gem "rails_datamapper",     "0.10.2", :require => nil
