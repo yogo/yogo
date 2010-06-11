@@ -14,19 +14,24 @@ set :copy_exclude, [".git"]
 # role :web, "yogo.cns.montana.edu"                          # Your HTTP server, Apache/etc
 # role :app, "yogo.cns.montana.edu"                          # This may be the same as your `Web` server
 
+set :ran_user_settings, false
+
 task :user_settings do
-  server_prompt = "What server are you deploying to?"
-  set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
-  role :web, "#{temp_server}"
-  role :app, "#{temp_server}"
-  user_prompt = "What user are you deploying to the server under? (defaults to 'yogo')"
-  set :temp_user, Proc.new { Capistrano::CLI.ui.ask(user_prompt)}
-  if temp_user.empty?
-    set :user, "yogo"
-    set :deploy_to, "/home/yogo/rails/yogo/"
-  else
-    set :user, "#{temp_user}"
-    set :deploy_to, "/home/#{temp_user}/rails/yogo/"
+  if !ran_user_settings
+    server_prompt = "What server are you deploying to?"
+    set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
+    role :web, "#{temp_server}"
+    role :app, "#{temp_server}"
+    user_prompt = "What user are you deploying to the server under? (defaults to 'yogo')"
+    set :temp_user, Proc.new { Capistrano::CLI.ui.ask(user_prompt)}
+    if temp_user.empty?
+      set :user, "yogo"
+      set :deploy_to, "/home/yogo/rails/yogo/"
+    else
+      set :user, "#{temp_user}"
+      set :deploy_to, "/home/#{temp_user}/rails/yogo/"
+    end
+    set :ran_user_settings, true
   end
 end
 
@@ -37,6 +42,8 @@ end
   "persvr:version", "shell" ].each do |task|
   before task, :user_settings
 end
+
+# before deploy, :user_settings
 
 namespace :deploy do
   task :start do ; end
@@ -85,6 +92,7 @@ namespace :bundle do
     run("bash -c 'cd #{current_path} && bundle install'")
   end
 end
+after 'setup_for_server', 'bundle:install'
 
 namespace :persvr do
   desc "Setup Persevere on the server"

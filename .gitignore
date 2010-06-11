@@ -1,3 +1,4 @@
+*.rbc
 *~
 SourceImages
 .rvmrc
@@ -16,7 +17,6 @@ coverage/*
 db/*.sqlite3
 db/*.db
 *.tmproj
-Capfile
 *.sw
 .svn
 gfembed*/*

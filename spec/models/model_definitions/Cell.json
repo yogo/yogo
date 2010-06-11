@@ -1,0 +1,74 @@
+{
+  "guid": "Cell",
+  
+    "properties": [{
+        "type": "Integer",
+        "name": "Cell Class",
+        "options": {}
+    },
+    {
+        "type": "Text",
+        "name": "Name",
+        "options": {}
+    },
+    {
+        "type": "Date",
+        "name": "Creation Date",
+        "options": {}
+    },
+    {
+        "type": "Text",
+        "name": "Description",
+        "options": {}
+    },
+    {
+        "type": "Text",
+        "name": "Development",
+        "options": {}
+    },
+    {
+        "type": "Integer",
+        "name": "Directional Tuning",
+        "options": {}
+    },
+    {
+        "type": "Text",
+        "name": "Hair Length",
+        "options": {}
+    },
+    {
+        "type": "Integer",
+        "name": "Number Of Varicosity",
+        "options": {}
+    },
+    {
+        "type": "Decimal",
+        "name": "Varicosity Surface Area",
+        "options": {}
+    },
+    {
+        "type": "File",
+        "name": "Reconstruction",
+        "options": {}
+    },
+    {
+        "type": "Image",
+        "name": "Overview",
+        "options": {}
+    },
+    {
+        "type": "Image",
+        "name": "Highlight",
+        "options": {}
+    },
+    {
+        "type": "Image",
+        "name": "Cell",
+        "options": {}
+    },
+    {
+        "type": "Image",
+        "name": "Inset",
+        "options": {}
+    }]
+}

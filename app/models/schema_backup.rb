@@ -6,7 +6,6 @@
 # FILE: schema_backup.rb
 # The project model is where the action starts.  Every yogo instance starts with a 
 # a project and the project is where the models and data will be namespaced.
-#
 
 # It is with a heavy heart I do this. Persevere has some problems remembering JSON schemas we give to it.
 # This class is a backup of the schemas. If persevere forgets, we can pull them from here and put them back.

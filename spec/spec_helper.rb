@@ -78,13 +78,24 @@ Spec::Runner.configure do |config|
     # line ( require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment')) )
     # and this block will run after that line
     # Start Persevere
-
   }
 
   config.after(:suite) {
 
   }
+  
+  config.before(:each) {
+    # DataMapper.auto_migrate!
+  }
 
   
+end
+
+def standard_user(opts = {})
+   User.new({:login => 'yogo', :password => "pass", :password_confirmation => 'pass'}.merge(opts))
+end
+
+def standard_group(opts = {})
+  Group.new({:name => 'basic group'}.merge(opts))
 end
   

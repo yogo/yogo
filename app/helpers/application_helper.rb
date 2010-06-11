@@ -154,6 +154,21 @@ module ApplicationHelper
     "<br clear='all' style='clear: both;'/>"
   end
   
+  
+  ##
+  # Helper for creating a tooltip
+  # 
+  # @example
+  #   Here is an example
+  # 
+  # @param [String] body
+  # @param [String] title
+  # @param [Integer] length
+  # 
+  # @return [HTML Fragment]
+  # 
+  # @author yogo
+  # @api public
   def tooltip(body, title = nil, length = 10)
     id = UUIDTools::UUID.random_create
     <<-TT

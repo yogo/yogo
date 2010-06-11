@@ -1,7 +1,7 @@
 %h1#content-title= @project.name
 
 #content-actions
-  = link_to("Edit Datasets", project_yogo_models_path(@project), :class => 'button-link')
+  = link_to("Edit Datasets", "/model_editor.html#projects/#{@project.id}", :class => 'button-link', :target => 'model_editor')
   = link_to("Delete Project", project_path(@project), 
     :method => :delete, :class => 'button-link', :confirm => "There is no undo.\n Continue?" ) 
   = link_to("Import CSV", import_csv_path(@project), :class => 'button-link') 

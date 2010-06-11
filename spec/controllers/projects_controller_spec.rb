@@ -13,6 +13,15 @@ describe ProjectsController do
       ]
   end
 
+  def mock_warden
+    request.env["warden"] = mock('Warden')
+    request.env["warden"].stub!(:user)
+  end
+
+  before :each do
+    mock_warden
+  end
+
   describe "GET projects/" do
     
     # this doesn't happen any more.

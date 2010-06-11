@@ -65,9 +65,9 @@ module Yogo
         model = self # This should be the actual model class
         
         model_def = {}
-        model_def[:guid] = model.guid
+        model_def['guid'] = model.guid
         # model_def[:name] = model.public_name
-        model_def[:properties] = []
+        model_def['properties'] = []
 
         properties = model.usable_properties
 
@@ -84,13 +84,15 @@ module Yogo
           prop_name = prop.display_name.to_s.titleize
 
           prop_def = {
-            :type => prop_type,
-            :name => prop_name,
-            :options => prop_options.dup
+            'type' => prop_type,
+            'name' => prop_name,
+            'options' => prop_options.dup
           }
+          
+          puts prop_def.inspect
 
-          prop_position_offset = model_def[:properties][prop_position] ? properties.size : 0
-          model_def[:properties][prop_position+prop_position_offset] = prop_def
+          prop_position_offset = model_def['properties'][prop_position] ? properties.size : 0
+          model_def['properties'][prop_position+prop_position_offset] = prop_def
         end
 
         return model_def
@@ -114,7 +116,7 @@ module Yogo
       def update_model_definition(definition)
         model = self # this should be the actual model class
         
-        definition_id = definition[:guid] || model.guid
+        definition_id = definition['guid'] || model.guid
 
         (model.guid == definition_id) || raise("model definition for #{definition_id} cannot be applied to #{model.guid}")
         
@@ -132,20 +134,20 @@ module Yogo
         # logger.debug { model.usable_properties.map{|p| p.name}.inspect }
         #         logger.debug { model.properties.map{|p| p.name}.inspect }
 
-        property_definitions = definition[:properties]
+        property_definitions = definition['properties']
         # These options are fixed and should be merged into every property
         default_property_options = {:required => false, 
                                     :separator => '__', 
                                     :prefix => 'yogo'}
         property_definitions.each_with_index do |prop_def, index|
-          def_type = prop_def[:type].to_s
-          def_name = prop_def[:name].to_s
+          def_type = prop_def['type'].to_s
+          def_name = prop_def['name'].to_s
           next if def_type.empty? || def_name.empty?
 
           prop_def = prop_def.dup.symbolize_keys!
           property_type = Yogo::Types.human_to_dm(def_type)
           property_name = def_name.squish.downcase.gsub(' ', '_').to_sym
-          property_options = {}.reverse_merge(default_property_options).reverse_merge(prop_def[:options] || {})
+          property_options = {}.reverse_merge(default_property_options).reverse_merge(prop_def['options'] || {})
           property_options[:position] = index
           property_options = property_options.symbolize_keys
           # logger.debug { "model.send(:property, #{property_name.inspect}, #{property_type.inspect}, #{property_options.inspect})"}
@@ -155,9 +157,8 @@ module Yogo
         # Type Mapping: prop_type = Yogo::Types.human_to_dm(model_def_type_name)
 
         # update model props: model.send(:property, :prop_name.to_sym, prop_type, :required => false, :position => prop[2], :separator => '__', :prefix => 'yogo')
-        model.auto_upgrade!
-
         begin
+          model.auto_upgrade!
           model.backup_schema!
         rescue ArgumentError => e
           Rails.logger.warn("Schema Backup Failed!")

@@ -145,7 +145,7 @@ module Yogo
       # @return [SchemaBackup]
       #   The backup object for this model.
       # 
-      # @api private
+      # @api public
       def backup_schema!
         schema_backup = SchemaBackup.get_or_create_by_name(self.name)
         schema_backup.schema =  self.to_json_schema

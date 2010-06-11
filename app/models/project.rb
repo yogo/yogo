@@ -6,7 +6,6 @@
 # FILE: project.rb
 # The project model is where the action starts.  Every yogo instance starts with a 
 # a project and the project is where the models and data will be namespaced.
-#
 
 # Class for a Yogo Project. A project contains a name, a description, and access to all of the models
 # that are part of the project.
@@ -16,18 +15,41 @@ class Project
   property :id, Serial
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
+  property :public, Boolean, :required => true, :default => true
   
   validates_is_unique   :name
   
   before :destroy, :delete_models!
   
+  after :create, :create_default_groups
+  
+  has n, :groups
+  
   # The number of items to be displayed (by default) per page
+  # 
+  # @example
+  #   Project.per_page
   # 
   # @return [Fixnum]
   # 
   # @api public
   def self.per_page
     15
+  end
+  
+  ##
+  # Returns all projects that have been marked public
+  # 
+  # @example
+  #   Project.public
+  # 
+  # @return [DataMapper::Collection]
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def self.public(opts = {})
+    all( opts.merge({:public => true}) )
   end
   
   ##
@@ -47,6 +69,7 @@ class Project
     Extlib::Inflection.classify(path)
   end
   
+  ##
   # Used to get the current project path name
   #
   # @example
@@ -61,6 +84,7 @@ class Project
     name.downcase.gsub(/[^\w]/, '_')
   end
 
+  ##
   # Compatability method for rails' route generation helpers
   #
   # @example
@@ -75,6 +99,7 @@ class Project
     id.to_s
   end
   
+  ##
   # Creates a model and imports data from a CSV file
   #
   # @example 
@@ -171,7 +196,7 @@ class Project
     DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::\w*#{search_term}\w*$/i }
   end
 
-
+  ##
   # Adds a model to the current project
   #
   # @example
@@ -284,12 +309,17 @@ class Project
   ## 
   # Return the description for a dataset
   # 
-  # @param [String] dataset name
+  # @example
+  #   project.dataset_description('blah')
+  # 
+  # @param [String] dataset 
+  #   The description
   # 
   # @return [String or Nil]
   # 
   # @author Pol Llovet pol.llovet@gmail.com
   # 
+  # @api public
   def dataset_description(dataset)
     "There should be a dataset description, make the editor."
   end
@@ -355,6 +385,22 @@ class Project
     model.send(:include,Yogo::Model)
     return model
   end
-
+  
+  ##
+  # Callback to create some default groups for this project
+  # 
+  # @return [nil]
+  # @author Robbie Lamb
+  # @api private
+  def create_default_groups
+    DataMapper.logger.debug { "Creating default groups" }
+    manager_group = Group.new(:name => 'managers')
+    user_group = Group.new(:name => 'users')
+    manager_group.users << User.current unless User.current.nil?
+    # manager_group.save
+    self.groups.push( manager_group, user_group )
+    # owner_group.save
+    self.save
+  end
   
 end
