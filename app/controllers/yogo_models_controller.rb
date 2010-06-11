@@ -186,7 +186,11 @@ class YogoModelsController < ApplicationController
   def destroy
     model = @project.get_model(params[:id])
     @project.delete_model(model)
-    redirect_to project_url(@project)
+    # redirect_to project_url(@project)
+    respond_to do |request|
+      request.html { redirect_to project_url(@project) }
+      request.json { head :ok }
+    end
   end
   
   ##
