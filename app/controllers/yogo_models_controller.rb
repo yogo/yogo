@@ -88,7 +88,7 @@ class YogoModelsController < ApplicationController
   #
   # @api public
   def create
-    model_def = params['Model'].symbolize_keys
+    model_def = HashWithIndifferentAccess.new(params['Model'])
     @model = nil
     class_name = nil
     
@@ -101,6 +101,7 @@ class YogoModelsController < ApplicationController
     @model = @project.add_model(class_name, {})
     logger.debug(class_name)
     logger.debug(@model.guid)
+    logger.debug(model_def.inspect)
     @model.auto_migrate!
     @model.update_model_definition(model_def)
     
