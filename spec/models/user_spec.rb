@@ -34,11 +34,15 @@ describe User do
   
   it "should enforce unique logins" do
     u = standard_user.save
-    u2 = standard_user
+    lambda do
+      u2 = standard_user
 
-    u2.should_not be_valid    
-    u2.errors.should have(1).error
-    u2.errors.should have_key(:login)
+      u2.should_not be_valid    
+      u2.errors.should have(1).error
+      u2.errors.should have_key(:login)
+      u2.save
+    end.should_not change(User, :count)
+    
   end
   
   it "should should validate passwords" do
