@@ -84,6 +84,7 @@ module Yogo
           prop_name = prop.display_name.to_s.titleize
 
           prop_def = {
+            'childRecordKey' => "#{model.guid}.#{prop.name}", #for sproutcore
             'type' => prop_type,
             'name' => prop_name,
             'options' => prop_options.dup
@@ -115,8 +116,8 @@ module Yogo
       # @api public
       def update_model_definition(definition)
         model = self # this should be the actual model class
-        
-        definition_id = definition['guid'] || model.guid
+        definition = definition.dup.symbolize_keys!
+        definition_id = definition[:guid] || model.guid
 
         (model.guid == definition_id) || raise("model definition for #{definition_id} cannot be applied to #{model.guid}")
         
@@ -134,20 +135,20 @@ module Yogo
         # logger.debug { model.usable_properties.map{|p| p.name}.inspect }
         #         logger.debug { model.properties.map{|p| p.name}.inspect }
 
-        property_definitions = definition['properties']
+        property_definitions = definition[:properties]
         # These options are fixed and should be merged into every property
         default_property_options = {:required => false, 
                                     :separator => '__', 
                                     :prefix => 'yogo'}
         property_definitions.each_with_index do |prop_def, index|
-          def_type = prop_def['type'].to_s
-          def_name = prop_def['name'].to_s
-          next if def_type.empty? || def_name.empty?
-
           prop_def = prop_def.dup.symbolize_keys!
+          def_type = prop_def[:type].to_s
+          def_name = prop_def[:name].to_s
+          next if def_type.empty? || def_name.empty?
+          
           property_type = Yogo::Types.human_to_dm(def_type)
           property_name = def_name.squish.downcase.gsub(' ', '_').to_sym
-          property_options = {}.reverse_merge(default_property_options).reverse_merge(prop_def['options'] || {})
+          property_options = {}.reverse_merge(default_property_options).reverse_merge(prop_def[:options] || {})
           property_options[:position] = index
           property_options = property_options.symbolize_keys
           # logger.debug { "model.send(:property, #{property_name.inspect}, #{property_type.inspect}, #{property_options.inspect})"}
