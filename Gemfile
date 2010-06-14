@@ -26,7 +26,7 @@ gem "rails_datamapper",     "0.10.2", :require => nil
 
 # Extra supporting gems
 gem "mime-types",                     :require => 'mime/types'
-gem "fastercsv"                       # unless RUBY 1.9
+gem "fastercsv"                       unless RUBY_VERSION >= '1.9.1'
 gem "carrierwave"
 gem "compass"
 gem "haml"
@@ -85,6 +85,6 @@ group :cucumber do
 end
 
 # A dev server that is slightly better then webrick
-gem 'mongrel',                     :require => nil
+gem 'mongrel',                     :require => nil unless RUBY_VERSION >= '1.9.1'
 gem 'thin',                        :require => nil unless defined?(JRUBY_VERSION)
 gem 'glassfish',                   :require => nil if     defined?(JRUBY_VERSION)
