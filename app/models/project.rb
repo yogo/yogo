@@ -15,7 +15,7 @@ class Project
   property :id, Serial
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
-  property :public, Boolean, :required => true, :default => true
+  property :is_public, Boolean, :required => true, :default => true
   
   validates_is_unique   :name
   
@@ -49,7 +49,7 @@ class Project
   # 
   # @api public
   def self.public(opts = {})
-    all( opts.merge({:public => true}) )
+    all( opts.merge({:is_public => true}) )
   end
   
   ##
