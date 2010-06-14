@@ -73,13 +73,26 @@ describe Project do
   end
   
   it "should be created with a set of default groups" do
-    p = Project.new(:name => 'blah', :public => false)
+    p = Project.new(:name => 'blah', :is_public => false)
     p.save
   
     p.groups.should_not be_empty
     Project.first(:name => 'blah').groups.should_not be_empty
     p.destroy
     Group.all.destroy
+  end
+
+  it "should be by default a public project" do
+    Project.create(:name => 'A Project').is_public.should be_true
+  end
+
+  it "should not return private projects when .public is called" do
+    p1 = Project.create(:name => 'test project 1')
+    p2 = Project.create(:name => 'test project 2')
+    p3 = Project.create(:name => 'test project 3')
+    pp = Project.create(:name => 'Private project', :is_public => false)
+    
+    Project.public.should_not include(pp)
   end
   
   it "should have 2 groups named 'managers' and 'users" do
