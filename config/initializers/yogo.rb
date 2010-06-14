@@ -7,3 +7,6 @@ end
 
 # Custom extensions for Yogo
 require 'exceptions'
+
+# Load the Application Version
+load Rails.root / "VERSION"
