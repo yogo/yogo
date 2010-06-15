@@ -7,10 +7,20 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 #
+# 
+require 'exceptions'
 class ApplicationController < ActionController::Base
+  include AuthenticatedSystem
+  include AuthorizationSystem
   
   # Check for local connections before anything else
-  before_filter :check_local_only 
+  before_filter :check_local_only
+  
+  # Set the current user for the models to use.
+  before_filter do |c|
+    # TODO: This is a hack until we are on rspec 2.0 and rails 3
+    User.current = c.current_user # unless Rails.env == 'test'
+  end
 
   # include all helpers, all the time  
   helper :all 
@@ -24,6 +34,8 @@ class ApplicationController < ActionController::Base
 
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
+  
+  rescue_from AuthorizationError, :with => :authorization_denied
   
   protected
 
@@ -49,11 +61,12 @@ class ApplicationController < ActionController::Base
         path = "/errors/#{status[0,3]}.html.erb"
       # end
        
-      render :template => path || "/errors/unknown.html.erb", :status => status, :layout => 'error.html.erb'
+      render :template => path || "/errors/unknown.html.erb", :status => status
     end
     
   private
   
+  ##
   # Method to see if incoming connections are local (and allowed) 
   # 
   # @example If the connection is local, render the view.
@@ -73,6 +86,7 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  ##
   # Show the sidebar in the layout (this is usually called by a before-filter)
   # 
   # @example

@@ -2,24 +2,29 @@
 source      "http://rubygems.org"
 
 # Required core gems
-gem "rails",                "2.3.5", :require => nil
+gem "rails",                "2.3.8", :require => nil
 gem "rake",                          :require => nil
 gem "dm-core",              "0.10.2"
 
-gem "dm-reflection",        "0.10.2", :git => "git://github.com/yogo/dm-reflection.git" # :path => "vendor/gems/dm-reflection-0.0.1"
-gem "dm-timestamps" 
-gem "dm-validations"
+gem "dm-reflection",        "0.11.0", :git => "git://github.com/yogo/dm-reflection.git"
+gem "dm-timestamps",        "0.10.2"
+gem "dm-validations",       "0.10.2"
 gem "dm-is-nested_set"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
-gem "dm-aggregates"
-gem "dm-types"
-gem "dm-observer"
-gem "dm-persevere-adapter", "0.52.1", :require => nil
-gem "do_sqlite3",                     :require => nil
-gem "rails_datamapper",               :require => nil
+gem "dm-aggregates",        "0.10.2"
+gem 'bcrypt-ruby'
+gem "dm-types",             "0.10.2", :path => "vendor/gems/dm-types-0.10.2"
+gem "dm-observer",          "0.10.2"
+gem "dm-persevere-adapter", "0.60.2", :require => nil
+gem "rails_datamapper",     "0.10.2", :require => nil
+
+# These are required so we can make it simple to interact with legacy data
+#gem "do_mysql",                       :require => nil
+#gem "do_postgres",                   :require => nil
+#gem "do_sqlite3",                    :require => nil
+#gem "do_sqlserver",                  :require => nil
 
 # Extra supporting gems
-# gem "authlogic",            "2.1.3"
 gem "mime-types",                     :require => 'mime/types'
 gem "fastercsv"                       # unless RUBY 1.9
 gem "carrierwave"
@@ -27,21 +32,24 @@ gem "compass"
 gem "haml"
 gem "uuidtools"
 
+gem 'rails_warden'
 
 if defined?(JRUBY_VERSION)
   gem "json_pure",            :require => nil
+  gem "BlueCloth",            :require => nil # Required for YARD
 else
-  gem "json",                 :require => nil  
+  gem "json",                 :require => nil
+  gem "bluecloth",            :require => nil # Required for YARD
 end
 
+gem 'ruby-debug',                  :require => nil, :group => :development unless defined?(JRUBY_VERSION)
 
-gem 'ruby-debug',                  :group => :development unless defined?(JRUBY_VERSION)
 gem "rails-footnotes",             :group => :development
 
 group :test do
   gem 'ruby-debug',                :require => nil unless defined?(JRUBY_VERSION)
-  gem 'rspec',        '~>1.3.0',   :require => nil
-  gem 'rspec-rails',  '~>1.3.2',   :require => 'spec/rails'
+  gem 'rspec',                     :require => nil
+  gem 'rspec-rails',               :require => 'spec/rails'
   gem 'ZenTest',                   :require => nil
   gem 'redgreen',                  :require => nil
   gem "yard",                      :require => nil
@@ -63,7 +71,6 @@ group :test do
   gem "googlecharts",              :require => nil
   gem "metric_fu",                 :require => nil
 end
-
 
 group :cucumber do
   gem 'rspec',        '~>1.3.0',   :require => nil

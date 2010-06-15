@@ -22,6 +22,9 @@ module Yogo
       base.send(:extend, ModelEditor)
       base.class_eval do
 
+        after_class_method :auto_migrate!, :backup_schema!
+        after_class_method :auto_upgrade!, :backup_schema!
+
         validates_present :change_summary, :if => :require_change_summary?
 
         base.properties.each do |property|
@@ -117,7 +120,7 @@ module Yogo
       # 
       # @api public
       def public_name
-        @_public_name ||= self.name.split('::')[-1].humanize
+        @_public_name ||= self.name.demodulize.titleize
       end
       
       # Compatability method for rails' route generation helpers
@@ -142,9 +145,11 @@ module Yogo
       # @return [SchemaBackup]
       #   The backup object for this model.
       # 
-      # @api private
+      # @api public
       def backup_schema!
-        SchemaBackup.get_or_create_by_name(self.name).update(:schema => self.to_json_schema)
+        schema_backup = SchemaBackup.get_or_create_by_name(self.name)
+        schema_backup.schema =  self.to_json_schema
+        schema_backup.save
       end
       
       private

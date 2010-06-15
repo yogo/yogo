@@ -65,9 +65,9 @@ module Yogo
         model = self # This should be the actual model class
         
         model_def = {}
-        model_def[:guid] = model.guid
+        model_def['guid'] = model.guid
         # model_def[:name] = model.public_name
-        model_def[:properties] = []
+        model_def['properties'] = []
 
         properties = model.usable_properties
 
@@ -84,13 +84,16 @@ module Yogo
           prop_name = prop.display_name.to_s.titleize
 
           prop_def = {
-            :type => prop_type,
-            :name => prop_name,
-            :options => prop_options.dup
+            'childRecordKey' => "#{model.guid}.#{prop.name}", #for sproutcore
+            'type' => prop_type,
+            'name' => prop_name,
+            'options' => prop_options.dup
           }
+          
+          puts prop_def.inspect
 
-          prop_position_offset = model_def[:properties][prop_position] ? properties.size : 0
-          model_def[:properties][prop_position+prop_position_offset] = prop_def
+          prop_position_offset = model_def['properties'][prop_position] ? properties.size : 0
+          model_def['properties'][prop_position+prop_position_offset] = prop_def
         end
 
         return model_def
@@ -113,7 +116,7 @@ module Yogo
       # @api public
       def update_model_definition(definition)
         model = self # this should be the actual model class
-        
+        definition = definition.dup.symbolize_keys!
         definition_id = definition[:guid] || model.guid
 
         (model.guid == definition_id) || raise("model definition for #{definition_id} cannot be applied to #{model.guid}")
@@ -138,11 +141,11 @@ module Yogo
                                     :separator => '__', 
                                     :prefix => 'yogo'}
         property_definitions.each_with_index do |prop_def, index|
+          prop_def = prop_def.dup.symbolize_keys!
           def_type = prop_def[:type].to_s
           def_name = prop_def[:name].to_s
           next if def_type.empty? || def_name.empty?
-
-          prop_def = prop_def.dup.symbolize_keys!
+          
           property_type = Yogo::Types.human_to_dm(def_type)
           property_name = def_name.squish.downcase.gsub(' ', '_').to_sym
           property_options = {}.reverse_merge(default_property_options).reverse_merge(prop_def[:options] || {})
@@ -155,8 +158,14 @@ module Yogo
         # Type Mapping: prop_type = Yogo::Types.human_to_dm(model_def_type_name)
 
         # update model props: model.send(:property, :prop_name.to_sym, prop_type, :required => false, :position => prop[2], :separator => '__', :prefix => 'yogo')
-        model.auto_upgrade!
-        model.backup_schema!
+        begin
+          model.auto_upgrade!
+          model.backup_schema!
+        rescue ArgumentError => e
+          Rails.logger.warn("Schema Backup Failed!")
+          Rails.logger.error(e)
+        end
+
         return model
       end
     end

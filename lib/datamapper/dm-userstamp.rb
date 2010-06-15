@@ -17,50 +17,51 @@ require 'dm-core'
 
 module DataMapper
   module Userstamp
-    module Stamper
-      
-      # This should never ever be called
-      # @return [Object] nothing!
-      # @api private
-      def self.included(base)
-        base.extend(ClassMethods)
-      end
+    # module Stamper
+    #   
+    #   # This should never ever be called
+    #   # @return [Object] nothing!
+    #   # @api private
+    #   def self.included(base)
+    #     base.extend(ClassMethods)
+    #   end
+    # 
+    #   module ClassMethods
+    #     
+    #     # This should never ever be called
+    #     # @return [Object] nothing!
+    #     # @api private
+    #     def userstamp_class
+    #       User
+    #     end
+    # 
+    #     # Sets the current user for the current process
+    #     # 
+    #     # Only needs to be used when overwriting the current user
+    #     # 
+    #     # @example User.current_user = current_user
+    #     # 
+    #     # @param [User] user a user to set as the current user.
+    #     # 
+    #     # @return [Object] the current user. Not useful
+    #     # 
+    #     # @api semipublic
+    #     def current_user=(user)
+    #       Thread.current["#{self.to_s.downcase}_#{self.object_id}_stamper"] = user
+    #     end
+    # 
+    #     # Returns the current user for the current process
+    #     # 
+    #     # @example User.current_user
+    #     #
+    #     # @return [User] the current user. Not useful
+    #     # @api semipublic
+    #     def current_user
+    #       Thread.current["#{self.to_s.downcase}_#{self.object_id}_stamper"]
+    #     end
+    #   end
+    # end
 
-      module ClassMethods
-        
-        # This should never ever be called
-        # @return [Object] nothing!
-        # @api private
-        def userstamp_class
-          User
-        end
-
-        # Sets the current user for the current process
-        # 
-        # Only needs to be used when overwriting the current user
-        # 
-        # @example User.current_user = current_user
-        # 
-        # @param [User] user a user to set as the current user.
-        # 
-        # @return [Object] the current user. Not useful
-        # 
-        # @api semipublic
-        def current_user=(user)
-          Thread.current["#{self.to_s.downcase}_#{self.object_id}_stamper"] = user
-        end
-
-        # Returns the current user for the current process
-        # 
-        # @example User.current_user
-        #
-        # @return [User] the current user. Not useful
-        # @api semipublic
-        def current_user
-          Thread.current["#{self.to_s.downcase}_#{self.object_id}_stamper"]
-        end
-      end
-    end
 
     # This should never ever be called
     # @return [Object] nothing!
@@ -70,8 +71,8 @@ module DataMapper
     end
 
     USERSTAMP_PROPERTIES = {
-      :created_by_id => lambda { |r| r.created_by_id = userstamp_class.current_user.id if userstamp_class.current_user && r.new_record? && r.created_by_id.nil? },
-      :updated_by_id => lambda { |r| r.updated_by_id = userstamp_class.current_user.id if userstamp_class.current_user}
+      :created_by_id => lambda { |r| r.created_by_id = userstamp_class.current.id if userstamp_class.current && r.new_record? && r.created_by_id.nil? },
+      :updated_by_id => lambda { |r| r.updated_by_id = userstamp_class.current.id if userstamp_class.current}
     }
     
     # This should never ever be called

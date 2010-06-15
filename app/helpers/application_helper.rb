@@ -154,13 +154,27 @@ module ApplicationHelper
     "<br clear='all' style='clear: both;'/>"
   end
   
+  ##
+  # Helper for creating a tooltip
+  # 
+  # @example
+  #   Here is an example
+  # 
+  # @param [String] body
+  # @param [String] title
+  # @param [Integer] length
+  # 
+  # @return [HTML Fragment]
+  # 
+  # @author yogo
+  # @api public
   def tooltip(body, title = nil, length = 10)
     id = UUIDTools::UUID.random_create
     <<-TT
     <div id='#{id}' class='tooltip' title='#{title || "Click to see full text."}'>#{body}</div>
-    <p class='tooltip-snippet' onClick="$('##{id}').dialog('open')">
+    <span class='tooltip-snippet' onClick="$('##{id}').dialog('open')">
       #{body[0..length]}<span class='more'>&#8230; more</span>
-    </p>
+    </span>
     TT
   end
   
@@ -193,5 +207,9 @@ module ApplicationHelper
     else 
       item[property.name]
     end
+  end
+  
+  def link_to_edit_project_models(project, link_text, options={})
+    link_to(link_text, "/model_editor.html#projects/#{project.id}&from=#{request.env['PATH_INFO']}", options)
   end
 end

@@ -4,3 +4,9 @@
 if ! File.directory?(File.join(Rails.root, Yogo::Setting['asset_directory']))
   FileUtils.mkdir_p(File.join(Rails.root, Yogo::Setting['asset_directory']))
 end
+
+# Custom extensions for Yogo
+require 'exceptions'
+
+# Load the Application Version
+load Rails.root / "VERSION"

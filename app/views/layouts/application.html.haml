@@ -26,12 +26,18 @@
   / Header (including optional menus)
   #header
     #logo= image_tag('header.png')
-    #menu
+    #menu.rbox
       = render(:partial => 'layouts/menu_links') unless @no_menu 
       = render(:partial => 'layouts/search') unless @no_search 
   =clear_break 
   /Grid Container 
   #container
+    / #login-stuff 
+    /   - if logged_in?
+    /     %p= current_user.login
+    /     %p= link_to("logout", logout_path)
+    /   - else
+    /     %p= link_to("Login", login_path)
     #flash
       - if flash[:notice]
         %p.notice= flash[:notice]
@@ -48,3 +54,4 @@
       = link_to(image_tag("yogo.png", 
           :alt => "The Yogo Data Management Toolkit Logo"), 
           'http://yogo.msu.montana.edu/')
+    #application-version= "v" + YOGO_VERSION

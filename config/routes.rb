@@ -44,6 +44,13 @@ ActionController::Routing::Routes.draw do |map|
                   :controller => 'project_wizard', :action => 'import_csv'
   map.upload_csv_wizard "/project_wizard/upload_csv/:id", 
                         :controller => 'project_wizard', :action => 'upload_csv'
+
+  map.resource :password, :only => [ :show, :update, :edit ]
+
+  # Login & Logout stuff
+  map.resource :user_session, :only => [ :show, :new, :create, :destory ]
+  map.logout '/logout', :controller => 'user_sessions', :action => 'destroy'
+  map.login '/login', :controller => 'user_sessions', :action => 'new'
   
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
   map.root :controller => "dashboard"

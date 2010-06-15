@@ -1,5 +1,0 @@
-<%= error_messages_for :group %>
-<%- form_for(@group, :url => groups_path) do |f| -%>
-  <%= render :partial => 'group_form', :locals => {:f => f} %>
-  <p><%= submit_tag 'Create' %></p>
-<%- end -%>

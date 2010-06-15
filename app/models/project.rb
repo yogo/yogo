@@ -6,7 +6,6 @@
 # FILE: project.rb
 # The project model is where the action starts.  Every yogo instance starts with a 
 # a project and the project is where the models and data will be namespaced.
-#
 
 # Class for a Yogo Project. A project contains a name, a description, and access to all of the models
 # that are part of the project.
@@ -16,10 +15,43 @@ class Project
   property :id, Serial
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
+  property :is_public, Boolean, :required => true, :default => true
   
   validates_is_unique   :name
   
   before :destroy, :delete_models!
+  
+  after :create, :create_default_groups
+  
+  has n, :groups
+  
+  # The number of items to be displayed (by default) per page
+  # 
+  # @example
+  #   Project.per_page
+  # 
+  # @return [Fixnum]
+  # 
+  # @api public
+  def self.per_page
+    15
+  end
+  
+  ##
+  # Returns all projects that have been marked public
+  # 
+  # @example
+  #   Project.public
+  # 
+  # @return [DataMapper::Collection]
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def self.public(opts = {})
+    all( opts.merge({:is_public => true}) )
+  end
+  
   ##
   # Returns the namespace Yogo Models will be in
   # 
@@ -37,6 +69,7 @@ class Project
     Extlib::Inflection.classify(path)
   end
   
+  ##
   # Used to get the current project path name
   #
   # @example
@@ -51,6 +84,7 @@ class Project
     name.downcase.gsub(/[^\w]/, '_')
   end
 
+  ##
   # Compatability method for rails' route generation helpers
   #
   # @example
@@ -65,6 +99,7 @@ class Project
     id.to_s
   end
   
+  ##
   # Creates a model and imports data from a CSV file
   #
   # @example 
@@ -99,7 +134,6 @@ class Project
     if model.nil?
       model = generate_empty_model(model_name)
       model.auto_migrate!
-      model.backup_schema!
     end
     
     # Load data
@@ -162,7 +196,7 @@ class Project
     DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::\w*#{search_term}\w*$/i }
   end
 
-
+  ##
   # Adds a model to the current project
   #
   # @example
@@ -181,7 +215,7 @@ class Project
   # @see http://datamapper.org/docs/properties
   # 
   # @api public
-  def add_model(name, properties = {})
+  def add_model(name, properties = {}, relationships = {})
     name = name.classify
     return false unless valid_model_or_column_name?(name)
 
@@ -191,6 +225,10 @@ class Project
       a_model.send(:property, name, options.delete(:type), options.merge(:prefix => 'yogo'))
     end
 
+    relationships.each do |name, options|
+      # Do something for each one
+    end
+    
     a_model.backup_schema!
 
     return a_model
@@ -271,14 +309,19 @@ class Project
   ## 
   # Return the description for a dataset
   # 
-  # @param [String] dataset name
+  # @example
+  #   project.dataset_description('blah')
+  # 
+  # @param [String] dataset 
+  #   The description
   # 
   # @return [String or Nil]
   # 
   # @author Pol Llovet pol.llovet@gmail.com
   # 
+  # @api public
   def dataset_description(dataset)
-    "Directionally selective mechanosensory afferents in the cricket cercal sensory system form a map of air current direction in the terminal abdominal ganglion. The global organization of this map was revealed by studying the anatomical relationships between an ensemble of sensory afferents that represented the entire range of receptor hair directional sensitivities on the sensory epithelium. The shapes and three-dimensional positions of the terminal arborizations of these cells were highly conserved across animals. Afferents with similar directional sensitivities arborized near each other within the map, and their terminal arborizations showed significant anatomical overlap. There was a clear global organization pattern of afferents within the map: they were organized into a spiral shape, with stimulus direction mapped continuously around the spiral. These results demonstrate that this map is not formed via a direct point-to-point topographic projection from the sensory epithelium to the CNS. Rather, the continuous representation of air current direction is synthesized within the CNS via an anatomical reorganization of the afferent terminal arbors. The arbors are reorganized according to a functional property that is independent of the location of the mechanoreceptor in the epithelium. The ensemble data were used to derive predictions of the patterns of steady-state excitation throughout the map for different directional stimuli. These images represent quantitative and testable predictions of functional characteristics of the entire neural map."
+    "There should be a dataset description, make the editor."
   end
   
   private
@@ -343,5 +386,22 @@ class Project
     return model
   end
 
+  
+  ##
+  # Callback to create some default groups for this project
+  # 
+  # @return [nil]
+  # @author Robbie Lamb
+  # @api private
+  def create_default_groups
+    DataMapper.logger.debug { "Creating default groups" }
+    manager_group = Group.new(:name => 'managers')
+    user_group = Group.new(:name => 'users')
+    manager_group.users << User.current unless User.current.nil?
+    # manager_group.save
+    self.groups.push( manager_group, user_group )
+    # owner_group.save
+    self.save
+  end
   
 end
