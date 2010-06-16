@@ -228,8 +228,6 @@ class Project
     relationships.each do |name, options|
       # Do something for each one
     end
-    
-    a_model.backup_schema!
 
     return a_model
   end
