@@ -7,8 +7,10 @@
 # 
 
 # Require custom extensions to datamapper.
+require 'datamapper/associations/relationship'
 require 'datamapper/paginate'
 require 'datamapper/property'
+require 'datamapper/model/relationship'
 require 'datamapper/search'
 require 'datamapper/paginate'
 require 'datamapper/factory'
