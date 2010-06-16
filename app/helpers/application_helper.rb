@@ -210,6 +210,19 @@ module ApplicationHelper
     end
   end
   
+  # Creates the appropriate HTML for attributes on a model
+  # 
+  # For attributes that are files or images it makes a download link work for them
+  # 
+  # @example 
+  #   <%= link_to_edit_project_models(@project, 'this is some text') %>
+  # 
+  # @param [Project] project The project to link to
+  # @param [String]  link_text The text to display in the link
+  # @param [Hash]  options Options for the linkto
+  # @return [HTML Fragment] the HTML is either a string or a link to the file/image.
+  # 
+  # @api public
   def link_to_edit_project_models(project, link_text, options={})
     link_to(link_text, "/model_editor.html#projects/#{project.id}&from=#{request.env['PATH_INFO']}", options)
   end

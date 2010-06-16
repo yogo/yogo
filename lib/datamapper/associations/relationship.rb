@@ -26,6 +26,19 @@ module DataMapper
       # @api public
       alias original_initialize initialize
       
+      ##
+      # Initializer for a relationship
+      # 
+      # This isn't really useful on it's own.
+      # 
+      # @example
+      #  Relatipnship.new('blah blah')
+      # 
+      # @return [Relationship]
+      #   The created relationship object.
+      # 
+      # @api public
+      # @author lamb
       def initialize(name, child_model, parent_model, options = {})
 
         pos = options.delete(:position)

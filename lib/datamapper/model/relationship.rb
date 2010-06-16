@@ -3,6 +3,17 @@ module DataMapper
     module CustomRelationship
       Model.append_extensions self
 
+      ##
+      # Overwriting the 'has' method for models
+      # 
+      # @example
+      #   has(n, bozons)
+      # 
+      # @return [Relationship]
+      #
+      # @api public
+      # 
+      # @author Robbie Lamb
       def has(cardinality, name, *args)
         # Collect options from splat or initialize empty hash if nothing
         options = args.pop
@@ -25,6 +36,17 @@ module DataMapper
         super(cardinality, name, model, *args)
       end
       
+      ##
+      # Overwriting the 'belongs_to' method for models
+      # 
+      # @example
+      #   belongs_to(bozons)
+      # 
+      # @return [Relationship]
+      # 
+      # @api public
+      # 
+      # @author Robbie Lamb
       def belongs_to(name, *args)
         # Collect options from splat or initialize empty hash if nothing
         options = args.pop
