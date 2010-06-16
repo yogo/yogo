@@ -1,9 +1,8 @@
-set :application, "yogo"
+set :application, "crux"
 set :use_sudo,    false
 
 set :scm, :git
-set :repository,  "git://github.com/yogo/yogo.git"
-
+set :repository,  "git://github.com/pol/crux.git"
 
 set :branch, "master"
 set :deploy_via, :remote_cache
@@ -18,19 +17,22 @@ set :ran_user_settings, false
 
 task :user_settings do
   if !ran_user_settings
-    server_prompt = "What server are you deploying to?"
-    set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
-    role :web, "#{temp_server}"
-    role :app, "#{temp_server}"
-    user_prompt = "What user are you deploying to the server under? (defaults to 'yogo')"
-    set :temp_user, Proc.new { Capistrano::CLI.ui.ask(user_prompt)}
-    if temp_user.empty?
-      set :user, "yogo"
-      set :deploy_to, "/home/yogo/rails/yogo/"
-    else
-      set :user, "#{temp_user}"
-      set :deploy_to, "/home/#{temp_user}/rails/yogo/"
-    end
+    set :user, "crux"
+    set :deploy_to, "/home/crux/"
+    server "crux.msu.montana.edu", :app, :web, :db, :primary => true
+    # server_prompt = "What server are you deploying to?"
+    # set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
+    # role :web, "#{temp_server}"
+    # role :app, "#{temp_server}"
+    # user_prompt = "What user are you deploying to the server under? (defaults to 'yogo')"
+    # set :temp_user, Proc.new { Capistrano::CLI.ui.ask(user_prompt)}
+    # if temp_user.empty?
+    #   set :user, "yogo"
+    #   set :deploy_to, "/home/yogo/rails/yogo/"
+    # else
+    #   set :user, "#{temp_user}"
+    #   set :deploy_to, "/home/#{temp_user}/rails/yogo/"
+    # end
     set :ran_user_settings, true
   end
 end
@@ -55,13 +57,11 @@ end
 
 namespace :db do
   task :setup do
-    run "mkdir -p #{deploy_to}#{shared_dir}/database/persvr"
-    run "mkdir -p #{deploy_to}#{shared_dir}/database/persevere"
+    run "mkdir -p #{deploy_to}#{shared_dir}/blazeds"
   end
   
   task :symlink do
-    run "ln -nfs #{deploy_to}#{shared_dir}/database/persvr #{release_path}/db/persvr"
-    run "ln -nfs #{deploy_to}#{shared_dir}/database/persevere #{release_path}/vendor/persevere"
+    run "ln -nfs #{deploy_to}#{shared_dir}/blazeds #{release_path}/blazeds"
   end
 end
 after "deploy:setup",       "db:setup"
@@ -94,31 +94,47 @@ namespace :bundle do
 end
 after 'setup_for_server', 'bundle:install'
 
-namespace :persvr do
-  desc "Setup Persevere on the server"
-  task :setup do
-    run("bash -c 'cd #{current_path} && rake persvr:setup'")
-  end
-  
-  desc "Start Persevere on the server"
+namespace :tomcat do
+  desc "Start the Tomcat Instance on the server (blazeds and persevere)"
   task :start do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake blazeds:start RAILS_ENV=production'")
   end
   
-  desc "Stop Persevere on the server"
+  desc "Stop the Tomcat Instance on the server (blazeds and persevere)"
   task :stop do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
-  end
-  
-  task :drop do
-    run("bash -c 'cd #{current_path} && rake persvr:drop PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
-  end
-  
-  task :version do
-    run("bash -c 'cd #{current_path} && rake persvr:version PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake blazeds:stop RAILS_ENV=production'")
   end
 end
+
+# namespace :persvr do
+#   desc "Setup Persevere on the server"
+#   task :setup do
+#     run("bash -c 'cd #{current_path} && rake persvr:setup'")
+#   end
+#   
+#   desc "Start Persevere on the server"
+#   task :start do
+#     puts '************************* This takes me a long time sometimes *************************'
+#     puts '************************************* Be patient **************************************'
+#     run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
+#   end
+#   
+#   desc "Stop Persevere on the server"
+#   task :stop do
+#     puts '************************* This takes me a long time sometimes *************************'
+#     puts '************************************* Be patient **************************************'
+#     run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
+#   end
+#   
+#   task :drop do
+#     run("bash -c 'cd #{current_path} && rake persvr:drop PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
+#   end
+#   
+#   task :version do
+#     run("bash -c 'cd #{current_path} && rake persvr:version PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
+#   end
+# end
