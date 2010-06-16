@@ -202,7 +202,7 @@ module Yogo
       
       # Check to see if the change_summary field is required to be filled out
       # 
-      # @return [TrueClass or FalseClass]
+      # @return [Boolean]
       # 
       # @author Robbie Lamb robbie.lamb@gmail.com
       # 

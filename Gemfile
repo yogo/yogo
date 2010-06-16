@@ -9,13 +9,13 @@ gem "dm-core",              "0.10.2"
 gem "dm-reflection",        "0.11.0", :git => "git://github.com/yogo/dm-reflection.git"
 gem "dm-timestamps",        "0.10.2"
 gem "dm-validations",       "0.10.2"
-gem "dm-is-nested_set"
+gem "dm-is-nested_set",     "0.10.2"
 gem "dm-serializer",        "0.10.2", :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates",        "0.10.2"
 gem 'bcrypt-ruby'
 gem "dm-types",             "0.10.2", :path => "vendor/gems/dm-types-0.10.2"
 gem "dm-observer",          "0.10.2"
-gem "dm-persevere-adapter", "0.60.2", :require => nil
+gem "dm-persevere-adapter", "0.60.4", :require => nil
 gem "rails_datamapper",     "0.10.2", :require => nil
 
 # These are required so we can make it simple to interact with legacy data
@@ -26,7 +26,7 @@ gem "rails_datamapper",     "0.10.2", :require => nil
 
 # Extra supporting gems
 gem "mime-types",                     :require => 'mime/types'
-gem "fastercsv"                       # unless RUBY 1.9
+gem "fastercsv"                       unless RUBY_VERSION >= '1.9.1'
 gem "carrierwave"
 gem "compass"
 gem "haml"
@@ -85,6 +85,6 @@ group :cucumber do
 end
 
 # A dev server that is slightly better then webrick
-gem 'mongrel',                     :require => nil
+gem 'mongrel',                     :require => nil unless RUBY_VERSION >= '1.9.1'
 gem 'thin',                        :require => nil unless defined?(JRUBY_VERSION)
 gem 'glassfish',                   :require => nil if     defined?(JRUBY_VERSION)

@@ -46,13 +46,6 @@ class User
   has n, :groups, :through => Resource
 
   validates_is_confirmed :password
-
-  # acts_as_authentic do |config| 
-  #   config.instance_eval do
-  #     validates_uniqueness_of_email_field_options :scope => :id
-  #     validate_login_field false
-  #   end
-  # end
   
   ##
   # Finds a user by their login
