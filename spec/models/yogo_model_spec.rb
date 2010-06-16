@@ -20,8 +20,6 @@ describe "A Yogo Model" do
     Yogo::SameProject::Cell.should_not be_nil
   end
   
-  it "should have ordered columns" 
-  
   describe "after Yogo::Model is included" do
   
     before(:each) do
