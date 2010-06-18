@@ -49,3 +49,11 @@ DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(
                                 DataMapper.repository(:default).storage_exists?(SchemaBackup.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(User.storage_name)
                                 
+
+g = Group.first(:name => 'Administrators', :admin => true, :project => nil)
+g ||= Group.create(:name => 'Administrators', :admin => true)
+if g.users.empty?
+  u = User.create(:login => 'yogo', :password => 'change me', :password_confirmation => 'change me')
+  u.groups << g
+  u.save
+end
