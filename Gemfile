@@ -44,7 +44,10 @@ end
 
 gem 'ruby-debug',                  :require => nil, :group => :development unless defined?(JRUBY_VERSION)
 
-gem "rails-footnotes",             :group => :development
+group :development do
+  gem "rails-footnotes"
+  gem "capistrano"
+end
 
 group :test do
   gem 'ruby-debug',                :require => nil unless defined?(JRUBY_VERSION)
