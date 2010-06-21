@@ -34,3 +34,6 @@ doc/yardstick/*
 yogo_assets/*
 public/stylesheets/compiled
 htmlreports/**/*
+# BlazeDS 
+vendor/blazeds
+vendor/blazeds/**/*
