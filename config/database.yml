@@ -10,19 +10,22 @@ development:
   adapter: persevere
   versioned: true
   host: localhost
-  port: 8080
+  path: '/persevere'
+  port: 8400
 
 production:
   adapter: persevere
   versioned: true
   host: localhost
-  port: 8080
+  path: '/persevere'
+  port: 8400
 
 # run with bin/persvr -p 8081
 test: &TEST
   adapter: persevere
   versioned: true
   host: localhost
+  path: '/persevere'
   port: 8081
 
 cucumber:
