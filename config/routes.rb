@@ -8,13 +8,13 @@
 #
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
-  map.resources :projects, 
+  map.resources :projects, :controller => 'yogo/projects',
                 :member => { :upload => :post, :list_models => :get }, 
                 :collection => { :loadexample => :post, :search => :get} do |project|
     
     # /projects/:project_id/yogo_data/:model_name
     # /projects/:project_id/yogo_data/:model_name/:id
-    project.resources :yogo_data, :as => 'yogo_data/:model_id', 
+    project.resources :yogo_data, :as => 'yogo_data/:model_id', :controller => 'yogo/data',
                       :collection => { :upload => :post, :search => :get, 
                                        :histogram_attribute => :get, 
                                        :pick_attribute => :get, 
@@ -22,16 +22,16 @@ ActionController::Routing::Routes.draw do |map|
                       :member => { :download_asset => :get, :show_asset => :get }
                           
     # /projects/:project_id/yogo_models/:model_name
-    project.resources :yogo_models,
+    project.resources :yogo_models, :controller => 'yogo/models',
                       :collection => { :refresh_attributes => :post },
                       :member => { :list_attributes => :get }
     
   end
-  map.resources :yogo_settings
+  map.resources :settings
   map.resources :tutorial
   map.resources :dashboard, :only => [ :index, :show ]
 
-  map.connect "/mockup/:action", :controller => 'mockup'
+  # map.connect "/mockup/:action", :controller => 'mockup'
   
   # Wizard stuff
   map.start_wizard  "/project_wizard/name", 

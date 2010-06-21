@@ -7,7 +7,7 @@
 # Functionality for CRUD of data within a yogo project's model
 # Additionally upload and download of data via CSV is provided
 #
-class YogoSettingsController < ApplicationController
+class SettingsController < ApplicationController
   
   # displays settings index page
   #

@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe YogoModelsController do
+describe Yogo::ModelsController do
   
   describe 'POST' do
   end # POST tests

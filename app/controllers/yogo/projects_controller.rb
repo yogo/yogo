@@ -8,7 +8,7 @@
 # and additionally: upload of CSV files, an example project and rereflection
 # of the yogo repository.
 
-class ProjectsController < ApplicationController
+class Yogo::ProjectsController < ApplicationController
   
   # Show all the projects
   #

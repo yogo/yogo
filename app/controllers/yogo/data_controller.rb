@@ -7,12 +7,13 @@
 # Functionality for CRUD of data within a yogo project's model
 # Additionally upload and download of data via CSV is provided
 #
-class YogoDataController < ApplicationController
+class Yogo::DataController < ApplicationController
   before_filter :find_parent_items, :show_sidebar
 
   # 10 data objects per page are displayed
   #
-  # @example http://localhost:3000/yogo_data
+  # @example 
+  #   get /project/1/yogo_data
   #
   # @param [Hash] params
   # @option params [String] :q this is a querry

@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe ProjectsController do
+describe Yogo::ProjectsController do
 
   def mock_project(stubs={})
     @mock_project ||= mock_model(Project, stubs)

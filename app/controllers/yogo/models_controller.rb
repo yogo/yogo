@@ -6,7 +6,7 @@
 # FILE: yogo_models_controller.rb
 # Functionality for CRUD of yogo project models
 # 
-class YogoModelsController < ApplicationController
+class Yogo::ModelsController < ApplicationController
   before_filter :find_parent_items
   
   ##

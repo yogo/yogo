@@ -5,7 +5,7 @@
   .rbox.dashed
     - form_for(@project, :url => create_wizard_project_path, :builder => YogoFormBuilder) do |form|
       =hidden_field_tag('wizard',true)
-      = render :partial => 'projects/form', :locals => {:f => form}
+      = render :partial => 'yogo/projects/form', :locals => {:f => form}
       .form-element
         =form.submit('Save and Continue', :class => 'button-link')
         = link_to('Cancel', root_path, :class => 'cancel') 
