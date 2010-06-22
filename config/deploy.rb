@@ -89,7 +89,7 @@ after "deploy:update_code", "setup_for_server"
 namespace :bundle do
   desc "Run bundle install on the server"
   task :install do
-    run("bash -c 'cd #{current_path} && bundle install'")
+    run("bash -c 'cd #{release_path} && bundle install'")
   end
 end
 after 'setup_for_server', 'bundle:install'
