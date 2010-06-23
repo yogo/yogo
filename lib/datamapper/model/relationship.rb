@@ -32,7 +32,6 @@ module DataMapper
         
         args.push(options)
         
-        
         super(cardinality, name, model, *args)
       end
       

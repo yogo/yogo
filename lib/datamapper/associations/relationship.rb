@@ -46,16 +46,8 @@ module DataMapper
 
         prefix = options.delete(:prefix)
         self.prefix = prefix.nil?  ? "" : prefix
-
+        
         self.display_name = name.to_s.sub("#{self.prefix}", "")
-
-        # name = (self.prefix + display_name).to_sym
-
-        # puts self.class
-        # puts name
-        # puts child_model
-        # puts parent_model
-        # puts display_name
 
         original_initialize(name, child_model, parent_model, options)
       end

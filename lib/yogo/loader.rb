@@ -23,9 +23,11 @@ module Yogo
     def self.load(repo, name)
       project = Project.create(:name => name)
       
+      require 'ruby-debug'
+
       # Iterate through each model and make it in persevere, then copy instances
       models = DataMapper::Reflection.reflect(repo, Object, true)
-      
+            
       yogo_models = Array.new
       
       # Create models
@@ -41,33 +43,33 @@ module Yogo
         yogo_models << ym
         ym.auto_migrate!
       end
-      
+            
       # Wire up relationships
       models.each_index do |idx|
         model = models[idx]
         yogo_model = yogo_models[idx]
         model.relationships.each do |key,relation|
-          other = yogo_models[models.index(models.select { |item| item.name == relation.child_model_name }[0])]
           case relation
           when DataMapper::Associations::ManyToMany::Relationship
-            puts "Making M:M (Infinity) #{key.to_sym} (:through => Resource) with model: #{other}"
-            yogo_model.has(Infinity, key.to_sym, {:through => DataMapper::Resource, :model => other, :prefix => "yogo", :separator => "__"})
+            other = yogo_models[models.index(models.select { |item| item.name == relation.child_model_name }[0])]
+            puts "#{yogo_model}.has(Infinity, #{key}, {:through => DataMapper::Resource, :model => #{other}, :prefix => 'yogo__', :inverse => 'yogo__#{other.name.demodulize.underscore.pluralize}'})"
+            yogo_model.has(Infinity, key.to_sym, {:through => DataMapper::Resource, :model => other, :prefix => "yogo__", :inverse => "yogo__#{other.name.demodulize.underscore.pluralize}".to_sym}) unless yogo_model == other
           when DataMapper::Associations::OneToMany::Relationship
-            puts "Making 1:M (Infinity) #{key.to_sym} with model: #{other}"
-            yogo_model.has(Infinity, key.to_sym, {:model => other, :prefix => "yogo", :separator => "__"})
+            other = yogo_models[models.index(models.select { |item| item.name == relation.child_model_name }[0])]
+#            puts "#{yogo_model}.has(Infinity, #{key.tableize.downcase}, {:model => #{other}, :prefix => 'yogo__'})"
+            yogo_model.has(Infinity, key.tableize.downcase.to_sym, {:model => other, :prefix => "yogo__"}) unless yogo_model == other
           when DataMapper::Associations::ManyToOne::Relationship
             other = yogo_models[models.index(models.select { |item| item.name == relation.parent_model_name }[0])]
-            puts "Making M:1 (belongs_to) #{key.singularize.to_sym} with model: #{other}"
-            yogo_model.belongs_to(key.singularize.to_sym, {:model => other, :prefix => "yogo", :separator => "__"})
+#            puts "#{yogo_model}.belongs_to(#{key.singularize}, {:model => #{other}, :prefix => 'yogo__'})"
+            yogo_model.belongs_to(key.singularize.to_sym, {:model => other, :prefix => "yogo__"}) unless yogo_model == other
           when DataMapper::Associations::OneToOne::Relationship
-            puts "Making 1:1 #{key.singularize.to_sym} with model: #{other}"
-            yogo_model.has(1,key.singularize.to_sym, {:model => other, :prefix => "yogo", :separator => "__"})
+            other = yogo_models[models.index(models.select { |item| item.name == relation.child_model_name }[0])]
+#            puts "#{yogo_model}.has(1, #{key.singularize.downcase}, {:model => #{other}, :prefix => 'yogo__'})"
+            yogo_model.has(1, key.singularize.to_sym, {:model => other, :prefix => "yogo__"}) unless yogo_model == other
           end
         end
       end
-            
-      debugger
-      
+                  
       # Migrate them now that they're full of properties and relationships
       yogo_models.each do |model|
         model.auto_upgrade!
@@ -85,7 +87,7 @@ module Yogo
           yogo_model.create(newitems)
         end
       end
-      
+          
       # Load up instance relationships
       yogo_models.each do |yogo_model|        
         model = models[models.index(yogo_model.name.demodulize.constantize)]
@@ -93,24 +95,18 @@ module Yogo
         model.all.each do |instance|
           yogo_instance = yogo_model.first(:yogo__id => instance.id)
           relationships.each do |r|
-            if model.relationships[r].max == 1
-              puts "Getting #{r} data for #{instance}"
-              value = instance.send(r.to_sym)
+            value = instance.send(r.to_sym)
+            if model.relationships[r].max == 1 && ! value.is_a?(Array)
               yogo_value = yogo_models[models.index(value.model)].first(:yogo__id => value.id)
-              yogo_instance.send("#{r}=".to_sym, yogo_value)
+              puts "(1. Single) #{yogo_instance.inspect}.send(yogo__#{r}=, #{yogo_value})"
+              yogo_instance.send("yogo__#{r}=", yogo_value)
+            elsif value.is_a?(Array)
+              next if value.length == 0
+              yogo_values = value.map { |v| yogo_models[models.index(v.model)].first(:yogo__id => v.id) }
+              puts "(2. Multiple) -> #{yogo_instance.inspect}.send(yogo__#{r}=, #{yogo_values.inspect})"
+              yogo_instance.send("yogo__#{r}=".to_sym, yogo_values)
             else
-              puts "Getting #{r} data for #{instance}"
-              values = instance.send(r.to_sym)
-              next if values.length == 0
-              yogo_values = values.map { |v| yogo_models[models.index(v.model)].first(:yogo__id => v.id) }
-
-              if yogo_model.relationships[r].is_a?(DataMapper::Associations::ManyToMany::Relationship)
-                puts "M:M Set"
-              else
-#                debugger
-                puts "1:M Set"
-#                yogo_instance.send("#{r}=".to_sym, yogo_values)
-              end
+              puts "Error loading values."
             end
           end
           yogo_instance.save
