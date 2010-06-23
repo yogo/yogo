@@ -22,7 +22,7 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def index
     redirect_to dashboard_index_url and return
-    @projects = Project.paginate(:page => params[:page], :per_page => 5)
+    @projects = Project.public.paginate(:page => params[:page], :per_page => 5)
   end
 
   # Find a project or projects and show the result
@@ -68,6 +68,7 @@ class Yogo::ProjectsController < ApplicationController
 
   end
 
+  ##
   # Shows a project
   #
   # @example 
@@ -80,7 +81,10 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def show
     @project = Project.get(params[:id])
-    # raise exception if project isn't found?
+    if !Yogo::Setting[:local_only] && !@project.is_public? 
+      redirect_to("/") and return if !logged_in? || !current_user.is_in_project?(@project)
+    end
+    
     @models = @project.models
     @sidebar = true
     
@@ -89,6 +93,7 @@ class Yogo::ProjectsController < ApplicationController
     end
   end
 
+  ##
   # Returns a form for creating a new project
   #
   # @example 
@@ -109,6 +114,7 @@ class Yogo::ProjectsController < ApplicationController
     redirect_to start_wizard_path
   end
 
+  ##
   # Creates a new project based on the attributes
   #
   # @example 
@@ -134,6 +140,7 @@ class Yogo::ProjectsController < ApplicationController
     end
   end
 
+  ##
   # load project for editing
   #
   # @example 
@@ -150,11 +157,16 @@ class Yogo::ProjectsController < ApplicationController
   def edit
     @project = Project.get(params[:id])
     
+    if !Yogo::Setting[:local_only] && (!logged_in? || !current_user.has_permission?(:edit_project,@project))
+      raise AuthorizationError
+    end
+    
     respond_to do |format|
       format.html
     end
   end
 
+  ##
   # Updates project with new values
   #
   # @example 
@@ -172,7 +184,12 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def update
     @project = Project.get(params[:id])
-    params[:project].delete(:name)
+    
+    if !Yogo::Setting[:local_only] && (!logged_in? || !current_user.has_permission?(:edit_project,@project))
+      raise AuthorizationError
+    end
+    
+    params[:project].delete(:name) if params.has_key?(:project)
     @project.attributes = params[:project]
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been updated."
@@ -183,6 +200,7 @@ class Yogo::ProjectsController < ApplicationController
     end
   end
 
+  ##
   # deletes a project
   #
   # @example 
@@ -199,6 +217,11 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def destroy
     @project = Project.get(params[:id])
+    
+    if !Yogo::Setting[:local_only] && (!logged_in? || !current_user.has_permission?(:edit_project,@project))
+      raise AuthorizationError
+    end
+    
     if @project.destroy
       flash[:notice] = "Project \"#{@project.name}\" has been destroyed."
     else
