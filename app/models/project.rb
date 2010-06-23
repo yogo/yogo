@@ -392,13 +392,17 @@ class Project
   # @api private
   def create_default_groups
     DataMapper.logger.debug { "Creating default groups" }
+
     manager_group = Group.new(:name => 'managers')
     user_group = Group.new(:name => 'users')
     manager_group.users << User.current unless User.current.nil?
-    # manager_group.save
+
     self.groups.push( manager_group, user_group )
-    # owner_group.save
     self.save
+    [:edit_project, :edit_model_descriptions, :edit_model_data, :delete_model_data].each do |action|
+      manager_group.add_permission(action)
+    end
+    manager_group.save
   end
   
 end

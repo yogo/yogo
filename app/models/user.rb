@@ -148,8 +148,25 @@ class User
   # 
   # @api public
   def has_permission?(action, project = nil)
-    @_user_groups ||= Group.all(:project => project, :users => self)
-    raise Exception, "Not yet implemented!"
+    # @_user_groups ||= Group.all(:project => project, :users => self)
+    self.groups.any?{ |g| g.project.eql?(project) && g.has_permission?(action) }
+  end
+
+  ##
+  # Check to see if the user belongs to the current project
+  #
+  # @example
+  #  current_user.is_in_project?(a_project)
+  #
+  # @param [Project] the project in question
+  #
+  # @return [Boolean]
+  #   True if the user is in the project or false if it's not in the project
+  #
+  # @api public
+  def is_in_project?(project)
+    # Group.count(:project => project, :users => self) > 0
+    self.groups.any?{ |g| g.project.eql?(project) }
   end
   
 end
