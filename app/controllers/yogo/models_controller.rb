@@ -194,29 +194,6 @@ class Yogo::ModelsController < ApplicationController
   end
   
   ##
-  # List attributes for a model
-  #
-  # @example http://localhost:3000/yogo_model/1/list_attributes
-  #
-  # @param [Hash] params
-  # @option params [String] :id
-  #
-  # @return renders list of the attributes
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def list_attributes
-    @model = @project.get_model(params[:id])
-    @attributes = Yogo::Navigation.attributes(@model)
-    
-    respond_to do |wants|
-      wants.html 
-      wants.js { render(:partial => 'list_attributes', :locals => { :model => @model, :attributes => @attributes, :project => @project })}
-    end
-  end
-  
-  ##
   # Reloads the models from our special backup Hopefully temporary
   # 
   # @example

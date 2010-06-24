@@ -233,48 +233,6 @@ class Yogo::DataController < ApplicationController
     end
   end
 
-  # gets a histrogram from an attribute name
-  #
-  # @example http://localhost:3000/project/histogram_attribute
-  #
-  # @param [Hash] params
-  # @option params [String] :attribute_name
-  #
-  # @return [Historgram] returns a histogram of Yogo navigational values 
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def histogram_attribute
-    ref_path, noop, ref_query = URI::split(request.referer)[5,3]
-
-    @attribute_name = params[:attribute_name]
-
-    if ref_query.nil?
-      @histogram = Yogo::Navigation.values(@model, @attribute_name.to_sym)
-    else
-      #what an ugly way to make a query scope.
-      query_options = ref_query.split('&').select{|r| !r.blank?}
-      query_options.each do |qo|
-        qo.match(/q\[(\w+)\]\[\]=(.+)/)
-        attribute = $1
-        condition = $2
-        if @query_scope.nil?
-          @query_scope = @model.all(attribute.to_sym => condition)
-        else
-          @query_scope = @query_scope & @model.all(attribute.to_sym => condition)
-        end
-      end
-      @histogram = Yogo::Navigation.values(@query_scope, @attribute_name.to_sym)
-    end
-
-    
-    respond_to do |wants|
-      wants.html 
-      wants.js { render :partial => 'histogram_attribute' }
-    end
-  end
-
   # gets an asset associated with an attribute
   #
   # @example http://localhost:3000/project/download_asset/:
@@ -350,7 +308,7 @@ class Yogo::DataController < ApplicationController
   def check_project_authorization
     if !Yogo::Setting[:local_only]
       action = request.parameters["action"]
-      if ['index', 'show'].include?(action)
+      if ['index', 'show', 'search', 'download_asset', 'show_asset'].include?(action)
         raise AuthorizationError unless @project.is_public? || (logged_in? && current_user.is_in_project?(@project))
       else
         action = :edit_model_data if ['new', 'create' 'edit', 'update'].include?(action)

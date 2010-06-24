@@ -9,16 +9,13 @@
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
   map.resources :projects, :controller => 'yogo/projects',
-                :member => { :upload => :post, :list_models => :get }, 
+                :member => { :upload => :post }, 
                 :collection => { :loadexample => :post, :search => :get} do |project|
     
     # /projects/:project_id/yogo_data/:model_name
     # /projects/:project_id/yogo_data/:model_name/:id
     project.resources :yogo_data, :as => 'yogo_data/:model_id', :controller => 'yogo/data',
-                      :collection => { :upload => :post, :search => :get, 
-                                       :histogram_attribute => :get, 
-                                       :pick_attribute => :get, 
-                                       :remove_attribute => :get},
+                      :collection => { :upload => :post, :search => :get },
                       :member => { :download_asset => :get, :show_asset => :get }
                           
     # /projects/:project_id/yogo_models/:model_name
@@ -29,7 +26,8 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :settings
   map.resources :tutorial
-  map.resources :dashboard, :only => [ :index, :show ]
+
+  map.dashboard "/dashboard", :controller => 'yogo/projects', :action => 'index'
 
   # map.connect "/mockup/:action", :controller => 'mockup'
   
@@ -54,5 +52,5 @@ ActionController::Routing::Routes.draw do |map|
   map.login '/login', :controller => 'user_sessions', :action => 'new'
   
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => "dashboard"
+  map.root :controller => "yogo/projects"
 end

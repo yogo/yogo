@@ -21,8 +21,17 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def index
-    redirect_to dashboard_index_url and return
     @projects = Project.public.paginate(:page => params[:page], :per_page => 5)
+    
+     respond_to do |format|
+        if @projects.empty?
+          @no_search = true
+          @no_menu   = true 
+          format.html { render('no_projects') }
+        else
+          format.html 
+        end
+      end
   end
 
   # Find a project or projects and show the result
@@ -247,6 +256,10 @@ class Yogo::ProjectsController < ApplicationController
   def upload
     @project = Project.get(params[:id])
     
+    if !Yogo::Setting[:local_only] && (!logged_in? || !current_user.has_permission?(:edit_project,@project))
+      raise AuthorizationError
+    end
+    
     if !params[:upload].nil?
       datafile = params[:upload]['datafile']
       
@@ -280,13 +293,12 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @return redirects to project index page
   #
+  # @todo Figure out how this should act when in server mode.
+  # 
   # @author Yogo Team
   #
   # @api public
   def loadexample
-    # Load the project and data 
-    #Yogo::Loader.load(:example, "Example Project")
-        
     # Load the cercal db from CSV
     @project = Project.create(:name => "Cricket Cercal System DB")
     errors = @project.process_csv(Rails.root.join("dist", "example_data", "cercaldb", "cells.csv"), "Cell")
@@ -297,27 +309,5 @@ class Yogo::ProjectsController < ApplicationController
     end
     redirect_to project_url(@project)
   end
-
-  # List all models for a selected project
-  #
-  # @example 
-  #   get /projects/1/list_models
-  #
-  # @param [Hash] params
-  # @option params [String]:id
-  #
-  # @return [Page] returns page with a list of models
-  #
-  # @author Yogo Team
-  #
-  # @api semipublic
-  def list_models
-    @project = Project.get(params[:id])
-    @models = @project.models
-    
-    respond_to do |wants|
-      wants.html
-      wants.js  { render(:partial => 'list_models', :locals => { :models => @models, :project => @project }) }
-    end
-  end
+  
 end
