@@ -8,7 +8,7 @@
 # Additionally upload and download of data via CSV is provided
 #
 class Yogo::DataController < ApplicationController
-  before_filter :find_parent_items, :show_sidebar
+  before_filter :find_parent_items, :check_project_authorization, :show_sidebar
 
   # 10 data objects per page are displayed
   #
@@ -26,6 +26,7 @@ class Yogo::DataController < ApplicationController
   def index
     if !params[:q].nil?
       queries =[]
+      
       params[:q].each_pair do |attribute, conditions|
         q = @model.all(attribute.to_sym => conditions[0])
         conditions[1..-1].each{ |c| q = q + @model.all(attribute.to_sym => c ) }
@@ -172,9 +173,14 @@ class Yogo::DataController < ApplicationController
     @item = @model.get(params[:id])
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
     @item.attributes = params[goober].delete_if{|key,value| value.empty? }
-    #TODO: THIS IS BROKEN!
-    @item.save
-    redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
+
+    respond_to do |format|
+      if @item.save
+        format.html { redirect_to project_yogo_data_index_url(@project, @model.name.demodulize) }
+      else
+        format.html { render(:action => 'edit') }
+      end
+    end
   end  
 
   # destroys a data object
@@ -339,5 +345,18 @@ class Yogo::DataController < ApplicationController
   def find_parent_items
     @project = Project.get(params[:project_id])
     @model = @project.get_model(params[:model_id])
+  end
+  
+  def check_project_authorization
+    if !Yogo::Setting[:local_only]
+      action = request.parameters["action"]
+      if ['index', 'show'].include?(action)
+        raise AuthorizationError unless @project.is_public? || (logged_in? && current_user.is_in_project?(@project))
+      else
+        action = :edit_model_data if ['new', 'create' 'edit', 'update'].include?(action)
+        action = :delete_model_data if ['destroy'].include?(action)
+        raise AuthorizationError if (!logged_in? || !current_user.has_permission?(action,@project))  
+      end
+    end
   end
 end
