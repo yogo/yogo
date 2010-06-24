@@ -52,7 +52,7 @@ module Yogo
           case relation
           when DataMapper::Associations::ManyToMany::Relationship
             other = yogo_models[models.index(models.select { |item| item.name == relation.child_model_name }[0])]
-            puts "#{yogo_model}.has(Infinity, #{key}, {:through => DataMapper::Resource, :model => #{other}, :prefix => 'yogo__', :inverse => 'yogo__#{other.name.demodulize.underscore.pluralize}'})"
+#            puts "#{yogo_model}.has(Infinity, #{key}, {:through => DataMapper::Resource, :model => #{other}, :prefix => 'yogo__', :inverse => 'yogo__#{other.name.demodulize.underscore.pluralize}'})"
             yogo_model.has(Infinity, key.to_sym, {:through => DataMapper::Resource, :model => other, :prefix => "yogo__", :inverse => "yogo__#{other.name.demodulize.underscore.pluralize}".to_sym}) unless yogo_model == other
           when DataMapper::Associations::OneToMany::Relationship
             other = yogo_models[models.index(models.select { |item| item.name == relation.child_model_name }[0])]
@@ -98,15 +98,15 @@ module Yogo
             value = instance.send(r.to_sym)
             if model.relationships[r].max == 1 && ! value.is_a?(Array)
               yogo_value = yogo_models[models.index(value.model)].first(:yogo__id => value.id)
-              puts "(1. Single) #{yogo_instance.inspect}.send(yogo__#{r}=, #{yogo_value})"
+#              puts "(1. Single) #{yogo_instance.inspect}.send(yogo__#{r}=, #{yogo_value})"
               yogo_instance.send("yogo__#{r}=", yogo_value)
             elsif value.is_a?(Array)
               next if value.length == 0
               yogo_values = value.map { |v| yogo_models[models.index(v.model)].first(:yogo__id => v.id) }
-              puts "(2. Multiple) -> #{yogo_instance.inspect}.send(yogo__#{r}=, #{yogo_values.inspect})"
+#              puts "(2. Multiple) -> #{yogo_instance.inspect}.send(yogo__#{r}=, #{yogo_values.inspect})"
               yogo_instance.send("yogo__#{r}=".to_sym, yogo_values)
             else
-              puts "Error loading values."
+#              puts "Error loading values."
             end
           end
           yogo_instance.save
