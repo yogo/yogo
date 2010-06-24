@@ -57,11 +57,11 @@ end
 
 namespace :db do
   task :setup do
-    run "mkdir -p #{deploy_to}#{shared_dir}/blazeds"
+    run "mkdir -p #{deploy_to}#{shared_dir}/vendor/blazeds"
   end
   
   task :symlink do
-    run "ln -nfs #{deploy_to}#{shared_dir}/blazeds #{release_path}/blazeds"
+    run "ln -nfs #{deploy_to}#{shared_dir}/vendor/blazeds #{release_path}/vendor/blazeds"
   end
 end
 after "deploy:setup",       "db:setup"
@@ -89,10 +89,10 @@ after "deploy:update_code", "setup_for_server"
 namespace :bundle do
   desc "Run bundle install on the server"
   task :install do
-    run("bash -c 'cd #{current_path} && bundle install'")
+    run("bash -c \"cd #{current_path} && bundle install\"")
   end
 end
-after 'setup_for_server', 'bundle:install'
+#after 'setup_for_server', 'bundle:install'
 
 namespace :tomcat do
   desc "Start the Tomcat Instance on the server (blazeds and persevere)"
