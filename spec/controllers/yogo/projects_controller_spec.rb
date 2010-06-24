@@ -27,16 +27,30 @@ describe Yogo::ProjectsController do
     before(:all) do
       Yogo::Setting[:local_only] = true
     end
-    
+
     describe "GET projects/" do
-    
-      # this doesn't happen any more.
-      # it "assigns all projects as @projects" do
-      #      projects = [mock_project]
-      #      Project.should_receive(:all).and_return(projects)
-      #      get :index
-      #      assigns[:projects].should equal(projects)
-      #    end
+
+      it "assigns all projects as @projects" do
+        projects = [mock_project]
+        Project.should_receive(:public).and_return(projects)
+        projects.should_receive(:paginate).and_return(projects)
+        
+        get :index
+        
+        assigns[:projects].should equal(projects)
+        response.should render_template('index')
+      end
+      
+      it "should show the 'no_project' page when there are no projects" do
+        projects = []
+        Project.should_receive(:public).and_return(projects)
+        projects.should_receive(:paginate).and_return(projects)
+        
+        get :index
+        
+        assigns[:projects].should equal(projects)
+        response.should render_template('no_projects')
+      end
   
     end
 
@@ -164,7 +178,7 @@ describe Yogo::ProjectsController do
     
     end
 
-    describe "DELETE destroy" do
+    describe "DELETE project/:id" do
       describe "success" do 
         it "destroys the requested project" do
           Project.should_receive(:get).with("37").and_return(mock_project(:name => 'Test Project'))
@@ -310,6 +324,8 @@ describe Yogo::ProjectsController do
         it "should not allow a user without group priviliges to update a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_public? => false))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(false)
+          mock_project.should_not_receive(:attributes=)
+          mock_project.should_not_receive(:save)
           
           put :update, :id => "37"
           
@@ -328,10 +344,12 @@ describe Yogo::ProjectsController do
         end
       end
 
-      describe "delete /project/:id" do
+      describe "DELETE /project/:id" do
         it "should not allow a user without group priviliges to delete a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :destroy => false))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(false)
+          mock_project.should_not_receive(:destroy)
+          
           delete :destroy, :id => "37"
           
           response.should be_redirect
@@ -340,6 +358,7 @@ describe Yogo::ProjectsController do
         it "should allow a user without group priviliges to delete a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :destroy => true, :name => 'a dead project'))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(true)
+          
           delete :destroy, :id => "37"
           
           response.should be_redirect
