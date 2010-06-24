@@ -29,3 +29,8 @@ Yogo is a Data Management System built on Ruby on Rails, DataMapper, and Perseve
 - Run `rake yogo:cucumber` to run all feature tests.
 
 The 'yogo' rake tasks manage starting, stopping, and resetting persevere for you.
+
+### Changelog
+
+0.9.2 2010-06-24
+ - Bumped the required dm-reflection gem version
