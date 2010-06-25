@@ -74,6 +74,22 @@ class Group
     @permissions_array.include?(action)
   end
   
+  ##
+  # An alias from have_permission?
+  # 
+  # @example
+  #   group.has_permission?(:edit_project)
+  # 
+  # @param [Symbol or String] action
+  #   The action to check permission for
+  # 
+  # @return [Boolean]
+  #   True or False depending if the group has permission or not
+  # 
+  # @raise [NonExistantPermissionError] If the given action isn't valid
+  # 
+  # @author Robbie Lamb robbie.lamb@gmail.com
+  # @api public
   alias :has_permission? :have_permission?
   
   ##

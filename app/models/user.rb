@@ -186,6 +186,20 @@ class User
   def admin?
     self.groups.any?{|g| g.admin? }
   end
+  
+  ##
+  # Alias for admin?
+  # 
+  # @example
+  #   current_user.admin
+  # 
+  # @return [Boolean] true if the user is an admin, or false otherwise
+  # 
+  # @author lamb
+  # 
+  # @see admin?
+  # 
+  # @api public
   alias :admin :admin?
   
   ##
@@ -231,6 +245,20 @@ class User
   def create_projects?
     self.has_permissions?(:create_projects)
   end
+  
+  ##
+  # Alias for create_project?
+  # 
+  # @example
+  #   current_user.create_projects
+  # 
+  # @return [Boolean] true if the user can create projects, or false otherwise
+  # 
+  # @author lamb
+  # 
+  # @see create_projects?
+  # 
+  # @api public
   alias :create_projects :create_projects?
   
   ##
