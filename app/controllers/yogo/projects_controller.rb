@@ -300,6 +300,12 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def loadexample
     # Load the cercal db from CSV
+    
+    if !Yogo::Setting[:local_only] && (!logged_in?)
+      raise AuthorizationError
+    end
+    
+     
     @project = Project.create(:name => "Cricket Cercal System DB")
     errors = @project.process_csv(Rails.root.join("dist", "example_data", "cercaldb", "cells.csv"), "Cell")
     if errors.empty?
