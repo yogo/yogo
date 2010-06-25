@@ -22,8 +22,8 @@ describe Group do
     g = standard_group(:name => 'test')
     g.save
     
-    Group.count.should eql 3
-    Group.count(:project => p).should eql 2
+    Group.count.should eql 6
+    Group.count(:project => p).should eql 5
     
     Group.all(:project => nil).length.should eql 1
   end
@@ -87,5 +87,22 @@ describe Group do
     g.have_permission?(:create_projects).should be_true
     g.have_permission?(:edit_project).should be_true
     
+  end
+  
+  it "should be able to store every permission and recall them" do
+    g = standard_group
+    g.save
+    
+    [:edit_project, :edit_model_descriptions, :edit_model_data, :delete_model_data].each do |action|
+      g.add_permission(action)
+    end
+
+    g.permissions.split(' ').length.should eql 4
+    
+    g.save
+    
+    g = Group.first
+    g.permissions.split(' ').length.should eql 4
+    g.have_permission?(:edit_project).should be_true
   end
 end

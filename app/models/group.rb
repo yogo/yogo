@@ -13,7 +13,7 @@ class Group
   property :name, String, :required => true
   property :admin, Boolean, :default => false
   
-  property :permissions, String, :default => '' #, :accessor => :private
+  property :permissions, String, :default => '', :length => 200 #, :accessor => :private
   
   has n, :users, :through => Resource
   belongs_to :project, :required => false
@@ -73,6 +73,8 @@ class Group
     
     @permissions_array.include?(action)
   end
+  
+  alias :has_permission? :have_permission?
   
   ##
   # Removes a permission from a group
