@@ -15,7 +15,7 @@ class Yogo::ProjectsController < ApplicationController
   # @example 
   #   get /projects
   #
-  # @return [Array] Retrives all project and passes them to the veiw
+  # @return [Array] Retrives all project and passes them to the view
   #
   # @author Yogo Team
   #
@@ -48,15 +48,15 @@ class Yogo::ProjectsController < ApplicationController
     search_scope = params[:search_scope]
     search_term = params[:search_term]
     if search_scope == 'everywhere' || params[:model_name].blank?
-      @projects = Project.search(search_term)
+      @projects = Project.public.search(search_term)
 
       @proj_models = []
-      Project.all.each do |project|
+      Project.public.each do |project|
         @proj_models << [project, project.search_models(search_term).flatten ]
       end
 
       @proj_models_data = []
-      Project.all.each do |project|
+      Project.public.each do |project|
         project.models.each do |model|
           count = model.search(search_term).count
           @proj_models_data << [project, model, count] if count > 0

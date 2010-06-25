@@ -10,6 +10,7 @@
 class Yogo::DataController < ApplicationController
   before_filter :find_parent_items, :check_project_authorization, :show_sidebar
 
+  ##
   # 10 data objects per page are displayed
   #
   # @example 
@@ -305,6 +306,12 @@ class Yogo::DataController < ApplicationController
     @model = @project.get_model(params[:model_id])
   end
   
+  ##
+  # Checks to see if the current user is authorized to perform the current action
+  # @return [nil]
+  # @raise Execption
+  # @author lamb
+  # @api private
   def check_project_authorization
     if !Yogo::Setting[:local_only]
       action = request.parameters["action"]

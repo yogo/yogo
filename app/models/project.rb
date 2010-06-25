@@ -53,6 +53,23 @@ class Project
   end
   
   ##
+  # Returns all private projects the current user has access to
+  # 
+  # @example
+  #   Project.private
+  # 
+  # @return [DataMapper::Collection or Array]
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def self.private(opts = {})
+    current_user = User.current
+    return [] if current_user.nil?
+    all( opts.merge( :is_public => false ) ).select{|p| current_user.is_in_project?(p) }
+  end
+  
+  ##
   # Returns the namespace Yogo Models will be in
   # 
   # @example
@@ -393,16 +410,27 @@ class Project
   def create_default_groups
     DataMapper.logger.debug { "Creating default groups" }
 
-    manager_group = Group.new(:name => 'managers')
-    user_group = Group.new(:name => 'users')
+    manager_group = Group.new(:name => 'Manager')
     manager_group.users << User.current unless User.current.nil?
 
-    self.groups.push( manager_group, user_group )
+    edit_project = Group.new(:name => 'Edit Project')
+    edit_model   = Group.new(:name => 'Edit Models')
+    edit_data    = Group.new(:name => 'Edit Data')
+    delete_data  = Group.new(:name => 'Delete Data')
+    self.groups.push( manager_group, edit_project, edit_model, edit_data, delete_data )
     self.save
     [:edit_project, :edit_model_descriptions, :edit_model_data, :delete_model_data].each do |action|
       manager_group.add_permission(action)
     end
     manager_group.save
+    edit_project.add_permission(:edit_project)
+    edit_project.save
+    edit_model.add_permission(:edit_model_descriptions)
+    edit_model.save
+    edit_data.add_permission(:edit_model_data)
+    edit_data.save
+    delete_data.add_permission(:delete_model_data)
+    delete_data.save
   end
   
 end

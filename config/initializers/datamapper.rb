@@ -50,10 +50,14 @@ DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(
                                 DataMapper.repository(:default).storage_exists?(User.storage_name)
                                 
 
-g = Group.first(:name => 'Administrators', :admin => true, :project => nil)
-g ||= Group.create(:name => 'Administrators', :admin => true)
-if g.users.empty?
+admin_g = Group.first(:name => 'Administrators', :admin => true, :project => nil)
+admin_g ||= Group.create(:name => 'Administrators', :admin => true)
+create_g = Group.first(:name => "Create Projects", :admin => false, :project => nil)
+create_g ||= Group.create(:name => 'Create Projects', :admin => false, :permissions => 'create_projects')
+
+if admin_g.users.empty?
   u = User.create(:login => 'yogo', :password => 'change me', :password_confirmation => 'change me')
-  u.groups << g
+  u.groups << admin_g
+  u.groups << create_g
   u.save
 end

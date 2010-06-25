@@ -137,8 +137,10 @@ class UsersController < ApplicationController
   def destroy
     user = User.get(params[:id])
 
-    if user.destroy
-      flash[:notice] = "User removed from"
+    if user.eql?(current_user)
+      flash[:notice] = "You can't destroy yourself"
+    elsif user.destroy
+      flash[:notice] = "#{user.name} removed from system"
     else
       flash[:error] = "Something went wrong removing the user"
       # Should this throw an exception?

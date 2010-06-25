@@ -15,8 +15,8 @@ class User
   property :id,                 DataMapper::Types::Serial
   property :login,              String, :required => true, :index => true, :unique => true
   # property :email,              String, :required => true, :length => 256
-  # property :first_name,         String, :required => true, :length => 50
-  # property :last_name,          String, :required => true, :length => 50  
+  property :first_name,         String, :length => 50
+  property :last_name,          String, :length => 50  
 
   # TODO: Make sure a length of 128 is long enough for various encryption algorithms.
   property :crypted_password,     BCryptHash, :required => true,  :length => 128
@@ -93,7 +93,11 @@ class User
   # 
   # @api public
   def name
-    "#{first_name} #{last_name}"
+    @___name ||= begin 
+      name = "#{first_name} #{last_name}"
+      name = self.login if name.blank?
+      name
+    end
   end
   
   
@@ -148,7 +152,6 @@ class User
   # 
   # @api public
   def has_permission?(action, project = nil)
-    # @_user_groups ||= Group.all(:project => project, :users => self)
     self.groups.any?{ |g| g.project.eql?(project) && g.has_permission?(action) }
   end
 
@@ -167,6 +170,88 @@ class User
   def is_in_project?(project)
     # Group.count(:project => project, :users => self) > 0
     self.groups.any?{ |g| g.project.eql?(project) }
+  end
+  
+  ##
+  # Check to see if any of the groups the user is in is an admin group
+  # 
+  # @example
+  #   current_user.admin?
+  # 
+  # @return [Boolean] true if the user is an admin, or false otherwise
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def admin?
+    self.groups.any?{|g| g.admin? }
+  end
+  alias :admin :admin?
+  
+  ##
+  # Check to see if any of the groups the user is in is an admin group
+  # 
+  # @example
+  #   current_user.admin=true
+  # 
+  # @param [Boolean] is_admin True if the user should be an admin, or false
+  # @return [nil] Not Interesting
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def admin=(is_admin)
+    debugger
+    admin_group = Group.first(:project => nil, :admin => true)
+    if is_admin == true || !(is_admin == 0 || is_admin == '0')
+      puts 'Pushing!'
+      self.groups.push(admin_group)
+    else
+      # should work when it's all working.
+      self.groups.delete(admin_group)
+      # if self.groups.include?(admin_group)
+      #    groups = self.groups
+      #    groups.delete(admin_group)
+      #    self.groups.replace(groups)
+      #  end
+    end
+  end
+  
+  ##
+  # Check to see if any of the groups the user is in can create projects
+  # 
+  # @example
+  #   current_user.create_projects?
+  # 
+  # @return [Boolean] true if the user can create projects, or false otherwise
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def create_projects?
+    self.has_permissions?(:create_projects)
+  end
+  alias :create_projects :create_projects?
+  
+  ##
+  # Check to see if any of the groups the user is in is an admin group
+  # 
+  # @example
+  #   current_user.admin=true
+  # 
+  # @param [Boolean] is_admin True if the user should be an admin, or false
+  # @return [nil] Not Interesting
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def create_projects=(can_create)
+    group = Group.all(:project => nil, :admin => false).select{|g| g.has_permission?(:create_projects)}.first
+    if can_create == true || !(can_create == 0 || can_create == '0')
+      self.groups.push(group)
+    else
+      self.groups.delete(group)
+    end
   end
   
 end

@@ -27,17 +27,17 @@
   #header
     #logo= image_tag('header.png')
     #menu.rbox
-      = render(:partial => 'layouts/menu_links') unless @no_menu 
-      = render(:partial => 'layouts/search') unless @no_search 
+      = render(:partial => 'layouts/menu_links') unless @no_menu
+      #login-links
+        - if logged_in?
+          = current_user.login
+          = link_to("logout", logout_path)
+        - else
+          = link_to("Login", login_path)
+      = render(:partial => 'layouts/search') unless @no_search
   =clear_break 
   /Grid Container 
   #container
-    / #login-stuff 
-    /   - if logged_in?
-    /     %p= current_user.login
-    /     %p= link_to("logout", logout_path)
-    /   - else
-    /     %p= link_to("Login", login_path)
     #flash
       - if flash[:notice]
         %p.notice= flash[:notice]
