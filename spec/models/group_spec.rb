@@ -1,6 +1,10 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
 describe Group do
+
+  before(:all) do
+    User.current = nil
+  end
   
   before(:each) do
     User.all.destroy
@@ -17,12 +21,15 @@ describe Group do
   end
   
   it "should be able to not belong to a project" do
-    p = Project.create(:name => 'test_project')
+    Group.count.should eql 0
+    Project.count.should eql 0
+    User.count.should eql 0
+    p = Project.create(:name => 'test_project') # This should create 5 groups
     
-    g = standard_group(:name => 'test')
+    g = standard_group(:name => 'test') # This creates 1 group
     g.save
-    
-    Group.count.should eql 6
+
+    Group.count.should eql 6 # 5 + 1 = 6 total groups
     Group.count(:project => p).should eql 5
     
     Group.all(:project => nil).length.should eql 1
