@@ -90,8 +90,6 @@ module Yogo
             'options' => prop_options.dup
           }
           
-          puts prop_def.inspect
-
           prop_position_offset = model_def['properties'][prop_position] ? properties.size : 0
           model_def['properties'][prop_position+prop_position_offset] = prop_def
         end
