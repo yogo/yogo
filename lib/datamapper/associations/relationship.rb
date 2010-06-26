@@ -48,7 +48,7 @@ module DataMapper
         self.prefix = prefix.nil?  ? "" : prefix
         
         self.display_name = name.to_s.sub("#{self.prefix}", "")
-
+#        puts "Calling relationship initialize with (#{name}, #{child_model}, #{parent_model}, #{options.inspect})"
         original_initialize(name, child_model, parent_model, options)
       end
     end
