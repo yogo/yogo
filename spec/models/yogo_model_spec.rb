@@ -35,14 +35,51 @@ describe "A Yogo Model" do
       @model.usable_properties.length.should eql(2)
     end
   
-    it "should not save when a comment is missing and comments are required"
+    it "should create models and reflect them back out" do
+      project = Project.create(:name => 'Sample', :description => 'This is a test project')
+
+      book = project.add_model("Book")
+      author = project.add_model("Author")
+
+      book.property(:name, String, :prefix => 'yogo')
+      book.property(:id, Integer, :prefix => 'yogo')
+      author.property(:name, String, :prefix => 'yogo')
+      author.property(:id, Integer, :prefix => 'yogo')
+
+      book.auto_migrate!
+      author.auto_migrate!
+
+      book_schema = book.to_json_schema_hash
+      author_schema = author.to_json_schema_hash
+
+      DataMapper::Model.descendants.delete(book)
+      DataMapper::Model.descendants.delete(author)
+
+      book = nil
+      author = nil
+
+      ns = eval("Yogo::Sample")
+      ns.send(:remove_const, :Book)
+      ns.send(:remove_const, :Author)
+
+      # Reflect Yogo data into memory
+      models = DataMapper::Reflection.reflect(:default)
+
+      models.each{|m| m.send(:include,Yogo::Model) }
+      models.each{|m| m.properties.sort! }
+      
+      models[0].properties.map{|p| p.name }.should include(:yogo__id)
+
+      book_schema.should eql(Yogo::Sample::Book.to_json_schema_hash)
+      author_schema.should eql(Yogo::Sample::Author.to_json_schema_hash)    
+    end
   
   end
   
   describe "when using associations" do
     
     before(:each) do
-      
+
     end
     
     it "create models and reflect them back out" do
@@ -86,7 +123,7 @@ describe "A Yogo Model" do
       Yogo::Sample::Author.relationships['yogo__books'].should be_a(DataMapper::Associations::OneToMany::Relationship)
       Yogo::Sample::Book.relationships.keys.should include('yogo__author')
       Yogo::Sample::Book.relationships['yogo__author'].should be_a(DataMapper::Associations::ManyToOne::Relationship)      
-      
+      # debugger
       book_schema.should eql(Yogo::Sample::Book.to_json_schema_hash)
       author_schema.should eql(Yogo::Sample::Author.to_json_schema_hash)
     end
