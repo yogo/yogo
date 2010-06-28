@@ -200,7 +200,7 @@ describe Yogo::DataController do
           get( :index, :project_id => "42", :model_id => 'Vanilla' )
 
           response.should be_redirect
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(login_url)
         end
         
         it "should allow access to public projects" do
@@ -225,7 +225,7 @@ describe Yogo::DataController do
           get( :index, :project_id => "42", :model_id => 'Vanilla', :id => '13' )
 
           response.should be_redirect
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(login_url)
         end
         
         it "should not allow access to the new form" do
@@ -234,7 +234,7 @@ describe Yogo::DataController do
           get(:new, :project_id => "42", :model_id => "Vanilla")
           
           response.should be_redirect
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(login_url)
         end
         
         it "should not allow access to the edit form" do
@@ -243,7 +243,7 @@ describe Yogo::DataController do
           get(:new, :project_id => "42", :model_id => "Vanilla", :id => 13)
           
           response.should be_redirect
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(login_url)
         end
       end
     end
@@ -287,6 +287,7 @@ describe Yogo::DataController do
           get( :index, :project_id => "42", :model_id => 'Vanilla' )
 
           response.should be_redirect
+          response.should_not redirect_to(login_url)
         end
         
         
@@ -313,7 +314,7 @@ describe Yogo::DataController do
           response.should_not be_redirect
         end
       
-        it "should not allow access to a private project data itemsthe user doesn't belongs to" do
+        it "should not allow access to a private project data items the user doesn't belongs to" do
           Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => false))
           @u.stub!(:is_in_project?).with(mock_project).and_return(false)
           mock_yogo_model.stub!(:get).with('13').and_return(mock_yogo_data)
@@ -322,6 +323,7 @@ describe Yogo::DataController do
 
           response.should be_redirect
           response.should_not render_template("show")
+          response.should_not redirect_to(login_url)
         end
 
         it "should allow access to the new form when the user is a member of the project" do
@@ -379,12 +381,13 @@ describe Yogo::DataController do
           post(:create, :project_id => "42", :model_id => "Vanilla", :yogo_test_project_vanilla => {'this' => 'item' })
 
           response.should be_redirect
+          response.should_not redirect_to(login_url)
         end
       end
 
       describe "PUT" do
         it "should update a prject when the user has permission" do
-          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject'))
+          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_public? => false))
           @u.stub!(:has_permission?).and_return(true)
           
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
@@ -401,8 +404,8 @@ describe Yogo::DataController do
           response.should redirect_to(project_yogo_data_index_url(mock_project, "Vanilla"))
         end
 
-        it "should not update a prject when the user doesn't have permission" do
-          Project.should_receive(:get).with("42").and_return(mock_project(:namespace => 'TestProject'))
+        it "should not update a project when the user doesn't have permission" do
+          Project.should_receive(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_public? => false))
           @u.stub!(:has_permission?).and_return(false)
           
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
@@ -417,17 +420,17 @@ describe Yogo::DataController do
               :id => '13',
               :yogo_test_project_vanilla => {'this' => 'item' })
           response.should be_redirect
-          response.should redirect_to(new_user_session_url)
+          response.should_not redirect_to(login_url)
         end
       end
 
       describe "DELETE" do
         it "should delete a data item if the user has permissioin" do
-          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject'))
+          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_public? => false))
           @u.should_receive(:has_permission?).and_return(true)
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
           mock_yogo_model.stub!(:get).with('13').and_return(mock_yogo_data)
-          
+
           mock_yogo_data.should_receive(:destroy!).and_return(true)
           
           delete(:destroy, :project_id => "42", :model_id => "Vanilla", :id => '13')
@@ -436,7 +439,7 @@ describe Yogo::DataController do
         end
 
         it "should not delete a data item if the user does not have permissioin" do
-          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject'))
+          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_public? => false))
           @u.should_receive(:has_permission?).and_return(false)
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
           mock_yogo_model.stub!(:get).with('13').and_return(mock_yogo_data)
@@ -447,6 +450,7 @@ describe Yogo::DataController do
           
           response.should_not redirect_to(project_yogo_data_index_url(mock_project, "Vanilla"))
           response.should be_redirect
+          response.should_not redirect_to(login_url)
         end
       end
     end # When logged in

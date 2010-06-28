@@ -230,6 +230,7 @@ describe Yogo::ProjectsController do
           get :show, :id => "37"
           assigns[:project].should equal(mock_project)
           response.should be_redirect
+          response.should redirect_to(login_url)
         end
         
         it "should be able to to view a public project" do
@@ -247,7 +248,7 @@ describe Yogo::ProjectsController do
           Project.stub!(:get).with("37").and_return(mock_project(:models => []))
           get :edit, :id => "37"
           response.should be_redirect
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(login_url)
         end
                                                
       end
@@ -255,7 +256,7 @@ describe Yogo::ProjectsController do
       describe "PUT project/:id" do
         it "should not be able to update a project" do
           put :update, :id => "37"
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(login_url)
         end
       end
       
@@ -265,7 +266,7 @@ describe Yogo::ProjectsController do
           delete :destroy, :id => "37"
           
           response.should be_redirect
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(login_url)
         end
       end
       
@@ -282,11 +283,12 @@ describe Yogo::ProjectsController do
       describe "GET /project/:id" do
         it "should not allow a user without a project group to view a private project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_public? => false))
-          @u.stub!(:is_in_project?).and_return(false)
+          @u.should_receive(:is_in_project?).with(mock_project).and_return(false)
           
           get :show, :id => "37"
           
           response.should be_redirect
+          response.should_not redirect_to(login_url)
         end
         
         it "should allow a user in a project group to view a private project" do

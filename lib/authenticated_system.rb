@@ -31,52 +31,6 @@ module AuthenticatedSystem
     protected
 
     ##
-    # Returns the current user session, if they are logged in.
-    # 
-    # @return [UserSession]
-    #   The current user session
-    # 
-    # @author lamb
-    # 
-    # @api semipublic
-    # def current_user_session
-    #   return @current_user_session if defined?(@current_user_session)
-    #   @current_user_session = UserSession.find
-    # end
-
-    ##
-    # Returns the current user session, if they are logged in.
-    # 
-    # @return [User or AnonymousUser]
-    #   Returns the current user for the sessions
-    # 
-    # @author lamb
-    # 
-    # @api semipublic
-    # def current_user
-    #   return @current_user if defined?(@current_user)
-    #   @current_user = (current_user_session && current_user_session.record) || AnonymousUser.new
-    # end
-
-    ##
-    # Checks to see if the current user has been authenticated
-    # 
-    # @example
-    #   if logged_in?
-    #     # do something
-    #   end
-    # 
-    # @return [TrueClass or FalseClass]
-    #   Returns true if the current user has been authenticated
-    # 
-    # @author lamb
-    # 
-    # @api public
-    # def logged_in?
-    #   (current_user_session && current_user_session.record)
-    # end
-
-    ##
     # Checks to see if the current user has been authenticated
     # 
     # @example
@@ -109,11 +63,25 @@ module AuthenticatedSystem
     def require_user
       unless logged_in?
         store_location
-        flash[:notice] = "You must be logged in to access this page"
+        flash[:notice] = "Please log in to access the requested page"
         redirect_to login_url
         return false
       end
     end
+
+    ##
+    # Makes sure a user is logged in
+    # 
+    # @example
+    #   authentication_required
+    # 
+    # @return [nil or False]
+    #  Redirects to the login page if the user isn't currently logged in
+    # 
+    # @author lamb
+    # @see require_user
+    # @api semipublic
+    alias :authentication_required :require_user
 
     ##
     # Makes sure a user is not logged in
