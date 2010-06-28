@@ -6,12 +6,12 @@ describe Yogo::ProjectsController do
     @mock_project ||= mock_model(Project, stubs)
   end
   
-  def mock_models(proj)
-    [ build_reflected_model('Vanilla',    proj),
-      build_reflected_model('Chocolate',  proj),
-      build_reflected_model('Strawberry', proj)
-      ]
-  end
+  # def mock_models(proj)
+  #   [ build_reflected_model('Vanilla',    proj),
+  #     build_reflected_model('Chocolate',  proj),
+  #     build_reflected_model('Strawberry', proj)
+  #     ]
+  # end
 
   def mock_warden
     request.env["warden"] = mock('Warden')
