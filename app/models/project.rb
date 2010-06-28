@@ -20,6 +20,7 @@ class Project
   validates_is_unique   :name
   
   before :destroy, :delete_models!
+  before :destroy, :delete_associated_groups!
   
   after :create, :create_default_groups
   
@@ -431,6 +432,10 @@ class Project
     edit_data.save
     delete_data.add_permission(:delete_model_data)
     delete_data.save
+  end
+  
+  def delete_associated_groups!
+    self.groups.each{|g| g.destroy }
   end
   
 end
