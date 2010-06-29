@@ -14,8 +14,9 @@
       .project-text
         %h2= link_to(project.name, project_path(project) ) 
         .action-links
-          = link_to(kefed_editor_project_path(project), image_tag('layout_edit.png', 
-              :title => "Describe Dataset") + " Describe")
+          = link_to(image_tag('layout_edit.png', 
+              :title => "Describe Dataset") + " Describe", 
+              kefed_editor_project_url(project))
           = link_to(image_tag('table_add.png', 
               :title => "Import Spreadsheet") + " Import", 
               import_csv_path(project))        
