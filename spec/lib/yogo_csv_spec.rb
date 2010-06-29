@@ -48,12 +48,12 @@ describe 'Yogo CSV Module' do
       CsvExampleModel.auto_migrate!
     end
     
-    it "should respond to make_csv" do
-      CsvExampleModel.should respond_to(:make_csv)
+    it "should respond to to_csv" do
+      CsvExampleModel.should respond_to(:to_csv)
     end
-
-    it "should return a valid CSV when asked" do
-      csv = CsvExampleModel.make_csv
+    
+    it "should return valid CSV model headers when asked" do
+      csv = CsvExampleModel.to_csv
       csv.should be_kind_of(String)
       result = FasterCSV.parse(csv)
       result.length.should eql(3)

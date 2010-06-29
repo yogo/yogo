@@ -27,32 +27,26 @@ module Yogo
     # 
     # @author Robbie Lamb
     module Csv
+      
       ##
-      # Returns a csv file of this model
+      # Returns CSV headers for this model
       # 
       # @example
-      #   @model.make_csv(true)  # To include all of the model's data
-      #   @model.make_csv(false) # Only a spreadsheet template
+      #   @model.to_csv
       # 
-      # @param [Boolean] include_data Include all of the data this model represents, or just the headers
-      #    Defaults to false, just show the headers
-      # 
-      # @return [String] The CSV in a string
+      # @return [String] The CSV headers in a string
       # 
       # @author Robbie Lamb robbie.lamb@gmail.com
       # 
       # @api public
-      def make_csv(include_data = false)
+      def to_csv
         self.properties.sort!
-        csv_output = FasterCSV.generate do |csv|
+        
+        FasterCSV.generate do |csv|
           csv << self.properties.map{|prop| prop.name == :yogo_id ? "Yogo ID" : prop.display_name.to_s.humanize }
           csv << self.properties.map{|prop| prop.name == :yogo_id ? "Internal Type" : Yogo::Types.dm_to_human(prop.type)}
           csv << self.properties.map{|prop| prop.name == :yogo_id ? "Please don't modify" : prop.units }
         end
-
-        all.each { |m| csv_output << m.to_csv } if include_data
-
-        csv_output
       end
       
       # Loads a CSV file into the model
