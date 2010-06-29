@@ -297,4 +297,21 @@ class ProjectsController < ApplicationController
       wants.js  { render(:partial => 'list_models', :locals => { :models => @models, :project => @project }) }
     end
   end
+  
+   # Load the kefed editor swf
+   #
+   # @example 
+   #   get /projects/1/kefed_editor
+   #
+   # @param [Hash] params
+   # @option params [String]:id
+   #
+   # @return [Page] returns page with the embedded kefed editor
+   #
+   # @author Pol Llovet <pol.llovet@gmail.com>
+   #
+   # @api semipublic
+  def kefed_editor
+    @project = Project.get(params[:id])
+  end
 end

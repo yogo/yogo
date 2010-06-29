@@ -225,4 +225,34 @@ module ApplicationHelper
   def link_to_edit_project_models(project, link_text, options={})
     link_to(link_text, "/model_editor.html#projects/#{project.id}&from=#{request.env['PATH_INFO']}", options)
   end
+
+  # Return the kefed editor swf url
+  #
+  # @example
+  #   kefed_editor_swf_url
+  #
+  # @return [String] the absolute url for the kefed editor swf
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  #
+  def kefed_editor_swf_url
+    "http://localhost:8400/blazeds/kefedEditor/BioScholar.swf"
+  end
+  
+  # Return the kefed editor swf file path
+  #
+  # @example
+  #   kefed_editor_swf_url
+  #
+  # @return [String] the absolute url for the kefed editor swf
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  #
+  def kefed_editor_swf_path
+    Rails.root / "vendor/blazeds/tomcat/webapps/blazeds/kefedEditor/BioScholar.swf"
+  end
 end
