@@ -29,7 +29,7 @@ module Yogo
     module Csv
       
       ##
-      # Returns CSV headers for this model
+      # Returns all CSV headers for this model
       # 
       # @example
       #   @model.to_csv
@@ -46,6 +46,27 @@ module Yogo
           csv << self.properties.map{|prop| prop.name == :yogo_id ? "Yogo ID" : prop.display_name.to_s.humanize }
           csv << self.properties.map{|prop| prop.name == :yogo_id ? "Internal Type" : Yogo::Types.dm_to_human(prop.type)}
           csv << self.properties.map{|prop| prop.name == :yogo_id ? "Please don't modify" : prop.units }
+        end
+      end
+      
+      ##
+      # Returns yogo CSV headers for this model
+      # 
+      # @example
+      #   @model.to_yogo_csv
+      # 
+      # @return [String] The CSV headers in a string
+      # 
+      # @author Robbie Lamb robbie.lamb@gmail.com
+      # 
+      # @api public
+      def to_yogo_csv
+        self.properties.sort!
+        
+        FasterCSV.generate do |csv|
+          csv << ["Yogo ID"] + self.usable_properties.map{|prop| prop.display_name.to_s.humanize }
+          csv << ["Internal Type"] + self.usable_properties.map{|prop| Yogo::Types.dm_to_human(prop.type)}
+          csv << ["Please don't modify"] + self.usable_properties.map{|prop| prop.units }
         end
       end
       

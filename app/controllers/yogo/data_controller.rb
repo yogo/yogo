@@ -284,7 +284,9 @@ class Yogo::DataController < ApplicationController
   #
   # @api private
   def download_csv
-    send_data(@model.to_csv + @query.to_csv,
+    csv_data = ''
+    @query.all.each{|i| csv_data << i.to_yogo_csv + "\n" }
+    send_data(@model.to_yogo_csv + csv_data,
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')

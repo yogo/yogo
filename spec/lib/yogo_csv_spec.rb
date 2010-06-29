@@ -16,6 +16,7 @@ describe 'Yogo CSV Module' do
       property :name, DataMapper::Types::Text,  :prefix => 'yogo'
       property :mass, Float,   :prefix => 'yogo'
       property :charge, Float, :prefix => 'yogo'
+      property :private_field, String
     end
 
     CsvExampleModel = model if !Object.const_defined?(:CsvExampleModel)
@@ -57,7 +58,21 @@ describe 'Yogo CSV Module' do
       csv.should be_kind_of(String)
       result = FasterCSV.parse(csv)
       result.length.should eql(3)
+      result[0].length.should eql(CsvExampleModel.properties.length)
     end
+    
+    it "should respond to to_yogo_csv" do
+      CsvExampleModel.should respond_to(:to_yogo_csv)
+    end
+    
+    it "should return valid yogo CSV model headers when asked" do
+      csv = CsvExampleModel.to_yogo_csv
+      csv.should be_kind_of(String)
+      result = FasterCSV.parse(csv)
+      result.length.should eql(3)
+      result[0].length.should eql(CsvExampleModel.usable_properties.length + 1)
+    end
+    
   end
   
   describe 'when loading csv data' do
@@ -127,7 +142,6 @@ describe 'Yogo CSV Module' do
     end
     
     it "should not load bad data" do
-      # debugger
       errors = CsvExampleModel.load_csv_data(@bad_data)
       errors.should_not be_empty
 
@@ -142,8 +156,11 @@ describe 'Yogo CSV Module' do
     
     it "should add new properties to the model" do
       CsvExampleModel.load_csv_data(@csv_data)
-      CsvExampleModel.load_csv_data(@new_properties)
+      CsvExampleModel.usable_properties.length.should eql(4)
       CsvExampleModel.properties.length.should eql(6)
+      CsvExampleModel.load_csv_data(@new_properties)
+      CsvExampleModel.usable_properties.length.should eql(5)
+      CsvExampleModel.properties.length.should eql(7)
     end
     
     it "should load images and files"
