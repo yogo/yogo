@@ -28,6 +28,6 @@
             %li <a href="##{dataset.to_param}-dataset-details">Dataset Details</a>
             %li <a href="##{dataset.to_param}-query">Query</a>
             %li <a href="##{dataset.to_param}-quickview">Quickview</a>
-          = render(:partial => 'yogo_models/dataset', :locals => {:dataset => dataset})
-          = render(:partial => 'projects/build_query', :locals => {:dataset => dataset})
-          = render(:partial => 'yogo_data/quickview', :locals => {:dataset => dataset})
+          = render(:partial => 'yogo/models/dataset', :locals => {:dataset => dataset})
+          = render(:partial => 'yogo/projects/build_query', :locals => {:dataset => dataset})
+          = render(:partial => 'yogo/data/quickview', :locals => {:dataset => dataset})

@@ -5,6 +5,7 @@ describe User do
   before :each do
     User.all.destroy
     Group.all.destroy
+    Project.all.destroy
   end
   
   it "should have a login" do
@@ -70,6 +71,24 @@ describe User do
 
     User.first.has_group?(group_name).should eql(true)
     Group.first.users.first.login.should eql(login)
+  end
+  
+  it "should belong to certain projects" do
+    u = standard_user
+    u.save
+    User.current = u
+    
+    p = Project.create(:name => 'blah')
+
+    u.is_in_project?(p).should be_true
+  end
+  
+  it "should not belong to some projects" do
+    p = Project.create(:name => 'some project')
+    u = standard_user
+    u.save
+
+    u.is_in_project?(p).should be_false
   end
 
 end

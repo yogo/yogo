@@ -32,7 +32,7 @@ module DataMapper
       # This isn't really useful on it's own.
       # 
       # @example
-      #  Relatipnship.new('blah blah')
+      #  Relationship.new('blah blah')
       # 
       # @return [Relationship]
       #   The created relationship object.
@@ -46,17 +46,10 @@ module DataMapper
 
         prefix = options.delete(:prefix)
         self.prefix = prefix.nil?  ? "" : prefix
-
+        
         self.display_name = name.to_s.sub("#{self.prefix}", "")
-
-        # name = (self.prefix + display_name).to_sym
-
-        # puts self.class
-        # puts name
-        # puts child_model
-        # puts parent_model
-        # puts display_name
-
+        name = "#{prefix}#{name.to_s.sub(prefix.to_s, '')}".to_sym
+#        puts "Calling relationship initialize with (#{name}, #{child_model}, #{parent_model}, #{options.inspect})"
         original_initialize(name, child_model, parent_model, options)
       end
     end

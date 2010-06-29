@@ -28,10 +28,9 @@ module DataMapper
         # must munge the name.
         prefix = options[:prefix]
         
-        name = "#{prefix}#{name}".to_sym
+        name = "#{prefix}#{name.to_s.sub(prefix.to_s, '')}".to_sym
         
         args.push(options)
-        
         
         super(cardinality, name, model, *args)
       end
@@ -61,7 +60,7 @@ module DataMapper
         # must munge the name.
         prefix = options[:prefix]
 
-        name = "#{prefix}#{name}".to_sym
+        name = "#{prefix}#{name.to_s.sub(prefix.to_s, '')}".to_sym
 
         args.push(options)
 

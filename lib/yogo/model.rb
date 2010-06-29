@@ -198,6 +198,24 @@ module Yogo
         self.yogo_id.to_s
       end
       
+      # Serialize a Resource to comma-separated values (CSV)
+      #
+      # @example
+      #   data_item.to_yogo_csv
+      # 
+      # @return <String> a CSV representation of the Resource
+      # 
+      # @api public
+      def to_yogo_csv
+        FCSV.generate do |csv|
+          row = [__send__(:yogo_id).to_s]
+          row += model.usable_properties.map do |property|
+            __send__(property.name).to_s
+          end
+          csv << row
+        end
+      end
+      
       private
       
       # Check to see if the change_summary field is required to be filled out

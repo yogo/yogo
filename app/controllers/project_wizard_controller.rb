@@ -46,7 +46,8 @@ class ProjectWizardController < ApplicationController
   # @api public
   def create
     @project = Project.new(params[:project])
-    if @project.save
+    if @project.valid?
+      @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
       redirect_to csv_question_url(@project)
     else

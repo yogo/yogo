@@ -8,21 +8,30 @@
 # and additionally: upload of CSV files, an example project and rereflection
 # of the yogo repository.
 
-class ProjectsController < ApplicationController
+class Yogo::ProjectsController < ApplicationController
   
   # Show all the projects
   #
   # @example 
   #   get /projects
   #
-  # @return [Array] Retrives all project and passes them to the veiw
+  # @return [Array] Retrives all project and passes them to the view
   #
   # @author Yogo Team
   #
   # @api public
   def index
-    redirect_to dashboard_index_url and return
-    @projects = Project.paginate(:page => params[:page], :per_page => 5)
+    @projects = Project.public.paginate(:page => params[:page], :per_page => 5)
+    
+     respond_to do |format|
+        if @projects.empty?
+          @no_search = true
+          @no_menu   = true 
+          format.html { render('no_projects') }
+        else
+          format.html 
+        end
+      end
   end
 
   # Find a project or projects and show the result
@@ -39,15 +48,15 @@ class ProjectsController < ApplicationController
     search_scope = params[:search_scope]
     search_term = params[:search_term]
     if search_scope == 'everywhere' || params[:model_name].blank?
-      @projects = Project.search(search_term)
+      @projects = Project.public.search(search_term)
 
       @proj_models = []
-      Project.all.each do |project|
+      Project.public.each do |project|
         @proj_models << [project, project.search_models(search_term).flatten ]
       end
 
       @proj_models_data = []
-      Project.all.each do |project|
+      Project.public.each do |project|
         project.models.each do |model|
           count = model.search(search_term).count
           @proj_models_data << [project, model, count] if count > 0
@@ -68,6 +77,7 @@ class ProjectsController < ApplicationController
 
   end
 
+  ##
   # Shows a project
   #
   # @example 
@@ -80,7 +90,12 @@ class ProjectsController < ApplicationController
   # @api public
   def show
     @project = Project.get(params[:id])
-    # raise exception if project isn't found?
+    
+    if !Yogo::Setting[:local_only] && !@project.is_public?
+      raise AuthenticationError if !logged_in?
+      raise AuthorizationError  if !current_user.is_in_project?(@project)
+    end
+    
     @models = @project.models
     @sidebar = true
     
@@ -89,6 +104,7 @@ class ProjectsController < ApplicationController
     end
   end
 
+  ##
   # Returns a form for creating a new project
   #
   # @example 
@@ -109,6 +125,7 @@ class ProjectsController < ApplicationController
     redirect_to start_wizard_path
   end
 
+  ##
   # Creates a new project based on the attributes
   #
   # @example 
@@ -124,6 +141,14 @@ class ProjectsController < ApplicationController
   #
   # @api public
   def create
+    
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError  if !logged_in? 
+      raise AuthorizationError if !current_user.has_permission?(:create_projects)
+    end
+
+    @project = Project.get(params[:id])
+    
     @project = Project.new(params[:project])
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
@@ -134,6 +159,7 @@ class ProjectsController < ApplicationController
     end
   end
 
+  ##
   # load project for editing
   #
   # @example 
@@ -150,11 +176,17 @@ class ProjectsController < ApplicationController
   def edit
     @project = Project.get(params[:id])
     
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError unless logged_in? 
+      raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
+    end
+    
     respond_to do |format|
       format.html
     end
   end
 
+  ##
   # Updates project with new values
   #
   # @example 
@@ -172,7 +204,13 @@ class ProjectsController < ApplicationController
   # @api public
   def update
     @project = Project.get(params[:id])
-    params[:project].delete(:name)
+    
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError unless logged_in? 
+      raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
+    end
+    
+    params[:project].delete(:name) if params.has_key?(:project)
     @project.attributes = params[:project]
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been updated."
@@ -183,6 +221,7 @@ class ProjectsController < ApplicationController
     end
   end
 
+  ##
   # deletes a project
   #
   # @example 
@@ -199,6 +238,12 @@ class ProjectsController < ApplicationController
   # @api public
   def destroy
     @project = Project.get(params[:id])
+    
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError unless logged_in? 
+      raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
+    end
+    
     if @project.destroy
       flash[:notice] = "Project \"#{@project.name}\" has been destroyed."
     else
@@ -223,6 +268,11 @@ class ProjectsController < ApplicationController
   # @api public
   def upload
     @project = Project.get(params[:id])
+    
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError unless logged_in? 
+      raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
+    end
     
     if !params[:upload].nil?
       datafile = params[:upload]['datafile']
@@ -257,14 +307,18 @@ class ProjectsController < ApplicationController
   #
   # @return redirects to project index page
   #
+  # @todo Figure out how this should act when in server mode.
+  # 
   # @author Yogo Team
   #
   # @api public
   def loadexample
-    # Load the project and data 
-    #Yogo::Loader.load(:example, "Example Project")
-        
     # Load the cercal db from CSV
+
+    if !Yogo::Setting[:local_only] && (!logged_in?)
+      raise AuthenticationError
+    end
+
     @project = Project.create(:name => "Cricket Cercal System DB")
     errors = @project.process_csv(Rails.root.join("dist", "example_data", "cercaldb", "cells.csv"), "Cell")
     if errors.empty?

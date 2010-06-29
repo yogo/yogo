@@ -38,6 +38,7 @@ describe UsersController do
     it "should allow users that belong to an admin group" do
       get :index
       response.should be_success
+      response.should_not be_redirect
       assigns[:users].should_not be_nil
     end
 

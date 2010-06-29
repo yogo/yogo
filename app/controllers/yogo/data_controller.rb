@@ -7,12 +7,14 @@
 # Functionality for CRUD of data within a yogo project's model
 # Additionally upload and download of data via CSV is provided
 #
-class YogoDataController < ApplicationController
-  before_filter :find_parent_items, :show_sidebar
+class Yogo::DataController < ApplicationController
+  before_filter :find_parent_items, :check_project_authorization, :show_sidebar
 
+  ##
   # 10 data objects per page are displayed
   #
-  # @example http://localhost:3000/yogo_data
+  # @example 
+  #   get /project/1/yogo_data
   #
   # @param [Hash] params
   # @option params [String] :q this is a querry
@@ -25,6 +27,7 @@ class YogoDataController < ApplicationController
   def index
     if !params[:q].nil?
       queries =[]
+      
       params[:q].each_pair do |attribute, conditions|
         q = @model.all(attribute.to_sym => conditions[0])
         conditions[1..-1].each{ |c| q = q + @model.all(attribute.to_sym => c ) }
@@ -171,9 +174,14 @@ class YogoDataController < ApplicationController
     @item = @model.get(params[:id])
     goober = "yogo_#{@project.namespace.underscore}_#{@model.name.demodulize.underscore}"
     @item.attributes = params[goober].delete_if{|key,value| value.empty? }
-    #TODO: THIS IS BROKEN!
-    @item.save
-    redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
+
+    respond_to do |format|
+      if @item.save
+        format.html { redirect_to project_yogo_data_index_url(@project, @model.name.demodulize) }
+      else
+        format.html { render(:action => 'edit') }
+      end
+    end
   end  
 
   # destroys a data object
@@ -223,48 +231,6 @@ class YogoDataController < ApplicationController
       respond_to do |format|
         format.html { redirect_to project_yogo_data_index_url(@project, @model.name.demodulize) }
       end
-    end
-  end
-
-  # gets a histrogram from an attribute name
-  #
-  # @example http://localhost:3000/project/histogram_attribute
-  #
-  # @param [Hash] params
-  # @option params [String] :attribute_name
-  #
-  # @return [Historgram] returns a histogram of Yogo navigational values 
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def histogram_attribute
-    ref_path, noop, ref_query = URI::split(request.referer)[5,3]
-
-    @attribute_name = params[:attribute_name]
-
-    if ref_query.nil?
-      @histogram = Yogo::Navigation.values(@model, @attribute_name.to_sym)
-    else
-      #what an ugly way to make a query scope.
-      query_options = ref_query.split('&').select{|r| !r.blank?}
-      query_options.each do |qo|
-        qo.match(/q\[(\w+)\]\[\]=(.+)/)
-        attribute = $1
-        condition = $2
-        if @query_scope.nil?
-          @query_scope = @model.all(attribute.to_sym => condition)
-        else
-          @query_scope = @query_scope & @model.all(attribute.to_sym => condition)
-        end
-      end
-      @histogram = Yogo::Navigation.values(@query_scope, @attribute_name.to_sym)
-    end
-
-    
-    respond_to do |wants|
-      wants.html 
-      wants.js { render :partial => 'histogram_attribute' }
     end
   end
 
@@ -318,7 +284,9 @@ class YogoDataController < ApplicationController
   #
   # @api private
   def download_csv
-    send_data(@model.make_csv(true),
+    csv_data = ''
+    @query.all.each{|i| csv_data << i.to_yogo_csv + "\n" }
+    send_data(@model.to_yogo_csv + csv_data,
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')
@@ -338,5 +306,26 @@ class YogoDataController < ApplicationController
   def find_parent_items
     @project = Project.get(params[:project_id])
     @model = @project.get_model(params[:model_id])
+  end
+  
+  ##
+  # Checks to see if the current user is authorized to perform the current action
+  # @return [nil]
+  # @raise Execption
+  # @author lamb
+  # @api private
+  def check_project_authorization
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError if !@project.is_public? && !logged_in?
+      action = request.parameters["action"]
+      if ['index', 'show', 'search', 'download_asset', 'show_asset'].include?(action)
+        raise AuthorizationError unless @project.is_public? || (logged_in? && current_user.is_in_project?(@project))
+      else
+        action = :edit_model_data if ['new', 'create' 'edit', 'update'].include?(action)
+        action = :delete_model_data if ['destroy'].include?(action)
+        raise AuthenticationError if !logged_in?
+        raise AuthorizationError  if !current_user.has_permission?(action,@project)
+      end
+    end
   end
 end

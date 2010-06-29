@@ -140,9 +140,18 @@ module AuthorizationSystem
       def authorization_denied
         logger.debug { "Authorization Denied" }
         store_location
-        flash[:notice] = "You've been denied."
-        redirect_to new_user_session_url
+        flash[:notice] = "You don't have permission to view that page."
+        # redirect_to new_user_session_url
         #TODO: Redirect back or default
+        respond_to do |format|
+          format.html do
+             if request.env['HTTP_REFERER'] 
+               redirect_to(:back)
+             else
+               redirect_to('/')
+             end
+           end
+        end
         return false
       end
 

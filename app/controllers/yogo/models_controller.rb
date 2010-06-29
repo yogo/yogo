@@ -6,8 +6,8 @@
 # FILE: yogo_models_controller.rb
 # Functionality for CRUD of yogo project models
 # 
-class YogoModelsController < ApplicationController
-  before_filter :find_parent_items
+class Yogo::ModelsController < ApplicationController
+  before_filter :find_parent_items, :check_project_authorization
   
   ##
   # Provides a list of the models for the current project
@@ -47,7 +47,7 @@ class YogoModelsController < ApplicationController
     @model = @project.get_model(params[:id])
     
     respond_to do |format|
-      # format.html
+      format.html
       format.json do
         
         render( :json => { "Model" => @model.to_model_definition } )
@@ -106,7 +106,7 @@ class YogoModelsController < ApplicationController
     @model.update_model_definition(model_def)
     
     respond_to do |format|
-      format.html { redirect_to(project_yogo_model_url(@project, @model.name.demodulize)) }
+      format.html { redirect_to(project_yogo_model_url(@project, @model)) }
       format.json do
         render( :json => { "Model" => @model.to_model_definition } )
       end
@@ -194,29 +194,6 @@ class YogoModelsController < ApplicationController
   end
   
   ##
-  # List attributes for a model
-  #
-  # @example http://localhost:3000/yogo_model/1/list_attributes
-  #
-  # @param [Hash] params
-  # @option params [String] :id
-  #
-  # @return renders list of the attributes
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def list_attributes
-    @model = @project.get_model(params[:id])
-    @attributes = Yogo::Navigation.attributes(@model)
-    
-    respond_to do |wants|
-      wants.html 
-      wants.js { render(:partial => 'list_attributes', :locals => { :model => @model, :attributes => @attributes, :project => @project })}
-    end
-  end
-  
-  ##
   # Reloads the models from our special backup Hopefully temporary
   # 
   # @example
@@ -245,7 +222,7 @@ class YogoModelsController < ApplicationController
   #
   # @api private
   def download_csv
-    send_data(@model.make_csv(false),
+    send_data(@model.to_yogo_csv,
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')
@@ -279,5 +256,24 @@ class YogoModelsController < ApplicationController
   def valid_model_or_column_name?(potential_name)
     # TODO: Validations should not be here.
     !potential_name.match(/^\d|\.|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-/)
+  end
+  
+  ##
+  # Checks to see if the current user is authorized to perform the current action
+  # @return [nil]
+  # @raise Execption
+  # @author lamb
+  # @api private
+  def check_project_authorization
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError if !@project.is_public? && !logged_in?
+        action = request.parameters["action"]
+        if ['index', 'show', 'download_csv'].include?(action)
+          raise AuthorizationError unless @project.is_public? || (logged_in? && current_user.is_in_project?(@project))
+        else
+          raise AuthenticationError if !logged_in?
+          raise AuthorizationError  if !current_user.has_permission?(:edit_model_descriptions,@project)
+        end
+    end
   end
 end

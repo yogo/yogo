@@ -13,7 +13,7 @@ class Group
   property :name, String, :required => true
   property :admin, Boolean, :default => false
   
-  property :permissions, String, :default => '' #, :accessor => :private
+  property :permissions, String, :default => '', :length => 200 #, :accessor => :private
   
   has n, :users, :through => Resource
   belongs_to :project, :required => false
@@ -73,6 +73,24 @@ class Group
     
     @permissions_array.include?(action)
   end
+  
+  ##
+  # An alias from have_permission?
+  # 
+  # @example
+  #   group.has_permission?(:edit_project)
+  # 
+  # @param [Symbol or String] action
+  #   The action to check permission for
+  # 
+  # @return [Boolean]
+  #   True or False depending if the group has permission or not
+  # 
+  # @raise [NonExistantPermissionError] If the given action isn't valid
+  # 
+  # @author Robbie Lamb robbie.lamb@gmail.com
+  # @api public
+  alias :has_permission? :have_permission?
   
   ##
   # Removes a permission from a group

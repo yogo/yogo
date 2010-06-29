@@ -91,18 +91,30 @@ describe Project do
     p2 = Project.create(:name => 'test project 2')
     p3 = Project.create(:name => 'test project 3')
     pp = Project.create(:name => 'Private project', :is_public => false)
-    
+
     Project.public.should_not include(pp)
   end
   
-  it "should have 2 groups named 'managers' and 'users" do
+  it "should have 5 groups" do
     p = Project.create(:name => 'test project')
-    
+
+    group_names = Project.first.groups.map(&:name)
+    group_names.should include('Manager')
+    group_names.should include('Edit Project')
+    group_names.should include('Edit Models')
+    group_names.should include('Edit Data')
+    group_names.should include('Delete Data')
+    group_names.length.should eql 5
+    p.destroy
+    Group.all.destroy
+  end
+  
+  it "should create 5 groups on save" do
+    p = Project.new(:name => 'a test project')
+    p.save
     
     group_names = Project.first.groups.map(&:name)
-    group_names.should include('managers')
-    group_names.should include('users')
-    group_names.length.should eql 2
+    group_names.length.should eql 5
     p.destroy
     Group.all.destroy
   end
@@ -116,9 +128,9 @@ describe Project do
     
     p = Project.create(:name => 'test project')
 
-    Project[0].groups.all(:name => 'managers').users.length.should eql 1
+    Project[0].groups.all(:name => 'Manager').users.length.should eql 1
     
-    Project[0].groups.all(:name => 'managers').users[0].login.should eql user_login
+    Project[0].groups.all(:name => 'Manager').users[0].login.should eql user_login
 
     User.current = nil
     p.destroy
