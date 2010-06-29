@@ -75,9 +75,8 @@ module ApplicationHelper
 
     output = ""
 
-    if current_page > 1
-      output += link_to("&lt;&nbsp;Previous&nbsp;", "?page=#{current_page-1}")
-    end
+    output += link_to("&lt;&lt; First&nbsp;",params.merge(:page => 1))  if current_page > 2
+    output += link_to("&lt;&nbsp;Previous&nbsp;", params.merge(:page => current_page-1)) if current_page > 1
   
     if total_pages > 1
       # Looking for a range of 5 pages centered around the current page.
@@ -89,16 +88,12 @@ module ApplicationHelper
       max_page = min_page + 4 if min_page.eql?(1) && total_pages > 5
 
       (min_page...max_page+1).each do |p|
-        output += link_to("&nbsp;"+((current_page==p) ? "<strong>"+p.to_s+"</strong>" : p.to_s + "")+"&nbsp;","?page=#{p}")
+        output += link_to("&nbsp;"+((current_page==p) ? "<strong>"+p.to_s+"</strong>" : p.to_s + "")+"&nbsp;",params.merge(:page=>p))
       end
     end
 
-    if current_page < total_pages
-      output += link_to("&nbsp;Next&nbsp;&gt;", "?page=#{current_page+1}")
-    end
-    
-    output = (link_to("&lt;&lt First&nbsp;","?page=1") + output) if current_page > 2
-    output << link_to("&nbsp;Last &gt;&gt;","?page=#{total_pages}") if current_page < total_pages-1
+    output += link_to("&nbsp;Next&nbsp;&gt;", params.merge(:page => current_page+1)) if current_page < total_pages
+    output << link_to("&nbsp;Last &gt;&gt;",params.merge(:page => total_pages)) if current_page < total_pages-1
 
     output
   end
