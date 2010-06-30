@@ -37,5 +37,9 @@ The 'yogo' rake tasks manage starting, stopping, and resetting persevere for you
 
 ### Crux Changelog
 
-0.5.1 2010-06-29
+0.5.2 
+- Add the local_only server hack
+- Some view tweaks
+- revert the deploy.rb file to its former glory
+0.5.1 2010-06-29 (6c95c6)
 - Integrated the kefed editor into an iframe in the application.
