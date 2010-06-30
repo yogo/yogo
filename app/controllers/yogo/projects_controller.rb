@@ -90,8 +90,10 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def show
     @project = Project.get(params[:id])
-    if !Yogo::Setting[:local_only] && !@project.is_public? 
-      redirect_to("/") and return if !logged_in? || !current_user.is_in_project?(@project)
+    
+    if !Yogo::Setting[:local_only] && !@project.is_public?
+      raise AuthenticationError if !logged_in?
+      raise AuthorizationError  if !current_user.is_in_project?(@project)
     end
     
     @models = @project.models
@@ -139,6 +141,14 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def create
+    
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError  if !logged_in? 
+      raise AuthorizationError if !current_user.has_permission?(:create_projects)
+    end
+
+    @project = Project.get(params[:id])
+    
     @project = Project.new(params[:project])
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
@@ -166,8 +176,9 @@ class Yogo::ProjectsController < ApplicationController
   def edit
     @project = Project.get(params[:id])
     
-    if !Yogo::Setting[:local_only] && (!logged_in? || !current_user.has_permission?(:edit_project,@project))
-      raise AuthorizationError
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError unless logged_in? 
+      raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
     end
     
     respond_to do |format|
@@ -194,8 +205,9 @@ class Yogo::ProjectsController < ApplicationController
   def update
     @project = Project.get(params[:id])
     
-    if !Yogo::Setting[:local_only] && (!logged_in? || !current_user.has_permission?(:edit_project,@project))
-      raise AuthorizationError
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError unless logged_in? 
+      raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
     end
     
     params[:project].delete(:name) if params.has_key?(:project)
@@ -227,8 +239,9 @@ class Yogo::ProjectsController < ApplicationController
   def destroy
     @project = Project.get(params[:id])
     
-    if !Yogo::Setting[:local_only] && (!logged_in? || !current_user.has_permission?(:edit_project,@project))
-      raise AuthorizationError
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError unless logged_in? 
+      raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
     end
     
     if @project.destroy
@@ -256,8 +269,9 @@ class Yogo::ProjectsController < ApplicationController
   def upload
     @project = Project.get(params[:id])
     
-    if !Yogo::Setting[:local_only] && (!logged_in? || !current_user.has_permission?(:edit_project,@project))
-      raise AuthorizationError
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError unless logged_in? 
+      raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
     end
     
     if !params[:upload].nil?
@@ -300,12 +314,11 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def loadexample
     # Load the cercal db from CSV
-    
+
     if !Yogo::Setting[:local_only] && (!logged_in?)
-      raise AuthorizationError
+      raise AuthenticationError
     end
-    
-     
+
     @project = Project.create(:name => "Cricket Cercal System DB")
     errors = @project.process_csv(Rails.root.join("dist", "example_data", "cercaldb", "cells.csv"), "Cell")
     if errors.empty?

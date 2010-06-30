@@ -90,7 +90,7 @@ module DataMapper
         self.separator = ""
       end
       
-      self.display_name = name.to_s.gsub("#{self.prefix}#{self.separator}", "")
+      self.display_name = name.to_s.sub("#{self.prefix}#{self.separator}", "")
       
       name = (self.prefix + self.separator + display_name).to_sym
       

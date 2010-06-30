@@ -284,7 +284,9 @@ class Yogo::DataController < ApplicationController
   #
   # @api private
   def download_csv
-    send_data(@model.make_csv(true),
+    csv_data = ''
+    @query.all.each{|i| csv_data << i.to_yogo_csv + "\n" }
+    send_data(@model.to_yogo_csv + csv_data,
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')
@@ -314,13 +316,15 @@ class Yogo::DataController < ApplicationController
   # @api private
   def check_project_authorization
     if !Yogo::Setting[:local_only]
+      raise AuthenticationError if !@project.is_public? && !logged_in?
       action = request.parameters["action"]
       if ['index', 'show', 'search', 'download_asset', 'show_asset'].include?(action)
         raise AuthorizationError unless @project.is_public? || (logged_in? && current_user.is_in_project?(@project))
       else
         action = :edit_model_data if ['new', 'create' 'edit', 'update'].include?(action)
         action = :delete_model_data if ['destroy'].include?(action)
-        raise AuthorizationError if (!logged_in? || !current_user.has_permission?(action,@project))  
+        raise AuthenticationError if !logged_in?
+        raise AuthorizationError  if !current_user.has_permission?(action,@project)
       end
     end
   end

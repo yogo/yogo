@@ -7,7 +7,7 @@
 # Functionality for CRUD of yogo project models
 # 
 class Yogo::ModelsController < ApplicationController
-  before_filter :find_parent_items
+  before_filter :find_parent_items, :check_project_authorization
   
   ##
   # Provides a list of the models for the current project
@@ -47,7 +47,7 @@ class Yogo::ModelsController < ApplicationController
     @model = @project.get_model(params[:id])
     
     respond_to do |format|
-      # format.html
+      format.html
       format.json do
         
         render( :json => { "Model" => @model.to_model_definition } )
@@ -106,7 +106,7 @@ class Yogo::ModelsController < ApplicationController
     @model.update_model_definition(model_def)
     
     respond_to do |format|
-      format.html { redirect_to(project_yogo_model_url(@project, @model.name.demodulize)) }
+      format.html { redirect_to(project_yogo_model_url(@project, @model)) }
       format.json do
         render( :json => { "Model" => @model.to_model_definition } )
       end
@@ -222,7 +222,7 @@ class Yogo::ModelsController < ApplicationController
   #
   # @api private
   def download_csv
-    send_data(@model.make_csv(false),
+    send_data(@model.to_yogo_csv,
               :filename    => "#{@model.name.demodulize.tableize.singular}.csv", 
               :type        => "text/csv", 
               :disposition => 'attachment')
@@ -256,5 +256,24 @@ class Yogo::ModelsController < ApplicationController
   def valid_model_or_column_name?(potential_name)
     # TODO: Validations should not be here.
     !potential_name.match(/^\d|\.|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-/)
+  end
+  
+  ##
+  # Checks to see if the current user is authorized to perform the current action
+  # @return [nil]
+  # @raise Execption
+  # @author lamb
+  # @api private
+  def check_project_authorization
+    if !Yogo::Setting[:local_only]
+      raise AuthenticationError if !@project.is_public? && !logged_in?
+        action = request.parameters["action"]
+        if ['index', 'show', 'download_csv'].include?(action)
+          raise AuthorizationError unless @project.is_public? || (logged_in? && current_user.is_in_project?(@project))
+        else
+          raise AuthenticationError if !logged_in?
+          raise AuthorizationError  if !current_user.has_permission?(:edit_model_descriptions,@project)
+        end
+    end
   end
 end
