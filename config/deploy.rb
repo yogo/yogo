@@ -20,19 +20,19 @@ task :user_settings do
     set :user, "crux"
     set :deploy_to, "/home/crux/"
     server "crux.msu.montana.edu", :app, :web, :db, :primary => true
-    server_prompt = "What server are you deploying to?"
-    set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
-    role :web, "#{temp_server}"
-    role :app, "#{temp_server}"
-    user_prompt = "What user are you deploying to the server under? (defaults to 'yogo')"
-    set :temp_user, Proc.new { Capistrano::CLI.ui.ask(user_prompt)}
-    if temp_user.empty?
-      set :user, "yogo"
-      set :deploy_to, "/home/yogo/rails/yogo/"
-    else
-      set :user, "#{temp_user}"
-      set :deploy_to, "/home/#{temp_user}/rails/yogo/"
-    end
+    # server_prompt = "What server are you deploying to?"
+    # set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
+    # role :web, "#{temp_server}"
+    # role :app, "#{temp_server}"
+    # user_prompt = "What user are you deploying to the server under? (defaults to 'yogo')"
+    # set :temp_user, Proc.new { Capistrano::CLI.ui.ask(user_prompt)}
+    # if temp_user.empty?
+    #   set :user, "yogo"
+    #   set :deploy_to, "/home/yogo/rails/yogo/"
+    # else
+    #   set :user, "#{temp_user}"
+    #   set :deploy_to, "/home/#{temp_user}/rails/yogo/"
+    # end
     set :ran_user_settings, true
   end
 end
