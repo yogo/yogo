@@ -118,7 +118,7 @@ namespace :persvr do
           pid = Process.fork do
             puts "Starting background persvr #{RAILS_ENV} instance in #{RAILS_ROOT/cfg['database']}..."
             puts "...logging persvr output to #{log}."
-            exec "#{PERSVR_CMD} --start --port #{cfg['port']} >& #{log} &" 
+            exec "#{PERSVR_CMD} --start --port #{cfg['port']} > #{log} 2>&1 &"
           end
           Process.detach(pid)
           
