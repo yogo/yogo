@@ -1,3 +1,7 @@
 %div.small-centered-content.boxed
   %p= @user.name
   %p= "Admin: #{@user.admin?}"
+  %p= "Create Projects: #{@user.create_projects?}"
+  %ul
+  - for group in @user.groups
+    %li= group.name

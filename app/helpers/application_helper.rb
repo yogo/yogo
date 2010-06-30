@@ -75,7 +75,7 @@ module ApplicationHelper
 
     output = ""
 
-    output += link_to("&lt;&lt; First&nbsp;",params.merge(:page => 1))  if current_page > 2
+    output += link_to("&lt;&lt; First&nbsp;", params.merge(:page => 1))  if current_page > 2
     output += link_to("&lt;&nbsp;Previous&nbsp;", params.merge(:page => current_page-1)) if current_page > 1
   
     if total_pages > 1
