@@ -58,7 +58,8 @@ namespace :persvr do
     sh "cp #{RAILS_ROOT}/db/server.js #{vendor_dir}/persevere/WEB-INF/src/org/persvr/server.js"
 
     # Step 2: Get to the right directory, update the jar, come back (so the rake task returns to the starting directory)
-    sh "pushd #{vendor_dir}/persevere/WEB-INF/src; jar uf ../lib/persevere.jar org/persvr/server.js; popd"
+    #sh "pushd #{vendor_dir}/persevere/WEB-INF/src; jar uf ../lib/persevere.jar org/persvr/server.js; popd"
+    sh "cd #{vendor_dir}/persevere/WEB-INF/src; jar uf ../lib/persevere.jar org/persvr/server.js; cd ../../../.."
     
     # Clean up zip file
     sh "rm #{persvr_zip}"
