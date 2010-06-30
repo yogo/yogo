@@ -274,10 +274,10 @@ describe Project do
         }
       }
       # Simulate a situation where a schema exists prior to the app starting
-      repository.adapter.put_schema(persisted_model_hash)
+      repository(:yogo).adapter.put_schema(persisted_model_hash)
       # Create a project associated with the pre-existing data
       project = Project.create(:name => 'Persisted Data')
-      DataMapper::Reflection.reflect(:default)
+      DataMapper::Reflection.reflect(:yogo)
       # The models in the datastore should be reflected and exist
       project.models.map(&:name).should == ["Yogo::PersistedDatum::Cell"]
       Yogo::PersistedDatum::Cell.should_not be_nil
@@ -294,9 +294,9 @@ describe Project do
           "name" => {"type" => "string"}
         }
       }
-      repository.adapter.put_schema(persisted_model_hash)
+      repository(:yogo).adapter.put_schema(persisted_model_hash)
       project = Project.new(:name => 'Persisted Bozon')
-      DataMapper::Reflection.reflect(:default)
+      DataMapper::Reflection.reflect(:yogo)
       project.models.should_not be_empty
       project.delete_models!
       project.models.should be_empty

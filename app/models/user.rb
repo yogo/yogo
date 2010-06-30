@@ -132,7 +132,8 @@ class User
   # 
   # @api public
   def has_group?(group_name, project = nil)
-    @_user_group_names ||= Group.all(:project => project, :users => self).collect(&:name)
+    # @_user_group_names ||= Group.all(:project => project, :users => self).collect(&:name)
+    @_user_group_names ||= self.groups(:project => project).collect(&:name)
     @_user_group_names.include?(group_name.to_s)
   end
   
@@ -152,7 +153,8 @@ class User
   # 
   # @api public
   def has_permission?(action, project = nil)
-    self.groups.any?{ |g| g.project.eql?(project) && g.has_permission?(action) }
+    self.groups(:project => project).any?{ |g| g.has_permission?(action) }
+    # self.groups.any?{ |g| g.project.eql?(project) && g.has_permission?(action) }
   end
 
   ##

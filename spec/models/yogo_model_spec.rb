@@ -63,7 +63,7 @@ describe "A Yogo Model" do
       ns.send(:remove_const, :Author)
 
       # Reflect Yogo data into memory
-      models = DataMapper::Reflection.reflect(:default)
+      models = DataMapper::Reflection.reflect(:yogo)
 
       models.each{|m| m.send(:include,Yogo::Model) }
       models.each{|m| m.properties.sort! }
@@ -114,7 +114,7 @@ describe "A Yogo Model" do
       ns.send(:remove_const, :Author)
 
       # Reflect Yogo data into memory
-      models = DataMapper::Reflection.reflect(:default)
+      models = DataMapper::Reflection.reflect(:yogo)
 
       models.each{|m| m.send(:include,Yogo::Model) }
       models.each{|m| m.properties.sort! }
@@ -160,7 +160,7 @@ describe "A Yogo Model" do
         ns.send(:remove_const, :Author)
 
         # Reflect Yogo data into memory
-        models = DataMapper::Reflection.reflect(:default)
+        models = DataMapper::Reflection.reflect(:yogo)
 
         models.each{|m| m.send(:include,Yogo::Model) }
         models.each{|m| m.properties.sort! }

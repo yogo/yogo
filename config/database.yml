@@ -6,24 +6,37 @@
 # FILE: database.yml.start
 #
 #
+
 development:
+  adapter: sqlite3
+  database: db/development.sqlite3
+
+production:
+  adapter: sqlite3
+  database: db/production.sqlite3
+
+test:
+  adapter: sqlite3
+  database: db/test.sqlite3
+
+yogo_development:
   adapter: persevere
   versioned: true
   host: localhost
   port: 8080
 
-production:
+yogo_production:
   adapter: persevere
   versioned: true
   host: localhost
   port: 8080
 
 # run with bin/persvr -p 8081
-test: &TEST
+yogo_test: &YOGO_TEST
   adapter: persevere
   versioned: true
   host: localhost
   port: 8081
 
-cucumber:
-  <<: *TEST
+yogo_cucumber:
+  <<: *YOGO_TEST

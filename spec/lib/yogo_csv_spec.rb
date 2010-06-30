@@ -11,6 +11,7 @@ describe 'Yogo CSV Module' do
     # Need a model and a CSV file.
     model = DataMapper::Model.new do
       include Yogo::Model
+      def self.default_repository_name; :yogo; end
       property :yogo_id, DataMapper::Types::Serial, :field => 'id'
       property :id,   Integer,  :prefix => 'yogo'
       property :name, DataMapper::Types::Text,  :prefix => 'yogo'
