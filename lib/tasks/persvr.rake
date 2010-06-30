@@ -55,7 +55,7 @@ namespace :persvr do
     # *and* that it's in your path
 
     # Step 1: Copy our server.js to the unpacked distribution
-    sh "cp #{RAILS_ROOT}/:db/server.js #{vendor_dir}/persevere/WEB-INF/src/org/persvr/server.js"
+    sh "cp #{RAILS_ROOT}/db/server.js #{vendor_dir}/persevere/WEB-INF/src/org/persvr/server.js"
 
     # Step 2: Get to the right directory, update the jar, come back (so the rake task returns to the starting directory)
     sh "pushd #{vendor_dir}/persevere/WEB-INF/src; jar uf ../lib/persevere.jar org/persvr/server.js; popd"
