@@ -166,12 +166,14 @@ module ApplicationHelper
   # @api public
   def tooltip(body, title = nil, length = 10)
     id = UUIDTools::UUID.random_create
-    <<-TT
-    <div id='#{id}' class='tooltip' title='#{title || "Click to see full text."}'>#{body}</div>
-    <span class='tooltip-snippet' onClick="$('##{id}').dialog('open')">
-      #{body[0..length]}<span class='more'>&#8230; more</span>
-    </span>
-    TT
+    if body.length > length
+      <<-TT
+      <div id='#{id}' class='tooltip' title='#{title || "Click to see full text."}'>#{body}</div>
+      <span class='tooltip-snippet' onClick="$('##{id}').dialog('open')">
+        #{body[0..length]}<span class='more'>&#8230; more</span>
+      </span>
+      TT
+    end
   end
   
   # Creates the appropriate HTML for attributes on a model
