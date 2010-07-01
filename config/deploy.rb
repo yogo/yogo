@@ -1,8 +1,9 @@
-set :application, "crux"
+set :application, "yogo"
 set :use_sudo,    false
 
 set :scm, :git
-set :repository,  "git://github.com/pol/crux.git"
+set :repository,  "git://github.com/yogo/yogo.git"
+
 
 set :branch, "master"
 set :deploy_via, :remote_cache
@@ -17,34 +18,24 @@ set :ran_user_settings, false
 
 task :user_settings do
   if !ran_user_settings
-    set :user, "crux"
-    set :deploy_to, "/home/crux/"
-    server "crux.msu.montana.edu", :app, :web, :db, :primary => true
-    
-    # set :default_environment, { 
-    #   'PATH' => "/usr/local/rvm/bin:/usr/local/rvm/bin:/home/crux/.gem/ruby/1.8/bin:/usr/local/rvm/gems/ruby-1.8.7-p174/bin:/usr/local/rvm/gems/ruby-1.8.7-p174@global/bin:/usr/local/rvm/rubies/ruby-1.8.7-p174/bin:$PATH",
-    #   'RUBY_VERSION' => 'ruby 1.8.7',
-    #   'GEM_HOME' => '/usr/local/rvm/gems/ruby-1.8.7-p174',
-    #   'GEM_PATH' => '/usr/local/rvm/gems/ruby-1.8.7-p174:/usr/local/rvm/gems/ruby-1.8.7-p174@global' 
-    # }
-    # server_prompt = "What server are you deploying to?"
-    # set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
-    # role :web, "#{temp_server}"
-    # role :app, "#{temp_server}"
-    # user_prompt = "What user are you deploying to the server under? (defaults to 'yogo')"
-    # set :temp_user, Proc.new { Capistrano::CLI.ui.ask(user_prompt)}
-    # if temp_user.empty?
-    #   set :user, "yogo"
-    #   set :deploy_to, "/home/yogo/rails/yogo/"
-    # else
-    #   set :user, "#{temp_user}"
-    #   set :deploy_to, "/home/#{temp_user}/rails/yogo/"
-    # end
+    server_prompt = "What server are you deploying to?"
+    set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
+    role :web, "#{temp_server}"
+    role :app, "#{temp_server}"
+    user_prompt = "What user are you deploying to the server under? (defaults to 'yogo')"
+    set :temp_user, Proc.new { Capistrano::CLI.ui.ask(user_prompt)}
+    if temp_user.empty?
+      set :user, "yogo"
+      set :deploy_to, "/home/yogo/rails/yogo/"
+    else
+      set :user, "#{temp_user}"
+      set :deploy_to, "/home/#{temp_user}/rails/yogo/"
+    end
     set :ran_user_settings, true
   end
 end
 
-[ "bundle:install", "bundle:check", "deploy", "deploy:check", "deploy:cleanup", "deploy:cold", "deploy:migrate",
+[ "bundle:install", "deploy", "deploy:check", "deploy:cleanup", "deploy:cold", "deploy:migrate",
   "deploy:migrations", "deploy:pending", "deploy:pending:diff", "deploy:rollback", "deploy:rollback:code",
   "deploy:setup", "deploy:symlink", "deploy:update", "deploy:update_code", "deploy:upload", "deploy:web:disable",
   "deploy:web:enable", "invoke", "persvr:setup", "persvr:start", "persvr:stop", "persvr:drop",
@@ -76,18 +67,6 @@ end
 after "deploy:setup",       "db:setup"
 after "deploy:update_code", "db:symlink"
 
-namespace :tomcat do
-  task :setup do
-    run "mkdir -p #{deploy_to}#{shared_dir}/vendor/blazeds"
-  end
-  
-  task :symlink do
-    run "ln -nfs #{deploy_to}#{shared_dir}/vendor/blazeds #{release_path}/vendor/blazeds"
-  end
-end
-after "deploy:setup",       "tomcat:setup"
-after "deploy:update_code", "tomcat:symlink"
-
 namespace :assets do
   task :setup do
     run "mkdir -p #{deploy_to}#{shared_dir}/assets/files"
@@ -108,35 +87,12 @@ end
 after "deploy:update_code", "setup_for_server"
 
 namespace :bundle do
-  bundle_cmd = "cd #{release_path} && bundle "
-
-  desc "Run bundle check on the server"
-  task :check do
-    run(bundle_cmd + 'check', :shell => 'bash')
-  end
-
   desc "Run bundle install on the server"
   task :install do
-    run("#{bundle_cmd % 'install'}")
+    run("bash -c 'cd #{release_path} && bundle install'")
   end
 end
-after 'setup_for_server', 'bundle:check'
-
-namespace :tomcat do
-  desc "Start the Tomcat Instance on the server (blazeds and persevere)"
-  task :start do
-    puts '************************* This takes me a long time sometimes *************************'
-    puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake blazeds:start RAILS_ENV=production'")
-  end
-  
-  desc "Stop the Tomcat Instance on the server (blazeds and persevere)"
-  task :stop do
-    puts '************************* This takes me a long time sometimes *************************'
-    puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake blazeds:stop RAILS_ENV=production'")
-  end
-end
+after 'setup_for_server', 'bundle:install'
 
 namespace :persvr do
   desc "Setup Persevere on the server"

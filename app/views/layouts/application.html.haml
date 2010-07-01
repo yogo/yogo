@@ -2,7 +2,7 @@
 %html
   %head
     %meta(http-equiv="content-type" content="text/html;charset=UTF-8")/
-    %title= "Crux Prototype: #{controller.action_name}"
+    %title= "Yogo Data Management Toolkit: #{controller.action_name}"
 
     = stylesheet_link_tag('compiled/screen.css', :media => "screen")
     = stylesheet_link_tag('compiled/print.css', :media => "print")
@@ -25,15 +25,15 @@
 
   / Header (including optional menus)
   #header
-    #logo Crux Prototype 
-    #login-links
-      - if logged_in?
-        = current_user.login
-        = link_to("logout", logout_path)
-      - else
-        = link_to("Login", login_path)      
-    #menu.rbox.tight
+    #logo= image_tag('header.png')
+    #menu.rbox
       = render(:partial => 'layouts/menu_links') unless @no_menu
+      #login-links
+        - if logged_in?
+          = current_user.login
+          = link_to("logout", logout_path)
+        - else
+          = link_to("Login", login_path)
       = render(:partial => 'layouts/search') unless @no_search
   =clear_break 
   /Grid Container 
@@ -50,4 +50,8 @@
   #footnotes_holder
   =clear_break   
   #footer
-    #application-version= "Crux Prototype v" + CRUX_VERSION
+    #yogo-brand
+      = link_to(image_tag("yogo.png", 
+          :alt => "The Yogo Data Management Toolkit Logo"), 
+          'http://yogo.msu.montana.edu/')
+    #application-version= "v" + YOGO_VERSION

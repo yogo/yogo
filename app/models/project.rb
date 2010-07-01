@@ -401,7 +401,6 @@ class Project
     model.send(:include,Yogo::Model)
     return model
   end
-
   
   ##
   # Callback to create some default groups for this project

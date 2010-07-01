@@ -7,7 +7,7 @@
   / Choose Your Destiny!
   .scratch.rbox
     %h4.text-center
-      = link_to('Edit Datasets', kefed_editor_project_path(@project), :class => 'button-link center')
+      = link_to_edit_project_models(@project, "Edit Datasets", :class => 'button-link center')
     %p If you don't have any data yet, you can describe the data you anticipate on collecting. The description is flexible, and allows you to update the description at any time.
   .spreadsheet.rbox
     %h4.text-center

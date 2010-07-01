@@ -1,8 +1,3 @@
-local_only: true
+local_only: false
 require_change_summary: false
 asset_directory: yogo_assets
-
-anonymous_user_name:  anonymous
-
-allow_api_key:        false
-api_key_name:         api_key

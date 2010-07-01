@@ -149,6 +149,7 @@ module ApplicationHelper
     "<br clear='all' style='clear: both;'/>"
   end
   
+  
   ##
   # Helper for creating a tooltip
   # 
@@ -165,16 +166,12 @@ module ApplicationHelper
   # @api public
   def tooltip(body, title = nil, length = 10)
     id = UUIDTools::UUID.random_create
-    if body.length > length
-      <<-TT
-      <div id='#{id}' class='tooltip' title='#{title || "Click to see full text."}'>#{body}</div>
-      <span class='tooltip-snippet' onClick="$('##{id}').dialog('open')">
-        #{body[0..length]}<span class='more'>&#8230; more</span>
-      </span>
-      TT
-    else
-      body
-    end
+    <<-TT
+    <div id='#{id}' class='tooltip' title='#{title || "Click to see full text."}'>#{body}</div>
+    <span class='tooltip-snippet' onClick="$('##{id}').dialog('open')">
+      #{body[0..length]}<span class='more'>&#8230; more</span>
+    </span>
+    TT
   end
   
   # Creates the appropriate HTML for attributes on a model
@@ -223,35 +220,5 @@ module ApplicationHelper
   # @api public
   def link_to_edit_project_models(project, link_text, options={})
     link_to(link_text, "/model_editor.html#projects/#{project.id}&from=#{request.env['PATH_INFO']}", options)
-  end
-
-  # Return the kefed editor swf url
-  #
-  # @example
-  #   kefed_editor_swf_url
-  #
-  # @return [String] the absolute url for the kefed editor swf
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  #
-  def kefed_editor_swf_url
-    "http://localhost:8400/blazeds/kefedEditor/BioScholar.swf"
-  end
-  
-  # Return the kefed editor swf file path
-  #
-  # @example
-  #   kefed_editor_swf_url
-  #
-  # @return [String] the absolute url for the kefed editor swf
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  #
-  def kefed_editor_swf_path
-    Rails.root / "vendor/blazeds/tomcat/webapps/blazeds/kefedEditor/BioScholar.swf"
   end
 end

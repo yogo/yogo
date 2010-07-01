@@ -1,11 +1,10 @@
 %h1#content-title= @project.name
 
 #content-actions
-  .content-action-links
-    = link_to("Import CSV", import_csv_path(@project), :class => 'medium-button-link') 
-    = link_to("Delete Project", project_path(@project), 
-      :method => :delete, :class => 'medium-button-link', :confirm => "There is no undo.\n Continue?" ) 
-    = link_to("Edit Experimental Design", kefed_editor_project_url(@project), :class => 'medium-button-link')
+  = link_to_edit_project_models(@project, "Edit Datasets", :class => 'button-link')
+  = link_to("Delete Project", project_path(@project), 
+    :method => :delete, :class => 'button-link', :confirm => "There is no undo.\n Continue?" ) 
+  = link_to("Import CSV", import_csv_path(@project), :class => 'button-link') 
 
 //= render(:partial => 'layouts/sidebar') %>
 
