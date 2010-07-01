@@ -367,5 +367,6 @@ class Yogo::ProjectsController < ApplicationController
    # @api semipublic
   def kefed_editor
     @project = Project.get(params[:id])
+    @no_blueprint = true 
   end
 end
