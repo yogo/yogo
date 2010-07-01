@@ -37,6 +37,10 @@ The 'yogo' rake tasks manage starting, stopping, and resetting persevere for you
 
 ### Crux Changelog
 
+0.5.3
+- Major look/feel changes
+- Removed unnecessary ui elements
+- Removed the 'load example' ui triggers
 0.5.2 
 - Add the local_only server hack
 - Some view tweaks
