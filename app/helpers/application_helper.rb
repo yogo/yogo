@@ -172,6 +172,8 @@ module ApplicationHelper
         #{body[0..length]}<span class='more'>&#8230; more</span>
       </span>
       TT
+    else
+      body
     end
   end
   
