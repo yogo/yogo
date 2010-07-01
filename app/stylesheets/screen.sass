@@ -43,32 +43,37 @@ body
   padding-top: 6em
   // Header (always blueprint layout)
   #header
-    padding-bottom: 1em
+    background: #EEE image-url('logo_gradient.png') repeat-x fixed top
     width: 100%
     position: fixed
-    left: 1em
+    left: 0
     top: 0
     overflow: none
     clear: both
+    #logo
+      padding-left: 10px
+      height: 50px
+      font-size: 2em
+      +column(15)
+    #login-links
+      +column(4, true)
+      text-align: right
+      line-height: 3em
     #menu
-      background: #eeeeee url(image_url("shadow-bk.png")) repeat-x fixed top
+      background: #eeeeee image-url("shadow-bk.png") repeat-x fixed top
       margin-top: -1em
       font-size: 0.9em
-      +column($blueprint_grid_columns - 2)
-      +last
-      padding: 0 1em 0 1em
+      margin-left: 80px
+      +column(18, true)
       border: 1px solid #f2f2f2 - #555
       background-color: #FFF
       #menu-links
-        +column(5)
-        padding: 1em 0
-      #login-links
-        +column(5)
-        padding: 1em 0
+        +column(8)
+        line-height: 2em
+        padding: .5em 0 .5em 10px
       #search-tab
-        +column(9)
-        +last
-        padding: 1em 0
+        +column(9, true)
+        padding: .5em 0
         text-align: right
         .button-link
           font-size: 0.9em
@@ -76,9 +81,8 @@ body
   // Flash Notices always use blueprint layout
   #flash
     +prepend(4)
-    +column(14)
+    +column(14, true)
     +append(4)
-    +last
     text-align: center
     height: 2em
     .error, .notice
@@ -155,7 +159,7 @@ body
   .rbox
     border: 1px solid $border-color + #553
     +border-radius
-    padding: 1.5em
+    // padding: 1.5em
     &.happy
       background-color: #EFE
     &.shady
@@ -209,9 +213,10 @@ body.bp
   // Header
   #container
     +container
+    
     // To left align the grid
     margin: 0
-    margin-top: 2em
+    margin-top: -2em
   #content-title
     margin-top: 0
     text-align: left
