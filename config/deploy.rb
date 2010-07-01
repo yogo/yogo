@@ -20,6 +20,13 @@ task :user_settings do
     set :user, "crux"
     set :deploy_to, "/home/crux/"
     server "crux.msu.montana.edu", :app, :web, :db, :primary => true
+    
+    # set :default_environment, { 
+    #   'PATH' => "/usr/local/rvm/bin:/usr/local/rvm/bin:/home/crux/.gem/ruby/1.8/bin:/usr/local/rvm/gems/ruby-1.8.7-p174/bin:/usr/local/rvm/gems/ruby-1.8.7-p174@global/bin:/usr/local/rvm/rubies/ruby-1.8.7-p174/bin:$PATH",
+    #   'RUBY_VERSION' => 'ruby 1.8.7',
+    #   'GEM_HOME' => '/usr/local/rvm/gems/ruby-1.8.7-p174',
+    #   'GEM_PATH' => '/usr/local/rvm/gems/ruby-1.8.7-p174:/usr/local/rvm/gems/ruby-1.8.7-p174@global' 
+    # }
     # server_prompt = "What server are you deploying to?"
     # set :temp_server, Proc.new { Capistrano::CLI.ui.ask(server_prompt)}
     # role :web, "#{temp_server}"
@@ -37,7 +44,7 @@ task :user_settings do
   end
 end
 
-[ "bundle:install", "deploy", "deploy:check", "deploy:cleanup", "deploy:cold", "deploy:migrate",
+[ "bundle:install", "bundle:check", "deploy", "deploy:check", "deploy:cleanup", "deploy:cold", "deploy:migrate",
   "deploy:migrations", "deploy:pending", "deploy:pending:diff", "deploy:rollback", "deploy:rollback:code",
   "deploy:setup", "deploy:symlink", "deploy:update", "deploy:update_code", "deploy:upload", "deploy:web:disable",
   "deploy:web:enable", "invoke", "persvr:setup", "persvr:start", "persvr:stop", "persvr:drop",
@@ -101,12 +108,19 @@ end
 after "deploy:update_code", "setup_for_server"
 
 namespace :bundle do
+  bundle_cmd = "cd #{release_path} && bundle "
+
+  desc "Run bundle check on the server"
+  task :check do
+    run(bundle_cmd + 'check', :shell => 'bash')
+  end
+
   desc "Run bundle install on the server"
   task :install do
-    run("bash -c 'cd #{release_path} && bundle install'")
+    run("#{bundle_cmd % 'install'}")
   end
 end
-after 'setup_for_server', 'bundle:install'
+after 'setup_for_server', 'bundle:check'
 
 namespace :tomcat do
   desc "Start the Tomcat Instance on the server (blazeds and persevere)"
