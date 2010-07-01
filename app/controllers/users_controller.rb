@@ -14,6 +14,9 @@ class UsersController < ApplicationController
   # @api public
   def index
     @users = User.all
+    respond_to do |format|
+      format.html
+    end
   end
 
   ##
@@ -28,6 +31,10 @@ class UsersController < ApplicationController
   # @api public
   def show
     @user = User.get(params[:id])
+    
+    respond_to do |format|
+      format.html
+    end
   end
 
   ##
@@ -42,6 +49,10 @@ class UsersController < ApplicationController
   # @api public
   def show
     @user = User.get(params[:id])
+    
+    respond_to do |format|
+      format.html
+    end
   end
 
   ##
@@ -56,6 +67,10 @@ class UsersController < ApplicationController
   # @api public
   def new
     @user = User.new
+    
+    respond_to do |format|
+      format.html
+    end
   end
 
   ##
@@ -95,6 +110,10 @@ class UsersController < ApplicationController
   # @api public
   def edit
     @user = User.get(params[:id])
+    
+    respond_to do |format|
+      format.html
+    end
   end
 
   ##
@@ -159,7 +178,8 @@ class UsersController < ApplicationController
   # @return [nil] or it doesn't return.
   # @api private
   def require_administrator
-    authorization_denied unless current_user.groups.any?{|g| g.admin? }
+    raise AuthenticationError unless logged_in?
+    raise AuthorizationError  unless current_user.groups.any?{|g| g.admin? }
   end
     
 end

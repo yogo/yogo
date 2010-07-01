@@ -46,11 +46,20 @@ namespace :persvr do
     # unpack it in vendor/persevere
     sh "unzip -o #{persvr_zip} -d #{vendor_dir} > /dev/null 2>&1"
     
-    # link vendor/persevere/bin/persvr to vendor/bundled/bin/persvr
-    # sh "ln -f -s #{vendor_dir}/persevere/bin/persvr #{vendor_dir}/bundled/bin/persvr"
-    
     # Chmod +x
     sh "chmod +x #{vendor_dir}/persevere/bin/persvr"
+
+    # We need to update the server.js file in the downloaded persevere
+    # This is a magical process that involves copying our server.js into the jarfile 
+    # NOTE: This assumes you have some JDE installed to use the jar command,
+    # *and* that it's in your path
+
+    # Step 1: Copy our server.js to the unpacked distribution
+    sh "cp #{RAILS_ROOT}/db/server.js #{vendor_dir}/persevere/WEB-INF/src/org/persvr/server.js"
+
+    # Step 2: Get to the right directory, update the jar, come back (so the rake task returns to the starting directory)
+    #sh "pushd #{vendor_dir}/persevere/WEB-INF/src; jar uf ../lib/persevere.jar org/persvr/server.js; popd"
+    sh "cd #{vendor_dir}/persevere/WEB-INF/src; jar uf ../lib/persevere.jar org/persvr/server.js; cd ../../../.."
     
     # Clean up zip file
     sh "rm #{persvr_zip}"
@@ -59,9 +68,6 @@ namespace :persvr do
   desc "Cleanup vendor installed persevere"
   task :remove do
     vendor_dir = RAILS_ROOT/:vendor
-    
-    # Remove the link
-    # sh "rm #{vendor_dir}/bundled/bin/persvr"
     
     # Remove the installed code
     sh "rm -rf #{vendor_dir}/persevere"
@@ -112,7 +118,7 @@ namespace :persvr do
           pid = Process.fork do
             puts "Starting background persvr #{RAILS_ENV} instance in #{RAILS_ROOT/cfg['database']}..."
             puts "...logging persvr output to #{log}."
-            exec "#{PERSVR_CMD} --start --port #{cfg['port']} > #{log} 2>&1 &" 
+            exec "#{PERSVR_CMD} --start --port #{cfg['port']} > #{log} 2>&1 &"
           end
           Process.detach(pid)
           
@@ -155,6 +161,12 @@ namespace :persvr do
     Rake::Task['persvr:start'].reenable
   end
   
+  desc "Restart persevere instance for the current environment."
+  task :restart => [:version, :stop, :start] do end
+  
+  desc "Restart and Reinitialize persevere instance for the current environment."
+  task :restart_clean => [:version, :stop, :drop, :create, :start] do end
+
   task :stop_all => :version do
     FileList[RAILS_ROOT/:db/:persvr/'*'].each do |dir|
       if File.exist? dir/'WEB-INF'/'process'

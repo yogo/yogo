@@ -5,5 +5,7 @@
     = f.text_field(:last_name)
     = f.password_field(:password, :label => "Password: ")
     = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
-    = f.check_box(:admin)
+    / - f.check_box(:admin)
+    / - f.check_box(:create_projects)
+    = f.hidden_field(:create_projects, :value => '1')
     = f.submit

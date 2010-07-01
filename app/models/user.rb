@@ -243,7 +243,7 @@ class User
   # 
   # @api public
   def create_projects?
-    self.has_permissions?(:create_projects)
+    self.has_permission?(:create_projects)
   end
   
   ##
