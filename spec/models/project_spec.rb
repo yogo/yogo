@@ -266,7 +266,7 @@ describe Project do
       # This is already in the test database and should be pre-populated for 
       # the above project
       persisted_model_hash = { 
-        "id" => "yogo/persisted_data/cell",
+        "id" => "yogo__persisted_datum__cell",
         "properties" => {
           "name" => {"type" => "string"}
         }
@@ -287,7 +287,7 @@ describe Project do
   
     it "should be able to delete its schemas" do
       persisted_model_hash = { 
-        "id" => "yogo/persisted_bozon/cell",
+        "id" => "yogo__persisted_bozons__cell",
         "properties" => {
           "name" => {"type" => "string"}
         }

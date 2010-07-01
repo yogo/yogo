@@ -118,12 +118,12 @@ describe "A Yogo Model" do
 
       models.each{|m| m.send(:include,Yogo::Model) }
       models.each{|m| m.properties.sort! }
-      
+
       Yogo::Sample::Author.relationships.keys.should include('yogo__books')
       Yogo::Sample::Author.relationships['yogo__books'].should be_a(DataMapper::Associations::OneToMany::Relationship)
       Yogo::Sample::Book.relationships.keys.should include('yogo__author')
       Yogo::Sample::Book.relationships['yogo__author'].should be_a(DataMapper::Associations::ManyToOne::Relationship)      
-      # debugger
+      
       book_schema.should eql(Yogo::Sample::Book.to_json_schema_hash)
       author_schema.should eql(Yogo::Sample::Author.to_json_schema_hash)
     end
