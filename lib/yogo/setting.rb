@@ -15,6 +15,8 @@ module Yogo
   class Setting
     include DataMapper::Resource  
 
+    # puts "Loading Yogo::Setting"
+
     # storage_names[:default] = 'yogo__settings'
     # storage_names[:yogo_settings_cache] = 'yogo_settings'
 
@@ -48,15 +50,7 @@ module Yogo
     def self.[](key)
       key = key.to_s if key.is_a? Symbol
       self.setup unless @@settings_setup
-      response = check_cache(key) 
-      if response.nil?
-        response = check_database(key)
-        store_cache(key, response) unless response.nil?
-      end
-
-      unless response.nil?
-        return response 
-      end
+      check_cache(key) 
     end
   
     ##
@@ -146,25 +140,6 @@ module Yogo
     def self.check_cache(key)
       @@cache[key] if @@cache.has_key?(key)
     end
-
-    ##
-    # Used to check the database for the given key
-    #
-    # @example
-    #  check_database("key_name")
-    #
-    # @param [String] key
-    #  the name of a key to check in the database
-    #
-    # @return [String or Boolean] returns the value of the key or False if there is no value
-    #
-    # @author Robbie Lamb robbie.lamb@gmail.com
-    #
-    # @api private
-    def self.check_database(key)   
-      result = repository(:default) { first(:name => key) }
-      return result.value unless result.nil?
-    end
     
     # Used to store a key-value pair in the cache
     #
@@ -223,13 +198,15 @@ module Yogo
     #
     # @api private
     def self.setup
-      begin
-        self.reset_database! unless self.storage_exists?(:default)
-        self.reset_cache!
-        @@settings_setup = true
-      rescue
-        # NOOP!
-      end unless @@settings_setup
+      if !@@settings_setup
+        begin
+          self.reset_database! unless self.storage_exists?(:default)
+          self.reset_cache!
+          @@settings_setup = true
+        rescue
+          # NOOP!
+        end 
+      end
     end
     
     # Reset the database and in memory cache to the file defaults
