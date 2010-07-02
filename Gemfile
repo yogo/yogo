@@ -15,7 +15,7 @@ gem "dm-aggregates",        "0.10.2"
 gem 'bcrypt-ruby'
 gem "dm-types",             "0.10.2", :path => "vendor/gems/dm-types-0.10.2"
 gem "dm-observer",          "0.10.2"
-gem "dm-persevere-adapter", "0.71.1", :require => nil
+gem "dm-persevere-adapter", "0.71.2", :require => nil
 gem "rails_datamapper",     "0.10.2", :require => nil
 
 # These are required so we can make it simple to interact with legacy data
