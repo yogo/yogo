@@ -32,5 +32,10 @@ The 'yogo' rake tasks manage starting, stopping, and resetting persevere for you
 
 ### Changelog
 
+0.9.3 2010-07-02
+ - Improved pagination
+ - Improved csv downloading
+ - Bumped the required dm-persevere gem version
+ 
 0.9.2 2010-06-24
  - Bumped the required dm-reflection gem version
