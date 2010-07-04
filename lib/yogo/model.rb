@@ -207,7 +207,7 @@ module Yogo
       # 
       # @api public
       def to_yogo_csv
-        FCSV.generate do |csv|
+        CSV.generate do |csv|
           row = [__send__(:yogo_id).to_s]
           row += model.usable_properties.map do |property|
             __send__(property.name).to_s

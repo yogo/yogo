@@ -156,7 +156,7 @@ describe Project do
   end
   
   it "should process a csv file" do
-    file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
+    file_name = "#{SPEC_ROOT}/models/csv/csvtest.csv"
     p = Project.create(:name => "CSV Test Project")
     p.process_csv(file_name, 'Csvtest').should be_empty
     results = p.search_models('csvtest')
@@ -168,7 +168,7 @@ describe Project do
   end
   
   it "should not process a bad csv file" do
-    file_name = "#{Rails.root}/spec/models/csv/bad_csvtest.csv"
+    file_name = "#{SPEC_ROOT}/models/csv/bad_csvtest.csv"
     p = Project.create(:name => "Bad CSV Test Project")
     errors = p.process_csv(file_name, 'Csvtest')
     errors.should_not be_empty
@@ -183,7 +183,7 @@ describe Project do
   # 4. rake spec # => FAIL! # => SO MYSTERIOUS!
   # n... rake spec # => subsequent successes (?!)
   it "should not overwrite a model that already exists" do
-    file_name = "#{Rails.root}/spec/models/csv/csvtest.csv"
+    file_name = "#{SPEC_ROOT}/models/csv/csvtest.csv"
     p = Project.create(:name => "Overwrite") 
     p.process_csv(file_name, 'Csvtest')
     results = p.search_models('csvtest')

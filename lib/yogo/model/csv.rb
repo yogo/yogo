@@ -42,7 +42,7 @@ module Yogo
       def to_csv
         self.properties.sort!
         
-        FasterCSV.generate do |csv|
+        CSV.generate do |csv|
           csv << self.properties.map{|prop| prop.name == :yogo_id ? "Yogo ID" : prop.display_name.to_s.humanize }
           csv << self.properties.map{|prop| prop.name == :yogo_id ? "Internal Type" : Yogo::Types.dm_to_human(prop.type)}
           csv << self.properties.map{|prop| prop.name == :yogo_id ? "Please don't modify" : prop.units }
@@ -63,7 +63,7 @@ module Yogo
       def to_yogo_csv
         self.properties.sort!
         
-        FasterCSV.generate do |csv|
+        CSV.generate do |csv|
           csv << ["Yogo ID"] + self.usable_properties.map{|prop| prop.display_name.to_s.humanize }
           csv << ["Internal Type"] + self.usable_properties.map{|prop| Yogo::Types.dm_to_human(prop.type)}
           csv << ["Please don't modify"] + self.usable_properties.map{|prop| prop.units }
@@ -90,7 +90,7 @@ module Yogo
       # 
       # @api public
       def load_csv_data(csv_file)
-        csv_data = FasterCSV.read(csv_file)
+        csv_data = CSV.read(csv_file)
         path = File.dirname(csv_file)
         
         errors = validate_csv_data(csv_data)

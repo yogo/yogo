@@ -15,7 +15,7 @@ gem "dm-aggregates",        "0.10.2"
 gem 'bcrypt-ruby'
 gem "dm-types",             "0.10.2", :path => "vendor/gems/dm-types-0.10.2"
 gem "dm-observer",          "0.10.2"
-gem "dm-persevere-adapter", "0.71.2", :require => nil
+gem "dm-persevere-adapter", "0.71.3", :require => nil
 gem "rails_datamapper",     "0.10.2", :require => nil
 
 # These are required so we can make it simple to interact with legacy data
@@ -42,12 +42,12 @@ else
   gem "bluecloth",            :require => nil # Required for YARD
 end
 
-gem 'ruby-debug',                  :require => nil, :group => :development unless defined?(JRUBY_VERSION)
+gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug', :require => nil, :group => :development unless defined?(JRUBY_VERSION)
 
 gem "rails-footnotes",             :group => :development
 
 group :test do
-  gem 'ruby-debug',                :require => nil unless defined?(JRUBY_VERSION)
+gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug',       :require => nil unless defined?(JRUBY_VERSION)
   gem 'rspec',                     :require => nil
   gem 'rspec-rails',               :require => 'spec/rails'
   gem 'ZenTest',                   :require => nil
@@ -70,6 +70,7 @@ group :test do
   gem "roodi",                     :require => nil
   gem "googlecharts",              :require => nil
   gem "metric_fu",                 :require => nil
+  gem "test-unit", "~>1.2" if RUBY_VERSION.include?('1.9')
 end
 
 group :cucumber do

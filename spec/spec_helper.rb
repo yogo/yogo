@@ -3,6 +3,8 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path(File.join(File.dirname(__FILE__),'..','config','boot'))
 
+SPEC_ROOT = File.expand_path(File.dirname(__FILE__))
+
 require 'rake'
 require 'rake/rdoctask'
 require 'rake/testtask'

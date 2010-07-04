@@ -19,7 +19,8 @@ describe 'Yogo CSV Module' do
       property :private_field, String
     end
 
-    CsvExampleModel = model if !Object.const_defined?(:CsvExampleModel)
+    Object.const_set(:CsvExampleModel, model) if !Object.const_defined?(:CsvExampleModel)
+    # CsvExampleModel = model if !Object.const_defined?(:CsvExampleModel)
     CsvExampleModel.auto_migrate!
     # CsvExampleModel.send(:include, Yogo::Model)
     
@@ -56,7 +57,7 @@ describe 'Yogo CSV Module' do
     it "should return valid CSV model headers when asked" do
       csv = CsvExampleModel.to_csv
       csv.should be_kind_of(String)
-      result = FasterCSV.parse(csv)
+      result = CSV.parse(csv)
       result.length.should eql(3)
       result[0].length.should eql(CsvExampleModel.properties.length)
     end
@@ -68,7 +69,7 @@ describe 'Yogo CSV Module' do
     it "should return valid yogo CSV model headers when asked" do
       csv = CsvExampleModel.to_yogo_csv
       csv.should be_kind_of(String)
-      result = FasterCSV.parse(csv)
+      result = CSV.parse(csv)
       result.length.should eql(3)
       result[0].length.should eql(CsvExampleModel.usable_properties.length + 1)
     end
@@ -85,6 +86,7 @@ describe 'Yogo CSV Module' do
       result = CsvExampleModel.load_csv_data(@csv_data)
       result.should be_empty
       result.should_not be_false
+      CsvExampleModel.count.should == 3
     end
     
     it "should not validate invalid csv data" do
@@ -92,12 +94,6 @@ describe 'Yogo CSV Module' do
       result.should be_kind_of(Array)
       result.should_not be_empty
       result.first.should eql("The datatype bozon for the ID column is invalid.")
-    end
-    
-    it "should load data into a model" do
-      result = CsvExampleModel.load_csv_data(@csv_data)
-      result.should be_empty
-      CsvExampleModel.count.should == 3
     end
     
     it "should not load invalid data into a model" do
