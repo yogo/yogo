@@ -81,7 +81,7 @@ class Yogo::UsersController < ApplicationController
     @groups.each{|g| g.users.clear }
 
     params[:groups].each_pair do |group_id, user_ids|
-      @groups.get(group_id).users << User.get(user_ids)
+      @groups.get(group_id).users = User.all(:id => user_ids)
     end
     
     if @groups.save
