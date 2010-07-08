@@ -193,24 +193,6 @@ class Yogo::ModelsController < ApplicationController
     end
   end
   
-  ##
-  # Reloads the models from our special backup Hopefully temporary
-  # 
-  # @example
-  #   post /yogo_model/1/refresh_attributes
-  # 
-  # @return redirects to originating page
-  # 
-  # @author lamb
-  # @api public
-  def refresh_attributes
-    @project.reload_schemas_from_backup!
-    
-    respond_to do |format|
-      format.html { redirect_to(:back) }
-    end
-  end
-  
   private
   
   ##

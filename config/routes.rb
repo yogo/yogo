@@ -19,9 +19,7 @@ ActionController::Routing::Routes.draw do |map|
                       :member => { :download_asset => :get, :show_asset => :get }
                           
     # /projects/:project_id/yogo_models/:model_name
-    project.resources :yogo_models, :controller => 'yogo/models',
-                      :collection => { :refresh_attributes => :post },
-                      :member => { :list_attributes => :get }
+    project.resources :yogo_models, :controller => 'yogo/models'
                       
     project.resources :users, :controller => 'yogo/users', 
                               :only => [:index, :new, :create], 
