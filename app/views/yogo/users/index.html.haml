@@ -1,5 +1,6 @@
 
 #content-block
+  = link_to("Create a new User", new_project_user_path(@project))
   - form_tag(update_user_groups_project_users_path, :method => 'post', :id => 'project-user-groups-form') do
     %table
       %thead

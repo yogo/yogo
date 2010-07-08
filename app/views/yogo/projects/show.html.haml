@@ -4,7 +4,9 @@
   = link_to_edit_project_models(@project, "Edit Datasets", :class => 'button-link')
   = link_to("Delete Project", project_path(@project), 
     :method => :delete, :class => 'button-link', :confirm => "There is no undo.\n Continue?" ) 
-  = link_to("Import CSV", import_csv_path(@project), :class => 'button-link') 
+  = link_to("Import CSV", import_csv_path(@project), :class => 'button-link')
+  - if current_user.has_permission?(:edit_project, @project)
+    = link_to("Manage Users", project_users_path(@project), :class => 'button-link')
 
 //= render(:partial => 'layouts/sidebar') %>
 

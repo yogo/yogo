@@ -8,6 +8,7 @@
       <%= @project.name %>
     </div>
 
+     <%= f.check_box(:is_public, :label => 'Public ?') %>
      <%= f.text_area(:description, :label => "Project Description: ") %>
 
     <div class='form-element'>
