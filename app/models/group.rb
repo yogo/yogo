@@ -19,7 +19,7 @@ class Group
   belongs_to :project, :required => false
   
   SYSTEM_ACTIONS = [ :create_projects ]
-  PROJECT_ACTIONS = [ :edit_project, :edit_model_descriptions, :edit_model_data, :delete_model_data ]
+  PROJECT_ACTIONS = [ :edit_project, :edit_model_descriptions, :edit_model_data, :delete_model_data, :view_project ]
   AVAILABLE_ACTIONS = SYSTEM_ACTIONS + PROJECT_ACTIONS
   
 
