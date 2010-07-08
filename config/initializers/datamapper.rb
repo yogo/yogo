@@ -35,7 +35,7 @@ if Object.const_defined?(:DataObjects)
   DataObjects::Postgres.logger  = Rails.logger if DataObjects.const_defined?(:Postgres)
   DataObjects::Sqlserver.logger = Rails.logger if DataObjects.const_defined?(:Sqlserver)
   DataObjects::Mysql.logger     = Rails.logger if DataObjects.const_defined?(:Mysql)
-  DataObjects::Sqlite.logger    = Rails.logger if DataObjects.const_defined?(:Sqlite)
+  DataObjects::Sqlite3.logger    = Rails.logger if DataObjects.const_defined?(:Sqlite3)
 end
 
 # Load the project model and migrate it if needed.
