@@ -99,22 +99,24 @@ describe Project do
     p = Project.create(:name => 'test project')
 
     group_names = Project.first.groups.map(&:name)
+
     group_names.should include('Manager')
     group_names.should include('Edit Project')
     group_names.should include('Edit Models')
     group_names.should include('Edit Data')
     group_names.should include('Delete Data')
-    group_names.length.should eql 5
+    group_names.should include('View Project')
+    group_names.length.should eql Group::PROJECT_ACTIONS.length+1
     p.destroy
     Group.all.destroy
   end
   
-  it "should create 5 groups on save" do
+  it "should create #{Group::PROJECT_ACTIONS.length} groups on save" do
     p = Project.new(:name => 'a test project')
     p.save
     
     group_names = Project.first.groups.map(&:name)
-    group_names.length.should eql 5
+    group_names.length.should eql Group::PROJECT_ACTIONS.length+1
     p.destroy
     Group.all.destroy
   end

@@ -29,8 +29,8 @@ describe Group do
     g = standard_group(:name => 'test') # This creates 1 group
     g.save
 
-    Group.count.should eql 6 # 5 + 1 = 6 total groups
-    Group.count(:project => p).should eql 5
+    Group.count.should eql(Group::PROJECT_ACTIONS.length + 2)
+    Group.count(:project => p).should eql 6
     
     Group.all(:project => nil).length.should eql 1
   end
