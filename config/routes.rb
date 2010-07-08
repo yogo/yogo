@@ -23,7 +23,9 @@ ActionController::Routing::Routes.draw do |map|
                       :collection => { :refresh_attributes => :post },
                       :member => { :list_attributes => :get }
                       
-    project.resources :users, :controller => 'yogo/users'
+    project.resources :users, :controller => 'yogo/users', 
+                              :only => [:index, :new, :create], 
+                              :collection => { :update_user_groups => :post }
     
   end
   map.resources :settings

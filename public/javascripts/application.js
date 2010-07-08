@@ -37,6 +37,15 @@ $(document).ready(function(){
   // Tooltip dialogs
   $('.tooltip').dialog({autoOpen:false, width:600});
 
+  // Toggle elements on the project-user-groups page
+  $('#project-user-groups-form :checkbox').bind('change', function(e){
+    if ($(this).attr('checked')) {
+      $(this).next('label').text('In Group');
+    } else {
+      $(this).next('label').text('Not In Group');
+    };
+    
+  })
 });
 
 function check_navigation_element_state(element){

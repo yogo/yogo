@@ -1,18 +1,21 @@
 
 #content-block
-  %table
-    %thead
-      %tr
-        %th User Name
-        - for group in @groups
-          %th= group.name
-    %tbody
-      - for user in @users
+  - form_tag(update_user_groups_project_users_path, :method => 'post', :id => 'project-user-groups-form') do
+    %table
+      %thead
         %tr
-          %td= user.login
-          -for group in @groups
-            %td
-              -if user.groups.include?(group)
-                In Group
-              -else
-                NOt in group
+          %th User Name
+          - for group in @groups
+            %th= group.name
+      %tbody
+        - for user in @users
+          %tr
+            %td= user.login
+            -for group in @groups
+              %td
+                = check_box_tag("groups[#{group.id}][]", user.id, user.groups.include?(group), :id => "user_#{user.id}_group_#{group.id}")
+                -if user.groups.include?(group)
+                  = label_tag("user_#{user.id}_group_#{group.id}", 'In Group')
+                -else
+                  = label_tag("user_#{user.id}_group_#{group.id}", 'Not In Group')
+    =submit_tag

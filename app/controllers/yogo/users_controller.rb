@@ -11,21 +11,88 @@ class Yogo::UsersController < ApplicationController
   before_filter :find_parent_items, :check_project_authorization
   
   def index
-    # This first way is preferred, but the second way works with the current persevere
-    # @users = @groups.collect{|g| g.users }.flatten.uniq
-    @users = @groups.collect{ |g| User.all(:groups => g) }.flatten.uniq
+    # Just get all the users. This should work for now
+    @users = User.all
 
     respond_to do |format|
       format.html
     end
   end
   
-  def show
+  ##
+  # Create a new user in the system
+  #
+  # @example
+  #   get /project/:project_id/users/new
+  #
+  # @return [HTML]
+  #  html response
+  #
+  # @api public
+  def new
+    @user = User.new
     
+    respond_to do |format|
+      format.html
+    end
   end
   
-  def update
+  ##
+  # Creates a new  user in the system
+  #
+  # @example
+  #   post /project/:project_id/users/ {:user => {:login => 'name', :password => 'pass', :password_confirmation => 'pass'}
+  #
+  # @return [HTML]
+  #  html response
+  #
+  # @api public
+  def create
+    params[:user].delete(:admin)
+    params[:user].delete(:create_projects)
     
+    @user = User.new(params[:user])
+
+    respond_to do |format|
+      if @user.valid?
+        @user.save
+        flash[:notice] = "User created"
+        format.html { redirect_to(project_users_url(@project)) }
+      else
+        flash[:error] = "User was unable to be created"
+        format.html { render(:action => 'new') }
+      end
+    end
+  end
+  
+  ##
+  # Creates a new  user in the system
+  #
+  # @example
+  #   post /users/ {:user => {:login => 'name', :password => 'pass', :password_confirmation => 'pass'}
+  #
+  # @return [HTML]
+  #  html response
+  #
+  # @todo Make this less painful with some ajax probably
+  # 
+  # @api public
+  def update_user_groups
+    @groups.each{|g| g.users.clear }
+
+    params[:groups].each_pair do |group_id, user_ids|
+      @groups.get(group_id).users << User.get(user_ids)
+    end
+    
+    if @groups.save
+      flash[:notice] = "Groups updated for the users"
+    else
+      flash[:error] = "Something strange happened. I'm sorry, the groups weren't updated with the users."
+    end
+    
+    respond_to do |format|
+      format.html { redirect_to(project_users_url(@project)) }
+    end
   end
   
   private
