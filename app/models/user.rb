@@ -215,19 +215,11 @@ class User
   # 
   # @api public
   def admin=(is_admin)
-    debugger
     admin_group = Group.first(:project => nil, :admin => true)
-    if is_admin == true || !(is_admin == 0 || is_admin == '0')
-      puts 'Pushing!'
-      self.groups.push(admin_group)
+    if is_admin == true || is_admin == 1 || is_admin == '1'
+      self.groups << admin_group unless self.groups.include?(admin_group)
     else
-      # should work when it's all working.
-      self.groups.delete(admin_group)
-      # if self.groups.include?(admin_group)
-      #    groups = self.groups
-      #    groups.delete(admin_group)
-      #    self.groups.replace(groups)
-      #  end
+      self.groups.delete(admin_group) if self.groups.include?(admin_group)
     end
   end
   
@@ -275,10 +267,11 @@ class User
   # @api public
   def create_projects=(can_create)
     group = Group.all(:project => nil, :admin => false).select{|g| g.has_permission?(:create_projects)}.first
-    if can_create == true || !(can_create == 0 || can_create == '0')
-      self.groups.push(group)
+    debugger
+    if can_create == true || can_create == 1 || can_create == '1'
+      self.groups << group unless self.groups.include?(group)
     else
-      self.groups.delete(group)
+      self.groups.delete(group) if self.groups.include?(group)
     end
   end
   

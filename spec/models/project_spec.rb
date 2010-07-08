@@ -17,9 +17,9 @@ end
 describe Project do
   
   before(:each) do
-    Project.auto_migrate!
-    Group.auto_migrate!
-    User.auto_migrate!
+    Project.all.destroy!
+    Group.all.destroy!
+    User.all.destroy!
     User.current = nil
   end
   

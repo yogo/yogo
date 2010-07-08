@@ -32,6 +32,7 @@ describe Yogo::UsersController do
     describe "GET /" do
       it "should description" do
         get(:index, :project_id => "42")
+        assigns[:users].should_not be_nil
         response.should be_success
       end
     end

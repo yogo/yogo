@@ -34,7 +34,6 @@ describe UsersController do
       request.env["warden"].stub!(:logout).and_return(true)
     end
 
-
     it "should allow users that belong to an admin group" do
       get :index
       response.should be_success
@@ -80,6 +79,7 @@ describe UsersController do
            :user => {:login => 'blah'})
       assigns[:user].errors.should_not be_empty
       response.should be_success
+      response.should render_template('new')
     end
 
     it "should be able to update a user" do
@@ -94,7 +94,33 @@ describe UsersController do
 
       response.should redirect_to(user_url(:id => '42'))
     end
+    
+    it "should not update a user with invalid data" do
+      mock_user = mock_model(User)
+      User.stub!(:get).with("42").and_return(mock_user)
+      mock_user.stub!(:attributes=)
+      mock_user.stub!(:valid?).and_return(false)
 
+      mock_user.stub!(:to_param).and_return('42')
+      
+      put(:update, :id => '42',  :user => {:id => '42', :login => 'blah' })
+
+      assigns[:user].should eql mock_user
+      response.should render_template('edit')
+    end
+    
+    it "should not update a password" do
+      u = standard_user
+      u.save
+      User.stub!(:get).with("42").and_return(u)
+      u.should_not_receive(:password=)
+      u.should_not_receive(:password_confirmation=)
+      u.stub!(:to_param).and_return('42')
+      
+      put(:update, :id => '42',  :user => {:id => '42', :login => 'blah', :password => 'blah', :password_confirmation => 'blah' })
+      
+      response.should(redirect_to(user_url(:id => 42)))
+    end
 
     it "should be able to destroy a user" do
       mock_user = mock_model(User)
