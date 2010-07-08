@@ -67,7 +67,23 @@ class Project
   def self.private(opts = {})
     current_user = User.current
     return [] if current_user.nil?
-    all( opts.merge( :is_public => false ) ).select{|p| current_user.is_in_project?(p) }
+    # all( opts.merge( :is_public => false ) ).select{|p| current_user.is_in_project?(p) }
+    current_user.groups.projects
+  end
+  
+  ##
+  # Returns all projects the current user has access to
+  # 
+  # @example
+  #   Project.available
+  # 
+  # @return [DataMapper::Collection or Array]
+  # 
+  # @author lamb
+  # 
+  # @api public
+  def self.available(opts = {})
+    (self.public + self.private).all(opts)
   end
   
   ##

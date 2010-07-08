@@ -21,7 +21,7 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def index
-    @projects = Project.public.paginate(:page => params[:page], :per_page => 5)
+    @projects = Project.available.paginate(:page => params[:page], :per_page => 5)
     
      respond_to do |format|
         if @projects.empty?
@@ -48,7 +48,7 @@ class Yogo::ProjectsController < ApplicationController
     search_scope = params[:search_scope]
     search_term = params[:search_term]
     if search_scope == 'everywhere' || params[:model_name].blank?
-      @projects = Project.public.search(search_term)
+      @projects = Project.available.search(search_term)
 
       @proj_models = []
       Project.public.each do |project|
@@ -56,7 +56,7 @@ class Yogo::ProjectsController < ApplicationController
       end
 
       @proj_models_data = []
-      Project.public.each do |project|
+      Project.available.each do |project|
         project.models.each do |model|
           count = model.search(search_term).count
           @proj_models_data << [project, model, count] if count > 0
