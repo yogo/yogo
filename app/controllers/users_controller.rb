@@ -38,24 +38,6 @@ class UsersController < ApplicationController
   end
 
   ##
-  # Retrieves a user in the system
-  #
-  # @example
-  #   get /users/42
-  #
-  # @return [HTML]
-  #  html response
-  #
-  # @api public
-  def show
-    @user = User.get(params[:id])
-    
-    respond_to do |format|
-      format.html
-    end
-  end
-
-  ##
   # Create a new user in the system
   #
   # @example
@@ -129,8 +111,12 @@ class UsersController < ApplicationController
   def update
     @user = User.get(params[:id])
 
+    # Remove these if they were sent.
+    params[:user].delete(:password)
+    params[:user].delete(:password_confirmation)
+    
     @user.attributes = params[:user]
-
+    
     respond_to do |format|
       if @user.valid?
         @user.save
