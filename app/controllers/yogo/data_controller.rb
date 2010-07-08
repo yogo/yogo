@@ -321,10 +321,10 @@ class Yogo::DataController < ApplicationController
       if ['index', 'show', 'search', 'download_asset', 'show_asset'].include?(action)
         raise AuthorizationError unless @project.is_public? || (logged_in? && current_user.is_in_project?(@project))
       else
-        action = :edit_model_data if ['new', 'create' 'edit', 'update'].include?(action)
-        action = :delete_model_data if ['destroy'].include?(action)
+        permission = :edit_model_data if ["new", 'create', 'edit', 'update'].include?(action)
+        permission = :delete_model_data if ['destroy'].include?(action)
         raise AuthenticationError if !logged_in?
-        raise AuthorizationError  if !current_user.has_permission?(action,@project)
+        raise AuthorizationError  if !current_user.has_permission?(permission,@project)
       end
     end
   end
