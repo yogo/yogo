@@ -1,4 +1,5 @@
 #users
+  #create-user-link= link_to("Create a new User", new_user_path)
   %table
     %thead
       %tr
@@ -13,3 +14,5 @@
           %td= link_to('View', user_path(user))
           %td= link_to('Edit', edit_user_path(user))
           %td= link_to('Delete', user_path(user), :method=>:delete, :confirm => 'Are you sure?')
+          
+#pagination-links= pagination_links(User, params[:page], 25)
