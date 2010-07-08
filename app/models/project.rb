@@ -59,16 +59,16 @@ class Project
   # @example
   #   Project.private
   # 
-  # @return [DataMapper::Collection or Array]
+  # @return [DataMapper::Collection or nil]
   # 
   # @author lamb
   # 
   # @api public
   def self.private(opts = {})
     current_user = User.current
-    return [] if current_user.nil?
+    return nil if current_user.nil?
     # all( opts.merge( :is_public => false ) ).select{|p| current_user.is_in_project?(p) }
-    current_user.groups.projects
+    current_user.groups.projects(opts)
   end
   
   ##
@@ -83,7 +83,12 @@ class Project
   # 
   # @api public
   def self.available(opts = {})
-    (self.public + self.private).all(opts)
+    private_projects = self.private
+    if private_projects == nil
+      self.public(opts)
+    else
+      (self.public + self.private).all(opts)
+    end
   end
   
   ##
