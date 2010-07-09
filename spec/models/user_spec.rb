@@ -112,16 +112,16 @@ describe User do
     
     User.get(u1.id).groups.length.should eql 1
 
-    # u = User.get(u2.id)
-    # gr = Group.first
-    # u.groups << gr
-    # u.save
+    u = User.get(u2.id)
+    gr = Group.first
+    u.groups << gr
+    u.save
     
     u3 = standard_user(:login => 'thrid')
     u3.groups << g
     u3.save
 
-    Group.first.users.length.should eql 2
+    Group.first.users.length.should eql 3
     Group.first.users.first.id.should eql u1.id
     Group.first.users.first.login.should eql u1.login
     
@@ -129,6 +129,8 @@ describe User do
     # Group.first.users[1].login.should eql u2.login
     
     User.get(u1.id).groups.length.should eql 1
+    User.get(u2.id).groups.length.should eql 1
+    User.get(u3.id).groups.length.should eql 1
   end
 
 end
