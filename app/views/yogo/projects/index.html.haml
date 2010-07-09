@@ -29,7 +29,7 @@
         - if project.models.empty?
           %p 
             There are no datasets associated with this project.<br />
-            = link_to('Edit Experimental Design', kefed_editor_project_url(project))
+            = link_to_edit_project_models(project, "Add Data Models", :class => 'button-link')
         - else
           %table
             %thead
