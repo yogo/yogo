@@ -2,6 +2,8 @@
 #content-actions
   .content-action-links
     = link_to("Create a Project", start_wizard_path, :class => 'big-button-link')
+    = link_to("Load Example Project", loadexample_projects_path, 
+      :class => 'button-link', :method => :post)
   .content-pagination-links= pagination_links(Project, params[:page], 5) 
 
 #content-block
