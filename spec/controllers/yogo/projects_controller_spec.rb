@@ -6,6 +6,16 @@ describe Yogo::ProjectsController do
     @mock_project ||= mock_model(Project, stubs)
   end
   
+  def mock_groups(stubs={})
+    @mock_groups ||= begin
+      mg = [ mock_model(Group, stubs),
+             mock_model(Group, stubs)
+           ]
+      mg.stub(:users).and_return([])
+      mg
+    end
+  end
+  
   # def mock_models(proj)
   #   [ build_reflected_model('Vanilla',    proj),
   #     build_reflected_model('Chocolate',  proj),
@@ -294,6 +304,9 @@ describe Yogo::ProjectsController do
         it "should allow a user in a project group to view a private project" do
           @u.stub!(:is_in_project?).and_return(true)
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_public? => false))
+          mock_project.stub!(:groups).and_return(mock_groups)
+          mock_groups.stub!(:users).and_return(['not empty'])
+
           
           get :show, :id => "37"
           response.should be_success
@@ -305,6 +318,8 @@ describe Yogo::ProjectsController do
         it "should not allow a user without group priviliges to edit a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_public? => false))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(false)
+          mock_project.stub!(:groups).and_return(mock_groups)
+          mock_groups.stub!(:users).and_return(['not empty'])
           
           get :edit, :id => "37"
           
@@ -315,6 +330,8 @@ describe Yogo::ProjectsController do
         it "should allow a user with group priviliges to edit a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_public? => false))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(true)
+          mock_project.stub!(:groups).and_return(mock_groups)
+          mock_groups.stub!(:users).and_return(['not empty'])
           
           get :edit, :id => "37"
           
@@ -340,6 +357,9 @@ describe Yogo::ProjectsController do
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(true)
           mock_project.should_receive(:attributes=).with({'these' => 'params'})
           
+          mock_project.stub!(:groups).and_return(mock_groups)
+          mock_groups.stub!(:users).and_return(['not empty'])
+          
           put :update, :id => "37", :project => {:name => 'blah', 'these' => 'params'}
           
           response.should be_redirect
@@ -360,6 +380,8 @@ describe Yogo::ProjectsController do
         it "should allow a user without group priviliges to delete a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :destroy => true, :name => 'a dead project'))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(true)
+          mock_project.stub!(:groups).and_return(mock_groups)
+          mock_groups.stub!(:users).and_return(['not empty'])
           
           delete :destroy, :id => "37"
           
