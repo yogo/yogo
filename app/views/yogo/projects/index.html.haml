@@ -15,13 +15,13 @@
           = link_to_edit_project_models(project, "Edit Data Models", :class => 'button-link')
           = link_to("Import Spreadsheet", import_csv_path(project), :class => 'button-link')        
         %p.rbox.tight
-          - if project.description
+          - if project.description && project.description.length > 0
             %strong= link_to('Project Description', edit_project_path(project), :title => 'Edit Project Description')
             %br/
             %em= tooltip(project.description, 
                     project.name + ' Description', 200)
           - else
-            %em= link_to('[Create Project Description]', edit_project_path(project))
+            %em= link_to('[Add Project Description]', edit_project_path(project))
           
       .project-datasets
         - if project.models.empty?
