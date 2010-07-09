@@ -25,7 +25,9 @@
 
   / Header (including optional menus)
   #header
-    #logo Yogo Data Management Toolkit (<i>Beta</i>)
+    #logo 
+      Yogo Data Management Toolkit 
+      %span.smaller.emphasis(Beta)
     - unless Yogo::Setting['local_only']
       #login-links
         - if logged_in?
