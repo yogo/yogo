@@ -178,7 +178,7 @@ class Yogo::ProjectsController < ApplicationController
     
     if !Yogo::Setting[:local_only]
       raise AuthenticationError unless logged_in? 
-      raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
+      raise AuthorizationError  unless @project.groups.users.empty? || current_user.has_permission?(:edit_project,@project)
     end
     
     respond_to do |format|
