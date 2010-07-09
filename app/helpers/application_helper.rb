@@ -219,6 +219,6 @@ module ApplicationHelper
   # 
   # @api public
   def link_to_edit_project_models(project, link_text, options={})
-    link_to(link_text, "/model_editor.html#projects/#{project.id}&from=#{request.env['PATH_INFO']}", options)
+    link_to(link_text, "/model_editor.html#projects/#{project.id}&from=#{project_path(project)}", options)
   end
 end
