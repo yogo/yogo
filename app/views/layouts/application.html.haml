@@ -28,12 +28,13 @@
     #logo= image_tag('header.png')
     #menu.rbox
       = render(:partial => 'layouts/menu_links') unless @no_menu
-      #login-links
-        - if logged_in?
-          = current_user.login
-          = link_to("logout", logout_path)
-        - else
-          = link_to("Login", login_path)
+      - unless Yogo::Setting['local_only']
+        #login-links
+          - if logged_in?
+            = current_user.login
+            = link_to("logout", logout_path)
+          - else
+            = link_to("Login", login_path)
       = render(:partial => 'layouts/search') unless @no_search
   =clear_break 
   /Grid Container 
