@@ -1,9 +1,13 @@
-%div.small-centered-content.boxed
-  -form_for(@user, :url => project_users_path(@project), :method => 'post', :builder => YogoFormBuilder) do |f|
-    = f.text_field(:login, :label => "Login:" )
-    = f.text_field(:first_name)
-    = f.text_field(:last_name)
-    - if @user.new?
-      = f.password_field(:password, :label => "Password: ")
-      = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
-    = f.submit
+.extra-small-centered
+  %h1#content-title Add New User
+  = clear_break
+  .rbox.dashed
+    #user-form
+      -form_for(@user, :url => project_users_path(@project), :method => 'post', :builder => YogoFormBuilder) do |f|
+        = f.text_field(:login, :label => "Login:" )
+        = f.text_field(:first_name)
+        = f.text_field(:last_name)
+        - if @user.new?
+          = f.password_field(:password, :label => "Password: ")
+          = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
+        = f.submit
