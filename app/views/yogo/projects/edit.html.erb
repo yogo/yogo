@@ -1,5 +1,9 @@
-<div class='small-centered-content boxed'>
-  <% form_for(@project, :builder => YogoFormBuilder) do |f| %>
+<div class='small-centered'>
+  <h1 id='content-title'>Update Project Description</h1>
+</div>
+
+<div class='small-centered boxed'>
+  <div class='rbox dashed'>  <% form_for(@project, :builder => YogoFormBuilder) do |f| %>
   
     <div class='form-element'>
       <div class='box' >
@@ -17,4 +21,5 @@
       <%= link_to('Cancel', projects_path, :class => 'cancel') %>
     </div>
   <% end %>
+  </div>
 </div>
