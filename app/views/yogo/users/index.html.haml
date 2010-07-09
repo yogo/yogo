@@ -13,10 +13,6 @@
           %tr
             %td= user.login
             -for group in @groups
-              %td
+              %td.text-center
                 = check_box_tag("groups[#{group.id}][]", user.id, user.groups.include?(group), :id => "user_#{user.id}_group_#{group.id}")
-                -if user.groups.include?(group)
-                  = label_tag("user_#{user.id}_group_#{group.id}", 'In Group')
-                -else
-                  = label_tag("user_#{user.id}_group_#{group.id}", 'Not In Group')
     =submit_tag
