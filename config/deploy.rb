@@ -55,13 +55,15 @@ end
 
 namespace :db do
   task :setup do
-    run "mkdir -p #{deploy_to}#{shared_dir}/database/persvr"
-    run "mkdir -p #{deploy_to}#{shared_dir}/database/persevere"
+    run "mkdir -p #{deploy_to}#{shared_dir}/db/persvr"
+    run "mkdir -p #{deploy_to}#{shared_dir}/db/sqlite3"
+    run "mkdir -p #{deploy_to}#{shared_dir}/vendor/persevere"
   end
   
   task :symlink do
-    run "ln -nfs #{deploy_to}#{shared_dir}/database/persvr #{release_path}/db/persvr"
-    run "ln -nfs #{deploy_to}#{shared_dir}/database/persevere #{release_path}/vendor/persevere"
+    run "ln -nfs #{deploy_to}#{shared_dir}/db/persvr #{release_path}/db/persvr"
+    run "ln -nfs #{deploy_to}#{shared_dir}/db/sqlite3 #{release_path}/db/sqlite3"
+    run "ln -nfs #{deploy_to}#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
   end
 end
 after "deploy:setup",       "db:setup"
@@ -104,21 +106,21 @@ namespace :persvr do
   task :start do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production'")
   end
   
   desc "Stop Persevere on the server"
   task :stop do
     puts '************************* This takes me a long time sometimes *************************'
     puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production'")
   end
   
   task :drop do
-    run("bash -c 'cd #{current_path} && rake persvr:drop PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake persvr:drop PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production'")
   end
   
   task :version do
-    run("bash -c 'cd #{current_path} && rake persvr:version PERSEVERE_HOME=#{deploy_to}#{shared_dir}/database/persevere RAILS_ENV=production'")
+    run("bash -c 'cd #{current_path} && rake persvr:version PERSEVERE_HOME=#{deploy_to}#{shared_dir}/vendor/persevere RAILS_ENV=production'")
   end
 end
