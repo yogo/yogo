@@ -158,6 +158,8 @@ body
     padding: 1.5em
     &.happy
       background-color: #EFE
+    &.shady
+      background-color: #DDD
     &.tight
       padding: .5em
     &.dashed
@@ -243,6 +245,8 @@ body.bp
       margin-top: 0
     #content-block
       +column($blueprint_grid_columns - 2)
+    #user-session-login
+      margin-left: 7em
     // No Project Index
     .description-column, .title-column
       h3
@@ -349,6 +353,11 @@ body.bp
       .ui-tabs .ui-tabs-panel 
         padding: 0px
     // centered content containers
+    .extra-small-centered
+      +prepend(6)
+      +column(10)
+      +append(6)
+      +last
     .small-centered
       +prepend(4)
       +column(14)
