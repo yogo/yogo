@@ -18,8 +18,7 @@ class ApplicationController < ActionController::Base
   
   # Set the current user for the models to use.
   before_filter do |c|
-    # TODO: This is a hack until we are on rspec 2.0 and rails 3
-    User.current = c.current_user # unless Rails.env == 'test'
+    User.current = c.current_user
   end
 
   # include all helpers, all the time  
