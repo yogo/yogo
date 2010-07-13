@@ -39,8 +39,8 @@ describe User do
     lambda do
       u2 = standard_user
 
-      u2.should_not be_valid    
-      u2.errors.should have(1).error
+      u2.should_not be_valid
+      u2.errors.keys.should eql 1
       u2.errors.should have_key(:login)
       u2.save
     end.should_not change(User, :count)

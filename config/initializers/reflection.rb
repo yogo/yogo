@@ -9,10 +9,6 @@
 
 models = []
 
-# Hack, Kludge, Requisite ugly code.
-Project.first
-Yogo::Setting.first
-
 # Reflect Yogo data into memory
 models = DataMapper::Reflection.reflect(:yogo)
 

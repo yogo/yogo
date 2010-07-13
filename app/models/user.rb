@@ -269,7 +269,7 @@ class User
   # @api public
   def create_projects=(can_create)
     group = Group.all(:project => nil, :admin => false).select{|g| g.has_permission?(:create_projects)}.first
-    debugger
+    
     if can_create == true || can_create == 1 || can_create == '1'
       self.groups << group unless self.groups.include?(group)
     else

@@ -314,7 +314,6 @@ describe Project do
     group = p.groups.first(:name => 'owner')
     group.users << u
     group.save
-    debugger
   end
   
   
