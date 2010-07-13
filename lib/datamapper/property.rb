@@ -71,7 +71,7 @@ module DataMapper
     # @see http://rdoc.info/projects/datamapper/dm-core
     # 
     # @api semipublic
-    def initialize(model, name, type, options = { })
+    def initialize(model, name, options={}, type = nil)
       options.delete(:yogo_file)
       options.delete(:yogo_image)
       
@@ -94,7 +94,7 @@ module DataMapper
       
       name = (self.prefix + self.separator + display_name).to_sym
       
-      original_initialize(model, name, type, options)
+      original_initialize(model, name, options, type)
     end
 
     # Compairson method for properties based on the position
