@@ -83,6 +83,8 @@ class Project
   # 
   # @api public
   def self.available(opts = {})
+    return self.all(opts) if Yogo::Setting[:local_only]
+    # else
     private_projects = self.private
     if private_projects == nil
       self.public(opts)
