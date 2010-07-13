@@ -2,11 +2,11 @@
 source      "http://rubygems.org"
 
 # Required core gems
-gem "rails",                "2.3.8", :require => nil
+gem "rails",                "2.3.8"
 gem "rake",                          :require => nil
 gem "dm-core",              "1.0"
 
-gem "dm-reflection",        "0.11.2", :path => "~/Projects/yogo/dm-reflection"#:git => "git://github.com/yogo/dm-reflection.git"
+gem "dm-reflection",        "0.11.2", :git => "git://github.com/yogo/dm-reflection.git", :branch => 'topic/dm1.0'
 gem "dm-timestamps",        "1.0"
 gem "dm-validations",       "1.0"
 gem "dm-is-nested_set",     "1.0"
@@ -16,7 +16,7 @@ gem "dm-migrations"
 gem 'bcrypt-ruby'
 gem "dm-types",             "1.0" #, :path => "vendor/gems/dm-types-0.10.2"
 gem "dm-observer",          "1.0"
-gem "dm-persevere-adapter", "0.71.4", :require => nil, :path => "~/Projects/yogo/dm-persevere-adapter" # This should point to a dm1.0 branch
+gem "dm-persevere-adapter", "0.71.4", :require => nil, :git => "git://github.com/yogo/dm-persevere-adapter.git", :branch => 'ryan/yogo-integration' # This should point to a dm1.0 branch
 # gem "rails_datamapper", :require => nil #,     "1.0" #, :require => nil
 
 # These are required so we can make it simple to interact with legacy data

@@ -107,7 +107,7 @@ class Project
   # @api public
   #
   def namespace
-    Extlib::Inflection.classify(path)
+    path.classify
   end
   
   ##
