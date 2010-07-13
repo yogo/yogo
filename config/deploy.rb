@@ -5,7 +5,7 @@ set :scm, :git
 set :repository,  "git://github.com/yogo/yogo.git"
 
 
-set :branch, "master"
+set :branch, "stable"
 set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
 
