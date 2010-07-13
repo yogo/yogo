@@ -42,23 +42,23 @@ describe Yogo::ProjectsController do
 
       it "assigns all projects as @projects" do
         projects = [mock_project]
-        Project.should_receive(:public).and_return(projects)
+        Project.should_receive(:available).and_return(projects)
         projects.should_receive(:paginate).and_return(projects)
         
         get :index
         
-        assigns[:projects].should equal(projects)
+        assigns[:projects].should eql(projects)
         response.should render_template('index')
       end
       
       it "should show the 'no_project' page when there are no projects" do
         projects = []
-        Project.should_receive(:public).and_return(projects)
+        Project.should_receive(:available).and_return(projects)
         projects.should_receive(:paginate).and_return(projects)
         
         get :index
         
-        assigns[:projects].should equal(projects)
+        assigns[:projects].should eql(projects)
         response.should render_template('no_projects')
       end
   
@@ -68,7 +68,7 @@ describe Yogo::ProjectsController do
       it "assigns the requested project as @project" do
         Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_public? => true))
         get :show, :id => "37"
-        assigns[:project].should equal(mock_project)
+        assigns[:project].should eql(mock_project)
         response.should be_success
         response.should_not be_redirect
       end
@@ -87,7 +87,7 @@ describe Yogo::ProjectsController do
       it "assigns the requested project as @project" do
         Project.stub!(:get).with("37").and_return(mock_project)
         get :edit, :id => "37"
-        assigns[:project].should equal(mock_project)
+        assigns[:project].should eql(mock_project)
       end
     end
   
