@@ -22,9 +22,6 @@ module Yogo
       base.send(:extend, ModelEditor)
       base.class_eval do
 
-        after_class_method :auto_migrate!, :backup_schema!
-        after_class_method :auto_upgrade!, :backup_schema!
-
         validates_present :change_summary, :if => :require_change_summary?
 
         base.properties.each do |property|
@@ -135,21 +132,6 @@ module Yogo
       # @api public
       def to_param
         self.name.demodulize
-      end
-      
-      ##
-      # Backup the schema into our special table
-      # @example
-      #   model.backup_schema!
-      # 
-      # @return [SchemaBackup]
-      #   The backup object for this model.
-      # 
-      # @api public
-      def backup_schema!
-        schema_backup = SchemaBackup.get_or_create_by_name(self.name)
-        schema_backup.schema =  self.to_json_schema
-        schema_backup.save
       end
       
       private
