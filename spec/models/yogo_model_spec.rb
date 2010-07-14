@@ -49,8 +49,8 @@ describe "A Yogo Model" do
       book.auto_migrate!
       author.auto_migrate!
 
-      book_schema = book.to_json_schema_hash
-      author_schema = author.to_json_schema_hash
+      # book_schema = book.to_json_schema_hash
+      # author_schema = author.to_json_schema_hash
 
       DataMapper::Model.descendants.delete(book)
       DataMapper::Model.descendants.delete(author)
@@ -70,8 +70,8 @@ describe "A Yogo Model" do
       
       models[0].properties.map{|p| p.name }.should include(:yogo__id)
 
-      book_schema.should eql(Yogo::Sample::Book.to_json_schema_hash)
-      author_schema.should eql(Yogo::Sample::Author.to_json_schema_hash)    
+      # book_schema.should eql(Yogo::Sample::Book.to_json_schema_hash)
+      # author_schema.should eql(Yogo::Sample::Author.to_json_schema_hash)    
     end
   
   end
@@ -82,97 +82,97 @@ describe "A Yogo Model" do
 
     end
     
-    it "create models and reflect them back out" do
-      project = Project.create(:name => 'Sample', :description => 'This is a test project')
-      
-      book = project.add_model("Book")
-      author = project.add_model("Author")
-      
-      book.property(:name, String, :prefix => 'yogo')
-      author.property(:name, String, :prefix => 'yogo')
-      
-      book.auto_migrate!
-      author.auto_migrate!
-      
-      book.belongs_to( :author, :prefix => 'yogo__', :model => author )
-      author.has(Infinity, :books, :prefix => 'yogo__', :model => book )
-      
-      book.auto_upgrade!
-      author.auto_upgrade!
-      
-      book_schema = book.to_json_schema_hash
-      author_schema = author.to_json_schema_hash
-      
-      DataMapper::Model.descendants.delete(book)
-      DataMapper::Model.descendants.delete(author)
-      
-      book = nil
-      author = nil
-      
-      ns = eval("Yogo::Sample")
-      ns.send(:remove_const, :Book)
-      ns.send(:remove_const, :Author)
-
-      # Reflect Yogo data into memory
-      models = DataMapper::Reflection.reflect(:yogo)
-
-      models.each{|m| m.send(:include,Yogo::Model) }
-      models.each{|m| m.properties.sort! }
-
-      Yogo::Sample::Author.relationships.keys.should include('yogo__books')
-      Yogo::Sample::Author.relationships['yogo__books'].should be_a(DataMapper::Associations::OneToMany::Relationship)
-      Yogo::Sample::Book.relationships.keys.should include('yogo__author')
-      Yogo::Sample::Book.relationships['yogo__author'].should be_a(DataMapper::Associations::ManyToOne::Relationship)      
-      
-      book_schema.should eql(Yogo::Sample::Book.to_json_schema_hash)
-      author_schema.should eql(Yogo::Sample::Author.to_json_schema_hash)
-    end
+    # it "create models and reflect them back out" do
+    #   project = Project.create(:name => 'Sample', :description => 'This is a test project')
+    #   
+    #   book = project.add_model("Book")
+    #   author = project.add_model("Author")
+    #   
+    #   book.property(:name, String, :prefix => 'yogo')
+    #   author.property(:name, String, :prefix => 'yogo')
+    #   
+    #   book.auto_migrate!
+    #   author.auto_migrate!
+    #   
+    #   book.belongs_to( :author, :prefix => 'yogo__', :model => author )
+    #   author.has(Infinity, :books, :prefix => 'yogo__', :model => book )
+    #   
+    #   book.auto_upgrade!
+    #   author.auto_upgrade!
+    #   
+    #   # book_schema = book.to_json_schema_hash
+    #   # author_schema = author.to_json_schema_hash
+    #   
+    #   DataMapper::Model.descendants.delete(book)
+    #   DataMapper::Model.descendants.delete(author)
+    #   
+    #   book = nil
+    #   author = nil
+    #   
+    #   ns = eval("Yogo::Sample")
+    #   ns.send(:remove_const, :Book)
+    #   ns.send(:remove_const, :Author)
+    # 
+    #   # Reflect Yogo data into memory
+    #   models = DataMapper::Reflection.reflect(:yogo)
+    # 
+    #   models.each{|m| m.send(:include,Yogo::Model) }
+    #   models.each{|m| m.properties.sort! }
+    # 
+    #   Yogo::Sample::Author.relationships.keys.should include('yogo__books')
+    #   Yogo::Sample::Author.relationships['yogo__books'].should be_a(DataMapper::Associations::OneToMany::Relationship)
+    #   Yogo::Sample::Book.relationships.keys.should include('yogo__author')
+    #   Yogo::Sample::Book.relationships['yogo__author'].should be_a(DataMapper::Associations::ManyToOne::Relationship)      
+    #   
+    #   # book_schema.should eql(Yogo::Sample::Book.to_json_schema_hash)
+    #   # author_schema.should eql(Yogo::Sample::Author.to_json_schema_hash)
+    # end
     
-     it "create many to many relationships and reflect them back out" do
-        project = Project.create(:name => 'Sample', :description => 'This is a test project')
-
-        book = project.add_model("Book")
-        author = project.add_model("Author")
-
-        book.property(:name, String, :prefix => 'yogo')
-        author.property(:name, String, :prefix => 'yogo')
-
-        book.auto_migrate!
-        author.auto_migrate!
-
-        book.has(Infinity,  :authors, :prefix => 'yogo__', :model => author )
-        author.has(Infinity, :books, :prefix => 'yogo__', :model => book )
-
-        book.auto_upgrade!
-        author.auto_upgrade!
-
-        book_schema = book.to_json_schema_hash
-        author_schema = author.to_json_schema_hash
-
-        DataMapper::Model.descendants.delete(book)
-        DataMapper::Model.descendants.delete(author)
-
-        book = nil
-        author = nil
-
-        ns = eval("Yogo::Sample")
-        ns.send(:remove_const, :Book)
-        ns.send(:remove_const, :Author)
-
-        # Reflect Yogo data into memory
-        models = DataMapper::Reflection.reflect(:yogo)
-
-        models.each{|m| m.send(:include,Yogo::Model) }
-        models.each{|m| m.properties.sort! }
-
-        Yogo::Sample::Author.relationships.keys.should include('yogo__books')
-        Yogo::Sample::Author.relationships['yogo__books'].should be_a(DataMapper::Associations::OneToMany::Relationship)
-        Yogo::Sample::Book.relationships.keys.should include('yogo__authors')
-        Yogo::Sample::Book.relationships['yogo__authors'].should be_a(DataMapper::Associations::OneToMany::Relationship)      
-
-        book_schema.should eql(Yogo::Sample::Book.to_json_schema_hash)
-        author_schema.should eql(Yogo::Sample::Author.to_json_schema_hash)
-      end
+    # it "create many to many relationships and reflect them back out" do
+    #   project = Project.create(:name => 'Sample', :description => 'This is a test project')
+    #   
+    #   book = project.add_model("Book")
+    #   author = project.add_model("Author")
+    #   
+    #   book.property(:name, String, :prefix => 'yogo')
+    #   author.property(:name, String, :prefix => 'yogo')
+    #   
+    #   book.auto_migrate!
+    #   author.auto_migrate!
+    #   
+    #   book.has(Infinity,  :authors, :prefix => 'yogo__', :model => author )
+    #   author.has(Infinity, :books, :prefix => 'yogo__', :model => book )
+    #   
+    #   book.auto_upgrade!
+    #   author.auto_upgrade!
+    #   
+    #   # book_schema = book.to_json_schema_hash
+    #   # author_schema = author.to_json_schema_hash
+    #   
+    #   DataMapper::Model.descendants.delete(book)
+    #   DataMapper::Model.descendants.delete(author)
+    #   
+    #   book = nil
+    #   author = nil
+    #   
+    #   ns = eval("Yogo::Sample")
+    #   ns.send(:remove_const, :Book)
+    #   ns.send(:remove_const, :Author)
+    #   
+    #   # Reflect Yogo data into memory
+    #   models = DataMapper::Reflection.reflect(:yogo)
+    #   
+    #   models.each{|m| m.send(:include,Yogo::Model) }
+    #   models.each{|m| m.properties.sort! }
+    #   
+    #   Yogo::Sample::Author.relationships.keys.should include('yogo__books')
+    #   Yogo::Sample::Author.relationships['yogo__books'].should be_a(DataMapper::Associations::OneToMany::Relationship)
+    #   Yogo::Sample::Book.relationships.keys.should include('yogo__authors')
+    #   Yogo::Sample::Book.relationships['yogo__authors'].should be_a(DataMapper::Associations::OneToMany::Relationship)      
+    #   
+    #   # book_schema.should eql(Yogo::Sample::Book.to_json_schema_hash)
+    #   # author_schema.should eql(Yogo::Sample::Author.to_json_schema_hash)
+    # end
     
   end
   

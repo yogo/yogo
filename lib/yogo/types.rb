@@ -21,7 +21,7 @@ module Yogo
     
     # DataMapper Type Map
     @@DMTM = { DataMapper::Property::Float        => "Decimal",
-               DataMapper::Property::BigDecimal   => "Decimal",
+               DataMapper::Property::Decimal   => "Decimal",
                DataMapper::Property::Integer      => "Integer",
                DataMapper::Property::Text         => "Text",
                DataMapper::Property::Boolean      => "TrueFalse",
@@ -34,7 +34,7 @@ module Yogo
 
    # Google Visual Type Map
    @@GVTM = { DataMapper::Property::Float        => "number",
-              DataMapper::Property::BigDecimal   => "number",
+              DataMapper::Property::Decimal   => "number",
               DataMapper::Property::Integer      => "number",
               DataMapper::Property::Text         => "string",
               DataMapper::Property::String       => "string",

@@ -12,7 +12,7 @@ class User
   # @api public
   attr_accessor :password, :password_confirmation
 
-  property :id,                 DataMapper::Types::Serial
+  property :id,                 Serial
   property :login,              String, :required => true, :index => true, :unique => true
   # property :email,              String, :required => true, :length => 256
   property :first_name,         String, :length => 50
@@ -45,7 +45,7 @@ class User
 
   has n, :groups, :through => Resource
 
-  validates_is_confirmed :password
+  validates_confirmation_of :password
   
   ##
   # Finds a user by their login
