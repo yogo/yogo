@@ -32,7 +32,8 @@
     - unless Yogo::Setting['local_only']
       #login-links
         - if logged_in?
-          = current_user.login
+          = link_to(current_user.login, edit_user_path(current_user))
+          |
           = link_to("logout", logout_path)
         - else
           = link_to("Login", login_path)

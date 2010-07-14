@@ -59,8 +59,7 @@ body
       font-variant: small-caps
       +column(15)
     #login-links
-      +column(4, true)
-      +
+      +column(7, true)
       text-align: right
       line-height: 3em
     #menu
@@ -78,11 +77,12 @@ body
         padding: .5em 0 .5em 10px
       #search-tab
         +column(9, true)
-        padding: .5em 0
+        padding: .5em 0 .5em 2em
         text-align: right
         .button-link
           font-size: 0.9em
-          padding: 3px 2px 2px 2px
+          line-height: 1.7em
+          padding: 1px 3px 0px
   // Flash Notices always use blueprint layout
   #flash
     +prepend(4)
