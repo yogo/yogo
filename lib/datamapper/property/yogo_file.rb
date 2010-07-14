@@ -3,8 +3,29 @@ module DataMapper
     class YogoFile < String
       length 2000
 
+      def custom?
+        true
+      end
+
       def primitive?(value)
-        value.kind_of?(::String)
+        # value.kind_of?(::String)
+        value.respond_to?(:filename) || value.kind_of?(::String)
+      end
+      
+      def load(value)
+        if value.respond_to?(:filename)
+          value.filename
+        else
+          value.to_s
+        end
+      end
+      
+      def dump(value)
+        load(value)
+      end
+      
+      def typecast_to_primitive(value)
+        load(value)
       end
 
     end

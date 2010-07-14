@@ -1,12 +1,8 @@
 module DataMapper
   class Property
-    class YogoImage < String
-      length 2000
+    class YogoImage < YogoFile
 
-      def primitive?(value)
-        value.kind_of?(::String)
-      end
-
+      
     end
   end # class Property
   

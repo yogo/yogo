@@ -94,7 +94,7 @@ module Yogo
         path = File.dirname(csv_file)
         
         errors = validate_csv_data(csv_data)
-        
+
         all_objects = []
         if errors.empty?
           attr_names = csv_data[0].map{|name| name.tableize.singularize.gsub(' ', '_') }
@@ -116,12 +116,14 @@ module Yogo
                 end  
               end
               obj = self.new(line_data)
+
               if obj.valid?
+                DataMapper.logger.debug("Object valid, adding")
                 all_objects << obj
               else
                 obj.errors.each_pair do |key,value|
                   value.each do |msg|
-                    errors << "Line #{idx+3} column #{key.to_s.gsub("yogo__", '')} #{msg.split[2..-1].join}"
+                    errors << "Line #{idx+3} column #{key.to_s.gsub("yogo__", '')} #{msg.split[2..-1].join(' ')}"
                   end
                 end
               end
@@ -129,6 +131,7 @@ module Yogo
           end
         end
         all_objects.each{|o| o.save } if errors.empty?
+
         return errors
       end
 

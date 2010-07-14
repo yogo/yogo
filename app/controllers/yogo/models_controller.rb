@@ -226,21 +226,6 @@ class Yogo::ModelsController < ApplicationController
   end
   
   ##
-  # validates model name or column name
-  #
-  # @param [String] potential name
-  #
-  # @return [Boolean] returns true or false
-  #
-  # @author Yogo Team
-  #
-  # @api private
-  def valid_model_or_column_name?(potential_name)
-    # TODO: Validations should not be here.
-    !potential_name.match(/^\d|\.|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-/)
-  end
-  
-  ##
   # Checks to see if the current user is authorized to perform the current action
   # @return [nil]
   # @raise Execption
