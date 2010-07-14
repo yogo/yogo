@@ -191,14 +191,14 @@ module ApplicationHelper
   # 
   # @api public
   def yogo_show_helper(item, property, project, model)
-    if property.type == DataMapper::Types::YogoFile
+    if property.kind_of?(DataMapper::Property::YogoFile)
       file = item[property.name]
       link_to(file, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))
-    elsif property.type == DataMapper::Types::YogoImage
+    elsif property.kind_of?(DataMapper::Property::YogoImage)
       file = item[property.name]
       img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
       link_to(file, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'), :class => 'fancybox')      
-    elsif property.type == DataMapper::Types::Text
+    elsif property.kind_of?(DataMapper::Property::Text)
       if item[property.name] && item[property.name].length > 15
         tooltip(item[property.name])
       else

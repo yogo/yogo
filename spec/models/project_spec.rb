@@ -233,7 +233,7 @@ describe Project do
       project = Project.create(:name => "Test Project 1")
       property_hash = {
         "name" => {:type => String},
-        "id"   => {:type => DataMapper::Types::Serial}
+        "id"   => {:type => DataMapper::Property::Serial}
       }
       m = project.add_model("Cell", property_hash)
       m.should == Yogo::TestProject1::Cell
@@ -256,7 +256,7 @@ describe Project do
       project = Project.create(:name => "Test Project 2")
       property_hash = {
         "name" => {:type => String},
-        "id"   => {:type => DataMapper::Types::Serial}
+        "id"   => {:type => DataMapper::Property::Serial}
       }
       
       project.add_model("Monkey",property_hash)

@@ -12,11 +12,11 @@ describe 'Yogo CSV Module' do
     model = DataMapper::Model.new do
       include Yogo::Model
       def self.default_repository_name; :yogo; end
-      property :yogo_id, DataMapper::Types::Serial, :field => 'id'
-      property :id,   Integer,  :prefix => 'yogo'
-      property :name, DataMapper::Types::Text,  :prefix => 'yogo'
-      property :mass, Float,   :prefix => 'yogo'
-      property :charge, Float, :prefix => 'yogo'
+      property :yogo_id, DataMapper::Property::Serial, :field => 'id'
+      property :id,   Integer,  :prefix => 'yogo', :position => 2
+      property :name, DataMapper::Property::Text,  :prefix => 'yogo', :position => 1
+      property :mass, Float,   :prefix => 'yogo', :position => 3
+      property :charge, Float, :prefix => 'yogo', :position => 4
       property :private_field, String
     end
 

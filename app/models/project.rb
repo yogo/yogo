@@ -17,7 +17,7 @@ class Project
   property :description, Text, :required => false
   property :is_public, Boolean, :required => true, :default => true
   
-  validates_is_unique   :name
+  validates_uniqueness_of   :name
   
   before :destroy, :delete_models!
   before :destroy, :delete_associated_groups!
@@ -399,7 +399,7 @@ class Project
                   :name => model_name, 
                   :properties => { 
                     'yogo_id' => {
-                      :type => DataMapper::Types::Serial, 
+                      :type => DataMapper::Property::Serial, 
                       :field => 'id' 
                       },
                       :created_at => {

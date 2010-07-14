@@ -7,9 +7,9 @@ describe "A Factory" do
     @valid_hash = { :name => 'Bacon',
                    :modules => [],
                    :properties => {
-                     :yogo_id => { :type => DataMapper::Types::Serial, :field => 'id' },
+                     :yogo_id => { :type => DataMapper::Property::Serial, :field => 'id' },
                      :fat_content => Float,
-                     :hickory_smoked => { :type => DataMapper::Types::Boolean, :default => false }
+                     :hickory_smoked => { :type => DataMapper::Property::Boolean, :default => false }
                    }}
   end
   

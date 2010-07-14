@@ -15,9 +15,9 @@ require 'datamapper/search'
 require 'datamapper/paginate'
 require 'datamapper/factory'
 require 'datamapper/dm-userstamp'
-require 'datamapper/types/yogo_file'
-require 'datamapper/types/yogo_image'
-require 'datamapper/types/raw'
+require 'datamapper/property/yogo_file'
+require 'datamapper/property/yogo_image'
+require 'datamapper/property/raw'
 require 'yogo/reflection'
 
 

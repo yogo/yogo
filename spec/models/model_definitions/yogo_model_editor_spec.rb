@@ -41,7 +41,7 @@ describe "A Model that supports an editing-tool," do
     it "should create a model definition with those properties" do      
       lambda do
         @model.instance_eval do
-          property :foo, DataMapper::Types::Text, :prefix => 'yogo'
+          property :foo, DataMapper::Property::Text, :prefix => 'yogo'
           property :bar, Integer, :prefix => 'yogo'
         end
         @model.auto_migrate!

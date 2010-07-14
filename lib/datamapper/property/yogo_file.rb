@@ -1,37 +1,15 @@
 module DataMapper
-  module Types
-    
-    class YogoFile < DataMapper::Type
-      primitive String
-      length    2000
-      # load
-      # @return [String]
-      # @api private
-      def self.load(value, property)
-        value.to_s
+  class Property
+    class YogoFile < String
+      length 2000
+
+      def primitive?(value)
+        value.kind_of?(::String)
       end
-      
-      # dump
-      # @return [String]
-      # @api private
-      def self.dump(value, property)
-        if value.kind_of?(String)
-          value.to_s
-        else
-          value.filename
-        end
-      end
-      
-      # typecast
-      # @return [String]
-      # @api private
-      def self.typecast(value, property)
-        value.to_s
-      end
+
     end
-    
-  end # module Types
-  
+  end # class Property
+
   module YogoFileAdapterExtensions
     module PersevereAdapter
       extend Chainable
@@ -39,7 +17,7 @@ module DataMapper
       chainable do
         def type_map
           @yogo_file_type_map ||= {
-            DataMapper::Types::YogoFile => { :primitive => 'string', :yogo_file => 'true'}
+            DataMapper::Property::YogoFile => { :primitive => 'string', :yogo_file => 'true'}
           }.merge(super).freeze
         end
       end
@@ -47,7 +25,7 @@ module DataMapper
       chainable do
         def get_type(dm_type)
           if  dm_type['type'].is_a?(String) && dm_type['type'].gsub(/\(\d*\)/, '') == 'string' && dm_type.has_key?('yogo_file')
-            return DataMapper::Types::YogoFile
+            return DataMapper::Property::YogoFile
           else
             return super
           end

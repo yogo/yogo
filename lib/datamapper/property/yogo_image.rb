@@ -1,34 +1,14 @@
 module DataMapper
-  module Types
-    
-    class YogoImage < DataMapper::Type
-      primitive String
-      length    2000
-      # load
-      # @return [String]
-      # @api private
-      def self.load(value, property)
-        value.to_s
+  class Property
+    class YogoImage < String
+      length 2000
+
+      def primitive?(value)
+        value.kind_of?(::String)
       end
-      # dump
-      # @return [String]
-      # @api private
-      def self.dump(value, property)
-        if value.kind_of?(String)
-          value.to_s
-        else
-          value.filename
-        end
-      end
-      # typecast
-      # @return [String]
-      # @api private
-      def self.typecast(value, property)
-        value.to_s
-      end
+
     end
-    
-  end # module Types
+  end # class Property
   
   module YogoImageAdapterExtensions
     module PersevereAdapter
@@ -38,7 +18,7 @@ module DataMapper
         # @api private
         def type_map
           @yogo_file_type_map ||= {
-            DataMapper::Types::YogoImage => { :primitive => 'string', :yogo_image => 'true'}
+            DataMapper::Property::YogoImage => { :primitive => 'string', :yogo_image => 'true'}
           }.merge(super).freeze
         end
       end
@@ -47,7 +27,7 @@ module DataMapper
         # @api private
         def get_type(dm_type)
           if dm_type['type'].is_a?(String) && dm_type['type'].gsub(/\(\d*\)/, '') == 'string' && dm_type.has_key?('yogo_image')
-            return DataMapper::Types::YogoImage
+            return DataMapper::Property::YogoImage
           else
             return super
           end

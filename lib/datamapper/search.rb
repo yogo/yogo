@@ -61,7 +61,7 @@ module DataMapper
       # only 1 query is performed in the end.
       queries = []
       properties.each do |prop|
-        if prop.type == String || prop.type == DataMapper::Types::Text
+        if prop.kind_of?(DataMapper::Property::String) || prop.kind_of?(DataMapper::Property::Text)
           queries << all( options.merge(prop.name.like => "%#{value}%") )
         end
       end
