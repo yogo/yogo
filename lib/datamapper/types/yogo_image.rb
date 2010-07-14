@@ -14,7 +14,11 @@ module DataMapper
       # @return [String]
       # @api private
       def self.dump(value, property)
-        value.to_s
+        if value.kind_of?(String)
+          value.to_s
+        else
+          value.filename
+        end
       end
       # typecast
       # @return [String]
