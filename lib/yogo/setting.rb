@@ -259,7 +259,7 @@ module Yogo
       else 
         self.load_defaults
       end
-      self.all{|setting| store_cache(setting.name, setting.value)}
+      self.all.each{|setting|  store_cache(setting.name, setting.value) }
     end
     
   end  
