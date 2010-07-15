@@ -155,7 +155,7 @@ describe Yogo::DataController do
         mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
         mock_yogo_model.stub!(:get).with('13').and_return(mock_yogo_data)
 
-        mock_yogo_data.stub!(:destroy!).and_return(true)
+        mock_yogo_data.stub!(:destroy).and_return(true)
         
         delete(:destroy, :project_id => "42", :model_id => "Vanilla", :id => '13')
 
@@ -431,7 +431,7 @@ describe Yogo::DataController do
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
           mock_yogo_model.stub!(:get).with('13').and_return(mock_yogo_data)
 
-          mock_yogo_data.should_receive(:destroy!).and_return(true)
+          mock_yogo_data.should_receive(:destroy).and_return(true)
           
           delete(:destroy, :project_id => "42", :model_id => "Vanilla", :id => '13')
           
@@ -444,7 +444,7 @@ describe Yogo::DataController do
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
           mock_yogo_model.stub!(:get).with('13').and_return(mock_yogo_data)
           
-          mock_yogo_data.should_not_receive(:destroy!).and_return(true)
+          mock_yogo_data.should_not_receive(:destroy).and_return(true)
           
           delete(:destroy, :project_id => "42", :model_id => "Vanilla", :id => '13')
           
