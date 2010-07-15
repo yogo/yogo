@@ -197,7 +197,7 @@ class Yogo::DataController < ApplicationController
   #
   # @api public
   def destroy
-    @model.get(params[:id]).destroy!
+    @model.get(params[:id]).destroy
     redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
   end
 

@@ -15,7 +15,7 @@ gem "dm-aggregates",        "0.10.2"
 gem 'bcrypt-ruby'
 gem "dm-types",             "0.10.2", :path => "vendor/gems/dm-types-0.10.2"
 gem "dm-observer",          "0.10.2"
-gem "dm-persevere-adapter", "0.71.4", :require => nil, :git => "git://github.com/yogo/dm-persevere-adapter.git",:branch => "yogo-integration", :ref => '83af2ee1367b12eb6567'
+gem "dm-persevere-adapter", "0.71.4", :require => nil, :git => "git://github.com/yogo/dm-persevere-adapter.git",:branch => "yogo-integration", :ref => '70bf9ff79cf948a48ff05a4bb2e45e394419cb76'
 gem "rails_datamapper",     "0.10.2", :require => nil
 
 # These are required so we can make it simple to interact with legacy data
