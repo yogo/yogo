@@ -1,14 +1,17 @@
-%h1#content-title= @project.name
+%h1#content-title
+  = image_tag('icons/private_32.png', :title => 'Private Project') unless @project.is_public?
+  = @project.name
 
 #content-actions
-  .content-action-links.text-right
-    = link_to_edit_project_models(@project, "Edit Datasets", :class => 'button-link')
-    = link_to("Delete Project", project_path(@project), 
-      :method => :delete, :class => 'button-link', 
-      :confirm => "There is no undo.\n Continue?" )
-    = link_to("Import CSV", import_csv_path(@project), :class => 'button-link')
-    - if !current_user.nil? && current_user.has_permission?(:edit_project, @project)
-      = link_to("Manage Users", project_users_path(@project), :class => 'button-link')
+  .content-action-links
+    = link_to_edit_project_models(@project, "Edit/Add Data Model", :class => 'button-link')
+    = link_to("Project Settings", edit_project_path(@project), :class => 'button-link')
+    /= link_to("Delete Project", project_path(@project), 
+    /  :method => :delete, :class => 'button-link', 
+    /  :confirm => "There is no undo.\n Continue?" )
+    /= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
+    /- if !current_user.nil? && current_user.has_permission?(:edit_project, @project)
+    /  = link_to("Manage Users", project_users_path(@project), :class => 'button-link')
 
 //= render(:partial => 'layouts/sidebar') %>
 
@@ -18,14 +21,12 @@
     .content-row-block
       .dataset-name
         %h2= link_to dataset.public_name, project_yogo_data_index_path(@project, dataset)
-        .description= tooltip(@project.dataset_description(dataset.name), 
-                      dataset.public_name + ' Description',
-                      200)
-        .action-links
-          = link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
-              :class => 'button-link')
-          = link_to("Download CSV", project_yogo_data_index_path(@project, dataset, 
-              :format => 'csv'), :class => 'button-link')
+        .vertical-links
+          .link= link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
+                  :class => 'button-link')
+          .link= link_to("Download Spreadsheet", project_yogo_data_index_path(@project, dataset, 
+                  :format => 'csv'), :class => 'button-link')
+          .link= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
       .dataset-info
         .action-tabs
           %ul
