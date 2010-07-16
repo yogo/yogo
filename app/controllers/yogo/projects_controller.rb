@@ -320,13 +320,19 @@ class Yogo::ProjectsController < ApplicationController
     end
 
     @project = Project.create(:name => "Cricket Cercal System DB")
-    errors = @project.process_csv(Rails.root.join("dist", "example_data", "cercaldb", "cells.csv"), "Cell")
-    if errors.empty?
-      flash[:notice]  = "Example Project imported succesfully."
+    if @project.valid?
+      errors = @project.process_csv(Rails.root.join("dist", "example_data", "cercaldb", "cells.csv"), "Cell")
+      if errors.empty?
+        flash[:notice]  = "Example Project imported succesfully."
+      else
+        flash[:error] = errors.join("\n")
+      end
+      Yogo::Setting[:example_project_loaded] = true
+      redirect_to project_url(@project)
     else
-      flash[:error] = errors.join("\n")
+      flash[:error] = "Example Project could not be created, so was not loaded."
+      redirect_to root_url
     end
-    redirect_to project_url(@project)
   end
   
 end
