@@ -46,6 +46,7 @@ body
     background: #EEE image-url('logo_gradient.png') repeat-x fixed top
     width: 100%
     position: fixed
+    z-index: 10
     left: 0
     top: 0
     overflow: none
@@ -90,7 +91,7 @@ body
     +append(4)
     text-align: center
     height: 2em
-    margin-top: 3em
+    margin-top: 2em
     .error, .notice
       padding: 0
       p
@@ -186,6 +187,8 @@ body
       +prepend(1)
       +column(16)
       text-align: center
+    img
+      margin-bottom: -.15em
   h2 
     font-size: 1.7em
     margin-bottom: 0.75em
@@ -250,7 +253,7 @@ body.bp
     #content-actions
       +column(10)
       +last
-      //margin: -.5em 0 1em 0
+      margin-top: .5em
       .content-action-links
         float: right
       .content-pagination-links
@@ -321,7 +324,7 @@ body.bp
       .project-text
         +prepend(1)
         +column(9)
-        +colborder
+        +append(1)
         .edit-link
           text-align: right
       .project-datasets
@@ -329,22 +332,22 @@ body.bp
         +column(10)
         +append(1)
         +last
+    .project-status
+      font-size: .4em
+      font-style: italic
     // Project Dashboard
     .dataset-name
       +column(6)
-      +last
       h2
-        text-align: center
-        margin: .25em 0
-      p
-        margin-left: 2em
-        font-style: italic
-        font-size: .8em
-      .action-links
-        text-align: center
-        margin-bottom: 1em
-      .description
-        padding: 0 1.5em 1em 1.5em
+        +prepend(1)
+        //padding: 0 25px
+      .vertical-links
+        +prepend(1)
+        .link
+          .button-link
+            margin-bottom: 3px
+            text-align: center
+            +column(4)
     .dataset-info
       +column(16)
       +last
@@ -352,11 +355,7 @@ body.bp
         margin:
           top: .5em
           bottom: .5em
-        +column(16)
-        +last
       .dataset-table
-        +column(16)
-        +last
         +borders
         height: 12em
         padding: 0px
@@ -364,6 +363,7 @@ body.bp
         font-size: .9em
         th
           border-bottom: 1px solid #CCC
+          border-top: 1px solid #CCC
           padding-bottom: 2px
       // Jquery UI Overrides
       .ui-tabs .ui-tabs-nav li a
