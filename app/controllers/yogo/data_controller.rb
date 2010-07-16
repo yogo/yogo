@@ -316,10 +316,10 @@ class Yogo::DataController < ApplicationController
   # @api private
   def check_project_authorization
     if !Yogo::Setting[:local_only]
-      raise AuthenticationError if !@project.is_public? && !logged_in?
+      raise AuthenticationError if @project.is_private? && !logged_in?
       action = request.parameters["action"]
       if ['index', 'show', 'search', 'download_asset', 'show_asset'].include?(action)
-        raise AuthorizationError unless @project.is_public? || (logged_in? && current_user.is_in_project?(@project))
+        raise AuthorizationError unless !@project.is_private? || (logged_in? && current_user.is_in_project?(@project))
       else
         permission = :edit_model_data if ["new", 'create', 'edit', 'update'].include?(action)
         permission = :delete_model_data if ['destroy'].include?(action)

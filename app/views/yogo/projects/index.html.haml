@@ -15,7 +15,7 @@
       .project-text
         %h2
           = link_to(project.name, project_path(project) ) 
-          = image_tag('icons/private_16.png', :title => 'Private Project') unless project.is_public?
+          = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
         .action-links
           = link_to_edit_project_models(project, "Edit/Add Data Models", :class => 'button-link')
           = link_to("Project Settings", edit_project_path(project), :class => 'button-link')

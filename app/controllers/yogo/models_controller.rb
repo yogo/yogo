@@ -248,10 +248,10 @@ class Yogo::ModelsController < ApplicationController
   # @api private
   def check_project_authorization
     if !Yogo::Setting[:local_only]
-      raise AuthenticationError if !@project.is_public? && !logged_in?
+      raise AuthenticationError if @project.is_private? && !logged_in?
         action = request.parameters["action"]
         if ['index', 'show', 'download_csv'].include?(action)
-          raise AuthorizationError unless @project.is_public? || (logged_in? && current_user.is_in_project?(@project))
+          raise AuthorizationError unless !@project.is_private? || (logged_in? && current_user.is_in_project?(@project))
         else
           raise AuthenticationError if !logged_in?
           raise AuthorizationError  if !current_user.has_permission?(:edit_model_descriptions,@project)

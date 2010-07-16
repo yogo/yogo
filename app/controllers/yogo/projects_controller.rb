@@ -91,7 +91,7 @@ class Yogo::ProjectsController < ApplicationController
   def show
     @project = Project.get(params[:id])
     
-    if !Yogo::Setting[:local_only] && !@project.is_public?
+    if !Yogo::Setting[:local_only] && @project.is_private?
       raise AuthenticationError if !logged_in?
       raise AuthorizationError  if !current_user.is_in_project?(@project)
     end

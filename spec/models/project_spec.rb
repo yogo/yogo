@@ -73,7 +73,7 @@ describe Project do
   end
   
   it "should be created with a set of default groups" do
-    p = Project.new(:name => 'blah', :is_public => false)
+    p = Project.new(:name => 'blah', :is_private => true)
     p.save
   
     p.groups.should_not be_empty
@@ -83,14 +83,14 @@ describe Project do
   end
 
   it "should be by default a public project" do
-    Project.create(:name => 'A Project').is_public.should be_true
+    Project.create(:name => 'A Project').is_private.should be_false
   end
 
   it "should not return private projects when .public is called" do
     p1 = Project.create(:name => 'test project 1')
     p2 = Project.create(:name => 'test project 2')
     p3 = Project.create(:name => 'test project 3')
-    pp = Project.create(:name => 'Private project', :is_public => false)
+    pp = Project.create(:name => 'Private project', :is_private => true)
 
     Project.public.should_not include(pp)
   end
@@ -214,8 +214,8 @@ describe Project do
     models.each do |m|
       p.add_model(m, {:name => {:type => String}})
     end
-    p.get_model('giraffe').name.should == 'Yogo::Zoo::Giraffe'
-    p.get_model('aGiraffe').name.should == 'Yogo::Zoo::AGiraffe'
+    p.get_model('giraffe').name.should  eql('Yogo::Zoo::Giraffe')
+    p.get_model('aGiraffe').name.should eql('Yogo::Zoo::AGiraffe')
   end
   
   describe "contains references to reflected datamapper models" do
@@ -236,7 +236,7 @@ describe Project do
         "id"   => {:type => DataMapper::Types::Serial}
       }
       m = project.add_model("Cell", property_hash)
-      m.should == Yogo::TestProject1::Cell
+      m.should eql(Yogo::TestProject1::Cell)
       Yogo::TestProject1::Cell.ancestors.should include(DataMapper::Resource)
     end
   
@@ -279,7 +279,7 @@ describe Project do
       project = Project.create(:name => 'Persisted Data')
       DataMapper::Reflection.reflect(:yogo)
       # The models in the datastore should be reflected and exist
-      project.models.map(&:name).should == ["Yogo::PersistedDatum::Cell"]
+      project.models.map(&:name).should eql(["Yogo::PersistedDatum::Cell"])
       Yogo::PersistedDatum::Cell.should_not be_nil
       
       #clean up

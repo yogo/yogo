@@ -15,7 +15,7 @@ class Project
   property :id, Serial
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
-  property :is_public, Boolean, :required => true, :default => true
+  property :is_private, Boolean, :required => true, :default => false
   
   validates_is_unique   :name
   
@@ -50,7 +50,7 @@ class Project
   # 
   # @api public
   def self.public(opts = {})
-    all( opts.merge({:is_public => true}) )
+    all( opts.merge({:is_private => false}) )
   end
   
   ##
@@ -67,7 +67,6 @@ class Project
   def self.private(opts = {})
     current_user = User.current
     return nil if current_user.nil?
-    # all( opts.merge( :is_public => false ) ).select{|p| current_user.is_in_project?(p) }
     current_user.groups.projects(opts)
   end
   
