@@ -103,12 +103,14 @@ body
     text-align: center
   // Pagination Links
   #pagination-links
-    text-align: center
+    //text-align: center
     +column($blueprint_grid_columns - 2)
     +last
+    margin-bottom: .25em
   // Tables
   table
     border-collapse: collapse
+    margin-bottom: .25em
     td, th
       border: 1px dotted #AAA
     th
@@ -235,14 +237,31 @@ body
     font-size: .8em
   img
     border: 0
+  // Content Header Elements that Occur Outside of bp.
+  #container
+    margin: 0
+    margin-top: -2em
+  #content-title
+    margin-top: 0
+    text-align: left
+    +column(12)
+  #content-actions
+    +column(10)
+    +last
+    //margin-top: .5em
+    .content-action-links
+      float: right
+    .content-pagination-links
+      text-align: right
+      line-height: 2em
+      +column(6)
+      +last
 
 // Blueprint Body Container
 body.bp
   // Header
   #container
     +container
-    
-    // To left align the grid
     margin: 0
     margin-top: -2em
   // Sidebar
@@ -258,21 +277,6 @@ body.bp
   // Content Frame
   #content
     +column($blueprint_grid_columns)
-    #content-title
-      margin-top: 0
-      text-align: left
-      +column(12)
-    #content-actions
-      +column(10)
-      +last
-      margin-top: .5em
-      .content-action-links
-        float: right
-      .content-pagination-links
-        text-align: right
-        line-height: 2em
-        +column(6)
-        +last
     h1#project-title
       margin-top: 0
     #content-block

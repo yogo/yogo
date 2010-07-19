@@ -24,9 +24,9 @@
         .vertical-links
           .link= link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
                   :class => 'button-link')
-          .link= link_to("Download Spreadsheet", project_yogo_data_index_path(@project, dataset, 
-                  :format => 'csv'), :class => 'button-link')
           .link= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
+          .link= link_to("Export Spreadsheet", project_yogo_data_index_path(@project, dataset, 
+                  :format => 'csv'), :class => 'button-link')
       .dataset-info
         .action-tabs
           %ul
