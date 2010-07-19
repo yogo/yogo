@@ -1,6 +1,6 @@
 %h1#content-title
   = @project.name
-  = image_tag('icons/private_32.png', :title => 'Private Project') unless @project.is_public?
+  = image_tag('icons/private_32.png', :title => 'Private Project') if @project.is_private?
 
 #content-actions
   .content-action-links

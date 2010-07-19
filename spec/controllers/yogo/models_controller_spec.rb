@@ -78,7 +78,7 @@ describe Yogo::ModelsController do
       
       describe 'GET' do
         it "should GET index with a public project" do
-          Project.stub!(:get).with("42").and_return(mock_project(:is_public? => true))
+          Project.stub!(:get).with("42").and_return(mock_project(:is_private? => false))
           
           get :index, :project_id => '42'
 
@@ -87,7 +87,7 @@ describe Yogo::ModelsController do
         end
         
         it "should GET show with a public project" do
-          Project.stub!(:get).with("42").and_return(mock_project(:is_public? => true))
+          Project.stub!(:get).with("42").and_return(mock_project(:is_private? => false))
           get :show, :project_id => '42', :id => 'Vanilla'
 
           response.should be_success
@@ -95,7 +95,7 @@ describe Yogo::ModelsController do
         end
         
         it "should not GET index with a private project" do
-          Project.stub!(:get).with("42").and_return(mock_project(:is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:is_private? => true))
           get :index, :project_id => '42'
 
           response.should be_redirect
@@ -103,7 +103,7 @@ describe Yogo::ModelsController do
         end
         
         it "should not GET show with a private project" do
-          Project.stub!(:get).with("42").and_return(mock_project(:is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:is_private? => true))
           get :show, :project_id => '42', :id => 'Vanilla'
 
           response.should be_redirect
@@ -113,7 +113,7 @@ describe Yogo::ModelsController do
 
       describe 'POST' do
         it "should not work" do
-          Project.stub!(:get).with("42").and_return(mock_project(:is_public? => true))
+          Project.stub!(:get).with("42").and_return(mock_project(:is_private? => false))
           post :create, :project_id => '42', 'Model' => 'blah'
 
           response.should be_redirect
@@ -123,7 +123,7 @@ describe Yogo::ModelsController do
 
       describe 'PUT' do
         it "should not work" do
-          Project.stub!(:get).with("42").and_return(mock_project(:is_public? => true))
+          Project.stub!(:get).with("42").and_return(mock_project(:is_private? => false))
           put :update, :project_id => '42', :id => 'Vanilla', 'Model' => 'blah'
 
           response.should be_redirect
@@ -133,7 +133,7 @@ describe Yogo::ModelsController do
 
       describe 'DELETE' do
         it "should not work" do
-          Project.stub!(:get).with("42").and_return(mock_project(:is_public? => true))
+          Project.stub!(:get).with("42").and_return(mock_project(:is_private? => false))
           delete :destroy, :project_id => '42', :id => 'Vanilla'
 
           response.should be_redirect
@@ -155,7 +155,7 @@ describe Yogo::ModelsController do
       describe "without permissions" do
         before(:each) do
           @u.stub!(:has_permission?).and_return(false)
-          Project.stub!(:get).with("42").and_return(mock_project(:is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:is_private? => true))
         end
         it "should not GET index" do
           get(:index, :project_id => '42')
@@ -188,7 +188,7 @@ describe Yogo::ModelsController do
       describe "with permissions" do
         before(:each) do
           @u.stub!(:has_permission?).and_return(true)
-          Project.stub!(:get).with("42").and_return(mock_project(:is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:is_private? => true))
         end
         it "should GET index" do
           get(:index, :project_id => '42')

@@ -142,7 +142,7 @@ body
       display: block
   .button-link, .big-button-link, .medium-button-link
     border: 1px solid #666666
-    padding: .25em
+    padding: 0 .25em
     background-color: #f2f2f2
     color: #703824
     line-height: 2em
@@ -150,6 +150,8 @@ body
       background-color: #e2e2e2
       text-decoration: none
       cursor: pointer
+    &.fright
+      float: right
   .big-button-link
     font-size: 1.5em
   .medium-button-link
@@ -196,6 +198,8 @@ body
     font-size: 1.4em
     line-height: 1
     margin-bottom: 1em
+    &.tight
+      margin-bottom: .2em
   h4 
     font-size: 1.1em
     line-height: 1.25
@@ -209,10 +213,18 @@ body
     font-weight: bold
   // Forms
   .form-element
-    margin-bottom: 1em
+    margin-bottom: .5em
+    margin-top: .5em
+  .label
+    margin-bottom: .2em
   .form-actions
     margin-top: 1em
+  label
+    img
+      margin-bottom: -.1em
   //General Styles
+  .bold
+    font-weight: bold
   .text-center
     text-align: center
   .text-right

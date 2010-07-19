@@ -181,7 +181,7 @@ describe Yogo::DataController do
       describe 'GET' do
         it "should allow access to public projects data" do
           Project.stub!(:get).with("42").and_return(mock_project)
-          mock_project.stub!(:is_public?).and_return(true)
+          mock_project.stub!(:is_private?).and_return(false)
 
           get( :index, :project_id => "42", :model_id => 'Vanilla' )
 
@@ -195,7 +195,7 @@ describe Yogo::DataController do
         
         it "should not allow access to private projects data" do
           Project.stub!(:get).with("42").and_return(mock_project)
-          mock_project.stub!(:is_public?).and_return(false)
+          mock_project.stub!(:is_private?).and_return(true)
 
           get( :index, :project_id => "42", :model_id => 'Vanilla' )
 
@@ -205,7 +205,7 @@ describe Yogo::DataController do
         
         it "should allow access to public projects" do
           Project.stub!(:get).with("42").and_return(mock_project)
-          mock_project.stub!(:is_public?).and_return(true)
+          mock_project.stub!(:is_private?).and_return(false)
           mock_yogo_model.stub!(:get).with('3').and_return(mock_yogo_data)
           
           get( :show, :project_id => "42", :model_id => 'Vanilla', :id => '3' )
@@ -220,7 +220,7 @@ describe Yogo::DataController do
         
         it "should not allow access to private projects" do
           Project.stub!(:get).with("42").and_return(mock_project)
-          mock_project.stub!(:is_public?).and_return(false)
+          mock_project.stub!(:is_private?).and_return(true)
 
           get( :index, :project_id => "42", :model_id => 'Vanilla', :id => '13' )
 
@@ -230,7 +230,7 @@ describe Yogo::DataController do
         
         it "should not allow access to the new form" do
           Project.stub!(:get).with("42").and_return(mock_project)
-          mock_project.stub!(:is_public?).and_return(true)
+          mock_project.stub!(:is_private?).and_return(false)
           get(:new, :project_id => "42", :model_id => "Vanilla")
           
           response.should be_redirect
@@ -239,7 +239,7 @@ describe Yogo::DataController do
         
         it "should not allow access to the edit form" do
           Project.stub!(:get).with("42").and_return(mock_project)
-          mock_project.stub!(:is_public?).and_return(true)
+          mock_project.stub!(:is_private?).and_return(false)
           get(:new, :project_id => "42", :model_id => "Vanilla", :id => 13)
           
           response.should be_redirect
@@ -260,7 +260,7 @@ describe Yogo::DataController do
       describe "GET" do
         it "should allow access to public projects the user doesn't belongs to" do
           @u.stub!(:is_in_project?).and_return(false)
-          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => true))
+          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_private? => false))
 
           get( :index, :project_id => "42", :model_id => 'Vanilla' )
 
@@ -271,7 +271,7 @@ describe Yogo::DataController do
         
         it "should allow access to private project the user belongs to" do
           @u.stub!(:is_in_project?).and_return(true)
-          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_private? => true))
         
           get( :index, :project_id => "42", :model_id => 'Vanilla' )
 
@@ -282,7 +282,7 @@ describe Yogo::DataController do
       
         it "should not allow access to a private project the user doesn't belongs to" do
           @u.stub!(:is_in_project?).and_return(false)
-          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_private? => true))
         
           get( :index, :project_id => "42", :model_id => 'Vanilla' )
 
@@ -293,7 +293,7 @@ describe Yogo::DataController do
         
         it "should allow access to public projects data items the user doesn't belongs to" do
           @u.stub!(:is_in_project?).and_return(false)
-          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => true))
+          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_private? => false))
           mock_yogo_model.stub!(:get).with('13').and_return(mock_yogo_data)
 
           get( :show, :project_id => "42", :model_id => 'Vanilla', :id => '13' )
@@ -305,7 +305,7 @@ describe Yogo::DataController do
         
         it "should allow access to private project data items the user belongs to" do
           @u.stub!(:is_in_project?).and_return(true)
-          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_private? => true))
           mock_yogo_model.stub!(:get).with('13').and_return(mock_yogo_data)
         
           get( :show, :project_id => "42", :model_id => 'Vanilla', :id => '13' )
@@ -315,7 +315,7 @@ describe Yogo::DataController do
         end
       
         it "should not allow access to a private project data items the user doesn't belongs to" do
-          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_private? => true))
           @u.stub!(:is_in_project?).with(mock_project).and_return(false)
           mock_yogo_model.stub!(:get).with('13').and_return(mock_yogo_data)
         
@@ -327,7 +327,7 @@ describe Yogo::DataController do
         end
 
         it "should allow access to the new form when the user is a member of the project" do
-          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_private? => true))
           @u.stub!(:has_permission?).with(:edit_model_data,mock_project).and_return(true)
 
           get(:new, :project_id => '42', :model_id => 'Vanilla')
@@ -337,7 +337,7 @@ describe Yogo::DataController do
         end
 
         it "should not allow access to the new form when the user is not a member of the project" do
-          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_private? => true))
           @u.stub!(:has_permission?).with(:edit_model_data,mock_project).and_return(false)
 
           get(:new, :project_id => '42', :model_id => 'Vanilla')
@@ -346,7 +346,7 @@ describe Yogo::DataController do
         end
 
         it "should not allow access to the new form when the user is not a member of the project, even if the project is public" do
-          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => true))
+          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_private? => false))
           @u.stub!(:has_permission?).with(:edit_model_data,mock_project).and_return(false)
 
           get(:new, :project_id => '42', :model_id => 'Vanilla')
@@ -358,7 +358,7 @@ describe Yogo::DataController do
 
       describe "POST" do
         it "should allow creating a new item when the user has permission" do
-          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => true))
+          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_private? => false))
           @u.stub!(:has_permission?).and_return(true)
 
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
@@ -371,7 +371,7 @@ describe Yogo::DataController do
         end
 
         it "should now allow the creation of a new item if the user does not have permission" do
-          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_public? => true))
+          Project.stub!(:get).with("42").and_return(mock_project(:models => [], :is_private? => false))
           @u.stub!(:has_permission?).and_return(false)
 
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
@@ -387,7 +387,7 @@ describe Yogo::DataController do
 
       describe "PUT" do
         it "should update a prject when the user has permission" do
-          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_private? => true))
           @u.stub!(:has_permission?).and_return(true)
           
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
@@ -405,7 +405,7 @@ describe Yogo::DataController do
         end
 
         it "should not update a project when the user doesn't have permission" do
-          Project.should_receive(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_public? => false))
+          Project.should_receive(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_private? => true))
           @u.stub!(:has_permission?).and_return(false)
           
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
@@ -426,7 +426,7 @@ describe Yogo::DataController do
 
       describe "DELETE" do
         it "should delete a data item if the user has permissioin" do
-          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_private? => true))
           @u.should_receive(:has_permission?).and_return(true)
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
           mock_yogo_model.stub!(:get).with('13').and_return(mock_yogo_data)
@@ -439,7 +439,7 @@ describe Yogo::DataController do
         end
 
         it "should not delete a data item if the user does not have permissioin" do
-          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_public? => false))
+          Project.stub!(:get).with("42").and_return(mock_project(:namespace => 'TestProject', :is_private? => true))
           @u.should_receive(:has_permission?).and_return(false)
           mock_yogo_model.stub!(:name).and_return('Yogo::TestProject::Vanilla')
           mock_yogo_model.stub!(:get).with('13').and_return(mock_yogo_data)
