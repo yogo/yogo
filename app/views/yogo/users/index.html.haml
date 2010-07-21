@@ -1,18 +1,26 @@
+.medium-centered.boxed
+  %h1#content-title
+    = @project.name 
+    #subtitle User Management
 
-#content-block
-  = link_to("Create a new User", new_project_user_path(@project))
-  - form_tag(update_user_groups_project_users_path, :method => 'post', :id => 'project-user-groups-form') do
-    %table
-      %thead
-        %tr
-          %th User Name
-          - for group in @groups
-            %th= group.name
-      %tbody
-        - for user in @users
+.medium-centered.boxed
+  .rbox.dashed
+    = link_to("Create a new User", new_project_user_path(@project), :class => 'button-link fright')
+    =clear_break * 2
+    - form_tag(update_user_groups_project_users_path, :method => 'post', :id => 'project-user-groups-form') do
+      %table
+        %thead
           %tr
-            %td= user.login
-            -for group in @groups
-              %td.text-center
-                = check_box_tag("groups[#{group.id}][]", user.id, user.groups.include?(group), :id => "user_#{user.id}_group_#{group.id}")
-    =submit_tag
+            %th User Name
+            - for group in @groups
+              %th= group.name
+        %tbody
+          - for user in @users
+            %tr
+              %td= user.login
+              -for group in @groups
+                %td.text-center
+                  = check_box_tag("groups[#{group.id}][]", user.id, user.groups.include?(group), 
+                      :id => "user_#{user.id}_group_#{group.id}")
+      = submit_tag('Update', :class => 'button-link')
+      = link_to('Cancel', edit_project_path(@project), :class => 'cancel')
