@@ -46,9 +46,15 @@
   #container
     #flash
       - if flash[:notice]
-        %p.notice= flash[:notice]
+        - if flash[:notice_link]
+          %p.notice= link_to(flash[:notice], flash[:notice_link])
+        - else
+          %p.error= flash[:error]
       - if flash[:error]
-        %p.error.notice= flash[:error]
+        - if flash[:error_link]
+          %p.error= link_to(flash[:error], flash[:error_link])
+        - else
+          %p.error= flash[:error]
     =clear_break 
     #content
       = yield 

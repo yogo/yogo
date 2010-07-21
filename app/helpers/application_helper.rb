@@ -75,8 +75,8 @@ module ApplicationHelper
 
     output = ""
 
-    output += link_to("&lt;&lt; First&nbsp;", params.merge(:page => 1))  if current_page > 2
-    output += link_to("&lt;&nbsp;Previous&nbsp;", params.merge(:page => current_page-1)) if current_page > 1
+    output += link_to("&lt;&lt; First&nbsp;", params.merge(:page => 1), :class => 'button-link')  if current_page > 2
+    output += link_to("&lt;&nbsp;Previous&nbsp;", params.merge(:page => current_page-1), :class => 'button-link') if current_page > 1
   
     if total_pages > 1
       # Looking for a range of 5 pages centered around the current page.
@@ -88,14 +88,18 @@ module ApplicationHelper
       max_page = min_page + 4 if min_page.eql?(1) && total_pages > 5
 
       (min_page...max_page+1).each do |p|
-        output += link_to("&nbsp;"+((current_page==p) ? "<strong>"+p.to_s+"</strong>" : p.to_s + "")+"&nbsp;",params.merge(:page=>p))
+        output += link_to("&nbsp;"+((current_page==p) ? "<strong>"+p.to_s+"</strong>" : p.to_s + "")+"&nbsp;",params.merge(:page=>p), :class => 'button-link')
       end
     end
 
-    output += link_to("&nbsp;Next&nbsp;&gt;", params.merge(:page => current_page+1)) if current_page < total_pages
-    output << link_to("&nbsp;Last &gt;&gt;",params.merge(:page => total_pages)) if current_page < total_pages-1
+    output += link_to("&nbsp;Next&nbsp;&gt;", params.merge(:page => current_page+1), :class => 'button-link') if current_page < total_pages
+    output << link_to("&nbsp;Last &gt;&gt;",params.merge(:page => total_pages), :class => 'button-link') if current_page < total_pages-1
 
-    output
+    # calculate the row range for this page
+    from = ((current_page - 1) * per_page.to_i) + 1
+    to = (collection.count < per_page.to_i) ? collection.count : from + per_page.to_i - 1
+
+     output + " <span style='font-style: italic'>Showing #{from}&hellip;#{to} rows out of #{collection.count} total rows</span>"
   end
 
   
@@ -194,6 +198,7 @@ module ApplicationHelper
     case property
     when DataMapper::Property::YogoImage
       file = item[property.name]
+      file = file[0..15] + '...' if file.length > 15 
       img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
       link_to(file, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'), :class => 'fancybox')
     when DataMapper::Property::YogoFile
