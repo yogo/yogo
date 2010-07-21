@@ -1,5 +1,7 @@
 %h1#content-title
-  #subtitle= link_to(@project.name, project_path(@project))
+  #subtitle
+    = link_to(@project.name, project_path(@project))
+    = image_tag('icons/private_16.png', :title => 'Private Project') if @project.is_private?
   = @model.public_name
 
 #content-actions

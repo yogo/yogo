@@ -194,7 +194,7 @@ module ApplicationHelper
   # @return [HTML Fragment] the HTML is either a string or a link to the file/image.
   # 
   # @api public
-  def yogo_show_helper(item, property, project, model)
+  def yogo_show_helper(item, property, project, model, detailed = false)
     if property.type == DataMapper::Types::YogoFile
       file = item[property.name]
       file = file[0..15] + '...' if file.length > 15 
@@ -203,9 +203,11 @@ module ApplicationHelper
       file = item[property.name]
       file = file[0..15] + '...' if file.length > 15 
       img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
-      link_to(file, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'), :class => 'fancybox')      
+      link_target = detailed ? img : file
+      link_to(link_target, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'), 
+        :class => 'fancybox', :title => model.name)      
     elsif property.type == DataMapper::Types::Text
-      if item[property.name] && item[property.name].length > 15
+      if !detailed && (item[property.name] && item[property.name].length > 15)
         tooltip(item[property.name])
       else
         item[property.name]
