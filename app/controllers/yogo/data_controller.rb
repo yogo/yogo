@@ -146,6 +146,7 @@ class Yogo::DataController < ApplicationController
     if @item.valid?
       if @item.save
         flash[:notice] = "New \"#{@model.name.demodulize}\" has been created."
+        flash[:notice_link] = project_yogo_data_path(@project, @model.name.demodulize, @item.yogo_id)
         redirect_to project_yogo_data_index_url(@project, @model.name.demodulize)
       else
         flash[:error] = "\"#{@model.name.demodulize}\" could not be created."

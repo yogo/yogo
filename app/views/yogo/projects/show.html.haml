@@ -22,6 +22,8 @@
       .dataset-name
         %h2= link_to dataset.public_name, project_yogo_data_index_path(@project, dataset)
         .vertical-links
+          .link= link_to("Add a new #{dataset.public_name}", new_project_yogo_data_path(@project, dataset), 
+                :class => 'button-link')
           .link= link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
                   :class => 'button-link')
           .link= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')

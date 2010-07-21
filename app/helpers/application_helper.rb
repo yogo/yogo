@@ -97,7 +97,7 @@ module ApplicationHelper
 
     # calculate the row range for this page
     from = ((current_page - 1) * per_page.to_i) + 1
-    to = from + per_page.to_i - 1 
+    to = (collection.count < per_page.to_i) ? collection.count : from + per_page.to_i - 1
 
      output + " <span style='font-style: italic'>Showing #{from}&hellip;#{to} rows out of #{collection.count} total rows</span>"
   end
