@@ -1,4 +1,7 @@
-%h1#content-title= link_to(@project.name, project_path(@project)) + " | " + @model.public_name
+%h1#content-title
+  #subtitle= link_to(@project.name, project_path(@project))
+  = @model.public_name
+
 #content-actions
   .content-action-links
     = link_to("Import Spreadsheet", import_csv_path(@project), :class => 'medium-button-link')
