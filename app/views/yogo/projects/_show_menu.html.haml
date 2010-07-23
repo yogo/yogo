@@ -1,0 +1,5 @@
+#content-menu 
+  = @project.name
+  = image_tag('icons/private_32.png', :title => 'Private Project', :class => content-menu-button-link) if @project.is_private?
+  = link_to(image_tag("edit_big.png"), "/model_editor.html#projects/#{@project.id}&from=#{project_path(@project)}", :class => 'content-menu-button-link')
+  = link_to(image_tag("gear-icon.png"), edit_project_path(@project), :class => 'content-menu-button-link')

@@ -1,0 +1,12 @@
+.small-centered.boxed
+  %h1#content-title
+    #subtitle Create a Project
+    
+.small-centered
+  .rbox.dashed
+    - form_for(@project, :url => new_project_path, :builder => YogoFormBuilder) do |form|
+      / =hidden_field_tag('wizard',true)
+      = render :partial => 'yogo/projects/form', :locals => {:f => form}
+      .form-element
+        =form.submit('Save and Continue', :class => 'button-link')
+        = link_to('Cancel', root_path, :class => 'cancel') 

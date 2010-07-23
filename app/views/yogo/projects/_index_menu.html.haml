@@ -1,0 +1,7 @@
+#content-menu 
+  Projects
+  = link_to(image_tag("plus.png"), new_project_path, :class => 'content-menu-button-link')
+  - unless Yogo::Setting[:example_project_loaded] || Yogo::Setting[:hide_example_project]
+    = link_to("Load Example Project", loadexample_projects_path, 
+      :class => 'medium-button-link', :method => :post)
+  .content-pagination-links= pagination_links(Project, params[:page], 5) 
