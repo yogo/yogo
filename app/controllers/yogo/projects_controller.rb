@@ -22,6 +22,7 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def index
     @projects = Project.available.paginate(:page => params[:page], :per_page => 5)
+    @_menu_partial = 'yogo/projects/index_menu'
     
      respond_to do |format|
         if @projects.empty?
@@ -90,6 +91,7 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def show
     @project = Project.get(params[:id])
+    @_menu_partial = 'yogo/projects/show_menu'
     
     if !Yogo::Setting[:local_only] && @project.is_private?
       raise AuthenticationError if !logged_in?
@@ -116,13 +118,12 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def new
-    # @project = Project.new
-    # 
-    # respond_to do |format|
-    #   format.html 
-    # end
-    # 
-    redirect_to start_wizard_path
+    @project = Project.new
+    
+    respond_to do |format|
+      format.html 
+    end
+    
   end
 
   ##
@@ -147,15 +148,14 @@ class Yogo::ProjectsController < ApplicationController
       raise AuthorizationError if !current_user.has_permission?(:create_projects)
     end
 
-    @project = Project.get(params[:id])
-    
     @project = Project.new(params[:project])
+
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
-      redirect_to csv_question_url(@project)
+      redirect_to projects_url
     else
-      flash.now[:error] = "Project could not be created."
-      render :action => :new
+      flash[:error] = "Project could not be created."
+      redirect_to projects_url
     end
   end
 

@@ -2,7 +2,7 @@
 %html
   %head
     %meta(http-equiv="content-type" content="text/html;charset=UTF-8")/
-    %title= "Yogo Data Management Toolkit: #{controller.action_name}"
+    %title= "VOEIS Data Hub: #{controller.action_name}"
 
     = stylesheet_link_tag('compiled/screen.css', :media => "screen")
     = stylesheet_link_tag('compiled/print.css', :media => "print")
@@ -26,20 +26,14 @@
   / Header (including optional menus)
   #header
     #logo 
-      Yogo Data Management Toolkit 
+      VOEIS Data Hub 
       %span.smaller.emphasis
-        beta
-    - unless Yogo::Setting['local_only']
-      #login-links
-        - if logged_in?
-          = link_to(current_user.login, edit_user_path(current_user))
-          |
-          = link_to("logout", logout_path)
-        - else
-          = link_to("Login", login_path)
+        = "ALPHA v" + YOGO_VERSION
     =clear_break
     #menu.rbox.tight
       = render(:partial => 'layouts/menu_links') unless @no_menu
+      = render(:partial => 'layouts/login') unless @no_login
+      = render(:partial => @_menu_partial) if @_menu_partial
       = render(:partial => 'layouts/search') unless @no_search
   =clear_break 
   /Grid Container 
@@ -63,7 +57,13 @@
   =clear_break   
   #footer
     #yogo-brand
-      = link_to(image_tag("yogo.png", 
-          :alt => "The Yogo Data Management Toolkit Logo"), 
-          'http://yogo.msu.montana.edu/')
-    #application-version= "v" + YOGO_VERSION
+      = link_to(image_tag("uky.png", :alt => "University of Kentucky"), 'http://www.uky.edu') 
+      = link_to(image_tag("umt.png", :alt => "The University of Montana"), 'http://www.umt.edu') 
+      = link_to(image_tag("FLBS.png", :alt => "Flathead Lake Biological Station"), 'http://www.umt.edu/FLBS/') 
+      = link_to(image_tag("hbfs.png", :alt => "Hancock Biological Field Station"), 'http://www.murraystate.edu/qacd/cos/hbs/hbs.htm') 
+      = link_to(image_tag("eku.png", :alt => "Eastern Kentucky University"), 'http://www.eku.edu') 
+      = link_to(image_tag("msu.png", :alt => "Montana State University"), 'http://www.montana.edu') 
+      = link_to(image_tag("ul.png", :alt => "University of Louisville"), 'http://www.louisville.edu') 
+      = link_to(image_tag("murray.png", :alt => "Murray State University"), 'http://www.murraystate.edu') 
+      = link_to(image_tag("yerc.png", :alt => "Yellowstone Ecological Research Center"), 'http://www.yellowstoneresearch.org')
+      = link_to(image_tag("yogo.png", :alt => "The Yogo Data Management Toolkit Logo"), 'http://yogo.msu.montana.edu/')

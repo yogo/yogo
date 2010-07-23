@@ -1,17 +1,6 @@
-%h1#content-title Dashboard
-#content-actions
-  .content-action-links
-    = link_to("Create a Project", start_wizard_path, :class => 'medium-button-link')
-    - unless Yogo::Setting[:example_project_loaded]
-      = link_to("Load Example Project", loadexample_projects_path, 
-        :class => 'medium-button-link', :method => :post)
-  .content-pagination-links= pagination_links(Project, params[:page], 5) 
-
 #content-block
   - for project in @projects
-    .content-row-block
-      /.project-icon= link_to(image_tag('mock-project-icon.jpg'), project_path(project) )
-
+    .content-row-block.rbox
       .project-text
         %h2
           = link_to(project.name, project_path(project) ) 
@@ -48,14 +37,5 @@
                   %td= link_to(dataset.count(:created_at.gt => 1.week.ago),
                         project_yogo_data_index_path(project, dataset))
                   %td= link_to(dataset.count, project_yogo_data_index_path(project, dataset))
-                  /%td= link_to(image_tag('table_edit.png', :title => "Browse Data") + " Browse",
-                  /      project_yogo_data_index_path(project, dataset))
-                  / TODO: Show the model editor
-                  /%td= link_to(image_tag('layout_edit.png', 
-                  /      :title => "Describe Dataset") + " Describe",
-                  /      project_yogo_models_path(project))
-                  /%td= link_to(image_tag('table_add.png', 
-                  /      :title => "Import Spreadsheet") + " Import", 
-                  /      import_csv_path(project))
 
 #pagination-links= pagination_links(Project, params[:page], 5)

@@ -99,7 +99,11 @@ module ApplicationHelper
     from = ((current_page - 1) * per_page.to_i) + 1
     to = (collection.count < per_page.to_i) ? collection.count : from + per_page.to_i - 1
 
-     output + " <span style='font-style: italic'>Showing #{from}&hellip;#{to} rows out of #{collection.count} total rows</span>"
+    if (from == 1 and to == collection.count)
+      output = ""
+    else
+      output + " <span style='font-style: italic'>Showing #{from}&hellip;#{to} of #{collection.count} #{collection.name.pluralize}</span>"
+    end
   end
 
   

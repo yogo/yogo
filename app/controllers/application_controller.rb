@@ -14,8 +14,8 @@ class ApplicationController < ActionController::Base
   include AuthorizationSystem
   
   # Check for local connections before anything else
-  before_filter :check_local_only
-  
+  before_filter :check_local_only, :check_menu
+
   # Set the current user for the models to use.
   before_filter do |c|
     User.current = c.current_user
@@ -86,6 +86,10 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def check_menu
+    @_menu_partial = nil
+  end
+  
   ##
   # Show the sidebar in the layout (this is usually called by a before-filter)
   # 
@@ -99,4 +103,6 @@ class ApplicationController < ActionController::Base
     @sidebar = true
   end
   
+  def about
+  end
 end

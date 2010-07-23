@@ -1,4 +1,5 @@
-local_only: true
+local_only: false
+hide_example_project: false
 require_change_summary: false
 asset_directory: yogo_assets
 
