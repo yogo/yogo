@@ -142,7 +142,6 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def create
-    
     if !Yogo::Setting[:local_only]
       raise AuthenticationError  if !logged_in? 
       raise AuthorizationError if !current_user.has_permission?(:create_projects)
