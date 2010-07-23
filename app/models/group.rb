@@ -12,6 +12,7 @@ class Group
   property :id, Serial
   property :name, String, :required => true
   property :admin, Boolean, :default => false
+  property :description, String
   
   property :permissions, String, :default => '', :length => 200 #, :accessor => :private
   
@@ -19,10 +20,9 @@ class Group
   belongs_to :project, :required => false
   
   SYSTEM_ACTIONS = [ :create_projects ]
-  PROJECT_ACTIONS = [ :edit_project, :edit_model_descriptions, :edit_model_data, :delete_model_data, :view_project ]
+  PROJECT_ACTIONS = [ :edit_project, :delete_project, :edit_model_descriptions, :edit_model_data, :delete_model_data, :view_project ]
   AVAILABLE_ACTIONS = SYSTEM_ACTIONS + PROJECT_ACTIONS
   
-
   ##
   # Adds a action to be permitted to the group
   # 

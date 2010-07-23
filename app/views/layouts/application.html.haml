@@ -43,7 +43,7 @@
         - if flash[:notice_link]
           %p.notice= link_to(flash[:notice], flash[:notice_link])
         - else
-          %p.error= flash[:error]
+          %p.notice= flash[:notice]
       - if flash[:error]
         - if flash[:error_link]
           %p.error= link_to(flash[:error], flash[:error_link])

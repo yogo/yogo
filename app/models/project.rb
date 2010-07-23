@@ -431,33 +431,16 @@ class Project
   # @author Robbie Lamb
   # @api private
   def create_default_groups
-    DataMapper.logger.debug { "Creating default groups" }
-
-    manager_group = Group.new(:name => 'Manager')
-    manager_group.users << User.current unless User.current.nil?
-
-    view_project = Group.new(:name => 'View Project')
-    edit_project = Group.new(:name => 'Edit Project')
-    edit_model   = Group.new(:name => 'Edit Models')
-    edit_data    = Group.new(:name => 'Edit Data')
-    delete_data  = Group.new(:name => 'Delete Data')
-    self.groups.push( manager_group, view_project, edit_project, edit_model, edit_data, delete_data )
-    self.save
-    [:edit_project, :edit_model_descriptions, :edit_model_data, :delete_model_data].each do |action|
-      manager_group.add_permission(action)
-    end
-    manager_group.save
-    view_project.add_permission(:view_project)
-    view_project.save
-    edit_project.add_permission(:edit_project)
-    edit_project.save
-    edit_model.add_permission(:edit_model_descriptions)
-    edit_model.save
-    edit_data.add_permission(:edit_model_data)
-    edit_data.save
-    delete_data.add_permission(:delete_model_data)
-    delete_data.save
-    
+    # DataMapper.logger.debug { "Creating default groups" }
+    # 
+    # admin_group = Group.new(:name => "Administrator", :description => "Application administrators.")
+    # admin_group.users << User.current unless User.current.nil?
+    # [:create_projects, :view_project, :edit_project, :delete_project, :edit_model_descriptions, :edit_model_data, :delete_model_data].each do |action|
+    #    admin_group.add_permission(action)
+    #  end
+    # admin_group.save
+    # self.groups.push(admin_group)
+    # self.save
   end
   
   def delete_associated_groups!

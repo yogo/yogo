@@ -80,15 +80,13 @@ DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(
                                 DataMapper.repository(:default).storage_exists?(SchemaBackup.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(User.storage_name)
                                 
-
-admin_g = Group.first(:name => 'Administrators', :admin => true, :project => nil)
-admin_g ||= Group.create(:name => 'Administrators', :admin => true)
-create_g = Group.first(:name => "Create Projects", :admin => false, :project => nil)
-create_g ||= Group.create(:name => 'Create Projects', :admin => false, :permissions => 'create_projects')
+admin_g = Group.first_or_create(:name => "Administrators", :admin => true, :project => nil)
+Group::AVAILABLE_ACTIONS.each do |action|
+  admin_g.add_permission(action)
+end
+admin_g.save
 
 if admin_g.users.empty?
-  u = User.create(:login => 'yogo', :password => 'change me', :password_confirmation => 'change me')
-  u.groups << admin_g
-  u.groups << create_g
-  u.save
+  admin_g.users.create(:login => 'yogo', :password => 'change me', :password_confirmation => 'change me')
+  admin_g.save
 end

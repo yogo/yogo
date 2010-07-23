@@ -1,4 +1,6 @@
 #content-block
+  - if @projects.empty?
+    There are no projects yet, you should create one!
   - for project in @projects
     .content-row-block.rbox
       .project-text

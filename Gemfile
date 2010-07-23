@@ -17,6 +17,7 @@ gem "dm-types",             "0.10.2", :path => "vendor/gems/dm-types-0.10.2"
 gem "dm-observer",          "0.10.2"
 gem "dm-persevere-adapter", "0.71.4", :require => nil, :git => "git://github.com/yogo/dm-persevere-adapter.git",:branch => "yogo-integration", :ref => '70bf9ff79cf948a48ff05a4bb2e45e394419cb76'
 gem "rails_datamapper",     "0.10.2", :require => nil
+gem "inherited_resources",  "1.0.6"
 
 # These are required so we can make it simple to interact with legacy data
 # gem "do_mysql",                       :require => nil

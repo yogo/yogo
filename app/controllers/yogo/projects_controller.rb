@@ -25,13 +25,7 @@ class Yogo::ProjectsController < ApplicationController
     @_menu_partial = 'yogo/projects/index_menu'
     
      respond_to do |format|
-        if @projects.empty?
-          @no_search = true
-          @no_menu   = true 
-          format.html { render('no_projects') }
-        else
-          format.html 
-        end
+        format.html 
       end
   end
 
@@ -143,8 +137,8 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def create
     if !Yogo::Setting[:local_only]
-      raise AuthenticationError  if !logged_in? 
-      raise AuthorizationError if !current_user.has_permission?(:create_projects)
+      flash[:error] = "You need to login first" unless logged_in?
+      flash[:error] = "You do not have permission to create the project." unless current_user.has_permission?(:create_projects)
     end
 
     @project = Project.new(params[:project])
@@ -239,8 +233,8 @@ class Yogo::ProjectsController < ApplicationController
     @project = Project.get(params[:id])
     
     if !Yogo::Setting[:local_only]
-      raise AuthenticationError unless logged_in? 
-      raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
+      flash[:error] = "You need to login first" unless logged_in?
+      flash[:error] = "You do not have permission to delete the project." unless current_user.has_permission?(:delete_project, @project)
     end
     
     if @project.destroy
