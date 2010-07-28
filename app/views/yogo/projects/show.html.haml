@@ -1,3 +1,10 @@
+=clear_break
+#map
+  You should see a map here.  
+  .map-links
+=clear_break
+
+
 #content-block
   - for dataset in @project.models
     - @item = dataset.new
@@ -21,3 +28,8 @@
           = render(:partial => 'yogo/models/dataset',       :locals => {:dataset => dataset})
           = render(:partial => 'yogo/projects/build_query', :locals => {:dataset => dataset})
           = render(:partial => 'yogo/data/quickview',       :locals => {:dataset => dataset})
+
+:javascript
+  $(document).ready(function(){
+  $.yogo_mapit($('#map'),{locations: [{'lat': 45.6, 'long': -111.0,   'name': "Lorem ipsum."},{'lat': 45.62, 'long': -111.01, 'name': "Lorem ipsum."}]});
+  });

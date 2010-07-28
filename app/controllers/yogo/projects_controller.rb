@@ -145,8 +145,22 @@ class Yogo::ProjectsController < ApplicationController
 
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
-       puts "*******************************************"
-        puts odm_contents = Dir.new("dist/odm").entries
+        #Check to be sure the default VOEIS project is loaded - create it if it doesn't exist
+        if Project.first(:name => "VOEIS").nil?
+          def_project = Project.new()
+          def_project.name = "VOEIS"
+          def_project.description = "The Default VOEIS Project and Repository" 
+          def_project.save
+          puts odm_contents = Dir.new("dist/odm").entries
+          odm_contents.each do |content|
+            puts content.to_s + "before"
+            if !content.to_s.index('.csv').nil?
+              puts content.to_s
+              def_project.process_csv('dist/odm/' + content.to_s, content.to_s.gsub(".csv",""))
+            end
+          end
+        end
+        puts odm_contents = Dir.new("dist/voeis_default").entries
         odm_contents.each do |content|
           puts content.to_s + "before"
           if !content.to_s.index('.csv').nil?
