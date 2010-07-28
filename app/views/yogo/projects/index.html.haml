@@ -1,12 +1,13 @@
-%h1#content-title Dashboard
-#content-actions
-  .content-action-links
-    = link_to("Create a Project", start_wizard_path, :class => 'medium-button-link')
-    - unless Yogo::Setting[:example_project_loaded]
-      = link_to("Load Example Project", loadexample_projects_path, 
-        :class => 'medium-button-link', :method => :post)
-  .content-pagination-links= pagination_links(Project, params[:page], 5) 
+/ %h1#content-title Dashboard
+/ #content-actions
+/   .content-action-links
+/     = link_to("Create a Project", start_wizard_path, :class => 'medium-button-link')
+/     - unless Yogo::Setting[:example_project_loaded]
+/       = link_to("Load Example Project", loadexample_projects_path, 
+/         :class => 'medium-button-link', :method => :post)
 
+#pagination-links= pagination_links(Project, params[:page], 5) 
+=clear_break
 #content-block
   - for project in @projects
     .content-row-block

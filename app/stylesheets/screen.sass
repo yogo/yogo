@@ -72,25 +72,30 @@ body
       border: 1px solid #f2f2f2 - #555
       background-color: #FFF
       padding: .5em 2px
-      #menu-links
+      #menu-left-col
         +column(12)
-        line-height: 2em
-        padding: .5em 0 .5em 10px
-      #search-tab
-        +column(9, true)
-        padding: .5em 0 .5em 2em
-        text-align: right
-        .button-link
-          font-size: 0.9em
-          line-height: 1.7em
-          padding: 1px 3px 0px
+        #content-title
+          margin-left: 10px
+      #menu-right-col
+        +column(10, true)
+        #menu-links
+          line-height: 2em
+          text-align: right
+          margin-right: 10px
+        #search-tab
+          text-align: right
+          margin-right: 10px
+          .button-link
+            font-size: 0.9em
+            line-height: 1.7em
+            padding: 1px 3px 0px
   // Flash Notices always use blueprint layout
   #flash
     +prepend(4)
     +column(14, true)
     +append(4)
     text-align: center
-    height: 2em
+    height: 4em
     margin-top: 2em
     .error, .notice
       padding: 0
@@ -202,7 +207,7 @@ body
       border-style: dashed
   // H* Tags
   h1 
-    font-size: 2.5em
+    font-size: 2em
     line-height: 1
     margin-bottom: 0.5em
     &.no-gap
@@ -217,22 +222,20 @@ body
     font-size: 1.7em
     margin-bottom: 0.75em
   h3 
-    font-size: 1.4em
+    font-size: 1.5em
     line-height: 1
     margin-bottom: 1em
-    &.tight
-      margin-bottom: .2em
-  h4 
-    font-size: 1.1em
-    line-height: 1.25
-    margin-bottom: 1.25em
-  h5 
+  h4
+    font-size: 1.3em
+    line-height: 1
+    margin-bottom: 1em
+  h5, h6 
     font-size: 1em
     font-weight: bold
     margin-bottom: 1.5em
-  h6 
-    font-size: 1em
-    font-weight: bold
+  h1, h2, h3, h4, h5, h6
+    &.tight
+      margin-bottom: .2em
   // Forms
   .form-element
     margin-bottom: .5em
@@ -255,6 +258,8 @@ body
     font-style: italic
   .smaller
     font-size: .6em
+  .double-height
+    line-height: 2em
   img
     border: 0
   // Content Header Elements that Occur Outside of bp.
@@ -264,6 +269,7 @@ body
   #content-title, #data-content-title
     margin-top: 0
     text-align: left
+    margin-bottom: 0
     +column(12)
     #subtitle
       font-size: .5em
@@ -273,10 +279,11 @@ body
     +column(10)
     margin-left: -.5em
   #content-actions, #data-content-actions
-    +column(10, true)
+    +column(12)
+    margin-left: 10px
     //margin-top: .5em
     .content-action-links
-      float: right
+      //float: right
     .content-pagination-links
       text-align: right
       line-height: 2em
