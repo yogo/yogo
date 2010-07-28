@@ -145,6 +145,15 @@ class Yogo::ProjectsController < ApplicationController
 
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
+       puts "*******************************************"
+        puts odm_contents = Dir.new("dist/odm").entries
+        odm_contents.each do |content|
+          puts content.to_s + "before"
+          if !content.to_s.index('.csv').nil?
+            puts content.to_s
+            @project.process_csv('dist/odm/' + content.to_s, content.to_s.gsub(".csv",""))
+          end
+        end
       redirect_to projects_url
     else
       flash[:error] = "Project could not be created."
