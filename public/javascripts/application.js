@@ -165,49 +165,7 @@ function check_navigation_element_state(element){
 	
 	// utility functions
 	function isFirstPage( opts, internalPageNum ) { return ( internalPageNum === 0 ); }
-	function isLastPage( opts, internalPageNum ) { return ( internalPageNum === opts.totalPages-1 ); }
-	
-})(jQuery);
-
-
-jQuery.fn.textdropdown = function() {
-  with ($(this)) {
-    with (next('ul:first')) {
-      find('li').click(function() {
-        $(this).parent().prev('.textdropdown-outer').find('input:first').attr('value', $(this).html());
-        $(this).parent().hide();
-      });
-      hide();
-    } 
-
-    keypress(function() { 
-      $(this).parent().next('ul:first').hide();
-    });
-
-    change(function() { 
-      $(this).parent().next('ul:first').hide();
-    });
-
-    wrap('<div class="textdropdown-outer" style="width: ' + width() + 'px; height: ' + (height() + 5) + 'px"></div>');
-    var btn = parent().prepend('<div class="textdropdown-btn">&nbsp;</div>').find('.textdropdown-btn');
-    width(width() - btn.width() - 5);
-    css("border", "0");
-
-    btn.click(function() {
-      var p = parent();
-      with (p.next('ul:first')) {
-        css('position', 'absolute');
-        css('width',    p.width());
-        css('left',     p.position().left);
-        css('top',      p.position().top + p.height() + 1);
-        toggle();
-      }
-    });
-  }
-};
-
-(function($){
-  // This plugin could really be cleaned up.
+	function isLastPage( opts, internalPageNum ) { return ( internalPageNum === opts.totalPages-1 ); };
   $.yogo_mapit = function(element, options){
 
     defaults = {
@@ -310,6 +268,42 @@ jQuery.fn.textdropdown = function() {
     
     return this;
   };
-  
-  
 })(jQuery);
+
+
+jQuery.fn.textdropdown = function() {
+  with ($(this)) {
+    with (next('ul:first')) {
+      find('li').click(function() {
+        $(this).parent().prev('.textdropdown-outer').find('input:first').attr('value', $(this).html());
+        $(this).parent().hide();
+      });
+      hide();
+    } 
+
+    keypress(function() { 
+      $(this).parent().next('ul:first').hide();
+    });
+
+    change(function() { 
+      $(this).parent().next('ul:first').hide();
+    });
+
+    wrap('<div class="textdropdown-outer" style="width: ' + width() + 'px; height: ' + (height() + 5) + 'px"></div>');
+    var btn = parent().prepend('<div class="textdropdown-btn">&nbsp;</div>').find('.textdropdown-btn');
+    width(width() - btn.width() - 5);
+    css("border", "0");
+
+    btn.click(function() {
+      var p = parent();
+      with (p.next('ul:first')) {
+        css('position', 'absolute');
+        css('width',    p.width());
+        css('left',     p.position().left);
+        css('top',      p.position().top + p.height() + 1);
+        toggle();
+      }
+    });
+  }
+};
+

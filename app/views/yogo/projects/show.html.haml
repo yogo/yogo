@@ -1,3 +1,5 @@
+= link_to("View Streaming Data", project_path(@project), :class => 'medium-button-link')
+= link_to("View Field Data", project_path(@project), :class => 'medium-button-link')
 =clear_break
 #map
   You should see a map here.  
@@ -31,5 +33,8 @@
 
 :javascript
   $(document).ready(function(){
-  $.yogo_mapit($('#map'),{locations: [{'lat': 45.6, 'long': -111.0,   'name': "Lorem ipsum."},{'lat': 45.62, 'long': -111.01, 'name': "Lorem ipsum."}]});
+  $.yogo_mapit($('#map'), {locations: 
+  [{'lat': 45.6, 'long': -111.0,   'name': "Lorem ipsum."},
+  {'lat': 45.62, 'long': -111.01, 'name': "Lorem ipsum."}]
+  });
   });
