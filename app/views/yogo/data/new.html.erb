@@ -1,4 +1,7 @@
-<H3><%= @model.name.demodulize.titleize.singularize %></H3>
+<H3>
+<%= link_to(@project.name, project_path(@project))%>
+<%= clear_break%>
+<%= @model.name.demodulize.titleize.singularize %></H3>
 <br />
 <%- form_for(@item, :url => project_yogo_data_index_path(@project, @model.name.demodulize), 
                     :builder => YogoDataFormBuilder,

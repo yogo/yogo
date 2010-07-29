@@ -160,12 +160,12 @@ class Yogo::ProjectsController < ApplicationController
             end
           end
         end
-        puts odm_contents = Dir.new("dist/voeis_default").entries
-        odm_contents.each do |content|
+        puts voeis_contents = Dir.new("dist/voeis_default").entries
+        voeis_contents.each do |content|
           puts content.to_s + "before"
           if !content.to_s.index('.csv').nil?
             puts content.to_s
-            @project.process_csv('dist/odm/' + content.to_s, content.to_s.gsub(".csv",""))
+            @project.process_csv('dist/voeis_default/' + content.to_s, content.to_s.gsub(".csv",""))
           end
         end
       redirect_to projects_url

@@ -13,23 +13,22 @@
     .content-row-block
       .dataset-name
         %h2= link_to dataset.public_name, project_yogo_data_index_path(@project, dataset)
-        .vertical-links
-          .link= link_to("Add a new #{dataset.public_name}", new_project_yogo_data_path(@project, dataset), 
+      =clear_break  
+      = link_to("Add a new #{dataset.public_name}", new_project_yogo_data_path(@project, dataset), 
+              :class => 'button-link')
+      = link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
                 :class => 'button-link')
-          .link= link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
-                  :class => 'button-link')
-          /= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
-          .link= link_to("Export Spreadsheet", project_yogo_data_index_path(@project, dataset, 
-                  :format => 'csv'), :class => 'button-link')
+      /= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
+      = link_to("Export Spreadsheet", project_yogo_data_index_path(@project, dataset, 
+                :format => 'csv'), :class => 'button-link')
       .dataset-info
         .action-tabs
           %ul
-            %li <a href="##{dataset.to_param}-dataset-details">Dataset Details</a>
-            %li <a href="##{dataset.to_param}-query">Query</a>
             %li <a href="##{dataset.to_param}-quickview">Quickview</a>
-          = render(:partial => 'yogo/models/dataset',       :locals => {:dataset => dataset})
-          = render(:partial => 'yogo/projects/build_query', :locals => {:dataset => dataset})
+            %li <a href="##{dataset.to_param}-query">Query</a>
+           
           = render(:partial => 'yogo/data/quickview',       :locals => {:dataset => dataset})
+          = render(:partial => 'yogo/projects/build_query', :locals => {:dataset => dataset})
 
 :javascript
   $(document).ready(function(){

@@ -1,3 +1,1 @@
-Yogo ID,Updated by,Created at,Change summary,Updated at,Created by,Organization,Source description,Source link,Contact name,Phone,Email,Address,City,State,Zipcode,Citation,Meta data
-Internal Type,Integer,DateTime,Text,DateTime,Integer,Text,Text,Text,Text,Text,Text,Text,Text,Text,Text,Text,Integer
-Please don't modify,,,,,,,,,,,,,,,,,
+Yogo ID,Organization,Source description,Source link,Contact name,Phone,Email,Address,City,State,Zipcode,Citation,Meta dataInternal Type,Text,Text,Text,Text,Text,Text,Text,Text,Text,Text,Text,IntegerPlease don't modify,,,,,,,,,,,,
