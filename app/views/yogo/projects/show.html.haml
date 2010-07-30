@@ -1,9 +1,15 @@
 = link_to("View Streaming Data", project_path(@project), :class => 'medium-button-link')
 = link_to("View Field Data", project_path(@project), :class => 'medium-button-link')
 =clear_break
-#map
-  You should see a map here.  
-  .map-links
+#project-actions
+  %table.project
+    %tr
+      %td.map
+        #map
+          You should see a map here.  
+          .map-links
+      %td.buttons
+        = link_to("Add a Site to #{@project.name}", {:controller => "projects", :action => "add_site", :params => {:id => @project.id}}, :class => 'button-link')
 =clear_break
 
 

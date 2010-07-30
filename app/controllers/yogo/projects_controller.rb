@@ -350,5 +350,11 @@ class Yogo::ProjectsController < ApplicationController
       redirect_to root_url
     end
   end
-  
+  def add_site
+    @project = Project.get(params[:id])
+    
+    respond_to do |format|
+      format.html 
+    end
+  end
 end
