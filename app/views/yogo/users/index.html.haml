@@ -1,9 +1,4 @@
 .medium-centered.boxed
-  %h1#content-title
-    #subtitle User Management
-    = @project.name 
-
-.medium-centered.boxed
   .rbox.dashed
     = link_to("Create a new User", new_project_user_path(@project), :class => 'button-link fright')
     =clear_break * 2

@@ -1,8 +1,12 @@
-.extra-small-centered
+.extra-small
   %h1#content-title
     #subtitle Edit User
     = @user.name
-
-.extra-small-centered.box
+    
+.extra-small.box
   .rbox.dashed
     = render(:partial => 'form')
+- unless @user.new?
+  .extra-small.box
+    .rbox-dashed
+      = render(:partial => 'user_projects')

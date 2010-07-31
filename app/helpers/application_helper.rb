@@ -186,6 +186,10 @@ module ApplicationHelper
     end
   end
   
+  def yogo_button(image, text, link)
+    link_to(image_tag(image), link)
+  end
+  
   # Creates the appropriate HTML for attributes on a model
   # 
   # For attributes that are files or images it makes a download link work for them

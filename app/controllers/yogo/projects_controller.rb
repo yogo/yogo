@@ -22,7 +22,7 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def index
     @projects = Project.available.paginate(:page => params[:page], :per_page => 5)
-    @_menu_partial = 'yogo/projects/index_menu'
+    @_menu_partial = 'index_menu'
     
      respond_to do |format|
         format.html 
@@ -85,7 +85,7 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def show
     @project = Project.get(params[:id])
-    @_menu_partial = 'yogo/projects/show_menu'
+    @_menu_partial = 'show_menu'
     
     if !Yogo::Setting[:local_only] && @project.is_private?
       raise AuthenticationError if !logged_in?

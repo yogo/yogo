@@ -1,0 +1,7 @@
+- field_set_tag("Users:") do
+  = collection_select(:user, :user_id, User.all, :id, :name, {:prompt => false, :include_blank => true})
+
+- field_set_tag("Role:") do
+  - for group in Group.all do
+    = check_box_tag(group.name)
+    = label_tag(group.name)
