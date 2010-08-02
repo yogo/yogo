@@ -95,7 +95,7 @@ class Yogo::ProjectsController < ApplicationController
     @project = Project.get(params[:id])
     @_menu_partial = 'show_menu'
 
-    if !Yogo::Setting[:local_only] && @project.is_private?
+    if !Setting[:local_only] && @project.is_private?
       raise AuthenticationError if !logged_in?
       raise AuthorizationError  if !current_user.is_in_project?(@project)
     end
@@ -144,7 +144,7 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def create
-    if !Yogo::Setting[:local_only]
+    if !Setting[:local_only]
       flash[:error] = "You need to login first" unless logged_in?
       flash[:error] = "You do not have permission to create the project." unless current_user.has_permission?(:create_projects)
     end
@@ -200,7 +200,7 @@ class Yogo::ProjectsController < ApplicationController
   def edit
     @project = Project.get(params[:id])
 
-    if !Yogo::Setting[:local_only]
+    if !Setting[:local_only]
       raise AuthenticationError unless logged_in?
       raise AuthorizationError  unless @project.groups.users.empty? || current_user.has_permission?(:edit_project,@project)
     end
@@ -229,7 +229,7 @@ class Yogo::ProjectsController < ApplicationController
   def update
     @project = Project.get(params[:id])
 
-    if !Yogo::Setting[:local_only]
+    if !Setting[:local_only]
       raise AuthenticationError unless logged_in?
       raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
     end
@@ -263,7 +263,7 @@ class Yogo::ProjectsController < ApplicationController
   def destroy
     @project = Project.get(params[:id])
 
-    if !Yogo::Setting[:local_only]
+    if !Setting[:local_only]
       flash[:error] = "You need to login first" unless logged_in?
       # We don't know how to check for this permission yet.
       #flash[:error] = "You do not have permission to delete the project." unless current_user.has_permission?(:delete_project, @project)
@@ -294,7 +294,7 @@ class Yogo::ProjectsController < ApplicationController
   def upload
     @project = Project.get(params[:id])
 
-    if !Yogo::Setting[:local_only]
+    if !Setting[:local_only]
       raise AuthenticationError unless logged_in?
       raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
     end
@@ -340,7 +340,7 @@ class Yogo::ProjectsController < ApplicationController
   def loadexample
     # Load the cercal db from CSV
 
-    if !Yogo::Setting[:local_only] && (!logged_in?)
+    if !Setting[:local_only] && (!logged_in?)
       raise AuthenticationError
     end
 
@@ -352,7 +352,7 @@ class Yogo::ProjectsController < ApplicationController
       else
         flash[:error] = errors.join("\n")
       end
-      Yogo::Setting[:example_project_loaded] = true
+      Setting[:example_project_loaded] = true
       redirect_to project_url(@project)
     else
       flash[:error] = "Example Project could not be created, so was not loaded."

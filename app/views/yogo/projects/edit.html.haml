@@ -13,16 +13,12 @@
       %h3= f.text_area(:description, :label => "Project Description: ")
       %h3.tight Project Users
       .rbox.tight
-        .managers
-          %span.bold Managers: 
-          - unless @project.groups.first(:name => 'Manager').nil?
-            = @project.groups.first(:name => 'Manager').users.map{|u| u.name }.join(', ')
         %span.bold All Users:
         %ul.all-users
-          - unless @project.groups.empty? 
-            - @project.groups.users.each do |user|
-              // TODO: The group-selection below is clumsy, optimize plz
-              %li= user.name + ": " + @project.groups.select{|g| g.users.include?(user) }.map{|g| g.name }.join(', ')
+          - unless @project.roles.empty? 
+            - @project.roles.users.each do |user|
+              // TODO: The role-selection below is clumsy, optimize plz
+              %li= user.name + ": " + @project.roles.select{|g| g.users.include?(user) }.map{|g| g.name }.join(', ')
       .form-element
         = f.submit('Update', :class => 'button-link')
         = link_to('Cancel', projects_path, :class => 'cancel')

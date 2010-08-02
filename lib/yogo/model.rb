@@ -169,7 +169,7 @@ module Yogo
       # 
       # @api private
       def create_uploader(name, type)
-        path = File.join(Rails.root, Yogo::Setting['asset_directory'], asset_path, name.to_s )
+        path = File.join(Rails.root, Setting['asset_directory'], asset_path, name.to_s )
         anon_file_handler = Class.new(CarrierWave::Uploader::Base)
         anon_file_handler.instance_eval do 
           storage :file
@@ -226,7 +226,7 @@ module Yogo
       # 
       # @api private
       def require_change_summary?
-        Yogo::Setting[:require_change_sumary] && !new_record?
+        Setting[:require_change_sumary] && !new_record?
       end
 
     end

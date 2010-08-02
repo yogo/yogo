@@ -13,7 +13,7 @@ class ProjectObserver
   
   before :destroy do
     DataMapper.logger.debug { "Before destroy hook" }
-    # raise AuthorizationError, "You can't do that!" unless Yogo::Setting[:local_only]
+    # raise AuthorizationError, "You can't do that!" unless Setting[:local_only]
   end
   
   before :delete_model do

@@ -1,12 +1,13 @@
-# Yogo Data Management Toolkit
+
+# # Yogo Data Management Toolkit
 # Copyright (c) 2010 Montana State University
 #
 # License -> see license.txt
 #
-# FILE: group.rb
-# Groups for projects and users. A Project will have groups, and users will belong to groups
+# FILE: Role.rb
+# Roles for projects and users. A Project will have Roles, and users will belong to Roles
 
-class Group
+class Role
   include DataMapper::Resource
 
   property :id, Serial
@@ -39,13 +40,13 @@ class Group
   end
 
   ##
-  # Adds a action to be permitted to the group
+  # Adds a action to be permitted to the Role
   #
   # @example
-  #   group.add_permission(:edit_project)
+  #   role.add_permission(:edit_project)
   #
   # @param [Symbol or String] action
-  #   The action to add to the permission list for this group
+  #   The action to add to the permission list for this Role
   #
   # @return [Array] not useful
   #
@@ -64,16 +65,16 @@ class Group
   end
 
   ##
-  # Checks to see if the group has permission for an action
+  # Checks to see if the Role has permission for an action
   #
   # @example
-  #   group.has_permission?(:edit_project)
+  #   role.has_permission?(:edit_project)
   #
   # @param [Symbol or String] action
   #   The action to check permission for
   #
   # @return [Boolean]
-  #   True or False depending if the group has permission or not
+  #   True or False depending if the Role has permission or not
   #
   # @raise [NonExistantPermissionError] If the given action isn't valid
   #
@@ -93,13 +94,13 @@ class Group
   # An alias from have_permission?
   #
   # @example
-  #   group.has_permission?(:edit_project)
+  #   role.has_permission?(:edit_project)
   #
   # @param [Symbol or String] action
   #   The action to check permission for
   #
   # @return [Boolean]
-  #   True or False depending if the group has permission or not
+  #   True or False depending if the Role has permission or not
   #
   # @raise [NonExistantPermissionError] If the given action isn't valid
   #
@@ -108,10 +109,10 @@ class Group
   alias :has_permission? :have_permission?
 
   ##
-  # Removes a permission from a group
+  # Removes a permission from a Role
   #
   # @example
-  #   group.remove_permission?(:edit_project)
+  #   role.remove_permission?(:edit_project)
   #
   # @param [Symbol or String] action
   #   The action to remove permission for

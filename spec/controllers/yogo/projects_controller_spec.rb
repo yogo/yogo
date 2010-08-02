@@ -6,10 +6,10 @@ describe Yogo::ProjectsController do
     @mock_project ||= mock_model(Project, stubs)
   end
   
-  def mock_groups(stubs={})
-    @mock_groups ||= begin
-      mg = [ mock_model(Group, stubs),
-             mock_model(Group, stubs)
+  def mock_Roles(stubs={})
+    @mock_Roles ||= begin
+      mg = [ mock_model(Role, stubs),
+             mock_model(Role, stubs)
            ]
       mg.stub(:users).and_return([])
       mg
@@ -35,7 +35,7 @@ describe Yogo::ProjectsController do
   describe "when running locally" do
     
     before(:all) do
-      Yogo::Setting[:local_only] = true
+      Setting[:local_only] = true
     end
 
     describe "GET projects/" do
@@ -221,11 +221,11 @@ describe Yogo::ProjectsController do
 
   describe "when running in server mode" do
     before(:all) do
-      Yogo::Setting[:local_only] = false
+      Setting[:local_only] = false
     end
     
     it "should be local only" do
-      Yogo::Setting[:local_only].should be_false
+      Setting[:local_only].should be_false
     end
     
     describe "when not logged in" do
@@ -291,7 +291,7 @@ describe Yogo::ProjectsController do
       end
 
       describe "GET /project/:id" do
-        it "should not allow a user without a project group to view a private project" do
+        it "should not allow a user without a project Role to view a private project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_private? => true))
           @u.should_receive(:is_in_project?).with(mock_project).and_return(false)
           
@@ -301,11 +301,11 @@ describe Yogo::ProjectsController do
           response.should_not redirect_to(login_url)
         end
         
-        it "should allow a user in a project group to view a private project" do
+        it "should allow a user in a project Role to view a private project" do
           @u.stub!(:is_in_project?).and_return(true)
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_private? => true))
-          mock_project.stub!(:groups).and_return(mock_groups)
-          mock_groups.stub!(:users).and_return(['not empty'])
+          mock_project.stub!(:Roles).and_return(mock_Roles)
+          mock_Roles.stub!(:users).and_return(['not empty'])
 
           
           get :show, :id => "37"
@@ -315,11 +315,11 @@ describe Yogo::ProjectsController do
       end
 
       describe "GET /project/:id/edit" do
-        it "should not allow a user without group priviliges to edit a project" do
+        it "should not allow a user without Role priviliges to edit a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_private? => true))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(false)
-          mock_project.stub!(:groups).and_return(mock_groups)
-          mock_groups.stub!(:users).and_return(['not empty'])
+          mock_project.stub!(:Roles).and_return(mock_Roles)
+          mock_Roles.stub!(:users).and_return(['not empty'])
           
           get :edit, :id => "37"
           
@@ -327,11 +327,11 @@ describe Yogo::ProjectsController do
           response.should be_redirect
         end
         
-        it "should allow a user with group priviliges to edit a project" do
+        it "should allow a user with Role priviliges to edit a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_private? => true))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(true)
-          mock_project.stub!(:groups).and_return(mock_groups)
-          mock_groups.stub!(:users).and_return(['not empty'])
+          mock_project.stub!(:Roles).and_return(mock_Roles)
+          mock_Roles.stub!(:users).and_return(['not empty'])
           
           get :edit, :id => "37"
           
@@ -340,7 +340,7 @@ describe Yogo::ProjectsController do
       end
 
       describe "PUT /project/:id" do
-        it "should not allow a user without group priviliges to update a project" do
+        it "should not allow a user without Role priviliges to update a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_private? => true))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(false)
           mock_project.should_not_receive(:attributes=)
@@ -352,13 +352,13 @@ describe Yogo::ProjectsController do
           response.should be_redirect
         end
         
-        it "should allow a user with group priviliges to update a project" do
+        it "should allow a user with Role priviliges to update a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :is_private? => true, :save => true, :name => 'proj'))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(true)
           mock_project.should_receive(:attributes=).with({'these' => 'params'})
           
-          mock_project.stub!(:groups).and_return(mock_groups)
-          mock_groups.stub!(:users).and_return(['not empty'])
+          mock_project.stub!(:Roles).and_return(mock_Roles)
+          mock_Roles.stub!(:users).and_return(['not empty'])
           
           put :update, :id => "37", :project => {:name => 'blah', 'these' => 'params'}
           
@@ -367,7 +367,7 @@ describe Yogo::ProjectsController do
       end
 
       describe "DELETE /project/:id" do
-        it "should not allow a user without group priviliges to delete a project" do
+        it "should not allow a user without Role priviliges to delete a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :destroy => false))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(false)
           mock_project.should_not_receive(:destroy)
@@ -377,11 +377,11 @@ describe Yogo::ProjectsController do
           response.should be_redirect
         end
         
-        it "should allow a user without group priviliges to delete a project" do
+        it "should allow a user without Role priviliges to delete a project" do
           Project.stub!(:get).with("37").and_return(mock_project(:models => [], :destroy => true, :name => 'a dead project'))
           @u.stub!(:has_permission?).with(:edit_project, mock_project).and_return(true)
-          mock_project.stub!(:groups).and_return(mock_groups)
-          mock_groups.stub!(:users).and_return(['not empty'])
+          mock_project.stub!(:Roles).and_return(mock_Roles)
+          mock_Roles.stub!(:users).and_return(['not empty'])
           
           delete :destroy, :id => "37"
           

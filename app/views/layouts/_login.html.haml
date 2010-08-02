@@ -1,4 +1,4 @@
-- unless Yogo::Setting['local_only']
+- unless Setting['local_only']
   #login-links
     - if logged_in?
       = link_to(current_user.login, edit_user_path(current_user))

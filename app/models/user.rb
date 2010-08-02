@@ -20,15 +20,9 @@ class User
 
   # TODO: Make sure a length of 128 is long enough for various encryption algorithms.
   property :crypted_password,     BCryptHash, :required => true,  :length => 128
-  # property :persistence_token,    String, :required => true,  :length => 128, :index => true
-
-  if Yogo::Setting[:allow_api_key] == true
-    property :single_access_token,  String, :required => false, :length => 128, :index => true
-  end
-
+  property :single_access_token,  String, :required => false, :length => 128, :index => true
   property :login_count,        Integer, :required => true, :default => 0
   property :failed_login_count, Integer, :required => true, :default => 0
-
   property :last_request_at,    DateTime
   property :last_login_at,      DateTime
   property :current_login_at,   DateTime
@@ -43,7 +37,7 @@ class User
   property :updated_at, DateTime
   property :updated_on, Date
 
-  has n, :groups, :through => Resource
+  has n, :roles, :through => Resource
 
   validates_is_confirmed :password
 
@@ -119,22 +113,22 @@ class User
   end
 
   ##
-  # Check if the user belongs to a given group
+  # Check if the user belongs to a given role
   #
   # @example
-  #   current_user.has_group?(:group_name)
+  #   current_user.has_role?(:role_name)
   #
-  # @param [Symbol or String] group
+  # @param [Symbol or String] role
   # @param [optional, Project] optional project for context
   #
   # @return [Boolean]
-  #   True if the user belongs to the group or False if the user doesn't belong to the group
+  #   True if the user belongs to the role or False if the user doesn't belong to the role
   #
   # @api public
-  def has_group?(group_name, project = nil)
-    # @_user_group_names ||= Group.all(:project => project, :users => self).collect(&:name)
-    @_user_group_names ||= self.groups(:project => project).collect(&:name)
-    @_user_group_names.include?(group_name.to_s)
+  def has_role?(role_name, project = nil)
+    # @_user_role_names ||= Role.all(:project => project, :users => self).collect(&:name)
+    @_user_role_names ||= self.roles(:project => project).collect(&:name)
+    @_user_role_names.include?(role_name.to_s)
   end
 
   ##
@@ -153,8 +147,7 @@ class User
   #
   # @api public
   def has_permission?(action, project = nil)
-    self.groups(:project => project).any?{ |g| g.has_permission?(action) }
-    # self.groups.any?{ |g| g.project.eql?(project) && g.has_permission?(action) }
+    self.roles(:project => project).any?{ |role| role.has_permission?(action) }
   end
 
   ##
@@ -170,12 +163,11 @@ class User
   #
   # @api public
   def is_in_project?(project)
-    # Group.count(:project => project, :users => self) > 0
-    self.groups.any?{ |g| g.project.eql?(project) }
+    self.roles.any?{ |role| role.project.eql?(project) }
   end
 
   ##
-  # Check to see if any of the groups the user is in is an admin group
+  # Check to see if any of the roles the user is in is an admin role
   #
   # @example
   #   current_user.admin?
@@ -186,7 +178,7 @@ class User
   #
   # @api public
   def admin?
-    self.groups.any?{|g| g.admin? }
+    self.roles.any?{|role| role.admin? }
   end
 
   ##
@@ -205,7 +197,7 @@ class User
   alias :admin :admin?
 
   ##
-  # Check to see if any of the groups the user is in is an admin group
+  # Check to see if any of the roles the user is in is an admin role
   #
   # @example
   #   current_user.admin=true
@@ -217,16 +209,16 @@ class User
   #
   # @api public
   def admin=(is_admin)
-    admin_group = Group.first(:project => nil, :admin => true)
+    admin_role = Role.first(:project => nil, :admin => true)
     if is_admin == true || is_admin == 1 || is_admin == '1'
-      self.groups << admin_group unless self.groups.include?(admin_group)
+      self.roles << admin_role unless self.roles.include?(admin_role)
     else
-      self.groups.delete(admin_group) if self.groups.include?(admin_group)
+      self.roles.delete(admin_role) if self.roles.include?(admin_role)
     end
   end
 
   ##
-  # Check to see if any of the groups the user is in can create projects
+  # Check to see if any of the roles the user is in can create projects
   #
   # @example
   #   current_user.create_projects?
@@ -256,7 +248,7 @@ class User
   alias :create_projects :create_projects?
 
   ##
-  # Check to see if any of the groups the user is in is an admin group
+  # Check to see if any of the roles the user is in is an admin role
   #
   # @example
   #   current_user.admin=true
@@ -268,12 +260,11 @@ class User
   #
   # @api public
   def create_projects=(can_create)
-    group = Group.all(:project => nil, :admin => false).select{|g| g.has_permission?(:create_projects)}.first
-    debugger
+    role = Role.all(:project => nil, :admin => false).select{|role| role.has_permission?(:create_projects)}.first
     if can_create == true || can_create == 1 || can_create == '1'
-      self.groups << group unless self.groups.include?(group)
+      self.roles << role unless self.roles.include?(role)
     else
-      self.groups.delete(group) if self.groups.include?(group)
+      self.roles.delete(role) if self.roles.include?(role)
     end
   end
 

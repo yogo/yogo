@@ -4,85 +4,85 @@
 # License -> see license.txt
 #
 # FILE: project.rb
-# The project model is where the action starts.  Every yogo instance starts with a 
+# The project model is where the action starts.  Every yogo instance starts with a
 # a project and the project is where the models and data will be namespaced.
 
 # Class for a Yogo Project. A project contains a name, a description, and access to all of the models
 # that are part of the project.
 class Project
   include DataMapper::Resource
-  
+
   property :id, Serial
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
   property :is_private, Boolean, :required => true, :default => false
-  
+
   validates_is_unique   :name
-  
+
   before :destroy, :delete_models!
-  before :destroy, :delete_associated_groups!
-  
-  after :create, :create_default_groups
-  
-  has n, :groups
-  
+  before :destroy, :delete_associated_roles!
+
+  after :create, :create_default_roles
+
+  has n, :roles
+
   # The number of items to be displayed (by default) per page
-  # 
+  #
   # @example
   #   Project.per_page
-  # 
+  #
   # @return [Fixnum]
-  # 
+  #
   # @api public
   def self.per_page
     15
   end
-  
+
   ##
   # Returns all projects that have been marked public
-  # 
+  #
   # @example
   #   Project.public
-  # 
+  #
   # @return [DataMapper::Collection]
-  # 
+  #
   # @author lamb
-  # 
+  #
   # @api public
   def self.public(opts = {})
     all( opts.merge({:is_private => false}) )
   end
-  
+
   ##
   # Returns all private projects the current user has access to
-  # 
+  #
   # @example
   #   Project.private
-  # 
+  #
   # @return [DataMapper::Collection or nil]
-  # 
+  #
   # @author lamb
-  # 
+  #
   # @api public
   def self.private(opts = {})
     current_user = User.current
     return nil if current_user.nil?
-    current_user.groups.projects(opts)
+    current_user.roles.projects(opts)
   end
-  
+
   ##
   # Returns all projects the current user has access to
-  # 
+  #
   # @example
   #   Project.available
-  # 
+  #
   # @return [DataMapper::Collection or Array]
-  # 
+  #
   # @author lamb
-  # 
+  #
   # @api public
   def self.available(opts = {})
-    return self.all(opts) if Yogo::Setting[:local_only]
+    return self.all(opts) if Setting[:local_only]
     # else
     private_projects = self.private
     if private_projects == nil
@@ -91,16 +91,16 @@ class Project
       (self.public + self.private).all(opts)
     end
   end
-  
+
   ##
   # Returns the namespace Yogo Models will be in
-  # 
+  #
   # @example
-  #   my_project.namespace 
-  # 
-  # @return [String] 
+  #   my_project.namespace
+  #
+  # @return [String]
   #   the project namespaced name
-  # 
+  #
   # @author Yogo Team
   #
   # @api public
@@ -108,13 +108,13 @@ class Project
   def namespace
     Extlib::Inflection.classify(path)
   end
-  
+
   ##
   # Used to get the current project path name
   #
   # @example
   #   @project.path
-  # 
+  #
   # @return [String] the project path name
   #
   # @author Yogo Team
@@ -129,7 +129,7 @@ class Project
   #
   # @example
   #   @project.to_param # returns the ID as a string
-  # 
+  #
   # @return [String] the object id as url param
   #
   # @author Yogo Team
@@ -138,35 +138,35 @@ class Project
   def to_param
     id.to_s
   end
-  
+
   ##
   # Creates a model and imports data from a CSV file
   #
-  # @example 
-  #    "aproject.process_csv('mydata.csv','MyModel')"  
+  # @example
+  #    "aproject.process_csv('mydata.csv','MyModel')"
   #    loading data from a CSV file into a project model
   #
-  # @param [String] datafile 
+  # @param [String] datafile
   #   A path to the CSV file to read in
-  # @param [String] model_name 
+  # @param [String] model_name
   #   The desired name of the model to be created
   #
-  # @return [Array] 
+  # @return [Array]
   #   Returns empty array if successful or an array of error messages if unsuccessful
   #
-  # * The csv datafile must be in the following format: 
+  # * The csv datafile must be in the following format:
   #   1. row 1 -> field names
-  #   2. row 2 -> type, 
+  #   2. row 2 -> type,
   #   3. row 3 -> units
   #   4. rows 4+ -> data
-  # 
+  #
   # @author Robbie Lamb
-  # 
+  #
   # @api public
   def process_csv(datafile, model_name)
-    
+
     model_name = model_name.gsub(/\s/,'_').classify
-    
+
     # Look to see if there is already one of these models.
     model = get_model(model_name)
 
@@ -175,19 +175,19 @@ class Project
       model = generate_empty_model(model_name)
       model.auto_migrate!
     end
-    
+
     # Load data
     errors = model.load_csv_data(datafile)
     return errors
   end
-  
+
   ##
   # Returns all of the Yogo::Models assocated with the project
-  # 
+  #
   # @example
   #  models
   #
-  # @return [Array] 
+  # @return [Array]
   #   All of the models associated with current project namespace
   #
   # @author
@@ -197,7 +197,7 @@ class Project
   def models
     DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{namespace}::/ }
   end
-  
+
   ##
   # Used to retreive the DataMapper model by it's name
   #
@@ -212,7 +212,7 @@ class Project
   # @author Yogo Team
   #
   # @api public
-  #  
+  #
   def get_model(name)
     DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::#{name}$/i }[0]
   end
@@ -243,24 +243,24 @@ class Project
   #  add_model("CDs")
   #
   # @param [String] name the name of the model to be created
-  # @param [Hash] properties Each key in the property is a new property name. The key points to an 
+  # @param [Hash] properties Each key in the property is a new property name. The key points to an
   #     options hash for the property. The key 'type' is required. All other keys are optional and
-  #     the same as a normal datamapper property options hash. 
-  # 
+  #     the same as a normal datamapper property options hash.
   #
-  # @return [DataMapper::Model] a new model 
+  #
+  # @return [DataMapper::Model] a new model
   #
   # @author Robbie Lamb robbie.lamb@gmail.com
   #
   # @see http://datamapper.org/docs/properties
-  # 
+  #
   # @api public
   def add_model(name, properties = {}, relationships = {})
     name = name.classify
     return false unless valid_model_or_column_name?(name)
 
     a_model = generate_empty_model(name)
-    
+
     properties.each do |name, options|
       a_model.send(:property, name, options.delete(:type), options.merge(:prefix => 'yogo'))
     end
@@ -271,7 +271,7 @@ class Project
 
     return a_model
   end
-  
+
   # Removes a model and any data contianed with from a project
   #
   # @example
@@ -292,16 +292,16 @@ class Project
 
     DataMapper::Model.descendants.delete(model)
     n = eval("Yogo")
-    if n.constants.include?(namespace.to_sym) 
+    if n.constants.include?(namespace.to_sym)
       ns = eval("Yogo::#{namespace}")
       ns.send(:remove_const, name.to_sym) if ns.constants.include?(name.to_sym)
     end
   end
-  
+
   ##
   # Removes all models and all of the data from a project
   #
-  # @example 
+  # @example
   #  delete_models!
   #
   # @return [Boolean] returns True if all models removed successfully
@@ -315,7 +315,7 @@ class Project
       delete_model(model)
     end
   end
-  
+
   ##
   # Reloads the models for this schema from the backups
   # @return [Array]
@@ -325,53 +325,53 @@ class Project
   # @api private
   def reload_schemas_from_backup!
     models.each do |m|
-      sb = SchemaBackup.get_or_create_by_name(m.name.to_s) 
+      sb = SchemaBackup.get_or_create_by_name(m.name.to_s)
       repository.adapter.update_schema(JSON.parse(sb.schema))
     end
-    
+
     models.each do |model|
       namespace_parts = model.name.split("::")
       name = namespace_parts.pop
       namespace = namespace_parts.join("::")
-      
+
       DataMapper::Model.descendants.delete(model)
       namespace.constantize.send(:remove_const, name.to_sym)
     end
-    
+
     new_models = DataMapper::Reflection.reflect(:default)
 
     new_models.each{|m| m.send(:include,Yogo::Model) }
     new_models.each{|m| m.properties.sort! }
   end
-  
-  ## 
+
+  ##
   # Return the description for a dataset
-  # 
+  #
   # @example
   #   project.dataset_description('blah')
-  # 
-  # @param [String] dataset 
+  #
+  # @param [String] dataset
   #   The description
-  # 
+  #
   # @return [String or Nil]
-  # 
+  #
   # @author Pol Llovet pol.llovet@gmail.com
-  # 
+  #
   # @api public
   def dataset_description(dataset)
     "There should be a dataset description, make the editor."
   end
-  
+
   private
-  
+
   ##
   # The name to check for validity
   #
   # @param [String] potential_name
-  # 
+  #
   # @return [TrueClass or FalseClass]
   #  If the string passed in can be a valid model or colum name
-  # 
+  #
   # @author Yogo Team
   #
   # @api private
@@ -379,30 +379,30 @@ class Project
   def valid_model_or_column_name?(potential_name)
     !potential_name.match(/^\d|\.|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)/)
   end
-  
+
   # Generates a model with the property :yogo_id in the project's namespace
   #
   # It will not be automigrated
-  # 
+  #
   # @param [String] name
   #   The name to give to the class.
-  # 
+  #
   # @return [Class]
   #   The class that has been generated.
   #
   # @author Robbie Lamb robbie.lamb@gmail.com
-  # 
+  #
   # @api private
   def generate_empty_model(model_name)
     spec_hash = { :modules => ["Yogo", namespace],
-                  :name => model_name, 
-                  :properties => { 
+                  :name => model_name,
+                  :properties => {
                     'yogo_id' => {
-                      :type => DataMapper::Types::Serial, 
-                      :field => 'id' 
+                      :type => DataMapper::Types::Serial,
+                      :field => 'id'
                       },
                       :created_at => {
-                        :type => DateTime 
+                        :type => DateTime
                       },
                       :updated_at => {
                         :type => DateTime
@@ -423,28 +423,28 @@ class Project
     model.send(:include,Yogo::Model)
     return model
   end
-  
+
   ##
-  # Callback to create some default groups for this project
-  # 
+  # Callback to create some default roles for this project
+  #
   # @return [nil]
   # @author Robbie Lamb
   # @api private
-  def create_default_groups
-    # DataMapper.logger.debug { "Creating default groups" }
-    # 
-    # admin_group = Group.new(:name => "Administrator", :description => "Application administrators.")
-    # admin_group.users << User.current unless User.current.nil?
+  def create_default_roles
+    # DataMapper.logger.debug { "Creating default roles" }
+    #
+    # admin_role = Role.new(:name => "Administrator", :description => "Application administrators.")
+    # admin_role.users << User.current unless User.current.nil?
     # [:create_projects, :view_project, :edit_project, :delete_project, :edit_model_descriptions, :edit_model_data, :delete_model_data].each do |action|
-    #    admin_group.add_permission(action)
+    #    admin_role.add_permission(action)
     #  end
-    # admin_group.save
-    # self.groups.push(admin_group)
+    # admin_role.save
+    # self.roles.push(admin_role)
     # self.save
   end
-  
-  def delete_associated_groups!
-    self.groups.each{|g| g.destroy }
+
+  def delete_associated_roles!
+    self.roles.each{ |role| role.destroy }
   end
-  
+
 end

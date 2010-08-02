@@ -48,17 +48,18 @@ module Extlib
   end
 end
 
-
 # Read the configuration from the existing database.yml file
 config = Rails.configuration.database_configuration
 
 # Setup the default datamapper repository corresponding to the current rails environment
 # unnecessary: rails-datamapper handles this
-
 DataMapper.setup(:default, config[Rails.env])
 
 # Alias :default to :yogo so things work well
 DataMapper.setup(:yogo, config["yogo_"+Rails.env])
+
+# Settings can be a repo, this can be fixed to read from the config file when the app moves to Dm 1.0
+DataMapper.setup(:settings, "yaml://db/settings.yml")
 
 # Map the datamapper logging to rails logging
 DataMapper.logger             = Rails.logger
@@ -70,23 +71,11 @@ if Object.const_defined?(:DataObjects)
 end
 
 Project
-SchemaBackup
 User
-Group
+Role
+Setting
+
 DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
-                                DataMapper.repository(:default).storage_exists?(SchemaBackup.storage_name) &&
-                                DataMapper.repository(:default).storage_exists?(User.storage_name)
-
-admin_g = Group.first_or_create(:name => "Administrator", :description => "VOEIS system administrators.",
-                                :admin => true, :project => nil)
-Group::AVAILABLE_ACTIONS.each do |action|
-  admin_g.add_permission(action)
-end
-admin_g.save
-
-if admin_g.users.empty?
-  admin_g.users.create(:login => 'yogo', :email => "none", :first_name => "System",
-                       :last_name => "Administrator", :password => 'change me',
-                       :password_confirmation => 'change me')
-  admin_g.save
-end
+                                DataMapper.repository(:default).storage_exists?(Setting.storage_name) &&
+                                DataMapper.repository(:default).storage_exists?(User.storage_name) &&
+                                DataMapper.repository(:default).storage_exists?(Role.storage_name)

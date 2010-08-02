@@ -6,10 +6,10 @@ describe Yogo::UsersController do
     @mock_project ||= mock_model(Project, stubs)
   end
   
-  def mock_groups(stubs={})
-    @mock_groups ||= begin
-      mg = [ mock_model(Group, stubs),
-             mock_model(Group, stubs)
+  def mock_Roles(stubs={})
+    @mock_Roles ||= begin
+      mg = [ mock_model(Role, stubs),
+             mock_model(Role, stubs)
            ]
       mg.stub(:users).and_return([])
       mg
@@ -31,12 +31,12 @@ describe Yogo::UsersController do
   before :each do
     mock_warden
     Project.should_receive(:get).with("42").and_return(mock_project)
-    mock_project.should_receive(:groups).and_return(mock_groups)
+    mock_project.should_receive(:Roles).and_return(mock_Roles)
   end
   
   describe "when local only in" do
     before(:all) do
-      Yogo::Setting[:local_only] = true
+      Setting[:local_only] = true
     end
     
     describe "GET /" do
@@ -50,7 +50,7 @@ describe Yogo::UsersController do
   
   describe "when not local only" do
     before(:all) do
-      Yogo::Setting[:local_only] = false
+      Setting[:local_only] = false
     end
     
     describe "when not logged in" do

@@ -2,7 +2,7 @@
   Projects
   #content-menu-links
     = link_to("New Project", new_project_path, :class => 'menu-button-links')
-    - unless Yogo::Setting[:example_project_loaded] || Yogo::Setting[:hide_example_project]
+    - unless Setting.names.include?('example_project_loaded') || Setting[:hide_example_project]
       = link_to("Load Example Project", loadexample_projects_path, 
         :class => 'medium-button-link', :method => :post)
     .content-pagination-links= pagination_links(Project, params[:page], 5) 
