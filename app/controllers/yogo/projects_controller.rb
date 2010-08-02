@@ -367,4 +367,12 @@ class Yogo::ProjectsController < ApplicationController
       format.html
     end
   end
+  
+  def add_stream
+    @project = Project.get(params[:id])
+    
+    respond_to do |format|
+      format.html
+    end
+  end
 end
