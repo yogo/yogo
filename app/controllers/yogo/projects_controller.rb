@@ -61,8 +61,8 @@ class Yogo::ProjectsController < ApplicationController
       respond_to do |format|
         format.html {
           if @proj_models_data.length == 1
-            redirect_to(search_project_yogo_data_url(@proj_models_data[0][0], 
-                                                     @proj_models_data[0][1], 
+            redirect_to(search_project_yogo_data_url(@proj_models_data[0][0],
+                                                     @proj_models_data[0][1],
                                                      :search_term => @search_term))
           end
         }
@@ -72,8 +72,8 @@ class Yogo::ProjectsController < ApplicationController
       project = Project.get(params[:project_id])
       model = project.get_model(params[:model_name])
       respond_to do |format|
-        format.html { 
-          redirect_to search_project_yogo_data_url(project, model, :search_term => @search_term) 
+        format.html {
+          redirect_to search_project_yogo_data_url(project, model, :search_term => @search_term)
         }
       end
     end
@@ -153,6 +153,29 @@ class Yogo::ProjectsController < ApplicationController
 
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
+        #Check to be sure the default VOEIS project is loaded - create it if it doesn't exist
+        if Project.first(:name => "VOEIS").nil?
+          def_project = Project.new()
+          def_project.name = "VOEIS"
+          def_project.description = "The Default VOEIS Project and Repository"
+          def_project.save
+          puts odm_contents = Dir.new("dist/odm").entries
+          odm_contents.each do |content|
+            puts content.to_s + "before"
+            if !content.to_s.index('.csv').nil?
+              puts content.to_s
+              def_project.process_csv('dist/odm/' + content.to_s, content.to_s.gsub(".csv",""))
+            end
+          end
+        end
+        puts voeis_contents = Dir.new("dist/voeis_default").entries
+        voeis_contents.each do |content|
+          puts content.to_s + "before"
+          if !content.to_s.index('.csv').nil?
+            puts content.to_s
+            @project.process_csv('dist/voeis_default/' + content.to_s, content.to_s.gsub(".csv",""))
+          end
+        end
       redirect_to projects_url
     else
       flash[:error] = "Project could not be created."
@@ -337,4 +360,11 @@ class Yogo::ProjectsController < ApplicationController
     end
   end
 
+  def add_site
+    @project = Project.get(params[:id])
+
+    respond_to do |format|
+      format.html
+    end
+  end
 end

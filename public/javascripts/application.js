@@ -165,8 +165,109 @@ function check_navigation_element_state(element){
 	
 	// utility functions
 	function isFirstPage( opts, internalPageNum ) { return ( internalPageNum === 0 ); }
-	function isLastPage( opts, internalPageNum ) { return ( internalPageNum === opts.totalPages-1 ); }
-	
+	function isLastPage( opts, internalPageNum ) { return ( internalPageNum === opts.totalPages-1 ); };
+  $.yogo_mapit = function(element, options){
+
+    defaults = {
+      locations: [{'lat': 45.6, 'long': -111.0,   'name': "Lorem ipsum."},
+                  {'lat': 45.62, 'long': -111.01, 'name': "Lorem ipsum."}],
+      recenter: true,
+      display_links: true,
+      zoom: 'auto'
+    }
+      var blue_icon = '/images/blue-dot.png';
+      var settings = jQuery.extend(defaults, options);
+    
+      minLat = 360;
+      maxLat = -360;
+      minLng = 360; 
+      maxLng = -360;
+    
+      $.each(settings.locations, function(i, location){
+        if (minLat > location['lat']) { minLat = location['lat'] };
+        if (maxLat < location['lat']) { maxLat = location['lat'] };
+        if (minLng > location['long']) { minLng = location['long'] };
+        if (maxLng < location['long']) { maxLng = location['long'] };
+      });
+    
+      var latLngBounds = new google.maps.LatLngBounds(new google.maps.LatLng(minLat, minLng),
+                                                      new google.maps.LatLng(maxLat, maxLng));
+    
+      mapOptions = {
+        center: latLngBounds.getCenter(),
+        mapTypeId: google.maps.MapTypeId.TERRAIN,
+        navigationControl: true,
+        navigationControlOptions : { style: google.maps.NavigationControlStyle.SMALL },
+        mapTypeControl: true,
+        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+        
+        scaleControl: true
+      };
+    
+      var map = new google.maps.Map($(element)[0], mapOptions);
+      if (settings.zoom == "auto") {
+        map.fitBounds(latLngBounds);
+      } else {
+        map.setZoom(settings.zoom);
+      };
+
+            var curInfoWindow = null;
+      $.each(settings.locations, function(i,location){
+        var latlng = new google.maps.LatLng(location['lat'], location['long']);
+        if (location['status'] == "Tentative")
+        {
+          var marker = new google.maps.Marker({
+                position: latlng, 
+                map: map,
+                title: location['lat'] + " : " + location['long'],
+                icon: blue_icon
+            });
+        }
+        else
+        {
+          var marker = new google.maps.Marker({
+                position: latlng, 
+                map: map,
+                title: location['lat'] + " : " + location['long']
+            });
+        }
+        if (location.name) {
+          var infoWindow = new google.maps.InfoWindow({
+            content: location.name
+          });
+
+          google.maps.event.addListener(marker, 'click', function(){
+            if(curInfoWindow!=null){
+              curInfoWindow.close();
+            };
+            infoWindow.open(map,marker);
+            curInfoWindow = infoWindow;
+              $(element).siblings('.maps-info').find('div').hide();
+              $("#site_"+location.id).toggle();
+          });
+        };
+        
+        if( settings.display_links == true ){
+          $("<a href='#>"+location.name+"</a>").appendTo($(element).siblings('.map-links')).bind('click', function(){
+            google.maps.event.trigger(marker,'click');
+          });
+        };
+        
+      });
+  
+      // Create a 'Recenter link' if requested.
+      if( settings.recenter == true ) {
+        $("<a href='#' id='#recenter-map' class='map-center-link'>Recenter</a>").appendTo($(element).siblings('.map-links')).bind("click", function(){
+          if(curInfoWindow != null){ curInfoWindow.close();};
+          $(element).siblings('.maps-info').find('div').hide();
+          map.fitBounds(latLngBounds);
+          map.panTo(latLngBounds.getCenter());
+        });
+      };
+      
+    
+    return this;
+  };
 })(jQuery);
 
 
@@ -205,3 +306,4 @@ jQuery.fn.textdropdown = function() {
     });
   }
 };
+

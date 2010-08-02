@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :projects, :controller => 'yogo/projects',
                 :member => { :upload => :post }, 
                 :collection => { :loadexample => :post, :search => :get} do |project|
-    
+  map.connect '/projects/add_site', :controller => 'yogo/projects', :action => 'add_site'  
     # /projects/:project_id/yogo_data/:model_name
     # /projects/:project_id/yogo_data/:model_name/:id
     project.resources :yogo_data, :as => 'yogo_data/:model_id', :controller => 'yogo/data',
