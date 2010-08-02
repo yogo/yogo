@@ -43,5 +43,5 @@ class Site
   property :comments, String, :required => false
 
   has n, :projects
-  has n, :data_streams
+  has n, :data_streams, :model => "DataStream"
 end

@@ -18,8 +18,8 @@ class DataStreamColumn
   property :type, String, :required => true
   property :column_number, Integer, :required => true
   
-  has one, :variable
-  has one, :unit
-  has one, :data_stream
+  has n, :variables, :through => Resource
+  has n, :units, :through=> Resource
+  belongs_to :data_stream, :model => "DataStream"
   
 end
