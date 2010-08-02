@@ -19,6 +19,10 @@ test:
   adapter: sqlite3
   database: db/sqlite3/test.sqlite3
 
+settings:
+  adapter: yaml
+  database: db/settings.yml
+
 yogo_development:
   adapter: persevere
   versioned: true

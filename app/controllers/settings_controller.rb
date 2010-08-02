@@ -8,78 +8,18 @@
 # Additionally upload and download of data via CSV is provided
 #
 class SettingsController < ApplicationController
-  
-  # displays settings index page
-  #
-  # @example http://localhost:3000/yogo_settings
-  #
-  # @return displays settings index page
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def index
-    
-  end
-  
-  # this shows yogo setting
-  #
-  # @example http://localhost:3000/yogo_settings
-  #
-  # @param [Hash] params
-  # @option params [String] :id
-  #
-  # @return displays setting
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def show
-    @key = params[:id]
-    @value = Yogo::Setting[@key]
-    
-    respond_to do |format|
-      format.html
-    end
+
+  inherit_resources
+
+  protected
+
+  def collection
+    @settings ||= resource_class.all
   end
 
-  # displays an edit page
-  #
-  # @example http://localhost:3000/yogo_settings/edit/1
-  #  edits setting 1
-  #
-  # @param [Hash] params
-  # @option params [String] :id
-  #
-  # @return displays edit page
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def edit
-    @key = params[:id]
-    @value = Yogo::Setting[@key]
-    
-    respond_to do |format|
-      format.html
-    end
+  def resource
+    @setting ||= resource_class.get(params[:id])
+    @key = @setting.name
+    @value = @setting.value
   end
-
-  # updates settings
-  #
-  # @example http://localhost:3000/yogo_settings/update
-  #
-  # @param [Hash] params
-  # @option params [String] :id
-  #
-  # @return if save was sucessful redirect to settings index 
-  #   else redirects to edit
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def update
-    
-  end
-  
 end

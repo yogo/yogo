@@ -2,6 +2,6 @@
   = collection_select(:project, :project_id, Project.all, :id, :name, {:prompt => false, :include_blank => true})
 
 - field_set_tag("Roles:") do
-  - for group in Group.all do
-    = check_box_tag(group.name)
-    = label_tag(group.name)
+  - for role in Role.all do
+    = check_box_tag(role.name)
+    = label_tag(role.name)

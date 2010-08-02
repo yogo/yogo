@@ -32,7 +32,7 @@ class UsersController < ApplicationController
   # @api public
   def show
     @user = User.get(params[:id])
-    
+
     respond_to do |format|
       format.html
     end
@@ -50,7 +50,7 @@ class UsersController < ApplicationController
   # @api public
   def new
     @user = User.new
-    
+
     respond_to do |format|
       format.html
     end
@@ -93,7 +93,7 @@ class UsersController < ApplicationController
   # @api public
   def edit
     @user = User.get(params[:id])
-    
+
     respond_to do |format|
       format.html
     end
@@ -115,9 +115,9 @@ class UsersController < ApplicationController
     # Remove these if they were sent.
     params[:user].delete(:password)
     params[:user].delete(:password_confirmation)
-    
+
     @user.attributes = params[:user]
-    
+
     respond_to do |format|
       if @user.valid?
         @user.save
@@ -151,22 +151,22 @@ class UsersController < ApplicationController
       flash[:error] = "Something went wrong removing the user"
       # Should this throw an exception?
     end
-    
+
     respond_to do |format|
       format.html { redirect_to(users_url) }
     end
-    
+
   end
-  
+
   private
 
   ##
-  # Checks to see if the current user is in the administrator group
+  # Checks to see if the current user is in the administrator role
   # @return [nil] or it doesn't return.
   # @api private
   def require_administrator
     raise AuthenticationError unless logged_in?
-    raise AuthorizationError  unless current_user.groups.any?{|g| g.admin? }
+    raise AuthorizationError  unless current_user.roles.any?{|role| role.admin? }
   end
-    
+
 end

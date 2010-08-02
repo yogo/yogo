@@ -34,11 +34,11 @@ describe Yogo::DataController do
 
   describe "when running locally" do
     before(:all) do
-      Yogo::Setting[:local_only] = true
+      Setting[:local_only] = true
     end
     
     it "should be local only" do
-      Yogo::Setting[:local_only].should be_true
+      Setting[:local_only].should be_true
     end
     
     describe 'GET' do
@@ -166,11 +166,11 @@ describe Yogo::DataController do
 
   describe "when running as a server" do
     before(:all) do
-      Yogo::Setting[:local_only] = false
+      Setting[:local_only] = false
     end
     
     it "should be local only" do
-      Yogo::Setting[:local_only].should be_false
+      Setting[:local_only].should be_false
     end
     
     describe "when not logged in" do

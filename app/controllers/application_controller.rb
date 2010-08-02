@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
   # Create a custom error handler
   #
   # @example Render an error if the connection is not allowed.
-  #   if Yogo::Setting[:local_only] && !["127.0.0.1"].include?(request.env["REMOTE_ADDR"])
+  #   if Setting[:local_only] && !["127.0.0.1"].include?(request.env["REMOTE_ADDR"])
   #     render_optional_error_file(:forbidden)
   #   end
   #
@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
   def check_local_only
     return true if Rails.env == "test"
 
-    if Yogo::Setting[:local_only] && !["127.0.0.1", "0:0:0:0:0:0:0:1%0"].include?(request.env["REMOTE_ADDR"])
+    if Setting[:local_only] && !["127.0.0.1", "0:0:0:0:0:0:0:1%0"].include?(request.env["REMOTE_ADDR"])
       # Raise a 403 exception or perhaps just redirect.
       render_optional_error_file(:forbidden)
     end

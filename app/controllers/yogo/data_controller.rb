@@ -316,7 +316,7 @@ class Yogo::DataController < ApplicationController
   # @author lamb
   # @api private
   def check_project_authorization
-    if !Yogo::Setting[:local_only]
+    if !Setting[:local_only]
       raise AuthenticationError if @project.is_private? && !logged_in?
       action = request.parameters["action"]
       if ['index', 'show', 'search', 'download_asset', 'show_asset'].include?(action)

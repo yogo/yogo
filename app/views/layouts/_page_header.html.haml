@@ -31,7 +31,7 @@
         = link_to("Project Settings", edit_project_path(@project), :class => 'medium-button-link')
       - else
         = link_to("Create a Project", start_wizard_path, :class => 'button-link')
-        - unless Yogo::Setting[:example_project_loaded]
+        - unless Setting[:example_project_loaded]
           = link_to("Load Example Project", loadexample_projects_path, 
             :class => 'button-link', :method => :post)
     - when "data"
