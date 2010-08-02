@@ -28,6 +28,7 @@ vendor/bundled/*
 bin/*
 tmtags
 vendor/persevere/*
+vendor/persvr/*
 public/files/*
 public/uploads/*
 .bundle/*
