@@ -1,11 +1,11 @@
 .extra-small
   %h1#content-title
-    #subtitle Edit Group
-    = @group.name
+    #subtitle Edit Role
+    = @role.name
     
 .extra-small.box
   .rbox.dashed
-    = link_to("Delete Group", group_path(@group), 
+    = link_to("Delete Role", role_path(@role), 
       :method => :delete, :class => 'button-link fright', 
-      :confirm => "Are you sure you want to delete the #{@group.name} group?\nThere is no undo! Continue?" )
+      :confirm => "Are you sure you want to delete the #{@role.name} group?\nThere is no undo! Continue?" )
     = render(:partial => 'form')
