@@ -40,33 +40,41 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def search
-    search_scope = params[:search_scope]
-    search_term = params[:search_term]
-    if search_scope == 'everywhere' || params[:model_name].blank?
-      @projects = Project.available.search(search_term)
+    @search_scope = params[:search_scope]
+    @search_term = params[:search_term]
+    if @search_scope == 'everywhere' || params[:model_name].blank?
+      @projects = Project.available.search(@search_term)
 
       @proj_models = []
-      Project.public.each do |project|
-        @proj_models << [project, project.search_models(search_term).flatten ]
+      Project.available.each do |project|
+        @proj_models << [project, project.search_models(@search_term).flatten ]
       end
 
       @proj_models_data = []
       Project.available.each do |project|
         project.models.each do |model|
-          count = model.search(search_term).count
+          count = model.search(@search_term).count
           @proj_models_data << [project, model, count] if count > 0
         end
       end
 
       respond_to do |format|
-        format.html
+        format.html {
+          if @proj_models_data.length == 1
+            redirect_to(search_project_yogo_data_url(@proj_models_data[0][0], 
+                                                     @proj_models_data[0][1], 
+                                                     :search_term => @search_term))
+          end
+        }
       end
 
     else
       project = Project.get(params[:project_id])
       model = project.get_model(params[:model_name])
       respond_to do |format|
-        format.html { redirect_to search_project_yogo_data_url(project, model, :search_term => search_term) }
+        format.html { 
+          redirect_to search_project_yogo_data_url(project, model, :search_term => @search_term) 
+        }
       end
     end
 

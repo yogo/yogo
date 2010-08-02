@@ -24,10 +24,6 @@ module DataMapper
       properties.each do |prop|
         if prop.type == String || prop.type == DataMapper::Types::Text
           queries << all( options.merge(prop.name.like => "%#{value}%") )
-        elsif prop.kind_of?(DataMapper::Property::Time) || prop.kind_of?(DataMapper::Property::Date) || prop.kind_of?(DataMapper::Property::Time)
-          # Do nothing
-        else 
-          queries << all( options.merge(prop.name => value))
         end
       end
 
@@ -67,10 +63,6 @@ module DataMapper
       properties.each do |prop|
         if prop.type == String || prop.type == DataMapper::Types::Text
           queries << all( options.merge(prop.name.like => "%#{value}%") )
-        elsif prop.kind_of?(DataMapper::Property::Time) || prop.kind_of?(DataMapper::Property::Date) || prop.kind_of?(DataMapper::Property::Time)
-          # Do nothing
-        else 
-          queries << all( options.merge(prop.name => value))
         end
       end
       

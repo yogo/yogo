@@ -63,9 +63,9 @@ class Yogo::DataController < ApplicationController
   #
   # @api public
   def search
-    search_term = params[:search_term]
+    @search_term = params[:search_term]
 
-    @query = @model.search(search_term)
+    @query = @model.search(@search_term)
     @data = @query.paginate(:page => params[:page], :per_page => Project.per_page)
     respond_to do |format|
       format.html { render( :action => :index) }

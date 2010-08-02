@@ -5,13 +5,13 @@
 #
 # FILE: application_helper.rb
 # Methods added to this helper will be available to all templates in the application.
-# 
+#
 module ApplicationHelper
   #
   # Google Vis API
-  # 
+  #
   include GoogleVisualization
-  
+
   # Adds items to the menu in the view
   #
   # @example
@@ -32,14 +32,14 @@ module ApplicationHelper
   def add_menu_item(name, url = {}, html_options = {})
     css_class = ''
     css_class = 'highlighted-menu-item' if request.url.include?(h(url))
-      
+
     "<li class='#{css_class}'>" +
       link_to(name, url, html_options) +
     "</li>"
   end
-  
+
   # Returns all projects
-  # 
+  #
   # @example
   #  all_projects
   #
@@ -77,12 +77,12 @@ module ApplicationHelper
 
     output += link_to("&lt;&lt; First&nbsp;", params.merge(:page => 1), :class => 'button-link')  if current_page > 2
     output += link_to("&lt;&nbsp;Previous&nbsp;", params.merge(:page => current_page-1), :class => 'button-link') if current_page > 1
-  
+
     if total_pages > 1
       # Looking for a range of 5 pages centered around the current page.
       min_page = [current_page - 2, 1].max
       max_page = [current_page + 2, total_pages].min
-      
+
       # This makes sure the range of 5 is ther even if the curren page isn't in the middle.
       min_page = max_page - 5 if max_page.eql?(total_pages) && total_pages > 5
       max_page = min_page + 4 if min_page.eql?(1) && total_pages > 5
@@ -102,11 +102,11 @@ module ApplicationHelper
     if (from == 1 and to == collection.count)
       output = ""
     else
-      output + " <span style='font-style: italic'>Showing #{from}&hellip;#{to} of #{collection.count} #{collection.name.pluralize}</span>"
+      output += " <span style='font-style: italic'>Showing #{from}&hellip;#{to} rows out of #{collection.count} total rows</span>"
     end
   end
 
-  
+
   # Creates breadcrumbs based on the request query_string
   #
   # @example
@@ -124,7 +124,7 @@ module ApplicationHelper
     query_options = ref_query.split('&').select{|r| !r.blank?}
     res = []
     query_path = []
-    
+
     query_options[0..-2].each do |qo|
       qo.match(/q\[(\w+)\]\[\]=(.+)/)
       attribute = $1
@@ -132,44 +132,44 @@ module ApplicationHelper
       found = false
       res << link_to("#{attribute.humanize}: #{condition}", ref_path+"?"+query_path.join("&"))
       query_path << qo
-      
+
     end
-    
+
     query_options[-1].match(/q\[(\w+)\]\[\]=(.+)/)
     attribute = $1
     condition = $2
      res << "#{attribute.humanize}: #{condition}"
-     
+
     return res.join(' > ')
   end
-  
+
   # Helper method for making a float breaking block level element
   #
-  # @example 
+  # @example
   #   <%= clear_break %>
   #   renders:
   #   <br clear='all' style='clear: both;'/>
-  # 
-  # @return [HTML Fragment] 
-  # 
+  #
+  # @return [HTML Fragment]
+  #
   # @api public
   def clear_break
     "<br clear='all' style='clear: both;'/>"
   end
-  
-  
+
+
   ##
   # Helper for creating a tooltip
-  # 
+  #
   # @example
   #   Here is an example
-  # 
+  #
   # @param [String] body
   # @param [String] title
   # @param [Integer] length
-  # 
+  #
   # @return [HTML Fragment]
-  # 
+  #
   # @author yogo
   # @api public
   def tooltip(body, title = nil, length = 10)
@@ -185,58 +185,58 @@ module ApplicationHelper
       body
     end
   end
-  
+
   def yogo_button(image, text, link)
     link_to(image_tag(image), link)
   end
-  
+
   # Creates the appropriate HTML for attributes on a model
-  # 
+  #
   # For attributes that are files or images it makes a download link work for them
-  # 
-  # @example 
+  #
+  # @example
   #   <%- @model.usable_properties.each do |p| %>
   #     <%= yogo_show_helper(d, p, @project, @model) %>
   #   <%- end %>
-  # 
+  #
   # @return [HTML Fragment] the HTML is either a string or a link to the file/image.
-  # 
+  #
   # @api public
   def yogo_show_helper(item, property, project, model, detailed = false)
     if property.type == DataMapper::Types::YogoFile
       file = item[property.name]
-      file = file[0..15] + '...' if file.length > 15 
+      file = file[0..15] + '...' if file.length > 15
       link_to(file, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))
     elsif property.type == DataMapper::Types::YogoImage
       file = item[property.name]
-      file = file[0..15] + '...' if file.length > 15 
+      file = file[0..15] + '...' if file.length > 15
       img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
       link_target = detailed ? img : file
-      link_to(link_target, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'), 
-        :class => 'fancybox', :title => model.name)      
+      link_to(link_target, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'),
+        :class => 'fancybox', :title => model.name)
     elsif property.type == DataMapper::Types::Text
       if !detailed && (item[property.name] && item[property.name].length > 15)
         tooltip(item[property.name])
       else
         item[property.name]
       end
-    else 
+    else
       item[property.name]
     end
   end
-  
+
   # Creates the appropriate HTML for attributes on a model
-  # 
+  #
   # For attributes that are files or images it makes a download link work for them
-  # 
-  # @example 
+  #
+  # @example
   #   <%= link_to_edit_project_models(@project, 'this is some text') %>
-  # 
+  #
   # @param [Project] project The project to link to
   # @param [String]  link_text The text to display in the link
   # @param [Hash]  options Options for the linkto
   # @return [HTML Fragment] the HTML is either a string or a link to the file/image.
-  # 
+  #
   # @api public
   def link_to_edit_project_models(project, link_text, options={})
     link_to(link_text, "/model_editor.html#projects/#{project.id}&from=#{project_path(project)}", options)

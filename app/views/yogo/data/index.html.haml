@@ -1,28 +1,29 @@
-%h1#content-title
-  #subtitle
-    = link_to(@project.name, project_path(@project))
-    = image_tag('icons/private_16.png', :title => 'Private Project') if @project.is_private?
-  = @model.public_name
-
-#content-actions
-  .content-action-links
-    = link_to("Import Spreadsheet", import_csv_path(@project), :class => 'medium-button-link')
-    - if action_name.eql?("search")
-      = link_to("Export Spreadsheet", search_project_yogo_data_path(@project, @model,
-          :search_term => params[:search_term], :format => 'csv'), :class => "medium-button-link")
-    - else
-      = link_to("Export Spreadsheet", project_yogo_data_index_path(@project, @model, :format => 'csv'),
-          :class => "medium-button-link")
-
-  / This is an alternative to the table using google visualiztion api (the javascript is now included in the app)
-  / <%# cols = @model.usable_properties.map { |prop| [ Yogo::Types.dm_to_gv(prop.type), Extlib::Inflection.humanize(prop.name.to_s) ] }%>
-  / <%# gvdata = @data.map { |item| @model.usable_properties.map { |p| item[p.name]  } } %>
-  / <%# visualization("test_table", "Table", {:data => gvdata, :columns => cols }) { } %>
-
-#pagination-links= pagination_links(@query, params[:page], Project.per_page)
+/ %h1#content-title
+/   #subtitle
+/     = link_to(@project.name, project_path(@project))
+/     = image_tag('icons/private_16.png', :title => 'Private Project') if @project.is_private?
+/   = @model.public_name
+/   %span.search-term
+/ 
+/ #content-actions
+/   .content-action-links
+/     = link_to("Import Spreadsheet", import_csv_path(@project), :class => 'medium-button-link')
+/     - if action_name.eql?("search")
+/       = link_to("Export Spreadsheet", search_project_yogo_data_path(@project, @model,
+/           :search_term => params[:search_term], :format => 'csv'), :class => "medium-button-link")
+/     - else
+/       = link_to("Export Spreadsheet", project_yogo_data_index_path(@project, @model, :format => 'csv'),
+/           :class => "medium-button-link")
+/ 
+/ This is an alternative to the table using google visualiztion api (the javascript is now included in the app)
+/ <%# cols = @model.usable_properties.map { |prop| [ Yogo::Types.dm_to_gv(prop.type), Extlib::Inflection.humanize(prop.name.to_s) ] }%>
+/ <%# gvdata = @data.map { |item| @model.usable_properties.map { |p| item[p.name]  } } %>
+/ <%# visualization("test_table", "Table", {:data => gvdata, :columns => cols }) { } %>
+#pagination-links
+  = "Search results for: <span class='bold'>#{@search_term}</span><br /> " if @search_term
+  = pagination_links(@query, params[:page], Project.per_page)
 =clear_break
-- @item = @model.new
-- form_for(@item,
+- form_for(@model.new,
           :url => project_yogo_data_index_path(@project, @model),
           :html => { :enctype => 'multipart/form-data' },
           :builder => YogoDataFormBuilder) do |f|
