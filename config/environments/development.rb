@@ -4,7 +4,7 @@
 # License -> see license.txt
 #
 # FILE: development.rb
-# 
+#
 #
 # Settings specified here will take precedence over those in config/environment.rb
 

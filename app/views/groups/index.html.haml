@@ -6,13 +6,13 @@
         %th Name
         %th Description
         %th Users
-        / %th blank
+        //%th blank
     %tbody
       - for group in collection
         %tr
-          %td= group.name
+          %td= link_to(group.name, edit_group_path(group))
           %td= group.description
           %td= group.users
-          / %td= link_to('View', group_path(group)), link_to('Edit', edit_group_path(group)), link_to('Delete', group_path(group), :method=>:delete, :confirm => 'Are you sure?')
+          //%td= link_to('View', group_path(group)), link_to('Edit', edit_group_path(group)), link_to('Delete', group_path(group), :method=>:delete, :confirm => 'Are you sure?')
           
 #pagination-links= pagination_links(resource_class, params[:page], 25)

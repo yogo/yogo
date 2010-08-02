@@ -122,7 +122,7 @@ class UsersController < ApplicationController
       if @user.valid?
         @user.save
         flash[:notice] = "User updated"
-        format.html { redirect_to(user_url(@user)) }
+        format.html { redirect_to(users_url) }
       else
         flash[:error] = "There was an error updating the user"
         format.html { render(:action => 'edit') }

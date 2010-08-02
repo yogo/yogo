@@ -4,7 +4,7 @@
 # License -> see license.txt
 #
 # FILE: datamapper.rb
-# 
+#
 
 # Require custom extensions to datamapper.
 require 'datamapper/associations/relationship'
@@ -27,10 +27,10 @@ module Extlib
     # Allows for classes to be reloaded.
     # In theory, we might only want to allow this while in development mode.
     #
-    # As run the original assert_kind_of and, if an ArgumentError is raised, 
+    # As run the original assert_kind_of and, if an ArgumentError is raised,
     # we double-check that none of the class names match.
     #
-    # If they match, we return, assuming that, if the class names match, 
+    # If they match, we return, assuming that, if the class names match,
     # then the actual type is a match.
     #
     # If there are no class name matches, we raise the original exception.
@@ -45,7 +45,7 @@ module Extlib
 
     alias_method_chain :assert_kind_of, :allow_class_name_matching
 
-  end 
+  end
 end
 
 
@@ -69,9 +69,6 @@ if Object.const_defined?(:DataObjects)
   DataObjects::Sqlite3.logger    = Rails.logger if DataObjects.const_defined?(:Sqlite3)
 end
 
-# Load the project model and migrate it if needed.
-# proj_model_file = File.join(RAILS_ROOT, "app", "models", "project.rb")
-# require proj_model_file
 Project
 SchemaBackup
 User
@@ -79,14 +76,17 @@ Group
 DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(SchemaBackup.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(User.storage_name)
-                                
-admin_g = Group.first_or_create(:name => "Administrator", :admin => true, :project => nil)
+
+admin_g = Group.first_or_create(:name => "Administrator", :description => "VOEIS system administrators.",
+                                :admin => true, :project => nil)
 Group::AVAILABLE_ACTIONS.each do |action|
   admin_g.add_permission(action)
 end
 admin_g.save
 
 if admin_g.users.empty?
-  admin_g.users.create(:login => 'yogo', :password => 'change me', :password_confirmation => 'change me')
+  admin_g.users.create(:login => 'yogo', :email => "none", :first_name => "System",
+                       :last_name => "Administrator", :password => 'change me',
+                       :password_confirmation => 'change me')
   admin_g.save
 end

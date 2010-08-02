@@ -9,10 +9,10 @@
 # of the yogo repository.
 
 class Yogo::ProjectsController < ApplicationController
-  
+
   # Show all the projects
   #
-  # @example 
+  # @example
   #   get /projects
   #
   # @return [Array] Retrives all project and passes them to the view
@@ -23,15 +23,15 @@ class Yogo::ProjectsController < ApplicationController
   def index
     @projects = Project.available.paginate(:page => params[:page], :per_page => 5)
     @_menu_partial = 'index_menu'
-    
+
      respond_to do |format|
-        format.html 
+        format.html
       end
   end
 
   # Find a project or projects and show the result
   #
-  # @example 
+  # @example
   #   get /projects/search?q=search-term
   #
   # @return [Model] searches for data across all project all models all content of models
@@ -57,11 +57,11 @@ class Yogo::ProjectsController < ApplicationController
           @proj_models_data << [project, model, count] if count > 0
         end
       end
-      
+
       respond_to do |format|
         format.html
       end
-      
+
     else
       project = Project.get(params[:project_id])
       model = project.get_model(params[:model_name])
@@ -75,7 +75,7 @@ class Yogo::ProjectsController < ApplicationController
   ##
   # Shows a project
   #
-  # @example 
+  # @example
   #   get /projects/1 # Returnes project with an id of 1
   #
   # @return [Object] returns a web page displaying a project
@@ -86,15 +86,15 @@ class Yogo::ProjectsController < ApplicationController
   def show
     @project = Project.get(params[:id])
     @_menu_partial = 'show_menu'
-    
+
     if !Yogo::Setting[:local_only] && @project.is_private?
       raise AuthenticationError if !logged_in?
       raise AuthorizationError  if !current_user.is_in_project?(@project)
     end
-    
+
     @models = @project.models
     @sidebar = true
-    
+
     respond_to do |format|
       format.html
     end
@@ -103,7 +103,7 @@ class Yogo::ProjectsController < ApplicationController
   ##
   # Returns a form for creating a new project
   #
-  # @example 
+  # @example
   #   get /projects/new
   #
   # @return [Object] returns an empty project
@@ -113,23 +113,23 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def new
     @project = Project.new
-    
+
     respond_to do |format|
-      format.html 
+      format.html
     end
-    
+
   end
 
   ##
   # Creates a new project based on the attributes
   #
-  # @example 
+  # @example
   #   post /projects
   #
   # @param [Hash] params
   # @option params [Hash] :project this is the attributes of a project
   #
-  # @return if the project saves correctly it redirects to show project 
+  # @return if the project saves correctly it redirects to show project
   #  else it redirects to new project page
   #
   # @author Yogo Team
@@ -155,7 +155,7 @@ class Yogo::ProjectsController < ApplicationController
   ##
   # load project for editing
   #
-  # @example 
+  # @example
   #  get /projects/1/edit # edits project with an id of 1
   #
   # @param [Hash] params
@@ -168,12 +168,12 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def edit
     @project = Project.get(params[:id])
-    
+
     if !Yogo::Setting[:local_only]
-      raise AuthenticationError unless logged_in? 
+      raise AuthenticationError unless logged_in?
       raise AuthorizationError  unless @project.groups.users.empty? || current_user.has_permission?(:edit_project,@project)
     end
-    
+
     respond_to do |format|
       format.html
     end
@@ -182,14 +182,14 @@ class Yogo::ProjectsController < ApplicationController
   ##
   # Updates project with new values
   #
-  # @example 
+  # @example
   #   put /projects/1
   #
   # @param [Hash] params
   # @option params [String]:id
   # @option params [Hash] :project
   #
-  # @return if the project saves correctly it redirects to show project 
+  # @return if the project saves correctly it redirects to show project
   #  else it redirects to edit project page
   #
   # @author Yogo Team
@@ -197,12 +197,12 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def update
     @project = Project.get(params[:id])
-    
+
     if !Yogo::Setting[:local_only]
-      raise AuthenticationError unless logged_in? 
+      raise AuthenticationError unless logged_in?
       raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
     end
-    
+
     params[:project].delete(:name) if params.has_key?(:project)
     @project.attributes = params[:project]
     if @project.save
@@ -217,7 +217,7 @@ class Yogo::ProjectsController < ApplicationController
   ##
   # deletes a project
   #
-  # @example 
+  # @example
   #   destroy /projects/1
   #
   # @param [Hash] params
@@ -231,12 +231,13 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def destroy
     @project = Project.get(params[:id])
-    
+
     if !Yogo::Setting[:local_only]
       flash[:error] = "You need to login first" unless logged_in?
-      flash[:error] = "You do not have permission to delete the project." unless current_user.has_permission?(:delete_project, @project)
+      # We don't know how to check for this permission yet.
+      #flash[:error] = "You do not have permission to delete the project." unless current_user.has_permission?(:delete_project, @project)
     end
-    
+
     if @project.destroy
       flash[:notice] = "Project \"#{@project.name}\" has been destroyed."
     else
@@ -247,7 +248,7 @@ class Yogo::ProjectsController < ApplicationController
 
   # Create a new dataset on the project with a CSV file
   #
-  # @example 
+  # @example
   #  post /projects/upload/1 # with a CSV file
   #
   # @param [Hash] params
@@ -261,15 +262,15 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def upload
     @project = Project.get(params[:id])
-    
+
     if !Yogo::Setting[:local_only]
-      raise AuthenticationError unless logged_in? 
+      raise AuthenticationError unless logged_in?
       raise AuthorizationError  unless current_user.has_permission?(:edit_project,@project)
     end
-    
+
     if !params[:upload].nil?
       datafile = params[:upload]['datafile']
-      
+
       if !['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
@@ -285,23 +286,23 @@ class Yogo::ProjectsController < ApplicationController
           flash[:error] = errors.join("\n")
         end
       end
-      
+
     else
        flash[:error] = "Spreadsheet import error, please try the upload again."
     end
-    
+
     redirect_to project_url(@project)
   end
 
   # loads example project and models in Yogo
   #
-  # @example 
+  # @example
   #   get /projects/loadexample
   #
   # @return redirects to project index page
   #
   # @todo Figure out how this should act when in server mode.
-  # 
+  #
   # @author Yogo Team
   #
   # @api public
@@ -327,5 +328,5 @@ class Yogo::ProjectsController < ApplicationController
       redirect_to root_url
     end
   end
-  
+
 end

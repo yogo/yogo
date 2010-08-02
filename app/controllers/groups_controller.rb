@@ -1,6 +1,24 @@
 class GroupsController < ApplicationController
   inherit_resources
 
+  # def update
+  #   super do |format|
+  #     format.html { redirect_to(groups_url) }
+  #   end
+  # end
+
+  def create
+    super do |format|
+      format.html { redirect_to(groups_url) }
+    end
+  end
+  #
+  # def delete
+  #   super do |format|
+  #     format.html { redirect_to(groups_url) }
+  #   end
+  # end
+
   protected
 
   def collection

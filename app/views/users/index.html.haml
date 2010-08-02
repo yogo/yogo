@@ -3,15 +3,27 @@
     %thead
       %tr
         %th Login
-        //%th View
-        //%th Edit
-        //%th Destroy
+        %th First Name
+        %th Last Name
+        %th Email
+        %th Administrator
+        %th Created
+        %th Last Login
+        %th
     %tbody
       - for user in @users
         %tr
           %td= link_to(user.login, edit_user_path(user))
-          //%td= link_to('View', user_path(user))
-          //%td= link_to('Edit', edit_user_path(user))
-          //%td= link_to('Delete', user_path(user), :method=>:delete, :confirm => 'Are you sure?')
+          %td= user.first_name
+          %td= user.last_name
+          %td= user.email
+          %td
+            %center= user.admin ? image_tag('notice.png', :size => '12x12') : ''
+          %td
+            %center= user.created_at.nil? ? '' : user.created_at.strftime("%m/%d/%Y %I:%M %p")
+          %td
+            %center= user.last_login_at.nil? ? '' : user.last_login_at.strftime("%m/%d/%Y %I:%M %p")
+          %td
+            %center= link_to(image_tag('locked.png', :size => '12x12'), user_path(user), :method=>:lock, :confirm => 'Are you sure?')
           
 #pagination-links= pagination_links(User, params[:page], 25)

@@ -31,10 +31,12 @@
         = "ALPHA v" + YOGO_VERSION
     =clear_break
     #menu.rbox.tight
-      = render(:partial => 'layouts/menu_links') unless @no_menu
-      = render(:partial => 'layouts/login') unless @no_login
-      = render(:partial => @_menu_partial) if @_menu_partial
-      = render(:partial => 'layouts/search') unless @no_search
+      #menu-left-col
+        = render(:partial => 'layouts/menu_links') unless @no_menu
+        = render(:partial => @_menu_partial) if @_menu_partial
+      #menu-right-col
+        = render(:partial => 'layouts/login') unless @no_login
+        = render(:partial => 'layouts/search') unless @no_search
   =clear_break 
   /Grid Container 
   #container

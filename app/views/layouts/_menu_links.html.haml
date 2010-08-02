@@ -1,5 +1,10 @@
 #menu-links
-  = [ link_to("Home", root_url), 
-      link_to("About", page_url(:about), :target => 'blank'),
-      link_to("Help", "http://yogo.msu.montana.edu/", :target => 'blank')].join(" | ")
+  = link_to("Home", root_url)
+  |
+  - if logged_in? && current_user.admin?
+    = link_to("Administration", page_url(:admin))
+    |
+  = link_to("About", page_url(:about))
+  |
+  = link_to("Help", "http://yogo.msu.montana.edu/", :target => 'blank')
       

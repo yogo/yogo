@@ -1,0 +1,17 @@
+#content
+  = [ image_tag("22x22/projects.png"), 
+      [link_to("Projects", projects_url),
+      link_to("New", new_project_path, :class => 'menu-button-links')].join(" | ")].join(" ")
+  %br/
+  = [ image_tag("22x22/users.png"),
+      [link_to("Users", users_url),
+      link_to("New", new_user_path, :class => 'menu-button-links')].join(" | ")].join(" ")
+  %br/
+  = [ image_tag("22x22/role.png"),
+      [link_to("Groups", groups_url),
+      link_to("New", new_group_path, :class => 'menu-button-links')].join(" | ")].join(" ")
+  %br/
+  = [ image_tag("22x22/settings.png"),
+      link_to("Settings", settings_url)].join(" ")
+
+      

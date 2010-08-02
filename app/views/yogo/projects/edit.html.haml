@@ -1,9 +1,9 @@
-.small-centered.boxed
+.small-.boxed
   %h1#content-title
     #subtitle Project Settings
     = @project.name
 
-.small-centered.boxed
+.small.boxed
   .rbox.dashed
     = link_to("Delete Project", project_path(@project), 
       :method => :delete, :class => 'button-link fright', 
