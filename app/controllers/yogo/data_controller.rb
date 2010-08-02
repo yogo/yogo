@@ -329,4 +329,37 @@ class Yogo::DataController < ApplicationController
       end
     end
   end
+  
+  # alows us to upload csv file to be processed into data
+  #
+  # @example http://localhost:3000/project/upload/1/
+  #
+  # @param [Hash] params
+  # @option params [Hash] :upload
+  #
+  # @return [String] Accepts the upload of a CSV file
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  def upload_stream
+    if !params[:upload].nil? && datafile = params[:upload]['datafile']
+      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
+            'application/octet-stream','application/csv'].include?(datafile.content_type)
+        flash[:error] = "File type #{datafile.content_type} not allowed"
+      else
+        # Read the data in
+        errors = @model.load_csv_data(datafile.path)
+        if errors.empty?
+          flash[:notice] = "#{@model.name.demodulize} Data Successfully Uploaded."
+        else
+          @errors = errors
+          flash[:error] = "CSV File improperly formatted. Data not uploaded."
+        end
+      end
+      respond_to do |format|
+        format.html { redirect_to project_yogo_data_index_url(@project, @model.name.demodulize) }
+      end
+    end
+  end
 end

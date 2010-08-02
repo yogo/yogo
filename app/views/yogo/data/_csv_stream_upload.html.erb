@@ -1,0 +1,9 @@
+<div id="upload">
+  <strong>Data File Management</strong>
+  <%- form_tag(upload_stream_project_yogo_data_path( @project.id, @project.name.demodulize.titleize), :multipart => true ) do -%>
+      <label for="upload_file">Select File</label> : 
+      <%= file_field('upload', 'datafile', :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel") %>
+      <%= submit_tag("Upload") %>
+  <%- end -%>
+  <br />
+</div>
