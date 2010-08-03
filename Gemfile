@@ -1,18 +1,18 @@
 #!/usr/bin/env ruby
 source      "http://rubygems.org"
 
-# Required core gems
+DATAMAPPER = 'git://github.com/datamapper'
 
-gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :require  => 'yogo/project'
 gem "dm-core",              "1.0"
 
 gem "dm-timestamps",        "1.0"
 gem "dm-validations",       "1.0"
 gem "dm-is-nested_set",     "1.0"
-gem "dm-serializer",        "1.0" #, :path => "vendor/gems/dm-serializer-0.10.2"
+gem "dm-serializer",        "1.0"
 gem "dm-aggregates",        "1.0"
 gem "dm-migrations"
-gem "dm-types",             "1.0" #, :path => "vendor/gems/dm-types-0.10.2"
+gem "dm-types",              "1.0",     :git => "#{DATAMAPPER}/dm-types.git",
+                                        :require => false
 gem "dm-observer",          "1.0"
 gem "dm-persevere-adapter", "0.72.0", :require => nil
 # gem "rails_datamapper", :require => nil #,     "1.0" #, :require => nil
@@ -25,6 +25,8 @@ gem "dm-persevere-adapter", "0.72.0", :require => nil
 # gem "do_sqlite3",                    :require => nil
 gem 'dm-sqlite-adapter', :require => nil
 #gem "do_sqlserver",                  :require => nil
+
+gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :require  => 'yogo/project'
 
 gem "rails",                "2.3.8"
 gem "rake",                          :require => nil

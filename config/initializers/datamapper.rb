@@ -7,6 +7,7 @@
 # 
 
 # Require custom extensions to datamapper.
+require 'datamapper/model'
 require 'datamapper/paginate'
 require 'datamapper/search'
 require 'datamapper/paginate'
@@ -14,6 +15,8 @@ require 'datamapper/dm-userstamp'
 require 'datamapper/property/yogo_file'
 require 'datamapper/property/yogo_image'
 require 'datamapper/property/raw'
+
+require 'yogo/project_ext'
 
 
 # Read the configuration from the existing database.yml file
@@ -25,7 +28,7 @@ config = Rails.configuration.database_configuration
 DataMapper.setup(:default, config[Rails.env])
 
 # Alias :default to :yogo so things work well
-DataMapper.setup(:yogo, config["yogo_"+Rails.env])
+DataMapper.setup(:collection_data, config["yogo_"+Rails.env])
 
 # Map the datamapper logging to rails logging
 DataMapper.logger             = Rails.logger
@@ -39,18 +42,18 @@ end
 # Load the project model and migrate it if needed.
 # proj_model_file = File.join(RAILS_ROOT, "app", "models", "project.rb")
 # require proj_model_file
-Project
+Yogo::Project
 User
 Group
-
-DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
+DataMapper.finalize
+DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Yogo::Project.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(Group.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(User.storage_name)
                                 
 
-admin_g = Group.first(:name => 'Administrators', :admin => true, :project => nil)
+admin_g = Group.first(:name => 'Administrators', :admin => true)
 admin_g ||= Group.create(:name => 'Administrators', :admin => true)
-create_g = Group.first(:name => "Create Projects", :admin => false, :project => nil)
+create_g = Group.first(:name => "Create Projects", :admin => false)
 create_g ||= Group.create(:name => 'Create Projects', :admin => false, :permissions => 'create_projects')
 
 if admin_g.users.empty?
