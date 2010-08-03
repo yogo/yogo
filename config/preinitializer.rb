@@ -24,7 +24,6 @@ end
 
 # This ensures the gems load in the proper order.
 require 'dm-core'
-require "dm-reflection"
 require "dm-timestamps"
 require "dm-validations"
 require "dm-is-nested_set"
