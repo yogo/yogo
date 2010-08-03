@@ -13,14 +13,9 @@ ActionController::Routing::Routes.draw do |map|
                   :member => { :upload => :post }, 
                   :collection => { :loadexample => :post, :search => :get} do |project|
     
-      # /projects/:project_id/yogo_data/:model_name
-      # /projects/:project_id/yogo_data/:model_name/:id
-      project.resources :yogo_data, :as => 'yogo_data/:model_id', :controller => 'yogo/data',
-                        :collection => { :upload => :post, :search => :get },
-                        :member => { :download_asset => :get, :show_asset => :get }
-                          
-      # /projects/:project_id/yogo_models/:model_name
-      project.resources :yogo_models, :controller => 'yogo/models'
+      project.resources :collections
+      
+      project.resources :items
                       
       project.resources :users, :controller => 'yogo/users', 
                                 :only => [:index, :new, :create], 
