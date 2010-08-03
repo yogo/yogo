@@ -2,22 +2,22 @@
 source      "http://rubygems.org"
 
 # Required core gems
-gem "rails",                "2.3.8"
-gem "rake",                          :require => nil
+
+gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :require  => 'yogo/project'
 gem "dm-core",              "1.0"
 
-gem "dm-reflection",        "0.11.2", :git => "git://github.com/yogo/dm-reflection.git", :branch => 'topic/dm1.0'
 gem "dm-timestamps",        "1.0"
 gem "dm-validations",       "1.0"
 gem "dm-is-nested_set",     "1.0"
 gem "dm-serializer",        "1.0" #, :path => "vendor/gems/dm-serializer-0.10.2"
 gem "dm-aggregates",        "1.0"
 gem "dm-migrations"
-gem 'bcrypt-ruby'
 gem "dm-types",             "1.0" #, :path => "vendor/gems/dm-types-0.10.2"
 gem "dm-observer",          "1.0"
-gem "dm-persevere-adapter", "0.71.4", :require => nil, :git => "git://github.com/yogo/dm-persevere-adapter.git", :branch => 'ryan/yogo-integration' # This should point to a dm1.0 branch
+gem "dm-persevere-adapter", "0.72.0", :require => nil
 # gem "rails_datamapper", :require => nil #,     "1.0" #, :require => nil
+
+
 
 # These are required so we can make it simple to interact with legacy data
 #gem "do_mysql",                       :require => nil
@@ -26,12 +26,18 @@ gem "dm-persevere-adapter", "0.71.4", :require => nil, :git => "git://github.com
 gem 'dm-sqlite-adapter', :require => nil
 #gem "do_sqlserver",                  :require => nil
 
+gem "rails",                "2.3.8"
+gem "rake",                          :require => nil
+
+gem 'inherited_resources', '~> 1.0.6'
+
 # Extra supporting gems
-gem "mime-types",                     :require => 'mime/types'
-gem "fastercsv"                       unless RUBY_VERSION >= '1.9.1'
 gem "carrierwave"
 gem "compass"
+gem 'bcrypt-ruby'
+gem "fastercsv"                       unless RUBY_VERSION >= '1.9.1'
 gem "haml"
+gem "mime-types",                     :require => 'mime/types'
 gem "uuidtools"
 
 gem 'rails_warden'
@@ -50,8 +56,8 @@ gem "rails-footnotes",             :group => :development
 
 group :test do
 gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug',       :require => nil unless defined?(JRUBY_VERSION)
-  gem 'rspec',                     :require => nil
-  gem 'rspec-rails',               :require => 'spec/rails'
+  gem 'rspec',        '~>1.3.0',   :require => nil
+  gem 'rspec-rails',  '~>1.3.2',   :require => 'spec/rails'
   gem 'ZenTest',                   :require => nil
   gem 'redgreen',                  :require => nil
   gem "yard",                      :require => nil
