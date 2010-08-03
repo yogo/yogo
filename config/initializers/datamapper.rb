@@ -43,22 +43,7 @@ end
 # proj_model_file = File.join(RAILS_ROOT, "app", "models", "project.rb")
 # require proj_model_file
 Yogo::Project
-User
-Group
+
 DataMapper.finalize
-DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Yogo::Project.storage_name) &&
-                                DataMapper.repository(:default).storage_exists?(Group.storage_name) &&
-                                DataMapper.repository(:default).storage_exists?(User.storage_name)
+DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Yogo::Project.storage_name)
                                 
-
-admin_g = Group.first(:name => 'Administrators', :admin => true)
-admin_g ||= Group.create(:name => 'Administrators', :admin => true)
-create_g = Group.first(:name => "Create Projects", :admin => false)
-create_g ||= Group.create(:name => 'Create Projects', :admin => false, :permissions => 'create_projects')
-
-if admin_g.users.empty?
-  u = User.create(:login => 'yogo', :password => 'change me', :password_confirmation => 'change me')
-  u.groups << admin_g
-  u.groups << create_g
-  u.save
-end

@@ -43,7 +43,6 @@ class User
   property :updated_at, DateTime
   property :updated_on, Date
 
-  has n, :groups, :through => Resource
 
   validates_confirmation_of :password
   
