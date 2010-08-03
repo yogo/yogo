@@ -42,6 +42,11 @@ class Yogo::ProjectsController < ApplicationController
   def search
     @search_scope = params[:search_scope]
     @search_term = params[:search_term]
+    
+    # Example
+    # if current_user.authorized?(:project_search)
+    # end
+    
     if @search_scope == 'everywhere' || params[:model_name].blank?
       @projects = Project.available.search(@search_term)
 

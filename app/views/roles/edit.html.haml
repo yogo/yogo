@@ -4,7 +4,7 @@
     = @role.name
     
 .extra-small.box
-  .rbox.dashed
+  .rbox
     = link_to("Delete Role", role_path(@role), 
       :method => :delete, :class => 'button-link fright', 
       :confirm => "Are you sure you want to delete the #{@role.name} group?\nThere is no undo! Continue?" )

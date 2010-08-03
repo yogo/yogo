@@ -14,9 +14,12 @@ load Rails.root / "VERSION"
 
 admins = Role.first_or_create(:name => "Administrator", :description => "VOEIS system administrators.",
                                 :admin => true, :project => nil)
-Role::AVAILABLE_ACTIONS.each do |action|
-  admins.add_permission(action)
-end
+
+admins.permissions = admins.available_permissions
+
+# Role::AVAILABLE_ACTIONS.each do |action|
+#   admins.add_permission(action)
+# end
 admins.save
 
 if admins.users.empty?

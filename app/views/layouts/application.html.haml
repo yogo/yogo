@@ -34,7 +34,7 @@
     #menu.rbox.tight
       #menu-left-col
         = render(:partial => 'layouts/menu_links') unless @no_menu
-        = render(:partial => @_menu_partial) if @_menu_partial
+        = render(:partial => "#{action_name}_menu") rescue nil
       #menu-right-col
         = render(:partial => 'layouts/login') unless @no_login
         = render(:partial => 'layouts/search') unless @no_search
