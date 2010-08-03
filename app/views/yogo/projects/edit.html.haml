@@ -10,23 +10,23 @@
 
 .small-centered.boxed
   .rbox.dashed
-    = link_to("Delete Project", project_path(@project), 
+    = link_to("Delete Project", yogo_project_path(@project), 
       :method => :delete, :class => 'button-link fright', 
       :confirm => "Are you sure you want to delete the #{@project.name} project?\nThere is no undo! Continue?" )
-    - form_for(@project, :builder => YogoFormBuilder) do |f|
+    - form_for(@project, :url => yogo_project_path(@project), :builder => YogoFormBuilder) do |f|
       %h3= f.check_box(:is_private, :label => image_tag('icons/private_16.png') + " Private")
       %h3= f.text_area(:description, :label => "Project Description: ")
       %h3.tight Project Users
       .rbox.tight
-        = link_to("Manage Users", project_users_path(@project), :class => 'button-link fright')
-        .managers
-          %span.bold Managers: 
-          = @project.groups.first(:name => 'Manager').users.map{|u| u.name }.join(', ')
-        %span.bold All Users:
-        %ul.all-users
-          - @project.groups.users.each do |user|
-            // TODO: The group-selection below is clumsy, optimize plz
-            %li= user.name + ": " + @project.groups.select{|g| g.users.include?(user) }.map{|g| g.name }.join(', ')
+        = link_to("Manage Users", yogo_project_users_path(@project), :class => 'button-link fright')
+        / .managers
+        /           %span.bold Managers: 
+        /           = @project.groups.first(:name => 'Manager').users.map{|u| u.name }.join(', ')
+        /         %span.bold All Users:
+        /         %ul.all-users
+        /           - @project.groups.users.each do |user|
+        /             // TODO: The group-selection below is clumsy, optimize plz
+        /             %li= user.name + ": " + @project.groups.select{|g| g.users.include?(user) }.map{|g| g.name }.join(', ')
       .form-element
         = f.submit('Update', :class => 'button-link')
-        = link_to('Cancel', projects_path, :class => 'cancel')
+        = link_to('Cancel', yogo_projects_path, :class => 'cancel')

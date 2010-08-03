@@ -21,7 +21,7 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def index
-    @projects = Project.available.paginate(:page => params[:page], :per_page => 5)
+    @projects = Yogo::Project.paginate(:page => params[:page], :per_page => 5)
     
      respond_to do |format|
         if @projects.empty?
@@ -97,14 +97,14 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def show
-    @project = Project.get(params[:id])
+    @project = Yogo::Project.get(params[:id])
     
     if !Yogo::Setting[:local_only] && @project.is_private?
       raise AuthenticationError if !logged_in?
       raise AuthorizationError  if !current_user.is_in_project?(@project)
     end
     
-    @models = @project.models
+    @data_collections = @project.data_collections
     @sidebar = true
     
     respond_to do |format|
@@ -124,13 +124,12 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def new
-    # @project = Project.new
-    # 
-    # respond_to do |format|
-    #   format.html 
-    # end
-    # 
-    redirect_to start_wizard_path
+    @project = Yogo::Project.new
+    
+    respond_to do |format|
+      format.html 
+    end
+    
   end
 
   ##
@@ -149,18 +148,16 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def create
-    
     if !Yogo::Setting[:local_only]
       raise AuthenticationError  if !logged_in? 
       raise AuthorizationError if !current_user.has_permission?(:create_projects)
     end
 
-    @project = Project.get(params[:id])
     
-    @project = Project.new(params[:project])
+    @project = Yogo::Project.new(params[:yogo_project])
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
-      redirect_to csv_question_url(@project)
+      redirect_to yogo_project_url(@project)
     else
       flash.now[:error] = "Project could not be created."
       render :action => :new
@@ -182,7 +179,7 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def edit
-    @project = Project.get(params[:id])
+    @project = Yogo::Project.get(params[:id])
     
     if !Yogo::Setting[:local_only]
       raise AuthenticationError unless logged_in? 
@@ -211,7 +208,7 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def update
-    @project = Project.get(params[:id])
+    @project = Yogo::Project.get(params[:id])
     
     if !Yogo::Setting[:local_only]
       raise AuthenticationError unless logged_in? 
@@ -219,10 +216,10 @@ class Yogo::ProjectsController < ApplicationController
     end
     
     params[:project].delete(:name) if params.has_key?(:project)
-    @project.attributes = params[:project]
+    @project.attributes = params[:yogo_project]
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been updated."
-      redirect_to projects_url
+      redirect_to yogo_projects_url
     else
       flash[:error] = "Project could not be updated."
       render( :action => :edit )
@@ -245,7 +242,7 @@ class Yogo::ProjectsController < ApplicationController
   #
   # @api public
   def destroy
-    @project = Project.get(params[:id])
+    @project = Yogo::Project.get(params[:id])
     
     if !Yogo::Setting[:local_only]
       raise AuthenticationError unless logged_in? 
@@ -327,7 +324,7 @@ class Yogo::ProjectsController < ApplicationController
       raise AuthenticationError
     end
 
-    @project = Project.create(:name => "Cricket Cercal System DB")
+    @project = Yogo::Project.create(:name => "Cricket Cercal System DB")
     if @project.valid?
       errors = @project.process_csv(Rails.root.join("dist", "example_data", "cercaldb", "cells.csv"), "Cell")
       if errors.empty?

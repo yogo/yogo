@@ -7,7 +7,7 @@
 #content-actions
   .content-action-links
     = link_to_edit_project_models(@project, "Edit/Add Data Model", :class => 'medium-button-link')
-    = link_to("Project Settings", edit_project_path(@project), :class => 'medium-button-link')
+    = link_to("Project Settings", edit_yogo_project_path(@project), :class => 'medium-button-link')
     /= link_to("Delete Project", project_path(@project), 
     /  :method => :delete, :class => 'button-link', 
     /  :confirm => "There is no undo.\n Continue?" )
@@ -18,7 +18,7 @@
 //= render(:partial => 'layouts/sidebar') %>
 
 #content-block
-  - for dataset in @project.models
+  - for dataset in @project.data_collections
     - @item = dataset.new
     .content-row-block
       .dataset-name
