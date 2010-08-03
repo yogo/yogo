@@ -73,7 +73,7 @@ Spec::Runner.configure do |config|
   # == Notes
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
-  
+
   config.before(:suite) {
     # We can't actually start perseve here.
     # Perseve needs to be started before the environment is loaded
@@ -85,19 +85,18 @@ Spec::Runner.configure do |config|
   config.after(:suite) {
 
   }
-  
+
   config.before(:each) {
     # DataMapper.auto_migrate!
   }
 
-  
+
 end
 
 def standard_user(opts = {})
    User.new({:login => 'yogo', :password => "pass", :password_confirmation => 'pass'}.merge(opts))
 end
 
-def standard_group(opts = {})
-  Group.new({:name => 'basic group'}.merge(opts))
+def standard_role(opts = {})
+  Role.new({:name => 'basic role'}.merge(opts))
 end
-  

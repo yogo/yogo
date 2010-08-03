@@ -13,19 +13,20 @@ class User
   attr_accessor :password, :password_confirmation
 
   property :id,                 DataMapper::Types::Serial
-  property :login,              String, :required => true, :index => true, :unique => true
-  property :email,              String, :required => true, :length => 256
-  property :first_name,         String, :length => 50
-  property :last_name,          String, :length => 50
+  property :login,              String,  :required => true, :index => true, :unique => true
+  property :email,              String,  :required => true, :length => 256
+  property :first_name,         String,  :length => 50
+  property :last_name,          String,  :length => 50
+  property :admin,              Boolean, :default => false
 
   # TODO: Make sure a length of 128 is long enough for various encryption algorithms.
   property :crypted_password,     BCryptHash, :required => true,  :length => 128
   property :single_access_token,  String, :required => false, :length => 128, :index => true
-  property :login_count,        Integer, :required => true, :default => 0
-  property :failed_login_count, Integer, :required => true, :default => 0
-  property :last_request_at,    DateTime
-  property :last_login_at,      DateTime
-  property :current_login_at,   DateTime
+  property :login_count,          Integer, :required => true, :default => 0
+  property :failed_login_count,   Integer, :required => true, :default => 0
+  property :last_request_at,      DateTime
+  property :last_login_at,        DateTime
+  property :current_login_at,     DateTime
 
   # Long enough for an ipv6 address.
   property :last_login_ip,      String, :length => 36
@@ -126,7 +127,6 @@ class User
   #
   # @api public
   def has_role?(role_name, project = nil)
-    # @_user_role_names ||= Role.all(:project => project, :users => self).collect(&:name)
     @_user_role_names ||= self.roles(:project => project).collect(&:name)
     @_user_role_names.include?(role_name.to_s)
   end
@@ -164,57 +164,6 @@ class User
   # @api public
   def is_in_project?(project)
     self.roles.any?{ |role| role.project.eql?(project) }
-  end
-
-  ##
-  # Check to see if any of the roles the user is in is an admin role
-  #
-  # @example
-  #   current_user.admin?
-  #
-  # @return [Boolean] true if the user is an admin, or false otherwise
-  #
-  # @author lamb
-  #
-  # @api public
-  def admin?
-    self.roles.any?{|role| role.admin? }
-  end
-
-  ##
-  # Alias for admin?
-  #
-  # @example
-  #   current_user.admin
-  #
-  # @return [Boolean] true if the user is an admin, or false otherwise
-  #
-  # @author lamb
-  #
-  # @see admin?
-  #
-  # @api public
-  alias :admin :admin?
-
-  ##
-  # Check to see if any of the roles the user is in is an admin role
-  #
-  # @example
-  #   current_user.admin=true
-  #
-  # @param [Boolean] is_admin True if the user should be an admin, or false
-  # @return [nil] Not Interesting
-  #
-  # @author lamb
-  #
-  # @api public
-  def admin=(is_admin)
-    admin_role = Role.first(:project => nil, :admin => true)
-    if is_admin == true || is_admin == 1 || is_admin == '1'
-      self.roles << admin_role unless self.roles.include?(admin_role)
-    else
-      self.roles.delete(admin_role) if self.roles.include?(admin_role)
-    end
   end
 
   ##

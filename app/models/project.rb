@@ -320,34 +320,6 @@ class Project
   end
 
   ##
-  # Reloads the models for this schema from the backups
-  # @return [Array]
-  #   An array of models that have been refreshed
-  #
-  # @author robbie.lamb@gmail.com
-  # @api private
-  def reload_schemas_from_backup!
-    models.each do |m|
-      sb = SchemaBackup.get_or_create_by_name(m.name.to_s)
-      repository.adapter.update_schema(JSON.parse(sb.schema))
-    end
-
-    models.each do |model|
-      namespace_parts = model.name.split("::")
-      name = namespace_parts.pop
-      namespace = namespace_parts.join("::")
-
-      DataMapper::Model.descendants.delete(model)
-      namespace.constantize.send(:remove_const, name.to_sym)
-    end
-
-    new_models = DataMapper::Reflection.reflect(:default)
-
-    new_models.each{|m| m.send(:include,Yogo::Model) }
-    new_models.each{|m| m.properties.sort! }
-  end
-
-  ##
   # Return the description for a dataset
   #
   # @example

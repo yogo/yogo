@@ -2,7 +2,7 @@
   - if @projects.empty?
     There are no projects yet, you should create one!
   - for project in @projects
-    - if project.name != "VOEIS" # && !current_user.admin?
+    - if project.name != "VOEIS" # && !current_user.admin
       .content-row-block.rbox
         .project-text
           %h2

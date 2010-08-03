@@ -33,16 +33,16 @@ module Yogo
             create_uploader(property.name, property.type)
           end
         end
-        
+
         # Original property
         # @example orginal_initialize
-        # @return 
+        # @return
         # @api public
         class << self
           alias_method :original_property, :property
           alias_method :property, :property_with_carrierwave
         end
-        
+
       end
     end
 
@@ -56,7 +56,7 @@ module Yogo
       # create a property in the current class
       #
       # This should never be called directly.
-      #   
+      #
       # @example
       #     property :id, Serial
       #
@@ -64,13 +64,13 @@ module Yogo
       # @param [String or Symbol] name The name of the property to be added
       # @param [Class] type The class the property should be
       # @param [Hash] options The options hash
-      #   
+      #
       # @return [Property] the property that was created. Not useful.
-      # 
+      #
       # @author Yogo Team
       #
       # @see http://rdoc.info/projects/datamapper/dm-core
-      # 
+      #
       # @api semipublic
       def property_with_carrierwave(name, type, options = {})
         prop = original_property(name, type, options)
@@ -82,13 +82,13 @@ module Yogo
       end
 
       # The properties on a model for human consumption
-      # 
+      #
       # @example @model.usable_properties.each{|prop| puts prop.display_name }
-      # 
+      #
       # @return [Array] properties that are usable by human consumption
-      # 
+      #
       # @author Robbie Lamb robbie.lamb@gmail.com
-      # 
+      #
       # @api public
       def usable_properties
         properties.select{|p| p.name.to_s.match(/^yogo__/) }
@@ -96,38 +96,38 @@ module Yogo
 
 
       # Create the asset path so we can reuse it
-      # 
+      #
       # @return [String] The string path to the directory/folder to storage for assets of this model.
-      # 
+      #
       # @example Get the path to the asset directory for a model
       #   Model.asset_path => "module/class"
-      # 
+      #
       # @author Ivan Judson
-      # 
+      #
       # @api public
       def asset_path
         self.name.gsub('::', '/')
       end
 
       # The name of the model humanized
-      # 
-      # @example 
+      #
+      # @example
       #   @model.public_name
-      # 
+      #
       # @return [String] humanized name of the class
-      # 
+      #
       # @author Robbie Lamb robbie.lamb@gmail.com
-      # 
+      #
       # @api public
       def public_name
         @_public_name ||= self.name.demodulize.titleize
       end
-      
+
       # Compatability method for rails' route generation helpers
       #
       # @example
       #   @model.to_param # returns the ID as a string
-      # 
+      #
       # @return [String] the object id as url param
       #
       # @author Yogo Team
@@ -136,59 +136,44 @@ module Yogo
       def to_param
         self.name.demodulize
       end
-      
-      ##
-      # Backup the schema into our special table
-      # @example
-      #   model.backup_schema!
-      # 
-      # @return [SchemaBackup]
-      #   The backup object for this model.
-      # 
-      # @api public
-      def backup_schema!
-        schema_backup = SchemaBackup.get_or_create_by_name(self.name)
-        schema_backup.schema =  self.to_json_schema
-        schema_backup.save
-      end
-      
+
       private
-      
+
       ##
       # Creates a carrierwave uploader for the specified field
-      # 
-      # @example 
+      #
+      # @example
       #   create_uploader(:yogo__file, DataMapper::Types::YogoFile)
-      # 
+      #
       # @param [Symbol or String] name the name of the property to add a handler to
       # @param [Class] type the type of property this is
-      # 
+      #
       # @return [Object] nothing useful
-      # 
+      #
       # @author Robbie Lamb robbie.lamb@gmail.com
-      # 
+      #
       # @api private
       def create_uploader(name, type)
         path = File.join(Rails.root, Setting['asset_directory'], asset_path, name.to_s )
         anon_file_handler = Class.new(CarrierWave::Uploader::Base)
-        anon_file_handler.instance_eval do 
+        anon_file_handler.instance_eval do
           storage :file
           self.class_eval("def store_dir; '#{path}'; end")
         end
 
         # named_class = Object.class_eval("#{self.name}::#{name.to_s.camelcase}File = anon_file_handler")
         mount_uploader name, anon_file_handler
-        
+
       end
     end
 
     module InstanceMethods
-      
+
       # Compatability method for rails' route generation helpers
       #
       # @example
       #   instance.to_param # returns the ID as a string
-      # 
+      #
       # @return [String] the object id as url param
       #
       # @author Yogo Team
@@ -197,14 +182,14 @@ module Yogo
       def to_param
         self.yogo_id.to_s
       end
-      
+
       # Serialize a Resource to comma-separated values (CSV)
       #
       # @example
       #   data_item.to_yogo_csv
-      # 
+      #
       # @return <String> a CSV representation of the Resource
-      # 
+      #
       # @api public
       def to_yogo_csv
         CSV.generate do |csv|
@@ -215,15 +200,15 @@ module Yogo
           csv << row
         end
       end
-      
+
       private
-      
+
       # Check to see if the change_summary field is required to be filled out
-      # 
+      #
       # @return [Boolean]
-      # 
+      #
       # @author Robbie Lamb robbie.lamb@gmail.com
-      # 
+      #
       # @api private
       def require_change_summary?
         Setting[:require_change_sumary] && !new_record?

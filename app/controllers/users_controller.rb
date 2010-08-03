@@ -14,7 +14,6 @@ class UsersController < ApplicationController
   # @api public
   def index
     @users = User.paginate(:page => params[:page], :per_page => 25, :order => 'login')
-    @_menu_partial = 'index_menu'
     respond_to do |format|
       format.html
     end
@@ -166,7 +165,7 @@ class UsersController < ApplicationController
   # @api private
   def require_administrator
     raise AuthenticationError unless logged_in?
-    raise AuthorizationError  unless current_user.roles.any?{|role| role.admin? }
+    raise AuthorizationError  unless current_user.admin
   end
 
 end

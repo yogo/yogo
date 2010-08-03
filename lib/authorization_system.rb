@@ -11,7 +11,7 @@ module AuthorizationSystem
     base.send :class_inheritable_accessor, :authorization_requirements
     base.send :authorization_requirements=, []
 
-    base.send :hide_action, 
+    base.send :hide_action,
     :authorization_requirements,
     :authorization_requirements=
 
@@ -19,7 +19,7 @@ module AuthorizationSystem
   end
 
   module AuthorizationSystemClassMethods
-    
+
     # Sets up authorization for a action
     # @example
     #   require_authorization
@@ -43,8 +43,8 @@ module AuthorizationSystem
 
     ##
     # Hey, a Method Missing
-    # 
-    # 
+    #
+    #
     # @return [nil]
     # @api private
     def method_missing(method_id, *arguments)
@@ -84,8 +84,8 @@ module AuthorizationSystem
           next if ( String===options[:unless] ? eval(options[:unless], binding) : options[:unless].call(params) )
         end
 
-        values.each { |value| 
-          return { :url => options[:redirect_url], :status => options[:status] } unless 
+        values.each { |value|
+          return { :url => options[:redirect_url], :status => options[:status] } unless
           (user and send("user_is_in_#{type}?", user, value))
           } unless (user == :false || user == false)
 
@@ -98,7 +98,7 @@ module AuthorizationSystem
       # @return [Boolean]
       # @api private
       def url_authorized?(user, params = {}, binding = self.binding)
-        if !user.nil? 
+        if !user.nil?
           return self.next_authorized_action_for(user, params, binding).nil?
         end
         return true
@@ -113,11 +113,11 @@ module AuthorizationSystem
       end
 
       ##
-      # Checks if the user given is in a group
+      # Checks if the user given is in a role
       # @return [Boolean]
       # @api private
-      def user_is_in_group?(user, group)
-        user.has_group?(group)
+      def user_is_in_role?(user, role)
+        user.has_role?(role)
       end
 
 
@@ -129,13 +129,13 @@ module AuthorizationSystem
 
       ##
       # The actions to take when authorization has been denied
-      # 
+      #
       # @example
       #   authorization_denied
-      # 
+      #
       # @return [False]
       #   Always returns false
-      # 
+      #
       # @api semipublic
       def authorization_denied
         logger.debug { "Authorization Denied" }
@@ -145,7 +145,7 @@ module AuthorizationSystem
         #TODO: Redirect back or default
         respond_to do |format|
           format.html do
-             if request.env['HTTP_REFERER'] 
+             if request.env['HTTP_REFERER']
                redirect_to(:back)
              else
                redirect_to('/')
@@ -157,7 +157,7 @@ module AuthorizationSystem
 
       ##
       # Action to take when authorization is accepted
-      # @example 
+      # @example
       #   authorized
       # @return [True]
       # @api semipublic
@@ -167,33 +167,32 @@ module AuthorizationSystem
 
       ##
       # Checks the authorizations for the current action being taken
-      # 
+      #
       # @example
       #   check_authorization
-      # 
+      #
       # @return [TrueClass or FalseClass]
       #   Returns true if authorized, and false if not authorized.
-      # 
+      #
       # @author Yogo Team
-      # 
+      #
       # @api private
       def check_authorization
-        # return authorized if admin_groups.length > 0
         return authorization_denied unless self.url_authorized?(params)
         return authorized
       end
 
       ##
       # Checks the authorizations for the current action being taken
-      # 
+      #
       # @example
       #   url_authorized
-      # 
+      #
       # @return [Boolean]
       #   Returns true if authorized, and false if not authorized.
-      # 
+      #
       # @author Yogo Team
-      # 
+      #
       # @api private
       def url_authorized?(params = {})
         params = params.symbolize_keys
@@ -202,7 +201,7 @@ module AuthorizationSystem
         else
           base = self.class
         end
-        base.url_authorized?(current_user, params, binding)  
+        base.url_authorized?(current_user, params, binding)
       end
 
     end # module AuthroizationSystemInstanceMethod
