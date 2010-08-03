@@ -24,6 +24,7 @@ class Project
 
   after :create, :create_default_roles
 
+  has n, :sites, :through => Resource
   has n, :roles
 
   # The number of items to be displayed (by default) per page

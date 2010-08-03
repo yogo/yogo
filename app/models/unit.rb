@@ -15,7 +15,7 @@ class Unit
   property :units_type, String, :required => true
   property :units_abbreviation, String, :required => true
   
-  has n, :data_stream_column, :model=>"DataStreamColumn", :through =>Resource
+  has n, :data_stream_columns, :model=>"DataStreamColumn", :through =>Resource
   has n, :variables, :model =>"Variable", :through => Resource
   # has n, :OffsetTypes, :class_name => "Raw::OffsetTypes"
   # 

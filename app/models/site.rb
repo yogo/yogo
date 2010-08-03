@@ -42,6 +42,6 @@ class Site
   property :country, String, :required => false
   property :comments, String, :required => false
 
-  has n, :projects
+  has n, :projects, :through => Resource
   has n, :data_streams, :model => "DataStream"
 end
