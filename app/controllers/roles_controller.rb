@@ -7,6 +7,12 @@ class RolesController < ApplicationController
     end
   end
 
+  def update
+    super do |format|
+      format.html { redirect_to(roles_url) }
+    end
+  end
+
   protected
 
   def collection
@@ -15,5 +21,10 @@ class RolesController < ApplicationController
 
   def resource
     @role ||= resource_class.get(params[:id])
+  end
+
+  def update_resource(object, attributes)
+    object.attributes = attributes
+    object.save
   end
 end

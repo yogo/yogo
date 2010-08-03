@@ -1,7 +1,7 @@
 #menu-links
   = link_to("Home", root_url)
   |
-  - if logged_in? && current_user.admin?
+  - if logged_in? && current_user.admin
     = link_to("Administration", page_url(:admin))
     |
   = link_to("About", page_url(:about))

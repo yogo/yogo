@@ -22,7 +22,6 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def index
     @projects = Project.available.paginate(:page => params[:page], :per_page => 5)
-    @_menu_partial = 'index_menu'
 
      respond_to do |format|
         format.html
@@ -42,6 +41,11 @@ class Yogo::ProjectsController < ApplicationController
   def search
     @search_scope = params[:search_scope]
     @search_term = params[:search_term]
+
+    # Example
+    # if current_user.authorized?(:project_search)
+    # end
+
     if @search_scope == 'everywhere' || params[:model_name].blank?
       @projects = Project.available.search(@search_term)
 
@@ -93,7 +97,6 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def show
     @project = Project.get(params[:id])
-    @_menu_partial = 'show_menu'
 
     if !Setting[:local_only] && @project.is_private?
       raise AuthenticationError if !logged_in?
@@ -202,7 +205,7 @@ class Yogo::ProjectsController < ApplicationController
 
     if !Setting[:local_only]
       raise AuthenticationError unless logged_in?
-      raise AuthorizationError  unless @project.groups.users.empty? || current_user.has_permission?(:edit_project,@project)
+      raise AuthorizationError  unless @project.roles.users.empty? || current_user.has_permission?(:edit_project,@project)
     end
 
     respond_to do |format|
@@ -367,10 +370,10 @@ class Yogo::ProjectsController < ApplicationController
       format.html
     end
   end
-  
+
   def add_stream
     @project = Project.get(params[:id])
-    
+
     respond_to do |format|
       format.html
     end

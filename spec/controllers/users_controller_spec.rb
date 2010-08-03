@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe UsersController do
-  
+
   def mock_warden
     request.env["warden"] = mock('Warden')
     request.env["warden"].stub!(:user)
@@ -10,7 +10,7 @@ describe UsersController do
   before(:all) do
     standard_group(:admin => 'true', :name => 'administrators').save
   end
-  
+
   after(:all) do
     User.all.destroy
     Group.all.destroy
@@ -19,14 +19,13 @@ describe UsersController do
   before(:each) do
     mock_warden
   end
-  
+
   describe "when working with administrators" do
     before :each do
       mock_warden
       User.all.destroy
-      @admin_group = Group.first(:admin => true)
       @u = standard_user
-      @u.groups << @admin_group
+      @u.admin = true
       @u.save
       request.env["warden"].stub!(:user).and_return(@u)
       request.env["warden"].stub!(:authenticated?).and_return(true)
@@ -68,7 +67,7 @@ describe UsersController do
       post(:create, :user => {:login => 'test',
              :password => 'a big password',
              :password_confirmation => 'a big password'})
-      
+
       assigns[:user].should_not be_nil
       flash[:notice].should eql("User created")
       response.should redirect_to(users_url)
@@ -89,12 +88,12 @@ describe UsersController do
       mock_user.stub!(:valid?).and_return(true)
       mock_user.stub!(:save)
       mock_user.stub!(:to_param).and_return('42')
-      
+
       put(:update, :id => '42',  :user => {:id => '42', :login => 'blah' })
 
       response.should redirect_to(user_url(:id => '42'))
     end
-    
+
     it "should not update a user with invalid data" do
       mock_user = mock_model(User)
       User.stub!(:get).with("42").and_return(mock_user)
@@ -102,13 +101,13 @@ describe UsersController do
       mock_user.stub!(:valid?).and_return(false)
 
       mock_user.stub!(:to_param).and_return('42')
-      
+
       put(:update, :id => '42',  :user => {:id => '42', :login => 'blah' })
 
       assigns[:user].should eql mock_user
       response.should render_template('edit')
     end
-    
+
     it "should not update a password" do
       u = standard_user
       u.save
@@ -116,9 +115,9 @@ describe UsersController do
       u.should_not_receive(:password=)
       u.should_not_receive(:password_confirmation=)
       u.stub!(:to_param).and_return('42')
-      
+
       put(:update, :id => '42',  :user => {:id => '42', :login => 'blah', :password => 'blah', :password_confirmation => 'blah' })
-      
+
       response.should(redirect_to(user_url(:id => 42)))
     end
 
@@ -173,8 +172,8 @@ describe UsersController do
       delete :destroy, :id => 1
       response.should be_redirect
     end
-    
+
   end
-  
-  
+
+
 end

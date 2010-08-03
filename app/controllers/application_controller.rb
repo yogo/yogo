@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   include AuthorizationSystem
 
   # Check for local connections before anything else
-  before_filter :check_local_only, :check_menu
+  before_filter :check_local_only
 
   # Set the current user for the models to use.
   before_filter do |c|
@@ -84,10 +84,6 @@ class ApplicationController < ActionController::Base
       # Raise a 403 exception or perhaps just redirect.
       render_optional_error_file(:forbidden)
     end
-  end
-
-  def check_menu
-    @_menu_partial = nil
   end
 
   ##

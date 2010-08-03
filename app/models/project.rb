@@ -11,6 +11,7 @@
 # that are part of the project.
 class Project
   include DataMapper::Resource
+  extend Permission
 
   property :id, Serial
   property :name, String, :required => true, :unique => true
@@ -19,13 +20,16 @@ class Project
 
   validates_is_unique   :name
 
+  has n, :roles
+
   before :destroy, :delete_models!
-  before :destroy, :delete_associated_roles!
-
-  after :create, :create_default_roles
-
   has n, :sites, :through => Resource
   has n, :roles
+
+  def self.extended_permissions
+    collection_perms = [ :create_models, :retrieve_models, :update_models, :delete_models, :create_data, :retrieve_data, :update_data, :delete_data ]
+    [:manage_users, collection_perms, super].flatten
+
 
   # The number of items to be displayed (by default) per page
   #
@@ -318,34 +322,6 @@ class Project
   end
 
   ##
-  # Reloads the models for this schema from the backups
-  # @return [Array]
-  #   An array of models that have been refreshed
-  #
-  # @author robbie.lamb@gmail.com
-  # @api private
-  def reload_schemas_from_backup!
-    models.each do |m|
-      sb = SchemaBackup.get_or_create_by_name(m.name.to_s)
-      repository.adapter.update_schema(JSON.parse(sb.schema))
-    end
-
-    models.each do |model|
-      namespace_parts = model.name.split("::")
-      name = namespace_parts.pop
-      namespace = namespace_parts.join("::")
-
-      DataMapper::Model.descendants.delete(model)
-      namespace.constantize.send(:remove_const, name.to_sym)
-    end
-
-    new_models = DataMapper::Reflection.reflect(:default)
-
-    new_models.each{|m| m.send(:include,Yogo::Model) }
-    new_models.each{|m| m.properties.sort! }
-  end
-
-  ##
   # Return the description for a dataset
   #
   # @example
@@ -423,29 +399,6 @@ class Project
     model = DataMapper::Factory.instance.build(spec_hash, :yogo )
     model.send(:include,Yogo::Model)
     return model
-  end
-
-  ##
-  # Callback to create some default roles for this project
-  #
-  # @return [nil]
-  # @author Robbie Lamb
-  # @api private
-  def create_default_roles
-    # DataMapper.logger.debug { "Creating default roles" }
-    #
-    # admin_role = Role.new(:name => "Administrator", :description => "Application administrators.")
-    # admin_role.users << User.current unless User.current.nil?
-    # [:create_projects, :view_project, :edit_project, :delete_project, :edit_model_descriptions, :edit_model_data, :delete_model_data].each do |action|
-    #    admin_role.add_permission(action)
-    #  end
-    # admin_role.save
-    # self.roles.push(admin_role)
-    # self.save
-  end
-
-  def delete_associated_roles!
-    self.roles.each{ |role| role.destroy }
   end
 
 end

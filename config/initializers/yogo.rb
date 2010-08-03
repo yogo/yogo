@@ -12,16 +12,7 @@ require 'exceptions'
 # Load the Application Version
 load Rails.root / "VERSION"
 
-admins = Role.first_or_create(:name => "Administrator", :description => "VOEIS system administrators.",
-                                :admin => true, :project => nil)
-Role::AVAILABLE_ACTIONS.each do |action|
-  admins.add_permission(action)
-end
-admins.save
-
-if admins.users.empty?
-  admins.users.create(:login => 'yogo', :email => "none", :first_name => "System",
-                       :last_name => "Administrator", :password => 'change me',
-                       :password_confirmation => 'change me')
-  admins.save
-end
+# Create the system administrator user
+User.create(:login => 'yogo', :email => "none", :first_name => "System",
+            :last_name => "Administrator", :admin => true,
+            :password => 'change me', :password_confirmation => 'change me')
