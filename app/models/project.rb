@@ -460,6 +460,12 @@ class Project
     
   end
   
+  # #
+  # Callback for deleting groups associated with this project
+  # 
+  # @return [nil] nothing useful
+  # 
+  # @api private
   def delete_associated_groups!
     self.groups.each{|g| g.destroy }
   end

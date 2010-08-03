@@ -10,6 +10,16 @@
 class Yogo::UsersController < ApplicationController
   before_filter :find_parent_items, :check_project_authorization
   
+  ##
+  # List all users in a project
+  #
+  # @example
+  #   get /project/:project_id/users
+  #
+  # @return [HTML]
+  #  html response
+  #
+  # @api public
   def index
     # Just get all the users. This should work for now
     @users = User.all
@@ -97,11 +107,25 @@ class Yogo::UsersController < ApplicationController
   
   private
   
+  ##
+  # Finds the parent items for the controller
+  # 
+  # @example
+  #   Don't use this directly
+  # @return [nil] Sets variables, doesn't return usefull information
+  # @api private
   def find_parent_items
     @project = Project.get(params[:project_id])
     @groups = @project.groups
   end
-  
+
+  ##
+  # Checks authorization for the controller
+  # 
+  # @example
+  #   Don't use this directly
+  # @return [nil] Raises an error
+  # @api private
   def check_project_authorization
     raise AuthorizationError if !Yogo::Setting[:local_only] && (!logged_in? || !current_user.has_permission?(:edit_project,@project))
   end
