@@ -1,7 +1,7 @@
 -form_for(@role, :builder => YogoFormBuilder) do |f|
   = f.text_field(:name, :label => "Name:" )
   = f.text_field(:description, :label => "Description:")
-  - @role.available_permissions_by_source.each do |name, perms|
+  - Role.available_permissions_by_source.each do |name, perms|
     .rbox
       %h3= name
       - perms.each do |p|

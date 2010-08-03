@@ -18,15 +18,15 @@ class Role
   has n, :users, :through => Resource
   belongs_to :project, :required => false
 
-  def permission_sources
+  def self.permission_sources
     [Project]
   end
 
-  def available_permissions
+  def self.available_permissions
     permission_sources.map {|ps| ps.to_permissions}.flatten
   end
 
-  def available_permissions_by_source
+  def self.available_permissions_by_source
     source_hash = Hash.new
     permission_sources.each { |ps| source_hash[ps.name] = ps.to_permissions }
     source_hash
