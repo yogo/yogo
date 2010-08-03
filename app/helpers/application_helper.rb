@@ -97,7 +97,8 @@ module ApplicationHelper
 
     # calculate the row range for this page
     from = ((current_page - 1) * per_page.to_i) + 1
-    to = (collection.count < per_page.to_i) ? collection.count : from + per_page.to_i - 1
+    to = from + per_page.to_i - 1
+    to = collection.count if (to > collection.count) # adjust the 'to' if it is impossible
 
      output + " <span style='font-style: italic'>Showing #{from}&hellip;#{to} rows out of #{collection.count} total rows</span>"
   end
@@ -200,12 +201,15 @@ module ApplicationHelper
       file = item[property.name]
       file = file[0..15] + '...' if file.length > 15 
       img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
-      link_to(file, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'), :class => 'fancybox')
+      link_target = detailed ? img : file
+      link_to(link_target, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'), 
+        :class => 'fancybox', :title => model.name)
     when DataMapper::Property::YogoFile
       file = item[property.name]
+      file = file[0..15] + '...' if file.length > 15 
       link_to(file, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))
     when DataMapper::Property::Text
-      if item[property.name] && item[property.name].length > 15
+      if !detailed && (item[property.name] && item[property.name].length > 15)
         tooltip(item[property.name])
       else
         item[property.name]

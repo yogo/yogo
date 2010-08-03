@@ -109,6 +109,10 @@ body
   #footer
     +column($blueprint_grid_columns - 2)
     text-align: center
+  #footnotes_holder
+    +prepend(2)
+    +column(18)
+    +append(2)
   // Pagination Links
   #pagination-links
     //text-align: center
@@ -134,6 +138,14 @@ body
         width: 60px
         margin: 0 auto
         text-align: center
+    td.data-label
+      +column(5)
+      border: none
+      font-weight: bold
+      font-size: 1.2em
+      text-align: right
+    td.data-value
+      +column(16, true)
   // Links
   a
     text-decoration: none
@@ -242,28 +254,35 @@ body
   .emphasis
     font-style: italic
   .smaller
-    font-size: .8em
+    font-size: .6em
   img
     border: 0
   // Content Header Elements that Occur Outside of bp.
   #container
     margin: 0
     margin-top: -2em
-  #content-title
+  #content-title, #data-content-title
     margin-top: 0
     text-align: left
     +column(12)
-  #content-actions
+    #subtitle
+      font-size: .5em
+      color: #777
+  #data-content-title
+    +prepend(6)
     +column(10)
-    +last
+    margin-left: -.5em
+  #content-actions, #data-content-actions
+    +column(10, true)
     //margin-top: .5em
     .content-action-links
       float: right
     .content-pagination-links
       text-align: right
       line-height: 2em
-      +column(6)
-      +last
+      +column(6, true)
+  #data-content-actions
+    +column(6, true)
 
 // Blueprint Body Container
 body.bp
@@ -418,6 +437,5 @@ body.bp
       +column(18)
       +append(2)
       +last
-      
 #project-user-groups-form table td
   width: 3em

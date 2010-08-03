@@ -1,1 +1,8 @@
-= render(:partial => 'form')
+.extra-small-centered
+  %h1#content-title
+    #subtitle Edit User
+    = @user.name
+
+.extra-small-centered.box
+  .rbox.dashed
+    = render(:partial => 'form')
