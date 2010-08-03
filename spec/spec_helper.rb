@@ -17,7 +17,6 @@ require 'spec/autorun'
 require 'spec/rails'
 # require 'factory_girl'
 #require 'factories'
-require 'datamapper/factory'
 
 begin
   require 'ruby-debug'
@@ -97,7 +96,4 @@ def standard_user(opts = {})
    User.new({:login => 'yogo', :password => "pass", :password_confirmation => 'pass'}.merge(opts))
 end
 
-def standard_group(opts = {})
-  Group.new({:name => 'basic group'}.merge(opts))
-end
   

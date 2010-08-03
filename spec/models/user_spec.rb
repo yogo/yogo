@@ -5,8 +5,6 @@ describe User do
   before :each do
     User.current = nil
     User.all.destroy
-    Group.all.destroy
-    Project.all.destroy
   end
   
   it "should have a login" do
@@ -57,80 +55,11 @@ describe User do
     (u.crypted_password == 'bad_pass').should eql(false)
     "#{u.crypted_password}".should_not eql('pass')
   end
+    
+  it "should belong to certain projects" 
   
-  it "should belong to certain groups" do
-    u = standard_user
-    login = u.login
-    u.save
-    
-    g = standard_group
-    group_name = g.name
-    g.save
-    
-    u.groups << g
-    u.save
+  it "should not belong to some projects" 
 
-    User.first.has_group?(group_name).should eql(true)
-    Group.first.users.first.login.should eql(login)
-  end
-  
-  it "should belong to certain projects" do
-    u = standard_user
-    u.save
-    User.current = u
-    
-    p = Project.create(:name => 'blah')
-
-    u.is_in_project?(p).should be_true
-  end
-  
-  it "should not belong to some projects" do
-    p = Project.create(:name => 'some project')
-    u = standard_user
-    u.save
-
-    u.is_in_project?(p).should be_false
-  end
-
-  ## OH WOW. This shows brokenness.
-  it "should allow many users to belong to many groups" do
-    u1 = standard_user(:login => 'login1')
-    u2 = standard_user(:login => 'login2')
-    u1.save
-    u2.save
-    
-    g = Group.create(:name => 'Administrators', :admin => true)
-    
-    Group.first.should eql g
-    u1.groups << g
-    u1.save
-    
-    Group.first.users.length.should eql 1
- 
-    Group.first.users.first.id.should eql u1.id
-    Group.first.users.first.login.should eql u1.login
-    
-    User.get(u1.id).groups.length.should eql 1
-
-    u = User.get(u2.id)
-    gr = Group.first
-    u.groups << gr
-    u.save
-    
-    u3 = standard_user(:login => 'thrid')
-    u3.groups << g
-    u3.save
-
-    Group.first.users.length.should eql 3
-    Group.first.users.first.id.should eql u1.id
-    Group.first.users.first.login.should eql u1.login
-    
-    # Group.first.users[1].id.should eql u2.id
-    # Group.first.users[1].login.should eql u2.login
-    
-    User.get(u1.id).groups.length.should eql 1
-    User.get(u2.id).groups.length.should eql 1
-    User.get(u3.id).groups.length.should eql 1
-  end
+  it "should be able to have many roles"
 
 end
