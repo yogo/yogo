@@ -55,6 +55,11 @@
           %p.error= link_to(flash[:error], flash[:error_link])
         - else
           %p.error= flash[:error]
+      - if flash[:alert]
+        - if flash[:error_link]
+          %p.error= link_to(flash[:error], flash[:error_link])
+        - else
+          %p.error= flash[:alert]
     =clear_break 
     #content
       = yield 

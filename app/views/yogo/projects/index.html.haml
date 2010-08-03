@@ -2,13 +2,13 @@
 #content-actions
   .content-action-links
     = link_to("Create a Project", new_yogo_project_path, :class => 'medium-button-link')
-    - unless Yogo::Setting[:example_project_loaded]
-      = link_to("Load Example Project", loadexample_yogo_projects_path, 
-        :class => 'medium-button-link', :method => :post)
+    / - unless Yogo::Setting[:example_project_loaded]
+    /     = link_to("Load Example Project", loadexample_yogo_projects_path, 
+    /       :class => 'medium-button-link', :method => :post)
   .content-pagination-links= pagination_links(Yogo::Project, params[:page], 5) 
 
 #content-block
-  - for project in @projects
+  - for project in collection
     .content-row-block
       /.project-icon= link_to(image_tag('mock-project-icon.jpg'), project_path(project) )
 
@@ -17,7 +17,6 @@
           = link_to(project.name, yogo_project_path(project) ) 
           = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
         .action-links
-          = link_to_edit_project_models(project, "Edit/Add Data Models", :class => 'button-link')
           = link_to("Project Settings", edit_yogo_project_path(project), :class => 'button-link')
         %p.rbox.tight
           - if project.description && project.description.length > 0
@@ -32,7 +31,7 @@
         - if project.data_collections.empty?
           %p 
             There are no datasets associated with this project.<br />
-            = link_to_edit_project_models(project, "Add Data Models", :class => 'button-link')
+            = link_to("Add Collections", '#', :class => 'button-link')
         - else
           %table
             %thead

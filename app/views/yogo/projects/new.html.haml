@@ -1,6 +1,6 @@
 .small-centered
   .rbox.dashed
-    - form_for(@project, :builder => YogoFormBuilder) do |form|
+    - form_for(:project, resource, :url => collection_path, :builder => YogoFormBuilder) do |form|
       = render :partial => 'yogo/projects/form', :locals => {:f => form}
       .form-element
         =form.submit('Save and Continue', :class => 'button-link')

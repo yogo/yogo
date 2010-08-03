@@ -1,35 +1,34 @@
 %h1#content-title
   #subtitle
     Yogo Project
-  = @project.name
-  = image_tag('icons/private_32.png', :title => 'Private Project') if @project.is_private?
+  = resource.name
+  = image_tag('icons/private_32.png', :title => 'Private Project') if resource.is_private?
 
 #content-actions
   .content-action-links
-    = link_to_edit_project_models(@project, "Edit/Add Data Model", :class => 'medium-button-link')
-    = link_to("Project Settings", edit_yogo_project_path(@project), :class => 'medium-button-link')
-    /= link_to("Delete Project", project_path(@project), 
-    /  :method => :delete, :class => 'button-link', 
-    /  :confirm => "There is no undo.\n Continue?" )
-    /= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
-    /- if !current_user.nil? && current_user.has_permission?(:edit_project, @project)
-    /  = link_to("Manage Users", project_users_path(@project), :class => 'button-link')
+    = link_to("Project Settings", edit_yogo_project_path(resource), :class => 'medium-button-link')
+    = link_to("Delete Project", yogo_project_path(resource), 
+     :method => :delete, :class => 'medium-button-link', 
+     :confirm => "There is no undo.\n Continue?" )
+    /= link_to("Import Spreadsheet", import_csv_path(resource), :class => 'button-link')
+    /- if !current_user.nil? && current_user.has_permission?(:edit_project, resource)
+    /  = link_to("Manage Users", project_users_path(resource), :class => 'button-link')
 
 //= render(:partial => 'layouts/sidebar') %>
 
 #content-block
-  - for dataset in @project.data_collections
+  - for dataset in resource.data_collections
     - @item = dataset.new
     .content-row-block
       .dataset-name
-        %h2= link_to dataset.public_name, project_yogo_data_index_path(@project, dataset)
+        %h2= link_to dataset.public_name, project_yogo_data_index_path(resource, dataset)
         .vertical-links
-          .link= link_to("Add a new #{dataset.public_name}", new_project_yogo_data_path(@project, dataset), 
+          .link= link_to("Add a new #{dataset.public_name}", new_project_yogo_data_path(resource, dataset), 
                 :class => 'button-link')
-          .link= link_to("Browse All Data", project_yogo_data_index_path(@project, dataset), 
+          .link= link_to("Browse All Data", project_yogo_data_index_path(resource, dataset), 
                   :class => 'button-link')
-          .link= link_to("Import Spreadsheet", import_csv_path(@project), :class => 'button-link')
-          .link= link_to("Export Spreadsheet", project_yogo_data_index_path(@project, dataset, 
+          .link= link_to("Import Spreadsheet", import_csv_path(resource), :class => 'button-link')
+          .link= link_to("Export Spreadsheet", project_yogo_data_index_path(resource, dataset, 
                   :format => 'csv'), :class => 'button-link')
       .dataset-info
         .action-tabs
