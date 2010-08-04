@@ -19,7 +19,7 @@ ActionController::Routing::Routes.draw do |map|
                       
       project.resources :users, :controller => 'yogo/users', 
                                 :only => [:index, :new, :create], 
-                                :collection => { :update_user_groups => :post }
+                                :collection => { :update_user_roles => :post }
     end
   end
 

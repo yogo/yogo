@@ -37,12 +37,12 @@ $(document).ready(function(){
   // Tooltip dialogs
   $('.tooltip').dialog({autoOpen:false, width:600});
 
-  // Toggle elements on the project-user-groups page
-  $('#project-user-groups-form :checkbox').bind('change', function(e){
+  // Toggle elements on the project-user-roles page
+  $('#project-user-roles-form :checkbox').bind('change', function(e){
     if ($(this).attr('checked')) {
-      $(this).next('label').text('In Group');
+      $(this).next('label').text('Has Role');
     } else {
-      $(this).next('label').text('Not In Group');
+      $(this).next('label').text('Does Not Have Role');
     };
     
   })

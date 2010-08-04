@@ -1,32 +1,33 @@
-/ .medium-centered
-/   %h1.text-center 
-/     Project Settings 
-/     #subtitle= @project.name
-/     
-.small-centered.boxed
+.small-.boxed
   %h1#content-title
     #subtitle Project Settings
-    = resource.name
+    = @project.name
 
-.small-centered.boxed
+.small.boxed
   .rbox.dashed
-    = link_to("Delete Project", yogo_project_path(resource), 
+    = link_to("Delete Project", project_path(@project), 
       :method => :delete, :class => 'button-link fright', 
-      :confirm => "Are you sure you want to delete the #{resource.name} project?\nThere is no undo! Continue?" )
-    - form_for(:project, resource, :url => resource_path, :builder => YogoFormBuilder, :html =>{:method => :put}) do |f|
+      :confirm => "Are you sure you want to delete the #{@project.name} project?\nThere is no undo! Continue?" )
+    - form_for(@project, :builder => YogoFormBuilder) do |f|
       %h3= f.check_box(:is_private, :label => image_tag('icons/private_16.png') + " Private")
       %h3= f.text_area(:description, :label => "Project Description: ")
       %h3.tight Project Users
       .rbox.tight
-        = link_to("Manage Users", yogo_project_users_path(resource), :class => 'button-link fright')
-        / .managers
-        /           %span.bold Managers: 
-        /           = @project.groups.first(:name => 'Manager').users.map{|u| u.name }.join(', ')
-        /         %span.bold All Users:
-        /         %ul.all-users
-        /           - @project.groups.users.each do |user|
-        /             // TODO: The group-selection below is clumsy, optimize plz
-        /             %li= user.name + ": " + @project.groups.select{|g| g.users.include?(user) }.map{|g| g.name }.join(', ')
+        %span.bold All Users:
+        %ul.all-users
+          - unless @project.roles.empty? 
+            - @project.roles.users.each do |user|
+              // TODO: The role-selection below is clumsy, optimize plz
+              %li= user.name + ": " + @project.roles.select{|g| g.users.include?(user) }.map{|g| g.name }.join(', ')
       .form-element
         = f.submit('Update', :class => 'button-link')
-        = link_to('Cancel', yogo_projects_path, :class => 'cancel')
+        = link_to('Cancel', projects_path, :class => 'cancel')
+        
+  .rbox.dashed
+    - field_set_tag("Users:") do
+      = collection_select(:user, :user_id, User.all, :id, :name, {:prompt => false, :include_blank => true})
+
+    - field_set_tag("Role:") do
+      - for role in Role.all do
+        = check_box_tag(role.name)
+        = label_tag(role.name)
