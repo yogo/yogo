@@ -3,14 +3,18 @@
   %table
     %thead
       %tr
+        %th Name
         %th Login
+        %th Email
         %th View
         %th Edit
         %th Destroy
     %tbody
       - for user in @users
         %tr
+          %td= user.name
           %td= user.login
+          %td= user.email
           %td= link_to('View', user_path(user))
           %td= link_to('Edit', edit_user_path(user))
           %td= link_to('Delete', user_path(user), :method=>:delete, :confirm => 'Are you sure?')

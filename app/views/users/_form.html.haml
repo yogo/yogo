@@ -2,6 +2,7 @@
   = f.text_field(:login, :label => "Login:" )
   = f.text_field(:first_name)
   = f.text_field(:last_name)
+  = f.text_field(:email)
   - if @user.new?
     = f.password_field(:password, :label => "Password: ")
     = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
