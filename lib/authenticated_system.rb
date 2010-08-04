@@ -13,20 +13,6 @@ module AuthenticatedSystem
     base.send(:helper_method, :logged_in?, :current_user)
   end
 
-  # module AuthenticatedSystemClassMethods
-  #   
-  #   def require_user(options = {})
-  #     authorize_group(:default, options)
-  #   end
-  #   
-  #   alias_method :login_required, :require_user
-  # 
-  #   def require_no_user(options = {})
-  #     authorize_group(:anonymous, options)
-  #   end
-  # end
-
-
   module AuthenticatedSystemInstanceMethods
     protected
 
