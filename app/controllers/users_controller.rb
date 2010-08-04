@@ -160,12 +160,12 @@ class UsersController < ApplicationController
   private
 
   ##
-  # Checks to see if the current user is in the administrator group
+  # Checks to see if the current user is an admin
   # @return [nil] or it doesn't return.
   # @api private
   def require_administrator
     raise AuthenticationError unless logged_in?
-    raise AuthorizationError  unless current_user.groups.any?{|g| g.admin? }
+    raise AuthorizationError  unless current_user.admin?
   end
     
 end
