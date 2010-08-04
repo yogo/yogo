@@ -113,11 +113,11 @@ module AuthorizationSystem
       end
 
       ##
-      # Checks if the user given is in a group
+      # Checks if the user given is in a role
       # @return [Boolean]
       # @api private
-      def user_is_in_group?(user, group)
-        user.has_group?(group)
+      def user_is_in_role?(user, role)
+        user.has_role?(role)
       end
 
 
