@@ -10,3 +10,8 @@ require 'exceptions'
 
 # Load the Application Version
 load Rails.root / "VERSION"
+
+# Create the system administrator user
+User.create(:login => 'yogo', :first_name => "System",
+            :last_name => "Administrator", :admin => true,
+            :password => 'change me', :password_confirmation => 'change me')

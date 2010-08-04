@@ -12,7 +12,7 @@ class User
 
   property :id,                 DataMapper::Types::Serial
   property :login,              String,  :required => true, :index => true, :unique => true
-  # property :email,              String,  :required => true, :length => 256
+  property :email,              String,  :length => 256, :format => :email_address
   property :first_name,         String,  :length => 50
   property :last_name,          String,  :length => 50
   property :admin,              Boolean, :default => false
