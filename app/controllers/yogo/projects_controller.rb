@@ -157,28 +157,28 @@ class Yogo::ProjectsController < ApplicationController
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
         #Check to be sure the default VOEIS project is loaded - create it if it doesn't exist
-        if Project.first(:name => "VOEIS").nil?
-          def_project = Project.new()
-          def_project.name = "VOEIS"
-          def_project.description = "The Default VOEIS Project and Repository"
-          def_project.save
-          puts odm_contents = Dir.new("dist/odm").entries
-          odm_contents.each do |content|
-            puts content.to_s + "before"
-            if !content.to_s.index('.csv').nil?
-              puts content.to_s
-              def_project.process_csv('dist/odm/' + content.to_s, content.to_s.gsub(".csv",""))
-            end
-          end
-        end
-        puts voeis_contents = Dir.new("dist/voeis_default").entries
-        voeis_contents.each do |content|
-          puts content.to_s + "before"
-          if !content.to_s.index('.csv').nil?
-            puts content.to_s
-            @project.process_csv('dist/voeis_default/' + content.to_s, content.to_s.gsub(".csv",""))
-          end
-        end
+        # if Project.first(:name => "VOEIS").nil?
+        #   def_project = Project.new()
+        #   def_project.name = "VOEIS"
+        #   def_project.description = "The Default VOEIS Project and Repository"
+        #   def_project.save
+        #   puts odm_contents = Dir.new("dist/odm").entries
+        #   odm_contents.each do |content|
+        #     puts content.to_s + "before"
+        #     if !content.to_s.index('.csv').nil?
+        #       puts content.to_s
+        #       def_project.process_csv('dist/odm/' + content.to_s, content.to_s.gsub(".csv",""))
+        #     end
+        #   end
+        # end
+        # puts voeis_contents = Dir.new("dist/voeis_default").entries
+        # voeis_contents.each do |content|
+        #   puts content.to_s + "before"
+        #   if !content.to_s.index('.csv').nil?
+        #     puts content.to_s
+        #     @project.process_csv('dist/voeis_default/' + content.to_s, content.to_s.gsub(".csv",""))
+        #   end
+        # end
       redirect_to projects_url
     else
       flash[:error] = "Project could not be created."
@@ -393,20 +393,20 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def upload_stream
     @project = Project.first(:id => params[:project_id])
+    @variables = Variable.all
     if !params[:upload].nil? && datafile = params[:upload]['datafile']
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
+        redirect_to (:controller =>"projects", :action => "add_stream", :params => {:id => params[:project_id]})
       else
-        puts "You are in the right place"
-        # Read the data in
-        # errors = @model.load_csv_data(datafile.path)
-        # if errors.empty?
-        #           flash[:notice] = "#{@model.name.demodulize} Data Successfully Uploaded."
-        #         else
-        #           @errors = errors
-        #           flash[:error] = "CSV File improperly formatted. Data not uploaded."
-        #         end
+
+        # Read the logger file header
+        @header_info = parse_logger_csv_header(datafile.path)
+        if @header_info.empty?
+          flash[:error] = "CSV File improperly formatted. Data not uploaded."
+          #redirect_to :controller =>"projects", :action => "add_stream", :params => {:id => params[:project_id]}
+        end
       end
       respond_to do |format|
         format.html
@@ -414,4 +414,37 @@ class Yogo::ProjectsController < ApplicationController
     end
   end
   
+  # parse the header of a logger file
+  #
+  # @example parse_logger_csv_header("filename")
+  #
+  # @param [String] csv_file
+  #
+  # @return [Array] an array whose elements are a hash
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  def parse_logger_csv_header(csv_file)
+    require "yogo/model/csv"
+    csv_data = CSV.read(csv_file)
+    path = File.dirname(csv_file)
+
+    #look at the first hour lines - 
+    #line 0 is a description -so skip that one
+    #line 1 is the variable names
+    #line 2 is the units
+    #line 3 is the type
+    #store the variable,unit and type for a column as a hash in an array
+    header_data=Array.new
+    (0..csv_data[1].size-1).each do |i|
+      item_hash = Hash.new
+      item_hash["variable"] = csv_data[1][i]
+      item_hash["unit"] = csv_data[2][i]
+      item_hash["type"] = csv_data[3][i]
+      header_data << item_hash
+    end
+    
+    header_data
+  end
 end
