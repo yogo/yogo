@@ -22,11 +22,10 @@ ActionController::Routing::Routes.draw do |map|
                                 :collection => { :update_user_groups => :post }
     end
   end
-  map.resources :settings
-  map.resources :tutorial
 
   map.dashboard "/dashboard", :controller => 'yogo/projects', :action => 'index'
-
+  
+  map.resources :settings
   map.resource :password, :only => [ :show, :update, :edit ]
   map.resources :users
   # Login & Logout stuff
