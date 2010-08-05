@@ -394,11 +394,12 @@ class Yogo::ProjectsController < ApplicationController
   def upload_stream
     @project = Project.first(:id => params[:project_id])
     @variables = Variable.all
+    @sites = Site.all
     if !params[:upload].nil? && datafile = params[:upload]['datafile']
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
-        redirect_to (:controller =>"projects", :action => "add_stream", :params => {:id => params[:project_id]})
+        redirect_to(:controller =>"projects", :action => "add_stream", :params => {:id => params[:project_id]})
       else
 
         # Read the logger file header
@@ -412,6 +413,45 @@ class Yogo::ProjectsController < ApplicationController
         format.html
       end
     end
+  end
+  
+  def create_stream
+    #create and save new DataStream
+    data_stream = DataStream.new(:name => params[:data_stream_name], 
+                                 :description => params[:data_stream_description],
+                                 :filename => params[:datafile],
+                                 :project_id => params[:project_id])
+    data_stream.sites << Site.first(:id => params[:site])
+    data_stream.save
+    
+    #add data_stream to site
+    site = Site.first(:id => params[:site])
+    site.data_streams << data_stream
+    site.save
+    
+    #create DataStreamColumns
+    (0..params[:rows]-1).each do |i|
+      #create the Timestamp column
+      if i == params[:timestamp]
+        data_stream_column = DataStreamColumn.new(:column_number => i, 
+                                                  :name => params[:header][i][:name], 
+                                                  :type =>"Timestamp")
+        data_stream_column.save
+      else
+        data_stream_column = DataStreamColumn.new(:column_number => i, 
+                                                  :name => params[:header][i][:name],
+                                                  :original_var => params[:header][i][:variable],
+                                                  :type => params[:header][i][:type])
+        data_stream_column.variables << Variable.first(:id => params[:variable])
+        data_stream_column.data_streams << data_stream
+        data_stream_column.save
+        data_stream.data_stream_columns << data_stream_column
+        data_stream.save 
+      end
+    end
+    # process csv data and store datavalues
+    # 
+    # 
   end
   
   # parse the header of a logger file

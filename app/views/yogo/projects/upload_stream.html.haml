@@ -17,6 +17,13 @@
     =text_area_tag("data_stream_description")
     =clear_break
     =clear_break
+    Please select the site this Data Stream should be associated with:
+    -@site_options=""
+    -@sites.each do |site|
+      -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
+    =select_tag("site", @site_options)
+    =clear_break
+    =clear_break
     Select what VOEIS variables should be associated with these columns from the Logger file
     %table
       %tr
@@ -40,5 +47,9 @@
             =select_tag("column"+i.to_s, @opt_string)
     =clear_break
     Please specify which column should be used as the time-stamp:
-    =select_tag("time-stamp", @column_options)
+    =select_tag("timestamp", @column_options)
+    =hidden_field_tag('datafile', params[:upload]['datafile'])
+    =hidden_field_tag('project_id', @project.id)
+    =hidden_field_tag('rows', @header_info.size)
+    =hidden_filed_tag('header', @header_info)
     =submit_tag("Submit")

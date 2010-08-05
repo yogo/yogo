@@ -16,6 +16,7 @@ class DataStreamColumn
   property :id, Serial
   property :name, String, :required => true
   property :type, String, :required => true
+  property :original_var, String, :required => true
   property :column_number, Integer, :required => true
   
   has n, :variables, :through => Resource

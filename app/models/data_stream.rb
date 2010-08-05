@@ -24,7 +24,7 @@ class DataStream
   #before :destroy, :delete_data_stream_columns!
   
   #has 1, :project
-  has 1, :site
+  has n, :sites, :through => Resource
   has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
 
 
