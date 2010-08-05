@@ -11,9 +11,10 @@ class Role
   include DataMapper::Resource
 
   property :id, Serial
-  property :name, String, :required => true
+  property :name, String, :required => true, :unique => true
   property :description, String
   property :permissions, Yaml, :default => [].to_yaml
+  property :dashboard, String
 
   has n, :users, :through => Resource
   belongs_to :project, :required => false
