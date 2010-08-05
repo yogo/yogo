@@ -48,8 +48,8 @@
     =clear_break
     Please specify which column should be used as the time-stamp:
     =select_tag("timestamp", @column_options)
-    =hidden_field_tag('datafile', params[:upload]['datafile'])
+    =hidden_field_tag('datafile', params[:upload]['datafile'].path)
     =hidden_field_tag('project_id', @project.id)
     =hidden_field_tag('rows', @header_info.size)
-    =hidden_filed_tag('header', @header_info)
+    =hidden_field_tag('header', @header_info)
     =submit_tag("Submit")

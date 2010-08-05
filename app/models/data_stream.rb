@@ -15,7 +15,7 @@ class DataStream
   property :id, Serial
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
-  property :filename, String, :required => true
+  property :filename, String, :required => true, :length => 512
 
   property :project_id, Integer, :required =>true, :default => 1
   

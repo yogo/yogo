@@ -157,28 +157,28 @@ class Yogo::ProjectsController < ApplicationController
     if @project.save
       flash[:notice] = "Project \"#{@project.name}\" has been created."
         #Check to be sure the default VOEIS project is loaded - create it if it doesn't exist
-        # if Project.first(:name => "VOEIS").nil?
-        #   def_project = Project.new()
-        #   def_project.name = "VOEIS"
-        #   def_project.description = "The Default VOEIS Project and Repository"
-        #   def_project.save
-        #   puts odm_contents = Dir.new("dist/odm").entries
-        #   odm_contents.each do |content|
-        #     puts content.to_s + "before"
-        #     if !content.to_s.index('.csv').nil?
-        #       puts content.to_s
-        #       def_project.process_csv('dist/odm/' + content.to_s, content.to_s.gsub(".csv",""))
-        #     end
-        #   end
-        # end
-        # puts voeis_contents = Dir.new("dist/voeis_default").entries
-        # voeis_contents.each do |content|
-        #   puts content.to_s + "before"
-        #   if !content.to_s.index('.csv').nil?
-        #     puts content.to_s
-        #     @project.process_csv('dist/voeis_default/' + content.to_s, content.to_s.gsub(".csv",""))
-        #   end
-        # end
+               if Project.first(:name => "VOEIS").nil?
+                 def_project = Project.new()
+                 def_project.name = "VOEIS"
+                 def_project.description = "The Default VOEIS Project and Repository"
+                 def_project.save
+                 puts odm_contents = Dir.new("dist/odm").entries
+                 odm_contents.each do |content|
+                   puts content.to_s + "before"
+                   if !content.to_s.index('.csv').nil?
+                     puts content.to_s
+                     def_project.process_csv('dist/odm/' + content.to_s, content.to_s.gsub(".csv",""))
+                   end
+                 end
+               end
+               puts voeis_contents = Dir.new("dist/voeis_default").entries
+               voeis_contents.each do |content|
+                 puts content.to_s + "before"
+                 if !content.to_s.index('.csv').nil?
+                   puts content.to_s
+                   @project.process_csv('dist/voeis_default/' + content.to_s, content.to_s.gsub(".csv",""))
+                 end
+               end
       redirect_to projects_url
     else
       flash[:error] = "Project could not be created."
@@ -421,33 +421,57 @@ class Yogo::ProjectsController < ApplicationController
                                  :description => params[:data_stream_description],
                                  :filename => params[:datafile],
                                  :project_id => params[:project_id])
+    data_stream.save
+    data_stream.errors do |e|
+      puts e
+    end
+    
     data_stream.sites << Site.first(:id => params[:site])
     data_stream.save
-    
-    #add data_stream to site
-    site = Site.first(:id => params[:site])
-    site.data_streams << data_stream
-    site.save
-    
-    #create DataStreamColumns
-    (0..params[:rows]-1).each do |i|
+    data_stream.errors do |e|
+      puts e
+    end
+    puts "After" + data_stream.errors.to_s
+    # puts "data stream is saved!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    #     #add data_stream to site
+    #     site = Site.first(:id => params[:site])
+    #     site.data_streams << data_stream
+    #     site.save
+    #     puts site.errors.to_s
+    #      puts "add stream to site!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        #create DataStreamColumns
+        # 
+    header = parse_logger_csv_header(params[:datafile])
+    (0..params[:rows].to_i-1).each do |i|
       #create the Timestamp column
-      if i == params[:timestamp]
+      if i == params[:timestamp].to_i
         data_stream_column = DataStreamColumn.new(:column_number => i, 
-                                                  :name => params[:header][i][:name], 
-                                                  :type =>"Timestamp")
-        data_stream_column.save
-      else
-        data_stream_column = DataStreamColumn.new(:column_number => i, 
-                                                  :name => params[:header][i][:name],
-                                                  :original_var => params[:header][i][:variable],
-                                                  :type => params[:header][i][:type])
-        data_stream_column.variables << Variable.first(:id => params[:variable])
-        data_stream_column.data_streams << data_stream
-        data_stream_column.save
+                                                  :name => "Timestamp", 
+                                                  :type =>"Timestamp",
+                                                  :original_var => header[i][:variable])
+        puts header[i][:variable]                     
+        puts data_stream_column.save
         data_stream.data_stream_columns << data_stream_column
-        data_stream.save 
+        data_stream.save
+         puts data_stream_column.errors.to_s
+         puts "timestamp is saved!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      # else
+      #         data_stream_column = DataStreamColumn.new(:column_number => i, 
+      #                                                   :name => params[:header][i][:name],
+      #                                                   :original_var => params[:header][i][:variable],
+      #                                                   :type => params[:header][i][:type])
+      #         data_stream_column.save
+      #         puts data_stream_column.errors.to_s
+      #          puts "data stream column is saved!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      #         data_stream_column.variables << Variable.first(:id => params[:variable])
+      #         data_stream_column.data_streams << data_stream
+      #         data_stream_column.save
+      #         data_stream.data_stream_columns << data_stream_column
+      #         data_stream.save 
       end
+    end
+    respond_to do |format|
+      format.html
     end
     # process csv data and store datavalues
     # 
