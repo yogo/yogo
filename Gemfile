@@ -98,4 +98,4 @@ end
 # A dev server that is slightly better then webrick
 gem 'mongrel',                     :require => nil unless RUBY_VERSION >= '1.9.1'
 gem 'thin',                        :require => nil unless defined?(JRUBY_VERSION)
-gem 'glassfish',                   :require => nil if     defined?(JRUBY_VERSION)
+
