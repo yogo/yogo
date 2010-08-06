@@ -25,14 +25,6 @@ class Yogo::PropertiesController < Yogo::BaseController
       hash[:data_collection] = controller.send(:yogo_project_collection_path, project, data_collection)
       hash
     end
-    
-    def collection_json(collection)
-      collection.map do |prop|
-        data_collection = prop.data_collection
-        project = data_collection.project
-        controller.send(:yogo_project_collection_property_path, project, data_collection, prop)
-      end
-    end
   end
   
 end
