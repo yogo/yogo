@@ -13,9 +13,12 @@ ActionController::Routing::Routes.draw do |map|
                   :member => { :upload => :post }, 
                   :collection => { :loadexample => :post, :search => :get} do |project|
     
-      project.resources :collections
+      project.resources :collections do |collection|
+        collection.resources :items
+        collection.resources :properties
+      end
       
-      project.resources :items
+      
                       
       project.resources :users, :only => [:index, :new, :create], 
                                 :collection => { :update_user_roles => :post }
