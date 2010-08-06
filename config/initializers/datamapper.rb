@@ -27,8 +27,9 @@ config = Rails.configuration.database_configuration
 
 DataMapper.setup(:default, config[Rails.env])
 
-# Alias :default to :yogo so things work well
-DataMapper.setup(:collection_data, config["yogo_"+Rails.env])
+# Use db configs in the form of "yogo_{default|persvr|sqlite|...}_{RAILS_ENV|development|production|...}"
+yogo_db = ['yogo', (ENV['YOGO_DB'] || 'default'), Rails.env].join('_')
+DataMapper.setup(:collection_data, config[yogo_db])
 
 # Map the datamapper logging to rails logging
 DataMapper.logger             = Rails.logger
