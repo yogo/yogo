@@ -81,7 +81,7 @@ class Yogo::BaseController < InheritedResources::Base
     end
 
     def collection_json(collection)
-      collection.map{|r| resource_path(r) }
+      collection.map{|r| resource_json(r) }
     end
   end
 end
