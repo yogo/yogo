@@ -7,50 +7,6 @@
 # Methods added to this helper will be available to all templates in the application.
 # 
 module ApplicationHelper
-  #
-  # Google Vis API
-  # 
-  include GoogleVisualization
-  
-  # Adds items to the menu in the view
-  #
-  # @example
-  #  add_menu_item(Bacon, bacon)
-  #
-  # @param [String] name
-  #  The name of the item to link to
-  # @param [String] url
-  #  The url of the item to link to, default value is {}
-  # @param [String] html_options
-  #  The html options for the link, default value is {}
-  #
-  # @return [String] a link formatted for a menu as a list item
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def add_menu_item(name, url = {}, html_options = {})
-    css_class = ''
-    css_class = 'highlighted-menu-item' if request.url.include?(h(url))
-      
-    "<li class='#{css_class}'>" +
-      link_to(name, url, html_options) +
-    "</li>"
-  end
-  
-  # Returns all projects
-  # 
-  # @example
-  #  all_projects
-  #
-  # @return [Array <Objects>] returns an array of projects
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def all_projects
-    Project.all
-  end
 
   # Generates the links needed for pagination
   #
