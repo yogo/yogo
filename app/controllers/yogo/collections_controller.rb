@@ -6,11 +6,6 @@ class Yogo::CollectionsController < Yogo::BaseController
   belongs_to :project, :parent_class => Yogo::Project,
              :finder => :get
   
-  def create
-    debugger
-    create!
-  end
-  
   protected
   
   def collection
