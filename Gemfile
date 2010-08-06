@@ -14,7 +14,7 @@ gem "dm-migrations"
 # gem "dm-types",              "1.0",     :git => "#{DATAMAPPER}/dm-types.git",
 #                                         :require => false
 # gem "dm-observer",          "1.0"
-# gem "dm-persevere-adapter", "0.72.0", :require => nil
+gem "dm-persevere-adapter", "0.72.0", :require => nil
 # gem "rails_datamapper", :require => nil #,     "1.0" #, :require => nil
 
 
