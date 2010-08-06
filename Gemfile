@@ -48,8 +48,8 @@ gem "rails-footnotes",             :group => :development
 
 group :test do
 gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug',       :require => nil unless defined?(JRUBY_VERSION)
-  gem 'rspec',                     :require => nil
-  gem 'rspec-rails',               :require => 'spec/rails'
+  gem 'rspec',        '~>1.3.0',   :require => nil
+  gem 'rspec-rails',  '~>1.3.2',   :require => 'spec/rails'
   gem 'ZenTest',                   :require => nil
   gem 'redgreen',                  :require => nil
   gem "yard",                      :require => nil
