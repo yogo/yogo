@@ -1,3 +1,5 @@
+require 'dm-types/bcrypt_hash'
+
 class User
   include DataMapper::Resource
   include SentientUser
