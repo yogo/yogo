@@ -12,9 +12,9 @@ GIT
 
 GIT
   remote: git://github.com/yogo/yogo-project.git
-  revision: 0cd655b
+  revision: 034def1
   specs:
-    yogo-project (0.3.1)
+    yogo-project (0.3.2)
       carrierwave
       configatron
       deep_merge
@@ -105,8 +105,8 @@ GEM
       jdbc-sqlite3 (>= 3.5.8)
     do_sqlite3 (0.10.2)
       data_objects (= 0.10.2)
-    eventmachine (0.12.10)
     eventmachine (0.12.10-java)
+    eventmachine (0.12.10)
     extlib (0.9.15)
     factory_girl (1.2.4)
     fastercsv (1.5.3)
@@ -134,6 +134,7 @@ GEM
       has_scope (~> 0.5.0)
       responders (~> 0.4.6)
     jdbc-sqlite3 (3.6.3.054)
+    json (1.4.4-java)
     json (1.4.4)
     json_pure (1.4.4)
     linecache (0.43)
@@ -159,9 +160,9 @@ GEM
       gem_plugin (>= 0.2.3)
     mongrel (1.1.5-java)
       gem_plugin (>= 0.2.3)
+    nokogiri (1.4.3.1)
     nokogiri (1.4.3.1-java)
       weakling (>= 0.0.3)
-    nokogiri (1.4.3.1)
     rack (1.1.0)
     rack-test (0.5.4)
       rack (>= 1.0)
@@ -179,8 +180,8 @@ GEM
     rails_warden (0.5.2)
       warden
     rake (0.8.7)
-    rcov (0.9.8-java)
     rcov (0.9.8)
+    rcov (0.9.8-java)
     redgreen (1.2.2)
     reek (1.2.8)
       ruby2ruby (~> 1.2)
