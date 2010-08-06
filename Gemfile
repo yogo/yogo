@@ -26,6 +26,11 @@ gem "dm-migrations"
 gem 'dm-sqlite-adapter', :require => nil
 #gem "do_sqlserver",                  :require => nil
 
+# 1.0 Release of dm-types has problems with UUID properties, use git master
+gem "dm-types",       "~> 1.0.0",     :git => "#{DATAMAPPER}/dm-types.git",
+                                      :ref => "674738f2a94788b975e9",
+                                      :require => false # don't require dm-type/json
+                                      
 gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :require  => 'yogo/project'
 
 gem "rails",                "2.3.8"
