@@ -5,16 +5,16 @@ DATAMAPPER = 'git://github.com/datamapper'
 
 gem "dm-core",              "1.0"
 
-gem "dm-timestamps",        "1.0"
-gem "dm-validations",       "1.0"
-gem "dm-is-nested_set",     "1.0"
-gem "dm-serializer",        "1.0"
-gem "dm-aggregates",        "1.0"
+# gem "dm-timestamps",        "1.0"
+# gem "dm-validations",       "1.0"
+# gem "dm-is-nested_set",     "1.0"
+# # gem "dm-serializer",        "1.0"
+# gem "dm-aggregates",        "1.0"
 gem "dm-migrations"
-gem "dm-types",              "1.0",     :git => "#{DATAMAPPER}/dm-types.git",
-                                        :require => false
-gem "dm-observer",          "1.0"
-gem "dm-persevere-adapter", "0.72.0", :require => nil
+# gem "dm-types",              "1.0",     :git => "#{DATAMAPPER}/dm-types.git",
+#                                         :require => false
+# gem "dm-observer",          "1.0"
+# gem "dm-persevere-adapter", "0.72.0", :require => nil
 # gem "rails_datamapper", :require => nil #,     "1.0" #, :require => nil
 
 
