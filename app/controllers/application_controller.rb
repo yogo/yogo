@@ -23,7 +23,6 @@ class ApplicationController < ActionController::Base
 
   # include all helpers, all the time  
   helper :all 
-  helper :breadcrumbs
   
   # Specify the layout for the yogo application
   layout 'application'
