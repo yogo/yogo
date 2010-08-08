@@ -428,46 +428,39 @@ class Yogo::ProjectsController < ApplicationController
     
     data_stream.sites << Site.first(:id => params[:site])
     data_stream.save
-    data_stream.errors do |e|
-      puts e
-    end
-    puts "After" + data_stream.errors.to_s
-    # puts "data stream is saved!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    #     #add data_stream to site
-    #     site = Site.first(:id => params[:site])
-    #     site.data_streams << data_stream
-    #     site.save
-    #     puts site.errors.to_s
-    #      puts "add stream to site!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        #create DataStreamColumns
-        # 
+    #create DataStreamColumns
+    # 
     header = parse_logger_csv_header(params[:datafile])
-    (0..params[:rows].to_i-1).each do |i|
+    range = params[:rows].to_i-1
+    (0..range).each do |i|
       #create the Timestamp column
       if i == params[:timestamp].to_i
         data_stream_column = DataStreamColumn.new(:column_number => i, 
                                                   :name => "Timestamp", 
                                                   :type =>"Timestamp",
-                                                  :original_var => header[i][:variable])
-        puts header[i][:variable]                     
+                                                  :original_var => header[i]["variable"])
+        puts header[i]["variable"]                     
         puts data_stream_column.save
+        puts data_stream_column.errors
+        puts "*****************"
+        puts data_stream_column.errors.inspect 
         data_stream.data_stream_columns << data_stream_column
         data_stream.save
-         puts data_stream_column.errors.to_s
+         puts data_stream_column.errors.inspect 
          puts "timestamp is saved!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      # else
-      #         data_stream_column = DataStreamColumn.new(:column_number => i, 
-      #                                                   :name => params[:header][i][:name],
-      #                                                   :original_var => params[:header][i][:variable],
-      #                                                   :type => params[:header][i][:type])
-      #         data_stream_column.save
-      #         puts data_stream_column.errors.to_s
-      #          puts "data stream column is saved!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      #         data_stream_column.variables << Variable.first(:id => params[:variable])
-      #         data_stream_column.data_streams << data_stream
-      #         data_stream_column.save
-      #         data_stream.data_stream_columns << data_stream_column
-      #         data_stream.save 
+      else
+              data_stream_column = DataStreamColumn.new(:column_number => i, 
+                                                        :name => params[:header][i][:name],
+                                                        :original_var => params[:header][i][:variable],
+                                                        :type => params[:header][i][:type])
+              data_stream_column.save
+              puts data_stream_column.errors.to_s
+               puts "data stream column is saved!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+              data_stream_column.variables << Variable.first(:id => params["column"+i.to_s])
+              data_stream_column.data_streams << data_stream
+              data_stream_column.save
+              # data_stream.data_stream_columns << data_stream_column
+              # data_stream.save 
       end
     end
     respond_to do |format|

@@ -55,6 +55,7 @@ class Variable
   property :general_category, String, :required => true, :default => 'Unknown'
   property :no_data_value, Float, :required => true, :default => -9999
   
-  has n, :data_stream_columns, :model => "DataStreamColumn"
+  has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
+  
   has n, :units, :through => Resource
 end

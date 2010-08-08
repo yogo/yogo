@@ -21,6 +21,6 @@ class DataStreamColumn
   
   has n, :variables, :through => Resource
   has n, :units, :through=> Resource
-  belongs_to :data_stream, :model => "DataStream"
+  has n, :data_streams, :model => "DataStream", :through => Resource
   
 end
