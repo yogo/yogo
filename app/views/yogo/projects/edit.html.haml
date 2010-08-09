@@ -25,8 +25,13 @@
                   %td= link_to(user.name, user_path(user))
                   %td= @project.roles.select{|role| role.users.include?(user) }.map{|role| role.name }.join(', ')     
                   %td 
-                    = link_to("edit memberships")
-                    = link_to(image_tag("delete.png", :size => "16x16"), :url => {}, :method=>:delete, :confirm => 'Are you sure?')
+                    #operation-links
+                      #edit-link
+                        = link_to(image_tag("edit.png", :size => "16x16"))
+                        Edit
+                      #delete-link
+                        = link_to(image_tag("delete.png", :size => "16x16"))
+                        Delete
           
       .form-element
         = f.submit('Update', :class => 'button-link')
