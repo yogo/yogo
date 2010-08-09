@@ -15,11 +15,12 @@ class DataStreamColumn
 
   property :id, Serial
   property :name, String, :required => true
-  property :type, String, :required => true
+  property :type, String, :required => false
+  property :original_var, String, :required => true
   property :column_number, Integer, :required => true
-
-  has 1, :variable
-  has 1, :unit
-  has 1, :data_stream
-
+  
+  has n, :variables, :through => Resource
+  has n, :units, :through=> Resource
+  has n, :data_streams, :model => "DataStream", :through => Resource
+  
 end

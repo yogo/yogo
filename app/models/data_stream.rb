@@ -15,15 +15,18 @@ class DataStream
   property :id, Serial
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
-  property :filename, String, :required => true
+  property :filename, String, :required => true, :length => 512
 
+  property :project_id, Integer, :required =>true, :default => 1
+  
   validates_is_unique   :name
+  
+  #before :destroy, :delete_data_stream_columns!
+  
+  #has 1, :project
+  has n, :sites, :through => Resource
+  has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
 
-  before :destroy, :delete_data_stream_columns!
-
-  has 1, :project
-  has 1, :site
-  has n, :data_stream_columns
 
  # Loads a CSV file into the streaming data model
   #

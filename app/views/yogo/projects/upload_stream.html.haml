@@ -1,0 +1,55 @@
+%h2
+  = link_to(@project.name, project_path(@project) )
+-if !@header_info.empty?  
+  %h3 Data Stream Import Form
+  =clear_break
+  -form_tag("create_stream") do 
+    -@opt_string = ""
+    -@column_options= ""
+    -@variables.each do |var|
+      -@opt_string = @opt_string + "<option value="+var.id.to_s+">"+var.variable_name+"</option>"
+    Please give this Data Stream a Name: 
+    =text_field_tag ("data_stream_name")
+    =clear_break
+    =clear_break
+    Please provide a description of this Data Stream:
+    =clear_break
+    =text_area_tag("data_stream_description")
+    =clear_break
+    =clear_break
+    Please select the site this Data Stream should be associated with:
+    -@site_options=""
+    -@sites.each do |site|
+      -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
+    =select_tag("site", @site_options)
+    =clear_break
+    =clear_break
+    Select what VOEIS variables should be associated with these columns from the Logger file
+    %table
+      %tr
+        %th Column
+        %th Logger Variable
+        %th Logger Unit
+        %th Logger Type
+        %th Selected VOEIS Variable
+      -(0..@header_info.size-1).each do |i|
+        -@column_options= @column_options + "<option value="+i.to_s+">Column "+i.to_s+"</option>"
+        %tr
+          %td 
+            =i.to_s
+          %td 
+            =@header_info[i]["variable"]
+          %td 
+            =@header_info[i]["unit"]
+          %td 
+            =@header_info[i]["type"]
+          %td 
+            =select_tag("column"+i.to_s, @opt_string)
+    =clear_break
+    Please specify which column should be used as the time-stamp:
+    =select_tag("timestamp", @column_options)
+    =hidden_field_tag('datafile', params[:upload]['datafile'].path)
+    =hidden_field_tag('project_id', @project.id)
+    =hidden_field_tag('rows', @header_info.size)
+    =hidden_field_tag('header', @header_info)
+    =submit_tag("Submit")
