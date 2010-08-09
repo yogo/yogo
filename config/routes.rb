@@ -30,7 +30,7 @@ ActionController::Routing::Routes.draw do |map|
                               :only => [:index, :new, :create],
                               :collection => { :update_user_roles => :post }
 
-    project.resources :members
+    project.resources :memberships
   end
   map.page 'pages/:id',
     :controller   => 'pages',
