@@ -11,17 +11,36 @@
     - form_for(@project, :builder => YogoFormBuilder) do |f|
       %h3= f.check_box(:is_private, :label => image_tag('icons/private_16.png') + " Private")
       %h5= f.text_area(:description, :label => "Description: ")
-      %h5.tight  Users
+      %h5.tight  Members
       .rbox.tight
-        %ul.all-users
-          - unless @project.roles.empty? 
-            - @project.roles.users.each do |user|
-              // TODO: The role-selection below is clumsy, optimize plz
-              %li= user.name + ": " + @project.roles.select{|g| g.users.include?(user) }.map{|g| g.name }.join(', ')     
+        %table
+          %thead
+            %th User
+            %th Roles
+            %th
+          %tbody
+            %tr
+            - unless @project.roles.empty? 
+              - @project.roles.users.each do |user|
+                %td= link_to(user.name, user_path(user))
+                %td= @project.roles.select{|role| role.users.include?(user) }.map{|role| role.name }.join(', ')     
+                %td= link_to("edit memberships")
+          
       .form-element
         = f.submit('Update', :class => 'button-link')
         = link_to('Cancel', projects_path, :class => 'cancel')
   
-    .rbox.tight
-      = render(:partial => 'project_role')      
+  .rbox
+    - form_for(:membership, :url => project_memberships_path(@project)) do |f|
+      - field_set_tag("Users:") do
+        - for user in User.all do
+          - unless @project.users.include?(user)
+            = check_box_tag("memberships[users][#{user.name}]", user.id, false, :class => "user_#{user.name}")
+            = label_tag("memberships[users][#{user.name}]", user.name) link_to(image_tag("delete.png", :size => "16x16"), project_user_path(@project, user), :method=>:delete, :confirm => 'Are you sure?')
+      - field_set_tag("Role:") do
+        - for role in Role.all do
+          = check_box_tag("memberships[roles][#{role.name}]", role.id, false, :class => "membership_#{role.name}")
+          = label_tag("memberships[roles][#{role.name}]", role.name)
+      = f.submit('Save', :class => 'button-link')
+        
 
