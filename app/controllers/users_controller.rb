@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :require_user
-  before_filter :require_administrator
+  # before_filter :require_user
+  # before_filter :require_administrator
 
   ##
   # Retrieves all users in the system
@@ -156,16 +156,4 @@ class UsersController < ApplicationController
     end
 
   end
-
-  private
-
-  ##
-  # Checks to see if the current user is in the administrator role
-  # @return [nil] or it doesn't return.
-  # @api private
-  def require_administrator
-    raise AuthenticationError unless logged_in?
-    raise AuthorizationError  unless current_user.admin
-  end
-
 end

@@ -42,9 +42,7 @@ class Yogo::ProjectsController < ApplicationController
     @search_scope = params[:search_scope]
     @search_term = params[:search_term]
 
-    # Example
-    # if current_user.authorized?(:project_search)
-    # end
+    raise AuthorizationError unless current_user.has_permission?(:search_project)
 
     if @search_scope == 'everywhere' || params[:model_name].blank?
       @projects = Project.available.search(@search_term)
@@ -100,7 +98,7 @@ class Yogo::ProjectsController < ApplicationController
 
     if !Setting[:local_only] && @project.is_private?
       raise AuthenticationError if !logged_in?
-      raise AuthorizationError  if !current_user.is_in_project?(@project)
+      raise AuthorizationError  if !current_user.has_permission?(:retrieve_project, @project)
     end
 
     @models = @project.models

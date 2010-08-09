@@ -241,4 +241,12 @@ module ApplicationHelper
   def link_to_edit_project_models(project, link_text, options={})
     link_to(link_text, "/model_editor.html#projects/#{project.id}&from=#{project_path(project)}", options)
   end
+
+  def check_administrator
+    raise AuthorizationError  unless current_user.admin
+  end
+
+  def logged_in?
+    raise AuthenticationError unless logged_in?
+  end
 end

@@ -20,7 +20,9 @@ class Project
 
   validates_is_unique   :name
 
-  has n, :roles
+  has n, :memberships
+  has n, :roles, :through => :memberships
+  has n, :users, :through => :memberships
 
   before :destroy, :delete_models!
   has n, :sites, :through => Resource

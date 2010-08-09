@@ -12,12 +12,12 @@ class Role
 
   property :id, Serial
   property :name, String, :required => true, :unique => true
-  property :description, String
+  property :description, String, :length => 256
   property :permissions, Yaml, :default => [].to_yaml
-  property :dashboard, String
 
-  has n, :users, :through => Resource
-  belongs_to :project, :required => false
+  has n, :memberships
+  has n, :projects, :through => :memberships
+  has n, :users, :through => :memberships
 
   def self.permission_sources
     [Project]
