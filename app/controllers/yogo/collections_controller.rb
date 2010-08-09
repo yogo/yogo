@@ -16,6 +16,15 @@ class Yogo::CollectionsController < Yogo::BaseController
     @data_collection ||= collection.get(params[:id])
   end
   
+  def build_resource
+    if data = parsed_body
+      data.delete('project')
+      get_resource_ivar || set_resource_ivar(end_of_association_chain.send(method_for_build, data || {}))
+    else
+      super
+    end
+  end
+  
   with_responder do
     def resource_json(resource)
       hash = super(resource)
