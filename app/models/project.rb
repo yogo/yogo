@@ -26,7 +26,6 @@ class Project
 
   before :destroy, :delete_models!
   has n, :sites, :through => Resource
-  has n, :roles
 
   def self.extended_permissions
     collection_perms = [ :create_models, :retrieve_models, :update_models, :delete_models, :create_data, :retrieve_data, :update_data, :delete_data ]
