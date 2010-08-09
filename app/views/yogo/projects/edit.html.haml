@@ -19,12 +19,14 @@
             %th Roles
             %th
           %tbody
-            %tr
             - unless @project.roles.empty? 
               - @project.roles.users.each do |user|
-                %td= link_to(user.name, user_path(user))
-                %td= @project.roles.select{|role| role.users.include?(user) }.map{|role| role.name }.join(', ')     
-                %td= link_to("edit memberships")
+                %tr
+                  %td= link_to(user.name, user_path(user))
+                  %td= @project.roles.select{|role| role.users.include?(user) }.map{|role| role.name }.join(', ')     
+                  %td 
+                    = link_to("edit memberships")
+                    = link_to(image_tag("delete.png", :size => "16x16"), :url => {}, :method=>:delete, :confirm => 'Are you sure?')
           
       .form-element
         = f.submit('Update', :class => 'button-link')
@@ -36,7 +38,7 @@
         - for user in User.all do
           - unless @project.users.include?(user)
             = check_box_tag("memberships[users][#{user.name}]", user.id, false, :class => "user_#{user.name}")
-            = label_tag("memberships[users][#{user.name}]", user.name) link_to(image_tag("delete.png", :size => "16x16"), project_user_path(@project, user), :method=>:delete, :confirm => 'Are you sure?')
+            = label_tag("memberships[users][#{user.name}]", user.name) 
       - field_set_tag("Role:") do
         - for role in Role.all do
           = check_box_tag("memberships[roles][#{role.name}]", role.id, false, :class => "membership_#{role.name}")
