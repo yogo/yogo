@@ -431,38 +431,39 @@ class Yogo::ProjectsController < ApplicationController
     #create DataStreamColumns
     # 
     header = parse_logger_csv_header(params[:datafile])
-    range = params[:rows].to_i-1
-    (0..range).each do |i|
+    puts range = params[:rows].to_i-1
+    puts range
+    (0..range.to_i).each do |i|
+      puts i.to_s + ": i"
       #create the Timestamp column
       if i == params[:timestamp].to_i
         data_stream_column = DataStreamColumn.new(:column_number => i, 
                                                   :name => "Timestamp", 
                                                   :type =>"Timestamp",
-                                                  :original_var => header[i]["variable"])
-        puts header[i]["variable"]                     
-        puts data_stream_column.save
-        puts data_stream_column.errors
-        puts "*****************"
+                                                  :original_var => header[i]["variable"])                   
+        data_stream_column.save
         puts data_stream_column.errors.inspect 
         data_stream.data_stream_columns << data_stream_column
         data_stream.save
-         puts data_stream_column.errors.inspect 
-         puts "timestamp is saved!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        puts data_stream_column.errors.inspect 
       else
               data_stream_column = DataStreamColumn.new(:column_number => i, 
-                                                        :name => params[:header][i][:name],
-                                                        :original_var => params[:header][i][:variable],
-                                                        :type => params[:header][i][:type])
+                                                        :name => header[i]["variable"],
+                                                        :original_var => header[i]["variable"],
+                                                        :type => header[i]["type"])
               data_stream_column.save
-              puts data_stream_column.errors.to_s
-               puts "data stream column is saved!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+              puts data_stream_column.errors.inspect
               data_stream_column.variables << Variable.first(:id => params["column"+i.to_s])
               data_stream_column.data_streams << data_stream
               data_stream_column.save
               # data_stream.data_stream_columns << data_stream_column
               # data_stream.save 
       end
+      
+      
     end
+    parse_logger_csv(params[:datafile], data_stream, 4)
+    
     respond_to do |format|
       format.html
     end
@@ -496,12 +497,33 @@ class Yogo::ProjectsController < ApplicationController
     header_data=Array.new
     (0..csv_data[1].size-1).each do |i|
       item_hash = Hash.new
-      item_hash["variable"] = csv_data[1][i]
-      item_hash["unit"] = csv_data[2][i]
-      item_hash["type"] = csv_data[3][i]
+      item_hash["variable"] = csv_data[1][i].to_s
+      item_hash["unit"] = csv_data[2][i].to_s
+      item_hash["type"] = csv_data[3][i].to_s
       header_data << item_hash
     end
     
     header_data
   end
+  
+  def parse_logger_csv(csv_file, data_stream_template,  start_line)
+    require "yogo/model/csv"
+    csv_data = CSV.read(csv_file)
+    path = File.dirname(csv_file)
+    data_model = Project.first(:id => data_stream_template.project_id).get_model("DataValue")
+    csv_data[start_line..-1].each do |row|
+      (0..row.size-1).each do |i|
+        if i != data_stream_template.data_stream_columns.first(:name => "Timestamp").column_number
+          data_value = data_model.new
+          data_value.yogo__data_value = row[i]
+          data_value.yogo__local_date_time = row[data_stream_template.data_stream_columns.first(:name => "Timestamp").column_number]
+          if !data_stream_template.data_stream_columns.first(:column_number => i).variables.first.nil?
+            data_value.yogo__variable = data_stream_template.data_stream_columns.first(:column_number => i).variables.first.id 
+          end
+          data_value.save
+        end
+      end
+    end
+  end
+  
 end
