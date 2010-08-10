@@ -38,7 +38,9 @@ class User
   property :updated_at, DateTime
   property :updated_on, Date
 
-  has n, :roles, :through => Resource
+  has n, :memberships
+  has n, :projects, :through => :memberships
+  has n, :roles, :through => :memberships
 
   validates_is_confirmed :password
 
@@ -147,6 +149,7 @@ class User
   #
   # @api public
   def has_permission?(action, project = nil)
+    return true if self.admin
     self.roles(:project => project).any?{ |role| role.has_permission?(action) }
   end
 

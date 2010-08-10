@@ -12,10 +12,11 @@ ActionController::Routing::Routes.draw do |map|
                 :member => { :upload => :post },
                 :collection => { :loadexample => :post, :search => :get} do |project|
 
-    map.connect '/projects/add_site', :controller => 'yogo/projects', :action => 'add_site'  
-    map.connect '/projects/add_stream', :controller => 'yogo/projects', :action => 'add_stream'  
+    map.connect '/projects/add_site', :controller => 'yogo/projects', :action => 'add_site'
+    map.connect '/projects/add_stream', :controller => 'yogo/projects', :action => 'add_stream'
     map.connect '/projects/upload_stream', :controller => 'yogo/projects', :action => 'upload_stream'
     map.connect '/projects/create_stream', :controller => 'yogo/projects', :action => 'create_stream'
+
     # /projects/:project_id/yogo_data/:model_name
     # /projects/:project_id/yogo_data/:model_name/:id
     project.resources :yogo_data, :as => 'yogo_data/:model_id', :controller => 'yogo/data',
@@ -25,15 +26,11 @@ ActionController::Routing::Routes.draw do |map|
     # /projects/:project_id/yogo_models/:model_name
     project.resources :yogo_models, :controller => 'yogo/models'
 
-    project.resources :users, :controller => 'yogo/users',
-                              :only => [:index, :new, :create],
-                              :collection => { :update_user_roles => :post }
-
+    project.resources :memberships
   end
-  map.page 'pages/:id',
-    :controller   => 'pages',
-    :action       => 'show',
-    :requirements => { :id => /[a-z]+/ }
+
+  map.dashboard 'dashboards/:id', :controller => 'dashboards', :action => 'show', :requirements => { :id => /[a-z]+/ }
+  map.page 'pages/:id', :controller   => 'pages', :action       => 'show', :requirements => { :id => /[a-z]+/ }
 
   map.resources :settings
   map.resource :password, :only => [ :show, :update, :edit ]

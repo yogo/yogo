@@ -1,7 +1,0 @@
-- field_set_tag("Projects:") do
-  = collection_select(:project, :project_id, Project.all, :id, :name, {:prompt => false, :include_blank => true})
-
-- field_set_tag("Roles:") do
-  - for role in Role.all do
-    = check_box_tag(role.name)
-    = label_tag(role.name)

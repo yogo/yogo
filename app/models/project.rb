@@ -20,11 +20,12 @@ class Project
 
   validates_is_unique   :name
 
-  has n, :roles
+  has n, :memberships
+  has n, :roles, :through => :memberships
+  has n, :users, :through => :memberships
 
   before :destroy, :delete_models!
   has n, :sites, :through => Resource
-  has n, :roles
 
   def self.extended_permissions
     collection_perms = [ :create_models, :retrieve_models, :update_models, :delete_models, :create_data, :retrieve_data, :update_data, :delete_data ]
