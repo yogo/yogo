@@ -1,53 +1,53 @@
-.small.boxed
-  %h1#content-title
-    #subtitle Project Settings
-    = @project.name
-
-.small.boxed
-  .rbox
-    = link_to("Delete Project", project_path(@project), 
-      :method => :delete, :class => 'button-link fright', 
-      :confirm => "Are you sure you want to delete the #{@project.name} project?\nThere is no undo! Continue?" )
-    - form_for(@project, :builder => YogoFormBuilder) do |f|
-      %h3= f.check_box(:is_private, :label => image_tag('icons/private_16.png') + " Private")
-      %h5= f.text_area(:description, :label => "Description: ")
-      %h5.tight  Members
-      .rbox.tight
-        %table
-          %thead
-            %th User
-            %th Roles
-            %th
-          %tbody
-            - unless @project.roles.empty? 
-              - @project.roles.users.each do |user|
-                %tr
-                  %td= link_to(user.name, user_path(user))
-                  %td= @project.roles.select{|role| role.users.include?(user) }.map{|role| role.name }.join(', ')     
-                  %td 
-                    #operation-links
-                      #edit-link
-                        = link_to(image_tag("edit.png", :size => "16x16"))
-                        Edit
-                      #delete-link
-                        = link_to(image_tag("delete.png", :size => "16x16"))
-                        Delete
-          
-      .form-element
-        = f.submit('Update', :class => 'button-link')
-        = link_to('Cancel', projects_path, :class => 'cancel')
-  
-  .rbox
-    - form_for(:membership, :url => project_memberships_path(@project)) do |f|
-      - field_set_tag("Users:") do
-        - for user in User.all do
-          - unless @project.users.include?(user)
-            = check_box_tag("memberships[users][#{user.name}]", user.id, false, :class => "user_#{user.name}")
-            = label_tag("memberships[users][#{user.name}]", user.name) 
-      - field_set_tag("Role:") do
-        - for role in Role.all do
-          = check_box_tag("memberships[roles][#{role.name}]", role.id, false, :class => "membership_#{role.name}")
-          = label_tag("memberships[roles][#{role.name}]", role.name)
-      = f.submit('Save', :class => 'button-link')
+#content-settings-main
+  .small.boxed
+    %h1#content-title
+      = @project.name
+      #subtitle Project Settings
+  .small.boxed
+    .rbox.tight
+      = link_to("Delete", project_path(@project), :method => :delete, :class => 'delete-link', 
+                :confirm => "Do you want to delete the #{@project.name} project?\nThere is no undo! Continue?" )
+      - form_for(@project, :builder => YogoFormBuilder) do |f|
+        %h3= f.check_box(:is_private, :label => image_tag('icons/private_16.png') + " Private")
+        %h5= f.text_area(:description, :label => "Description: ")
+        %h5.tight  Members
+        .rbox.tight
+          %table
+            %thead
+              %th User
+              %th Roles
+              %th
+            %tbody
+              - unless @project.roles.empty? 
+                - @project.roles.users.each do |user|
+                  %tr
+                    %td= link_to(user.name, user_path(user))
+                    %td= @project.roles.select{|role| role.users.include?(user) }.map{|role| role.name }.join(', ')     
+                    %td 
+                      #operation-links
+                        #edit-link
+                          = link_to("Edit", edit_project_membership_path(@project, @user), :class => 'edit-link')
+                        #delete-link
+                          = link_to("Delete", project_membership_path(@project, @user), :method => :delete, 
+                                    :class => 'delete-link',
+                                    :confirm => "Do you want to remove #{user.name} from the #{@project.name} project?")
         
+        .form-element
+          = f.submit('Update', :class => 'update-link')
+          = link_to('Cancel', projects_path, :class => 'cancel-link')
 
+  #content-settings-extra
+    .rbox.tight
+      - form_for(:membership, :url => project_memberships_path(@project)) do |f|
+        - field_set_tag("Users:") do
+          - for user in User.all do
+            - unless @project.users.include?(user)
+              = check_box_tag("memberships[users][#{user.name}]", user.id, false, :class => "user_#{user.name}")
+              = label_tag("memberships[users][#{user.name}]", user.name) 
+        - field_set_tag("Role:") do
+          - for role in Role.all do
+            = check_box_tag("memberships[roles][#{role.name}]", role.id, false, :class => "membership_#{role.name}")
+            = label_tag("memberships[roles][#{role.name}]", role.name)
+        = f.submit('Update', :class => 'update-link')
+        = link_to('Cancel', projects_path, :class => 'cancel-link')
+        
