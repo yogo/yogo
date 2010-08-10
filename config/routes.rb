@@ -26,16 +26,11 @@ ActionController::Routing::Routes.draw do |map|
     # /projects/:project_id/yogo_models/:model_name
     project.resources :yogo_models, :controller => 'yogo/models'
 
-    project.resources :users, :controller => 'yogo/users',
-                              :only => [:index, :new, :create],
-                              :collection => { :update_user_roles => :post }
-
     project.resources :memberships
   end
-  map.page 'pages/:id',
-    :controller   => 'pages',
-    :action       => 'show',
-    :requirements => { :id => /[a-z]+/ }
+
+  map.dashboard 'dashboards/:id', :controller => 'dashboards', :action => 'show', :requirements => { :id => /[a-z]+/ }
+  map.page 'pages/:id', :controller   => 'pages', :action       => 'show', :requirements => { :id => /[a-z]+/ }
 
   map.resources :settings
   map.resource :password, :only => [ :show, :update, :edit ]
