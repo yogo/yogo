@@ -16,6 +16,8 @@ ActionController::Routing::Routes.draw do |map|
     map.connect '/projects/add_stream', :controller => 'yogo/projects', :action => 'add_stream'
     map.connect '/projects/upload_stream', :controller => 'yogo/projects', :action => 'upload_stream'
     map.connect '/projects/create_stream', :controller => 'yogo/projects', :action => 'create_stream'
+    map.connect '/projects/create_site', :controller => 'yogo/projects', :action => 'create_site'
+    map.connect '/projects/add_site_to_project', :controller => 'yogo/projects', :action => 'add_site_to_project'
 
     # /projects/:project_id/yogo_data/:model_name
     # /projects/:project_id/yogo_data/:model_name/:id

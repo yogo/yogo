@@ -1,14 +1,15 @@
 %h2
   = link_to(@project.name, project_path(@project) )
 =clear_break
--form_tag("add_new_site") do 
+-form_tag("add_site_to_project", :method => :post) do 
   -@site_options=""
   -@sites.each do |site|
     -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
   =select_tag("site", @site_options)
+  =hidden_field_tag("project_id", @project.id)
   =submit_tag("Submit")
 =clear_break
--form_tag("create_site") do
+-form_tag("create_site", :method => :post) do
   Site Name:
   =text_field_tag("site_name")
   =clear_break
@@ -21,4 +22,5 @@
   Longitude:
   =text_field_tag("longitude")
   =clear_break
+  =hidden_field_tag("project_id", @project.id)
   =submit_tag("Submit")

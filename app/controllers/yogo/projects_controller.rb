@@ -368,6 +368,32 @@ class Yogo::ProjectsController < ApplicationController
       format.html
     end
   end
+  
+  def create_site
+    site = Site.new(:site_code => params[:site_code],
+             :site_name => params[:site_name],
+             :latitude => params[:latitude],
+             :longitude => params[:longitude])
+    if site.save
+      site.projects << Project.first(:id => params[:project_id])
+      site.save
+      flash[:notice]  = "Site created succesfully."
+      redirect_to project_path(params[:project_id])
+    else
+      flash[:error]  = "Site not created. Error!"
+      redirect_to project_path(params[:project_id])
+    end
+    
+  end
+  
+  def add_site_to_project
+    project = Project.first(:id => params[:project_id])
+    project.sites << Site.first(:id => params[:site])
+    project.save
+    flash[:notice] = "Site added succesfully."
+    redirect_to project_path(params[:project_id])
+
+  end
 
   def add_stream
     @project = Project.get(params[:id])
@@ -392,7 +418,7 @@ class Yogo::ProjectsController < ApplicationController
   def upload_stream
     @project = Project.first(:id => params[:project_id])
     @variables = Variable.all
-    @sites = Site.all
+    @sites = @project.sites
     if !params[:upload].nil? && datafile = params[:upload]['datafile']
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
