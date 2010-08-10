@@ -1,5 +1,24 @@
 %h2
   = link_to(@project.name, project_path(@project) )
-
-
-Add a site to this project
+=clear_break
+-form_tag("add_new_site") do 
+  -@site_options=""
+  -@sites.each do |site|
+    -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
+  =select_tag("site", @site_options)
+  =submit_tag("Submit")
+=clear_break
+-form_tag("create_site") do
+  Site Name:
+  =text_field_tag("site_name")
+  =clear_break
+  Site Code:
+  =text_field_tag("site_code")
+  =clear_break
+  Latitude:
+  =text_field_tag("latitude")
+  =clear_break
+  Longitude:
+  =text_field_tag("longitude")
+  =clear_break
+  =submit_tag("Submit")

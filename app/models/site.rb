@@ -44,4 +44,6 @@ class Site
 
   has n, :projects, :through => Resource
   has n, :data_streams, :model => "DataStream", :through => Resource
+  has n, :sensor_values, :model => "SensorValue", :through => Resource
+  has n, :sensor_types, :model => "SensorType", :through => :sensor_values
 end
