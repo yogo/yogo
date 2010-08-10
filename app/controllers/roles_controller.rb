@@ -1,9 +1,6 @@
 class RolesController < ApplicationController
   inherit_resources
 
-  # before_filter :require_user
-  # before_filter :require_administrator
-
   def create
     super do |format|
       format.html { redirect_to(roles_url) }
