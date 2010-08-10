@@ -1,7 +1,7 @@
-# require 'datamapper/authlogic/compatability'
+require 'dm-types/bcrypt_hash'
+
 class User
   include DataMapper::Resource
-  # include DataMapper::Authlogic::Compatability
   include SentientUser
 
   # I'm confused. What is this doing?
@@ -14,7 +14,7 @@ class User
 
   property :id,                 DataMapper::Types::Serial
   property :login,              String,  :required => true, :index => true, :unique => true
-  property :email,              String,  :required => true, :length => 256
+  property :email,              String,  :length => 256, :format => :email_address
   property :first_name,         String,  :length => 50
   property :last_name,          String,  :length => 50
   property :admin,              Boolean, :default => false
@@ -39,10 +39,10 @@ class User
   property :updated_on, Date
 
   has n, :memberships
-  has n, :projects, :through => :memberships
+  has n, :projects, :through => :memberships, :model => 'Yogo::Project'
   has n, :roles, :through => :memberships
 
-  validates_is_confirmed :password
+  validates_confirmation_of :password
 
   ##
   # Finds a user by their login
@@ -149,7 +149,8 @@ class User
   #
   # @api public
   def has_permission?(action, project = nil)
-    return true if self.admin
+    return true if self.admin?
+
     self.roles(:project => project).any?{ |role| role.has_permission?(action) }
   end
 

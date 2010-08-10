@@ -196,12 +196,12 @@ module AuthorizationSystem
       # @api private
       def url_authorized?(params = {})
         params = params.symbolize_keys
-        if params[:controller]
-          base = eval("#{params[:controller]}_controller".classify)
-        else
+        # if params[:controller]
+        #          debugger
+        #          base = eval("#{params[:controller]}_controller".classify)
+        #        else
           base = self.class
-        end
-        base.url_authorized?(current_user, params, binding)
+          base.url_authorized?(current_user, params, binding)
       end
 
     end # module AuthroizationSystemInstanceMethod

@@ -2,6 +2,7 @@
   %table
     %thead
       %tr
+        %th Name
         %th Login
         %th First Name
         %th Last Name
@@ -24,6 +25,7 @@
           %td
             %center= user.last_login_at.nil? ? '' : user.last_login_at.strftime("%m/%d/%Y %I:%M %p")
           %td
-            %center= link_to(image_tag('locked.png', :size => '12x12'), user_path(user), :method=>:lock, :confirm => 'Are you sure?')
+            /%center= link_to("Lock", user_path(user), :method=>:lock, :confirm => 'Are you sure?')
+
           
 #pagination-links= pagination_links(User, params[:page], 25)

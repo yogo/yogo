@@ -41,4 +41,4 @@
                           project_yogo_data_index_path(project, dataset))
                     %td= link_to(dataset.count, project_yogo_data_index_path(project, dataset))
 
-#pagination-links= pagination_links(Project, params[:page], 5)
+#pagination-links= pagination_links(Yogo::Project, params[:page], 5)

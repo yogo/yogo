@@ -8,28 +8,30 @@
 #
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
-  map.resources :projects, :controller => 'yogo/projects',
-                :member => { :upload => :post },
-                :collection => { :loadexample => :post, :search => :get} do |project|
+  map.namespace :yogo do |yogo|
+    yogo.resources :projects,
+                  :member => { :upload => :post },
+                  :collection => { :loadexample => :post, :search => :get} do |project|
 
-    map.connect '/projects/add_site', :controller => 'yogo/projects', :action => 'add_site'
-    map.connect '/projects/add_stream', :controller => 'yogo/projects', :action => 'add_stream'
-    map.connect '/projects/upload_stream', :controller => 'yogo/projects', :action => 'upload_stream'
-    map.connect '/projects/create_stream', :controller => 'yogo/projects', :action => 'create_stream'
+      project.resources :collections do |collection|
+        collection.resources :items
+        collection.resources :properties
+      end
 
-    # /projects/:project_id/yogo_data/:model_name
-    # /projects/:project_id/yogo_data/:model_name/:id
-    project.resources :yogo_data, :as => 'yogo_data/:model_id', :controller => 'yogo/data',
-                      :collection => { :upload => :post, :search => :get, :upload_stream => :post },
-                      :member => { :download_asset => :get, :show_asset => :get }
-
-    # /projects/:project_id/yogo_models/:model_name
-    project.resources :yogo_models, :controller => 'yogo/models'
-
-    project.resources :memberships
+      project.resources :memberships
+    end
   end
 
+  # These are hard wired until we get RESTful routes into the new project collection working
+  map.connect '/projects/add_site', :controller => 'yogo/projects', :action => 'add_site'
+  map.connect '/projects/add_stream', :controller => 'yogo/projects', :action => 'add_stream'
+  map.connect '/projects/upload_stream', :controller => 'yogo/projects', :action => 'upload_stream'
+  map.connect '/projects/create_stream', :controller => 'yogo/projects', :action => 'create_stream'
+
+  # Dashboard routes
   map.dashboard 'dashboards/:id', :controller => 'dashboards', :action => 'show', :requirements => { :id => /[a-z]+/ }
+
+  # Static page route
   map.page 'pages/:id', :controller   => 'pages', :action       => 'show', :requirements => { :id => /[a-z]+/ }
 
   map.resources :settings

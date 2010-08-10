@@ -58,3 +58,4 @@ Site.first_or_create(:site_code =>"LOS_MSU",
                       :site_name => "Losertown",
                       :latitude => 45.8,
                       :longitude => -111.32)
+

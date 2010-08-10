@@ -1,0 +1,36 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: database.yml.start
+#
+#
+
+development:
+  adapter: sqlite3
+  database: db/sqlite3/development.sqlite3
+
+production:
+  adapter: sqlite3
+  database: db/sqlite3/production.sqlite3
+
+test:
+  adapter: sqlite3
+  database: db/sqlite3/test.sqlite3
+
+yogo_development:
+  adapter: sqlite3
+  database: db/sqlite3/development_collection_data.sqlite3
+
+yogo_production:
+  adapter: sqlite3
+  database: db/sqlite3/production_collection_data.sqlite3
+
+# run with bin/persvr -p 8081
+yogo_test: &YOGO_TEST
+  adapter: sqlite3
+  database: db/sqlite3/test_collection_data.sqlite3
+
+yogo_cucumber:
+  <<: *YOGO_TEST

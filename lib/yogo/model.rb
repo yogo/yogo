@@ -22,12 +22,12 @@ module Yogo
       base.send(:extend, ModelEditor)
       base.class_eval do
 
-        validates_present :change_summary, :if => :require_change_summary?
+        validates_presence_of :change_summary, :if => :require_change_summary?
 
         base.properties.each do |property|
           # Create carrierwave class for this property.
-          if property.type == DataMapper::Types::YogoFile || property.type == DataMapper::Types::YogoImage
-            create_uploader(property.name, property.type)
+          if property.kind_of?(DataMapper::Property::YogoFile) || property.kind_of?(DataMapper::Property::YogoImage)
+            create_uploader(property.name, property.class)
           end
         end
 
@@ -72,7 +72,7 @@ module Yogo
       def property_with_carrierwave(name, type, options = {})
         prop = original_property(name, type, options)
 
-        if type == DataMapper::Types::YogoFile || type == DataMapper::Types::YogoImage
+        if prop.kind_of?(DataMapper::Property::YogoFile) || prop.kind_of?(DataMapper::Property::YogoImage)
           create_uploader(prop.name, prop.type)
         end
         return prop
@@ -140,7 +140,7 @@ module Yogo
       # Creates a carrierwave uploader for the specified field
       #
       # @example
-      #   create_uploader(:yogo__file, DataMapper::Types::YogoFile)
+      #   create_uploader(:yogo__file, DataMapper::Property::YogoFile)
       #
       # @param [Symbol or String] name the name of the property to add a handler to
       # @param [Class] type the type of property this is

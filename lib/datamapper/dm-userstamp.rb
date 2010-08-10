@@ -10,10 +10,6 @@
 #  end
 # 
 # TODO: Make the userclass customizable.
-require 'rubygems'
-
-gem 'dm-core', '>=0.9.10'
-require 'dm-core'
 
 module DataMapper
   module Userstamp
