@@ -1,4 +1,6 @@
 class UsersController < InheritedResources::Base
+  belongs_to :project, :role, :optional => true
+
   before_filter :require_user
   before_filter :require_administrator
 
