@@ -28,9 +28,6 @@ DataMapper.setup(:default, config[Rails.env])
 yogo_db = ['yogo', (ENV['YOGO_DB'] || 'default'), Rails.env].join('_')
 DataMapper.setup(:collection_data, config[yogo_db])
 
-# Settings can be a repo, this can be fixed to read from the config file when the app moves to Dm 1.0
-DataMapper.setup(:settings, "yaml://db/settings.yml")
-
 # Map the datamapper logging to rails logging
 DataMapper.logger             = Rails.logger
 if Object.const_defined?(:DataObjects)
