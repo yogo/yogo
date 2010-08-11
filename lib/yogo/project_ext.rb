@@ -3,6 +3,7 @@ require 'yogo/project'
 module Yogo
   class Project
     extend Permission
+    include Facet::DataMapper::Resource
     
     property :is_private,      Boolean, :required => true, :default => false
     
