@@ -9,12 +9,17 @@
             = link_to(project.name, project_path(project) ) 
             = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
           .action-links
-            #map
+            .map{:id => "map" + project.id.to_s}
               You should see a map here.  
               .map-links
             = link_to_edit_project_models(project, "Edit/Add Data Models", :class => 'button-link')
             = link_to("Project Settings", edit_project_path(project), :class => 'button-link')
           %p.rbox.tight
+            :javascript
+              $(document).ready(function(){
+              $.yogo_mapit($('#{'#map'+project.id.to_s}'), {locations: #{@project_sites_array[project.id].to_json}
+              });
+              });
             - if project.description && project.description.length > 0
               %strong= link_to('Project Description', edit_project_path(project), :title => 'Edit Project Description')
               %br/
@@ -46,10 +51,3 @@
 
 #pagination-links= pagination_links(Project, params[:page], 5)
 
-:javascript
-  $(document).ready(function(){
-  $.yogo_mapit($('#map'), {locations: 
-  [{'lat': 45.6, 'long': -111.0,   'name': "Lorem ipsum."},
-  {'lat': 45.62, 'long': -111.01, 'name': "Lorem ipsum."}]
-  });
-  });

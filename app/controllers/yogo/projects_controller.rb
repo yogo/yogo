@@ -22,7 +22,18 @@ class Yogo::ProjectsController < ApplicationController
   # @api public
   def index
     @projects = Project.available.paginate(:page => params[:page], :per_page => 5)
-
+    @project_sites_array = Array.new
+    @projects.each do |project|
+      sites_array = Array.new
+      project.sites.each do |site|
+        sites_temp_hash = Hash.new
+        sites_temp_hash['lat'] = site.lat.to_f
+        sites_temp_hash['long'] = site.long.to_f
+        sites_temp_hash['name'] = site.name
+        sites_array << sites_temp_hash
+      end
+      @project_sites_array[project.id] = sites_array
+    end
      respond_to do |format|
         format.html
       end
@@ -454,14 +465,11 @@ class Yogo::ProjectsController < ApplicationController
                                  :filename => params[:datafile],
                                  :project_id => params[:project_id])
     data_stream.save
-    data_stream.errors do |e|
-      puts e
-    end
-    
+       
     data_stream.sites << Site.first(:id => params[:site])
     data_stream.save
     #create DataStreamColumns
-    # 
+    site = Site.first(:id => params[:site])
     header = parse_logger_csv_header(params[:datafile])
     range = params[:rows].to_i-1
     (0..range.to_i).each do |i|
@@ -492,12 +500,14 @@ class Yogo::ProjectsController < ApplicationController
               # data_stream.data_stream_columns << data_stream_column
               # data_stream.save 
               # 
-              SensorType.first_or_create(:name => header[i]["variable"] + Site.first(:id => params[:site]).name)
+              sensor_type = SensorType.first_or_create(:name => header[i]["variable"] + Site.first(:id => params[:site]).name)
+              site.sensor_types << sensor_type
+              site.save
       end
       
       
     end
-    parse_logger_csv(params[:datafile], data_stream, 4, Site.first(:id => params[:site]))
+    parse_logger_csv(params[:datafile], data_stream, 4, site)
     flash[:notice] = "File parsed and stored successfully."
     redirect_to project_path(params[:project_id])
   end
@@ -536,6 +546,8 @@ class Yogo::ProjectsController < ApplicationController
     header_data
   end
   
+  
+  
   def parse_logger_csv(csv_file, data_stream_template,  start_line, site)
     require "yogo/model/csv"
     csv_data = CSV.read(csv_file)
@@ -563,17 +575,13 @@ class Yogo::ProjectsController < ApplicationController
           #save to sensor_value and sensor_type
           sensor_value = SensorValue.new(:value => row[i],
                                         :units => data_stream_col.unit,
-                                        :timestamp => row[data_timestamp.column_number],
-                                        :created_at => DateTime.now)
+                                        :timestamp => row[data_timestamp.column_number])
                                           
           sensor_value.save
           puts sensor_type_array[i].name
-          sensor_type = sensor_type_array[i]
-          sensor_value.sensor_type << sensor_type
+          sensor_value.sensor_type << sensor_type_array[i]
           sensor_value.site << site
           sensor_value.save
-          site.sensor_types << sensor_type
-          site.save
         end
       end
     end
