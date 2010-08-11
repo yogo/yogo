@@ -8,7 +8,7 @@ class SensorType
   property :id,       Serial,  :key      => true
   property :name,     String,  :required => true
 
-
+  has n, :sites, :through => Resource
   has n, :sensor_values, :model => "SensorValue", :through => Resource
   
   # This method allows us to do things like

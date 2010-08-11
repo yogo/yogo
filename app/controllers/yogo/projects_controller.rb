@@ -103,7 +103,14 @@ class Yogo::ProjectsController < ApplicationController
 
     @models = @project.models
     @sidebar = true
-
+    @sites_array = Array.new
+    @project.sites.each do |site|
+      sites_temp_hash = Hash.new
+      sites_temp_hash['lat'] = site.lat.to_f
+      sites_temp_hash['long'] = site.long.to_f
+      sites_temp_hash['name'] = site.name
+      @sites_array << sites_temp_hash
+    end
     respond_to do |format|
       format.html
     end
@@ -534,11 +541,18 @@ class Yogo::ProjectsController < ApplicationController
     csv_data = CSV.read(csv_file)
     path = File.dirname(csv_file)
     data_model = Project.first(:id => data_stream_template.project_id).get_model("DataValue")
+    sensor_type_array = Array.new
+    data_stream_template.data_stream_columns.each do |col|
+      puts col.name
+      sensor_type_array[col.column_number] = SensorType.first(:name => col.original_var + site.name)
+    end
     csv_data[start_line..-1].each do |row|
       (0..row.size-1).each do |i|
+        puts i
         data_stream_col = data_stream_template.data_stream_columns.first(:column_number => i)
         data_timestamp = data_stream_template.data_stream_columns.first(:name => "Timestamp")
         if i != data_timestamp.column_number
+          puts row[i]
           data_value = data_model.new
           data_value.yogo__data_value = row[i]
           data_value.yogo__local_date_time = row[data_timestamp.column_number]
@@ -553,7 +567,8 @@ class Yogo::ProjectsController < ApplicationController
                                         :created_at => DateTime.now)
                                           
           sensor_value.save
-          sensor_type = SensorType.first(:name => data_stream_col.original_var + site.name)
+          puts sensor_type_array[i].name
+          sensor_type = sensor_type_array[i]
           sensor_value.sensor_type << sensor_type
           sensor_value.site << site
           sensor_value.save

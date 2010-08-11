@@ -9,6 +9,9 @@
             = link_to(project.name, project_path(project) ) 
             = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
           .action-links
+            #map
+              You should see a map here.  
+              .map-links
             = link_to_edit_project_models(project, "Edit/Add Data Models", :class => 'button-link')
             = link_to("Project Settings", edit_project_path(project), :class => 'button-link')
           %p.rbox.tight
@@ -42,3 +45,11 @@
                     %td= link_to(dataset.count, project_yogo_data_index_path(project, dataset))
 
 #pagination-links= pagination_links(Project, params[:page], 5)
+
+:javascript
+  $(document).ready(function(){
+  $.yogo_mapit($('#map'), {locations: 
+  [{'lat': 45.6, 'long': -111.0,   'name': "Lorem ipsum."},
+  {'lat': 45.62, 'long': -111.01, 'name': "Lorem ipsum."}]
+  });
+  });
