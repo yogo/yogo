@@ -24,13 +24,18 @@
 # 
 class Site
   include DataMapper::Resource
-
   
-  property :id, Serial, :required => true
-  property :site_code, String, :required => true
-  property :site_name, String, :required => true
-  property :latitude, Float, :required => true
-  property :longitude, Float, :required => true
+  # property :site_code, String, :required => true
+  # property :site_name, String, :required => true
+  # property :latitude, Float, :required => true
+  # property :longitude, Float, :required => true
+  property :id,                 Serial
+  property :name,               String,     :required => true, :length => 128
+  property :code,               String,     :required => true, :length => 128
+  property :lat,                BigDecimal, :required => true, :precision => 18, :scale => 15
+  property :long,               BigDecimal, :required => true, :precision => 18, :scale => 15
+  property :state,              String,     :required => true
+  property :status,             String,     :required => true, :default => "Active"
   property :lat_long_datum_id, Integer, :required => true, :default => 0
   property :elevation_m, Float, :required => false
   property :vertical_datum, String, :required => false
@@ -38,12 +43,15 @@ class Site
   property :local_y, Float, :required => false
   property :local_projection_id, Integer, :required => false
   property :pos_accuracy_m, Float, :required => false
-  property :state, String, :required => false
   property :country, String, :required => false
   property :comments, String, :required => false
-
+  
   has n, :projects, :through => Resource
   has n, :data_streams, :model => "DataStream", :through => Resource
   has n, :sensor_values, :model => "SensorValue", :through => Resource
-  has n, :sensor_types, :model => "SensorType", :through => :sensor_values
+  has n, :sensor_types, :model => "SensorType", :through => Resource
+  
+  validates_is_unique :code
+  validates_within    :lat, :set => (- 90.0..  90.0)
+  validates_within    :long, :set => (-180.0 .. 180.0)
 end

@@ -20,7 +20,7 @@
     Please select the site this Data Stream should be associated with:
     -@site_options=""
     -@sites.each do |site|
-      -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
+      -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
     =select_tag("site", @site_options)
     =clear_break
     =clear_break

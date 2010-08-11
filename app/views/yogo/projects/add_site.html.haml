@@ -4,7 +4,7 @@
 -form_tag("add_site_to_project", :method => :post) do 
   -@site_options=""
   -@sites.each do |site|
-    -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
+    -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
   =select_tag("site", @site_options)
   =hidden_field_tag("project_id", @project.id)
   =submit_tag("Submit")
@@ -21,6 +21,9 @@
   =clear_break
   Longitude:
   =text_field_tag("longitude")
+  =clear_break
+  State:
+  =text_field_tag("state")
   =clear_break
   =hidden_field_tag("project_id", @project.id)
   =submit_tag("Submit")
