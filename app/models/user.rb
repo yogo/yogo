@@ -3,6 +3,7 @@ require 'dm-types/bcrypt_hash'
 class User
   include DataMapper::Resource
   include SentientUser
+  include Facet::DataMapper::Resource
 
   # I'm confused. What is this doing?
   # @example
@@ -38,7 +39,10 @@ class User
   property :updated_at, DateTime
   property :updated_on, Date
 
-  has n, :roles, :through => Resource
+  has n, :memberships
+  has n, :projects, :through => :memberships, :model => Yogo::Project
+  has n, :roles,    :through => :memberships
+  belongs_to :system_role
 
   validates_confirmation_of :password
 
@@ -214,6 +218,20 @@ class User
       self.roles << role unless self.roles.include?(role)
     else
       self.roles.delete(role) if self.roles.include?(role)
+    end
+  end
+  
+  
+  def permissions_for(model_or_resource)
+    case(model_or_resource)
+    when Yogo::Project
+      self.memberships(:project_id => model_or_resource.id).roles.map{|r| r.permissions}.flatten.uniq
+    when DataMapper::Model
+      self.system_role.permissions & model_or_resource.to_permissions
+    when DataMapper::Resource
+      self.system_role.permissions & model_or_resource.to_permissions
+    else
+      []
     end
   end
 
