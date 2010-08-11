@@ -1,1 +1,11 @@
-= render(:partial => 'form')
+-form_for(@user, :builder => YogoFormBuilder) do |f|
+  = f.text_field(:login, :label => "Login:" )
+  = f.text_field(:first_name, :label => "First Name:")
+  = f.text_field(:last_name, :label => "Last Name:")
+  = f.text_field(:email, :label => "Email:")
+  - if @user.new?
+    = f.password_field(:password, :label => "Password: ")
+    = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
+  = f.check_box(:admin)
+  = f.submit('Save', :class => 'save-link')
+  = link_to('Cancel', root_path, :class => 'cancel-link') 
