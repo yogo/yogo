@@ -18,26 +18,26 @@ ActionController::Routing::Routes.draw do |map|
         collection.resources :properties
       end
 
-      project.resources :memberships
+     project.resources :memberships, :namespace => nil, :controller => "memberships"
+     project.resources :users, :namespace => nil, :controller => "users"
+     #project.resources :roles, :namespace => nil, :controller => "roles"
     end
   end
-
-  # These are hard wired until we get RESTful routes into the new project collection working
-  map.connect '/projects/add_site', :controller => 'yogo/projects', :action => 'add_site'
-  map.connect '/projects/add_stream', :controller => 'yogo/projects', :action => 'add_stream'
-  map.connect '/projects/upload_stream', :controller => 'yogo/projects', :action => 'upload_stream'
-  map.connect '/projects/create_stream', :controller => 'yogo/projects', :action => 'create_stream'
 
   # Dashboard routes
   map.dashboard 'dashboards/:id', :controller => 'dashboards', :action => 'show', :requirements => { :id => /[a-z]+/ }
 
   # Static page route
-  map.page 'pages/:id', :controller   => 'pages', :action       => 'show', :requirements => { :id => /[a-z]+/ }
+  map.page 'pages/:id', :controller => 'pages', :action       => 'show', :requirements => { :id => /[a-z]+/ }
 
-  map.resources :settings
-  map.resource :password, :only => [ :show, :update, :edit ]
-  map.resources :users
+  map.resources :users do |user|
+    user.resources :memberships, :namespace => nil, :controller => "memberships"
+  end
   map.resources :roles
+  map.resources :memberships
+  map.resources :settings
+
+  map.resource  :password, :only => [ :show, :update, :edit ]
 
   # Login & Logout stuff
   map.resource :user_session, :only => [ :show, :new, :create, :destory ]
