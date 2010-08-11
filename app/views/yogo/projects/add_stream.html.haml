@@ -1,7 +1,0 @@
-%h2
-  = link_to(@project.name, project_path(@project) )
-
-
-Add a Data Stream to this project
-=clear_break
-= render(:partial => 'yogo/projects/csv_stream_upload', :locals => {:project_id => @project.id})
