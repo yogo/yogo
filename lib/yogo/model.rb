@@ -22,8 +22,6 @@ module Yogo
       base.send(:extend, ModelEditor)
       base.class_eval do
 
-        validates_presence_of :change_summary, :if => :require_change_summary?
-
         base.properties.each do |property|
           # Create carrierwave class for this property.
           if property.kind_of?(DataMapper::Property::YogoFile) || property.kind_of?(DataMapper::Property::YogoImage)
@@ -197,21 +195,6 @@ module Yogo
           csv << row
         end
       end
-
-      private
-
-      # Check to see if the change_summary field is required to be filled out
-      #
-      # @return [Boolean]
-      #
-      # @author Robbie Lamb robbie.lamb@gmail.com
-      #
-      # @api private
-      def require_change_summary?
-        Setting[:require_change_sumary] && !new_record?
-      end
-
     end
-
   end
 end
