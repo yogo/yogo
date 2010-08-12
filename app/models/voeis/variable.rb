@@ -44,7 +44,11 @@ class Voeis::Variable < Yogo::Collection::Data
   end
 
   def generate_model
-    DataMapper::Model.new do
+    model = DataMapper::Model.new
+    model.extend(Yogo::Collection::Base::Model)
+    model.send(:include, Yogo::Collection::Base::Model::InstanceMethods)
+    model.collection = self
+    model.class_eval do
       property :id, Serial, :required => true, :key => true
       property :variable_code, String, :required => true
       property :variable_name, String, :required => true
@@ -59,8 +63,10 @@ class Voeis::Variable < Yogo::Collection::Data
       property :general_category, String, :required => true, :default => 'Unknown'
       property :no_data_value, Float, :required => true, :default => -9999
 
-      has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
-      has n, :units, :through => Resource
+      # has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
+      # has n, :units, :through => Resource
     end
+    model.auto_upgrade!
+    model
   end
 end

@@ -16,16 +16,22 @@ class Voeis::DataStreamColumn < Yogo::Collection::Data
   end
 
   def generate_model
-    DataMapper::Model.new do
+    model = DataMapper::Model.new
+    model.extend(Yogo::Collection::Base::Model)
+    model.send(:include, Yogo::Collection::Base::Model::InstanceMethods)
+    model.collection = self
+    model.class_eval do
       property :id, Serial
       property :name, String, :required => true
       property :type, String, :required => false
       property :original_var, String, :required => true
       property :column_number, Integer, :required => true
 
-      has n, :variables, :through => Resource
-      has n, :units, :through=> Resource
-      has n, :data_streams, :model => "DataStream", :through => Resource
+      # has n, :variables, :through => Resource
+      # has n, :units, :through=> Resource
+      # has n, :data_streams, :model => "DataStream", :through => Resource
     end
+    model.auto_upgrade!
+    model
   end
 end

@@ -15,7 +15,11 @@ class Voeis::DataStream < Yogo::Collection::Data
   end
 
   def generate_model
-    DataMapper::Model.new do
+    model = DataMapper::Model.new
+    model.extend(Yogo::Collection::Base::Model)
+    model.send(:include, Yogo::Collection::Base::Model::InstanceMethods)
+    model.collection = self
+    model.class_eval do
       property :id, Serial
       property :name, String, :required => true, :unique => true
       property :description, Text, :required => false
@@ -24,8 +28,8 @@ class Voeis::DataStream < Yogo::Collection::Data
 
       validates_is_unique   :name
 
-      has n, :sites, :through => Resource
-      has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
+      # has n, :sites, :through => Resource
+      # has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
 
       # Loads a CSV file into the streaming data model
       #
@@ -89,5 +93,7 @@ class Voeis::DataStream < Yogo::Collection::Data
         return errors
       end
     end
+    model.auto_upgrade!
+    model
   end
 end

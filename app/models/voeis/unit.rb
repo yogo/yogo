@@ -12,13 +12,18 @@ class Voeis::Unit < Yogo::Collection::Data
 
   def generate_model
     DataMapper::Model.new do
+      extend(Yogo::Collection::Base::Model)
+      include(Yogo::Collection::Base::Model::InstanceMethods)
+      collection = Voeis::Unit
       property :id, Serial, :required => true, :key =>true
       property :units_name, String, :required => true
       property :units_type, String, :required => true
       property :units_abbreviation, String, :required => true
 
-      has n, :data_stream_columns, :model=>"DataStreamColumn", :through =>Resource
-      has n, :variables, :model =>"Variable", :through => Resource
+      # has n, :data_stream_columns, :model=>"DataStreamColumn", :through =>Resource
+      # has n, :variables, :model =>"Variable", :through => Resource
     end
+    model.auto_upgrade!
+    model
   end
 end

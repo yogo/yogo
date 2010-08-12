@@ -28,7 +28,11 @@ class Voeis::Site < Yogo::Collection::Data
   end
 
   def generate_model
-    DataMapper::Model.new do
+    model = DataMapper::Model.new
+    model.extend(Yogo::Collection::Base::Model)
+    model.send(:include, Yogo::Collection::Base::Model::InstanceMethods)
+    model.collection = self
+    model.class_eval do
       property :id, Serial, :required => true
       property :site_code, String, :required => true
       property :site_name, String, :required => true
@@ -45,8 +49,10 @@ class Voeis::Site < Yogo::Collection::Data
       property :country, String, :required => false
       property :comments, String, :required => false
 
-      has n, :projects, :through => Resource
-      has n, :data_streams, :model => "DataStream", :through => Resource
+      # has n, :projects, :through => Resource
+      # has n, :data_streams, :model => "DataStream", :through => Resource
     end
+    model.auto_upgrade!
+    model
   end
 end
