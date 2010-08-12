@@ -45,6 +45,16 @@ class Yogo::BaseController < InheritedResources::Base
         super
       end
     end
+    
+    def update_resource(object, attributes)
+      # debugger
+      attributes = attributes || parsed_body
+      attributes.delete('id')
+      attr_keys = object.attributes.keys.map{|key| key.to_s }
+      valid_attributes = attributes.inject({}) {|h,(k,v)| h[k]=v if attr_keys.include?(k); h }
+      object.attributes = valid_attributes
+      object.save
+    end
   end
 
   with_responder do

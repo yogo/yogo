@@ -16,6 +16,15 @@ class Yogo::PropertiesController < Yogo::BaseController
     @property ||= collection.get(params[:id])
   end
   
+  def build_resource
+    if data = parsed_body
+      data.delete('data_collection')
+      get_resource_ivar || set_resource_ivar(end_of_association_chain.send(method_for_build, data || {}))
+    else
+      super
+    end
+  end
+  
   with_responder do
     def resource_json(resource)
       data_collection = resource.data_collection
