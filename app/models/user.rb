@@ -131,7 +131,8 @@ class User
   #
   # @api public
   def has_role?(role_name, project = nil)
-    @_user_role_names ||= self.roles(:project => project).collect(&:name)
+    return true if self.admin?
+    @_user_role_names ||= self.roles(:projects => project).collect(&:name)
     @_user_role_names.include?(role_name.to_s)
   end
 
@@ -151,7 +152,8 @@ class User
   #
   # @api public
   def has_permission?(action, project = nil)
-    self.roles(:project => project).any?{ |role| role.has_permission?(action) }
+    return true if self.admin?
+    self.roles(:projects => project).any?{ |role| role.has_permission?(action) }
   end
 
   ##
@@ -167,58 +169,7 @@ class User
   #
   # @api public
   def is_in_project?(project)
-    self.roles.any?{ |role| role.project.eql?(project) }
-  end
-
-  ##
-  # Check to see if any of the roles the user is in can create projects
-  #
-  # @example
-  #   current_user.create_projects?
-  #
-  # @return [Boolean] true if the user can create projects, or false otherwise
-  #
-  # @author lamb
-  #
-  # @api public
-  def create_projects?
-    self.has_permission?(:create_projects)
-  end
-
-  ##
-  # Alias for create_project?
-  #
-  # @example
-  #   current_user.create_projects
-  #
-  # @return [Boolean] true if the user can create projects, or false otherwise
-  #
-  # @author lamb
-  #
-  # @see create_projects?
-  #
-  # @api public
-  alias :create_projects :create_projects?
-
-  ##
-  # Check to see if any of the roles the user is in is an admin role
-  #
-  # @example
-  #   current_user.admin=true
-  #
-  # @param [Boolean] is_admin True if the user should be an admin, or false
-  # @return [nil] Not Interesting
-  #
-  # @author lamb
-  #
-  # @api public
-  def create_projects=(can_create)
-    role = Role.all(:project => nil, :admin => false).select{|role| role.has_permission?(:create_projects)}.first
-    if can_create == true || can_create == 1 || can_create == '1'
-      self.roles << role unless self.roles.include?(role)
-    else
-      self.roles.delete(role) if self.roles.include?(role)
-    end
+    self.projects.include?(project)
   end
   
   
