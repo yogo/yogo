@@ -13,8 +13,6 @@ class Yogo::ProjectsController < Yogo::BaseController
            :collection_name => 'projects',
            :instance_name => 'project'
 
-  belongs_to :role, :user, :optional => true
-
   def create
     create! do |success, failure|
       resource.data_collections.create(:name => "Variables", :type => Voeis::Variable)
