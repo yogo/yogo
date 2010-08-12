@@ -15,6 +15,16 @@ class Yogo::ProjectsController < Yogo::BaseController
 
   belongs_to :role, :user, :optional => true
 
+  def create
+    create! do |success, failure|
+      resource.data_collections.create(:name => "Variables", :type => Voeis::Variable)
+      resource.data_collections.create(:name => "Units", :type => Voeis::Unit)
+      resource.data_collections.create(:name => "Sites", :type => Voeis::Site)
+      resource.data_collections.create(:name => "DataStreams", :type => Voeis::DataStream)
+      resource.data_collections.create(:name => "DataStreamColumns", :type => Voeis::DataStreamColumn)
+    end
+  end
+
   def destroy
     destroy! do |success, failure|
       success.html { redirect_to(yogo_projects_path) }
