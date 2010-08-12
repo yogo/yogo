@@ -438,6 +438,7 @@ class Yogo::ProjectsController < ApplicationController
     @project = Project.first(:id => params[:project_id])
     @variables = Variable.all
     @sites = @project.sites
+    
     if !params[:upload].nil? && datafile = params[:upload]['datafile']
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
@@ -446,10 +447,18 @@ class Yogo::ProjectsController < ApplicationController
       else
 
         # Read the logger file header
-        @header_info = parse_logger_csv_header(datafile.path)
-        if @header_info.empty?
-          flash[:error] = "CSV File improperly formatted. Data not uploaded."
-          #redirect_to :controller =>"projects", :action => "add_stream", :params => {:id => params[:project_id]}
+        if params[:header_box] == "Campbell"
+          @start_line = 4
+          @header_info = parse_logger_csv_header(datafile.path)
+          @row_size = @header_info.size
+          @row_size = @row_size - 1 
+          if @header_info.empty?
+            flash[:error] = "CSV File improperly formatted. Data not uploaded."
+            #redirect_to :controller =>"projects", :action => "add_stream", :params => {:id => params[:project_id]}
+          end
+        else
+          @start_line = params[:start_line].to_i
+          @row_size = get_row_size(datafile.path, params[:start_line].to_i)-1
         end
       end
       respond_to do |format|
@@ -463,16 +472,18 @@ class Yogo::ProjectsController < ApplicationController
     data_stream = DataStream.new(:name => params[:data_stream_name], 
                                  :description => params[:data_stream_description],
                                  :filename => params[:datafile],
-                                 :project_id => params[:project_id])
+                                 :project_id => params[:project_id],
+                                 :start_line => params[:start_line].to_i)
     data_stream.save
        
     data_stream.sites << Site.first(:id => params[:site])
     data_stream.save
     #create DataStreamColumns
     site = Site.first(:id => params[:site])
-    header = parse_logger_csv_header(params[:datafile])
-    range = params[:rows].to_i-1
-    (0..range.to_i).each do |i|
+    #header = parse_logger_csv_header(params[:datafile])
+    # 
+    range = params[:rows].to_i
+    (0..range).each do |i|
       puts i.to_s + ": i"
       #create the Timestamp column
       if i == params[:timestamp].to_i
@@ -480,7 +491,7 @@ class Yogo::ProjectsController < ApplicationController
                                                   :name => "Timestamp", 
                                                   :type =>"Timestamp",
                                                   :unit => "NA",
-                                                  :original_var => header[i]["variable"])                   
+                                                  :original_var => params["variable"+i.to_s])                   
         data_stream_column.save
         puts data_stream_column.errors.inspect 
         data_stream.data_stream_columns << data_stream_column
@@ -488,10 +499,10 @@ class Yogo::ProjectsController < ApplicationController
         puts data_stream_column.errors.inspect 
       else
               data_stream_column = DataStreamColumn.new(:column_number => i, 
-                                                        :name => header[i]["variable"],
-                                                        :original_var => header[i]["variable"],
-                                                        :unit => header[i]["unit"],
-                                                        :type => header[i]["type"])
+                                                        :name => params["variable"+i.to_s],
+                                                        :original_var => params["variable"+i.to_s],
+                                                        :unit => params["unit"+i.to_s],
+                                                        :type => params["type"+i.to_s])
               data_stream_column.save
               puts data_stream_column.errors.inspect
               data_stream_column.variables << Variable.first(:id => params["column"+i.to_s])
@@ -500,14 +511,14 @@ class Yogo::ProjectsController < ApplicationController
               # data_stream.data_stream_columns << data_stream_column
               # data_stream.save 
               # 
-              sensor_type = SensorType.first_or_create(:name => header[i]["variable"] + Site.first(:id => params[:site]).name)
+              sensor_type = SensorType.first_or_create(:name => params["variable"+i.to_s] + Site.first(:id => params[:site]).name)
               site.sensor_types << sensor_type
               site.save
       end
       
       
     end
-    parse_logger_csv(params[:datafile], data_stream, 4, site)
+    parse_logger_csv(params[:datafile], data_stream, site)
     flash[:notice] = "File parsed and stored successfully."
     redirect_to project_path(params[:project_id])
   end
@@ -546,36 +557,45 @@ class Yogo::ProjectsController < ApplicationController
     header_data
   end
   
+  def get_row_size(csv_file, row)
+    require "yogo/model/csv"
+    csv_data = CSV.read(csv_file)
+    path = File.dirname(csv_file)
+
+    csv_data[row-1].size
+  end
   
   
-  def parse_logger_csv(csv_file, data_stream_template,  start_line, site)
+  
+  def parse_logger_csv(csv_file, data_stream_template, site)
     require "yogo/model/csv"
     csv_data = CSV.read(csv_file)
     path = File.dirname(csv_file)
     data_model = Project.first(:id => data_stream_template.project_id).get_model("DataValue")
     sensor_type_array = Array.new
+    data_stream_col = Array.new
     data_stream_template.data_stream_columns.each do |col|
       puts col.name
       sensor_type_array[col.column_number] = SensorType.first(:name => col.original_var + site.name)
+      data_stream_col[col.column_number] = col
     end
-    csv_data[start_line..-1].each do |row|
+    data_timestamp_col = data_stream_template.data_stream_columns.first(:name => "Timestamp").column_number
+    csv_data[data_stream_template.start_line..-1].each do |row|
       (0..row.size-1).each do |i|
         puts i
-        data_stream_col = data_stream_template.data_stream_columns.first(:column_number => i)
-        data_timestamp = data_stream_template.data_stream_columns.first(:name => "Timestamp")
-        if i != data_timestamp.column_number
+        if i != data_timestamp_col
           puts row[i]
           data_value = data_model.new
           data_value.yogo__data_value = row[i]
-          data_value.yogo__local_date_time = row[data_timestamp.column_number]
-          if !data_stream_col.variables.first.nil?
-            data_value.yogo__variable = data_stream_col.variables.first.id 
-          end   
+          data_value.yogo__local_date_time = row[data_timestamp_col]
+          #if !data_stream_col.variables.first.nil?
+          #  data_value.yogo__variable = data_stream_col.variables.first.id 
+          #end   
           data_value.save
           #save to sensor_value and sensor_type
           sensor_value = SensorValue.new(:value => row[i],
-                                        :units => data_stream_col.unit,
-                                        :timestamp => row[data_timestamp.column_number])
+                                        :units => data_stream_col[i].unit,
+                                        :timestamp => row[data_timestamp_col])
                                           
           sensor_value.save
           puts sensor_type_array[i].name
@@ -627,82 +647,88 @@ class Yogo::ProjectsController < ApplicationController
             end
           end
           @sensor_types.each do |s_type| 
-            if senscount != 0
-              @plot_data +=  ","
-            end
-            senscount+=1
-            count = 0
+            if !s_type.sensor_values.last.nil?
+              if senscount != 0 && 
+                @plot_data +=  ","
+              end
+              senscount+=1
+              count = 0
           
-            @plot_data += '"' + s_type.name + "-" + site.code + '"' + ": {data:["
-            # last_time = Time.now
-            # tmp_data = site.sensor_values.all(:sensor_type => s_type, :fields => [:timestamp, :value], :limit => 20, :offset => 0 ).collect{|val| "[#{val.timestamp.to_time.to_i*1000}, #{val.value}]"}.join(',')
-            @sensor_hash = Hash.new
-            if params[:hours].nil?#api grab values for time period
-              num = 12
-            else
-               num = params[:hours].to_i 
-            end
-            if params[:begin_date].nil? # get the last ?hrs of data, calc from the last timestamp
-              #cur_date = DateTime.now #strptime("2009-11-17T08:45:00+00:00")
-              cur_date = site.sensor_values.first(:order => [:timestamp.desc]).timestamp
-              begin_date = (cur_date.to_time - num.hours).to_datetime
-            else
-                          cur_date = DateTime.now #strptime("2009-11-17T08:45:00+00:00")
-                          begin_date = params[:begin_date].to_datetime #(cur_date.to_time - num.hours).to_datetime
-                        end
-                        if !params[:end_date].nil?
-                          cur_date = params[:end_date].to_datetime
-                        end
-            tmp_data = ""
-            sense_data = site.sensor_types.first(:name => s_type.name).sensor_values(:timestamp.gt => begin_date, :timestamp.lt => cur_date)
-            sense_data.each do |val|
-              #temp_array = Array.new
-              #temp_array << val.timestamp.to_time.to_i*1000
-              #temp_array << val.value
-              tmp_data = tmp_data + ",[" + (val.timestamp.to_time.to_i*1000).to_s + "," + val.value.to_s + "]"
-            end
-            tmp_data = tmp_data.slice(1..tmp_data.length)
-            #tmp_data = repository(:default).adapter.select('SELECT "timestamp","value","site_id" FROM "sensor_values" WHERE site_id = ? and sensor_type_id = ? and timestamp >= ? and timestamp <= ? ORDER BY "timestamp"', site.id, s_type.id, begin_date, cur_date).collect{|val| "[#{val.timestamp.to_time.to_i*1000}, #{val.value}]"}.join(',')
-            
-            array_data = Array.new()
-            value_results = site.sensor_types.first(:name => s_type.name).sensor_values(:timestamp.gt => begin_date, :timestamp.lt => cur_date).collect{
-              |val| 
-            #value_results = repository(:default).adapter.select('SELECT "timestamp","value","site_id" FROM "sensor_values" WHERE site_id = ? and sensor_type_id = ? and timestamp >= ? and timestamp <= ? ORDER BY "timestamp"', site.id, s_type.id, begin_date, cur_date).collect{|val| 
-              temp_array= Array.new() 
-              if params[:hourly].nil?
-                temp_array.push(val.timestamp.to_time.localtime.to_i*1000, val.value)
-                array_data.push(temp_array)
+              @plot_data += '"' + s_type.name + "-" + site.code + '"' + ": {data:["
+              # last_time = Time.now
+              # tmp_data = site.sensor_values.all(:sensor_type => s_type, :fields => [:timestamp, :value], :limit => 20, :offset => 0 ).collect{|val| "[#{val.timestamp.to_time.to_i*1000}, #{val.value}]"}.join(',')
+              @sensor_hash = Hash.new
+              if params[:hours].nil?#api grab values for time period
+                num = 12
               else
-                if val.timestamp.min == 0
+                 num = params[:hours].to_i 
+              end
+              if params[:begin_date].nil? # get the last ?hrs of data, calc from the last timestamp
+                #cur_date = DateTime.now #strptime("2009-11-17T08:45:00+00:00")
+                cur_date = site.sensor_values.first(:order => [:timestamp.desc]).timestamp
+                begin_date = (cur_date.to_time - num.hours).to_datetime
+              else
+                            cur_date = DateTime.now #strptime("2009-11-17T08:45:00+00:00")
+                            begin_date = params[:begin_date].to_datetime #(cur_date.to_time - num.hours).to_datetime
+              end
+              if !params[:end_date].nil?
+                            cur_date = params[:end_date].to_datetime
+                          end
+              tmp_data = ""
+              sense_data = site.sensor_types.first(:name => s_type.name).sensor_values(:timestamp.gt => begin_date, :timestamp.lt => cur_date)
+              sense_data.each do |val|
+                #temp_array = Array.new
+                #temp_array << val.timestamp.to_time.to_i*1000
+                #temp_array << val.value
+                tmp_data = tmp_data + ",[" + (val.timestamp.to_time.to_i*1000).to_s + "," + val.value.to_s + "]"
+              end
+              tmp_data = tmp_data.slice(1..tmp_data.length)
+              #tmp_data = repository(:default).adapter.select('SELECT "timestamp","value","site_id" FROM "sensor_values" WHERE site_id = ? and sensor_type_id = ? and timestamp >= ? and timestamp <= ? ORDER BY "timestamp"', site.id, s_type.id, begin_date, cur_date).collect{|val| "[#{val.timestamp.to_time.to_i*1000}, #{val.value}]"}.join(',')
+            
+              array_data = Array.new()
+              value_results = site.sensor_types.first(:name => s_type.name).sensor_values(:timestamp.gt => begin_date, :timestamp.lt => cur_date).collect{
+                |val| 
+              #value_results = repository(:default).adapter.select('SELECT "timestamp","value","site_id" FROM "sensor_values" WHERE site_id = ? and sensor_type_id = ? and timestamp >= ? and timestamp <= ? ORDER BY "timestamp"', site.id, s_type.id, begin_date, cur_date).collect{|val| 
+                temp_array= Array.new() 
+                if params[:hourly].nil?
                   temp_array.push(val.timestamp.to_time.localtime.to_i*1000, val.value)
                   array_data.push(temp_array)
+                else
+                  if val.timestamp.min == 0
+                    temp_array.push(val.timestamp.to_time.localtime.to_i*1000, val.value)
+                    array_data.push(temp_array)
+                  end
                 end
-              end}
-            # logger.debug{ "#{tmp_data}" }
-            # logger.debug { "end of query: #{Time.now - last_time}" }
-            if !tmp_data.nil?
-              @plot_data += tmp_data
-            end
-            #array_data = tmp_data.to_a#{}"["  + tmp_data.to_a.to_s + "]"
-            @sensor_hash["data"] = array_data
+              }
+              # logger.debug{ "#{tmp_data}" }
+              # logger.debug { "end of query: #{Time.now - last_time}" }
+              if !tmp_data.nil?
+                @plot_data += tmp_data
+              end
+              #array_data = tmp_data.to_a#{}"["  + tmp_data.to_a.to_s + "]"
+              @sensor_hash["data"] = array_data
             
-            # if !@sensor_labels[s_type.name.to_s].nil?
-            #                @sensor_hash["label"] = @sensor_labels[s_type.name.to_s]
-            #             
-            #                @thelabel = @sensor_labels[s_type.name]
-            # 
-            #            else
+              # if !@sensor_labels[s_type.name.to_s].nil?
+              #                @sensor_hash["label"] = @sensor_labels[s_type.name.to_s]
+              #             
+              #                @thelabel = @sensor_labels[s_type.name]
+              # 
+              #            else
           
-                 @sensor_hash["label"] = s_type.name
-                 @thelabel = s_type.name
-           #end
-                            
-            @sensor_hash["units"] = s_type.sensor_values.last.units
-            @site_hash[s_type.name] = @sensor_hash
+                   @sensor_hash["label"] = s_type.name
+                   @thelabel = s_type.name
+             #end
+              if !s_type.sensor_values.last.units.nil?              
+                @sensor_hash["units"] = s_type.sensor_values.last.units
+              else
+                @sensor_hash["units"] = "nil"
+              end
+              @site_hash[s_type.name] = @sensor_hash
           
-            @plot_data += "] , label: \"#{@thelabel}\" }"
-          end
-      end
+              @plot_data += "] , label: \"#{@thelabel}\" }"
+            end
+          end #if
+      end  #for
         @plot_data += "}"
         # @json_data += ","
         temp_hash = Hash.new

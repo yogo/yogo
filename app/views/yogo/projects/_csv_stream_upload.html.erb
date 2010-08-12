@@ -4,6 +4,17 @@
       <label for="upload_file">Select File</label> : 
       <%= file_field('upload', 'datafile', :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel") %>
       <%= hidden_field_tag('project_id', project_id) %>
+      <br>
+      Check if logger file is from a Campbell Scientific Logger:
+      <%= check_box_tag('header_box', 'Campbell')%>
+      <br>
+      If this is not a Campbel Scientific Logger please indicate which line data begins on.
+      <%-opt_string = ""-%>
+      <%-(1..20).each do |i|-%>
+        <%-opt_string = opt_string + "<option value="+i.to_s+">"+i.to_s+"</option>"-%>
+      <%-end-%>
+      <%=select_tag("start_line", opt_string)%>
+      <br>
       <%= submit_tag("Upload Logger File") %>
   <%- end -%>
   <br />
