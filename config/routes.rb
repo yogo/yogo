@@ -18,10 +18,6 @@ ActionController::Routing::Routes.draw do |map|
         collection.resources :properties
       end
       
-      
-                      
-      project.resources :users, :only => [:index, :new, :create], 
-                                :collection => { :update_user_roles => :post }
     end
   end
 
