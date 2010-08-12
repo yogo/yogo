@@ -10,8 +10,8 @@ ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
   map.namespace :yogo do |yogo|
     yogo.resources :projects,
-                  :member => { :upload => :post },
-                  :collection => { :loadexample => :post, :search => :get} do |project|
+                   :member => { :upload => :post },
+                   :collection => { :search => :get} do |project|
 
       project.resources :collections do |collection|
         collection.resources :items
@@ -20,7 +20,6 @@ ActionController::Routing::Routes.draw do |map|
 
      project.resources :memberships, :namespace => nil, :controller => "memberships"
      project.resources :users, :namespace => nil, :controller => "users"
-     #project.resources :roles, :namespace => nil, :controller => "roles"
     end
   end
 
