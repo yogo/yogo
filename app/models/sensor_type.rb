@@ -10,6 +10,7 @@ class SensorType
 
   has n, :sites, :through => Resource
   has n, :sensor_values, :model => "SensorValue", :through => Resource
+  has n, :variables, :through => Resource
   
   # This method allows us to do things like
   #    yogo_project_path(@project)

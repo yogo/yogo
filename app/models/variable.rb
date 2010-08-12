@@ -56,6 +56,6 @@ class Variable
   property :no_data_value, Float, :required => true, :default => -9999
   
   has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
-  
+  has n, :sensor_types, :model => "SensorType", :through => Resource
   has n, :units, :through => Resource
 end

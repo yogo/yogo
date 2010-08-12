@@ -14,6 +14,7 @@
               .map-links
             = link_to_edit_project_models(project, "Edit/Add Data Models", :class => 'button-link')
             = link_to("Project Settings", edit_project_path(project), :class => 'button-link')
+            = link_to("Add a Site to #{project.name}", {:controller => "projects", :action => "add_site", :params => {:id => project.id}}, :class => 'button-link')
           %p.rbox.tight
             :javascript
               $(document).ready(function(){

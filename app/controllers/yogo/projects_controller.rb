@@ -515,6 +515,8 @@ class Yogo::ProjectsController < ApplicationController
               sensor_type = SensorType.first_or_create(:name => params["variable"+i.to_s] + Site.first(:id => params[:site]).name)
               site.sensor_types << sensor_type
               site.save
+              sensor_type.variables <<  Variable.first(:id => params["column"+i.to_s])
+              sensor_type.save
       end
 
 
@@ -589,9 +591,9 @@ class Yogo::ProjectsController < ApplicationController
           data_value = data_model.new
           data_value.yogo__data_value = row[i]
           data_value.yogo__local_date_time = row[data_timestamp_col]
-          #if !data_stream_col.variables.first.nil?
-          #  data_value.yogo__variable = data_stream_col.variables.first.id 
-          #end   
+          if !data_stream_col[i].variables.first.nil?
+            data_value.yogo__variable = data_stream_col[i].variables.first.id 
+          end   
           data_value.save
           #save to sensor_value and sensor_type
           sensor_value = SensorValue.new(:value => row[i],
@@ -719,8 +721,8 @@ class Yogo::ProjectsController < ApplicationController
               # 
               #            else
           
-                   @sensor_hash["label"] = s_type.name
-                   @thelabel = s_type.name
+                   @sensor_hash["label"] = s_type.variables.first.variable_name
+                   @thelabel = s_type.variables.first.variable_name
              #end
               if !s_type.sensor_values.last.units.nil?              
                 @sensor_hash["units"] = s_type.sensor_values.last.units
