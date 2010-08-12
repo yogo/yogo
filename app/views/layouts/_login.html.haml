@@ -1,8 +1,8 @@
 - unless Setting['local_only']
   #login-links
     - if logged_in?
-      = link_to(current_user.login, edit_user_path(current_user))
-      |
-      = link_to("logout", logout_path)
+      Logged in as
+      = link_to(current_user.login, edit_user_path(current_user), :class => 'logged-in-link')
+      = link_to("Logout", logout_path, :class => 'menu-link')
     - else
-      = link_to("Login", login_path)
+      = link_to("Login", login_path, :class => 'menu-link')

@@ -27,15 +27,17 @@
       VOEIS Data Hub 
       %span.smaller.emphasis
         = "ALPHA v" + YOGO_VERSION
-    =clear_break
-    #menu.box.tight
+    #system-menu.box.tight
       #menu-left-col
         = render(:partial => 'layouts/menu_links') unless @no_menu
-        = render(:partial => "#{action_name}_menu") rescue nil
       #menu-right-col
         = render(:partial => 'layouts/login') unless @no_login
-        /= render(:partial => 'layouts/search') unless @no_search
-  =clear_break 
+    #menu.box.tight
+      #menu-left-col
+        Stuff should go in here
+      #menu-right-col
+        and here
+  =clear_break
   /Grid Container 
   #container
     #flash
@@ -54,7 +56,6 @@
           %p.error= link_to(flash[:error], flash[:error_link])
         - else
           %p.error= flash[:alert]
-    =clear_break 
     #content
       = yield 
 
