@@ -13,6 +13,14 @@
 // Import the non-default scaffolding module.
 @import "blueprint/scaffolding"
 
+// VOEIS Color Scheme (from KULER)
+//
+// Dark Blue: #264f5c
+// Base Blue: #2ba3c9
+// Light Blue: 8fdaf2
+// Dark Highlight: #784a1c
+// Light Highlight: #bd8e5e
+
 // Border Mixins
 =borders
   border: 1px solid $border_color
@@ -38,15 +46,15 @@ form.bp
 
 // Base Body Styles
 body
-  background-color: #A5BDEC
+  background-color: #2ba3c9
   +blueprint-typography(true)
   padding-top: 6em
   p
     margin-bottom: 0.5em
   // Header (always blueprint layout)
   #header
-    color: #DDD
-    background: #EEE image-url('lake_sky_sm_wd2.png') repeat-x fixed top
+    color: #bd8e5e
+    background: image-url('lake_sky_sm_wd2.png') repeat-x fixed top
     width: 100%
     position: fixed
     z-index: 10
@@ -55,19 +63,26 @@ body
     overflow: none
     clear: both
     height: 65px
+    // Links
+    a
+      text-decoration: none
+      color: #bd8e5e
+      &:hover
+        text-decoration: none
+        color: #784a1c
     #logo
       padding-left: 10px
-      height: 50px
+      height: 25px
       font-size: 2em
       font-variant: small-caps
-      +column(18)
     #menu
-      background-color: #A5BDEC
+      color: #bd8e5e
+      background-color: #264f5c
       font-size: 0.9em
-      +column(22, true)
-      border: 1px solid #f2f2f2 - #555
-      background-color: #FFF
-      padding: .5em 2px
+      height: 40px
+      //+column(22, true)
+      //border: 1px solid #f2f2f2 - #555
+      //padding: .5em 2px
       #menu-left-col
         +column(12)
         #content-title
@@ -112,7 +127,8 @@ body
       color: #8A1F11
   // Footer
   #footer
-    +column($blueprint_grid_columns - 2)
+    background-color: #2ba3c9
+    //+column($blueprint_grid_columns - 2)
     text-align: center
   #footnotes_holder
     +prepend(2)
