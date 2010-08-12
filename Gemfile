@@ -4,32 +4,22 @@ source      "http://rubygems.org"
 DATAMAPPER = 'git://github.com/datamapper'
 
 gem "dm-core",              "1.0"
-
-# gem "dm-timestamps",        "1.0"
-# gem "dm-validations",       "1.0"
-# gem "dm-is-nested_set",     "1.0"
-# # gem "dm-serializer",        "1.0"
-# gem "dm-aggregates",        "1.0"
 gem "dm-migrations"
-# gem "dm-types",              "1.0",     :git => "#{DATAMAPPER}/dm-types.git",
-#                                         :require => false
-# gem "dm-observer",          "1.0"
 gem "dm-persevere-adapter", "0.72.0", :require => nil
-# gem "rails_datamapper", :require => nil #,     "1.0" #, :require => nil
 
 # These are required so we can make it simple to interact with legacy data
-# gem "do_mysql",                       :require => nil
-# gem "do_postgres",                   :require => nil
-# gem "do_sqlite3",                    :require => nil
 gem 'dm-sqlite-adapter', :require => nil
-# gem "do_sqlserver",                  :require => nil
+# gem "do_mysql",                       :require => nil
+# gem "do_postgres",                    :require => nil
+# gem "do_sqlite3",                     :require => nil
+# gem "do_sqlserver",                   :require => nil
 
 # 1.0 Release of dm-types has problems with UUID properties, use git master
 gem "dm-types",       "~> 1.0.0",     :git => "#{DATAMAPPER}/dm-types.git",
                                       :ref => "674738f2a94788b975e9",
                                       :require => false # don't require dm-type/json
 
-gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :require  => 'yogo/project'
+gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :branch => "topic/contexts", :require  => 'yogo/project'
 
 gem "rails",                "2.3.8"
 gem "rake",                          :require => nil

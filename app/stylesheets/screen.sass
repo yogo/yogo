@@ -7,11 +7,17 @@
 // To configure blueprint, edit the partials/base.sass file.
 @import "partials/base.sass"
 
-// Import all the default blueprint modules so that we can access their mixins.
-@import "blueprint"
-
 // Import the non-default scaffolding module.
+// to provide +blueprint-form
 @import "blueprint/scaffolding"
+
+// Import the liquid 
+@import "blueprint/liquid"
+
+// Cleaning up imports
+@import "blueprint/debug"
+@import "blueprint/interaction"
+@import "blueprint/typography"
 
 // VOEIS Color Scheme (from KULER)
 //
@@ -37,20 +43,19 @@
   border-left: 1px solid $border_color
   margin-left: -1px
 
-body.bp
-  +blueprint-debug
-  +blueprint-interaction
-
 form.bp
   +blueprint-form
 
 // Base Body Styles
 body
-  background-color: #264f5c
   +blueprint-typography(true)
+  +blueprint-debug
+  +blueprint-interaction
+  background-color: #264f5c
   padding-top: 6em
   p
     margin-bottom: 0.5em
+    
   // Header (always blueprint layout)
   #header
     color: #8fdaf2
@@ -80,7 +85,7 @@ body
       color: #784a1c
       background-color: #2ba3c9
       font-size: 0.9em
-      height: 20px
+      height: 22px
       #menu-left-col
         +column(12)
         #content-title
@@ -96,14 +101,10 @@ body
           line-height: 2em
           text-align: right
           margin-right: 10px
-        #search-tab
-          color: #FFF
-          margin-right: 10px
-          text-align: right
     #menu
       color: #784a1c
       background-color: #bd8e5e
-      height: 25px
+      height: 24px
       #menu-left-col
         +column(12)
         line-height: 2em
@@ -113,7 +114,7 @@ body
         line-height: 2em
         text-align: right
         margin-right: 10px
-        
+      
   // Flash Notices always use blueprint layout
   #flash
     width: 100%
@@ -225,7 +226,7 @@ body
   .rbox
     border: 1px solid $border-color + #553
     +border-radius
-    padding: 1.5em
+    padding: 1em
     &.happy
       background-color: #EFE
     &.shady
@@ -318,186 +319,6 @@ body
       +column(6, true)
   #data-content-actions
     +column(6, true)
-
-// Blueprint Body Container
-body.bp
-
-  // Header
-  #container
-    +container
-    //margin: 0
-    width: 100%
-    overflow: none
-    
-  // Sidebar
-  #sidebar
-    $sidebar_columns: floor($blueprint_grid_columns / 4)
-    +column($sidebar_columns)
-    
-  // Model Editor iFrame
-  #editor_frame
-    +column(22)
-    +last
-    height: 400px
-    margin-bottom: 2em
-    
-  // Content Frame
-  #content
-    padding: 0.8em
-    h1#project-title
-      margin-top: 0
-    #content-block
-      +column($blueprint_grid_columns - 2)
-      margin-left: 2px
-    #content-settings-main
-    #content-settings-extra
-    #user-form
-      margin-left: 7em
-      
-    // No Project Index
-    .description-column, .title-column
-      h3
-        text-align: center
-    .description-column
-      margin-top: -2em
-      +column(7)
-      +prepend(1)
-      p
-        margin-bottom: 0
-      .rbox
-        margin-bottom: 1em
-    .title-column
-      margin-top: -2em
-      +column(14)
-      +last
-      h1
-        margin-bottom: 1.5em
-      #getting-started
-        +prepend(2)
-        +column(10)
-        +append(2)
-        +last
-        margin-top: 4em
-    #project-actions
-      table.project
-        padding: 0px
-        border: 0px
-        border-color: transparent
-        border-style: hidden
-        tr
-          vertical-align: top
-        td.map
-          vertical-align: top
-          width: 300px
-        td.buttons
-          vertical-align: top
-          
-    // CSV Question
-    .scratch, .spreadsheet
-      +column(6)
-      height: 150px
-    .spreadsheet
-      +last
-      
-    // CSV Import
-    .import-form
-      +prepend(5)
-      +column(12)
-      +append(5)
-      +last
-    .instructions
-      +prepend(1)
-      +column(12)
-    .example
-      +prepend(1)
-      +column(8)
-      +last
-      p
-        font-style: italic
-        
-    // Yogo Dashboard
-    .content-row-block
-      +column(21)
-      +last
-      +borders
-      margin: 0
-      .project-icon
-        +column(2)
-        padding-top: 1em
-      .project-text
-        +prepend(1)
-        +column(9)
-        +append(1)
-        .edit-link
-          text-align: right
-      .project-datasets
-        margin-top: 1em
-        +column(10)
-        +last
-    .project-status
-      font-size: .4em
-      font-style: italic
-      
-    // Project Dashboard
-    .dataset-name
-      +column(6)
-      h2
-        +prepend(1)
-      .vertical-links
-        +prepend(1)
-        .link
-          .button-link
-            margin-bottom: 3px
-            text-align: center
-            +column(4)
-    .dataset-info
-      +column(21)
-      +last
-      .action-tabs
-        margin:
-          top: .5em
-          bottom: .5em
-      .dataset-table
-        +borders
-        height: 12em
-        padding: 0px
-        overflow: auto
-        font-size: .9em
-        th
-          border-bottom: 1px solid #CCC
-          border-top: 1px solid #CCC
-          padding-bottom: 2px
-          
-      // Jquery UI Overrides
-      .ui-tabs .ui-tabs-nav li a
-        padding: 0.3em 0.5em
-      .ui-tabs .ui-tabs-nav
-        padding: 0.1em 0
-        font-size: .9em
-      .ui-tabs .ui-tabs-panel 
-        padding: 0px
-        
-    // centered content containers
-    .extra-small-centered
-      +prepend(6)
-      +column(10)
-      +append(6)
-      +last
-    .small-centered
-      +prepend(4)
-      +column(14)
-      +append(4)
-      +last
-    .medium-centered
-      +prepend(3)
-      +column(16)
-      +append(3)
-      +last
-    .large-centered
-      +prepend(2)
-      +column(18)
-      +append(2)
-      +last
       
 #project-user-roles-form table td
   width: 3em

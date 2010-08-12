@@ -9,91 +9,79 @@
 
 # Class for a Yogo Project. A project contains a name, a description, and access to all of the models
 # that are part of the project.
-class Voeis::DataStream < Yogo::Collection::Data
+class Voeis::DataStream
+  include DataMapper::Resource
 
-  def update_model
-  end
+  property :id, Serial
+  property :name, String, :required => true, :unique => true
+  property :description, Text, :required => false
+  property :filename, String, :required => true, :length => 512
+  # property :project_id, Integer, :required =>true, :default => 1
 
-  def generate_model
-    model = DataMapper::Model.new
-    model.extend(Yogo::Collection::Base::Model)
-    model.send(:include, Yogo::Collection::Base::Model::InstanceMethods)
-    model.collection = self
-    model.class_eval do
-      property :id, Serial
-      property :name, String, :required => true, :unique => true
-      property :description, Text, :required => false
-      property :filename, String, :required => true, :length => 512
-      property :project_id, Integer, :required =>true, :default => 1
+  validates_uniqueness_of :name
 
-      validates_is_unique   :name
+  has n, :sites, :through => Resource
+  has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
 
-      # has n, :sites, :through => Resource
-      # has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
+  # Loads a CSV file into the streaming data model
+  #
+  # Loads CSV data into the streaming data model.
+  #
+  # TODO: Write a description of the CSV streaming data model here.
+  #
+  # @example
+  #   @data_stream_model.load_csv_data_stream(csv_data)
+  #
+  # @param [String] csv_file
+  #   Path the the CSV file
+  #
+  #
+  # @return [Array] This will return an array of errors or an empty array if there were none
+  #
+  # @author Robbie Lamb robbie.lamb@gmail.com
+  # @author Sean Cleveland sean.b.cleveland@gmail.com
+  #
+  # @api public
+  def load_csv_data_stream(csv_file, project, site)
+    csv_data = CSV.read(csv_file)
+    path = File.dirname(csv_file)
 
-      # Loads a CSV file into the streaming data model
-      #
-      # Loads CSV data into the streaming data model.
-      #
-      # TODO: Write a description of the CSV streaming data model here.
-      #
-      # @example
-      #   @data_stream_model.load_csv_data_stream(csv_data)
-      #
-      # @param [String] csv_file
-      #   Path the the CSV file
-      #
-      #
-      # @return [Array] This will return an array of errors or an empty array if there were none
-      #
-      # @author Robbie Lamb robbie.lamb@gmail.com
-      # @author Sean Cleveland sean.b.cleveland@gmail.com
-      #
-      # @api public
-      def load_csv_data_stream(csv_file, project, site)
-        csv_data = CSV.read(csv_file)
-        path = File.dirname(csv_file)
+    errors = validate_csv_data(csv_data)
 
-        errors = validate_csv_data(csv_data)
+    all_objects = []
+    if errors.empty?
+      attr_names = csv_data[0].map{|name| name.tableize.singularize.gsub(' ', '_') }
+      attr_names = attr_names.map {|name| name.eql?("yogo_id") ? "yogo_id" : "yogo__#{name}" }
+      props = attr_names.map {|name| properties[name] }
 
-        all_objects = []
-        if errors.empty?
-          attr_names = csv_data[0].map{|name| name.tableize.singularize.gsub(' ', '_') }
-          attr_names = attr_names.map {|name| name.eql?("yogo_id") ? "yogo_id" : "yogo__#{name}" }
-          props = attr_names.map {|name| properties[name] }
+      csv_data[3..-1].each_index do |idx|
+        line = csv_data[idx+3]
+        line_data = Hash.new
+        if !line.empty?  #ignore blank lines
+          csv_data[0].each_index do |i|
+            prop = props[i]
 
-          csv_data[3..-1].each_index do |idx|
-            line = csv_data[idx+3]
-            line_data = Hash.new
-            if !line.empty?  #ignore blank lines
-              csv_data[0].each_index do |i|
-                prop = props[i]
-
-                if prop.type == DataMapper::Types::YogoFile || prop.type == DataMapper::Types::YogoImage
-                  column_value = File.open(File.join(path, line[i]))
-                  line_data[attr_names[i]] = column_value unless column_value.nil? || prop.nil?
-                else
-                  line_data[attr_names[i]] = prop.typecast(line[i]) unless line[i].nil? || prop.nil?
-                end
-              end
-              obj = self.new(line_data)
-              if obj.valid?
-                all_objects << obj
-              else
-                obj.errors.each_pair do |key,value|
-                  value.each do |msg|
-                    errors << "Line #{idx+3} column #{key.to_s.gsub("yogo__", '')} #{msg.split[2..-1].join}"
-                  end
-                end
+            if prop.type == DataMapper::Types::YogoFile || prop.type == DataMapper::Types::YogoImage
+              column_value = File.open(File.join(path, line[i]))
+              line_data[attr_names[i]] = column_value unless column_value.nil? || prop.nil?
+            else
+              line_data[attr_names[i]] = prop.typecast(line[i]) unless line[i].nil? || prop.nil?
+            end
+          end
+          obj = self.new(line_data)
+          if obj.valid?
+            all_objects << obj
+          else
+            obj.errors.each_pair do |key,value|
+              value.each do |msg|
+                errors << "Line #{idx+3} column #{key.to_s.gsub("yogo__", '')} #{msg.split[2..-1].join}"
               end
             end
           end
         end
-        all_objects.each{|o| o.save } if errors.empty?
-        return errors
       end
     end
-    model.auto_upgrade!
-    model
+    all_objects.each{|o| o.save } if errors.empty?
+    return errors
   end
 end

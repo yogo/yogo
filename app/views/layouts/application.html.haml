@@ -16,10 +16,10 @@
                              'jrails.js', 'application.js')
 
     %link{:rel => "shortcut icon", :href => "#{image_path("favicon.png")}"}/
-  - if @no_blueprint
-    %body.typography
-  - else
-    %body.bp.typography
+  / - if @no_blueprint
+  %body.typography
+  / - else
+  /   %body.bp.typography
 
   / Header (including optional menus)
   #header
@@ -37,7 +37,7 @@
         Stuff should go in here
       #menu-right-col
         and here
-  =clear_break
+  /=clear_break
   /Grid Container 
   #container
     #flash

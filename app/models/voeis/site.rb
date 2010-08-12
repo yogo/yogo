@@ -22,37 +22,25 @@
 # SpatialReferenceID from the SpatialReferences controlled vocabulary table.  If the spatial
 # reference system of the local coordinates is unknown, a default value of 0 is used.
 #
-class Voeis::Site < Yogo::Collection::Data
+class Voeis::Site
+  include DataMapper::Resource
 
-  def update_model
-  end
+  property :id, Serial, :required => true
+  property :site_code, String, :required => true
+  property :site_name, String, :required => true
+  property :latitude, Float, :required => true
+  property :longitude, Float, :required => true
+  property :lat_long_datum_id, Integer, :required => true, :default => 0
+  property :elevation_m, Float, :required => false
+  property :vertical_datum, String, :required => false
+  property :local_x, Float,  :required => false
+  property :local_y, Float, :required => false
+  property :local_projection_id, Integer, :required => false
+  property :pos_accuracy_m, Float, :required => false
+  property :state, String, :required => false
+  property :country, String, :required => false
+  property :comments, String, :required => false
 
-  def generate_model
-    model = DataMapper::Model.new
-    model.extend(Yogo::Collection::Base::Model)
-    model.send(:include, Yogo::Collection::Base::Model::InstanceMethods)
-    model.collection = self
-    model.class_eval do
-      property :id, Serial, :required => true
-      property :site_code, String, :required => true
-      property :site_name, String, :required => true
-      property :latitude, Float, :required => true
-      property :longitude, Float, :required => true
-      property :lat_long_datum_id, Integer, :required => true, :default => 0
-      property :elevation_m, Float, :required => false
-      property :vertical_datum, String, :required => false
-      property :local_x, Float,  :required => false
-      property :local_y, Float, :required => false
-      property :local_projection_id, Integer, :required => false
-      property :pos_accuracy_m, Float, :required => false
-      property :state, String, :required => false
-      property :country, String, :required => false
-      property :comments, String, :required => false
-
-      # has n, :projects, :through => Resource
-      # has n, :data_streams, :model => "DataStream", :through => Resource
-    end
-    model.auto_upgrade!
-    model
-  end
+  # has n, :projects, :through => Resource
+  has n, :data_streams, :model => "DataStream", :through => Resource
 end

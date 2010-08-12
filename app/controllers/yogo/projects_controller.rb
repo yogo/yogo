@@ -15,11 +15,11 @@ class Yogo::ProjectsController < Yogo::BaseController
 
   def create
     create! do |success, failure|
-      resource.data_collections.create(:name => "Variables", :type => Voeis::Variable)
-      resource.data_collections.create(:name => "Units", :type => Voeis::Unit)
-      resource.data_collections.create(:name => "Sites", :type => Voeis::Site)
-      resource.data_collections.create(:name => "DataStreams", :type => Voeis::DataStream)
-      resource.data_collections.create(:name => "DataStreamColumns", :type => Voeis::DataStreamColumn)
+      Yogo::Collection::Static.create(:project => resource, :name => "Variables",          :static_model => "Voeis::Variable")
+      Yogo::Collection::Static.create(:project => resource, :name => "Units",              :static_model => "Voeis::Unit")
+      Yogo::Collection::Static.create(:project => resource, :name => "Sites",              :static_model => "Voeis::Site")
+      Yogo::Collection::Static.create(:project => resource, :name => "DataStreams",        :static_model => "Voeis::DataStream")
+      Yogo::Collection::Static.create(:project => resource, :name => "DataStreamColumns",  :static_model => "Voeis::DataStreamColumn")
     end
   end
 

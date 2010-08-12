@@ -5,25 +5,13 @@
 # This table is pre-populated within the ODM.  Changes to this controlled vocabulary can be
 # requested at http://water.usu.edu/cuahsi/odm/.
 #
-class Voeis::Unit < Yogo::Collection::Data
+class Voeis::Unit
+  include DataMapper::Resource
+  property :id, Serial, :required => true, :key =>true
+  property :units_name, String, :required => true
+  property :units_type, String, :required => true
+  property :units_abbreviation, String, :required => true
 
-  def update_model
-  end
-
-  def generate_model
-    DataMapper::Model.new do
-      extend(Yogo::Collection::Base::Model)
-      include(Yogo::Collection::Base::Model::InstanceMethods)
-      collection = Voeis::Unit
-      property :id, Serial, :required => true, :key =>true
-      property :units_name, String, :required => true
-      property :units_type, String, :required => true
-      property :units_abbreviation, String, :required => true
-
-      # has n, :data_stream_columns, :model=>"DataStreamColumn", :through =>Resource
-      # has n, :variables, :model =>"Variable", :through => Resource
-    end
-    model.auto_upgrade!
-    model
-  end
+  has n, :data_stream_columns, :model=>"DataStreamColumn", :through =>Resource
+  has n, :variables, :model =>"Variable", :through => Resource
 end
