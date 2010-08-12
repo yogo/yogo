@@ -28,7 +28,7 @@
       %span.smaller.emphasis
         = "ALPHA v" + YOGO_VERSION
     =clear_break
-    #menu.rbox.tight
+    #menu.box.tight
       #menu-left-col
         = render(:partial => 'layouts/menu_links') unless @no_menu
         = render(:partial => "#{action_name}_menu") rescue nil

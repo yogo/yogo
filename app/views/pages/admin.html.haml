@@ -1,17 +1,17 @@
 #content
   = [ image_tag("22x22/projects.png"), 
-      [link_to("Projects", yogo_projects_url),
-      link_to("New", new_yogo_project_path, :class => 'menu-button-links')].join(" | ")].join(" ")
+      [link_to("Projects", yogo_projects_url, :class => 'projects-link'),
+      link_to("New", new_yogo_project_path, :class => 'new-link')].join(" | ")].join(" ")
   %br/
   = [ image_tag("22x22/users.png"),
-      [link_to("Users", users_url),
-      link_to("New", new_user_path, :class => 'menu-button-links')].join(" | ")].join(" ")
+      [link_to("Users", users_url, :class => 'users-link'),
+      link_to("New", new_user_path, :class => 'new-link')].join(" | ")].join(" ")
   %br/
   = [ image_tag("22x22/role.png"),
-      [link_to("Roles & Permissions", roles_url),
-      link_to("New", new_role_path, :class => 'menu-button-links')].join(" | ")].join(" ")
+      [link_to("Roles & Permissions", roles_url, :class => 'roles-link'),
+      link_to("New", new_role_path, :class => 'new-link')].join(" | ")].join(" ")
   %br/
   = [ image_tag("22x22/settings.png"),
-      link_to("Settings", settings_url)].join(" ")
+      link_to("Settings", settings_url, :class => 'settings-link')].join(" ")
 
       

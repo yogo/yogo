@@ -3,11 +3,11 @@
     %thead
       %th Permissions
       - for role in Role.all.sort
-        %th= role.name
+        %th= link_to(role.name, edit_role_path(role))
     %tbody
       - for perm in Role.available_permissions.each
         %tr
           %td= perm.humanize
           - for role in Role.all.sort
-            %td= check_box_tag("role[permissions][]", perm.to_s, role.permissions.include?(perm), :id => "role_permission_#{p}")
+            %td= check_box_tag("role[permissions][]", perm.to_s, role.permissions.include?(perm), :id => "role_permission_#{p}", :disabled => true)
             
