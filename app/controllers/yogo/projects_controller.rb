@@ -386,7 +386,7 @@ class Yogo::ProjectsController < ApplicationController
       format.html
     end
   end
-  
+
   def create_site
     site = Site.new(:code => params[:site_code],
              :name => params[:site_name],
@@ -402,9 +402,9 @@ class Yogo::ProjectsController < ApplicationController
       flash[:error]  = "Site not created. Error!"
       redirect_to project_path(params[:project_id])
     end
-    
+
   end
-  
+
   def add_site_to_project
     project = Project.first(:id => params[:project_id])
     project.sites << Site.first(:id => params[:site])
@@ -421,7 +421,7 @@ class Yogo::ProjectsController < ApplicationController
       format.html
     end
   end
-  
+
   # alows us to upload csv file to be processed into data
   #
   # @example http://localhost:3000/project/upload_stream/1/
@@ -466,16 +466,16 @@ class Yogo::ProjectsController < ApplicationController
       end
     end
   end
-  
+
   def create_stream
     #create and save new DataStream
-    data_stream = DataStream.new(:name => params[:data_stream_name], 
+    data_stream = DataStream.new(:name => params[:data_stream_name],
                                  :description => params[:data_stream_description],
                                  :filename => params[:datafile],
                                  :project_id => params[:project_id],
                                  :start_line => params[:start_line].to_i)
     data_stream.save
-       
+
     data_stream.sites << Site.first(:id => params[:site])
     data_stream.save
     #create DataStreamColumns
@@ -487,16 +487,17 @@ class Yogo::ProjectsController < ApplicationController
       puts i.to_s + ": i"
       #create the Timestamp column
       if i == params[:timestamp].to_i
-        data_stream_column = DataStreamColumn.new(:column_number => i, 
-                                                  :name => "Timestamp", 
+        data_stream_column = DataStreamColumn.new(:column_number => i,
+                                                  :name => "Timestamp",
                                                   :type =>"Timestamp",
                                                   :unit => "NA",
                                                   :original_var => params["variable"+i.to_s])                   
+
         data_stream_column.save
-        puts data_stream_column.errors.inspect 
+        puts data_stream_column.errors.inspect
         data_stream.data_stream_columns << data_stream_column
         data_stream.save
-        puts data_stream_column.errors.inspect 
+        puts data_stream_column.errors.inspect
       else
               data_stream_column = DataStreamColumn.new(:column_number => i, 
                                                         :name => params["variable"+i.to_s],
@@ -515,14 +516,14 @@ class Yogo::ProjectsController < ApplicationController
               site.sensor_types << sensor_type
               site.save
       end
-      
-      
+
+
     end
     parse_logger_csv(params[:datafile], data_stream, site)
     flash[:notice] = "File parsed and stored successfully."
     redirect_to project_path(params[:project_id])
   end
-  
+
   # parse the header of a logger file
   #
   # @example parse_logger_csv_header("filename")
@@ -539,7 +540,7 @@ class Yogo::ProjectsController < ApplicationController
     csv_data = CSV.read(csv_file)
     path = File.dirname(csv_file)
 
-    #look at the first hour lines - 
+    #look at the first hour lines -
     #line 0 is a description -so skip that one
     #line 1 is the variable names
     #line 2 is the units
@@ -553,10 +554,10 @@ class Yogo::ProjectsController < ApplicationController
       item_hash["type"] = csv_data[3][i].to_s
       header_data << item_hash
     end
-    
+
     header_data
   end
-  
+
   def get_row_size(csv_file, row)
     require "yogo/model/csv"
     csv_data = CSV.read(csv_file)
@@ -606,7 +607,7 @@ class Yogo::ProjectsController < ApplicationController
       end
     end
   end
-  
+
   def data_view
     @project = Project.first(:id => params[:id])
     @project_array = Array.new
@@ -622,16 +623,16 @@ class Yogo::ProjectsController < ApplicationController
       @site_info= Array.new
       @site_info[0]= Site.first(:code => params[:sitecode])
     end
-    
+
     @site_info.each do |site| # do something for each existing site in a project
        site_count += 1
-       if site.status == "Active"     
+       if site.status == "Active"
        @plot_data = "{"
         senscount = 0
         @site_hash = Hash.new
         if !site.sensor_types.empty?
           #do we need only a few sensors
-          # 
+          #
           if params[:sensors].nil? #api grab sensors
             @sensor_types = site.sensor_types
           else
@@ -642,10 +643,11 @@ class Yogo::ProjectsController < ApplicationController
                   @sensor_types << SensorType.first(:name => type_name)
                 end
               rescue
-                
+
               end
             end
           end
+
           @sensor_types.each do |s_type| 
             if !s_type.sensor_values.last.nil?
               if senscount != 0 && 
@@ -660,6 +662,7 @@ class Yogo::ProjectsController < ApplicationController
               @sensor_hash = Hash.new
               if params[:hours].nil?#api grab values for time period
                 num = 12
+
               else
                  num = params[:hours].to_i 
               end
@@ -699,6 +702,7 @@ class Yogo::ProjectsController < ApplicationController
                     array_data.push(temp_array)
                   end
                 end
+
               }
               # logger.debug{ "#{tmp_data}" }
               # logger.debug { "end of query: #{Time.now - last_time}" }
@@ -729,6 +733,7 @@ class Yogo::ProjectsController < ApplicationController
             end
           end #if
       end  #for
+
         @plot_data += "}"
         # @json_data += ","
         temp_hash = Hash.new
@@ -748,7 +753,7 @@ class Yogo::ProjectsController < ApplicationController
         format.json{
           if params[:sitecode]
                       puts "YEAH+++++++++++++++++++++++++++++++++++"+ num_hash[params[:sitecode]].to_s + params[:sitecode].to_s
-                      
+
                       render :json => @project_hash["sites"][num_hash[params[:sitecode]]], :callback => params[:jsoncallback]
                     else
             puts "NO+++++++++++++++++++++++++++++++++++" + params[:sitecode].to_s
@@ -761,5 +766,5 @@ class Yogo::ProjectsController < ApplicationController
       end
     end
   end
-  
+
 end
