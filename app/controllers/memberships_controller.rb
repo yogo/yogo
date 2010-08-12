@@ -4,8 +4,7 @@ class MembershipsController < ApplicationController
   defaults :resource_class => Membership, :collection_name => 'memberships', :instance_name => 'membership'
 
   belongs_to :project, :finder => :get, :parent_class => Yogo::Project
-  belongs_to :user
-  belongs_to :role
+  belongs_to :user, :finder => :get
 
   respond_to :html, :json
 
