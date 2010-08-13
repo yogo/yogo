@@ -416,7 +416,7 @@ class Yogo::ProjectsController < ApplicationController
 
   def add_stream
     @project = Project.get(params[:id])
-
+    @data_templates = DataStream.all
     respond_to do |format|
       format.html
     end
@@ -439,6 +439,7 @@ class Yogo::ProjectsController < ApplicationController
     @variables = Variable.all
     @sites = @project.sites
     
+    
     if !params[:upload].nil? && datafile = params[:upload]['datafile']
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
@@ -450,16 +451,35 @@ class Yogo::ProjectsController < ApplicationController
         if params[:header_box] == "Campbell"
           @start_line = 4
           @header_info = parse_logger_csv_header(datafile.path)
-          @row_size = @header_info.size
-          @row_size = @row_size - 1 
+          
+          @start_row = @header_info.last
+          
+          @row_size = @start_row.size - 1 
           if @header_info.empty?
             flash[:error] = "CSV File improperly formatted. Data not uploaded."
             #redirect_to :controller =>"projects", :action => "add_stream", :params => {:id => params[:project_id]}
           end
         else
           @start_line = params[:start_line].to_i
-          @row_size = get_row_size(datafile.path, params[:start_line].to_i)-1
+          @start_row = get_row(datafile.path, params[:start_line].to_i)
+          @row_size = @start_row.size-1
         end
+      end
+      @var_array = Array.new
+      if params[:data_template] != "None"
+       data_template = DataStream.first(:id => params[:data_template])
+       (0..@row_size).each do |i|
+         data_col = data_template.data_stream_columns.first(:column_number => i)
+         if data_col.variables.empty?
+           @var_array[i] = [data_col.name, data_col.unit, data_col.type,""]
+         else
+           @var_array[i] = [data_col.name, data_col.unit, data_col.type,data_col.variables.first.id]
+         end
+       end
+      else
+        (0..@row_size).each do |i|
+          @var_array[i] = ["","","",""]
+         end
       end
       respond_to do |format|
         format.html
@@ -557,15 +577,15 @@ class Yogo::ProjectsController < ApplicationController
       header_data << item_hash
     end
 
-    header_data
+    header_data << csv_data[4]
   end
 
-  def get_row_size(csv_file, row)
+  def get_row(csv_file, row)
     require "yogo/model/csv"
     csv_data = CSV.read(csv_file)
     path = File.dirname(csv_file)
 
-    csv_data[row-1].size
+    csv_data[row-1]
   end
   
   

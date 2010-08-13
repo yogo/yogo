@@ -15,6 +15,13 @@
       <%-end-%>
       <%=select_tag("start_line", opt_string)%>
       <br>
+      You can select a DataTemplate to apply to this CSV:
+      <%-template_string = '<option value="None">None</option>'-%>
+      <%-@data_templates.each do |template|-%>
+        <%-template_string = template_string + "<option value="+template.id.to_s+">"+template.name+"</option>"-%>
+      <%-end-%>
+      <%=select_tag("data_template", template_string)%>
+      <br>
       <%= submit_tag("Upload Logger File") %>
   <%- end -%>
   <br />

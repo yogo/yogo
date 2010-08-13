@@ -4,10 +4,10 @@
   %h3 Data Stream Import Form
   =clear_break
   -form_tag("create_stream") do 
-    -@opt_string = ""
+    -@opt_array = Array.new
     -@column_options= ""
-    -@variables.each do |var|
-      -@opt_string = @opt_string + "<option value="+var.id.to_s+">"+var.variable_name+"</option>"
+    -@variables.all(:order => [:variable_name.asc]).each do |var|
+      -@opt_array << [var.variable_name, var.id]
     Please give this Data Stream a Name: 
     =text_field_tag ("data_stream_name")
     =clear_break
@@ -30,15 +30,18 @@
       %table
         %tr
           %th Column
+          %th Starting Row Values
           %th Logger Variable
           %th Logger Unit
           %th Logger Type
           %th Selected VOEIS Variable
-        -(0..@header_info.size-1).each do |i|
+        -(0..@row_size).each do |i|
           -@column_options= @column_options + "<option value="+i.to_s+">Column "+i.to_s+"</option>"
           %tr
             %td 
               =i.to_s
+            %td
+              =@start_row[i]
             %td 
               =@header_info[i]["variable"]
               =hidden_field_tag("variable"+i.to_s, @header_info[i]["variable"])
@@ -49,11 +52,12 @@
               =@header_info[i]["type"]
               =hidden_field_tag("type"+i.to_s, @header_info[i]["type"])
             %td 
-              =select_tag("column"+i.to_s, @opt_string)
+              =select_tag("column"+i.to_s, options_for_select(@opt_array, @var_array[i][3]))
     -else
       %table
         %tr
           %th Column
+          %th Starting Row Values
           %th Logger Variable
           %th Logger Unit
           %th Logger Type
@@ -63,14 +67,16 @@
           %tr
             %td 
               =i.to_s
+            %td
+              =@start_row[i]
             %td 
-              =text_field_tag("variable"+i.to_s)
+              =text_field_tag("variable"+i.to_s, @var_array[i][0])
             %td 
-              =text_field_tag("unit"+i.to_s)
+              =text_field_tag("unit"+i.to_s, @var_array[i][1])
             %td 
-              =text_field_tag("type"+i.to_s)
+              =text_field_tag("type"+i.to_s, @var_array[i][2])
             %td 
-              =select_tag("column"+i.to_s, @opt_string)
+              =select_tag("column"+i.to_s, options_for_select(@opt_array, @var_array[i][3]))
     =clear_break
     Please specify which column should be used as the time-stamp:
     =select_tag("timestamp", @column_options)

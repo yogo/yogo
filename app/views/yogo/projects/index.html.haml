@@ -30,6 +30,15 @@
               %em= link_to('[Add Project Description]', edit_project_path(project))
           
         .project-datasets
+          %h3 Last Updates:
+          -project.sites.each do |site|
+            -if !site.sensor_values.last.nil?
+              =site.name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
+              =clear_break
+            -else
+              =site.name + ': never'
+              =clear_break
+          =clear_break
           - if project.models.empty?
             %p 
               There are no datasets associated with this project.<br />

@@ -94,6 +94,14 @@ Variable.first_or_create(:variable_name => "Battery Voltage",
                          :variable_code => "BattVolt",
                          :time_support => 1.0,
                           :variable_units_id => 5)
+# Methods 
+# Method.first_or_create(:method_description => "CR1000 Campbell Scientific Logger",
+#                        :method_link => "http://www.google.com")
+# Method.first_or_create(:method_description => "CR800 Campbell Scientific Logger",
+#                       :method_link => "http://www.google.com")
+# Method.first_or_create(:method_description => "Campbell Scientific CS123Temp Temperature gauge",
+#                       :method_link => "http://www.google.com")
+                      
 # Load/create sites
 Site.first_or_create(:code =>"BLU_MSU",
                       :name => "Blunderville",
