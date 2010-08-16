@@ -9,21 +9,27 @@
 
 # Class for a Yogo Project. A project contains a name, a description, and access to all of the models
 # that are part of the project.
-class Voeis::DataStream
+class DataStream
   include DataMapper::Resource
 
   property :id, Serial
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
   property :filename, String, :required => true, :length => 512
-  # property :project_id, Integer, :required =>true, :default => 1
+  property :start_line, Integer, :required => true, :default => 0
 
-  validates_uniqueness_of :name
+  property :project_id, Integer, :required =>true, :default => 1
 
+  validates_is_unique   :name
+
+  #before :destroy, :delete_data_stream_columns!
+
+  #has 1, :project
   has n, :sites, :through => Resource
   has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
 
-  # Loads a CSV file into the streaming data model
+
+ # Loads a CSV file into the streaming data model
   #
   # Loads CSV data into the streaming data model.
   #
@@ -73,6 +79,7 @@ class Voeis::DataStream
             all_objects << obj
           else
             obj.errors.each_pair do |key,value|
+              # debugger
               value.each do |msg|
                 errors << "Line #{idx+3} column #{key.to_s.gsub("yogo__", '')} #{msg.split[2..-1].join}"
               end
@@ -84,4 +91,5 @@ class Voeis::DataStream
     all_objects.each{|o| o.save } if errors.empty?
     return errors
   end
+
 end

@@ -18,8 +18,11 @@ ActionController::Routing::Routes.draw do |map|
         collection.resources :properties
       end
 
-     project.resources :memberships, :namespace => nil, :controller => "memberships"
-     project.resources :users, :namespace => nil, :controller => "users"
+      project.resources :memberships, :namespace => nil, :controller => "memberships"
+      project.resources :users, :namespace => nil, :controller => "users"
+
+      project.resources :sites, :namespace => nil, :controller => 'voeis/sites'
+      project.resources :data_streams, :namespace => nil, :controller => 'voeis/data_streams'
     end
   end
 
@@ -35,7 +38,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :roles
   map.resources :memberships
   map.resources :settings
-
+  map.resources :search
   map.resource  :password, :only => [ :show, :update, :edit ]
 
   # Login & Logout stuff

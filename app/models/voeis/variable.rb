@@ -38,7 +38,7 @@
 # would never expect to measure a water temperature of -9999.  The default value for this
 # field is -9999.
 #
-class Voeis::Variable
+class Variable
   include DataMapper::Resource
 
   property :id, Serial, :required => true, :key => true
@@ -56,6 +56,6 @@ class Voeis::Variable
   property :no_data_value, Float, :required => true, :default => -9999
 
   has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
+  has n, :sensor_types, :model => "SensorType", :through => Resource
   has n, :units, :through => Resource
-
 end

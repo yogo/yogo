@@ -8,16 +8,50 @@
           = link_to(project.name, yogo_project_path(project) ) 
           = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
         .action-links
+          .map{:id => "map" + project.id.to_s}
+            You should see a map here.  
+            .map-links
           /= link_to_edit_project_models(project, "Edit/Add Data Models", :class => 'button-link')
           = link_to("Project Settings", edit_yogo_project_path(project), :class => 'button-link')
+          = link_to("Add a Site to #{project.name}", new_yogo_project_site_path(project), :class => 'button-link')
         %p.rbox.tight
+          :javascript
+            $(document).ready(function(){
+            $.yogo_mapit($('#{'#map'+project.id.to_s}'), { locations: $.getJSON(#{yogo_project_sites_url(project)}) }
+            );
+            });
           - if project.description && project.description.length > 0
             %strong= link_to('Project Description', edit_yogo_project_path(project), :title => 'Edit Project Description')
             %br/
-            %em= tooltip(project.description, project.name + ' Description', 200)
+            %em= tooltip(project.description, 
+                    project.name + ' Description', 200)
           - else
             %em= link_to('[Add Project Description]', edit_yogo_project_path(project))
         
       .project-datasets
+        %h3 Last Updates:
+        - project.data_collections.first(:name => "Sites").items.each do |site|
+          -if !site.sensor_values.last.nil?
+            =site.name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
+            =clear_break
+          -else
+            =site.name + ': never'
+            =clear_break
+        =clear_break
+        / %table
+        /   %thead
+        /     %tr
+        /       %th Dataset
+        /       %th New
+        /       %th Total
+        /   %tbody
+        /     - for dataset in project.models
+        /       %tr
+        /         %td= link_to dataset.public_name,
+        /               project_yogo_data_index_path(project, dataset) 
+        /         %td= link_to(dataset.count(:created_at.gt => 1.week.ago),
+        /               project_yogo_data_index_path(project, dataset))
+        /         %td= link_to(dataset.count, project_yogo_data_index_path(project, dataset))
 
 #pagination-links= pagination_links(Yogo::Project, params[:page], 5)
+
