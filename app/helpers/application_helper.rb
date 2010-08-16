@@ -7,6 +7,10 @@
 # Methods added to this helper will be available to all templates in the application.
 #
 module ApplicationHelper
+
+  # include Google Vis tools
+  include GoogleVisualization
+
   # Generates the links needed for pagination
   #
   # @example

@@ -15,11 +15,15 @@
                              'jquery.fancybox-1.3.1.pack.js',
                              'jrails.js', 'application.js')
 
+    %script{:type =>"text/javascript",  :src => "http://maps.google.com/maps/api/js?sensor=false"}
+    %script{:type => "text/javascript", :src => "http://www.google.com/jsapi"}
+    
+    = include_visualization_api
+    = render_visualizations
+    
     %link{:rel => "shortcut icon", :href => "#{image_path("favicon.png")}"}/
-  / - if @no_blueprint
+
   %body.typography
-  / - else
-  /   %body.bp.typography
 
   / Header (including optional menus)
   #header
@@ -29,14 +33,14 @@
         = "ALPHA v" + YOGO_VERSION
     #system-menu.box.tight
       #menu-left-col
-        = render(:partial => 'layouts/menu_links') unless @no_menu
+        = render(:partial => 'layouts/menu_links')
       #menu-right-col
-        = render(:partial => 'layouts/login') unless @no_login
+        = render(:partial => 'layouts/login')
     #menu.box.tight
       #menu-left-col
-        Stuff should go in here
+        = render(:partial => "#{action_menu}") rescue nil
       #menu-right-col
-        and here
+        = render(:partial => 'layouts/search')
   /=clear_break
   /Grid Container 
   #container
