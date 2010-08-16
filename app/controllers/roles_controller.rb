@@ -1,5 +1,4 @@
-class RolesController < ApplicationController
-  inherit_resources
+class RolesController < InheritedResources::Base
 
   belongs_to :project, :user, :optional => true
 

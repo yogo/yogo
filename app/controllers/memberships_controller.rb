@@ -1,5 +1,4 @@
-class MembershipsController < ApplicationController
-  inherit_resources
+class MembershipsController < InheritedResources::Base
 
   defaults :resource_class => Membership, :collection_name => 'memberships', :instance_name => 'membership'
 
