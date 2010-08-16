@@ -22,8 +22,14 @@ ActionController::Routing::Routes.draw do |map|
       project.resources :users, :namespace => nil, :controller => "users"
 
       project.resources :sites, :namespace => nil, :controller => 'voeis/sites'
+
       project.resources :data_streams, :namespace => nil, :controller => 'voeis/data_streams',
                         :collection => { :pre_upload => :post}
+      project.resources :variables, :namespace => nil, :controller => 'voeis/variables'
+      project.resources :units, :namespace => nil, :controller => 'voeis/units'
+      project.resources :sensor_values, :namespace => nil, :controller => 'voeis/sensor_values'
+      project.resources :sensor_types, :namespace => nil, :controller => 'voeis/sensor_types'
+      project.resources :data_stream_columns, :namespace => nil, :controller => 
     end
   end
 #  map.connect 'voeis/data_streams/upload_stream', :controller => 'voeis/data_streams', :action => 'upload_stream'
