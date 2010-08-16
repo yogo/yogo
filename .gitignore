@@ -38,3 +38,4 @@ doc/yardstick/*
 yogo_assets/*
 public/stylesheets/compiled
 htmlreports/**/*
+app/stylesheets/screen.css
