@@ -22,10 +22,11 @@ ActionController::Routing::Routes.draw do |map|
       project.resources :users, :namespace => nil, :controller => "users"
 
       project.resources :sites, :namespace => nil, :controller => 'voeis/sites'
-      project.resources :data_streams, :namespace => nil, :controller => 'voeis/data_streams'
+      project.resources :data_streams, :namespace => nil, :controller => 'voeis/data_streams',
+                        :collection => { :pre_upload => :post}
     end
   end
-
+#  map.connect 'voeis/data_streams/upload_stream', :controller => 'voeis/data_streams', :action => 'upload_stream'
   # Dashboard routes
   map.dashboard 'dashboards/:id', :controller => 'dashboards', :action => 'show', :requirements => { :id => /[a-z]+/ }
 
