@@ -1,6 +1,6 @@
 #menu-links
-  = link_to("Home", root_url, :class => 'menu-link')
+  = link_to("Home", root_url)
   - if logged_in? && current_user.admin
-    = link_to("Administration", page_url(:admin), :class => 'menu-link')
-  = link_to("About", page_url(:about), :class => 'menu-link')
-  = link_to("Help", "http://yogo.msu.montana.edu/", :target => 'blank', :class => 'menu-link')
+    = link_to("Administration", page_url(:admin))
+  = link_to("About", page_url(:about))
+  = link_to("Help", "http://yogo.msu.montana.edu/", :target => 'blank')

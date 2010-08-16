@@ -94,13 +94,29 @@ body
           line-height: 2em
           text-align: left
           margin-left: 10px
-          .menu-link:
-            margin-right: 8px
+          // Links
+          a
+            padding-right: 8px
+            text-decoration: none
+            color: #784a1c
+            &:hover
+              text-decoration: none
+              color: #bd8e5e
+
       #menu-right-col
         #login-links
           line-height: 2em
           text-align: right
           margin-right: 10px
+          // Links
+          a
+            padding-right: 8px
+            text-decoration: none
+            color: #784a1c
+            &:hover
+              text-decoration: none
+              color: #bd8e5e
+        
     #menu
       color: #784a1c
       background-color: #bd8e5e
@@ -114,7 +130,11 @@ body
         line-height: 2em
         text-align: right
         margin-right: 10px
-      
+        #search-tab
+          width: 400px
+          margin-right: 10px
+          display: inline
+          
   // Flash Notices always use blueprint layout
   #flash
     width: 100%
