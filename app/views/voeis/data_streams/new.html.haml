@@ -1,0 +1,23 @@
+#upload
+  %h3 Data File Management
+  - form_tag('pre_upload', :multipart => true ) do
+    <label for="upload_file">Select File</label> : 
+    = file_field_tag('datafile', :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel")
+    = hidden_field_tag('project_id', @project.id)
+    =clear_break
+    Check if logger file is from a Campbell Scientific Logger:
+    = check_box_tag('header_box', 'Campbell')
+    =clear_break
+    If this is not a Campbel Scientific Logger please indicate which line data begins on.
+    -opt_string = ""
+    -(1..20).each do |i|
+      -opt_string = opt_string + "<option value="+i.to_s+">"+i.to_s+"</option>"
+    =select_tag("start_line", opt_string)
+    =clear_break
+    You can select a DataTemplate to apply to this CSV:
+    -template_string = '<option value="None">None</option>'
+    /-@data_templates.each do |template|
+    /-template_string = template_string + "<option value="+template.id.to_s+">"+template.name+"</option>"
+    /=select_tag("data_template", template_string)
+    =clear_break
+    = submit_tag("Upload Logger File")
