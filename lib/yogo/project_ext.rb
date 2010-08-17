@@ -11,6 +11,8 @@ module Yogo
     has n, :roles, :through => :memberships
     has n, :users, :through => :memberships
     
+    before :destroy, :destroy_cleanup
+    
     def self.extended_permissions
       collection_perms = ['collection', 'item'].map do |elem|
         self.basic_permissions.map{|p| "#{p}_#{elem}".to_sym }
@@ -41,5 +43,11 @@ module Yogo
       super + user.memberships(:project_id => self.id).roles.map{|r| r.permissions}.flatten.uniq
     end
     
+    private
+    
+    def destroy_cleanup
+      memberships.destroy
+    end
+
   end
 end
