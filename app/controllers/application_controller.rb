@@ -33,8 +33,8 @@ class ApplicationController < ActionController::Base
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
   
-  rescue_from AuthorizationError, :with => :authorization_denied
-  rescue_from AuthenticationError, :with => :authentication_required
+  rescue_from Facet::PermissionException::Denied, :with => :authorization_denied
+  # rescue_from Facet::PermissionException::Denied, :with => :authentication_required
   
   protected
 
