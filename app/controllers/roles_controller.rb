@@ -1,14 +1,22 @@
 class RolesController < ApplicationController
   inherit_resources
 
+  belongs_to :project, :user, :optional => true
+
   def create
-    super do |format|
+    create! do |format|
       format.html { redirect_to(roles_url) }
     end
   end
 
   def update
-    super do |format|
+    update! do |format|
+      format.html { redirect_to(roles_url) }
+    end
+  end
+
+  def delete
+    delete! do |format|
       format.html { redirect_to(roles_url) }
     end
   end
@@ -23,8 +31,4 @@ class RolesController < ApplicationController
     @role ||= resource_class.get(params[:id])
   end
 
-  def update_resource(object, attributes)
-    object.attributes = attributes
-    object.save
-  end
 end
