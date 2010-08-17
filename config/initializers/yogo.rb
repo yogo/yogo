@@ -11,9 +11,14 @@ require 'exceptions'
 # Load the Application Version
 load Rails.root / "VERSION"
 
-sr = SystemRole.first_or_create(:name => 'Administrator', :description => 'System role for Administrators',
-                                :permissions => User.to_permissions + Yogo::Project.to_permissions)
+sr = SystemRole.first_or_create(:name => 'User', :description => 'Default user in the system')
+sr.permissions = ["yogo/project$retrieve"] and sr.save if sr.new?
 
+sr = SystemRole.first_or_new(:name => 'Project Manager', :description => 'Able to create projects')
+sr.permissions = Yogo::Project.to_permissions and sr.save if sr.new?
+
+sr = SystemRole.first_or_new(:name => 'Administrator', :description => 'System role for Administrators')
+sr.permissions = User.to_permissions + Yogo::Project.to_permissions and sr.save if sr.new?
 # Create the system administrator user
 User.create(:login => 'yogo', :first_name => "System",
             :last_name => "Administrator", :system_role => sr,
