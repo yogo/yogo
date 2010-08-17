@@ -18,6 +18,7 @@ gem "dm-types",       "~> 1.0.0",     :git => "#{DATAMAPPER}/dm-types.git",
                                       :require => false # don't require dm-type/json
 
 gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :branch => "topic/contexts", :require  => 'yogo/project'
+# gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :branch => "topic/managers", :require  => 'yogo/project'
 
 gem "rails",                "2.3.8"
 gem "rake",                 :require => nil
@@ -35,18 +36,20 @@ gem "uuidtools"
 gem 'rails_warden'
 
 if defined?(JRUBY_VERSION)
+  gem "jruby-openssl",        :require => nil
   gem "glassfish",            :require => nil
   gem "json_pure",            :require => nil
   gem "BlueCloth",            :require => nil # Required for YARD
 else
+  gem "ruby-debug"            unless RUBY_VERSION >= '1.9.1'
+  gem "ruby-debug19"          if RUBY_VERSION >= '1.9.1'
   gem "json",                 :require => nil
   gem "bluecloth",            :require => nil # Required for YARD
 end
 
 group :development do
   gem "capistrano",           :require => nil
-  gem "rails-footnotes",
-  gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug', :require => nil unless defined?(JRUBY_VERSION)
+  gem "rails-footnotes"
 end
 
 group :test do
