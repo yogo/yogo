@@ -1,11 +1,12 @@
 # SensorValues
 #
+# require 'yogo/datamapper/model/storage_context'
 
 class SensorValue
   include DataMapper::Resource
+  # extend Yogo::DataMapper::Model::StorageContext
 
   property :id,       Serial,  :key      => true
-  #property :name,     String,  :required => true
   property :value,    Float,   :required => true
   property :units,    String,  :required => true
   property :timestamp,    DateTime,  :required => true, :index => true
