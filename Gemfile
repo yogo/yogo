@@ -8,21 +8,20 @@ gem "dm-migrations"
 gem "dm-persevere-adapter", "0.72.0", :require => nil
 
 # These are required so we can make it simple to interact with legacy data
-gem 'dm-sqlite-adapter', :require => nil
-# gem "do_mysql",                       :require => nil
+gem 'dm-sqlite-adapter',    :require => nil
+gem "dm-sqlserver-adapter", :require => nil
 # gem "do_postgres",                    :require => nil
-# gem "do_sqlite3",                     :require => nil
-# gem "do_sqlserver",                   :require => nil
 
 # 1.0 Release of dm-types has problems with UUID properties, use git master
 gem "dm-types",       "~> 1.0.0",     :git => "#{DATAMAPPER}/dm-types.git",
                                       :ref => "674738f2a94788b975e9",
                                       :require => false # don't require dm-type/json
 
-gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :branch => "topic/contexts", :require  => 'yogo/project'
+# gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :branch => "topic/contexts", :require  => 'yogo/project'
+gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :branch => "topic/managers", :require  => 'yogo/project'
 
 gem "rails",                "2.3.8"
-gem "rake",                          :require => nil
+gem "rake",                 :require => nil
 
 gem 'inherited_resources', '~> 1.0.6'
 
@@ -34,23 +33,27 @@ gem "fastercsv"                       unless RUBY_VERSION >= '1.9.1'
 gem "haml"
 gem "mime-types",                     :require => 'mime/types'
 gem "uuidtools"
-
 gem 'rails_warden'
 
 if defined?(JRUBY_VERSION)
+  gem "jruby-openssl",        :require => nil
+  gem "glassfish",            :require => nil
   gem "json_pure",            :require => nil
   gem "BlueCloth",            :require => nil # Required for YARD
 else
+  gem "ruby-debug"            unless RUBY_VERSION >= '1.9.1'
+  gem "ruby-debug19"          if RUBY_VERSION >= '1.9.1'
   gem "json",                 :require => nil
   gem "bluecloth",            :require => nil # Required for YARD
 end
 
-gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug', :require => nil, :group => :development unless defined?(JRUBY_VERSION)
-
-gem "rails-footnotes",             :group => :development
+group :development do
+  gem "capistrano",           :require => nil
+  gem "rails-footnotes"
+end
 
 group :test do
-gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug',       :require => nil unless defined?(JRUBY_VERSION)
+gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug', :require => nil unless defined?(JRUBY_VERSION)
   gem 'rspec',        '~>1.3.0',   :require => nil
   gem 'rspec-rails',  '~>1.3.2',   :require => 'spec/rails'
   gem 'ZenTest',                   :require => nil
@@ -87,8 +90,3 @@ group :cucumber do
   gem 'webrat',                    :require => nil
   gem 'selenium-client',           :require => nil
 end
-
-# A dev server that is slightly better then webrick
-gem 'mongrel',                     :require => nil unless RUBY_VERSION >= '1.9.1'
-gem 'thin',                        :require => nil unless defined?(JRUBY_VERSION)
-

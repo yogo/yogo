@@ -65,3 +65,20 @@ yogo_default_test: &YOGO_DEFAULT_TEST
 
 yogo_cucumber:
   <<: *YOGO_DEFAULT_TEST
+
+#
+# HIS Servers
+#
+his_development:
+  adapter: sqlserver
+  database: LittleBear11
+  host: ravage.msu.montana.edu
+  username: sa
+  password: P@dm1n2009*
+
+his_production:
+  adapter: sqlserver
+  database: LittleBear11
+  host: sideswipe.msu.montana.edu
+  username: sa
+  password: P@dm1n2009*
