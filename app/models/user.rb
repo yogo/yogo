@@ -171,19 +171,5 @@ class User
   def is_in_project?(project)
     self.projects.include?(project)
   end
-  
-  
-  def permissions_for(model_or_resource)
-    case(model_or_resource)
-    when Yogo::Project
-      self.memberships(:project_id => model_or_resource.id).roles.map{|r| r.permissions}.flatten.uniq
-    when DataMapper::Model
-      self.system_role.permissions & model_or_resource.to_permissions
-    when DataMapper::Resource
-      self.system_role.permissions & model_or_resource.to_permissions
-    else
-      []
-    end
-  end
 
 end
