@@ -8,7 +8,7 @@ case "$1" in
   start)
     echo "Starting glassfish"
     cd $RAILS_APP
-    glassfish
+    glassfish --daemon -P $RAILS_APP/../shared/pids/glassfish.pid
   ;;
 
   restart)
