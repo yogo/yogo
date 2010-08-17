@@ -11,7 +11,7 @@ set :copy_exclude, [".git"]
 set  :user, "voeis-demo"
 role :web, "klank.msu.montana.edu"                          # Your HTTP server, Apache/etc
 role :app, "klank.msu.montana.edu"                          # This may be the same as your `Web` server
-set :deploy_to, "/home/#{user}/voeis/"
+set  :deploy_to, "/home/#{user}/voeis/"
 
 namespace :deploy do
   desc "Restart Glassfish"
@@ -66,7 +66,7 @@ namespace :bundle do
     run("bash -c 'cd #{release_path} && bundle install'")
   end
 end
-after 'setup_for_server', 'bundle:install'
+after 'deploy:update_code', 'bundle:install'
 
 namespace :persvr do
   desc "Setup Persevere on the server"

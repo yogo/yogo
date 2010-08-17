@@ -1,9 +1,8 @@
 #!/bin/bash
+#
 
 # Adding RVM configuration for users in the RVM group
-# . "/usr/local/rvm/scripts/rvm"
-#
-# rvm use jruby
+[[ -s "/usr/local/rvm/scripts/rvm" ]] && . "/usr/local/rvm/scripts/rvm"
 
 RAILS_APP=/home/voeis-demo/voeis/current
 
