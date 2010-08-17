@@ -17,8 +17,8 @@ gem "dm-types",       "~> 1.0.0",     :git => "#{DATAMAPPER}/dm-types.git",
                                       :ref => "674738f2a94788b975e9",
                                       :require => false # don't require dm-type/json
 
-gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :branch => "topic/contexts", :require  => 'yogo/project'
-# gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :branch => "topic/managers", :require  => 'yogo/project'
+# gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :branch => "topic/contexts", :require  => 'yogo/project'
+gem 'yogo-project', :git => 'git://github.com/yogo/yogo-project.git', :branch => "topic/managers", :require  => 'yogo/project'
 
 gem "rails",                "2.3.8"
 gem "rake",                 :require => nil

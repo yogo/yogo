@@ -11,11 +11,11 @@
 # Class for a Yogo Project. A project contains a name, a description, and access to all of the models
 # that are part of the project.
 #
-# require 'yogo/datamapper/model/storage_context'
+require 'yogo/datamapper/model/storage_context'
 
 class DataStreamColumn
   include DataMapper::Resource
-  # extend Yogo::DataMapper::Model::StorageContext
+  extend Yogo::DataMapper::Model::StorageContext
 
   property :id, Serial
   property :name, String, :required => true

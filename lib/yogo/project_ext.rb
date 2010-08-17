@@ -1,10 +1,10 @@
 require 'yogo/project'
-#require 'yogo/datamapper/storage_manager'
+require 'yogo/datamapper/storage_manager'
 
 module Yogo
   class Project
     extend Permission
-    # include Yogo::DataMapper::StorageManager
+    include Yogo::DataMapper::StorageManager
 
     property :is_private,      Boolean, :required => true, :default => false
 

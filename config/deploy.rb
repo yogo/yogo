@@ -1,8 +1,14 @@
+$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
+require "rvm/capistrano"
+set :rvm_ruby_string, 'jruby'
+
 set :application, "voeis"
 set :use_sudo,    false
 
 set :scm, :git
 set :repository,  "git://github.com/yogo/yogo.git"
+set :shell, "/bin/bash"
+set :pty, true
 
 set :branch, "apps/voeis_merge_master"
 set :deploy_via, :remote_cache
