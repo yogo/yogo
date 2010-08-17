@@ -7,7 +7,7 @@ case "$1" in
   start)
     echo "Starting glassfish"
     cd $RAILS_APP
-    glassfish --daemon --pid ~/voeis/shared/pids/glassfish.pid
+    glassfish -d -P $RAILS_APP/../shared/pids/glassfish.pid
   ;;
 
   restart)
@@ -18,7 +18,7 @@ case "$1" in
   stop)
     echo "Stopping glassfish"
     cd $RAILS_APP
-    kill -s2 `cat ~/voeis/shared/pids/glassfish.pid`
+    kill -s2 `cat $RAILS_APP/../shared/pids/glassfish.pid`
 
   ;;
 
