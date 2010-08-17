@@ -9,6 +9,7 @@ describe User do
   
   it "should have a login" do
     u = standard_user
+    
     u.should be_valid
   end
   

@@ -93,7 +93,8 @@ Spec::Runner.configure do |config|
 end
 
 def standard_user(opts = {})
-   User.new({:login => 'yogo', :password => "pass", :password_confirmation => 'pass'}.merge(opts))
+   sr = SystemRole.first_or_create(:name => 'default', :description => 'A default role')
+   User.new({:login => 'yogo', :password => "pass", :password_confirmation => 'pass', :system_role => sr}.merge(opts))
 end
 
   
