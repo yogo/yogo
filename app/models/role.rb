@@ -9,15 +9,18 @@
 
 class Role
   include DataMapper::Resource
+  include Facet::DataMapper::Resource
 
   property :id, Serial
   property :name, String, :required => true
-  property :description, String
+  property :description, String, :length => 256
   property :permissions, Yaml, :default => [].to_yaml
 
   has n, :memberships
   has n, :users, :through => :memberships
   has n, :projects, :through => :memberships, :model => Yogo::Project
+
+  is :list
 
   def self.permission_sources
     [Yogo::Project]

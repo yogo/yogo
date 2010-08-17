@@ -2,15 +2,17 @@
 source      "http://rubygems.org"
 
 DATAMAPPER = 'git://github.com/datamapper'
+DATAMAPPER_VER = "1.0"
 
-gem "dm-core",              "1.0"
+gem "dm-core",              DATAMAPPER_VER
 
+gem "dm-is-list",           DATAMAPPER_VER
 # gem "dm-timestamps",        "1.0"
 # gem "dm-validations",       "1.0"
 # gem "dm-is-nested_set",     "1.0"
 # # gem "dm-serializer",        "1.0"
 # gem "dm-aggregates",        "1.0"
-gem "dm-migrations"
+gem "dm-migrations",        DATAMAPPER_VER
 # gem "dm-types",              "1.0",     :git => "#{DATAMAPPER}/dm-types.git",
 #                                         :require => false
 # gem "dm-observer",          "1.0"
@@ -20,11 +22,11 @@ gem "dm-persevere-adapter", "0.72.0", :require => nil
 
 
 # These are required so we can make it simple to interact with legacy data
-#gem "do_mysql",                       :require => nil
-#gem "do_postgres",                   :require => nil
-# gem "do_sqlite3",                    :require => nil
-gem 'dm-sqlite-adapter', :require => nil
-#gem "do_sqlserver",                  :require => nil
+#gem "do_mysql",          DATAMAPPER_VER, :require => nil
+#gem "do_postgres",       DATAMAPPER_VER, :require => nil
+# gem "do_sqlite3",       DATAMAPPER_VER, :require => nil
+gem 'dm-sqlite-adapter',  DATAMAPPER_VER, :require => nil
+#gem "do_sqlserver",      DATAMAPPER_VER  :require => nil
 
 # 1.0 Release of dm-types has problems with UUID properties, use git master
 gem "dm-types",       "~> 1.0.0",     :git => "#{DATAMAPPER}/dm-types.git",
