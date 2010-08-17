@@ -19,7 +19,7 @@ case "$1" in
   stop)
     echo "Stopping glassfish"
     cd $RAILS_APP
-    kill -s 2 `cat $RAILS_APP/../shared/pids/glassfish.pid`
+    kill -2 `cat $RAILS_APP/../shared/pids/glassfish.pid`
 
   ;;
 
