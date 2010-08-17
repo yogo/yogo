@@ -12,8 +12,8 @@ GIT
 
 GIT
   remote: git://github.com/yogo/yogo-project.git
-  revision: 58fffe3
-  branch: topic/contexts
+  revision: dbe6ff7
+  branch: topic/managers
   specs:
     yogo-project (0.3.2)
       carrierwave
@@ -108,21 +108,14 @@ GEM
     do-jdbc_sqlserver (1.2.4-java)
     do_jdbc (0.10.2-java)
       data_objects (= 0.10.2)
-    do_sqlite3 (0.10.2)
-      data_objects (= 0.10.2)
     do_sqlite3 (0.10.2-java)
       data_objects (= 0.10.2)
       do_jdbc (= 0.10.2)
       jdbc-sqlite3 (>= 3.5.8)
-<<<<<<< Updated upstream
-    eventmachine (0.12.10)
-    eventmachine (0.12.10-java)
-=======
     do_sqlserver (0.10.2-java)
       data_objects (= 0.10.2)
       do-jdbc_sqlserver (~> 1.2.4)
       do_jdbc (= 0.10.2)
->>>>>>> Stashed changes
     extlib (0.9.15)
     factory_girl (1.2.4)
     fastercsv (1.5.3)
@@ -149,13 +142,8 @@ GEM
       has_scope (~> 0.5.0)
       responders (~> 0.4.6)
     jdbc-sqlite3 (3.6.3.054)
-<<<<<<< Updated upstream
-    json (1.4.6)
-    json (1.4.6-java)
-=======
     jruby-openssl (0.7.1)
       bouncy-castle-java
->>>>>>> Stashed changes
     json_pure (1.4.6)
     main (4.2.0)
       arrayfields (>= 4.7.4)
@@ -172,16 +160,6 @@ GEM
       reek (>= 1.2.6)
       roodi (>= 2.1.0)
     mime-types (1.16)
-<<<<<<< Updated upstream
-    mongrel (1.1.5)
-      cgi_multipart_eof_fix (>= 2.4)
-      daemons (>= 1.0.3)
-      fastthread (>= 1.0.1)
-      gem_plugin (>= 0.2.3)
-    mongrel (1.1.5-java)
-      gem_plugin (>= 0.2.3)
-    nokogiri (1.4.3.1)
-=======
     net-scp (1.0.3)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.4)
@@ -189,7 +167,6 @@ GEM
     net-ssh (2.0.23)
     net-ssh-gateway (1.0.1)
       net-ssh (>= 1.99.1)
->>>>>>> Stashed changes
     nokogiri (1.4.3.1-java)
       weakling (>= 0.0.3)
     rack (1.1.0)
@@ -209,10 +186,6 @@ GEM
     rails_warden (0.5.2)
       warden
     rake (0.8.7)
-<<<<<<< Updated upstream
-    rcov (0.9.8)
-=======
->>>>>>> Stashed changes
     rcov (0.9.8-java)
     redgreen (1.2.2)
     reek (1.2.8)
