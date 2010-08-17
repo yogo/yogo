@@ -10,7 +10,7 @@
 #
 
 # application environment. Default value development
-environment: production
+environment: development
 
 # HTTP configuration
 http:
@@ -75,7 +75,7 @@ log:
 
     # Logging level. Log level 0 to 7. 0:OFF, 1:SEVERE, 2:WARNING,
     # 3:INFO (default), 4:FINE, 5:FINER, 6:FINEST, 7:ALL.
-    log-level: 3
+    log-level: 7
 
 #
 # Runtime configuration
@@ -125,7 +125,7 @@ daemon:
 
     # GlassFish gem runs with these default options
     #
-    jvm-options: -server -Xmx512m -XX:MaxPermSize=192m -XX:NewRatio=2 -XX:+DisableExplicitGC -Dhk2.file.directory.changeIntervalTimer=6000 -Djruby.compile.mode=OFF
+    #jvm-options: -server -Xmx512m -XX:MaxPermSize=192m -XX:NewRatio=2 -XX:+DisableExplicitGC -Dhk2.file.directory.changeIntervalTimer=6000 -Djruby.compile.mode=OFF
 
 
 

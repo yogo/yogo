@@ -1,14 +1,16 @@
-#!/bin/bash
+#!/bin/bash -x
 #
 
 RAILS_APP=/home/voeis-demo/voeis/current
+PIDFILE=/home/voeis-demo/voeis/shared/pids/glassfish.pid
+
 export CLASSPATH=$RAILS_APP/lib/jna.jar
 
 case "$1" in
   start)
     echo "Starting glassfish"
     cd $RAILS_APP
-    glassfish -P $RAILS_APP/../shared/pids/glassfish.pid
+    jruby -X-C -S glassfish -P $PIDFILE
   ;;
 
   restart)
@@ -19,8 +21,8 @@ case "$1" in
   stop)
     echo "Stopping glassfish"
     cd $RAILS_APP
-    if [ -f $RAILS_APP/../shared/pids/glassfish.pid ]; then
-      kill -2 `cat $RAILS_APP/../shared/pids/glassfish.pid`
+    if [ -f $PIDFILE ]; then
+      kill -2 `cat $PIDFILE`
     fi
   ;;
 
