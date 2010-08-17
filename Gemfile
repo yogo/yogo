@@ -36,8 +36,6 @@ gem "uuidtools"
 gem 'rails_warden'
 
 if defined?(JRUBY_VERSION)
-  # gem "ffi",                  :require => nil
-  # gem "ffi-ncurses",          :require => nil
   gem "jruby-openssl",        :require => nil
   gem "glassfish",            :require => nil
   gem "json_pure",            :require => nil
