@@ -10,7 +10,7 @@
 #
 
 # application environment. Default value development
-environment: development
+environment: production
 
 # HTTP configuration
 http:
