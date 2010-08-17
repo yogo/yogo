@@ -12,7 +12,6 @@
 # application environment. Default value development
 environment: development
 
-
 # HTTP configuration
 http:
 
