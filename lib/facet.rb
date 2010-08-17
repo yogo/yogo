@@ -1,3 +1,9 @@
+class Object
+  def is_facet?
+    false
+  end
+end
+
 module Facet
   
   # wraps and restricts access to an object
@@ -8,20 +14,43 @@ module Facet
     end
     
     def can_invoke(method)
-      (permitted_methods + @target.unsecured_methods).include?(method)
+      (permitted_methods + @target.unsecured_methods).include?(method.to_sym)
     end
     
+    alias can_invoke? can_invoke
+    
     def permitted_methods
-      permissions = @permission_source.permissions_for(@target)
+      permissions = @target.permissions_for(@permission_source)
       @target.methods_permitted_for(*permissions) 
     end
     
     def method_missing(method, *args, &block)
+      self.send(method, *args, &block)
+    end
+    
+    def send(method, *args, &block)
+      # ::Rails.logger.debug("Can #{@permission_source} Invoke? #{method} #{can_invoke method}")
       if(can_invoke method)
-        @target.send(method, *args, &block)
+        result = @target.__send__(method, *args, &block)
+        if (result.kind_of?(::DataMapper::Collection) && result.model.respond_to?(:access_as)) ||
+           (result.kind_of?(::DataMapper::Resource)   && result.respond_to?(:access_as))
+          return result.access_as(@permission_source)
+        else
+          return result
+        end
       else
+        # logger.debug { "Access denied to method #{method}" }
+        ::Rails.logger.debug("Access denied to method #{method}")
         raise Facet::PermissionException::Denied, "#{method} is not allowed"
       end
+    end
+    
+    def is_facet?
+      true
+    end
+    
+    def permission_source
+      @permission_source
     end
   end
   
@@ -30,19 +59,32 @@ module Facet
     end
   end
   
+  
+  module SecurityWrapper
+    def access_as(access = nil)
+      # When running in local only, bypass all access by returning self
+      if Yogo::Setting[:local_only]
+        self
+      else
+        Facet::Proxy.new(self, access)
+      end
+    end
+    
+    alias as_facet access_as
+  end
+  
   # mixin for objects that will be wrapped
-  # Project.extend
   module SecureMethods
+    include SecurityWrapper
+    
     def secured_methods
       []
     end
     
     def unsecured_methods
-      [:inspect, :methods]
-    end
-    
-    def access_as(access)
-      Facet::Proxy.new(self, access)
+      # [:class, :inspect, :methods, :send, :secured_methods, :unsecured_methods] 
+      [ :debugger, :empty? ] +
+      self.methods.map{|m| m.to_sym } - secured_methods
     end
     
   end
@@ -51,17 +93,19 @@ module Facet
     include SecureMethods
     
     def secured_methods
-      super + [:new, :create, :all, :first, :last, :get]
+      super + [:new, :create, :all, :first, :last, :get, :count]
     end
-    
     
     def secured_instance_methods
       [:attributes, :attributes=, :save, :destroy]
     end
     
     def unsecured_instance_methods
-      [:valid?]
+      ([:debugger, :class, :empty?, :is_a?, :nil?, :respond_to?, :to_param, :valid?] + 
+      self.instance_methods.map{ |k| k.to_sym }) - secured_instance_methods
+      # self.instance_methods - secured_instance_methods
     end
+    
   end
   
   module ResourceSecureMethods
@@ -98,6 +142,7 @@ module Facet
     def permission_base_name
       ""
     end
+
   end
   
   module ModelPermissions
@@ -106,7 +151,7 @@ module Facet
     def permissions
       {
         :create => [:new, :create],
-        :retrieve => [:all, :get, :first, :last],
+        :retrieve => [:all, :get, :first, :last, :count],
         :update => [:update],
         :destroy => [:destroy]
       }
@@ -114,6 +159,11 @@ module Facet
         
     def permission_base_name
       self.name.underscore
+    end
+    
+    def permissions_for(target)
+      return [] if target.nil?
+      target.system_role.permissions & self.to_permissions
     end
   end
   
@@ -136,6 +186,11 @@ module Facet
     def permission_base_name
       self.class.permission_base_name
     end
+    
+    def permissions_for(target)
+      return [] if target.nil?
+      target.system_role.permissions & self.to_permissions
+    end
   end
   
   module DataMapper
@@ -151,3 +206,7 @@ module Facet
     end # Resource
   end # DataMapper
 end # Facet
+
+# Also send this
+DataMapper::Collection.send(:include, Facet::SecurityWrapper)
+
