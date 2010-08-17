@@ -9,23 +9,49 @@
 # of the yogo repository.
 
 class Yogo::ProjectsController < Yogo::BaseController
-  defaults :resource_class => Yogo::Project,
-           :collection_name => 'projects',
-           :instance_name => 'project'
+  belongs_to :role, :user, :optional => true
+
+  ##
+  # Show all the projects
+  #
+  # @example 
+  #   get /projects
+  #
+  # @return [Array] Retrives all project and passes them to the view
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  def index
+    super do |format|
+      if collection.empty?
+        @no_search = true
+        @no_menu   = true 
+        format.html { render('no_projects') }
+      else
+        format.html 
+      end
+    end
+  end
   
+  def destroy
+    destroy! do |success,failure|
+      success.html { redirect_to( yogo_projects_path )}
+    end
+  end
   
   protected
 
   def resource
-    @project ||= collection.get(params[:id])
+    @project ||= resource_class.get(params[:id])
   end
   
   def collection
-    @projects ||= resource_class.all# .paginate(:page => params[:page], :per_page => 5)
+    @projects ||= resource_class.all # .paginate(:page => params[:page], :per_page => 5)
   end
   
   def resource_class
-    Yogo::Project
+    Yogo::Project.access_as(current_user)
   end
   
   with_responder do
