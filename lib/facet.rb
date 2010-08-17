@@ -163,7 +163,7 @@ module Facet
     
     def permissions_for(target)
       return [] if target.nil?
-      target.system_role.permissions & self.to_permissions
+      target.system_role.actions & self.to_permissions
     end
   end
   
@@ -189,7 +189,7 @@ module Facet
     
     def permissions_for(target)
       return [] if target.nil?
-      target.system_role.permissions & self.to_permissions
+      target.system_role.actions & self.to_permissions
     end
   end
   

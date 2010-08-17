@@ -14,7 +14,7 @@ class Role
   property :id, Serial
   property :name, String, :required => true
   property :description, String, :length => 256
-  property :permissions, Yaml, :default => [].to_yaml
+  property :actions, Yaml, :default => [].to_yaml
 
   has n, :memberships
   has n, :users, :through => :memberships
@@ -23,7 +23,7 @@ class Role
   is :list
 
   def self.permission_sources
-    [Yogo::Project]
+    [Yogo::Project, Membership]
   end
 
   def self.available_permissions
@@ -37,7 +37,7 @@ class Role
   end
 
   def has_permission?(permission)
-    permissions.include?(permission)
+    actions.include?(permission)
   end
 
   ##
