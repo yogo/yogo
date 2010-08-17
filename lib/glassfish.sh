@@ -7,7 +7,7 @@ case "$1" in
 start)
   echo "Starting glassfish"
   cd $RAILS_APP
-  nohup jruby --server -X-C -S glassfish
+  jruby --server -X-C -S glassfish -d -P ~/voeis/shared/pids/glassfish.pid
 ;;
 restart)
   $0 stop
@@ -16,11 +16,7 @@ restart)
 stop)
   echo "Stopping glassfish"
   cd $RAILS_APP
-  for i in `ls ~/voeis/shared/pids/glassfish*.pid`
-  do
-    pid=`cat $i`
-    kill -s2 $pid
-  done
+  kill -s2 `cat ~/voeis/shared/pids/glassfish.pid`
 
 ;;
 *)
