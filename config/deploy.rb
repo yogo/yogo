@@ -4,7 +4,7 @@ set :use_sudo,    false
 set :scm, :git
 set :repository,  "git://github.com/yogo/yogo.git"
 
-set :branch, "apps/voeis"
+set :branch, "apps/voeis_merge_master"
 set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
 
