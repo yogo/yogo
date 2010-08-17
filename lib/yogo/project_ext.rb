@@ -29,5 +29,17 @@ module Yogo
       user.roles(:project => self).any?{|r| r.has_permission?(permission) }
     end
     
+    
+    def self.permissions_for(user)
+      (super << "#{permission_base_name}$retrieve").uniq
+    end
+    
+    ##
+    # 
+    def permissions_for(user)
+      return ["#{permission_base_name}$retrieve"] if user.nil?
+      super + user.memberships(:project_id => self.id).roles.map{|r| r.permissions}.flatten.uniq
+    end
+    
   end
 end
