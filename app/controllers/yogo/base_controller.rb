@@ -16,6 +16,7 @@ class Yogo::BaseController < InheritedResources::Base
   
   chainable do
     def parsed_body(format=request.content_type)
+      return nil unless format
       format_method = "body_#{format.to_sym}".to_sym
       
       if respond_to?(format_method)
