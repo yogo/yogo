@@ -1,8 +1,55 @@
-.extra-small-centered
-  %h1#content-title
-    #subtitle Edit User
-    = @user.name
+#content-settings-main
+  .small.boxed
+    %h1#content-title
+      = @user.name
+      #subtitle Edit User
 
-.extra-small-centered.box
-  .rbox.dashed
-    = render(:partial => 'form')
+  .small.boxed
+    .rbox.tight
+      = link_to("Delete", yogo_project_path(@project), :method => :delete, :class => 'delete-link', 
+                :confirm => "Do you want to delete the #{@user.name}?\nThere is no undo! Continue?" )
+      -form_for(@user, :builder => YogoFormBuilder) do |f|
+        = f.text_field(:login, :label => "Login:" )
+        = f.text_field(:first_name, :label => "First Name:")
+        = f.text_field(:last_name, :label => "Last Name:")
+        = f.text_field(:email, :label => "Email:")
+
+        - if @user.new?
+          = f.password_field(:password, :label => "Password: ")
+          = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
+        = f.select(:system_role_id, SystemRole.all.map{|sr| [sr.name, sr.id]}, :label => 'System Role:')
+        %h5.tight  Projects
+        .rbox.tight
+          %table
+            %thead
+              %th Project
+              %th Roles
+              %th
+            %tbody
+              - unless @user.roles.empty? 
+                - @user.roles.projects.each do |project|
+                  %tr
+                    %td= link_to(project.name, yogo_project_path(project))
+                    %td= @user.roles.select{|role| role.projects.include?(project) }.map{|role| role.name }.join(', ')     
+                    %td 
+                      #operation-links
+                        #edit-link
+                          = link_to("Edit", edit_user_membership_path(@user, project), :class => 'edit-link')
+                        #delete-link
+                          = link_to("Delete", user_membership_path(@user, project), :method => :delete, :class => 'delete-link', :confirm => "Do you want to remove #{@user.first_name} #{@user.last_name} from the #{project.name} project?")
+        = f.submit('Save', :class => 'save-link')
+        = link_to('Cancel', users_path, :class => 'cancel-link')
+
+#content-settings-extra
+  - if Yogo::Project.all.length > @user.projects.length
+    #content-settings-extra
+      .rbox.tight
+        - form_for(:membership, :url => user_memberships_path(@user)) do |f|
+          - field_set_tag("Projects:") do
+            = select_tag("project_id", options_from_collection_for_select(Yogo::Project.all.select { |p| not @user.projects.include?(p) }, 'id', 'name'))
+          - field_set_tag("Role:") do
+            - for role in Role.all do
+              = check_box_tag("memberships[roles][]", role.id, false, :class => "memberships_#{role.id}", :id => "memberships_#{role.id}")
+              = label_tag("memberships_#{role.id}", role.name)
+          = f.submit('Update', :class => 'update-link')
+          = link_to('Cancel', yogo_projects_path, :class => 'cancel-link')

@@ -1,6 +1,5 @@
 class UsersController < InheritedResources::Base
   before_filter :require_user
-  before_filter :require_administrator
   
   respond_to :html, :json
   
@@ -29,7 +28,7 @@ class UsersController < InheritedResources::Base
   protected
 
   def resource
-    @user ||= collection.get(params[:id])
+    @user ||= collection.get(params[:id]).access_as(current_user)
   end
   
   def collection
@@ -37,18 +36,7 @@ class UsersController < InheritedResources::Base
   end
   
   def resource_class
-    User
-  end
-  
-  private
-
-  ##
-  # Checks to see if the current user is an admin
-  # @return [nil] or it doesn't return.
-  # @api private
-  def require_administrator
-    raise AuthenticationError unless logged_in?
-    raise AuthorizationError  unless current_user.admin?
+    User.access_as(current_user)
   end
   
 end

@@ -1,22 +1,31 @@
 #users
-  #create-user-link= link_to("Create a new User", new_user_path)
   %table
     %thead
       %tr
         %th Name
         %th Login
+        %th First Name
+        %th Last Name
         %th Email
-        %th View
-        %th Edit
-        %th Destroy
+        %th Administrator
+        %th Created
+        %th Last Login
+        %th
     %tbody
       - for user in @users
         %tr
-          %td= user.name
-          %td= user.login
+          %td= link_to(user.login, edit_user_path(user))
+          %td= user.first_name
+          %td= user.last_name
           %td= user.email
-          %td= link_to('View', user_path(user))
-          %td= link_to('Edit', edit_user_path(user))
-          %td= link_to('Delete', user_path(user), :method=>:delete, :confirm => 'Are you sure?')
+          %td
+            %center= user.admin ? image_tag('notice.png', :size => '12x12') : ''
+          %td
+            %center= user.created_at.nil? ? '' : user.created_at.strftime("%m/%d/%Y %I:%M %p")
+          %td
+            %center= user.last_login_at.nil? ? '' : user.last_login_at.strftime("%m/%d/%Y %I:%M %p")
+          %td
+            /%center= link_to("Lock", user_path(user), :method=>:lock, :confirm => 'Are you sure?')
+
           
 #pagination-links= pagination_links(User, params[:page], 25)

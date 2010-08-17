@@ -6,7 +6,6 @@
   - if @user.new?
     = f.password_field(:password, :label => "Password: ")
     = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
-  = f.check_box(:admin)
-  = f.check_box(:create_projects)
+  = f.select(:system_role_id, SystemRole.all.map{|sr| [sr.name, sr.id]}, :label => 'System Role:')
   = f.submit('Update', :class => 'button-link')
   = link_to('Cancel', users_path)
