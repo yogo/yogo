@@ -1,5 +1,4 @@
-# SensorValues
-#
+# SensorTypes
 
 class SensorType
   include DataMapper::Resource
