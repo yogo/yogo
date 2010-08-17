@@ -7,7 +7,7 @@ case "$1" in
 start)
   echo "Starting glassfish"
   cd $RAILS_APP
-  jruby --server -X-C -S glassfish -d -P ~/voeis/shared/pids/glassfish.pid
+  jruby --server -X-C -S glassfish --daemon --pid ~/voeis/shared/pids/glassfish.pid
 ;;
 restart)
   $0 stop
