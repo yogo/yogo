@@ -29,7 +29,8 @@ ActionController::Routing::Routes.draw do |map|
       project.resources :units, :namespace => nil, :controller => 'voeis/units'
       project.resources :sensor_values, :namespace => nil, :controller => 'voeis/sensor_values'
       project.resources :sensor_types, :namespace => nil, :controller => 'voeis/sensor_types'
-      project.resources :data_stream_columns, :namespace => nil, :controller => 'voeis/data_stream_columns'
+      project.resources :data_stream_columns, :namespace => nil, :controller =>'voeis/data_stream_columns' 
+
     end
   end
 

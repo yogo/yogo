@@ -14,7 +14,8 @@ class SensorValue
 
   has n, :site, :through => Resource
   has n, :sensor_type, :model => "SensorType", :through => Resource
-
+  has n, :meta_tags, :through => Resource
+  
   default_scope(:default).update(:order => [:timestamp]) # set default order
 
   def name
