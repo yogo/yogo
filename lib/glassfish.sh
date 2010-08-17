@@ -2,12 +2,13 @@
 #
 
 RAILS_APP=/home/voeis-demo/voeis/current
+export CLASSPATH=$RAILS_APP/lib/jna.jar
 
 case "$1" in
   start)
     echo "Starting glassfish"
     cd $RAILS_APP
-    glassfish -d -P $RAILS_APP/../shared/pids/glassfish.pid
+    glassfish
   ;;
 
   restart)
