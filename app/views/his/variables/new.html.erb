@@ -1,0 +1,32 @@
+<h1>New Variable</h1>
+
+<% form_for :variable, @variable, :url => { :action => "create"} do |f| %>
+  Variable Code: <%= f.text_field :variable_code %>
+  <p>
+  Variable Name: <%= f.text_field :variable_name %>
+  <p>
+  Variable Units ID: <%= f.text_field :variable_units_id %>
+  <p>
+  Speciation: <%= f.text_field :speciation %>
+  <p>
+  Sample Medium: <%= f.text_field :sample_medium%>
+  <p>
+  Value Type: <%= f.text_field :value_type%>
+  <p>
+  Is Regular: <%= f.text_field :is_regular%>
+  <p>
+  Time Support: <%= f.text_field :time_support%>
+  <p>
+  Time Units ID: <%= f.text_field :time_units_id%>
+  <p>
+  Data Type: <%= f.text_field :data_type%>
+  <p>
+  General Category: <%= f.text_field :general_category%>
+  <p>
+  No Data Value: <%= f.text_field :no_data_value%>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', his_variables_path %>

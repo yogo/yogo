@@ -1,0 +1,14 @@
+<h1>New HIS Data Type CV</h1>
+
+<% form_for :data_type_cv, @data_type_cv, :url => { :action => "create"} do |f| %>
+  Term: <%= f.text_field :term %>
+  <p>
+  Definition: <%= f.text_field :definition %>
+
+  <p>
+
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', his_data_type_c_vs_path %>

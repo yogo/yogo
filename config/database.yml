@@ -69,16 +69,16 @@ yogo_cucumber:
 #
 # HIS Servers
 #
-his_development:
+his_dev:
   adapter: sqlserver
   database: LittleBear11
   host: ravage.msu.montana.edu
   username: sa
   password: P@dm1n2009*
 
-his_production:
+his:
   adapter: sqlserver
-  database: LittleBear11
+  database: OD
   host: sideswipe.msu.montana.edu
-  username: sa
+  username: hisuser
   password: P@dm1n2009*

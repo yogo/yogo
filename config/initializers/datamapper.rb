@@ -23,7 +23,7 @@ config = Rails.configuration.database_configuration
 # Setup the default datamapper repository corresponding to the current rails environment
 # unnecessary: rails-datamapper handles this
 DataMapper.setup(:default, config[Rails.env])
-
+DataMapper.setup(:his, config['his'])
 # Use db configs in the form of "yogo_{default|persvr|sqlite|...}_{RAILS_ENV|development|production|...}"
 yogo_db = ['yogo', (ENV['YOGO_DB'] || 'default'), Rails.env].join('_')
 DataMapper.setup(:collection_data, config[yogo_db])

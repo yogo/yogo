@@ -1,0 +1,17 @@
+<h1>Sites</h1>
+
+<table>
+  <tr>
+  </tr>
+	<% @sites.each do |site| %>
+	  <tr>
+  		<td><%= site.id %>:<%= site.site_name %>
+  	    <td><%= link_to 'Show', his_site_path(site.id) %></td>
+	  </tr>
+	<%end%>
+</table>
+
+<br />
+
+<%= link_to 'New Site', new_his_site_path %><P>
+

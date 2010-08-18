@@ -1,0 +1,17 @@
+<h1>Censor Code CV</h1>
+
+<table>
+  <tr>
+  </tr>
+	<% @censor_code_cvs.each do |censor_code_cv| %>
+	  <tr>
+		<td><%= censor_code_cv.term %>
+	    <td><%= link_to 'Show', his_censor_code_c_v_path(censor_code_cv.term) %></td>
+	  </tr>
+	<%end%>
+</table>
+
+<br />
+
+<%= link_to 'New CensorCodeCV', new_his_censor_code_c_v_path %><P>
+

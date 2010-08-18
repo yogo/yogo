@@ -1,0 +1,21 @@
+<h1>Data Value</h1>
+
+<table>
+  <tr>
+  </tr>
+	<% @data_values.each do |data_value| %>
+	  <tr>
+		<td><%= data_value.id %>:<%= data_value.data_value%>
+	    <td><%= link_to 'Show', raw_data_value_path(data_value.id) %></td>
+	    <td><%= link_to 'Edit', edit_raw_data_value_path(data_value.id) %></td>
+	    <td><%= link_to 'Destroy', raw_data_value_path(data_value.id), 
+	       :confirm => 'Are you sure?', 
+	       :method => :delete %></td>
+	  </tr>
+	<%end%>
+</table>
+
+<br />
+
+<%= link_to 'New Data Value', new_raw_data_value_path %><P>
+
