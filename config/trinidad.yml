@@ -1,0 +1,42 @@
+---
+  port: 80  # port where trinidad is running
+  ajp:            # ajp configuration section
+    port: 3031
+  ssl:            # ssl configuration section
+    port: 3081
+
+  # Begin: options that can be overrided into the web_apps section
+
+  environment: production  # environment for rails applications
+  jruby_min_runtimes: 1    # min number of runtimes
+  jruby_max_runtimes: 5    # max number of runtimes
+  libs_dir: lib            # directory where libraries packed as jars can be found
+  classes_dir: classes     # directory where other java classes can be found
+  # default_web_xml: config/web.xml # if you are using a custom web.xml
+  context_path: /          # default context path
+  # web_app_dir: /var/www/rails # system path where the application is located, by default is PWD
+  # rackup: config.ru # rackup script if you are running a non rails application
+  public: public # system path where your public files are located
+
+  # End: options that can be overrided into the web_apps section
+  # extensions:  # if you are using any server extension
+  #   daemon: # example, daemon extension
+  #     pid_file: # pid file
+  #     jvm_args: # additional arguments for the thread that runs the daemon
+  #    log:  # daemon log properties
+  #       file: trinidad.log # where the daemon writes its output
+  #       level: ALL # severity level
+  #    hotdeploy:
+  #      monitor: tmp/restart.txt
+  #      delay: 30000
+
+  # web_apps:  # if you are running more than one application or you are using web apps extensions, hotdeploy or dbpool for instance
+  #   default:  # the key is the name and the default path for the application, 'default' means path '/', the path can be changed with the option 'context_path'
+  #      # here you can add any configuration option that could be overrided
+  #      extensions: # if you are using any webapp extension
+  #        hotdeploy: #example, hotdeploy extension
+  #          monitor: tmp/restart.txt # file to monitorize
+  #          delay: 30000 # delay to check the file, perhaps 1 second is too much for production :)
+  #   another_app: # configuring another application
+  #       context_path: /foo # this will be the path rather than 'another_app'
+  #       web_app_dir: /var/www/foo # system path where this application is located

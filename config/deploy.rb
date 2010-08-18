@@ -49,7 +49,12 @@ namespace :db do
     run "ln -nfs #{deploy_to}#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
   end
 end
+# These are one time setup steps
 after "deploy:setup",       "db:setup"
+after "db:setup",           "persvr:setup"
+after "persvr:setup",       "persvr:start"
+
+# This happens every deploy
 after "deploy:update_code", "db:symlink"
 
 namespace :assets do
