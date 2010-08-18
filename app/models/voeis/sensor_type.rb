@@ -2,7 +2,7 @@
 # SensorTypes
 #
 require 'yogo/datamapper/model/storage_context'
-class SensorType
+class Voeis::SensorType
   include DataMapper::Resource
   extend Yogo::DataMapper::Model::StorageContext
 

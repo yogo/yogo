@@ -39,7 +39,7 @@ class User
   property :updated_on, Date
 
   has n, :memberships
-  has n, :projects, :through => :memberships, :model => 'Yogo::Project'
+  has n, :projects, :through => :memberships
   has n, :roles, :through => :memberships
 
   validates_confirmation_of :password

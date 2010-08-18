@@ -1,5 +1,8 @@
 class Voeis::DataStreamColumnsController < Yogo::BaseController
-  belongs_to :project, :parent_class => Yogo::Project, :finder => :get
+  respond_to :html, :json
+  
+  belongs_to :project, :parent_class => Project, :finder => :get
+  
   def new
     #@project = Project.get(params[:id])
     #@data_templates = DataStream.all

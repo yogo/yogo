@@ -2,7 +2,7 @@
 #
 require 'yogo/datamapper/model/storage_context'
 
-class SensorValue
+class Voeis::SensorValue
   include DataMapper::Resource
   extend Yogo::DataMapper::Model::StorageContext
 
