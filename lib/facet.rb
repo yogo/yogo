@@ -83,7 +83,7 @@ module Facet
     
     def unsecured_methods
       # [:class, :inspect, :methods, :send, :secured_methods, :unsecured_methods] 
-      [ :debugger, :empty? ] +
+      [ :debugger, :empty? ] + relationships.keys.map{|m| m.to_s.pluralize.to_sym } +
       self.methods.map{|m| m.to_sym } - secured_methods
     end
     
