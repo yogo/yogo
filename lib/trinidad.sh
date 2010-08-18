@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #
 
 RAILS_APP=/home/voeis-demo/voeis/current
