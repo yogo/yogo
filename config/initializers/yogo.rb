@@ -11,22 +11,26 @@ require 'exceptions'
 # Load the Application Version
 load Rails.root / "VERSION"
 
-sr = SystemRole.first_or_create(:name => 'User', :description => 'Default user in the system')
-sr.permissions = ["yogo/project$retrieve"] and sr.save if sr.new?
+sr = SystemRole.first_or_new(:name => 'User', :description => 'Default user in the system')
+sr.actions = ["yogo/project$retrieve"] and sr.save if sr.new?
+sr.move(:to => 1)
 
 sr = SystemRole.first_or_new(:name => 'Project Manager', :description => 'Able to create projects')
-sr.permissions = Yogo::Project.to_permissions and sr.save if sr.new?
+sr.actions = ["yogo/projects$retrieve", "yogo/projects$update"] and sr.save if sr.new?
+sr.move(:to => 2)
 
 sr = SystemRole.first_or_new(:name => 'Administrator', :description => 'System role for Administrators')
-sr.permissions = User.to_permissions + Yogo::Project.to_permissions and sr.save if sr.new?
+sr.actions = SystemRole.available_permissions and sr.save if sr.new?
+sr.move(:to => 3)
+
 # Create the system administrator user
 User.create(:login => 'yogo', :first_name => "System",
             :last_name => "Administrator", :system_role => sr,
             :password => 'change me', :password_confirmation => 'change me') if User.find_by_login('yogo').nil?
             
-# VOEIS Specific Role Initialization
-Role.first_or_create(:name => "Principal Investigator", :description => "Principal Investigators create projects to pursue research goals.")
-Role.first_or_create(:name => "Field Technician",       :description => "Field Technicians manage field activities.")
-Role.first_or_create(:name => "Laboratory Technician",  :description => "Lab Technicians manage lab activities.")
-Role.first_or_create(:name => "Data Manager",           :description => "Data Managers manage all the data for a project.")
-Role.first_or_create(:name => "Member",                 :description => "General members of projects.")
+# Default Yogo Roles, we always want the PI to be in position 1
+Role.first_or_create(:name => "Principal Investigator", :description => "Principal Investigators create projects to pursue research goals.").move(:to => 1)
+# Role.first_or_create(:name => "Field Technician",       :description => "Field Technicians manage field activities.")
+# Role.first_or_create(:name => "Laboratory Technician",  :description => "Lab Technicians manage lab activities.")
+Role.first_or_create(:name => "Data Manager",           :description => "Data Managers manage all the data for a project.").move(:to => 2)
+Role.first_or_create(:name => "Member",                 :description => "General members of projects.").move(:to => 3)
