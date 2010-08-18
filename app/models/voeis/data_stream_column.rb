@@ -13,11 +13,11 @@
 #
 require 'yogo/datamapper/model/storage_context'
 
-class DataStreamColumn
+class Voeis::DataStreamColumn
   include DataMapper::Resource
   extend Yogo::DataMapper::Model::StorageContext
 
-  property :id, Serial
+  property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :name, String, :required => true
   property :type, String, :required => false
   property :unit, String, :required => true

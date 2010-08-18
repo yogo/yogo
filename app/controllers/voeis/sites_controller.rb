@@ -9,15 +9,10 @@ class Voeis::SitesController < Yogo::BaseController
   end
 
   def collection
-    @sites ||= site_collection.items
+    parent.with_storage do 
+      @sites ||= Voeis::Sites.all
+    end
   end
 
-  def resource_class
-    site_collection.data_model
-  end
-
-  def site_collection
-    @site_collection ||= Yogo::Collection::Static.first(:project => parent, :static_model => "Voeis::Site")
-  end
 
 end

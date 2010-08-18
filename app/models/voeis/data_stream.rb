@@ -12,17 +12,17 @@
 #
 require 'yogo/datamapper/model/storage_context'
 
-class DataStream
+class Voeis::DataStream
   include DataMapper::Resource
   extend Yogo::DataMapper::Model::StorageContext
 
-  property :id, Serial
+ property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
   property :filename, String, :required => true, :length => 512
   property :start_line, Integer, :required => true, :default => 0
 
-  property :project_id, Integer, :required =>true, :default => 1
+  #property :project_id, Integer, :required =>true, :default => 1
 
   validates_uniqueness_of   :name
 
