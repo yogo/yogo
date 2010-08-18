@@ -15,8 +15,8 @@ set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
 
 set  :user, "voeis-demo"
-role :web, "klank.msu.montana.edu"                          # Your HTTP server, Apache/etc
-role :app, "klank.msu.montana.edu"                          # This may be the same as your `Web` server
+role :web, "klank.msu.montana.edu"
+role :app, "klank.msu.montana.edu"
 set  :deploy_to, "/home/#{user}/voeis/"
 
 namespace :deploy do

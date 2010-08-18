@@ -9,7 +9,7 @@ case "$1" in
     echo "Starting trinidad"
     cd $RAILS_APP
     nohup trinidad --config > $RAILS_APP/log/trinidad.log 2>&1 &
-    echo $$ > $PIDFILE
+    echo $! > $PIDFILE
   ;;
 
   restart)
