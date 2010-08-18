@@ -10,7 +10,7 @@ case "$1" in
   start)
     echo "Starting glassfish"
     cd $RAILS_APP
-    jruby -X-C -S glassfish -P $PIDFILE
+    jruby --server -X-C -S glassfish -P $PIDFILE
   ;;
 
   restart)
