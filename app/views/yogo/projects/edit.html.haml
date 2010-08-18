@@ -19,7 +19,7 @@
               %th
             %tbody
               - unless @project.roles.empty? 
-                - @project.roles.users.each do |user|
+                - @project.users.each do |user|
                   %tr
                     %td= user.name
                     %td= @project.roles.select{|role| role.users.include?(user) }.map{|role| role.name }.join(', ')     
