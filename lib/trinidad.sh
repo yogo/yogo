@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #
 
 RAILS_APP=/home/voeis-demo/voeis/current
@@ -8,7 +8,8 @@ case "$1" in
   start)
     echo "Starting trinidad"
     cd $RAILS_APP
-    trinidad --config
+    nohup trinidad --config > $RAILS_APP/log/trinidad.log 2>&1 &
+    echo $! > $PIDFILE
   ;;
 
   restart)

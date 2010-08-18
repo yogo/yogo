@@ -8,7 +8,6 @@ set :use_sudo,    false
 set :scm, :git
 set :repository,  "git://github.com/yogo/yogo.git"
 set :shell, "/bin/bash"
-set :pty, true
 
 set :branch, "apps/voeis_merge_master"
 set :deploy_via, :remote_cache
@@ -18,6 +17,8 @@ set  :user, "voeis-demo"
 role :web, "klank.msu.montana.edu"
 role :app, "klank.msu.montana.edu"
 set  :deploy_to, "/home/#{user}/voeis/"
+
+default_run_options[:pty] = false
 
 namespace :deploy do
   desc "Restart Server"
