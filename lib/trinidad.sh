@@ -2,14 +2,13 @@
 #
 
 RAILS_APP=/home/voeis-demo/voeis/current
-PIDFILE=/home/voeis-demo/voeis/shared/pids/trinidad.pid
+PIDFILE=/home/voeis-demo/voeis/shared/tmp/trinidad.pid
 
 case "$1" in
   start)
     echo "Starting trinidad"
     cd $RAILS_APP
-    nohup trinidad --config > $RAILS_APP/log/trinidad.log 2>&1 &
-    echo $! > $PIDFILE
+    trinidad --config
   ;;
 
   restart)
