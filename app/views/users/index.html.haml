@@ -24,8 +24,7 @@
             %center= user.created_at.nil? ? '' : user.created_at.strftime("%m/%d/%Y %I:%M %p")
           %td
             %center= user.last_login_at.nil? ? '' : user.last_login_at.strftime("%m/%d/%Y %I:%M %p")
-          %td
-            /%center= link_to("Lock", user_path(user), :method=>:lock, :confirm => 'Are you sure?')
+            
+#add-user= link_to("Add User", new_user_path)
 
-          
 #pagination-links= pagination_links(User, params[:page], 25)
