@@ -20,19 +20,19 @@ role :app, "klank.msu.montana.edu"                          # This may be the sa
 set  :deploy_to, "/home/#{user}/voeis/"
 
 namespace :deploy do
-  desc "Restart Glassfish"
+  desc "Restart Server"
   task :restart, :roles => :app do
-   run "TZ=America/Denver #{current_path}/lib/glassfish.sh restart"
+   run "TZ=America/Denver #{current_path}/lib/trinidad.sh restart"
   end
 
-  desc "Start Glassfish"
+  desc "Start Server"
   task :start, :roles => :app do
-    run "TZ=America/Denver #{current_path}/lib/glassfish.sh start"
+    run "TZ=America/Denver #{current_path}/lib/trinidad.sh start"
   end
 
-  desc "Stop Glassfish"
+  desc "Stop Server"
   task :stop, :roles => :app do
-    run "TZ=America/Denver #{current_path}/lib/glassfish.sh stop"
+    run "TZ=America/Denver #{current_path}/lib/trinidad.sh stop"
   end
 end
 

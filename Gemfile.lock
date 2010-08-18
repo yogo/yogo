@@ -32,16 +32,16 @@ GEM
     BlueCloth (1.0.1)
     Saikuro (1.1.0)
     ZenTest (4.3.3)
-    actionmailer (2.3.5)
-      actionpack (= 2.3.5)
-    actionpack (2.3.5)
-      activesupport (= 2.3.5)
-      rack (~> 1.0.0)
-    activerecord (2.3.5)
-      activesupport (= 2.3.5)
-    activeresource (2.3.5)
-      activesupport (= 2.3.5)
-    activesupport (2.3.5)
+    actionmailer (2.3.8)
+      actionpack (= 2.3.8)
+    actionpack (2.3.8)
+      activesupport (= 2.3.8)
+      rack (~> 1.1.0)
+    activerecord (2.3.8)
+      activesupport (= 2.3.8)
+    activeresource (2.3.8)
+      activesupport (= 2.3.8)
+    activesupport (2.3.8)
     addressable (2.2.0)
     arrayfields (4.7.4)
     bcrypt-ruby (2.1.2)
@@ -128,8 +128,6 @@ GEM
       sexp_processor (~> 3.0)
     gherkin (2.1.5-java)
       trollop (~> 1.16.2)
-    glassfish (1.0.2-java)
-      rack (>= 0.4.0)
     googlecharts (1.6.0)
     haml (3.0.17)
     has_scope (0.5.0)
@@ -142,10 +140,8 @@ GEM
       has_scope (~> 0.5.0)
       responders (~> 0.4.6)
     jdbc-sqlite3 (3.6.3.054)
-    jruby-jars (1.5.1)
     jruby-openssl (0.7.1)
       bouncy-castle-java
-    jruby-rack (1.0.3)
     json_pure (1.4.6)
     main (4.2.0)
       arrayfields (>= 4.7.4)
@@ -171,15 +167,15 @@ GEM
       net-ssh (>= 1.99.1)
     nokogiri (1.4.3.1-java)
       weakling (>= 0.0.3)
-    rack (1.0.1)
+    rack (1.1.0)
     rack-test (0.5.4)
       rack (>= 1.0)
-    rails (2.3.5)
-      actionmailer (= 2.3.5)
-      actionpack (= 2.3.5)
-      activerecord (= 2.3.5)
-      activeresource (= 2.3.5)
-      activesupport (= 2.3.5)
+    rails (2.3.8)
+      actionmailer (= 2.3.8)
+      actionpack (= 2.3.8)
+      activerecord (= 2.3.8)
+      activeresource (= 2.3.8)
+      activesupport (= 2.3.8)
       rake (>= 0.8.3)
     rails-footnotes (3.6.7)
     rails_best_practices (0.4.0)
@@ -208,18 +204,12 @@ GEM
       sexp_processor (~> 3.0)
     rubyforge (2.0.4)
       json_pure (>= 1.1.7)
-    rubyzip (0.9.4)
     selenium-client (1.2.18)
     sexp_processor (3.0.4)
     stringex (1.1.0)
     term-ansicolor (1.0.5)
     trollop (1.16.2)
     uuidtools (2.1.1)
-    warbler (1.2.1)
-      jruby-jars (>= 1.4.0)
-      jruby-rack (>= 1.0.0)
-      rake (>= 0.8.7)
-      rubyzip (>= 0.9.4)
     warden (0.10.7)
       rack (>= 1.0.0)
     weakling (0.0.4-java)
@@ -259,7 +249,6 @@ DEPENDENCIES
   fattr
   flay
   flog
-  glassfish
   googlecharts
   haml
   hirb
@@ -270,8 +259,7 @@ DEPENDENCIES
   main
   metric_fu
   mime-types
-  rack (= 1.0.1)
-  rails (= 2.3.5)
+  rails (= 2.3.8)
   rails-footnotes
   rails_warden
   rake
@@ -284,7 +272,6 @@ DEPENDENCIES
   ruby_parser
   selenium-client
   uuidtools
-  warbler
   webrat
   yard
   yardstick
