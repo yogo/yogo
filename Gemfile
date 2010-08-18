@@ -9,7 +9,6 @@ gem "dm-persevere-adapter", "0.72.0", :require => nil
 
 # These are required so we can make it simple to interact with legacy data
 gem 'dm-sqlite-adapter',    :require => nil
-gem "dm-sqlserver-adapter", :require => nil
 # gem "do_postgres",                    :require => nil
 
 # 1.0 Release of dm-types has problems with UUID properties, use git master
@@ -36,8 +35,8 @@ gem "uuidtools"
 gem 'rails_warden'
 
 if defined?(JRUBY_VERSION)
+  gem "dm-sqlserver-adapter", :require => nil
   gem "jruby-openssl",        :require => nil
-  gem "glassfish",            :require => nil
   gem "json_pure",            :require => nil
   gem "BlueCloth",            :require => nil # Required for YARD
 else

@@ -15,24 +15,24 @@ set :deploy_via, :remote_cache
 set :copy_exclude, [".git"]
 
 set  :user, "voeis-demo"
-role :web, "klank.msu.montana.edu"                          # Your HTTP server, Apache/etc
-role :app, "klank.msu.montana.edu"                          # This may be the same as your `Web` server
+role :web, "klank.msu.montana.edu"
+role :app, "klank.msu.montana.edu"
 set  :deploy_to, "/home/#{user}/voeis/"
 
 namespace :deploy do
-  desc "Restart Glassfish"
+  desc "Restart Server"
   task :restart, :roles => :app do
-   run "TZ=America/Denver #{current_path}/lib/glassfish.sh restart"
+   run "TZ=America/Denver #{current_path}/lib/trinidad.sh restart"
   end
 
-  desc "Start Glassfish"
+  desc "Start Server"
   task :start, :roles => :app do
-    run "TZ=America/Denver #{current_path}/lib/glassfish.sh start"
+    run "TZ=America/Denver #{current_path}/lib/trinidad.sh start"
   end
 
-  desc "Stop Glassfish"
+  desc "Stop Server"
   task :stop, :roles => :app do
-    run "TZ=America/Denver #{current_path}/lib/glassfish.sh stop"
+    run "TZ=America/Denver #{current_path}/lib/trinidad.sh stop"
   end
 end
 
@@ -49,7 +49,12 @@ namespace :db do
     run "ln -nfs #{deploy_to}#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
   end
 end
+# These are one time setup steps
 after "deploy:setup",       "db:setup"
+after "db:setup",           "persvr:setup"
+after "persvr:setup",       "persvr:start"
+
+# This happens every deploy
 after "deploy:update_code", "db:symlink"
 
 namespace :assets do
