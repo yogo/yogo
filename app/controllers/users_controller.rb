@@ -1,7 +1,7 @@
 class UsersController < InheritedResources::Base
-  before_filter :require_user
-  
   respond_to :html, :json
+  
+  belongs_to :projects, :optional => true
   
   defaults :resource_class => User,
            :collection_name => 'users',
@@ -28,7 +28,7 @@ class UsersController < InheritedResources::Base
   protected
 
   def resource
-    @user ||= collection.get(params[:id]).access_as(current_user)
+    @user ||= resource_class.get(params[:id])
   end
   
   def collection
