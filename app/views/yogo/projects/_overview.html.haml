@@ -2,7 +2,7 @@
   %tr
     %td.map
       #map
-        = render(:partial => "map", :locals => { :sites => :collection => @project.data_collections.first(:name => "Sites").items })
+        = render(:partial => "map", :locals => { :sites =>  @project.data_collections.first(:name => "Sites").items })
     %td.buttons
       = link_to("New Site", new_yogo_project_site_path(@project), :class => 'new-link')
       = clear_break

@@ -22,10 +22,15 @@
 # SpatialReferenceID from the SpatialReferences controlled vocabulary table.  If the spatial
 # reference system of the local coordinates is unknown, a default value of 0 is used.
 #
+# 
+# 
+
+require 'yogo/datamapper/model/storage_context'
 class Voeis::Site
   include DataMapper::Resource
+  extend Yogo::DataMapper::Model::StorageContext
 
-  property :id, Serial, :required => true
+  property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :site_code, String, :required => true
   property :site_name, String, :required => true
   property :latitude, Float, :required => true

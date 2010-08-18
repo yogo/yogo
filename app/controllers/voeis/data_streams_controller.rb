@@ -49,20 +49,22 @@ class Voeis::DataStreamsController < Yogo::BaseController
       @var_array = Array.new
       @var_array[0] = ["","","",""]
       # if params[:data_template] != "None"
-      #        data_template = DataStream.first(:id => params[:data_template])
-      #        (0..@row_size).each do |i|
-      #          data_col = data_template.data_stream_columns.first(:column_number => i)
-      #          if data_col.variables.empty?
-      #            @var_array[i] = [data_col.name, data_col.unit, data_col.type,""]
-      #          else
-      #            @var_array[i] = [data_col.name, data_col.unit, data_col.type,data_col.variables.first.id]
-      #          end
-      #        end
-      #       else
-              (0..@row_size).each do |i|
-                   @var_array[i] = ["","","",""]
-                  end
-      #       end
+      #   data_template = DataStream.first(:id => params[:data_template])
+          # (0..@row_size).each do |i|
+          #    puts i
+          #    data_col = data_template.data_stream_columns.first(:column_number => i)
+          #    if data_col.variables.empty?
+          #      @var_array[i] = [data_col.name, data_col.unit, data_col.type,"",data_col.min, data_col.min, data_col.difference]
+          #    else
+          #      @var_array[i] = [data_col.name, data_col.unit, data_col.type,data_col.variables.first.id,data_col.min, data_col.min, data_col.difference]
+          #    end
+          #  end
+          # else
+            (0..@row_size).each do |i|
+              @var_array[i] = ["","","","","","",""]
+             end
+          # end
+
       respond_to do |format|
         format.html
       end
