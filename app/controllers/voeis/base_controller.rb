@@ -1,9 +1,9 @@
 # @author Ryan Heimbuch
-# @abstract Base class Voeis-specific controllers
+# @abstract Base class for Voeis-specific controllers
 # 
 # Voeis models are not "related" to Project as might be expected by the 
 # InheritedResources#belongs_to declaration.
-# In fact, Voeis models hold not relationship with the top-level 
+# In fact, Voeis models have no relationship with the top-level 
 # Project model.
 # Instead Project acts as a RepositoryManager and handles creating 
 # and manipulating a "project-specific" DataMapper::Repository
@@ -31,9 +31,8 @@
 # You should be familiar with the features provided by InheritedResources
 # and understand how to properly override the controller actions (index/create/edit/...etc).
 # @see http://github.com/josevalim/inherited_resources/tree/v1.0.6
-
-end
 class Voeis::BaseController < InheritedResources::Base
+  
   # #belongs_to indicates that the resources managed by this controller
   # are nested-resources under /project/.
   # This **does not** mean that any of the resources have any database
