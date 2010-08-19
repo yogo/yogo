@@ -47,7 +47,7 @@ class Project
     models = args
     
     @managed_models += models
-    @monaged_models.uniq!
+    @managed_models.uniq!
     
     @managed_models
   end
