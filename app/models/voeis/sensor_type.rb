@@ -12,9 +12,9 @@ class Voeis::SensorType
   property :max,      Integer,  :required => false
   property :difference,  Integer,  :required => false
 
-  has n, :sites, :through => Resource
-  has n, :sensor_values, :model => "SensorValue", :through => Resource
-  has n, :variables, :through => Resource
+  has n, :sites,          :model => "Voeis::Site", :through => Resource
+  has n, :sensor_values,  :model => "Voeis::SensorValue", :through => Resource
+  has n, :variables,      :model => "Voeis::Variable", :through => Resource
   #has n, :methods, :model => "Method", :through => Resource
 
   # This method allows us to do things like

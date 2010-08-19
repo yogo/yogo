@@ -1,29 +1,10 @@
 %h2
-  = link_to(@project.name, project_path(@project) )
-=clear_break
--form_tag("add_site_to_project", :method => :post) do 
-  -@site_options=""
-  -@sites.each do |site|
-    -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
-  =select_tag("site", @site_options)
-  =hidden_field_tag("project_id", @project.id)
-  =submit_tag("Submit")
-=clear_break
--form_tag("create_site", :method => :post) do
-  Site Name:
-  =text_field_tag("site_name")
-  =clear_break
-  Site Code:
-  =text_field_tag("site_code")
-  =clear_break
-  Latitude:
-  =text_field_tag("latitude")
-  =clear_break
-  Longitude:
-  =text_field_tag("longitude")
-  =clear_break
-  State:
-  =text_field_tag("state")
-  =clear_break
-  =hidden_field_tag("project_id", @project.id)
-  =submit_tag("Submit")
+  / = link_to(parent.name, project_path(@project) )
+
+-form_for(:site, resource, :url => project_sites_path(@project), :builder => YogoFormBuilder) do |f|
+  =f.text_field("site_name")
+  =f.text_field("site_code")
+  =f.text_field("latitude")
+  =f.text_field("longitude")
+  =f.text_field("state")
+  =f.submit("Submit")

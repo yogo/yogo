@@ -6,7 +6,7 @@
 
   .small.boxed
     .rbox.tight
-      = link_to("Delete", yogo_project_path(@project), :method => :delete, :class => 'delete-link', 
+      = link_to("Delete", project_path(@project), :method => :delete, :class => 'delete-link', 
                 :confirm => "Do you want to delete the #{@user.name}?\nThere is no undo! Continue?" )
       -form_for(@user, :builder => YogoFormBuilder) do |f|
         = f.text_field(:login, :label => "Login:" )
@@ -29,7 +29,7 @@
               - unless @user.roles.empty? 
                 - @user.roles.projects.each do |project|
                   %tr
-                    %td= link_to(project.name, yogo_project_path(project))
+                    %td= link_to(project.name, project_path(project))
                     %td= @user.roles.select{|role| role.projects.include?(project) }.map{|role| role.name }.join(', ')     
                     %td 
                       #operation-links
@@ -52,4 +52,4 @@
               = check_box_tag("memberships[roles][]", role.id, false, :class => "memberships_#{role.id}", :id => "memberships_#{role.id}")
               = label_tag("memberships_#{role.id}", role.name)
           = f.submit('Update', :class => 'update-link')
-          = link_to('Cancel', yogo_projects_path, :class => 'cancel-link')
+          = link_to('Cancel', projects_path, :class => 'cancel-link')

@@ -1,8 +1,13 @@
-class Voeis::DataStreamsController < Yogo::BaseController
-  belongs_to :project, :parent_class => Yogo::Project, :finder => :get
-  def new
-    @project = Yogo::Project.first(:id => params[:project_id])
-  end
+class Voeis::DataStreamsController < Voeis::BaseController
+
+  # Properly override defaults to ensure proper controller behavior
+  # @see Voeis::BaseController
+  defaults  :route_collection_name => 'data_streams',
+            :route_instance_name => 'data_stream',
+            :collection_name => 'data_streams',
+            :instance_name => 'data_stream',
+            :resource_class => Voeis::DataStream
+
   # alows us to upload csv file to be processed into data
   #
   # @example http://localhost:3000/project/upload_stream/1/
@@ -16,11 +21,11 @@ class Voeis::DataStreamsController < Yogo::BaseController
   #
   # @api public
   def pre_upload
-    @project = Yogo::Project.first(:id => params[:project_id])
+    @project = Project.first(:id => params[:project_id])
     #@variables = Variable.all
     #@sites = @project.sites
-    
-    
+
+
     if !params[:datafile].nil? && datafile = params[:datafile]
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
@@ -32,10 +37,10 @@ class Voeis::DataStreamsController < Yogo::BaseController
         if params[:header_box] == "Campbell"
           @start_line = 4
           @header_info = parse_logger_csv_header(datafile.path)
-          
+
           @start_row = @header_info.last
-          
-          @row_size = @start_row.size - 1 
+
+          @row_size = @start_row.size - 1
           if @header_info.empty?
             flash[:error] = "CSV File improperly formatted. Data not uploaded."
             #redirect_to :controller =>"projects", :action => "add_stream", :params => {:id => params[:project_id]}
@@ -70,7 +75,7 @@ class Voeis::DataStreamsController < Yogo::BaseController
       end
     end
   end
-  
+
   def create_stream
     #create and save new DataStream
     data_stream = DataStream.new(:name => params[:data_stream_name],
@@ -85,7 +90,7 @@ class Voeis::DataStreamsController < Yogo::BaseController
     #create DataStreamColumns
     site = Site.first(:id => params[:site])
     #header = parse_logger_csv_header(params[:datafile])
-    # 
+    #
     range = params[:rows].to_i
     (0..range).each do |i|
       puts i.to_s + ": i"
@@ -95,7 +100,7 @@ class Voeis::DataStreamsController < Yogo::BaseController
                                                   :name => "Timestamp",
                                                   :type =>"Timestamp",
                                                   :unit => "NA",
-                                                  :original_var => params["variable"+i.to_s])                   
+                                                  :original_var => params["variable"+i.to_s])
 
         data_stream_column.save
         puts data_stream_column.errors.inspect
@@ -103,7 +108,7 @@ class Voeis::DataStreamsController < Yogo::BaseController
         data_stream.save
         puts data_stream_column.errors.inspect
       else
-              data_stream_column = DataStreamColumn.new(:column_number => i, 
+              data_stream_column = DataStreamColumn.new(:column_number => i,
                                                         :name => params["variable"+i.to_s],
                                                         :original_var => params["variable"+i.to_s],
                                                         :unit => params["unit"+i.to_s],
@@ -114,8 +119,8 @@ class Voeis::DataStreamsController < Yogo::BaseController
               data_stream_column.data_streams << data_stream
               data_stream_column.save
               # data_stream.data_stream_columns << data_stream_column
-              # data_stream.save 
-              # 
+              # data_stream.save
+              #
               sensor_type = SensorType.first_or_create(:name => params["variable"+i.to_s] + Site.first(:id => params[:site]).name)
               site.sensor_types << sensor_type
               site.save
@@ -129,8 +134,8 @@ class Voeis::DataStreamsController < Yogo::BaseController
     flash[:notice] = "File parsed and stored successfully."
     redirect_to project_path(params[:project_id])
   end
-  
-  def index
+
+  def old_index
      @project = Project.first(:id => params[:id])
      @project_array = Array.new
      temp_hash = Hash.new
@@ -170,9 +175,9 @@ class Voeis::DataStreamsController < Yogo::BaseController
              end
            end
 
-           @sensor_types.each do |s_type| 
+           @sensor_types.each do |s_type|
              if !s_type.sensor_values.last.nil?
-               if senscount != 0 && 
+               if senscount != 0 &&
                  @plot_data +=  ","
                end
                senscount+=1
@@ -186,7 +191,7 @@ class Voeis::DataStreamsController < Yogo::BaseController
                  num = 12
 
                else
-                  num = params[:hours].to_i 
+                  num = params[:hours].to_i
                end
                if params[:begin_date].nil? # get the last ?hrs of data, calc from the last timestamp
                  #cur_date = DateTime.now #strptime("2009-11-17T08:45:00+00:00")
@@ -212,9 +217,9 @@ class Voeis::DataStreamsController < Yogo::BaseController
 
                array_data = Array.new()
                value_results = site.sensor_types.first(:name => s_type.name).sensor_values(:timestamp.gt => begin_date, :timestamp.lt => cur_date).collect{
-                 |val| 
-               #value_results = repository(:default).adapter.select('SELECT "timestamp","value","site_id" FROM "sensor_values" WHERE site_id = ? and sensor_type_id = ? and timestamp >= ? and timestamp <= ? ORDER BY "timestamp"', site.id, s_type.id, begin_date, cur_date).collect{|val| 
-                 temp_array= Array.new() 
+                 |val|
+               #value_results = repository(:default).adapter.select('SELECT "timestamp","value","site_id" FROM "sensor_values" WHERE site_id = ? and sensor_type_id = ? and timestamp >= ? and timestamp <= ? ORDER BY "timestamp"', site.id, s_type.id, begin_date, cur_date).collect{|val|
+                 temp_array= Array.new()
                  if params[:hourly].nil?
                    temp_array.push(val.timestamp.to_time.localtime.to_i*1000, val.value)
                    array_data.push(temp_array)
@@ -236,15 +241,15 @@ class Voeis::DataStreamsController < Yogo::BaseController
 
                # if !@sensor_labels[s_type.name.to_s].nil?
                #                @sensor_hash["label"] = @sensor_labels[s_type.name.to_s]
-               #             
+               #
                #                @thelabel = @sensor_labels[s_type.name]
-               # 
+               #
                #            else
 
                     @sensor_hash["label"] = s_type.variables.first.variable_name
                     @thelabel = s_type.variables.first.variable_name
               #end
-               if !s_type.sensor_values.last.units.nil?              
+               if !s_type.sensor_values.last.units.nil?
                  @sensor_hash["units"] = s_type.sensor_values.last.units
                else
                  @sensor_hash["units"] = "nil"
@@ -284,7 +289,7 @@ class Voeis::DataStreamsController < Yogo::BaseController
          }
        else
          flash[:warning] = "Unable to find a project with the identifier #{params[:id]}."
-         format.html { redirect_to( yogo_projects_path )}
+         format.html { redirect_to( projects_path )}
        end
      end
    end
@@ -330,8 +335,6 @@ class Voeis::DataStreamsController < Yogo::BaseController
      csv_data[row-1]
    end
 
-
-
    def parse_logger_csv(csv_file, data_stream_template, site)
      require "yogo/model/csv"
      csv_data = CSV.read(csv_file)
@@ -354,8 +357,8 @@ class Voeis::DataStreamsController < Yogo::BaseController
            data_value.yogo__data_value = row[i]
            data_value.yogo__local_date_time = row[data_timestamp_col]
            if !data_stream_col[i].variables.first.nil?
-             data_value.yogo__variable = data_stream_col[i].variables.first.id 
-           end   
+             data_value.yogo__variable = data_stream_col[i].variables.first.id
+           end
            data_value.save
            #save to sensor_value and sensor_type
            sensor_value = SensorValue.new(:value => row[i],
@@ -371,7 +374,4 @@ class Voeis::DataStreamsController < Yogo::BaseController
        end
      end
    end
-   
-
-
 end

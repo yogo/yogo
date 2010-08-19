@@ -45,5 +45,7 @@ class Voeis::Site
   property :comments, String, :required => false
 
   # has n, :projects, :through => Resource
-  has n, :data_streams, :model => "DataStream", :through => Resource
+  has n, :data_streams, :model => "Voeis::DataStream", :through => Resource
+  has n, :sensor_type,    :model => "Voeis::SensorType", :through => Resource
+  has n, :sensor_values,  :model => "Voeis::SensorValue", :through => Resource
 end

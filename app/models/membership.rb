@@ -5,7 +5,7 @@ class Membership
   property :role_id,    Integer, :key => true
   property :user_id,    Integer, :key => true
 
-  belongs_to :project, :model => 'Yogo::Project'
+  belongs_to :project
   belongs_to :role
   belongs_to :user
 end

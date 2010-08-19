@@ -1,6 +1,6 @@
 <h2><%=link_to(@project.name, project_path(@project) )%></h2>
 <div id="graphs">
-  <% @project.sites.each do |site| %>
+  <% collection.each do |site| %>
     <% if site.status == "Active"%>
 
     <h3><a href="#"><%=site.name%></a></h3>

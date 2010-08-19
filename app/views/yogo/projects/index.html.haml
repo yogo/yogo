@@ -31,11 +31,10 @@
       %h3 Last Updates:
       - project.data_collections.first(:name => "Sites").items.each do |site|
         -if !site.sensor_values.last.nil?
-          =site.name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
-          =clear_break
+          = site.site_name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
         -else
-          =site.name + ': never'
-          =clear_break
-
+          = site.site_name + ': never'
+        = clear_break
+        
 #pagination-links= pagination_links(Yogo::Project, params[:page], 5)
 

@@ -11,11 +11,9 @@
 # Class for a Yogo Project. A project contains a name, a description, and access to all of the models
 # that are part of the project.
 #
-require 'yogo/datamapper/model/storage_context'
 
 class Voeis::DataStreamColumn
   include DataMapper::Resource
-  extend Yogo::DataMapper::Model::StorageContext
 
   property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :name, String, :required => true
@@ -24,7 +22,7 @@ class Voeis::DataStreamColumn
   property :original_var, String, :required => true
   property :column_number, Integer, :required => true
 
-  has n, :variables, :through => Resource
-  has n, :units, :through=> Resource
-  has n, :data_streams, :model => "DataStream", :through => Resource
+  has n, :variables,    :model => 'Voeis::Variable', :through => Resource
+  has n, :units,        :model => 'Voeis::Unit', :through=> Resource
+  has n, :data_streams, :model => "Voeis::DataStream", :through => Resource
 end

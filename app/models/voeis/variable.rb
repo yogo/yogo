@@ -37,10 +37,11 @@
 # value.  For example a NoDataValue of -9999 is valid for water temperature because we
 # would never expect to measure a water temperature of -9999.  The default value for this
 # field is -9999.
-require 'yogo/datamapper/model/storage_context'
+
 class Voeis::Variable
   include DataMapper::Resource
-extend Yogo::DataMapper::Model::StorageContext
+  extend Yogo::DataMapper::Model::StorageContext
+
   property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :variable_code, String, :required => true
   property :variable_name, String, :required => true
@@ -55,7 +56,7 @@ extend Yogo::DataMapper::Model::StorageContext
   property :general_category, String, :required => true, :default => 'Unknown'
   property :no_data_value, Float, :required => true, :default => -9999
 
-  has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
-  has n, :sensor_types, :model => "SensorType", :through => Resource
-  has n, :units, :through => Resource
+  has n, :data_stream_columns,      :model => "Voeis::DataStreamColumn", :through => Resource
+  has n, :sensor_types,             :model => "Voeis::SensorType", :through => Resource
+  has n, :units,                    :model => "Voeis::Unit", :through => Resource
 end

@@ -16,7 +16,7 @@ class Role
   property :permissions, Yaml, :default => [].to_yaml
 
   has n, :memberships
-  has n, :projects, :through => :memberships, :model => 'Yogo::Project'
+  has n, :projects, :through => :memberships
   has n, :users, :through => :memberships
 
   def self.permission_sources
