@@ -1,6 +1,6 @@
 #menu-links
   = link_to("Home", root_url)
-  = select_tag("role", options_from_collection_for_select(current_user.roles, 'id', 'name'))
+  / = render_dashboard_jump_box
   - if logged_in? && current_user.admin
     = link_to("Administration", page_url(:admin))
   = link_to("About", page_url(:about))

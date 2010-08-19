@@ -145,6 +145,52 @@ module ApplicationHelper
     end
   end
 
+  def render_dashboard_jump_box
+    # Retrieve them now to avoid a COUNT query
+    projects = current_user.projects.all
+    if projects.any?
+      s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
+            "<option value=''>Jump to a project...</option>" +
+            '<option value="" disabled="disabled">---</option>'
+      s << project_tree_options_for_select(projects, :selected => @project) do |p|
+        { :value => url_for(:controller => 'dashboards', :action => 'show', :id => p, :jump => current_menu_item) }
+      end
+      s << '</select>'
+      s
+    end
+  end
+
+  # Renders the project quick-jump box
+  def render_project_jump_box
+    # Retrieve them now to avoid a COUNT query
+    projects = current_user.projects.all
+    if projects.any?
+      s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
+            "<option value=''>Jump to a project...</option>" +
+            '<option value="" disabled="disabled">---</option>'
+      s << project_tree_options_for_select(projects, :selected => @project) do |p|
+        { :value => url_for(:controller => 'projects', :action => 'show', :id => p, :jump => current_menu_item) }
+      end
+      s << '</select>'
+      s
+    end
+  end
+
+  def project_tree_options_for_select(projects, options = {})
+    s = ''
+    projects.each do |project|
+      tag_options = {:value => project.id}
+      if project == options[:selected] || (options[:selected].respond_to?(:include?) && options[:selected].include?(project))
+        tag_options[:selected] = 'selected'
+      else
+        tag_options[:selected] = nil
+      end
+      tag_options.merge!(yield(project)) if block_given?
+      s << content_tag('option', name_prefix + h(project), tag_options)
+    end
+    s
+  end
+
   def yogo_button(image, text, link)
     link_to(image_tag(image), link)
   end

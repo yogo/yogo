@@ -9,9 +9,9 @@ class MembershipsController < InheritedResources::Base
 
   def create
     if params.has_key?(:project_id)
-      @project = Yogo::Project.get(params[:project_id])
+      @project = Project.get(params[:project_id])
     else
-      @project = Yogo::Project.get(params[:id])
+      @project = Project.get(params[:id])
     end
 
     if params.has_key?(:user_id)
@@ -33,9 +33,9 @@ class MembershipsController < InheritedResources::Base
 
   def destroy
     if params.has_key?(:project_id)
-      @project = Yogo::Project.get(params[:project_id])
+      @project = Project.get(params[:project_id])
     else
-      @project = Yogo::Project.get(params[:id])
+      @project = Project.get(params[:id])
     end
 
     if params.has_key?(:user_id)
@@ -51,9 +51,9 @@ class MembershipsController < InheritedResources::Base
 
   def edit
     if params.has_key?(:project_id)
-      @project = Yogo::Project.get(params[:project_id])
+      @project = Project.get(params[:project_id])
     else
-      @project = Yogo::Project.get(params[:id])
+      @project = Project.get(params[:id])
     end
 
     if params.has_key?(:user_id)
@@ -71,7 +71,7 @@ class MembershipsController < InheritedResources::Base
 
 
   def update
-    @project = Yogo::Project.get(params[:project_id])
+    @project = Project.get(params[:project_id])
     @user = User.get(params[:id])
     @roles = params[:memberships][:roles].map { |rid| Role.get(rid) }
 

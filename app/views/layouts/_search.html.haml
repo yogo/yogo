@@ -1,5 +1,4 @@
 #search-tab
   Search:
   = text_field_tag("search_term")
-  - projects = Project.all.select { |p| p.users.include?(current_user) || (p.is_private? == false) }
-  = select_tag("project", options_from_collection_for_select(projects, 'id', 'name'))
+  / = render_project_jump_box
