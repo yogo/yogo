@@ -24,8 +24,8 @@ class Voeis::DataStream
 
   validates_uniqueness_of   :name
 
-  has n, :sites, :through => Resource
-  has n, :data_stream_columns, :model => "DataStreamColumn", :through => Resource
+  has n, :sites,               :model => 'Voeis::Site', :through => Resource
+  has n, :data_stream_columns, :model => "Voeis::DataStreamColumn", :through => Resource
 
 
  # Loads a CSV file into the streaming data model

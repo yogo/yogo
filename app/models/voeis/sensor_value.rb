@@ -12,9 +12,9 @@ class Voeis::SensorValue
   property :timestamp,    DateTime,  :required => true, :index => true
   property :created_at,  DateTime
 
-  has n, :site, :through => Resource
-  has n, :sensor_type, :model => "SensorType", :through => Resource
-  has n, :meta_tags, :through => Resource
+  has n, :site,           :model => "Voeis::Site", :through => Resource
+  has n, :sensor_type,    :model => "Voeis::SensorType", :through => Resource
+  has n, :meta_tags,      :model => "Voeis::MetaTag", :through => Resource
   
   default_scope(:default).update(:order => [:timestamp]) # set default order
 

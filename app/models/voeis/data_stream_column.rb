@@ -21,7 +21,7 @@ class Voeis::DataStreamColumn
   property :original_var, String, :required => true
   property :column_number, Integer, :required => true
 
-  has n, :variables, :through => Resource
-  has n, :units, :through=> Resource
-  has n, :data_streams, :model => "DataStream", :through => Resource
+  has n, :variables,    :model => 'Voeis::Variable', :through => Resource
+  has n, :units,        :model => 'Voeis::Unit', :through=> Resource
+  has n, :data_streams, :model => "Voeis::DataStream", :through => Resource
 end

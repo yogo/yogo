@@ -7,6 +7,6 @@ class Voeis::MetaTag
   property :name,    String,  :required => true
   property :created_at,  DateTime
 
-  has n, :sensor_values, :through => Resource
+  has n, :sensor_values, :model => 'Voeis::SensorValue', :through => Resource
 
 end
