@@ -1,24 +1,20 @@
-class Voeis::SitesController < Yogo::BaseController
+class Voeis::SitesController < Voeis::BaseController
+  
+  # Properly override defaults to ensure proper controller behavior
+  # @see Voeis::BaseController
+  defaults  :route_collection_name => 'sites',
+            :route_instance_name => 'site',
+            :collection_name => 'sites',
+            :instance_name => 'site',
+            :resource_class => Voeis::Site
 
-  belongs_to :project, :parent_class => Project, :finder => :get
-  respond_to :html, :json
 
-  protected
-
-  def resource
-    @site ||= collection.get(params[:id])
+  def create
+    super do |success, failure|
+      success.html { redirect_to project_url(parent) }
+    end
   end
+  
 
-  def collection
-    @sites ||= site_collection.items
-  end
-
-  def resource_class
-    site_collection.data_model
-  end
-
-  def site_collection
-    @site_collection ||= Yogo::Collection::Static.first(:project => parent, :static_model => "Voeis::Site")
-  end
 
 end

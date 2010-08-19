@@ -1,11 +1,13 @@
-class Voeis::DataStreamsController < Yogo::BaseController
-  respond_to :html, :json
-  
-  belongs_to :project, :parent_class => Project, :finder => :get
-  
-  def new
-    @project = Yogo::Project.first(:id => params[:project_id])
-  end
+class Voeis::DataStreamsController < Voeis::BaseController
+
+  # Properly override defaults to ensure proper controller behavior
+  # @see Voeis::BaseController
+  defaults  :route_collection_name => 'data_streams',
+            :route_instance_name => 'data_stream',
+            :collection_name => 'data_streams',
+            :instance_name => 'data_stream',
+            :resource_class => Voeis::DataStream
+            
   # alows us to upload csv file to be processed into data
   #
   # @example http://localhost:3000/project/upload_stream/1/
@@ -19,7 +21,7 @@ class Voeis::DataStreamsController < Yogo::BaseController
   #
   # @api public
   def pre_upload
-    @project = Yogo::Project.first(:id => params[:project_id])
+    @project = Project.first(:id => params[:project_id])
     #@variables = Variable.all
     #@sites = @project.sites
     
@@ -131,7 +133,7 @@ class Voeis::DataStreamsController < Yogo::BaseController
     redirect_to project_path(params[:project_id])
   end
   
-  def index
+  def old_index
      @project = Project.first(:id => params[:id])
      @project_array = Array.new
      temp_hash = Hash.new
@@ -285,7 +287,7 @@ class Voeis::DataStreamsController < Yogo::BaseController
          }
        else
          flash[:warning] = "Unable to find a project with the identifier #{params[:id]}."
-         format.html { redirect_to( yogo_projects_path )}
+         format.html { redirect_to( projects_path )}
        end
      end
    end

@@ -1,5 +1,11 @@
-class Voeis::SensorValuesController < Yogo::BaseController
-  belongs_to :project, :parent_class => Project, :finder => :get
-  respond_to :html, :json
+class Voeis::SensorValuesController < Voeis::BaseController
+  
+  # Properly override defaults to ensure proper controller behavior
+  # @see Voeis::BaseController
+  defaults  :route_collection_name => 'sensor_values',
+            :route_instance_name => 'sensor_value',
+            :collection_name => 'sensor_values',
+            :instance_name => 'sensor_value',
+            :resource_class => Voeis::SensorValue
   
 end
