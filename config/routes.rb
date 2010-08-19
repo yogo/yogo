@@ -33,7 +33,15 @@ ActionController::Routing::Routes.draw do |map|
 
     end
   end
-
+  map.namespace :his do |his|
+    his.resources :data_type_c_vs #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :censor_code_c_vs #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :sources #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :methods #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :variables #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :sites #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :data_values#, :requirements => { :id => /[a-zA-Z]+/ }
+  end
   # Dashboard routes
   map.dashboard 'dashboards/:id', :controller => 'dashboards', :action => 'show', :requirements => { :id => /[a-z]+/ }
 

@@ -1,0 +1,17 @@
+<h1>Variables</h1>
+
+<table>
+  <tr>
+  </tr>
+	<% @variables.each do |variable| %>
+	  <tr>
+		<td><%= variable.id %>:<%= variable.variable_name %>
+	    <td><%= link_to 'Show', his_variable_path(variable.id) %></td>
+	  </tr>
+	<%end%>
+</table>
+
+<br />
+
+<%= link_to 'New Variable', new_his_variable_path %><P>
+
