@@ -22,10 +22,8 @@
 # SpatialReferenceID from the SpatialReferences controlled vocabulary table.  If the spatial
 # reference system of the local coordinates is unknown, a default value of 0 is used.
 #
-# 
-# 
-
 require 'yogo/datamapper/model/storage_context'
+
 class Voeis::Site
   include DataMapper::Resource
   extend Yogo::DataMapper::Model::StorageContext

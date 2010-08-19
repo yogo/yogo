@@ -13,6 +13,4 @@ class Voeis::SitesController < Yogo::BaseController
       @sites ||= Voeis::Sites.all
     end
   end
-
-
 end

@@ -8,7 +8,7 @@
         = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
       .action-links
         .map{:id => "map" + project.id.to_s}
-          You should see a map here.  
+          = render(:partial => 'map', :locals => { :sites => project.data_collections.first(:name => "Sites").items })
           .map-links
         /= link_to_edit_project_models(project, "Edit/Add Data Models", :class => 'button-link')
         = link_to("Project Settings", edit_yogo_project_path(project), :class => 'button-link')

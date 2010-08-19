@@ -16,7 +16,7 @@ class Voeis::DataStream
   include DataMapper::Resource
   extend Yogo::DataMapper::Model::StorageContext
 
- property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
+  property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :name, String, :required => true, :unique => true
   property :description, Text, :required => false
   property :filename, String, :required => true, :length => 512
