@@ -1,8 +1,0 @@
-<% visualization("map", "Map", :html => { :class => 'map' }) do |map| %>
-  <% map.number "Latitude" %>
-  <% map.number "Longitude" %>
-  <% map.string "Name" %>
-  <% @project.data_collections.first(:name => "Sites").items.each do |site| %>
-    <% map.add_row([site.latitude, site.longitude, site.name2]) %>
-  <% end %>
-<% end %>
