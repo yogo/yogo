@@ -47,7 +47,7 @@ class Project
     models = args
     
     @managed_models += models
-    @monaged_model.uniq!
+    @monaged_models.uniq!
     
     @managed_models
   end
@@ -62,8 +62,8 @@ class Project
   def self.finalize_managed_models!
     models = []
     @managed_models.each do |m|
-      models += m.relationships.map{|r| r.child_model }
-      models += m.relationships.map{|r| r.parent_model }
+      models += m.relationships.values.map{|r| r.child_model }
+      models += m.relationships.values.map{|r| r.parent_model }
     end
     @managed_models += models
     @managed_models.uniq!
