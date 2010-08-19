@@ -2,7 +2,7 @@
 #
 
 RAILS_APP=/home/voeis-demo/voeis/current
-PIDFILE=/home/voeis-demo/voeis/shared/tmp/trinidad.pid
+PIDFILE=/home/voeis-demo/voeis/shared/pids/trinidad.pid
 
 case "$1" in
   start)

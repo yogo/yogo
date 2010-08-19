@@ -75,7 +75,7 @@ after "deploy:update_code", "assets:symlink"
 namespace :bundle do
   desc "Run bundle install on the server"
   task :install do
-    run("bash -c 'cd #{release_path} && bundle install'")
+    run("bash -c 'cd #{release_path} && rm Gemfile.lock && bundle install'")
   end
 end
 after 'deploy:update_code', 'bundle:install'
