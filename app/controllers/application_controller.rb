@@ -33,6 +33,7 @@ class ApplicationController < ActionController::Base
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password, :password_confirmation
   
+  # We might not need these lines anymore. See the method 'rescue_action' defined below
   rescue_from Facet::PermissionException::Denied, :with => :authorization_denied
   # rescue_from Facet::PermissionException::Denied, :with => :authentication_required
   
@@ -96,6 +97,14 @@ class ApplicationController < ActionController::Base
   # @api private
   def show_sidebar
     @sidebar = true
+  end
+  
+  def rescue_action(e)
+    if e.kind_of?(Facet::PermissionException::Denied) || e.original_exception.kind_of?(Facet::PermissionException::Denied)
+      authorization_denied
+    else
+      super
+    end
   end
   
 end
