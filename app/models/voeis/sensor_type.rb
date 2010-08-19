@@ -8,9 +8,9 @@ class Voeis::SensorType
 
   property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :name,     String,  :required => true
-  property :min,      Integer,  :required => false
-  property :max,      Integer,  :required => false
-  property :difference,  Integer,  :required => false
+  property :min,      Float,  :required => false
+  property :max,      Float,  :required => false
+  property :difference,  Float,  :required => false
 
   has n, :sites,          :model => "Voeis::Site", :through => Resource
   has n, :sensor_values,  :model => "Voeis::SensorValue", :through => Resource
