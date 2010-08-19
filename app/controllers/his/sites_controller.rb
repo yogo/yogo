@@ -2,7 +2,6 @@ class His::SitesController < ApplicationController
   # GET /sites
   def index
     @sites = His::Sites.all
-    debugger
     respond_to do |format|
       format.html # index.html.erb
     end

@@ -198,6 +198,11 @@ body
       text-align: right
     td.data-value
       +column(16, true)
+    td.map
+      width: 300px
+      font-size: small
+    td.datasets
+      font-size: small
       
   // Links
   a
@@ -326,6 +331,8 @@ body
     #subtitle
       font-size: .5em
       color: #777
+    #links
+      font-size: .25em
   #data-content-title
     +prepend(6)
     +column(10)
@@ -343,17 +350,12 @@ body
 #project-user-roles-form table td
   width: 3em
 
-#map
-  width: 300px
-  height: 200px
-  border: 1px solid #000
-
 .map
   width: 300px
   height: 200px
   margin: 0px
   padding: 0px
-  
+
 .map-links
   display: block
   margin: 15px
