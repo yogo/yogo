@@ -42,17 +42,31 @@ class Project
   # 
   # @param [DataMapper::Model] model class that might be stored in Project managed_repositories
   # @return [Array<DataMapper::Model>] list of currently managed models
-  def self.manage(klass)
+  def self.manage(*args)
     @managed_models ||= []
-    unless @managed_models.include?(klass)
-      @managed_models << klass
-    end
+    models = args
+    
+    @managed_models += models
+    @monaged_model.uniq!
+    
     @managed_models
   end
   
   # Models that are currently managed by Project instances.
   # @return [Array<DataMapper::Model>] list of currently managed models
   def self.managed_models
+    @managed_models
+  end
+  
+  # Ensure that Relation models are also managed
+  def self.finalize_managed_models!
+    models = []
+    @managed_models.each do |m|
+      models += m.relationships.map{|r| r.child_model }
+      models += m.relationships.map{|r| r.parent_model }
+    end
+    @managed_models += models
+    @managed_models.uniq!
     @managed_models
   end
   
@@ -85,6 +99,7 @@ class Project
   def prepare_models
     adapter # ensure the adapter exists or is setup
     managed_repository.scope {
+      self.class.finalize_managed_models!
       self.class.managed_models.each do |klass|
         klass.auto_upgrade!
       end
