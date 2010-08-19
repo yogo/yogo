@@ -24,14 +24,20 @@ module Yogo
     # end
     
     def self.permissions_for(user)
+      # By default, all users can retrieve projects
       (super << "#{permission_base_name}$retrieve").uniq
     end
     
     ##
     # 
     def permissions_for(user)
-      return ["#{permission_base_name}$retrieve"] if user.nil?
-      super + user.memberships(:project_id => self.id).roles.map{|r| r.actions }.flatten.uniq
+      @_permissions_for ||= {}
+      @_permissions_for[user] ||= begin
+        base_permission = []
+        base_permission << "#{permission_base_name}$retrieve" unless self.is_private?
+        return base_permission if user.nil?
+        (super + base_permission + user.memberships(:project_id => self.id).roles.map{|r| r.actions }).flatten.uniq
+      end
     end
     
     private
