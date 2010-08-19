@@ -14,7 +14,8 @@ ActionController::Routing::Routes.draw do |map|
     project.resources :memberships, :namespace => nil, :controller => "memberships"
     project.resources :users, :namespace => nil, :controller => "users"
 
-    project.resources :sites, :namespace => nil, :controller => 'voeis/sites'
+    project.resources :sites, :namespace => nil, :controller => 'voeis/sites',
+                      :collection => {:add_site => :get, :save_site => :post}
 
     project.resources :data_streams, :namespace => nil, :controller => 'voeis/data_streams',
                       :collection => { :pre_upload => :post, :create_stream => :post}
