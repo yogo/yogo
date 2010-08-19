@@ -87,8 +87,7 @@ module Facet
     
     def unsecured_methods
       # [:class, :inspect, :methods, :send, :secured_methods, :unsecured_methods] 
-      [ :debugger, :empty? ] + relationships.keys.map{|m| m.to_s.pluralize.to_sym } +
-      self.methods.map{|m| m.to_sym } - secured_methods
+      [ :debugger, :empty? ] - secured_methods
     end
     
   end
@@ -105,8 +104,8 @@ module Facet
     end
     
     def unsecured_instance_methods
-      ([:debugger, :class, :empty?, :is_a?, :nil?, :respond_to?, :to_param, :valid?] + 
-      self.instance_methods.map{ |k| k.to_sym }) - secured_instance_methods
+      [:debugger, :class, :empty?, :is_a?, :nil?, :respond_to?, :to_param, :valid?]  
+      # self.instance_methods.map{ |k| k.to_sym }) - secured_instance_methods
       # self.instance_methods - secured_instance_methods
     end
     
@@ -155,7 +154,8 @@ module Facet
     def permissions
       {
         :create => [:new, :create],
-        :retrieve => [:all, :get, :first, :last, :count],
+        :retrieve => [:all, :get, :first, :last, :count] + relationships.keys.map{|m| m.to_s.pluralize.to_sym } +
+        self.methods.map{|m| m.to_sym },
         :update => [:update],
         :destroy => [:destroy]
       }
@@ -177,7 +177,7 @@ module Facet
     def permissions
       {
         :create => [],
-        :retrieve => [:attributes],
+        :retrieve => [:attributes] + self.methods.map{ |k| k.to_sym },
         :update => [:attributes=, :save, :update],
         :destroy => [:destroy]
       }
