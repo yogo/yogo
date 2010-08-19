@@ -7,19 +7,6 @@
 #
 #
 ActionController::Routing::Routes.draw do |map|
-  # The priority is based upon order of creation: first created -> highest priority.
-  # map.namespace :yogo do |yogo|
-  #   yogo.resources :projects,
-  #                  :member => { :upload => :post },
-  #                  :collection => { :search => :get} do |project|
-  # 
-  #     project.resources :collections do |collection|
-  #       collection.resources :items
-  #       collection.resources :properties
-  #     end
-  #   end
-  # end
-  
   map.resources :projects,
                  :member => { :upload => :post },
                  :collection => { :search => :get} do |project|
@@ -35,7 +22,7 @@ ActionController::Routing::Routes.draw do |map|
     project.resources :units, :namespace => nil, :controller => 'voeis/units'
     project.resources :sensor_values, :namespace => nil, :controller => 'voeis/sensor_values'
     project.resources :sensor_types, :namespace => nil, :controller => 'voeis/sensor_types'
-    project.resources :data_stream_columns, :namespace => nil, :controller =>'voeis/data_stream_columns' 
+    project.resources :data_stream_columns, :namespace => nil, :controller =>'voeis/data_stream_columns'
 
   end
   map.namespace :his do |his|
@@ -68,5 +55,5 @@ ActionController::Routing::Routes.draw do |map|
   map.login '/login', :controller => 'user_sessions', :action => 'new'
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => "yogo/projects"
+  map.root :controller => "projects"
 end
