@@ -1,6 +1,5 @@
 #search-tab
-  //- form_for(:search, :url => search_path, :html => {:method => :get} ) do |f|
   Search:
   = text_field_tag("search_term")
-  - projects = Yogo::Project.all.select { |p| p.users.include?(current_user) || (p.is_private? == false) }
+  - projects = Project.all.select { |p| p.users.include?(current_user) || (p.is_private? == false) }
   = select_tag("project", options_from_collection_for_select(projects, 'id', 'name'))
