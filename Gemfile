@@ -39,6 +39,7 @@ if defined?(JRUBY_VERSION)
   gem "jruby-openssl",        :require => nil
   gem "json_pure",            :require => nil
   gem "BlueCloth",            :require => nil # Required for YARD
+  gem "ruby-debug"
 else
   gem "ruby-debug"            unless RUBY_VERSION >= '1.9.1'
   gem "ruby-debug19"          if RUBY_VERSION >= '1.9.1'
