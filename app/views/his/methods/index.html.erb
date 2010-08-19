@@ -1,0 +1,17 @@
+<h1>Methods</h1>
+
+<table>
+  <tr>
+  </tr>
+	<% @methods.each do |method| %>
+	  <tr>
+		<td><%= method.id %>:<%= method.method_description %>
+	    <td><%= link_to 'Show', his_method_path(method.id) %></td>
+	  </tr>
+	<%end%>
+</table>
+
+<br />
+
+<%= link_to 'New Method', new_his_method_path %><P>
+

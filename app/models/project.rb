@@ -1,405 +1,148 @@
-# Yogo Data Management Toolkit
-# Copyright (c) 2010 Montana State University
-#
-# License -> see license.txt
-#
-# FILE: project.rb
-# The project model is where the action starts.  Every yogo instance starts with a
-# a project and the project is where the models and data will be namespaced.
+require 'dm-core'
+require 'dm-types/uuid'
 
-# Class for a Yogo Project. A project contains a name, a description, and access to all of the models
-# that are part of the project.
+require 'yogo/datamapper/repository_manager'
+
+# Top-level data-management container.
+#
+# Project includes functionality from Yogo::DataMapper::RespositoryManager
+# @see http://github.com/yogo/yogo-project/blob/topic/managers/lib/yogo/datamapper/repository_manager.rb
+#
+# 
 class Project
-  include DataMapper::Resource
-  extend Permission
+  include ::DataMapper::Resource
+  include Yogo::DataMapper::RepositoryManager
 
-  property :id, Serial
-  property :name, String, :required => true, :unique => true
-  property :description, Text, :required => false
-  property :is_private, Boolean, :required => true, :default => false
-
-  validates_is_unique   :name
+  property :id,               UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
+  property :name,             String,     :required => true
+  property :description,      String
+  
+  property :is_private,      Boolean, :required => true, :default => false
 
   has n, :memberships
-  has n, :roles, :through => :memberships
   has n, :users, :through => :memberships
+  has n, :roles, :through => :memberships
 
-  before :destroy, :delete_models!
-  has n, :sites, :through => Resource
+  before :destroy, :destroy_cleanup
 
   def self.extended_permissions
     collection_perms = [ :create_models, :retrieve_models, :update_models, :delete_models, :create_data, :retrieve_data, :update_data, :delete_data ]
     [:manage_users, collection_perms, super].flatten
   end
 
-  # The number of items to be displayed (by default) per page
-  #
-  # @example
-  #   Project.per_page
-  #
-  # @return [Fixnum]
-  #
-  # @api public
-  def self.per_page
-    15
-  end
-
-  ##
-  # Returns all projects that have been marked public
-  #
-  # @example
-  #   Project.public
-  #
-  # @return [DataMapper::Collection]
-  #
-  # @author lamb
-  #
-  # @api public
-  def self.public(opts = {})
-    all( opts.merge({:is_private => false}) )
-  end
-
-  ##
-  # Returns all private projects the current user has access to
-  #
-  # @example
-  #   Project.private
-  #
-  # @return [DataMapper::Collection or nil]
-  #
-  # @author lamb
-  #
-  # @api public
-  def self.private(opts = {})
-    current_user = User.current
-    return nil if current_user.nil?
-    current_user.roles.projects(opts)
-  end
-
-  ##
-  # Returns all projects the current user has access to
-  #
-  # @example
-  #   Project.available
-  #
-  # @return [DataMapper::Collection or Array]
-  #
-  # @author lamb
-  #
-  # @api public
-  def self.available(opts = {})
-    return self.all(opts) if Setting[:local_only]
-    # else
-    private_projects = self.private
-    if private_projects == nil
-      self.public(opts)
-    else
-      (self.public + self.private).all(opts)
-    end
-  end
-
-  ##
-  # Returns the namespace Yogo Models will be in
-  #
-  # @example
-  #   my_project.namespace
-  #
-  # @return [String]
-  #   the project namespaced name
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  #
-  def namespace
-    Extlib::Inflection.classify(path)
-  end
-
-  ##
-  # Used to get the current project path name
-  #
-  # @example
-  #   @project.path
-  #
-  # @return [String] the project path name
-  #
-  # @author Yogo Team
-  #
-  # @api semipublic
-  def path
-    name.downcase.gsub(/[^\w]/, '_')
-  end
-
-  ##
-  # Compatability method for rails' route generation helpers
-  #
-  # @example
-  #   @project.to_param # returns the ID as a string
-  #
-  # @return [String] the object id as url param
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def to_param
-    id.to_s
-  end
-
-  ##
-  # Creates a model and imports data from a CSV file
-  #
-  # @example
-  #    "aproject.process_csv('mydata.csv','MyModel')"
-  #    loading data from a CSV file into a project model
-  #
-  # @param [String] datafile
-  #   A path to the CSV file to read in
-  # @param [String] model_name
-  #   The desired name of the model to be created
-  #
-  # @return [Array]
-  #   Returns empty array if successful or an array of error messages if unsuccessful
-  #
-  # * The csv datafile must be in the following format:
-  #   1. row 1 -> field names
-  #   2. row 2 -> type,
-  #   3. row 3 -> units
-  #   4. rows 4+ -> data
-  #
-  # @author Robbie Lamb
-  #
-  # @api public
-  def process_csv(datafile, model_name)
-
-    model_name = model_name.gsub(/\s/,'_').classify
-
-    # Look to see if there is already one of these models.
-    model = get_model(model_name)
-
-    # Generate a model with no properties.
-    if model.nil?
-      model = generate_empty_model(model_name)
-      model.auto_migrate!
-    end
-
-    # Load data
-    errors = model.load_csv_data(datafile)
-    return errors
-  end
-
-  ##
-  # Returns all of the Yogo::Models assocated with the project
-  #
-  # @example
-  #  models
-  #
-  # @return [Array]
-  #   All of the models associated with current project namespace
-  #
-  # @author
-  #
-  # @api public
-  #
-  def models
-    DataMapper::Model.descendants.select { |m| m.name =~ /Yogo::#{namespace}::/ }
-  end
-
-  ##
-  # Used to retreive the DataMapper model by it's name
-  #
-  # @example
-  #  get_model("SampleModel")
-  #
-  # @param [String] name
-  #  The name of the class to retrieve
-  #
-  # @return [Model] the DataMapper model
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  #
-  def get_model(name)
-    DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::#{name}$/i }[0]
-  end
-
-  ##
-  # Used to retreive the DataMapper model that have search term in their name
-  #
-  # @example
-  #  search_models("Baccon")
-  #
-  # @param [String] search_term
-  #  The term to search for
-  #
-  # @return [Models] the DataMapper models
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  #
-  def search_models(search_term)
-    DataMapper::Model.descendants.select{ |m| m.name =~ /^Yogo::#{namespace}::\w*#{search_term}\w*$/i }
-  end
-
-  ##
-  # Adds a model to the current project
-  #
-  # @example
-  #  add_model("CDs")
-  #
-  # @param [String] name the name of the model to be created
-  # @param [Hash] properties Each key in the property is a new property name. The key points to an
-  #     options hash for the property. The key 'type' is required. All other keys are optional and
-  #     the same as a normal datamapper property options hash.
-  #
-  #
-  # @return [DataMapper::Model] a new model
-  #
-  # @author Robbie Lamb robbie.lamb@gmail.com
-  #
-  # @see http://datamapper.org/docs/properties
-  #
-  # @api public
-  def add_model(name, properties = {}, relationships = {})
-    name = name.classify
-    return false unless valid_model_or_column_name?(name)
-
-    a_model = generate_empty_model(name)
-
-    properties.each do |name, options|
-      a_model.send(:property, name, options.delete(:type), options.merge(:prefix => 'yogo'))
-    end
-
-    relationships.each do |name, options|
-      # Do something for each one
-    end
-
-    return a_model
-  end
-
-  # Removes a model and any data contianed with from a project
-  #
-  # @example
-  #  delete_model("CDs")
-  #
-  # @param [String] model
-  #  the name of the model to delete
-  #
-  # @return [Boolean] return True if model removed successfully
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def delete_model(model)
-    model = get_model(model) if model.class == String
-    name = model.name.demodulize
-    model.auto_migrate_down!
-
-    DataMapper::Model.descendants.delete(model)
-    n = eval("Yogo")
-    if n.constants.include?(namespace.to_sym)
-      ns = eval("Yogo::#{namespace}")
-      ns.send(:remove_const, name.to_sym) if ns.constants.include?(name.to_sym)
-    end
-  end
-
-  ##
-  # Removes all models and all of the data from a project
-  #
-  # @example
-  #  delete_models!
-  #
-  # @return [Boolean] returns True if all models removed successfully
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  #
-  def delete_models!
-    models.each do |model|
-      delete_model(model)
-    end
-  end
-
-  ##
-  # Return the description for a dataset
-  #
-  # @example
-  #   project.dataset_description('blah')
-  #
-  # @param [String] dataset
-  #   The description
-  #
-  # @return [String or Nil]
-  #
-  # @author Pol Llovet pol.llovet@gmail.com
-  #
-  # @api public
-  def dataset_description(dataset)
-    "There should be a dataset description, make the editor."
-  end
-
   private
-
-  ##
-  # The name to check for validity
-  #
-  # @param [String] potential_name
-  #
-  # @return [TrueClass or FalseClass]
-  #  If the string passed in can be a valid model or colum name
-  #
-  # @author Yogo Team
-  #
-  # @api private
-  #
-  def valid_model_or_column_name?(potential_name)
-    !potential_name.match(/^\d|\.|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)/)
+  def destroy_cleanup
+    memberships.destroy
   end
-
-  # Generates a model with the property :yogo_id in the project's namespace
-  #
-  # It will not be automigrated
-  #
-  # @param [String] name
-  #   The name to give to the class.
-  #
-  # @return [Class]
-  #   The class that has been generated.
-  #
-  # @author Robbie Lamb robbie.lamb@gmail.com
-  #
-  # @api private
-  def generate_empty_model(model_name)
-    spec_hash = { :modules => ["Yogo", namespace],
-                  :name => model_name,
-                  :properties => {
-                    'yogo_id' => {
-                      :type => DataMapper::Types::Serial,
-                      :field => 'id'
-                      },
-                      :created_at => {
-                        :type => DateTime
-                      },
-                      :updated_at => {
-                        :type => DateTime
-                      },
-                      :created_by_id => {
-                        :type => Integer
-                      },
-                      :updated_by_id => {
-                        :type => Integer
-                      },
-                      :change_summary => {
-                        :type => Text
-                      }
-                    }
-                }
-
-    model = DataMapper::Factory.instance.build(spec_hash, :yogo )
-    model.send(:include,Yogo::Model)
-    return model
+  
+  public
+  
+  # Class method for informing Project instances about what kinds of models
+  # might be stored inside thier Project#managed_repository.
+  # 
+  # @param [DataMapper::Model] model class that might be stored in Project managed_repositories
+  # @return [Array<DataMapper::Model>] list of currently managed models
+  def self.manage(klass)
+    @managed_models ||= []
+    unless @managed_models.include?(klass)
+      @managed_models << klass
+    end
+    @managed_models
   end
-
-end
+  
+  # Models that are currently managed by Project instances.
+  # @return [Array<DataMapper::Model>] list of currently managed models
+  def self.managed_models
+    @managed_models
+  end
+  
+  # @author Ryan Heimbuch
+  # 
+  # Override required from Yogo::DataMapper::Repository#managed_repository_name
+  # 
+  # @return [Symbol] the name for the DataMapper::Repository that the Project manages
+  def managed_repository_name
+    ActiveSupport::Inflector.tableize(id.to_s).to_sym
+  end
+  
+  # @author Ryan Heimbuch
+  # 
+  # @return [Hash] The adapter configuration for the Project managed_repository
+  # @see DataMapper.setup
+  # @todo Refactor this method into a module in yogo-project
+  def adapter_config
+    {
+      :adapter => 'sqlite',
+      :database => "db/sqlite3/voeis-project-#{managed_repository_name}.db"
+    }
+  end
+  
+  # Ensure that models that models managed by the Project
+  # are properly migrated/upgraded inside the Project managed repository.
+  #
+  # @author Ryan Heimbuch
+  # @todo Refactor this method into a module in yogo-project
+  def prepare_models
+    adapter # ensure the adapter exists or is setup
+    managed_repository.scope {
+      self.class.managed_models.each do |klass|
+        klass.auto_upgrade!
+      end
+    }
+  end
+  
+  # Builds a "new", unsaved datamapper resource, that is explicitly
+  # bound to the Project#managed_repository. 
+  # If you want to create a new resource that will be saved inside the
+  # repository of a Project, you should always use this method.
+  # 
+  # @example Create a new site that is stored in myProject.managed_repository
+  #   managedSite = myProject.build_managed(Voeis::Site, :site_name => ...)
+  #
+  # @example Doing any of these will NOT work consistently (if at all)
+  #   managedSite1 = Voeis::Site.new(:site_name => ...)
+  #   managedSite1.save # WILL NOT save in myProject.managed_repository
+  #
+  #   managedSite2 = myProject.managed_repository{Voeis::Site.new(:site_name => ...)}
+  #   managedSite2.save # WILL NOT save in myProject.managed_repository
+  #
+  # Boring Details:
+  #   Initially "new" model resources do not bind themselves to any repository.
+  #   At some point a "new" resource will persist itself and bind itself exclusively
+  #   to the repository that it "persisted into". This step is fiddly to catch, and 
+  #   happens deep inside the DataMapper code. It is MUCH easier to explictly bind
+  #   the "new" resource to a particular repository immediately after calling #new.
+  #   This requires using reflection to modify the internal state of the resource object,
+  #   so it is best sealed inside a single method, rather than scattered throughout 
+  #   the codebase.
+  #
+  # @todo Refactor into module in yogo-project
+  # @author Ryan Heimbuch
+  def build_managed(model_klass, attributes={})
+    unless self.class.managed_models.include? model_klass
+      self.class.manage(model_klass)
+      prepare_models
+    end
+    res = model_klass.new(attributes)
+    res.instance_variable_set(:@_repository, managed_repository)
+    res
+  end
+  
+  # Ensure that models that we might store in the Project#managed_repository
+  # are properly migrated/upgrade whenever the Project changes.
+  # @author Ryan Heimbuch
+  # @see Project#prepare_models
+  after :save, :prepare_models
+  
+  # Ensure that our common Voeis models are ready to be persisted
+  # in the Project#managed_repository.
+  # @author Ryan Heimbuch
+  manage Voeis::Site
+  manage Voeis::DataStream
+  manage Voeis::DataStreamColumn
+  manage Voeis::MetaTag
+  manage Voeis::SensorType
+  manage Voeis::SensorValue
+  manage Voeis::Unit
+  manage Voeis::Variable
+end # Project

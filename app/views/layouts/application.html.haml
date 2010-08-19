@@ -17,15 +17,16 @@
                               'jquery.flot.selection.js',
                               'jquery.flot.navigate.js',
                              'jrails.js', 'application.js')
+
     %script{:type =>"text/javascript",  :src => "http://maps.google.com/maps/api/js?sensor=false"}
     %script{:type => "text/javascript", :src => "http://www.google.com/jsapi"}
+    
     = include_visualization_api
     = render_visualizations
+    
     %link{:rel => "shortcut icon", :href => "#{image_path("favicon.png")}"}/
-  - if @no_blueprint
-    %body.typography
-  - else
-    %body.bp.typography
+
+  %body.typography
 
   / Header (including optional menus)
   #header
@@ -33,16 +34,19 @@
       VOEIS Data Hub 
       %span.smaller.emphasis
         = "ALPHA v" + YOGO_VERSION
-    =clear_break
-    #menu.rbox.tight
+    #system-menu.box.tight
       #menu-left-col
-        = render(:partial => 'layouts/menu_links') unless @no_menu
-        = render(:partial => "#{action_name}_menu") rescue nil
+        = render(:partial => 'layouts/menu_links')
       #menu-right-col
-        = render(:partial => 'layouts/login') unless @no_login
-        = render(:partial => 'layouts/search') unless @no_search
-  =clear_break 
-  /Grid Container 
+        = render(:partial => 'layouts/login')
+    #menu.box.tight
+      #menu-left-col
+        / In the case of pages and dashboards (static controllers we probably want something else)
+        = controller_name.capitalize
+      #menu-right-col
+        = render(:partial => 'layouts/search')
+
+  / Grid Container 
   #container
     #flash
       - if flash[:notice]
@@ -55,7 +59,11 @@
           %p.error= link_to(flash[:error], flash[:error_link])
         - else
           %p.error= flash[:error]
-    =clear_break 
+      - if flash[:alert]
+        - if flash[:error_link]
+          %p.error= link_to(flash[:error], flash[:error_link])
+        - else
+          %p.error= flash[:alert]
     #content
       = yield 
 

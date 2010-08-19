@@ -23,7 +23,6 @@ class ApplicationController < ActionController::Base
 
   # include all helpers, all the time
   helper :all
-  helper :breadcrumbs
 
   # Specify the layout for the yogo application
   layout 'application'
@@ -85,18 +84,4 @@ class ApplicationController < ActionController::Base
       render_optional_error_file(:forbidden)
     end
   end
-
-  ##
-  # Show the sidebar in the layout (this is usually called by a before-filter)
-  #
-  # @example
-  #   before_filter :show_sidebar
-  #
-  # @return [Trueclass]
-  #
-  # @api private
-  def show_sidebar
-    @sidebar = true
-  end
-
 end

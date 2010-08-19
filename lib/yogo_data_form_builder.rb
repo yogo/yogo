@@ -14,12 +14,12 @@ class YogoDataFormBuilder < ActionView::Helpers::FormBuilder
   #
   # @api public
   def field_for_param(param, *args)
-    if param.type == DataMapper::Types::YogoFile || param.type == DataMapper::Types::YogoImage
+    if param.kind_of?(DataMapper::Property::YogoFile) || param.kind_of?(DataMapper::Property::YogoImage)
       options = args.last.is_a?(Hash) ? args.pop : {}
       options.merge!(:size => 15)
       args << options
       file_field(param.name, *args)
-    elsif param.type == DataMapper::Types::Boolean
+    elsif param.kind_of?(DataMapper::Property::Boolean)
       radio_button(param.name, true, *args) + " " + label(param.name, "True", :value => true) << ActiveSupport::SafeBuffer.new('<br>') <<
       radio_button(param.name, false, *args) + " " + label(param.name, "False", :value => false)
     elsif param.type == Date

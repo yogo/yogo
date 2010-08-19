@@ -1,0 +1,11 @@
+#project-actions
+  %table.project
+    %tr
+      %td.map
+        = render(:partial => 'overview_map', :locals => { :project => @project } )
+      %td.buttons
+        = link_to("Add Site", new_project_site_path(@project), :class => 'new-link')
+        = clear_break
+        = link_to("Add a Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id},:class => 'new-link')
+        = clear_break
+        = link_to("View Data Streams", project_data_streams_path(@project), :class => 'button-link')

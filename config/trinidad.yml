@@ -1,0 +1,28 @@
+---
+  port: 3000      # port where trinidad is running
+  ajp:            # ajp configuration section
+    port: 3031
+  # ssl:            # ssl configuration section
+  #   port: 3081
+
+  # Begin: options that can be overrided into the web_apps section
+
+  environment: production  # environment for rails applications
+  jruby_min_runtimes: 1    # min number of runtimes
+  jruby_max_runtimes: 5    # max number of runtimes
+  libs_dir: lib            # directory where libraries packed as jars can be found
+  classes_dir: classes     # directory where other java classes can be found
+  context_path: /          # default context path
+  public: public           # system path where your public files are located
+
+  # End: options that can be overrided into the web_apps section
+
+  extensions:                    # if you are using any server extension
+    # daemon:                      # example, daemon extension
+    #   pid_file: tmp/trinidad.pid # pid file
+    #   log:                        # daemon log properties
+    #     file: log/trinidad.log   # where the daemon writes its output
+    #     level: ALL               # severity level
+    hotdeploy:
+      monitor: tmp/restart.txt
+      delay: 30000

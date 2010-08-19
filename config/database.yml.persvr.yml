@@ -1,0 +1,41 @@
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: database.yml.start
+#
+#
+
+development:
+  adapter: sqlite3
+  database: db/sqlite3/development.sqlite3
+
+production:
+  adapter: sqlite3
+  database: db/sqlite3/production.sqlite3
+
+test:
+  adapter: sqlite3
+  database: db/sqlite3/test.sqlite3
+
+
+persevere_settings: &PERSEVERE
+  adapter: persevere
+  versioned: true
+  host: localhost
+  port: 8080
+  
+yogo_development:
+  <<: *PERSEVERE
+
+yogo_production:
+  <<: *PERSEVERE
+
+# run with bin/persvr -p 8081
+yogo_test: &YOGO_TEST
+  <<: *PERSEVERE
+  port: 8081
+
+yogo_cucumber:
+  <<: *YOGO_TEST

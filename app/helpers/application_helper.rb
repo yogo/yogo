@@ -7,50 +7,9 @@
 # Methods added to this helper will be available to all templates in the application.
 #
 module ApplicationHelper
-  #
-  # Google Vis API
-  #
+
+  # include Google Vis tools
   include GoogleVisualization
-
-  # Adds items to the menu in the view
-  #
-  # @example
-  #  add_menu_item(Bacon, bacon)
-  #
-  # @param [String] name
-  #  The name of the item to link to
-  # @param [String] url
-  #  The url of the item to link to, default value is {}
-  # @param [String] html_options
-  #  The html options for the link, default value is {}
-  #
-  # @return [String] a link formatted for a menu as a list item
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def add_menu_item(name, url = {}, html_options = {})
-    css_class = ''
-    css_class = 'highlighted-menu-item' if request.url.include?(h(url))
-
-    "<li class='#{css_class}'>" +
-      link_to(name, url, html_options) +
-    "</li>"
-  end
-
-  # Returns all projects
-  #
-  # @example
-  #  all_projects
-  #
-  # @return [Array <Objects>] returns an array of projects
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def all_projects
-    Project.all
-  end
 
   # Generates the links needed for pagination
   #
@@ -186,6 +145,52 @@ module ApplicationHelper
     end
   end
 
+  def render_dashboard_jump_box
+    # Retrieve them now to avoid a COUNT query
+    projects = current_user.projects.all
+    if projects.any?
+      s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
+            "<option value=''>Jump to a project...</option>" +
+            '<option value="" disabled="disabled">---</option>'
+      s << project_tree_options_for_select(projects, :selected => @project) do |p|
+        { :value => url_for(:controller => 'dashboards', :action => 'show', :id => p, :jump => current_menu_item) }
+      end
+      s << '</select>'
+      s
+    end
+  end
+
+  # Renders the project quick-jump box
+  def render_project_jump_box
+    # Retrieve them now to avoid a COUNT query
+    projects = current_user.projects.all
+    if projects.any?
+      s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
+            "<option value=''>Jump to a project...</option>" +
+            '<option value="" disabled="disabled">---</option>'
+      s << project_tree_options_for_select(projects, :selected => @project) do |p|
+        { :value => url_for(:controller => 'projects', :action => 'show', :id => p, :jump => current_menu_item) }
+      end
+      s << '</select>'
+      s
+    end
+  end
+
+  def project_tree_options_for_select(projects, options = {})
+    s = ''
+    projects.each do |project|
+      tag_options = {:value => project.id}
+      if project == options[:selected] || (options[:selected].respond_to?(:include?) && options[:selected].include?(project))
+        tag_options[:selected] = 'selected'
+      else
+        tag_options[:selected] = nil
+      end
+      tag_options.merge!(yield(project)) if block_given?
+      s << content_tag('option', name_prefix + h(project), tag_options)
+    end
+    s
+  end
+
   def yogo_button(image, text, link)
     link_to(image_tag(image), link)
   end
@@ -202,19 +207,20 @@ module ApplicationHelper
   # @return [HTML Fragment] the HTML is either a string or a link to the file/image.
   #
   # @api public
-  def yogo_show_helper(item, property, project, model, detailed = false)
-    if property.type == DataMapper::Types::YogoFile
-      file = item[property.name]
-      file = file[0..15] + '...' if file.length > 15
-      link_to(file, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))
-    elsif property.type == DataMapper::Types::YogoImage
+  def yogo_show_helper(item, property, project, model)
+    case property
+    when DataMapper::Property::YogoImage
       file = item[property.name]
       file = file[0..15] + '...' if file.length > 15
       img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
       link_target = detailed ? img : file
       link_to(link_target, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'),
         :class => 'fancybox', :title => model.name)
-    elsif property.type == DataMapper::Types::Text
+    when DataMapper::Property::YogoFile
+      file = item[property.name]
+      file = file[0..15] + '...' if file.length > 15
+      link_to(file, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))
+    when DataMapper::Property::Text
       if !detailed && (item[property.name] && item[property.name].length > 15)
         tooltip(item[property.name])
       else
@@ -223,30 +229,5 @@ module ApplicationHelper
     else
       item[property.name]
     end
-  end
-
-  # Creates the appropriate HTML for attributes on a model
-  #
-  # For attributes that are files or images it makes a download link work for them
-  #
-  # @example
-  #   <%= link_to_edit_project_models(@project, 'this is some text') %>
-  #
-  # @param [Project] project The project to link to
-  # @param [String]  link_text The text to display in the link
-  # @param [Hash]  options Options for the linkto
-  # @return [HTML Fragment] the HTML is either a string or a link to the file/image.
-  #
-  # @api public
-  def link_to_edit_project_models(project, link_text, options={})
-    link_to(link_text, "/model_editor.html#projects/#{project.id}&from=#{project_path(project)}", options)
-  end
-
-  def check_administrator
-    raise AuthorizationError  unless current_user.admin
-  end
-
-  def logged_in?
-    raise AuthenticationError unless logged_in?
   end
 end

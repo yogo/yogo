@@ -38,7 +38,7 @@ module SentientUser
       # @api public
       def self.current=(o)
         raise(ArgumentError,
-            "Expected an object of class '#{self}', got #{o.inspect}") unless (o.is_a?(self) || o.is_a?(AnonymousUser)|| o.nil?)
+            "Expected an object of class '#{self}', got #{o.inspect}") unless (o.is_a?(self) || o.nil?)
         Thread.current[:user] = o
       end
   

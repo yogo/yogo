@@ -7,9 +7,7 @@
 # Functionality for CRUD of data within a yogo project's model
 # Additionally upload and download of data via CSV is provided
 #
-class SettingsController < ApplicationController
-
-  inherit_resources
+class SettingsController < InheritedResources::Base
 
   protected
 

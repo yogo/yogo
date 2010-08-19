@@ -7,11 +7,25 @@
 // To configure blueprint, edit the partials/base.sass file.
 @import "partials/base.sass"
 
-// Import all the default blueprint modules so that we can access their mixins.
-@import "blueprint"
-
 // Import the non-default scaffolding module.
+// to provide +blueprint-form
 @import "blueprint/scaffolding"
+
+// Import the liquid 
+@import "blueprint/liquid"
+
+// Cleaning up imports
+@import "blueprint/debug"
+@import "blueprint/interaction"
+@import "blueprint/typography"
+
+// VOEIS Color Scheme (from KULER)
+//
+// Dark Blue:       #264f5c
+// Base Blue:       #2ba3c9
+// Light Blue:      #8fdaf2
+// Dark Highlight:  #784a1c
+// Light Highlight: #bd8e5e
 
 // Border Mixins
 =borders
@@ -29,24 +43,23 @@
   border-left: 1px solid $border_color
   margin-left: -1px
 
-body.bp
-  +blueprint-debug
-  +blueprint-interaction
-
 form.bp
   +blueprint-form
 
 // Base Body Styles
 body
-  background-color: #A5BDEC
   +blueprint-typography(true)
+  +blueprint-debug
+  +blueprint-interaction
+  background-color: #264f5c
   padding-top: 6em
   p
     margin-bottom: 0.5em
+    
   // Header (always blueprint layout)
   #header
-    color: #DDD
-    background: #EEE image-url('lake_sky_sm_wd2.png') repeat-x fixed top
+    color: #8fdaf2
+    background: image-url('lake_sky_sm_wd2.png') repeat-x fixed top
     width: 100%
     position: fixed
     z-index: 10
@@ -54,20 +67,25 @@ body
     top: 0
     overflow: none
     clear: both
-    height: 65px
+    height: 70px
+    
+    // Links
+    a
+      text-decoration: none
+      color: #784a1c
+      &:hover
+        text-decoration: none
+        color: #bd8e5e
     #logo
       padding-left: 10px
-      height: 50px
+      height: 28px
       font-size: 2em
       font-variant: small-caps
-      +column(18)
-    #menu
-      background-color: #A5BDEC
+    #system-menu
+      color: #784a1c
+      background-color: #2ba3c9
       font-size: 0.9em
-      +column(22, true)
-      border: 1px solid #f2f2f2 - #555
-      background-color: #FFF
-      padding: .5em 2px
+      height: 22px
       #menu-left-col
         +column(12)
         #content-title
@@ -76,27 +94,51 @@ body
           line-height: 2em
           text-align: left
           margin-left: 10px
+          // Links
+          a
+            padding-right: 8px
+            text-decoration: none
+            color: #784a1c
+            &:hover
+              text-decoration: none
+              color: #bd8e5e
+
       #menu-right-col
-        +column(10, true)
         #login-links
           line-height: 2em
           text-align: right
           margin-right: 10px
+          // Links
+          a
+            padding-right: 8px
+            text-decoration: none
+            color: #784a1c
+            &:hover
+              text-decoration: none
+              color: #bd8e5e
+        
+    #menu
+      color: #784a1c
+      background-color: #bd8e5e
+      height: 24px
+      #menu-left-col
+        +column(12)
+        line-height: 2em
+        text-align: left
+        margin-left: 10px
+      #menu-right-col
+        line-height: 2em
+        text-align: right
+        margin-right: 10px
         #search-tab
-          color: #FFF
+          width: 400px
           margin-right: 10px
-          text-align: right
-          .button-link
-            font-size: 0.9em
-            line-height: 1.7em
-            padding: 1px 3px 0px
+          display: inline
+          
   // Flash Notices always use blueprint layout
   #flash
-    +prepend(4)
-    +column(14, true)
-    +append(4)
+    width: 100%
     text-align: center
-    padding-top: 3em
     .error, .notice
       padding: 0
       p
@@ -110,20 +152,23 @@ body
       background: none repeat scroll 0 0 #FBE3E4
       border: 2px solid #FBC2C4
       color: #8A1F11
+      
   // Footer
   #footer
-    +column($blueprint_grid_columns - 2)
+    color: #bd8e5e
+    background-color: #264f5c
     text-align: center
   #footnotes_holder
     +prepend(2)
     +column(18)
     +append(2)
+    
   // Pagination Links
   #pagination-links
-    //text-align: center
     +column($blueprint_grid_columns - 2)
     +last
     margin-bottom: .25em
+    
   // Tables
   table
     border-collapse: collapse
@@ -153,11 +198,13 @@ body
       text-align: right
     td.data-value
       +column(16, true)
+      
   // Links
   a
     text-decoration: none
     &:hover
       text-decoration: underline
+      
   // Button Links
   .button-links
     overflow: auto
@@ -185,6 +232,7 @@ body
     font-size: 1.5em
   .medium-button-link
     font-size: 1.25em
+    
   // Tooltip Dialogs
   .tooltip
     font-size: .9em
@@ -193,11 +241,12 @@ body
       cursor: pointer
     .more
       color: $link_color
+      
   // Boxen
   .rbox
     border: 1px solid $border-color + #553
     +border-radius
-    padding: 1.5em
+    padding: 1em
     &.happy
       background-color: #EFE
     &.shady
@@ -206,6 +255,7 @@ body
       padding: .5em
     &.dashed
       border-style: dashed
+      
   // H* Tags
   h1 
     font-size: 2em
@@ -248,7 +298,8 @@ body
   label
     img
       margin-bottom: -.1em
-  //General Styles
+      
+  // General Styles
   .bold
     font-weight: bold
   .text-center
@@ -264,16 +315,14 @@ body
   img
     border: 0
     margin: 3px
+    
   // Content Header Elements that Occur Outside of bp.
   #container
-    background-color: #FFF
-    padding-top: 2em
-    margin-top: -2em
+    background-color: #eee
   #content-title, #data-content-title
     margin-top: 0
     text-align: left
     margin-bottom: 0
-    +column(9)
     #subtitle
       font-size: .5em
       color: #777
@@ -284,202 +333,27 @@ body
   #content-actions, #data-content-actions
     +column(12)
     margin-left: 10px
-    //margin-top: .5em
-    .content-action-links
-      //float: right
     .content-pagination-links
       text-align: right
       line-height: 2em
       +column(6, true)
   #data-content-actions
     +column(6, true)
-
-// Blueprint Body Container
-body.bp
-  // Header
-  #container
-    +container
-    margin: 0
-    margin-top: -2em
-    width: 898px
-  // Sidebar
-  #sidebar
-    $sidebar_columns: floor($blueprint_grid_columns / 4)
-    +column($sidebar_columns)
-  // Model Editor iFrame
-  #editor_frame
-    +column(22)
-    +last
-    height: 400px
-    margin-bottom: 2em
-  // Content Frame
-  #content
-    +column(22)
-    margin: 0px 1em 0.8em
-    h1#project-title
-      margin-top: 0
-    #content-block
-      +column($blueprint_grid_columns - 2)
-      margin-left: 2px
-    #content-settings-main
-      //+column(9)
-    #content-settings-extra
-      //+column(3)
-    #user-form
-      margin-left: 7em
-    // No Project Index
-    .description-column, .title-column
-      h3
-        text-align: center
-    .description-column
-      margin-top: -2em
-      +column(7)
-      +prepend(1)
-      p
-        margin-bottom: 0
-      .rbox
-        margin-bottom: 1em
-    .title-column
-      margin-top: -2em
-      +column(14)
-      +last
-      h1
-        margin-bottom: 1.5em
-      #getting-started
-        +prepend(2)
-        +column(10)
-        +append(2)
-        +last
-        margin-top: 4em
-    #project-actions
-      table.project
-        padding: 0px
-        border: 0px
-        border-color: transparent
-        border-style: hidden
-        tr
-          vertical-align: top
-        td.map
-          vertical-align: top
-          width: 300px
-        td.buttons
-          vertical-align: top
-    // CSV Question
-    .scratch, .spreadsheet
-      +column(6)
-      height: 150px
-    .spreadsheet
-      +last
-    // CSV Import
-    .import-form
-      +prepend(5)
-      +column(12)
-      +append(5)
-      +last
-    .instructions
-      +prepend(1)
-      +column(12)
-    .example
-      +prepend(1)
-      +column(8)
-      +last
-      p
-        font-style: italic
-    // Yogo Dashboard
-    .content-row-block
-      +column(21)
-      +last
-      +borders
-      margin: 0
-      .project-icon
-        +column(2)
-        padding-top: 1em
-      .project-text
-        +prepend(1)
-        +column(9)
-        +append(1)
-        .edit-link
-          text-align: right
-      .project-datasets
-        margin-top: 1em
-        +column(10)
-        +last
-    .project-status
-      font-size: .4em
-      font-style: italic
-    // Project Dashboard
-    .dataset-name
-      +column(6)
-      h2
-        +prepend(1)
-        //padding: 0 25px
-      .vertical-links
-        +prepend(1)
-        .link
-          .button-link
-            margin-bottom: 3px
-            text-align: center
-            +column(4)
-    .dataset-info
-      +column(21)
-      +last
-      .action-tabs
-        margin:
-          top: .5em
-          bottom: .5em
-      .dataset-table
-        +borders
-        height: 12em
-        padding: 0px
-        overflow: auto
-        font-size: .9em
-        th
-          border-bottom: 1px solid #CCC
-          border-top: 1px solid #CCC
-          padding-bottom: 2px
-      // Jquery UI Overrides
-      .ui-tabs .ui-tabs-nav li a
-        padding: 0.3em 0.5em
-      .ui-tabs .ui-tabs-nav
-        padding: 0.1em 0
-        font-size: .9em
-      .ui-tabs .ui-tabs-panel 
-        padding: 0px
-    // centered content containers
-    .extra-small-centered
-      +prepend(6)
-      +column(10)
-      +append(6)
-      +last
-    .small-centered
-      +prepend(4)
-      +column(14)
-      +append(4)
-      +last
-    .medium-centered
-      +prepend(3)
-      +column(16)
-      +append(3)
-      +last
-    .large-centered
-      +prepend(2)
-      +column(18)
-      +append(2)
-      +last
+      
 #project-user-roles-form table td
   width: 3em
+
 #map
-  margin-right: 5px
-  width: 300px
-  height: 200px
-  border: 1px solid #000
-  
-.map
-  margin-right: 5px
   width: 300px
   height: 200px
   border: 1px solid #000
 
+.map
+  width: 300px
+  height: 200px
+  margin: 0px
+  padding: 0px
+  
 .map-links
   display: block
   margin: 15px
@@ -513,10 +387,15 @@ body.bp
 
 .maps-info table .align-right
   text-align: right
+  
 #data_stream_description
   width: 80%
-  height: 50px
-  
+  height: 75px
+
+// .new-link
+//   background-image: image-url('add.png')
+//   background-repeat: no-repeat
+//   width: 30px
 .icon-add 
   background-image: image-url('add.png')
 .icon-edit 

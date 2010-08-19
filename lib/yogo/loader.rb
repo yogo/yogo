@@ -33,7 +33,7 @@ module Yogo
         mphash = {}
         
         model.properties.each do |prop| 
-          type = prop.type == String ? DataMapper::Types::Text : prop.type
+          type = prop.kind_of?(DataMapper::Property::String) ? DataMapper::Property::Text : prop.class
           mphash[prop.name] = { :type => type } 
           mphash[prop.name].merge!({:default => prop.default}) if prop.default? 
         end

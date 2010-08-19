@@ -1,0 +1,105 @@
+%h2
+  = link_to(@project.name, project_path(@project) )
+-if !@row_size.nil?  
+  %h3 Data Stream Import Form
+  =clear_break
+  -form_tag("create_stream") do 
+    -@opt_array = Array.new
+    -@column_options= ""
+    /-@variables.all(:order => [:variable_name.asc]).each do |var|
+    /-@opt_array << [var.variable_name, var.id]
+    Please give this Data Stream a Name: 
+    =text_field_tag ("data_stream_name")
+    =clear_break
+    =clear_break
+    Please provide a description of this Data Stream:
+    =clear_break
+    =text_area_tag("data_stream_description")
+    =clear_break
+    =clear_break
+    Please select the site this Data Stream should be associated with:
+    -@site_options=""
+    /-@sites.each do |site|
+    /-@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
+    =select_tag("site", @site_options)
+    =clear_break
+    =clear_break
+    Select what VOEIS variables should be associated with these columns from the Logger file
+    =params[:header_box]
+    -if params[:header_box] == 'Campbell'
+      %table
+        %tr
+          %th Column
+          %th Starting Row Values
+          %th Logger Variable
+          %th Logger Unit
+          %th Logger Type
+          %th Selected VOEIS Variable
+          %th Alert Min
+          %th Alert Max
+          %th Alert Deviation
+        -(0..@row_size).each do |i|
+          /-@column_options= @column_options + "<option value="+i.to_s+">Column "+i.to_s+"</option>"
+          %tr
+            %td 
+              =i.to_s
+            %td
+              =@start_row[i]
+            %td 
+              =@header_info[i]["variable"]
+              =hidden_field_tag("variable"+i.to_s, @header_info[i]["variable"])
+            %td 
+              =@header_info[i]["unit"]
+              =hidden_field_tag("unit"+i.to_s, @header_info[i]["unit"])
+            %td 
+              =@header_info[i]["type"]
+              =hidden_field_tag("type"+i.to_s, @header_info[i]["type"])
+            %td 
+              =select_tag("column"+i.to_s, options_for_select(@opt_array, @var_array[i][3]))
+            %td
+              =text_field_tag("min"+i.to_s,@var_array[i][4])
+            %td
+              =text_field_tag("max"+i.to_s,@var_array[i][5])
+            %td
+              =text_field_tag("difference"+i.to_s,@var_array[i][6])
+    -else
+      %table
+        %tr
+          %th Column
+          %th Starting Row Values
+          %th Logger Variable
+          %th Logger Unit
+          %th Logger Type
+          %th Selected VOEIS Variable
+          %th Alert Min
+          %th Alert Max
+          %th Alert Deviation
+        -(0..@row_size).each do |i|
+          /-@column_options= @column_options + "<option value="+i.to_s+">Column "+i.to_s+"</option>"
+          %tr
+            %td 
+              =i.to_s
+            %td
+              =@start_row[i]
+            %td 
+              =text_field_tag("variable"+i.to_s, @var_array[i][0])
+            %td 
+              =text_field_tag("unit"+i.to_s, @var_array[i][1])
+            %td 
+              =text_field_tag("type"+i.to_s, @var_array[i][2])
+            %td 
+              =select_tag("column"+i.to_s, options_for_select(@opt_array, @var_array[i][3]))
+            %td
+              =text_field_tag("min"+i.to_s,@var_array[i][4])
+            %td
+              =text_field_tag("max"+i.to_s,@var_array[i][5])
+            %td
+              =text_field_tag("difference"+i.to_s,@var_array[i][6])
+    =clear_break
+    Please specify which column should be used as the time-stamp:
+    =select_tag("timestamp", @column_options)
+    =hidden_field_tag('datafile', params[:datafile].path)
+    =hidden_field_tag('project_id', @project.id)
+    =hidden_field_tag('rows', @row_size)
+    =hidden_field_tag("start_line", @start_line)
+    =submit_tag("Submit")

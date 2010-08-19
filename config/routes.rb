@@ -7,37 +7,47 @@
 #
 #
 ActionController::Routing::Routes.draw do |map|
-  # The priority is based upon order of creation: first created -> highest priority.
-  map.resources :projects, :controller => 'yogo/projects',
-                :member => { :upload => :post },
-                :collection => { :loadexample => :post, :search => :get} do |project|
+  map.resources :projects,
+                 :member => { :upload => :post },
+                 :collection => { :search => :get} do |project|
 
-    map.connect '/projects/add_site', :controller => 'yogo/projects', :action => 'add_site'
-    map.connect '/projects/add_stream', :controller => 'yogo/projects', :action => 'add_stream'
-    map.connect '/projects/upload_stream', :controller => 'yogo/projects', :action => 'upload_stream'
-    map.connect '/projects/create_stream', :controller => 'yogo/projects', :action => 'create_stream'
-    map.connect '/projects/create_site', :controller => 'yogo/projects', :action => 'create_site'
-    map.connect '/projects/add_site_to_project', :controller => 'yogo/projects', :action => 'add_site_to_project'
-    map.connect '/projects/data_view', :controller => 'yogo/projects', :action => 'data_view'
-    # /projects/:project_id/yogo_data/:model_name
-    # /projects/:project_id/yogo_data/:model_name/:id
-    project.resources :yogo_data, :as => 'yogo_data/:model_id', :controller => 'yogo/data',
-                      :collection => { :upload => :post, :search => :get, :upload_stream => :post },
-                      :member => { :download_asset => :get, :show_asset => :get }
+    project.resources :memberships, :namespace => nil, :controller => "memberships"
+    project.resources :users, :namespace => nil, :controller => "users"
 
-    # /projects/:project_id/yogo_models/:model_name
-    project.resources :yogo_models, :controller => 'yogo/models'
+    project.resources :sites, :namespace => nil, :controller => 'voeis/sites'
 
-    project.resources :memberships
+    project.resources :data_streams, :namespace => nil, :controller => 'voeis/data_streams',
+                      :collection => { :pre_upload => :post}
+    project.resources :variables, :namespace => nil, :controller => 'voeis/variables'
+    project.resources :units, :namespace => nil, :controller => 'voeis/units'
+    project.resources :sensor_values, :namespace => nil, :controller => 'voeis/sensor_values'
+    project.resources :sensor_types, :namespace => nil, :controller => 'voeis/sensor_types'
+    project.resources :data_stream_columns, :namespace => nil, :controller =>'voeis/data_stream_columns'
+
   end
-
+  map.namespace :his do |his|
+    his.resources :data_type_c_vs #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :censor_code_c_vs #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :sources #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :methods #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :variables #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :sites #, :requirements => { :id => /[a-zA-Z]+/ }
+    his.resources :data_values#, :requirements => { :id => /[a-zA-Z]+/ }
+  end
+  # Dashboard routes
   map.dashboard 'dashboards/:id', :controller => 'dashboards', :action => 'show', :requirements => { :id => /[a-z]+/ }
-  map.page 'pages/:id', :controller   => 'pages', :action       => 'show', :requirements => { :id => /[a-z]+/ }
 
-  map.resources :settings
-  map.resource :password, :only => [ :show, :update, :edit ]
-  map.resources :users
+  # Static page route
+  map.page 'pages/:id', :controller => 'pages', :action       => 'show', :requirements => { :id => /[a-z]+/ }
+
+  map.resources :users do |user|
+    user.resources :memberships, :namespace => nil, :controller => "memberships"
+  end
   map.resources :roles
+  map.resources :memberships
+  map.resources :settings
+  map.resources :search
+  map.resource  :password, :only => [ :show, :update, :edit ]
 
   # Login & Logout stuff
   map.resource :user_session, :only => [ :show, :new, :create, :destory ]
@@ -45,5 +55,5 @@ ActionController::Routing::Routes.draw do |map|
   map.login '/login', :controller => 'user_sessions', :action => 'new'
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => "yogo/projects"
+  map.root :controller => "projects"
 end

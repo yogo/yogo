@@ -94,7 +94,7 @@ module Yogo
         path = File.dirname(csv_file)
         
         errors = validate_csv_data(csv_data)
-        
+
         all_objects = []
         if errors.empty?
           attr_names = csv_data[0].map{|name| name.tableize.singularize.gsub(' ', '_') }
@@ -108,7 +108,7 @@ module Yogo
               csv_data[0].each_index do |i| 
                 prop = props[i]
                 
-                if prop.type == DataMapper::Types::YogoFile || prop.type == DataMapper::Types::YogoImage
+                if prop.kind_of?(DataMapper::Property::YogoFile) || prop.kind_of?(DataMapper::Property::YogoImage)
                   column_value = File.open(File.join(path, line[i]))
                   line_data[attr_names[i]] = column_value unless column_value.nil? || prop.nil?
                 else
@@ -116,13 +116,14 @@ module Yogo
                 end  
               end
               obj = self.new(line_data)
+
               if obj.valid?
+                DataMapper.logger.debug("Object valid, adding")
                 all_objects << obj
               else
                 obj.errors.each_pair do |key,value|
-                  # debugger
                   value.each do |msg|
-                    errors << "Line #{idx+3} column #{key.to_s.gsub("yogo__", '')} #{msg.split[2..-1].join}"
+                    errors << "Line #{idx+3} column #{key.to_s.gsub("yogo__", '')} #{msg.split[2..-1].join(' ')}"
                   end
                 end
               end
@@ -130,6 +131,7 @@ module Yogo
           end
         end
         all_objects.each{|o| o.save } if errors.empty?
+
         return errors
       end
 
@@ -155,11 +157,12 @@ module Yogo
         errors = []
         properties_to_add = {}
         require_auto_migrate = false
-        
+
         csv_data[0].each_index do |idx|
           attr_name = csv_data[0][idx].tableize.singularize.gsub(' ', '_')
           next if attr_name.eql?("yogo_id")
           cohersed_attr_name = "yogo__#{attr_name}"
+          
           prop = properties[cohersed_attr_name]
           dm_type = Yogo::Types.human_to_dm(csv_data[1][idx])
           
@@ -175,7 +178,7 @@ module Yogo
                                                   }
             require_auto_migrate = true
             
-          elsif prop.type != dm_type
+          elsif !prop.kind_of?(dm_type)
             errors << "The datatype #{csv_data[1][idx]} for row #{idx} is different from what is currently in the database.\n To change the type in the database, please use the model editor."
           end
         end

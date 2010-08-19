@@ -80,7 +80,7 @@ module Yogo
 
           prop_options.reject!{|k,v| excluded_property_options.include?(k) }
 
-          prop_type = Yogo::Types.dm_to_human(prop.type)
+          prop_type = Yogo::Types.dm_to_human(prop.class)
           prop_name = prop.display_name.to_s.titleize
 
           prop_def = {
@@ -159,7 +159,6 @@ module Yogo
         begin
           model.auto_upgrade!
         rescue ArgumentError => e
-          Rails.logger.warn("Schema Backup Failed!")
           Rails.logger.error(e)
         end
 

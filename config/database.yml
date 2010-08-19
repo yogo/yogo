@@ -19,28 +19,66 @@ test:
   adapter: sqlite3
   database: db/sqlite3/test.sqlite3
 
-settings:
-  adapter: yaml
-  database: db/settings.yml
+# Configurations for storing Yogo Collections in Sqlite
+yogo_sqlite_settings: &YOGO_SQLITE_SETTINGS
+  adapter: sqlite3
 
-yogo_development:
+yogo_sqlite_development: &YOGO_SQLITE_DEVELOPMENT
+  <<: *YOGO_SQLITE_SETTINGS
+  database: db/sqlite3/yogo_development_collections.sqlite3
+
+yogo_sqlite_production: &YOGO_SQLITE_PRODUCTION
+  <<: *YOGO_SQLITE_SETTINGS
+  database: db/sqlite3/yogo_production_collections.sqlite3
+
+yogo_sqlite_test: &YOGO_SQLITE_TEST
+  <<: *YOGO_SQLITE_SETTINGS
+  database: db/sqlite3/yogo_test_collections.sqlite3
+
+# Configurations for storing Yogo Collections in Persevere
+yogo_persvr_settings: &YOGO_PERSVR_SETTINGS
   adapter: persevere
   versioned: true
   host: localhost
   port: 8080
 
-yogo_production:
-  adapter: persevere
-  versioned: true
-  host: localhost
-  port: 8080
+yogo_persvr_development: &YOGO_PERSVR_DEVELOPMENT
+  <<: *YOGO_PERSVR_SETTINGS
+
+yogo_persvr_production: &YOGO_PERSVR_PRODUCTION
+  <<: *YOGO_PERSVR_SETTINGS
 
 # run with bin/persvr -p 8081
-yogo_test: &YOGO_TEST
-  adapter: persevere
-  versioned: true
-  host: localhost
+yogo_persvr_test: &YOGO_PERSVR_TEST
+  <<: *YOGO_PERSVR_SETTINGS
   port: 8081
 
+# Default configurations for storing Yogo Collections
+yogo_default_development: &YOGO_DEFAULT_DEVELOPMENT
+  <<: *YOGO_PERSVR_DEVELOPMENT
+
+yogo_default_production: &YOGO_DEFAULT_PRODUCTION
+  <<: *YOGO_PERSVR_PRODUCTION
+
+yogo_default_test: &YOGO_DEFAULT_TEST
+  <<: *YOGO_PERSVR_TEST
+
 yogo_cucumber:
-  <<: *YOGO_TEST
+  <<: *YOGO_DEFAULT_TEST
+
+#
+# HIS Servers
+#
+his_dev:
+  adapter: sqlserver
+  database: LittleBear11
+  host: ravage.msu.montana.edu
+  username: sa
+  password: P@dm1n2009*
+
+his:
+  adapter: sqlserver
+  database: OD
+  host: sideswipe.msu.montana.edu
+  username: hisuser
+  password: P@dm1n2009*

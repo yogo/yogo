@@ -9,42 +9,42 @@
 module Yogo
   class Types
     # Constant for the supported Human readable datatypes
-    @@HumanTM = { "Decimal"        => Float, 
-                  "Integer"        => Integer,
-                  "Text"           => DataMapper::Types::Text, 
-                  "TrueFalse"     => DataMapper::Types::Boolean, 
-                  "Date"           => Date,
-                  "Time"           => Time,
-                  "DateTime"       => DateTime,
-                  "File"           => DataMapper::Types::YogoFile,
-                  "Image"          => DataMapper::Types::YogoImage }
+    @@HumanTM = { "Decimal"        => DataMapper::Property::Float, 
+                  "Integer"        => DataMapper::Property::Integer,
+                  "Text"           => DataMapper::Property::Text, 
+                  "TrueFalse"      => DataMapper::Property::Boolean, 
+                  "Date"           => DataMapper::Property::Date,
+                  "Time"           => DataMapper::Property::Time,
+                  "DateTime"       => DataMapper::Property::DateTime,
+                  "File"           => DataMapper::Property::YogoFile,
+                  "Image"          => DataMapper::Property::YogoImage }
     
     # DataMapper Type Map
-    @@DMTM = { Float                      => "Decimal",
-               BigDecimal                 => "Decimal",
-               Integer                    => "Integer",
-               DataMapper::Types::Text    => "Text",
-               DataMapper::Types::Boolean => "TrueFalse",
-               Date                       => "Date",
-               Time                       => "Time",
-               DateTime                   => "DateTime",
-               DataMapper::Types::Serial  => "Integer",
-               DataMapper::Types::YogoFile     => "File",
-               DataMapper::Types::YogoImage    => "Image" }
+    @@DMTM = { DataMapper::Property::Float        => "Decimal",
+               DataMapper::Property::Decimal   => "Decimal",
+               DataMapper::Property::Integer      => "Integer",
+               DataMapper::Property::Text         => "Text",
+               DataMapper::Property::Boolean      => "TrueFalse",
+               DataMapper::Property::Date         => "Date",
+               DataMapper::Property::Time         => "Time",
+               DataMapper::Property::DateTime     => "DateTime",
+               DataMapper::Property::Serial       => "Integer",
+               DataMapper::Property::YogoFile     => "File",
+               DataMapper::Property::YogoImage    => "Image" }
 
    # Google Visual Type Map
-   @@GVTM = { Float                           => "number",
-              BigDecimal                      => "number",
-              Integer                         => "number",
-              DataMapper::Types::Text         => "string",
-              String                          => "string",
-              DataMapper::Types::Boolean      => "string",
-              Date                            => "date",
-              Time                            => "string",
-              DateTime                        => "datetime",
-              DataMapper::Types::Serial       => "number",
-              DataMapper::Types::YogoFile     => "string",
-              DataMapper::Types::YogoImage    => "string" }
+   @@GVTM = { DataMapper::Property::Float        => "number",
+              DataMapper::Property::Decimal   => "number",
+              DataMapper::Property::Integer      => "number",
+              DataMapper::Property::Text         => "string",
+              DataMapper::Property::String       => "string",
+              DataMapper::Property::Boolean      => "string",
+              DataMapper::Property::Date         => "date",
+              DataMapper::Property::Time         => "string",
+              DataMapper::Property::DateTime     => "datetime",
+              DataMapper::Property::Serial       => "number",
+              DataMapper::Property::YogoFile     => "string",
+              DataMapper::Property::YogoImage    => "string" }
 
     ##
     # Returns the human readable Yogo string of DataMappers datatype 

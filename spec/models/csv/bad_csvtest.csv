@@ -1,5 +1,5 @@
 Name,ID,Mass,Charge,index
-Text,bozon,Decimal,Decimal,DataMapper::Types::Serial
+Text,bozon,Decimal,Decimal,DataMapper::Property::Serial
 NA,NA,kg,volts,nugget
 Sean,1,Bad Data,1.2,1
 Bug,2,23492.0,1.5,2
