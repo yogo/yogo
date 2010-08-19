@@ -19,21 +19,43 @@ class Project
   
   property :is_private,      Boolean, :required => true, :default => false
 
-  has n, :memberships
+  has n, :memberships, :parent_key => [:id], :child_key => [:project_id], :model => 'Membership'
   has n, :users, :through => :memberships
   has n, :roles, :through => :memberships
 
+  after :create, :give_current_user_membership
   before :destroy, :destroy_cleanup
 
-  def self.extended_permissions
-    collection_perms = [ :create_models, :retrieve_models, :update_models, :delete_models, :create_data, :retrieve_data, :update_data, :delete_data ]
-    [:manage_users, collection_perms, super].flatten
+  ##
+  # Permissions on the object for the user that is passed in
+  # 
+  # @param [User or nil] user To check the permissions for
+  # @return [Array] Set of permissions for the current user
+  # @author lamb
+  # @api semipublic
+  def self.permissions_for(user)
+    # By default, all users can retrieve projects
+    (super << "#{permission_base_name}$retrieve").uniq
+  end
+  
+  ##
+  # Same as above, but for instances instead of classes
+  # 
+  # @param [User or nil] user To check permissions for
+  # @return [Array] Set of permissions the current user has
+  # @api semipublic
+  def permissions_for(user)
+    @_permissions_for ||= {}
+    @_permissions_for[user] ||= begin
+      base_permission = []
+      base_permission << "#{permission_base_name}$retrieve" unless self.is_private?
+      return base_permission if user.nil?
+      (super + base_permission + user.memberships(:project_id => self.id).roles.map{|r| r.actions }).flatten.uniq
+    end
   end
 
   private
-  def destroy_cleanup
-    memberships.destroy
-  end
+
   
   public
   
@@ -145,4 +167,16 @@ class Project
   manage Voeis::SensorValue
   manage Voeis::Unit
   manage Voeis::Variable
+  
+  private
+  
+  def destroy_cleanup
+    memberships.destroy
+  end
+  
+  def give_current_user_membership
+    unless User.current.nil?
+      Membership.create(:user => User.current, :project => self, :role => Role.first(:position => 1))
+    end
+  end
 end # Project

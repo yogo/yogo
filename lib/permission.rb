@@ -1,7 +1,7 @@
 module Permission
 
   def basic_permissions
-    [:create, :retrieve, :update, :delete, :search]
+    [:create, :retrieve, :update, :delete]
   end
 
   def extended_permissions

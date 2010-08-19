@@ -37,13 +37,13 @@ ActionController::Routing::Routes.draw do |map|
   # Dashboard routes
   map.dashboard 'dashboards/:id', :controller => 'dashboards', :action => 'show', :requirements => { :id => /[a-z]+/ }
 
-  # Static page route
-  map.page 'pages/:id', :controller => 'pages', :action       => 'show', :requirements => { :id => /[a-z]+/ }
-
+  map.dashboard "/dashboard", :controller => 'yogo/projects', :action => 'index'
+  
   map.resources :users do |user|
     user.resources :memberships, :namespace => nil, :controller => "memberships"
   end
   map.resources :roles
+  map.resources :system_roles
   map.resources :memberships
   map.resources :settings
   map.resources :search

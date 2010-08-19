@@ -87,6 +87,9 @@ GEM
     dm-do-adapter (1.0.0)
       data_objects (~> 0.10.1)
       dm-core (~> 1.0.0)
+    dm-is-list (1.0.0)
+      dm-adjust (~> 1.0.0)
+      dm-core (~> 1.0.0)
     dm-migrations (1.0.0)
       dm-core (~> 1.0.0)
     dm-persevere-adapter (0.72.0)
@@ -244,7 +247,8 @@ DEPENDENCIES
   cucumber
   cucumber-rails
   dm-core (= 1.0)
-  dm-migrations
+  dm-is-list (= 1.0)
+  dm-migrations (= 1.0)
   dm-persevere-adapter (= 0.72.0)
   dm-sqlite-adapter
   dm-types (~> 1.0.0)!
