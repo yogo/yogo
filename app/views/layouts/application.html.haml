@@ -38,11 +38,12 @@
         = render(:partial => 'layouts/login')
     #menu.box.tight
       #menu-left-col
-        = render(:partial => "#{action_menu}") rescue nil
+        / In the case of pages and dashboards (static controllers we probably want something else)
+        = controller_name.capitalize
       #menu-right-col
         = render(:partial => 'layouts/search')
-  /=clear_break
-  /Grid Container 
+
+  / Grid Container 
   #container
     #flash
       - if flash[:notice]
