@@ -2,13 +2,7 @@
   %table.project
     %tr
       %td.map
-        - visualization('map', 'Map') do |map|
-          - map.number "Lat"
-          - map.number "Lon"
-          - map.string "Name"
-          - sites = resource.managed_repository{Voeis::Site.all}
-          - rows = sites.map{|site| [site.latitude, site.longitude, site.site_name] }
-          - map.add_rows( rows )
+        = render(:partial => 'overview_map', :locals => { :project => @project } )
       %td.buttons
         = link_to("Add Site", new_project_site_path(@project), :class => 'new-link')
         = clear_break

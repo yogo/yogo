@@ -7,14 +7,8 @@
         = link_to(project.name, project_path(project) ) 
         = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
       .action-links
-        .map{:id => "map" + project.id.to_s}
-          - visualization('map', 'Map') do |map|
-            - map.number "Lat"
-            - map.number "Lon"
-            - map.string "Name"
-            - sites = project.managed_repository{Voeis::Site.all}
-            - rows = sites.map{|site| [site.latitude, site.longitude, site.site_name] }
-            - map.add_rows( rows )
+        .map
+          = render(:partial => 'overview_map', :locals => { :project => project } )
         .map-links
         = link_to("Settings", edit_project_path(project), :class => 'settings-link')
         = link_to("Add a Site", new_project_site_path(project), :class => 'new-link')
