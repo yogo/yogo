@@ -8,9 +8,10 @@ module Facet
   
   # wraps and restricts access to an object
   class Proxy < ActiveSupport::BasicObject
-    def initialize(target, permission_source)
+    def initialize(target, permission_source, root_target = nil)
       @target = target
       @permission_source = permission_source
+      @root_target = root_target
     end
     
     def can_invoke(method)
@@ -21,6 +22,7 @@ module Facet
     
     def permitted_methods
       permissions = @target.permissions_for(@permission_source)
+      permissions = permissions | @root_target.permissions_for(@permission_source) unless @root_target.nil?
       @target.methods_permitted_for(*permissions) 
     end
     
@@ -34,7 +36,9 @@ module Facet
         result = @target.__send__(method, *args, &block)
         if (result.kind_of?(::DataMapper::Collection) && result.model.respond_to?(:access_as)) ||
            (result.kind_of?(::DataMapper::Resource)   && result.respond_to?(:access_as))
-          return result.access_as(@permission_source)
+          # Reuse the current_root target, or use the current target if it's an instance, not a class
+          root_target = @root_target || !@target.kind_of?(::Class) ? @target : nil
+          return result.access_as(@permission_source, root_target)
         else
           return result
         end
@@ -61,12 +65,12 @@ module Facet
   
   
   module SecurityWrapper
-    def access_as(access = nil)
+    def access_as(access = nil, root_target = nil)
       # When running in local only, bypass all access by returning self
       if Yogo::Setting[:local_only]
         self
       else
-        Facet::Proxy.new(self, access)
+        Facet::Proxy.new(self, access, root_target)
       end
     end
     
