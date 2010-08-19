@@ -8,21 +8,21 @@
         = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
       .action-links
         .map{:id => "map" + project.id.to_s}
-          = render(:partial => "map", :locals => { :sites => project.managed_repository{ Voeis::Site.all } })
-          .map-links
+          - visualization('map', 'Map') do |map|
+            - map.number "Lat"
+            - map.number "Lon"
+            - map.string "Name"
+            - sites = project.managed_repository{Voeis::Site.all}
+            - rows = sites.map{|site| [site.latitude, site.longitude, site.site_name] }
+            - map.add_rows( rows )
+        .map-links
         = link_to("Settings", edit_project_path(project), :class => 'settings-link')
         = link_to("Add a Site", new_project_site_path(project), :class => 'new-link')
       %p.rbox.tight
-        :javascript
-          $(document).ready(function(){
-          $.yogo_mapit($('#{'#map'+project.id.to_s}'), { locations: $.getJSON('#{project_sites_url(project)}') }
-          );
-          });
         - if project.description && project.description.length > 0
           %strong= link_to('Project Description', edit_project_path(project), :title => 'Edit Project Description')
           %br/
-          %em= tooltip(project.description, 
-                  project.name + ' Description', 200)
+          %em= tooltip(project.description, project.name + ' Description', 200)
         - else
           %em= link_to('[Add Project Description]', edit_project_path(project))
       
