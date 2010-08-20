@@ -1,42 +1,30 @@
 <h2><%=link_to(@project.name, project_path(@project) )%></h2>
-<div id="graphs">
+<div id="graphs", width = "600px", height = "400px">
   <% @sites.each do |site| %>
     <h3><a href="#"><%=site.site_name%></a></h3>
     <div>
     <%if @site_data[site.site_code].to_s != "{}"%> 
-      <table>
-        <tr>
-          <td>
-                <div id="placeholder<%= site.site_code %>" style="width:500px;height:300px;"></div>
-                <p id="hoverdata" style="font-size: .75em">Position:
-                (<span id="x<%= site.site_code%>">0</span>, <span id="y<%= site.site_code %>">0</span>). <span id="clickdata"></span></p>
-           </td>
-           <td valign= "top">
-               <div id ="legend<%=site.site_code%>" ><div>
-           </td>
-           <td valign= "top">
-               <div id="choices<%=site.site_code%>">Show:</div>
 
-           </td>
-           </tr>           
-           <tr>
-             <td>
-                 <%= button_to("Download Selected Data", "#", :disabled => true) %>
-             </td>
-             <td></td>
-             <td></td>
-           <tr>
-      </table>    
-      <script type="text/javascript" charset="utf-8">
+      <% visualization "my_chart", "MotionChart", :width => 600, :height => 400, :html => {:class => "graph_chart"} do |chart| %>
 
-          $("#placeholder<%= site.site_code %>").yogo_graphit({choice: "#choices<%= site.site_code %>",
-                                                       plot_data: <%= @site_data[site.site_code] %>,
-                                                       leg:"#legend<%= site.site_code %>",
-                                                       x: "#x<%= site.site_code %>",
-                                                       y: "#y<%= site.site_code %>"});
-                                                       
-                                                       
-      </script>
+      	<% chart.string "Fruit" %>
+      	<% chart.date "Date" %>
+      	<% chart.number "Sales" %>
+      	<% chart.number "Expenses" %>
+      	<% chart.string "Location" %>
+
+
+      	<% chart.add_rows([
+      			["Apples", Date.new(1998,1,1), 1000,300,'East'],
+      			["Oranges", Date.new(1998,1,1), 950,200,'West'],
+      			["Bananas", Date.new(1998,1,1), 300,250,'West'],
+      			["Apples", Date.new(1998,2,1), 1200,400,'East'],
+      			["Oranges", Date.new(1998,2,1), 950,150,'West'],
+      			["Bananas", Date.new(1998,2,1), 788,617,'West']
+      		]) %>
+      <% end %>
+      
+     
       <%else%>
         <div>There is currently no data for this site.</div>
       <%end%>
