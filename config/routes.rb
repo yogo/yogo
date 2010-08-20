@@ -14,10 +14,11 @@ ActionController::Routing::Routes.draw do |map|
     project.resources :memberships, :namespace => nil, :controller => "memberships"
     project.resources :users, :namespace => nil, :controller => "users"
 
-    project.resources :sites, :namespace => nil, :controller => 'voeis/sites'
+    project.resources :sites, :namespace => nil, :controller => 'voeis/sites',
+                      :collection => {:add_site => :get, :save_site => :post}
 
     project.resources :data_streams, :namespace => nil, :controller => 'voeis/data_streams',
-                      :collection => { :pre_upload => :post}
+                      :collection => { :pre_upload => :post, :create_stream => :post}
     project.resources :variables, :namespace => nil, :controller => 'voeis/variables'
     project.resources :units, :namespace => nil, :controller => 'voeis/units'
     project.resources :sensor_values, :namespace => nil, :controller => 'voeis/sensor_values'
@@ -25,6 +26,7 @@ ActionController::Routing::Routes.draw do |map|
     project.resources :data_stream_columns, :namespace => nil, :controller =>'voeis/data_stream_columns'
 
   end
+
   map.namespace :his do |his|
     his.resources :data_type_c_vs #, :requirements => { :id => /[a-zA-Z]+/ }
     his.resources :censor_code_c_vs #, :requirements => { :id => /[a-zA-Z]+/ }
@@ -34,6 +36,7 @@ ActionController::Routing::Routes.draw do |map|
     his.resources :sites #, :requirements => { :id => /[a-zA-Z]+/ }
     his.resources :data_values#, :requirements => { :id => /[a-zA-Z]+/ }
   end
+
   # Dashboard routes
   map.dashboard 'dashboards/:id', :controller => 'dashboards', :action => 'show', :requirements => { :id => /[a-z]+/ }
 
@@ -42,12 +45,15 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users do |user|
     user.resources :memberships, :namespace => nil, :controller => "memberships"
   end
+
   map.resources :roles
   map.resources :system_roles
   map.resources :memberships
   map.resources :settings
   map.resources :search
   map.resource  :password, :only => [ :show, :update, :edit ]
+  map.resources :dashboards, :only => [ :show ], :requirements => { :id => /[\w]+/ }
+  map.resources :pages, :only => [ :show ], :requirements => { :id => /[\w]+/ }
 
   # Login & Logout stuff
   map.resource :user_session, :only => [ :show, :new, :create, :destory ]

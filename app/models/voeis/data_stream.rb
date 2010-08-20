@@ -78,7 +78,6 @@ class Voeis::DataStream
             all_objects << obj
           else
             obj.errors.each_pair do |key,value|
-              # debugger
               value.each do |msg|
                 errors << "Line #{idx+3} column #{key.to_s.gsub("yogo__", '')} #{msg.split[2..-1].join}"
               end

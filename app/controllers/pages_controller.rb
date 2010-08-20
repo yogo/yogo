@@ -1,6 +1,12 @@
-# app/controllers/pages_controller.rb
+# Yogo Data Management Toolkit
+# Copyright (c) 2010 Montana State University
+#
+# License -> see license.txt
+#
+# FILE: pages_controller
+# This controller loads static pages
+#
 class PagesController < ApplicationController
-
   rescue_from ActionView::MissingTemplate, :with => :invalid_page
 
   def show
@@ -8,6 +14,6 @@ class PagesController < ApplicationController
   end
 
   def invalid_page
-    redirect_to root_path
+    redirect_to(:back)
   end
 end

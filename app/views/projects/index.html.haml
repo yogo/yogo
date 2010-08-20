@@ -1,34 +1,33 @@
 - if @projects.empty?
   There are no projects yet, you should create one!
 - for project in @projects
-  .content-row-block.rbox
-    .project-text
-      %h2
-        = link_to(project.name, project_path(project) ) 
-        = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?
-      .action-links
-        .map
+  #content-title
+    = link_to(project.name, project_path(project) ) 
+    #links
+      = link_to("Settings", edit_project_path(project), :class => 'settings-link')
+      = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?         
+  %table.project
+    %tbody
+      %tr
+        %td.map
           = render(:partial => 'overview_map', :locals => { :project => project } )
-        .map-links
-        = link_to("Settings", edit_project_path(project), :class => 'settings-link')
-        = link_to("Add a Site", new_project_site_path(project), :class => 'new-link')
-      %p.rbox.tight
-        - if project.description && project.description.length > 0
-          %strong= link_to('Project Description', edit_project_path(project), :title => 'Edit Project Description')
+        %td.datasets
+          Last Updates:
           %br/
-          %em= tooltip(project.description, project.name + ' Description', 200)
-        - else
-          %em= link_to('[Add Project Description]', edit_project_path(project))
+          - project.managed_repository do
+            - Voeis::Site.all.each do |site|
+              -if !site.sensor_values.last.nil?
+                = site.site_name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
+              -else
+                = site.site_name + ': never'
+              %br/
+            = link_to("Add a Site", new_project_site_path(project), :class => 'new-link')
+  %p.rbox.tight
+    - if project.description && project.description.length > 0
+      %strong= link_to('Project Description', edit_project_path(project), :title => 'Edit Project Description')
+      %br/
+      %em= tooltip(project.description, project.name + ' Description', 200)
+    - else
+      %em= link_to('[Add Project Description]', edit_project_path(project))
       
-    .project-datasets
-      %h3 Last Updates:
-      - project.managed_repository do
-        - Voeis::Site.all.each do |site|
-          -if !site.sensor_values.last.nil?
-            = site.site_name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
-          -else
-            = site.site_name + ': never'
-          = clear_break
-
 #pagination-links= pagination_links(Project, params[:page], 5)
-

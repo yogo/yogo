@@ -8,7 +8,6 @@ module AuthorizationSystem
     base.send :include, AuthorizationSystemInstanceMethods
   end
 
-
   module AuthorizationSystemInstanceMethods
 
     protected

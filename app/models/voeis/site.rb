@@ -41,11 +41,11 @@ class Voeis::Site
   property :local_projection_id, Integer, :required => false
   property :pos_accuracy_m, Float, :required => false
   property :state, String, :required => true
-  property :country, String, :required => false
+  property :county, String, :required => false
   property :comments, String, :required => false
 
   # has n, :projects, :through => Resource
   has n, :data_streams, :model => "Voeis::DataStream", :through => Resource
-  has n, :sensor_type,    :model => "Voeis::SensorType", :through => Resource
+  has n, :sensor_types,    :model => "Voeis::SensorType", :through => Resource
   has n, :sensor_values,  :model => "Voeis::SensorValue", :through => Resource
 end

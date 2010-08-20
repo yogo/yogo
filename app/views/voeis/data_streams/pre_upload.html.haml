@@ -6,8 +6,8 @@
   -form_tag("create_stream") do 
     -@opt_array = Array.new
     -@column_options= ""
-    /-@variables.all(:order => [:variable_name.asc]).each do |var|
-    /-@opt_array << [var.variable_name, var.id]
+    -@variables.all(:order => [:variable_name.asc]).each do |var|
+      -@opt_array << [var.variable_name, var.id]
     Please give this Data Stream a Name: 
     =text_field_tag ("data_stream_name")
     =clear_break
@@ -19,8 +19,9 @@
     =clear_break
     Please select the site this Data Stream should be associated with:
     -@site_options=""
-    /-@sites.each do |site|
-    /-@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
+    -@sites.each do |site|
+      -if site.id != nil
+        -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
     =select_tag("site", @site_options)
     =clear_break
     =clear_break
@@ -39,7 +40,7 @@
           %th Alert Max
           %th Alert Deviation
         -(0..@row_size).each do |i|
-          /-@column_options= @column_options + "<option value="+i.to_s+">Column "+i.to_s+"</option>"
+          -@column_options= @column_options + "<option value="+i.to_s+">Column "+i.to_s+"</option>"
           %tr
             %td 
               =i.to_s
@@ -57,11 +58,11 @@
             %td 
               =select_tag("column"+i.to_s, options_for_select(@opt_array, @var_array[i][3]))
             %td
-              =text_field_tag("min"+i.to_s,@var_array[i][4])
+              =text_field_tag("min"+i.to_s,@var_array[i][4], :size=>8)
             %td
-              =text_field_tag("max"+i.to_s,@var_array[i][5])
+              =text_field_tag("max"+i.to_s,@var_array[i][5],:size=>8)
             %td
-              =text_field_tag("difference"+i.to_s,@var_array[i][6])
+              =text_field_tag("difference"+i.to_s,@var_array[i][6],:size=>8)
     -else
       %table
         %tr
@@ -75,7 +76,7 @@
           %th Alert Max
           %th Alert Deviation
         -(0..@row_size).each do |i|
-          /-@column_options= @column_options + "<option value="+i.to_s+">Column "+i.to_s+"</option>"
+          -@column_options= @column_options + "<option value="+i.to_s+">Column "+i.to_s+"</option>"
           %tr
             %td 
               =i.to_s
@@ -90,11 +91,11 @@
             %td 
               =select_tag("column"+i.to_s, options_for_select(@opt_array, @var_array[i][3]))
             %td
-              =text_field_tag("min"+i.to_s,@var_array[i][4])
+              =text_field_tag("min"+i.to_s,@var_array[i][4],:size=>8)
             %td
-              =text_field_tag("max"+i.to_s,@var_array[i][5])
+              =text_field_tag("max"+i.to_s,@var_array[i][5],:size=>8)
             %td
-              =text_field_tag("difference"+i.to_s,@var_array[i][6])
+              =text_field_tag("difference"+i.to_s,@var_array[i][6],:size=>8)
     =clear_break
     Please specify which column should be used as the time-stamp:
     =select_tag("timestamp", @column_options)
