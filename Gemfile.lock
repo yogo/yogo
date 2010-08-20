@@ -102,14 +102,8 @@ GEM
       dm-core (~> 1.0.0)
     dm-validations (1.0.0)
       dm-core (~> 1.0.0)
-    do_jdbc (0.10.2-java)
-      data_objects (= 0.10.2)
     do_sqlite3 (0.10.2)
       data_objects (= 0.10.2)
-    do_sqlite3 (0.10.2-java)
-      data_objects (= 0.10.2)
-      do_jdbc (= 0.10.2)
-      jdbc-sqlite3 (>= 3.5.8)
     extlib (0.9.15)
     factory_girl (1.2.4)
     fastercsv (1.5.3)
@@ -122,8 +116,6 @@ GEM
       sexp_processor (~> 3.0)
     gherkin (2.1.5)
       trollop (~> 1.16.2)
-    gherkin (2.1.5-java)
-      trollop (~> 1.16.2)
     googlecharts (1.6.0)
     haml (3.0.17)
     has_scope (0.5.0)
@@ -135,12 +127,7 @@ GEM
     inherited_resources (1.0.6)
       has_scope (~> 0.5.0)
       responders (~> 0.4.6)
-    jdbc-sqlite3 (3.6.3.054)
     json (1.4.6)
-<<<<<<< Updated upstream
-    json (1.4.6-java)
-=======
->>>>>>> Stashed changes
     json_pure (1.4.6)
     linecache (0.43)
     main (4.2.0)
@@ -166,8 +153,6 @@ GEM
     net-ssh-gateway (1.0.1)
       net-ssh (>= 1.99.1)
     nokogiri (1.4.3.1)
-    nokogiri (1.4.3.1-java)
-      weakling (>= 0.0.3)
     rack (1.1.0)
     rack-test (0.5.4)
       rack (>= 1.0)
@@ -186,7 +171,6 @@ GEM
       warden
     rake (0.8.7)
     rcov (0.9.8)
-    rcov (0.9.8-java)
     redgreen (1.2.2)
     reek (1.2.8)
       ruby2ruby (~> 1.2)
@@ -219,7 +203,6 @@ GEM
     uuidtools (2.1.1)
     warden (0.10.7)
       rack (>= 1.0.0)
-    weakling (0.0.4-java)
     webrat (0.7.1)
       nokogiri (>= 1.2.0)
       rack (>= 1.0)
@@ -230,7 +213,6 @@ GEM
       yard (~> 0.2)
 
 PLATFORMS
-  java
   ruby
 
 DEPENDENCIES
