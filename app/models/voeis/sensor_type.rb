@@ -1,12 +1,11 @@
 
 # SensorTypes
 #
-require 'yogo/datamapper/model/storage_context'
+
 class Voeis::SensorType
   include DataMapper::Resource
-  extend Yogo::DataMapper::Model::StorageContext
 
-  property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
+  property :id, Serial
   property :name,     String,  :required => true
   property :min,      Float,  :required => false
   property :max,      Float,  :required => false

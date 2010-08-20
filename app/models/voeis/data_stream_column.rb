@@ -15,7 +15,7 @@
 class Voeis::DataStreamColumn
   include DataMapper::Resource
 
-  property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
+  property :id, Serial
   property :name, String, :required => true
   property :type, String, :required => false
   property :unit, String, :required => true

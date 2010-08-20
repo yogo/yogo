@@ -1,7 +1,7 @@
 class Voeis::MetaTag
   include DataMapper::Resource
-  extend Yogo::DataMapper::Model::StorageContext
-  property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
+  
+  property :id, Serial
   #property :name,     String,  :required => true
   property :value,    Text,   :required => true
   property :name,    String,  :required => true

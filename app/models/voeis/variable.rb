@@ -40,9 +40,8 @@
 
 class Voeis::Variable
   include DataMapper::Resource
-  extend Yogo::DataMapper::Model::StorageContext
 
-  property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
+  property :id, Serial
   property :variable_code, String, :required => true
   property :variable_name, String, :required => true
   property :speciation, String, :required => true, :default => 'Not Applicable'
