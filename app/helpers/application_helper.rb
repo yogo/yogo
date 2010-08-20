@@ -145,15 +145,19 @@ module ApplicationHelper
     end
   end
 
+  # Renders the project quick-jump box
   def render_dashboard_jump_box
-    # Retrieve them now to avoid a COUNT query
-    projects = current_user.projects.all
-    if projects.any?
+    return unless logged_in?
+    roles = Role.all
+    if roles.any?
       s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
-            "<option value=''>Jump to a project...</option>" +
+            "<option value=''>Jump to Dashboard...</option>" +
             '<option value="" disabled="disabled">---</option>'
-      s << project_tree_options_for_select(projects, :selected => @project) do |p|
-        { :value => url_for(:controller => 'dashboards', :action => 'show', :id => p, :jump => current_menu_item) }
+      s << options_for_select(roles, :selected => @role) do |role|
+        dashboard = role.name.gsub(' ', '').underscore
+        z = { :value => dashboard_url(dashboard.to_sym) }
+        z[:disabled] = 'disabled' unless current_user.roles.include?(role)
+        z
       end
       s << '</select>'
       s
@@ -162,31 +166,38 @@ module ApplicationHelper
 
   # Renders the project quick-jump box
   def render_project_jump_box
-    # Retrieve them now to avoid a COUNT query
-    projects = current_user.projects.all
+    if logged_in?
+      projects = Project.all
+    else
+      projects = Project.select {|p| not p.is_private? }
+    end
     if projects.any?
       s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
-            "<option value=''>Jump to a project...</option>" +
+            "<option value=''>Jump to Project...</option>" +
             '<option value="" disabled="disabled">---</option>'
-      s << project_tree_options_for_select(projects, :selected => @project) do |p|
-        { :value => url_for(:controller => 'projects', :action => 'show', :id => p, :jump => current_menu_item) }
+      s << options_for_select(projects, :selected => @project ) do |project|
+        z = { :value => project_url(project) }
+        if logged_in?
+          z[:disabled] = 'disabled' unless current_user.projects.include?(project)
+        end
+        z
       end
       s << '</select>'
       s
     end
   end
 
-  def project_tree_options_for_select(projects, options = {})
+  def options_for_select(items, options = {})
     s = ''
-    projects.each do |project|
-      tag_options = {:value => project.id}
-      if project == options[:selected] || (options[:selected].respond_to?(:include?) && options[:selected].include?(project))
+    items.each do |item|
+      tag_options = {:value => item.id}
+      if item == options[:selected] || (options[:selected].respond_to?(:include?) && options[:selected].include?(item))
         tag_options[:selected] = 'selected'
       else
         tag_options[:selected] = nil
       end
-      tag_options.merge!(yield(project)) if block_given?
-      s << content_tag('option', name_prefix + h(project), tag_options)
+      tag_options.merge!(yield(item)) if block_given?
+      s << content_tag('option', h(item.name), tag_options)
     end
     s
   end

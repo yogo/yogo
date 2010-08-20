@@ -6,12 +6,10 @@
 # requested at http://water.usu.edu/cuahsi/odm/.
 #
 #
-require 'yogo/datamapper/model/storage_context'
 class Voeis::Unit
   include DataMapper::Resource
-  extend Yogo::DataMapper::Model::StorageContext
 
-  property :id, UUID, :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
+  property :id, Serial
   property :units_name, String, :required => true
   property :units_type, String, :required => true
   property :units_abbreviation, String, :required => true
