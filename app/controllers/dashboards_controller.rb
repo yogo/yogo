@@ -3,12 +3,10 @@
 #
 # License -> see license.txt
 #
-# FILE: yogo_data_controller.rb
-# Functionality for CRUD of data within a yogo project's model
-# Additionally upload and download of data via CSV is provided
+# FILE: dashboards_controller
+# This controller loads statically configured dashboards
 #
 class DashboardsController < ApplicationController
-
   rescue_from ActionView::MissingTemplate, :with => :invalid_page
 
   def show
@@ -16,6 +14,6 @@ class DashboardsController < ApplicationController
   end
 
   def invalid_page
-    redirect_to root_path
+    redirect_to(:back)
   end
 end

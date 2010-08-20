@@ -39,7 +39,7 @@ class Voeis::Site
   property :local_projection_id, Integer, :required => false
   property :pos_accuracy_m, Float, :required => false
   property :state, String, :required => true
-  property :country, String, :required => false
+  property :county, String, :required => false
   property :comments, String, :required => false
 
   # has n, :projects, :through => Resource

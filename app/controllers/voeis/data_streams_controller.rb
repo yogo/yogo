@@ -83,11 +83,11 @@ class Voeis::DataStreamsController < Voeis::BaseController
   def create_stream
     #create and save new DataStream
     #
-    data_stream = parent.managed_repository{Voeis::DataStream}.create(
+    data_stream = parent.managed_repository{Voeis::DataStream.create(
                                  :name => params[:data_stream_name],
                                  :description => params[:data_stream_description],
                                  :filename => params[:datafile],
-                                 :start_line => params[:start_line].to_i)
+                                 :start_line => params[:start_line].to_i)}
     #Add site association to data_stream
     # 
     site = parent.managed_repository{Voeis::Site.first(:id => params[:site])}
@@ -150,8 +150,23 @@ class Voeis::DataStreamsController < Voeis::BaseController
     redirect_to project_path(params[:project_id])
   end
 
+
+
+  def index
+    @sites = parent.managed_repository{Voeis::Site.all}
+    
+    @site_data = Hash.new
+    
+    respond_to do |format|
+      format.html
+    end
+  end
+
+
+
+
   def old_index
-     @project = Project.first(:id => params[:id])
+     @project = parent
      @project_array = Array.new
      temp_hash = Hash.new
      @project_hash = Hash.new
@@ -159,12 +174,12 @@ class Voeis::DataStreamsController < Voeis::BaseController
      num_hash = Hash.new
      site_count=-1
      #do we need all the sites or just one? for api access
-     if params[:sitecode].nil? # get all sites
-       @site_info= @project.sites
-     else
-       @site_info= Array.new
-       @site_info[0]= Site.first(:code => params[:sitecode])
-     end
+     #if params[:sitecode].nil? # get all sites
+     @site_info= @project.managed_repository{Voeis::Site.all}
+     #else
+     #  @site_info= Array.new
+     #  @site_info[0]= Site.first(:code => params[:sitecode])
+     #end
 
      @site_info.each do |site| # do something for each existing site in a project
         site_count += 1
