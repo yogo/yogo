@@ -137,7 +137,10 @@ GEM
       responders (~> 0.4.6)
     jdbc-sqlite3 (3.6.3.054)
     json (1.4.6)
+<<<<<<< Updated upstream
     json (1.4.6-java)
+=======
+>>>>>>> Stashed changes
     json_pure (1.4.6)
     linecache (0.43)
     main (4.2.0)
