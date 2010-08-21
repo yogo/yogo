@@ -16,7 +16,7 @@ class Voeis::DataStreamColumn
   include DataMapper::Resource
 
   property :id, Serial
-  property :name, String, :required => true
+  property :name, String, :required => true, :length => 512
   property :type, String, :required => false
   property :unit, String, :required => true
   property :original_var, String, :required => true

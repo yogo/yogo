@@ -15,7 +15,7 @@ class Voeis::DataStream
   include DataMapper::Resource
 
   property :id, Serial
-  property :name, String, :required => true, :unique => true
+  property :name, String, :required => true, :unique => true, :length => 512
   property :description, Text, :required => false
   property :filename, String, :required => true, :length => 512
   property :start_line, Integer, :required => true, :default => 0

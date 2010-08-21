@@ -1,30 +1,81 @@
 <h2><%=link_to(@project.name, project_path(@project) )%></h2>
-<div id="graphs", width = "600px", height = "400px">
+<div id="graphs">
   <% @sites.each do |site| %>
     <h3><a href="#"><%=site.site_name%></a></h3>
     <div>
     <%if @site_data[site.site_code].to_s != "{}"%> 
+      <table>
+        <tr>
+          <td>
+                <div id="placeholder<%= site.site_code %>" style="width:500px;height:300px;"></div>
+                <p id="hoverdata" style="font-size: .75em">Position:
+                (<span id="x<%= site.site_code%>">0</span>, <span id="y<%= site.site_code %>">0</span>). <span id="clickdata"></span></p>
+           </td>
+           <td valign= "top">
+               <div id ="legend<%=site.site_code%>" ><div>
+           </td>
+           <td valign= "top">
+               <div id="choices<%=site.site_code%>">Show:</div>
 
-      <% visualization "my_chart", "MotionChart", :width => 600, :height => 400, :html => {:class => "graph_chart"} do |chart| %>
+           </td>
+           </tr>           
+           <tr>
+             <td>
+                 <%= button_to("Download Selected Data", "#", :disabled => true) %>
+             </td>
+             <td></td>
+             <td></td>
+           <tr>
+      </table>    
+      <script type="text/javascript" charset="utf-8">
 
-      	<% chart.string "Fruit" %>
-      	<% chart.date "Date" %>
-      	<% chart.number "Sales" %>
-      	<% chart.number "Expenses" %>
-      	<% chart.string "Location" %>
+          $("#placeholder<%= site.site_code %>").yogo_graphit({choice: "#choices<%= site.site_code %>",
+                                                       plot_data: <%= @site_data[site.site_code] %>,
+                                                       leg:"#legend<%= site.site_code %>",
+                                                       x: "#x<%= site.site_code %>",
+                                                       y: "#y<%= site.site_code %>"});
+                                                       
+                                                       
+      </script>
 
-
-      	<% chart.add_rows([
-      			["Apples", Date.new(1998,1,1), 1000,300,'East'],
-      			["Oranges", Date.new(1998,1,1), 950,200,'West'],
-      			["Bananas", Date.new(1998,1,1), 300,250,'West'],
-      			["Apples", Date.new(1998,2,1), 1200,400,'East'],
-      			["Oranges", Date.new(1998,2,1), 950,150,'West'],
-      			["Bananas", Date.new(1998,2,1), 788,617,'West']
-      		]) %>
+      <% visualization "my_table", "Table", :width => 1000, :height => 400, :html => {:class => "g_table"} do |chart| %>
+        
+        <% chart.datetime "Timestamp" %>
+        <% site.sensor_types.each do |sens|%>
+          <% chart.number "#{sens.variables.first.variable_name}" %>
+        <% end%>
+        <% row_array = Array.new%>
+        <% site.sensor_types.first.sensor_values.each do |sens_val|%>
+          <% row_array = Array.new%>
+          <% row_array << sens_val.timestamp.to_datetime %>
+          <%site.sensor_types.each do |sens| %>
+            <%val = sens.sensor_values.first(:timestamp.gte => sens_val.timestamp)%>
+            <%if !val.nil?%>
+              <% row_array << val.value %>
+            <% else%>
+              <% row_array << 0 %>
+            <%end%>
+          <%end%>
+          <%chart.add_row (row_array)%>
+        <%end%>
       <% end %>
       
-     
+      <% visualization "my_graph", "AnnotatedTimeLine", :width => 600, :height => 400, :html => {:class => "graph_chart"} do |agraph| %>
+        
+        <% agraph.datetime "Timestamp" %>
+        <% agraph.number "#{site.sensor_types.first.variables.first.variable_name}"%>
+        <% agraph.string "title1"%>
+        <% agraph.string "text1"%>
+        <% row_array = Array.new%>
+        <% site.sensor_types.first.sensor_values.each do |sens_val|%>
+          <% row_array = Array.new%>
+          <% row_array << sens_val.timestamp %>
+          <% row_array << sens_val.value %>
+          <% row_array << "value" %>
+          <% row_array << "text"%>
+          <%agraph.add_row (row_array)%>
+        <%end%>
+      <% end %>
       <%else%>
         <div>There is currently no data for this site.</div>
       <%end%>

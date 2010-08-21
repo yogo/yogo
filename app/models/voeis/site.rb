@@ -28,10 +28,10 @@ class Voeis::Site
   
   property :id, Serial
   property :site_code, String, :required => true
-  property :site_name, String, :required => true
+  property :site_name, String, :required => true, :length => 512
   property :latitude, Float, :required => true
   property :longitude, Float, :required => true
-  property :lat_long_datum_id, Integer, :required => true, :default => 0
+  property :lat_long_datum_id, Integer, :required => false, :default => 0
   property :elevation_m, Float, :required => false
   property :vertical_datum, String, :required => false
   property :local_x, Float,  :required => false

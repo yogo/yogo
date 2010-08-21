@@ -6,7 +6,7 @@ class Voeis::SensorType
   include DataMapper::Resource
 
   property :id, Serial
-  property :name,     String,  :required => true
+  property :name,     String,  :required => true, :length => 512
   property :min,      Float,  :required => false
   property :max,      Float,  :required => false
   property :difference,  Float,  :required => false

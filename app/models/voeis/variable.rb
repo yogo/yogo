@@ -42,17 +42,17 @@ class Voeis::Variable
   include DataMapper::Resource
 
   property :id, Serial
-  property :variable_code, String, :required => true
-  property :variable_name, String, :required => true
-  property :speciation, String, :required => true, :default => 'Not Applicable'
+  property :variable_code, String, :required => true, :length => 512
+  property :variable_name, String, :required => true, :length => 512
+  property :speciation, String, :required => true, :default => 'Not Applicable', :length => 512
   property :variable_units_id, Integer, :required => true
-  property :sample_medium, String, :required => true, :default => 'Unknown'
-  property :value_type, String, :required => true, :default =>'Unknown'
+  property :sample_medium, String, :required => true, :default => 'Unknown', :length => 512
+  property :value_type, String, :required => true, :default =>'Unknown', :length => 512
   property :is_regular, Boolean, :required => true, :default => false
   property :time_support, Float, :required => true
   property :time_units_id, Integer, :required => true, :default => 103
-  property :data_type, String, :required => true, :default => 'Unknown'
-  property :general_category, String, :required => true, :default => 'Unknown'
+  property :data_type, String, :required => true, :default => 'Unknown', :length => 512
+  property :general_category, String, :required => true, :default => 'Unknown', :length => 512
   property :no_data_value, Float, :required => true, :default => -9999
 
   has n, :data_stream_columns,      :model => "Voeis::DataStreamColumn", :through => Resource
