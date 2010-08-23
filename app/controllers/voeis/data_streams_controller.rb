@@ -47,7 +47,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
     puts @sites = parent.managed_repository{Voeis::Site.all}
     @sites.each do |site|
       puts site.id.to_s
-      puts site.site_name 
+      puts site.name
     end
     if !params[:datafile].nil? && datafile = params[:datafile]
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
@@ -110,12 +110,12 @@ class Voeis::DataStreamsController < Voeis::BaseController
                                  :filename => params[:datafile],
                                  :start_line => params[:start_line].to_i)}
     #Add site association to data_stream
-    # 
+    #
     site = parent.managed_repository{Voeis::Site.first(:id => params[:site])}
     data_stream.sites << site
     data_stream.save
-    #create DataStreamColumns 
-    #    
+    #create DataStreamColumns
+    #
     range = params[:rows].to_i
     (0..range).each do |i|
       #create the Timestamp column
@@ -138,7 +138,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
                               :original_var => params["variable"+i.to_s],
                               :unit => params["unit"+i.to_s],
                               :type => params["type"+i.to_s])
-       
+
         variable = Voeis::Variable.first_or_create(
                     :variable_code => @his_var.variable_code,
                     :variable_name => @his_var.variable_name,
@@ -156,7 +156,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
         data_stream_column.data_streams << data_stream
         data_stream_column.save
         sensor_type = Voeis::SensorType.first_or_create(
-                      :name => params["variable"+i.to_s] + site.site_name,
+                      :name => params["variable"+i.to_s] + site.name,
                       :min => params["min"+i.to_s].to_f,
                       :max => params["max"+i.to_s].to_f,
                       :difference => params["difference"+i.to_s].to_f)
@@ -196,8 +196,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
           end
           senscount+=1
           count = 0
-      
-          @plot_data += '"' + s_type.name + "-" + site.site_code + '"' + ": {data:["
+
+          @plot_data += '"' + s_type.name + "-" + site.code + '"' + ": {data:["
           @sensor_hash = Hash.new
           num = 24
           cur_date = s_type.sensor_values.first(:order => [:timestamp.desc]).timestamp
@@ -235,15 +235,15 @@ class Voeis::DataStreamsController < Voeis::BaseController
            end
            @site_hash[s_type.name] = @sensor_hash
            @plot_data += "] , label: \"#{@thelabel}\" }"
-        end #end sensor_type      
+        end #end sensor_type
         @plot_data += "}"
         temp_hash = Hash.new
-        temp_hash["sitecode"]=site.site_code
-        temp_hash["sitename"]=site.site_name
+        temp_hash["sitecode"]=site.code
+        temp_hash["sitename"]=site.name
         temp_hash["sensors"]=@site_hash
         @project_array.push(temp_hash)
-        num_hash[site.site_code] = site_count
-        @site_data[site.site_code] = @plot_data
+        num_hash[site.code] = site_count
+        @site_data[site.code] = @plot_data
       end  #site
       @project_hash["sites"] = @project_array
     end
@@ -252,7 +252,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
     end
   end
 
-   
+
    # parse the header of a logger file
    # assumes Campbell scientific header style at the moment
    # @example parse_logger_csv_header("filename")
@@ -288,12 +288,12 @@ class Voeis::DataStreamsController < Voeis::BaseController
    end
 
    # Returns the specified row of a csv
-   # 
+   #
    # @example get_row("filename",4)
    #
    # @param [String] csv_file
    # @param [Integer] row
-   # 
+   #
    # @return [Array] an array whose elements are a csv-row columns
    #
    # @author Yogo Team
@@ -315,8 +315,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
    # @param [String] csv_file
    # @param [Object] data_stream_template
    # @param [Object] site
-   # 
-   # @return 
+   #
+   # @return
    #
    # @author Yogo Team
    #
@@ -328,7 +328,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
      sensor_type_array = Array.new
      data_stream_col = Array.new
      data_stream_template.data_stream_columns.each do |col|
-       sensor_type_array[col.column_number] = parent.managed_repository{Voeis::SensorType.first(:name => col.original_var + site.site_name)}
+       sensor_type_array[col.column_number] = parent.managed_repository{Voeis::SensorType.first(:name => col.original_var + site.name)}
        data_stream_col[col.column_number] = col
      end
      data_timestamp_col = data_stream_template.data_stream_columns.first(:name => "Timestamp").column_number
@@ -337,7 +337,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
          if i != data_timestamp_col
            #save to sensor_value and sensor_type
            parent.managed_repository{
-           sensor_value = Voeis::SensorValue.new(                                     
+           sensor_value = Voeis::SensorValue.new(
                                          :value => row[i],
                                          :units => data_stream_col[i].unit,
                                          :timestamp => row[data_timestamp_col])

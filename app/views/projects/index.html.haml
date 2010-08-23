@@ -17,9 +17,9 @@
           - project.managed_repository do
             - Voeis::Site.all.each do |site|
               -if !site.sensor_values.last.nil?
-                = site.site_name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
+                = site.name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
               -else
-                = site.site_name + ': never'
+                = site.name + ': never'
               %br/
             = link_to("Add a Site", new_project_site_path(project), :class => 'new-link')
   %p.rbox.tight
