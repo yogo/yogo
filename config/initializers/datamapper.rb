@@ -17,6 +17,9 @@ require 'datamapper/property/yogo_image'
 require 'datamapper/property/raw'
 require 'yogo/project_ext'
 
+# When saving models don't be terse
+DataMapper::Model.raise_on_save_failure = true
+
 # Read the configuration from the existing database.yml file
 config = Rails.configuration.database_configuration
 
