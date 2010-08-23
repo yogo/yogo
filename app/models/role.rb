@@ -12,7 +12,7 @@ class Role
 
   property :id, Serial
   property :name, String, :required => true, :unique => true
-  property :description, String, :length => 256
+  property :description, Text
   property :permissions, Yaml, :default => [].to_yaml
 
   has n, :memberships
