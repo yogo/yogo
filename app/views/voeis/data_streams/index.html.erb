@@ -3,19 +3,19 @@
   <% @sites.each do |site| %>
     <h3><a href="#"><%=site.site_name%></a></h3>
     <div>
-    <%if @site_data[site.site_code].to_s != "{}"%> 
+    <%if @site_data[site.code].to_s != "{}"%> 
       <table>
         <tr>
           <td>
-                <div id="placeholder<%= site.site_code %>" style="width:500px;height:300px;"></div>
+                <div id="placeholder<%= site.code %>" style="width:500px;height:300px;"></div>
                 <p id="hoverdata" style="font-size: .75em">Position:
-                (<span id="x<%= site.site_code%>">0</span>, <span id="y<%= site.site_code %>">0</span>). <span id="clickdata"></span></p>
+                (<span id="x<%= site.code%>">0</span>, <span id="y<%= site.code %>">0</span>). <span id="clickdata"></span></p>
            </td>
            <td valign= "top">
-               <div id ="legend<%=site.site_code%>" ><div>
+               <div id ="legend<%=site.code%>" ><div>
            </td>
            <td valign= "top">
-               <div id="choices<%=site.site_code%>">Show:</div>
+               <div id="choices<%=site.code%>">Show:</div>
 
            </td>
            </tr>           
@@ -29,11 +29,11 @@
       </table>    
       <script type="text/javascript" charset="utf-8">
 
-          $("#placeholder<%= site.site_code %>").yogo_graphit({choice: "#choices<%= site.site_code %>",
-                                                       plot_data: <%= @site_data[site.site_code] %>,
-                                                       leg:"#legend<%= site.site_code %>",
-                                                       x: "#x<%= site.site_code %>",
-                                                       y: "#y<%= site.site_code %>"});
+          $("#placeholder<%= site.code %>").yogo_graphit({choice: "#choices<%= site.code %>",
+                                                       plot_data: <%= @site_data[site.code] %>,
+                                                       leg:"#legend<%= site.code %>",
+                                                       x: "#x<%= site.code %>",
+                                                       y: "#y<%= site.code %>"});
                                                        
                                                        
       </script>

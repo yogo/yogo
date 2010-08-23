@@ -1,7 +1,7 @@
 %h2
 - form_for(:site, resource, :url => project_sites_path(@project), :builder => YogoFormBuilder) do |f|
   = f.text_field("site_name")
-  = f.text_field("site_code")
+  = f.text_field("code")
   = f.text_field("latitude")
   = f.text_field("longitude")
   = f.text_field("state")
