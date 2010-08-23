@@ -41,6 +41,9 @@ end
 # Load the project model and migrate it if needed.
 User
 Role
+Site
+Variable
+Unit
 Setting
 Membership
 Yogo::Project
@@ -50,4 +53,7 @@ DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(
                                 DataMapper.repository(:default).storage_exists?(Setting.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(User.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(Role.storage_name) &&
-                                DataMapper.repository(:default).storage_exists?(Membership.storage_name)
+DataMapper.repository(:default).storage_exists?(Membership.storage_name) &&
+DataMapper.repository(:default).storage_exists?(Site.storage_name) &&
+DataMapper.repository(:default).storage_exists?(Unit.storage_name) &&
+DataMapper.repository(:default).storage_exists?(Variable.storage_name)

@@ -18,27 +18,27 @@ class Voeis::SitesController < Voeis::BaseController
   end
   
   def add_site
-    @sites = His::Sites.all
+    @sites = Site.all
     
   end
   
   def save_site
-    his_site = His::Sites.first(:id => params[:site])
+    sys_site = Site.first(:id => params[:site])
     parent.managed_repository{Voeis::Site.first_or_create(
-                :site_code => his_site.site_code,
-                :site_name => his_site.site_name,
-                :latitude => his_site.latitude,
-                :longitude  => his_site.longitude,
-                # :lat_long_datum_id => his_site.lat_long_datum_id,
-                # :elevation_m => his_site.elevation_m,
-                # :vertical_datum => his_site.vertical_datum,
-                # :local_x => his_site.local_x,
-                # :local_y => his_site.local_y,
-                # :local_projection_id => his_site.local_projection_id,
-                # :pos_accuracy_m => his_site.pos_accuracy_m,
-                :state => his_site.state)}
-                # :county => his_site.county,
-                # :comments => his_site.comments)}
+                :site_code => sys_site.site_code,
+                :site_name => sys_site.site_name,
+                :latitude => sys_site.latitude,
+                :longitude  => sys_site.longitude,
+                # :lat_long_datum_id => sys_site.lat_long_datum_id,
+                # :elevation_m => sys_site.elevation_m,
+                # :vertical_datum => sys_site.vertical_datum,
+                # :local_x => sys_site.local_x,
+                # :local_y => sys_site.local_y,
+                # :local_projection_id => sys_site.local_projection_id,
+                # :pos_accuracy_m => sys_site.pos_accuracy_m,
+                :state => sys_site.state)}
+                # :county => sys_site.county,
+                # :comments => sys_site.comments)}
     redirect_to project_url(parent)
   end
 end
