@@ -27,6 +27,8 @@ class User
   property :last_request_at,      DateTime
   property :last_login_at,        DateTime
   property :current_login_at,     DateTime
+  
+  property :api_key,  String, :required => false, :length => 64, :index => true, :writer => :private
 
   # Long enough for an ipv6 address.
   property :last_login_ip,      String, :length => 36
@@ -61,6 +63,26 @@ class User
   # @api public
   def self.find_by_login(login)
     self.first(:login => login)
+  end
+
+  ##
+  # Finds a user by their api key
+  #
+  # @example
+  #   User.find_by_api_key('lamb') # Returns a user or nil
+  #
+  # @param [String]
+  #   The api key to look for.
+  #
+  # @return [User or nil]
+  #   Returns the user if found, or nil if no user was found
+  #
+  # @author Robbie Lamb
+  #
+  # @api public
+  def self.find_by_api_key(api_key)
+    return nil if api_key.blank?
+    self.first(:api_key => api_key)
   end
 
   ##
@@ -221,4 +243,18 @@ class User
     end
   end
 
+  ##
+  # Genertes a new api key for the user
+  # 
+  # @example
+  #   a_user.generate_new_api_key!
+  #
+  # @return [Boolean] True if the key was able to be updated, or false other wise
+  # @author lamb
+  # @api public
+  def generate_new_api_key!
+    attribute_set(:api_key, ::SecureRandom.hex(32))
+    save!
+  end
+  
 end

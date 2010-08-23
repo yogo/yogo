@@ -1,5 +1,5 @@
 Rails.configuration.middleware.use RailsWarden::Manager do |manager|
-  manager.default_strategies :bcrypt
+  manager.default_strategies :api_key, :bcrypt
   manager.failure_app = UserSessionsController
 end
 
@@ -20,6 +20,7 @@ Warden::Strategies.add(:bcrypt) do
   end
 
   def authenticate!
+    
     return fail! unless user = User.find_by_login(params["user_session"]["login"])
 
     if user.crypted_password == "#{params["user_session"]["password"]}"
@@ -27,6 +28,23 @@ Warden::Strategies.add(:bcrypt) do
     else
       #What is this errors?
       errors.add(:login, "Username or Password incorrect")
+      fail!
+    end
+  end
+end
+
+Warden::Strategies.add(:api_key) do
+  def valid?
+    params["api_key"] && !params["api_key"].empty?
+  end
+  
+  def authenticate!
+    user = User.find_by_api_key(params["api_key"])
+    
+    unless user.nil?
+      success!(user)
+    else
+      errors.add(:api_key, "Invalid Api token")
       fail!
     end
   end
