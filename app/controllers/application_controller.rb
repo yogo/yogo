@@ -18,6 +18,9 @@ class ApplicationController < ActionController::Base
 
   # Set the current user for the models to use.
   before_filter do |c|
+    if c.current_user.nil?
+      c.authenticate(:api_key)
+    end
     User.current = c.current_user
   end
 
