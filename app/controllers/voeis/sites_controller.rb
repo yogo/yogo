@@ -16,17 +16,17 @@ class Voeis::SitesController < Voeis::BaseController
       success.html { redirect_to project_url(parent) }
     end
   end
-  
+
   def add_site
     @sites = His::Sites.all
-    
+
   end
-  
+
   def save_site
     his_site = His::Sites.first(:id => params[:site])
     parent.managed_repository{Voeis::Site.first_or_create(
-                :site_code => his_site.site_code,
-                :site_name => his_site.site_name,
+                :code => his_site.site_code,
+                :name => his_site.site_name,
                 :latitude => his_site.latitude,
                 :longitude  => his_site.longitude,
                 # :lat_long_datum_id => his_site.lat_long_datum_id,
