@@ -176,7 +176,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           senscount+=1
           count = 0
       
-          @plot_data += '"' + s_type.name + "-" + site.site_code + '"' + ": {data:["
+          @plot_data += '"' + s_type.name + "-" + site.code + '"' + ": {data:["
           @sensor_hash = Hash.new
           num = 24
           cur_date = s_type.sensor_values.first(:order => [:timestamp.desc]).timestamp
@@ -217,12 +217,12 @@ class Voeis::DataStreamsController < Voeis::BaseController
         end #end sensor_type      
         @plot_data += "}"
         temp_hash = Hash.new
-        temp_hash["sitecode"]=site.site_code
+        temp_hash["sitecode"]=site.code
         temp_hash["sitename"]=site.site_name
         temp_hash["sensors"]=@site_hash
         @project_array.push(temp_hash)
-        num_hash[site.site_code] = site_count
-        @site_data[site.site_code] = @plot_data
+        num_hash[site.code] = site_count
+        @site_data[site.code] = @plot_data
       end  #site
       @project_hash["sites"] = @project_array
     end
