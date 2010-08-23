@@ -18,11 +18,11 @@
               %th Roles
               %th
             %tbody
-              - unless @project.roles.empty? 
-                - @project.roles.users.each do |user|
+              - unless @project.users.empty? 
+                - @project.users.each do |user|
                   %tr
                     %td= user.name
-                    %td= @project.roles.select{|role| role.users.include?(user) }.map{|role| role.name }.join(', ')     
+                    %td= (user.roles | @project.roles).map {|role| role.name }.join(', ')
                     %td 
                       #operation-links
                         #edit-link
