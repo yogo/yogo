@@ -112,13 +112,13 @@ class Project
   # repository of a Project, you should always use this method.
   #
   # @example Create a new site that is stored in myProject.managed_repository
-  #   managedSite = myProject.build_managed(Voeis::Site, :site_name => ...)
+  #   managedSite = myProject.build_managed(Voeis::Site, :name => ...)
   #
   # @example Doing any of these will NOT work consistently (if at all)
-  #   managedSite1 = Voeis::Site.new(:site_name => ...)
+  #   managedSite1 = Voeis::Site.new(:name => ...)
   #   managedSite1.save # WILL NOT save in myProject.managed_repository
   #
-  #   managedSite2 = myProject.managed_repository{Voeis::Site.new(:site_name => ...)}
+  #   managedSite2 = myProject.managed_repository{Voeis::Site.new(:name => ...)}
   #   managedSite2.save # WILL NOT save in myProject.managed_repository
   #
   # Boring Details:
