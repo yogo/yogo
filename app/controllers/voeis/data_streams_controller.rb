@@ -7,6 +7,27 @@ class Voeis::DataStreamsController < Voeis::BaseController
             :collection_name => 'data_streams',
             :instance_name => 'data_stream',
             :resource_class => Voeis::DataStream
+  
+  def query
+    @variables = ""
+    @sites = ""
+    parent.managed_repository do 
+      @sites = Voeis::Site.all
+      @variables = Voeis::Variable.all
+    end  
+  end
+            
+  def search
+  
+    respond_to do |format|
+      format.js{render :update do |page|
+        page.replace_html "search_results", :partial => "show_search_results", :locals => {:items => sites, :topic => topic_name,  :owner => own_name, :category => cat_name, :status => status_name, :url => params[:query][:url_query], :start_date => start_date, :end_date => end_date }
+      end
+      }
+    end  
+  end
+  
+  
 
   # alows us to upload csv file to be processed into data
   #

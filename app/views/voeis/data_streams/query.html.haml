@@ -1,0 +1,24 @@
+%h1 Search
+-remote_form_for :query, @query, :url => { :action => 'search'} do |f| %>
+  
+  Variable: 
+  -opts = ""
+  -@variables.each do |var|
+    -opt_array << [var.variable_name, var.id.to_s]
+  =select_tag("variable", @opt_array)
+  
+  Site: 
+  -@site_options=""
+  -@sites.each do |site|
+    -if site.id != nil
+      -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
+  =select_tag("site", @site_options)
+  = f.check_box :date_search
+  Dates After: 
+  = date_select('range', 'start_date', :order => [:month, :day, :year])
+  Dates Before: 
+  = date_select('range', 'end_date', :order => [:month, :day, :year])
+  
+  = f.submit('Search')
+
+
