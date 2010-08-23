@@ -27,6 +27,7 @@ require 'yogo/datamapper/model/storage_context'
 class Voeis::Site
   include DataMapper::Resource
   extend Yogo::DataMapper::Model::StorageContext
+  include Facet::DataMapper::Resource
 
   property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :site_code, String, :required => true

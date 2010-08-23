@@ -12,6 +12,7 @@ require 'yogo/datamapper/repository_manager'
 class Project
   include ::DataMapper::Resource
   include Yogo::DataMapper::RepositoryManager
+  include Facet::DataMapper::Resource
 
   property :id,               UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :name,             String,     :required => true

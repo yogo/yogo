@@ -41,6 +41,7 @@
 class Voeis::Variable
   include DataMapper::Resource
   extend Yogo::DataMapper::Model::StorageContext
+  include Facet::DataMapper::Resource
 
   property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :variable_code, String, :required => true

@@ -13,6 +13,7 @@
 
 class Voeis::DataStream
   include DataMapper::Resource
+  include Facet::DataMapper::Resource
 
   property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :name, String, :required => true, :unique => true

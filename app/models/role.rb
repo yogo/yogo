@@ -23,7 +23,15 @@ class Role
   is :list
 
   def self.permission_sources
-    [Yogo::Project, Membership]
+    [Project, Membership,
+      Voeis::DataStream,
+      Voeis::DataStreamColumn,
+      Voeis::MetaTag,
+      Voeis::SensorType,
+      Voeis::SensorValue,
+      Voeis::Site,
+      Voeis::Unit,
+      Voeis::Variable]
   end
 
   def self.available_permissions
