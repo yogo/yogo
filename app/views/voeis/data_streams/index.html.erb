@@ -2,43 +2,37 @@
 <div id="graphs">
   <% @sites.each do |site| %>
     <h3><a href="#"><%=site.name%></a></h3>
-    <div>
+    <div width="600px" height="400px">
     <%if @site_data[site.code].to_s != "{}"%>
-      <table>
-        <tr>
-          <td>
-                <div id="placeholder<%= site.code %>" style="width:500px;height:300px;"></div>
-                <p id="hoverdata" style="font-size: .75em">Position:
-                (<span id="x<%= site.code%>">0</span>, <span id="y<%= site.code %>">0</span>). <span id="clickdata"></span></p>
-           </td>
-           <td valign= "top">
-               <div id ="legend<%=site.code%>" ><div>
-           </td>
-           <td valign= "top">
-               <div id="choices<%=site.code%>">Show:</div>
-
-           </td>
-           </tr>
-           <tr>
-             <td>
-                 <%= button_to("Download Selected Data", "#", :disabled => true) %>
-             </td>
-             <td></td>
-             <td></td>
-           <tr>
-      </table>
-      <script type="text/javascript" charset="utf-8">
-
-          $("#placeholder<%= site.code %>").yogo_graphit({choice: "#choices<%= site.code %>",
-                                                       plot_data: <%= @site_data[site.code] %>,
-                                                       leg:"#legend<%= site.code %>",
-                                                       x: "#x<%= site.code %>",
-                                                       y: "#y<%= site.code %>"});
-
-
-      </script>
+      <div width="600px" height="400px">
       <% site.data_streams.each do |data_stream| %>
         <%= data_stream.name %>
+        <% visualization "my_graph:"+data_stream.name, "LineChart", :width => 600, :height => 400, :html => {:class => "graph_chart"} do |agraph| %>
+          <% agraph.datetime "Timestamp" %>
+          <% data_stream.data_stream_columns.each do |col|%>
+            <%if !col.variables.empty?%>
+              <% agraph.number "#{col.variables.first.variable_name}" %>
+            <%end%>
+          <% end%>
+          <% row_array = Array.new%>
+          <% if !data_stream.data_stream_columns.empty? %>
+            <% if !data_stream.data_stream_columns.first(:name.not => "Timestamp").sensor_types.empty? %>
+              <% data_stream.data_stream_columns.first(:name.not => "Timestamp").sensor_types.first.sensor_values.each do |sens_val|%>
+                <% row_array = Array.new%>
+                <% row_array << sens_val.timestamp.to_datetime %>
+                <%data_stream.data_stream_columns.all(:name.not => "Timestamp").sensor_types.each do |sens| %>
+                  <%val = sens.sensor_values.first(:timestamp.gte => sens_val.timestamp)%>
+                  <%if !val.nil?%>
+                    <% row_array << val.value %>
+                  <% else%>
+                    <% row_array << 0 %>
+                  <%end%>
+                <%end%>
+                <%agraph.add_row (row_array)%>
+              <%end%>
+            <%end%>
+          <%end%>
+        <% end %>
         <% visualization "my_table:"+data_stream.name, "Table", :width => 1000, :height => 400, :html => {:class => "g_table"} do |chart| %>
 
           <% chart.datetime "Timestamp" %>
@@ -50,44 +44,26 @@
           <% row_array = Array.new%>
           <% if !data_stream.data_stream_columns.empty? %>
             <% if !data_stream.data_stream_columns.first(:name.not => "Timestamp").sensor_types.empty? %>
-          <% data_stream.data_stream_columns.first(:name.not => "Timestamp").sensor_types.first.sensor_values.each do |sens_val|%>
-            <% row_array = Array.new%>
-            <% row_array << sens_val.timestamp.to_datetime %>
-            <%data_stream.data_stream_columns.all(:name.not => "Timestamp").sensor_types.each do |sens| %>
-              <%val = sens.sensor_values.first(:timestamp.gte => sens_val.timestamp)%>
-              <%if !val.nil?%>
-                <% row_array << val.value %>
-              <% else%>
-                <% row_array << 0 %>
+              <% data_stream.data_stream_columns.first(:name.not => "Timestamp").sensor_types.first.sensor_values.each do |sens_val|%>
+                <% row_array = Array.new%>
+                <% row_array << sens_val.timestamp.to_datetime %>
+                <%data_stream.data_stream_columns.all(:name.not => "Timestamp").sensor_types.each do |sens| %>
+                  <%val = sens.sensor_values.first(:timestamp.gte => sens_val.timestamp)%>
+                  <%if !val.nil?%>
+                    <% row_array << val.value %>
+                  <% else%>
+                    <% row_array << 0 %>
+                  <%end%>
+                <%end%>
+                <%chart.add_row (row_array)%>
               <%end%>
             <%end%>
-            <%chart.add_row (row_array)%>
-          <%end%>
-          <%end%>
           <%end%>
         <% end %>
-      <% end %>  
-        
-      <% site.data_streams.each do |data_stream| %>
-      <% visualization "my_graph", "AnnotatedTimeLine", :width => 600, :height => 400, :html => {:class => "graph_chart"} do |agraph| %>
-
-        <% agraph.datetime "Timestamp" %>
-        <% agraph.number "#{data_stream.data_stream_columns.first(:name.not => "Timestamp").variables.first.variable_name}"%>
-        <% agraph.string "title1"%>
-        <% agraph.string "text1"%>
-        <% row_array = Array.new%>
-        <% data_stream.data_stream_columns.first(:name.not => "Timestamp").sensor_types.first.sensor_values.each do |sens_val|%>
-          <% row_array = Array.new%>
-          <% row_array << sens_val.timestamp %>
-          <% row_array << sens_val.value %>
-          <% row_array << "value" %>
-          <% row_array << "text"%>
-          <%agraph.add_row (row_array)%>
-        <%end%>
       <% end %>
-      <%end%>
+      </div>
       <%else%>
-        <div>There is currently no data for this site.</div>
+        <div width="600px" height="400px">There is currently no data for this site.</div>
       <%end%>
     </div>
     <%end%>

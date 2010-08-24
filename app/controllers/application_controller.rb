@@ -87,4 +87,8 @@ class ApplicationController < ActionController::Base
       render_optional_error_file(:forbidden)
     end
   end
+  
+  def verify_authenticity_token
+      super unless params.has_key?(:api_key)
+  end
 end
