@@ -12,6 +12,6 @@ class ProjectsController < InheritedResources::Base
   end
 
   def resource_class
-    Project
+    Project.access_as(current_user)
   end
 end
