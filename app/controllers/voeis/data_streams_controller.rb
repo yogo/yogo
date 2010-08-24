@@ -97,6 +97,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
             @row_array << temp_array
           end  
         else
+          
           @column_array << ["Timestamp", 'datetime']
           sensor = parent.managed_repository{site.sensor_types.first(:variables => {:id => variable.id})}
           @column_array << [sensor.variables.first.variable_name, 'number']
