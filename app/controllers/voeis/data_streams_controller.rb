@@ -34,8 +34,14 @@ class Voeis::DataStreamsController < Voeis::BaseController
   # @api public
   def upload
     data_stream_template = parent.managed_repository{Voeis::DataStream.get(params[:data_template_id])}
-    
-    parse_logger_csv(params[:datafile], data_stream_template, data_stream_template.sites.first)
+    parse_logger_csv(params[:datafile].path, data_stream_template, data_stream_template.sites.first)
+    respond_to do |format|
+      if params.has_key?(:api_key)
+        format.json
+      else
+        format.html
+      end
+    end
   end
   
   def query
@@ -45,13 +51,28 @@ class Voeis::DataStreamsController < Voeis::BaseController
       @sites = Voeis::Site.all
       @variables = Voeis::Variable.all
     end  
+    @var_opts_array = Array.new
+    @variables.all(:order => [:variable_name.asc]).each do |var|
+      @var_opts_array << [var.variable_name+":"+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+    end
+    @var_options = opts_for_select(@var_opts_array)
+    @site_opts_array = Array.new
+    @sites.all(:order => [:name.asc]).each do |site|
+      @site_opts_array << [site.name, site.id.to_s]
+    end
+    @site_options = opts_for_select(@site_opts_array)
   end
             
   def search
-  
+    unless params[:variable].empty?
+      
+      
+      
+    end
+    
     respond_to do |format|
       format.js{render :update do |page|
-        page.replace_html "search_results", :partial => "show_search_results", :locals => {:items => sites, :topic => topic_name,  :owner => own_name, :category => cat_name, :status => status_name, :url => params[:query][:url_query], :start_date => start_date, :end_date => end_date }
+        page.replace_html "search_results", :partial => "show_query_results", :locals => {:site => params[:site], :variable => params[:variable},  :start_date => params[:start_date}, :end_data => params[:end_data}, :date_search => params[:date_search]}
       end
       }
     end  
