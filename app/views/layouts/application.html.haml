@@ -31,8 +31,7 @@
     #logo 
       VOEIS Data Hub 
       %span.smaller.emphasis
-        = "ALPHA v" + YOGO_VERSION
-        / Put in a tooltip/link to information on the update (date, log with changes, etc)
+        = link_to(VOEIS_VERSION, page_url(:changelog))
     #system-menu.box.tight
       #menu-left-col
         = render(:partial => 'layouts/menu_links')
