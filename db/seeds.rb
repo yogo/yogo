@@ -51,7 +51,7 @@ begin
   User.create(:login => "kathryn.watson",    :email => "kwatson@montana.edu",               :first_name => "Kathryn",  :last_name => "Watson",     :password => "watsonk",    :password_confirmation => "watsonk")
   User.create(:login => "katie.gibson",      :email => "katie_gibson@ieee.org",             :first_name => "Katie",    :last_name => "Gibson",     :password => "gibsonk",    :password_confirmation => "gibsonk")
   User.create(:login => "leslie.piper",      :email => "leslie.piper@msu.montana.edu",      :first_name => "Leslie",   :last_name => "Piper",      :password => "piperl",     :password_confirmation => "piperl")
-  User.create(:login => "Lindell Ormsbee"    :email => "lindell.ormsbee@uky.edu",           :first_name => "Lindell",  :last_name => "Ormsbee",    :password => "ormsbeel",   :password_confirmation => "ormsbeel")
+  User.create(:login => "Lindell Ormsbee",   :email => "lindell.ormsbee@uky.edu",           :first_name => "Lindell",  :last_name => "Ormsbee",    :password => "ormsbeel",   :password_confirmation => "ormsbeel")
   User.create(:login => "lucy.marshall",     :email => "lmarshall@montana.edu",             :first_name => "Lucy",     :last_name => "Marshall",   :password => "marshalll",  :password_confirmation => "marshalll")
   User.create(:login => "mari.eggers",       :email => "mari.eggers@biofilm.montana.edu",   :first_name => "Mari",     :last_name => "Eggers",     :password => "eggersm",    :password_confirmation => "eggersm")
   User.create(:login => "mark.lorang",       :email => "mark.lorang@mso.umt.edu",           :first_name => "Mark",     :last_name => "Lorang",     :password => "lorangm",    :password_confirmation => "lorangm")
