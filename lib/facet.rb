@@ -34,6 +34,7 @@ module Facet
       # ::Rails.logger.debug("Can #{@permission_source} Invoke? #{method} #{can_invoke method}")
       if(can_invoke method)
         result = @target.__send__(method, *args, &block)
+        # TODO: Extract out this DataMapper specific code
         if (result.kind_of?(::DataMapper::Collection) && result.model.respond_to?(:access_as)) ||
            (result.kind_of?(::DataMapper::Resource)   && result.respond_to?(:access_as))
           # Reuse the current_root target, or use the current target if it's an instance, not a class
@@ -67,7 +68,7 @@ module Facet
   module SecurityWrapper
     def access_as(access = nil, root_target = nil)
       # When running in local only, bypass all access by returning self
-      if Yogo::Setting[:local_only]
+      if Setting[:local_only]
         self
       else
         Facet::Proxy.new(self, access, root_target)
@@ -104,6 +105,7 @@ module Facet
     end
     
     def unsecured_instance_methods
+      # TODO: Evaluate what instance methods should be unsecured
       [:debugger, :class, :empty?, :is_a?, :nil?, :respond_to?, :to_param, :valid?]  
       # self.instance_methods.map{ |k| k.to_sym }) - secured_instance_methods
       # self.instance_methods - secured_instance_methods
