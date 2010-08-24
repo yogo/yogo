@@ -117,9 +117,10 @@ module ApplicationHelper
   end
 
   def page_title
-    # debugger
-    if params.has_key?(:id) && resource.respond_to?(:name)
-      "#{controller_name.capitalize} >> #{resource.name}"
+    if ["pages", "dashboards"].include?(controller_name)
+      "#{controller_name.titleize} >> #{params[:id].humanize}"
+    elsif (not resource.nil?) && resource.respond_to?(:name)
+      "#{link_to(controller_name.titleize, :controller => params[:controller], :action => :index)} >> #{resource.name}"
     else
       controller_name.capitalize
     end

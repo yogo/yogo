@@ -18,7 +18,6 @@
 class Method
   include DataMapper::Resource
 
-
   property :id, Serial
   property :method_description, Text, :required => true
   property :method_link, String, :required => false
