@@ -2,7 +2,8 @@
   = link_to("Home", root_url)
   - if logged_in?
     = render_dashboard_jump_box
-  - if logged_in? && current_user.admin
+  / We should come up with a better way to check if the system role is an 'admin' or not.
+  - if logged_in? && current_user.system_role.name.eql?('Administrator')
     = link_to("Administration", page_url(:admin))
   = link_to("About", page_url(:about))
   = link_to("Help", "http://yogo.msu.montana.edu/", :target => 'blank')
