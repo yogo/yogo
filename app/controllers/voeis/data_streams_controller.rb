@@ -231,7 +231,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
         @site_hash = Hash.new
         @sensor_types = site.sensor_types
         @sensor_types.each do |s_type|
-          if senscount != 0 &&
+          if !s_type.sensor_values.empty?
+          if senscount != 0 && 
            @plot_data +=  ","
           end
           senscount+=1
@@ -275,6 +276,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
            end
            @site_hash[s_type.name] = @sensor_hash
            @plot_data += "] , label: \"#{@thelabel}\" }"
+          end
         end #end sensor_type
         @plot_data += "}"
         temp_hash = Hash.new
