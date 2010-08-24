@@ -8,6 +8,15 @@ class Voeis::DataStreamsController < Voeis::BaseController
             :instance_name => 'data_stream',
             :resource_class => Voeis::DataStream
   
+  
+  def new
+    
+    @data_templates = parent.managed_repository{Voeis::DataStream.all}
+    respond_to do |format|
+      format.html
+    end
+  end
+  
   def query
     @variables = ""
     @sites = ""
@@ -27,7 +36,19 @@ class Voeis::DataStreamsController < Voeis::BaseController
     end  
   end
   
-  
+  def opts_for_select(opt_array, selected = nil)
+     option_string =""
+     if !opt_array.empty?
+       opt_array.each do |opt|
+         if opt[1] == selected
+           option_string = option_string + '<option selected="selected" value='+opt[1]+'>'+opt[0]+'</option>'
+         else
+           option_string = option_string + '<option value='+opt[1]+'>'+opt[0]+'</option>'
+         end
+       end 
+     end
+     option_string
+  end
 
   # alows us to upload csv file to be processed into data
   #
@@ -43,8 +64,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
   # @api public
   def pre_upload
    #@project = Project.first(:id => params[:project_id])
-    puts @variables = His::Variables.all
-    puts @sites = parent.managed_repository{Voeis::Site.all}
+    @variables = Variable.all
+    @sites = parent.managed_repository{Voeis::Site.all}
     @sites.each do |site|
       puts site.id.to_s
       puts site.name
@@ -76,22 +97,30 @@ class Voeis::DataStreamsController < Voeis::BaseController
       end
       @var_array = Array.new
       @var_array[0] = ["","","",""]
-      # if params[:data_template] != "None"
-      #   data_template = DataStream.first(:id => params[:data_template])
-          # (0..@row_size).each do |i|
-          #    puts i
-          #    data_col = data_template.data_stream_columns.first(:column_number => i)
-          #    if data_col.variables.empty?
-          #      @var_array[i] = [data_col.name, data_col.unit, data_col.type,"",data_col.min, data_col.min, data_col.difference]
-          #    else
-          #      @var_array[i] = [data_col.name, data_col.unit, data_col.type,data_col.variables.first.id,data_col.min, data_col.min, data_col.difference]
-          #    end
-          #  end
-          # else
-            (0..@row_size).each do |i|
-              @var_array[i] = ["","","","","","",""]
-             end
-          # end
+      @opts_array = Array.new
+      @variables.all(:order => [:variable_name.asc]).each do |var|
+        @opts_array << [var.variable_name+":"+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+      end
+      if params[:data_template] != "None"
+          data_template = parent.managed_repository {Voeis::DataStream.first(:id => params[:data_template])}
+          (0..@row_size).each do |i|
+             puts i
+             data_col = data_template.data_stream_columns.first(:column_number => i)
+             if data_col.name != "Timestamp"
+               if data_col.variables.empty?
+                 @var_array[i] = [data_col.name, data_col.unit, data_col.type,opts_for_select(@opts_array),data_col.sensor_types.first.min, data_col.sensor_types.first.max, data_col.sensor_types.first.difference]
+               else
+                 @var_array[i] = [data_col.name, data_col.unit, data_col.type,opts_for_select(@opts_array,Variable.first(:variable_code => data_col.variables.first.variable_code).id.to_s),data_col.sensor_types.first.min, data_col.sensor_types.first.max, data_col.sensor_types.first.difference]
+               end
+              else
+                @var_array[i] = [data_col.name, data_col.unit, data_col.type,opts_for_select(@opts_array),"","",""]
+              end
+          end
+      else
+        (0..@row_size).each do |i|
+          @var_array[i] = ["","","",opts_for_select(@opts_array),"","",""]
+         end
+      end
 
       respond_to do |format|
         format.html
@@ -103,73 +132,84 @@ class Voeis::DataStreamsController < Voeis::BaseController
 
   def create_stream
     #create and save new DataStream
-    #
-    data_stream = parent.managed_repository{Voeis::DataStream.create(
-                                 :name => params[:data_stream_name],
-                                 :description => params[:data_stream_description],
-                                 :filename => params[:datafile],
-                                 :start_line => params[:start_line].to_i)}
-    #Add site association to data_stream
-    #
-    site = parent.managed_repository{Voeis::Site.first(:id => params[:site])}
-    data_stream.sites << site
-    data_stream.save
-    #create DataStreamColumns
-    #
+    @data_stream =""
+    @site =""
+    parent.managed_repository do
+      @data_stream = Voeis::DataStream.create(
+                                   :name => params[:data_stream_name],
+                                   :description => params[:data_stream_description],
+                                   :filename => params[:datafile],
+                                   :start_line => params[:start_line].to_i)
+      #Add site association to data_stream
+      #
+      @site = Voeis::Site.first(:id => params[:site])
+      @data_stream.sites << @site
+      @data_stream.save
+      # site.data_streams << data_stream
+      #     site.save
+      #create DataStreamColumns
+      #
+    end
     range = params[:rows].to_i
     (0..range).each do |i|
       #create the Timestamp column
       if i == params[:timestamp].to_i
-        @his_var = His::Variables.first(:id => params["column"+i.to_s])
-        parent.managed_repository{
-        data_stream_column = Voeis::DataStreamColumn.create(
-                              :column_number => i,
-                              :name => "Timestamp",
-                              :type =>"Timestamp",
-                              :unit => "NA",
-                              :original_var => params["variable"+i.to_s])
-        data_stream.data_stream_columns << data_stream_column
-        data_stream.save}
+        puts params["column"+i.to_s]
+        puts @var = Variable.get(params["column"+i.to_s])
+        parent.managed_repository do
+          data_stream_column = Voeis::DataStreamColumn.create(
+                                :column_number => i,
+                                :name => "Timestamp",
+                                :type =>"Timestamp",
+                                :unit => "NA",
+                                :original_var => params["variable"+i.to_s])
+          data_stream_column.data_streams << @data_stream
+          data_stream_column.save
+        end
       else #create other data_stream_columns and create sensor_types
-        parent.managed_repository{
-        data_stream_column = Voeis::DataStreamColumn.create(
-                              :column_number => i,
-                              :name => params["variable"+i.to_s],
-                              :original_var => params["variable"+i.to_s],
-                              :unit => params["unit"+i.to_s],
-                              :type => params["type"+i.to_s])
+        puts params["column"+i.to_s]
+        puts @var = Variable.get(params["column"+i.to_s])
+        parent.managed_repository do
+          data_stream_column = Voeis::DataStreamColumn.create(
+                                :column_number => i,
+                                :name => params["variable"+i.to_s],
+                                :original_var => params["variable"+i.to_s],
+                                :unit => params["unit"+i.to_s],
+                                :type => params["type"+i.to_s])
 
-        variable = Voeis::Variable.first_or_create(
-                    :variable_code => @his_var.variable_code,
-                    :variable_name => @his_var.variable_name,
-                    :speciation =>  @his_var.speciation,
-                    :variable_units_id => @his_var.variable_units_id,
-                    :sample_medium =>  @his_var.sample_medium,
-                    :value_type => @his_var.value_type,
-                    :is_regular => @his_var.is_regular,
-                    :time_support => @his_var.time_support,
-                    :time_units_id => @his_var.time_units_id,
-                    :data_type => @his_var.data_type,
-                    :general_category => @his_var.general_category,
-                    :no_data_value => @his_var.no_data_value)
-        data_stream_column.variables << variable
-        data_stream_column.data_streams << data_stream
-        data_stream_column.save
-        sensor_type = Voeis::SensorType.first_or_create(
-                      :name => params["variable"+i.to_s] + site.name,
-                      :min => params["min"+i.to_s].to_f,
-                      :max => params["max"+i.to_s].to_f,
-                      :difference => params["difference"+i.to_s].to_f)
-        #Add sites and variable associations to senor_type
-        site.sensor_types << sensor_type
-        site.save
-        sensor_type.variables <<  variable
-        sensor_type.save}
+          variable = Voeis::Variable.first_or_create(
+                      :variable_code => @var.variable_code,
+                      :variable_name => @var.variable_name,
+                      :speciation =>  @var.speciation,
+                      :variable_units_id => @var.variable_units_id,
+                      :sample_medium =>  @var.sample_medium,
+                      :value_type => @var.value_type,
+                      :is_regular => @var.is_regular,
+                      :time_support => @var.time_support,
+                      :time_units_id => @var.time_units_id,
+                      :data_type => @var.data_type,
+                      :general_category => @var.general_category,
+                      :no_data_value => @var.no_data_value)
+          data_stream_column.variables << variable
+          data_stream_column.data_streams << @data_stream
+          data_stream_column.save
+          sensor_type = Voeis::SensorType.first_or_create(
+                        :name => params["variable"+i.to_s] + @site.name,
+                        :min => params["min"+i.to_s].to_f,
+                        :max => params["max"+i.to_s].to_f,
+                        :difference => params["difference"+i.to_s].to_f)
+          #Add sites and variable associations to senor_type
+          # 
+          sensor_type.sites << @site
+          sensor_type.variables <<  variable
+          sensor_type.data_stream_columns << data_stream_column
+          sensor_type.save
+        end
       end
     end
     # Parse the csv file using the newly created data_stream template and
     # save the values as sensor_values
-    parse_logger_csv(params[:datafile], data_stream, site)
+    parse_logger_csv(params[:datafile], @data_stream, @site)
     flash[:notice] = "File parsed and stored successfully."
     redirect_to project_path(params[:project_id])
   end

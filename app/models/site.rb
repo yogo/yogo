@@ -18,13 +18,13 @@ class Site
   property :pos_accuracy_m, Float, :required => false
   property :state, String, :required => true
   property :county, String, :required => false
-  property :comments, String, :required => false
+  property :comments, String, :required => false, :length => 512
 
-  def self.Pupdate_from_his
+  def self.update_from_his
     his_sites = His::Sites.all
     his_sites.each do |his_s|
       if self.first(:his_id => his_s.id).nil?
-        self.create(:his_id => his_s.id,
+        new_site = self.new(:his_id => his_s.id,
                     :site_code => his_s.site_code, 
                     :site_name  => his_s.site_name,
                     :latitude  => his_s.latitude, 
@@ -39,9 +39,39 @@ class Site
                     :state  => his_s.state, 
                     :county  => his_s.county, 
                     :comments  => his_s.comments)
+        new_site.save
+        if !new_site.errors.nil?
+          puts new_site.errors.inspect
+        end
       end
     end
   end
+  
+  def self.store_his_site(id)
+    his_s = His::Sites.get(id)
+    my_site = Site.new(:his_id => his_s.id,
+                :site_code => his_s.site_code, 
+                :site_name  => his_s.site_name,
+                :latitude  => his_s.latitude, 
+                :longitude  => his_s.longitude, 
+                :lat_long_datum_id => his_s.lat_long_datum_id,
+                :elevation_m   => his_s.elevation_m, 
+                :vertical_datum  => his_s.vertical_datum, 
+                :local_x  => his_s.local_x, 
+                :local_y  => his_s.local_y, 
+                :local_projection_id  => his_s.local_projection_id,
+                :pos_accuracy_m  => his_s.pos_accuracy_m, 
+                :state  => his_s.state, 
+                :county  => his_s.county, 
+                :comments  => his_s.comments)
+    my_site.save
+    if !my_site.errors.nil?
+      puts my_site.errors.inspect
+    end
+  end
+    
+    
+    
   
   #probably don't want to do it this way 
   #probably want to use self but my brain is blanking 
