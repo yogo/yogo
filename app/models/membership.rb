@@ -4,7 +4,7 @@ class Membership
   
   property :project_id, UUID, :key => true
 
-  belongs_to :project, :child_key => [:project_id], :parent_key => [:id], :model => 'Yogo::Project'
+  belongs_to :project, :child_key => [:project_id], :parent_key => [:id], :model => 'Project'
   belongs_to :role,    :key => true
   belongs_to :user,    :key => true
   

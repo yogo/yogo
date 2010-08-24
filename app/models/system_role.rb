@@ -12,7 +12,7 @@ class SystemRole
   is :list
   
   def self.permission_sources
-    [Yogo::Project, Role, User, SystemRole]
+    [Project, Role, User, SystemRole]
   end
 
   def self.available_permissions

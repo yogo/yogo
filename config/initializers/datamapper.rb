@@ -15,7 +15,6 @@ require 'datamapper/dm-userstamp'
 require 'datamapper/property/yogo_file'
 require 'datamapper/property/yogo_image'
 require 'datamapper/property/raw'
-require 'yogo/project_ext'
 
 # Read the configuration from the existing database.yml file
 config = Rails.configuration.database_configuration
@@ -43,10 +42,10 @@ User
 Role
 Setting
 Membership
-Yogo::Project
+Project
 
 DataMapper.finalize
-DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Yogo::Project.storage_name) &&
+DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(Setting.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(User.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(Role.storage_name) &&

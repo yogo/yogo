@@ -41,7 +41,7 @@
         = link_to('Cancel', users_path, :class => 'cancel-link')
 
 #content-settings-extra
-  - if Yogo::Project.count > @user.projects.count
+  - if Project.count > @user.projects.count
     #content-settings-extra
       .rbox.tight
         - form_for(:membership, :url => user_memberships_path(@user)) do |f|
