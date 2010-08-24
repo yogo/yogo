@@ -79,6 +79,7 @@ begin
   Role.create(:name => "Laboratory Technician",  :description => "Lab Technicians manage lab activities.")
   Role.create(:name => "Data Manager",           :description => "Data Managers manage all the data for a project.")
   Role.create(:name => "Member",                 :description => "General members of projects.")
+  Role.create(:name => "Program Manager",        :description => "Program Managers for the research project.")
   puts 'done.'
 
   print 'Creating Projects...'
