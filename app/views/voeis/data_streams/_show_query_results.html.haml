@@ -1,0 +1,32 @@
+<h3>Item Query Results</h3>
+For: Owner(<%=owner%>), Topic(<%=topic%>), Category(<%=category%>), Status(<%= status%>)
+<% if !url.nil? %>
+, URL(<%=url%>)
+<%end%>
+<% if !start_date.nil?%>
+, Review(
+  <%if start_date > end_date %>
+    <font color="red">ERROR - start date should not come after end date</font>
+  <%else%>
+    <%=start_date%> - <%= end_date%>
+  <%end%>
+  )
+<%end%> 
+<br>
+<%if items.nil? || items.empty?%>
+  <b>Sorry - there were no results for this search.<b>
+<%- else -%>
+
+<table>
+	<% items.each do |item| %>
+	  <tr>
+		<td><%= item.name%>
+	    <td><%= link_to 'Show', yogo_item_path(item.id) %></td>
+	    <td><%= link_to 'Edit', edit_yogo_item_path(item.id) %></td>
+	    <td><%= link_to 'Destroy', yogo_item_path(item.id), 
+	       :confirm => 'Are you sure?', 
+	       :method => :delete %></td>
+	  </tr>
+	<% end %>
+</table>
+<%end%>

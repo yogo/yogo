@@ -1,12 +1,11 @@
 class Voeis::MetaTag
   include DataMapper::Resource
-  extend Yogo::DataMapper::Model::StorageContext
   include Facet::DataMapper::Resource
   
-  property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
+  property :id, Serial
   #property :name,     String,  :required => true
   property :value,    Text,   :required => true
-  property :name,    String,  :required => true
+  property :name,    String,  :required => true, :length => 512
   property :created_at,  DateTime
 
   has n, :sensor_values, :model => 'Voeis::SensorValue', :through => Resource

@@ -24,6 +24,16 @@ class UsersController < InheritedResources::Base
     end
   end
 
+  def api_key_update
+    @user = User.get(params[:id])
+    if @user.generate_new_api_key!
+      flash[:notice] = "Updated API Key"
+    else
+      flash[:error] = "Failed to update API Key"
+    end
+    redirect_to(:back)
+  end
+
   protected
 
   def resource
@@ -31,7 +41,7 @@ class UsersController < InheritedResources::Base
   end
   
   def collection
-    @users ||= resource_class.all.paginate(:page => params[:page], :per_page => 25, :order => 'login')
+    @users ||= resource_class.all.paginate(:page => params[:page], :per_page => 20, :order => 'login')
   end
 
   def resource_class

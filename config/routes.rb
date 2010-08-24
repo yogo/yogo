@@ -18,7 +18,8 @@ ActionController::Routing::Routes.draw do |map|
                       :collection => {:add_site => :get, :save_site => :post}
 
     project.resources :data_streams, :namespace => nil, :controller => 'voeis/data_streams',
-                      :collection => { :pre_upload => :post, :create_stream => :post}
+                      :collection => { :pre_upload => :post, :create_stream => :post,
+                                       :query => :get, :search => :post}
     project.resources :variables, :namespace => nil, :controller => 'voeis/variables'
     project.resources :units, :namespace => nil, :controller => 'voeis/units'
     project.resources :sensor_values, :namespace => nil, :controller => 'voeis/sensor_values'
@@ -37,12 +38,7 @@ ActionController::Routing::Routes.draw do |map|
     his.resources :data_values#, :requirements => { :id => /[a-zA-Z]+/ }
   end
 
-  # Dashboard routes
-  map.dashboard 'dashboards/:id', :controller => 'dashboards', :action => 'show', :requirements => { :id => /[a-z]+/ }
-
-  map.dashboard "/dashboard", :controller => 'yogo/projects', :action => 'index'
-  
-  map.resources :users do |user|
+  map.resources :users, :member => { :api_key_update => :put } do |user|
     user.resources :memberships, :namespace => nil, :controller => "memberships"
   end
 

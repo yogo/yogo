@@ -7,8 +7,9 @@
     .rbox.tight
       = link_to("Delete", project_path(@project), :method => :delete, :class => 'delete-link', 
                 :confirm => "Do you want to delete the #{@project.name} project?\nThere is no undo! Continue?" )
-      - form_for(:project, @project, :url => project_path(@project), :builder => YogoFormBuilder) do |f|
-        %h3= f.check_box(:is_private, :label => image_tag('icons/private_16.png') + " Private")
+      - form_for(:project, @project, :url => project_path(@project), :builder => YogoFormBuilder, :html => {:method => :put}) do |f|
+        %h3= f.check_box(:is_private, :label => "Private", :class => 'private')
+        %h3= f.check_box(:publish_to_his, :label =>"Publish to HIS/Hydro")
         %h5= f.text_area(:description, :label => "Description: ")
         %h5.tight  Members
         .rbox.tight
@@ -18,11 +19,11 @@
               %th Roles
               %th
             %tbody
-              - unless @project.roles.empty? 
-                - @project.roles.users.each do |user|
+              - unless @project.users.empty? 
+                - @project.users.each do |user|
                   %tr
                     %td= user.name
-                    %td= @project.roles.select{|role| role.users.include?(user) }.map{|role| role.name }.join(', ')     
+                    %td= (user.roles | @project.roles).map {|role| role.name }.join(', ')
                     %td 
                       #operation-links
                         #edit-link
@@ -33,9 +34,8 @@
                                     :confirm => "Do you want to remove #{user.name} from the #{@project.name} project?")
         
         .form-element
-          = f.submit('Update', :class => 'update-link')
+          = f.submit('Save', :class => 'save-link')
           = link_to('Cancel', projects_path, :class => 'cancel-link')
-
   - if User.all.length > @project.users.length
     #content-settings-extra
       .rbox.tight

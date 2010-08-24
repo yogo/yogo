@@ -82,3 +82,10 @@ his:
   host: sideswipe.msu.montana.edu
   username: hisuser
   password: P@dm1n2009*
+  
+his_tan:
+  adapter: sqlserver
+  database: OD
+  host: tanager.msu.montana.edu
+  username: odmclient
+  password: dashi

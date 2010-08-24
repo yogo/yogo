@@ -18,6 +18,11 @@
           = f.password_field(:password, :label => "Password: ")
           = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
         = f.select(:system_role_id, SystemRole.all.map{|sr| [sr.name, sr.id]}, :label => 'System Role:')
+        %h5.tight API Access
+        .rbox.tight
+          = label_tag("API Key:")
+          = @user.api_key
+          = link_to("Generate new API key", api_key_update_user_path(@user), :method => :put, :class => 'update-link')
         %h5.tight  Projects
         .rbox.tight
           %table

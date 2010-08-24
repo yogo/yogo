@@ -16,13 +16,14 @@ class Voeis::DataStreamColumn
   include DataMapper::Resource
   include Facet::DataMapper::Resource
 
-  property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
-  property :name, String, :required => true
+  property :id, Serial
+  property :name, String, :required => true, :length => 512
   property :type, String, :required => false
   property :unit, String, :required => true
   property :original_var, String, :required => true
   property :column_number, Integer, :required => true
 
+  has n, :sensor_types, :model => 'Voeis::SensorType', :through => Resource
   has n, :variables,    :model => 'Voeis::Variable', :through => Resource
   has n, :units,        :model => 'Voeis::Unit', :through=> Resource
   has n, :data_streams, :model => "Voeis::DataStream", :through => Resource

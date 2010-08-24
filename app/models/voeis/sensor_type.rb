@@ -1,19 +1,19 @@
 
 # SensorTypes
 #
-require 'yogo/datamapper/model/storage_context'
+
 class Voeis::SensorType
   include DataMapper::Resource
-  extend Yogo::DataMapper::Model::StorageContext
   include Facet::DataMapper::Resource
 
-  property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
-  property :name,     String,  :required => true
+  property :id, Serial
+  property :name,     String,  :required => true, :length => 512
   property :min,      Float,  :required => false
   property :max,      Float,  :required => false
   property :difference,  Float,  :required => false
 
   has n, :sites,          :model => "Voeis::Site", :through => Resource
+  has n, :data_stream_columns, :model => 'Voeis::DataStreamColumn', :through => Resource
   has n, :sensor_values,  :model => "Voeis::SensorValue", :through => Resource
   has n, :variables,      :model => "Voeis::Variable", :through => Resource
   #has n, :methods, :model => "Method", :through => Resource

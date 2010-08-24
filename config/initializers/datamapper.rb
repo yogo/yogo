@@ -16,6 +16,9 @@ require 'datamapper/property/yogo_file'
 require 'datamapper/property/yogo_image'
 require 'datamapper/property/raw'
 
+# When saving models don't be terse
+DataMapper::Model.raise_on_save_failure = true
+
 # Read the configuration from the existing database.yml file
 config = Rails.configuration.database_configuration
 
@@ -40,6 +43,9 @@ end
 # Load the project model and migrate it if needed.
 User
 Role
+Site
+Variable
+Unit
 Setting
 Membership
 Project
@@ -49,4 +55,7 @@ DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(
                                 DataMapper.repository(:default).storage_exists?(Setting.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(User.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(Role.storage_name) &&
-                                DataMapper.repository(:default).storage_exists?(Membership.storage_name)
+DataMapper.repository(:default).storage_exists?(Membership.storage_name) &&
+DataMapper.repository(:default).storage_exists?(Site.storage_name) &&
+DataMapper.repository(:default).storage_exists?(Unit.storage_name) &&
+DataMapper.repository(:default).storage_exists?(Variable.storage_name)

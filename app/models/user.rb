@@ -30,6 +30,8 @@ class User
   
   property :api_key,  String, :required => false, :length => 64, :index => true, :writer => :private
 
+  property :api_key,  String, :required => false, :length => 64, :index => true, :writer => :private
+
   # Long enough for an ipv6 address.
   property :last_login_ip,      String, :length => 36
   property :current_login_ip,   String, :length => 36

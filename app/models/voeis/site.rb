@@ -22,19 +22,17 @@
 # SpatialReferenceID from the SpatialReferences controlled vocabulary table.  If the spatial
 # reference system of the local coordinates is unknown, a default value of 0 is used.
 #
-require 'yogo/datamapper/model/storage_context'
 
 class Voeis::Site
   include DataMapper::Resource
-  extend Yogo::DataMapper::Model::StorageContext
   include Facet::DataMapper::Resource
 
-  property :id, UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
-  property :site_code, String, :required => true
-  property :site_name, String, :required => true
+  property :id, Serial
+  property :code, String, :required => true
+  property :name, String, :required => true, :length => 512
   property :latitude, Float, :required => true
   property :longitude, Float, :required => true
-  property :lat_long_datum_id, Integer, :required => true, :default => 0
+  property :lat_long_datum_id, Integer, :required => false, :default => 0
   property :elevation_m, Float, :required => false
   property :vertical_datum, String, :required => false
   property :local_x, Float,  :required => false
@@ -44,6 +42,7 @@ class Voeis::Site
   property :state, String, :required => true
   property :county, String, :required => false
   property :comments, String, :required => false
+  property :description, Text, :required => false
 
   # has n, :projects, :through => Resource
   has n, :data_streams, :model => "Voeis::DataStream", :through => Resource

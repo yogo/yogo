@@ -12,9 +12,9 @@ class Role
   include Facet::DataMapper::Resource
 
   property :id, Serial
-  property :name, String, :required => true
-  property :description, String, :length => 256
-  property :actions, Yaml, :default => [].to_yaml
+  property :name, String, :required => true, :unique => true
+  property :description, Text
+  property :permissions, Yaml, :default => [].to_yaml
 
   has n, :memberships
   has n, :projects, :through => :memberships

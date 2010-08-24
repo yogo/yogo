@@ -6,15 +6,13 @@
 # requested at http://water.usu.edu/cuahsi/odm/.
 #
 #
-require 'yogo/datamapper/model/storage_context'
 class Voeis::Unit
   include DataMapper::Resource
-  extend Yogo::DataMapper::Model::StorageContext
   include Facet::DataMapper::Resource
 
-  property :id, UUID, :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
-  property :units_name, String, :required => true
-  property :units_type, String, :required => true
+  property :id, Serial
+  property :units_name, String, :required => true, :length => 512
+  property :units_type, String, :required => true, :length => 512
   property :units_abbreviation, String, :required => true
 
   has n, :data_stream_columns,  :model => "Voeis::DataStreamColumn", :through =>Resource
