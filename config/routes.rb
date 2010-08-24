@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
                       :collection => {:add_site => :get, :save_site => :post}
 
     project.resources :data_streams, :namespace => nil, :controller => 'voeis/data_streams',
-                      :collection => { :pre_upload => :post, :create_stream => :post, 
+                      :collection => { :pre_upload => :post, :create_stream => :post,
                                        :query => :get, :search => :post}
     project.resources :variables, :namespace => nil, :controller => 'voeis/variables'
     project.resources :units, :namespace => nil, :controller => 'voeis/units'
@@ -38,7 +38,7 @@ ActionController::Routing::Routes.draw do |map|
     his.resources :data_values#, :requirements => { :id => /[a-zA-Z]+/ }
   end
 
-  map.resources :users do |user|
+  map.resources :users, :member => { :api_key_update => :put } do |user|
     user.resources :memberships, :namespace => nil, :controller => "memberships"
   end
 

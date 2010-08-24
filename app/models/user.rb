@@ -27,7 +27,7 @@ class User
   property :last_request_at,      DateTime
   property :last_login_at,        DateTime
   property :current_login_at,     DateTime
-  
+
   property :api_key,  String, :required => false, :length => 64, :index => true, :writer => :private
 
   # Long enough for an ipv6 address.
@@ -244,8 +244,8 @@ class User
   end
 
   ##
-  # Genertes a new api key for the user
-  # 
+  # Generates a new api key for the user
+  #
   # @example
   #   a_user.generate_new_api_key!
   #
@@ -256,5 +256,5 @@ class User
     attribute_set(:api_key, ::SecureRandom.hex(32))
     save!
   end
-  
+
 end

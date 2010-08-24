@@ -18,6 +18,7 @@ class Project
   property :description,      Text
 
   property :is_private,       Boolean,    :required => true, :default => false
+  property :publish_to_his,   Boolean,    :required => false, :default => false
 
   has n, :memberships
   has n, :users, :through => :memberships

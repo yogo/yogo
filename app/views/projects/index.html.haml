@@ -2,10 +2,16 @@
   There are no projects yet, you should create one!
 - for project in @projects
   #content-title
-    = link_to(project.name, project_path(project) ) 
+    = link_to(project.name, project_path(project))
     #links
       = link_to("Settings", edit_project_path(project), :class => 'settings-link')
-      = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?         
+      = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?      
+    %br/ 
+    = link_to('Project Description', edit_project_path(project), :title => 'Edit Project Description')
+    - if project.description && project.description.length > 0
+      %em= tooltip(project.description, project.name + ' Description', 200)
+    - else
+      %em= link_to('[Add Project Description]', edit_project_path(project))
   %table.project
     %tbody
       %tr
@@ -22,12 +28,5 @@
                 = site.name + ': never'
               %br/
             = link_to("Add a Site", new_project_site_path(project), :class => 'new-link')
-  %p.rbox.tight
-    - if project.description && project.description.length > 0
-      %strong= link_to('Project Description', edit_project_path(project), :title => 'Edit Project Description')
-      %br/
-      %em= tooltip(project.description, project.name + ' Description', 200)
-    - else
-      %em= link_to('[Add Project Description]', edit_project_path(project))
       
 #pagination-links= pagination_links(Project, params[:page], 5)
