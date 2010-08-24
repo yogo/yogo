@@ -6,7 +6,7 @@
   .small.boxed
     .rbox.tight
       = link_to("Delete", project_path(@project), :method => :delete, :class => 'delete-link', 
-                :confirm => "Do you want to delete the #{@project.name} project?\nThere is no undo! Continue?" )
+                :confirm => "Do you want to delete the #{@project.name} project?\nThere is no undo! Continue?", :disabled => true )
       - form_for(:project, @project, :url => project_path(@project), :builder => YogoFormBuilder, :html => {:method => :put}) do |f|
         %h3= f.check_box(:is_private, :label => "Private", :class => 'private')
         %h3= f.check_box(:publish_to_his, :label =>"Publish to HIS/Hydro")

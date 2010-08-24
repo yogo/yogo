@@ -321,10 +321,11 @@ body
     border: 0
     margin: 3px
     
-  // Content Header Elements that Occur Outside of bp.
   #container
     background-color: #eee
-  #content-title, #data-content-title
+  #content
+    padding: 5px
+  #content-title
     margin-top: 0
     text-align: left
     margin-bottom: 0
@@ -333,23 +334,10 @@ body
       color: #777
     #links
       font-size: .25em
-  #data-content-title
-    +prepend(6)
-    +column(10)
-    margin-left: -.5em
-  #content-actions, #data-content-actions
-    +column(12)
-    margin-left: 10px
-    .content-pagination-links
-      text-align: right
-      line-height: 2em
-      +column(6, true)
-  #data-content-actions
-    +column(6, true)
+  #content-actions
+    text-align: right
+    line-height: 2em
       
-#project-user-roles-form table td
-  width: 3em
-
 .map
   width: 300px
   height: 200px

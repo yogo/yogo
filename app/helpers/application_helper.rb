@@ -61,7 +61,7 @@ module ApplicationHelper
     if (from == 1 and to == collection.count)
       output = ""
     else
-      output += " <span style='font-style: italic'>Showing #{from}&hellip;#{to} rows out of #{collection.count} total rows</span>"
+      output += " <span style='font-style: italic'>Showing #{from}&hellip;#{to} #{collection.name} (#{collection.count} total)</span>"
     end
   end
 
@@ -116,6 +116,14 @@ module ApplicationHelper
     "<br clear='all' style='clear: both;'/>"
   end
 
+  def page_title
+    # debugger
+    if params.has_key?(:id) && resource.respond_to?(:name)
+      "#{controller_name.capitalize} >> #{resource.name}"
+    else
+      controller_name.capitalize
+    end
+  end
 
   ##
   # Helper for creating a tooltip
