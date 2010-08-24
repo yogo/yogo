@@ -52,6 +52,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
       @variables = Voeis::Variable.all
     end  
     @var_opts_array = Array.new
+    @var_opts_array << ["All", "All"]
     @variables.all(:order => [:variable_name.asc]).each do |var|
       @var_opts_array << [var.variable_name+":"+Unit.get(var.variable_units_id).units_name, var.id.to_s]
     end
@@ -64,15 +65,54 @@ class Voeis::DataStreamsController < Voeis::BaseController
   end
             
   def search
-    unless params[:variable].empty?
-      
-      
-      
+    if !params[:variable].empty? && !params[:site].empty?
+      @column_array = Array.new
+      @row_array = Array.new
+      site = parent.managed_repository{Voeis::Site.get(params[:site])}
+      site_name =site.name
+      variable = parent.managed_repository{Voeis::Variable.get(params[:variable])}
+      if params[:variable] == "All"
+        var_name = "All"
+      else
+        var_name = variable.variable_name
+      end
+      # if !parent.manged_repository{Voeis::Variable.get(params[:variable]).sensor_types.all(:sites => {:id => site.id})}.nil?
+      if !site.sensor_types.empty?
+        if params[:variable] == "All"
+          @column_array << ["Timestamp", 'datetime']
+          site.sensor_types.each do |sensor|
+            @column_array << [sensor.variables.first.variable_name, 'number']
+          end
+          site.sensor_types.first.sensor_values.each do |sens_val|
+            temp_array = Array.new
+            temp_array << sens_val.timestamp.to_datetime
+            site.sensor_types.each do |sens|
+              val = sens.sensor_values.first(:timestamp.gte => sens_val.timestamp)
+              if !val.nil?
+                temp_array << val.value
+              else
+                temp_array << -9999.0
+              end
+            end
+            @row_array << temp_array
+          end  
+        else
+          @column_array << ["Timestamp", 'datetime']
+          sensor = parent.managed_repository{site.sensor_types.first(:variables => {:id => variable.id})}
+          @column_array << [sensor.variables.first.variable_name, 'number']
+          sensor.sensor_values.each do |sens_val|
+            temp_array = Array.new
+            temp_array << sens_val.timestamp.to_datetime
+            temp_array << sens_val.value
+            @row_array << temp_array
+          end
+        end
+      end
     end
     
     respond_to do |format|
       format.js{render :update do |page|
-        page.replace_html "search_results", :partial => "show_query_results", :locals => {:site => params[:site], :variable => params[:variable},  :start_date => params[:start_date}, :end_data => params[:end_data}, :date_search => params[:date_search]}
+        page.replace_html "search_results", :partial => "show_query_results", :locals => {:site => site_name, :variable => var_name,  :row_array => @row_array, :column_array => @column_array,:start_date => params[:start_date], :end_data => params[:end_data], :date_search => params[:date_search]}
       end
       }
     end  

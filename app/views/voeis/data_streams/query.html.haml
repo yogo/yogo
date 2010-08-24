@@ -6,6 +6,7 @@
   
   Site: 
   =select_tag("site", @site_options)
+  =clear_break
   = f.check_box :date_search
   Dates After: 
   = date_select('range', 'start_date', :order => [:month, :day, :year])
@@ -13,5 +14,6 @@
   = date_select('range', 'end_date', :order => [:month, :day, :year])
   
   = f.submit('Search')
+=clear_break
 
-
+#search_results
