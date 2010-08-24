@@ -90,7 +90,7 @@ class ApplicationController < ActionController::Base
   end
   
   def rescue_action(e)
-    if e.kind_of?(Facet::PermissionException::Denied) || e.original_exception.kind_of?(Facet::PermissionException::Denied)
+    if e.respond_to?(:original_exception) && e.original_exception.kind_of?(Facet::PermissionException::Denied)
       authorization_denied
     else
       super
