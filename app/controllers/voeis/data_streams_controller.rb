@@ -7,16 +7,16 @@ class Voeis::DataStreamsController < Voeis::BaseController
             :collection_name => 'data_streams',
             :instance_name => 'data_stream',
             :resource_class => Voeis::DataStream
-  
-  
+
+
   def new
-    
+
     @data_templates = parent.managed_repository{Voeis::DataStream.all}
     respond_to do |format|
       format.html
     end
   end
-  
+
   # alows us to upload csv file to be processed into data
   # this requires that a datastream has already been created
   # to parse this file
@@ -25,7 +25,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
   # curl -F datafile=@CR1000_2_BigSky_NFork_small.dat -F data_template_id=1 http://localhost:3000/projects/fbf20340-af15-11df-80e4-002500d43ea0/data_streams/pre_upload/?api_key=5c47e1d3ab117c4b009a65ed7ff346bc1e00dac9d56c64b0e61ecfd9a514806e&blank=1
   # @param [Hash] params
   # @option params [File] :datafile csv file to store
-  # @option params [Integer] :DataStream ID 
+  # @option params [Integer] :DataStream ID
   #
   # @return [String] Accepts the upload of a CSV file
   #
@@ -43,16 +43,15 @@ class Voeis::DataStreamsController < Voeis::BaseController
       end
     end
   end
-  
+
   def query
     @variables = ""
     @sites = ""
-    parent.managed_repository do 
+    parent.managed_repository do
       @sites = Voeis::Site.all
       @variables = Voeis::Variable.all
-    end  
+    end
     @var_opts_array = Array.new
-    @var_opts_array << ["All", "All"]
     @variables.all(:order => [:variable_name.asc]).each do |var|
       @var_opts_array << [var.variable_name+":"+Unit.get(var.variable_units_id).units_name, var.id.to_s]
     end
@@ -63,61 +62,21 @@ class Voeis::DataStreamsController < Voeis::BaseController
     end
     @site_options = opts_for_select(@site_opts_array)
   end
-            
+
   def search
-    if !params[:variable].empty? && !params[:site].empty?
-      @column_array = Array.new
-      @row_array = Array.new
-      site = parent.managed_repository{Voeis::Site.get(params[:site])}
-      site_name =site.name
-      variable = parent.managed_repository{Voeis::Variable.get(params[:variable])}
-      if params[:variable] == "All"
-        var_name = "All"
-      else
-        var_name = variable.variable_name
-      end
-      # if !parent.manged_repository{Voeis::Variable.get(params[:variable]).sensor_types.all(:sites => {:id => site.id})}.nil?
-      if !site.sensor_types.empty?
-        if params[:variable] == "All"
-          @column_array << ["Timestamp", 'datetime']
-          site.sensor_types.each do |sensor|
-            @column_array << [sensor.variables.first.variable_name, 'number']
-          end
-          site.sensor_types.first.sensor_values.each do |sens_val|
-            temp_array = Array.new
-            temp_array << sens_val.timestamp.to_datetime
-            site.sensor_types.each do |sens|
-              val = sens.sensor_values.first(:timestamp.gte => sens_val.timestamp)
-              if !val.nil?
-                temp_array << val.value
-              else
-                temp_array << -9999.0
-              end
-            end
-            @row_array << temp_array
-          end  
-        else
-          @column_array << ["Timestamp", 'datetime']
-          sensor = parent.managed_repository{site.sensor_types.first(:variables => {:id => variable.id})}
-          @column_array << [sensor.variables.first.variable_name, 'number']
-          sensor.sensor_values.each do |sens_val|
-            temp_array = Array.new
-            temp_array << sens_val.timestamp.to_datetime
-            temp_array << sens_val.value
-            @row_array << temp_array
-          end
+    respond_to do |format|
+      format.js do
+        render :update do |page|
+          page.replace_html "search_results", :partial => "show_query_results", :locals => {:site => params[:site],
+                                                                                            :variable => params[:variable],
+                                                                                            :start_date => params[:start_date],
+                                                                                            :end_data => params[:end_data],
+                                                                                            :date_search => params[:date_search] }
         end
       end
     end
-    
-    respond_to do |format|
-      format.js{render :update do |page|
-        page.replace_html "search_results", :partial => "show_query_results", :locals => {:site => site_name, :variable => var_name,  :row_array => @row_array, :column_array => @column_array,:start_date => params[:start_date], :end_data => params[:end_data], :date_search => params[:date_search]}
-      end
-      }
-    end  
   end
-  
+
   def opts_for_select(opt_array, selected = nil)
      option_string =""
      if !opt_array.empty?
@@ -127,7 +86,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
          else
            option_string = option_string + '<option value='+opt[1]+'>'+opt[0]+'</option>'
          end
-       end 
+       end
      end
      option_string
   end
@@ -281,7 +240,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
                         :max => params["max"+i.to_s].to_f,
                         :difference => params["difference"+i.to_s].to_f)
           #Add sites and variable associations to senor_type
-          # 
+          #
           sensor_type.sites << @site
           sensor_type.variables <<  variable
           sensor_type.data_stream_columns << data_stream_column
@@ -314,7 +273,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
         @sensor_types = site.sensor_types
         @sensor_types.each do |s_type|
           if !s_type.sensor_values.empty?
-          if senscount != 0 && 
+          if senscount != 0 &&
            @plot_data +=  ","
           end
           senscount+=1
