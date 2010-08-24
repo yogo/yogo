@@ -17,7 +17,6 @@ class Setting
   property :name,   String, :unique => true
   property :value,  Object
 
-
   ##
   # Used to query the settings basied on a key
   #
