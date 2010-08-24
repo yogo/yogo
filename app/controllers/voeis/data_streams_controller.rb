@@ -17,6 +17,27 @@ class Voeis::DataStreamsController < Voeis::BaseController
     end
   end
   
+  # alows us to upload csv file to be processed into data
+  # this requires that a datastream has already been created
+  # to parse this file
+  #
+  # @example http://localhost:3000/project/upload/
+  # curl -F datafile=@CR1000_2_BigSky_NFork_small.dat -F data_template_id=1 http://localhost:3000/projects/fbf20340-af15-11df-80e4-002500d43ea0/data_streams/pre_upload/?api_key=5c47e1d3ab117c4b009a65ed7ff346bc1e00dac9d56c64b0e61ecfd9a514806e&blank=1
+  # @param [Hash] params
+  # @option params [File] :datafile csv file to store
+  # @option params [Integer] :DataStream ID 
+  #
+  # @return [String] Accepts the upload of a CSV file
+  #
+  # @author Yogo Team
+  #
+  # @api public
+  def upload
+    data_stream_template = parent.managed_repository{Voeis::DataStream.get(params[:data_template_id])}
+    
+    parse_logger_csv(params[:datafile], data_stream_template, data_stream_template.sites.first)
+  end
+  
   def query
     @variables = ""
     @sites = ""
