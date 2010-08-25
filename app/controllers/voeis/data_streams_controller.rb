@@ -174,10 +174,6 @@ class Voeis::DataStreamsController < Voeis::BaseController
    #@project = Project.first(:id => params[:project_id])
     @variables = Variable.all
     @sites = parent.managed_repository{ Voeis::Site.all }
-    @sites.each do |site|
-      puts site.id.to_s
-      puts site.name
-    end
     if !params[:datafile].nil? && datafile = params[:datafile]
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
