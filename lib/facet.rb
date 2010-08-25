@@ -37,9 +37,9 @@ module Facet
         # TODO: Extract out this DataMapper specific code
         if (result.kind_of?(::DataMapper::Collection) && result.model.respond_to?(:access_as)) ||
            (result.kind_of?(::DataMapper::Resource)   && result.respond_to?(:access_as))
-          # Reuse the current_root target, or use the current target if it's an instance, not a class
-          root_target = @root_target || !@target.kind_of?(::Class) ? @target : nil
-          return result.access_as(@permission_source, root_target)
+          # Reuse the current root_target, or use the current target if it's an instance, not a class
+          @root_target ||= !@target.kind_of?(::Class) ? @target : nil
+          return result.access_as(@permission_source, @root_target)
         else
           return result
         end
@@ -56,6 +56,10 @@ module Facet
     
     def permission_source
       @permission_source
+    end
+    
+    def root_target
+      @root_target
     end
   end
   
@@ -156,7 +160,7 @@ module Facet
     def permissions
       {
         :create => [:new, :create],
-        :retrieve => [:all, :get, :first, :last, :count] + relationships.keys.map{|m| m.to_s.to_sym } +
+        :retrieve => [:all, :get, :first, :last, :count, :map, :each] + relationships.keys.map{|m| m.to_s.to_sym } +
         self.methods.map{|m| m.to_sym },
         :update => [:update],
         :destroy => [:destroy]
@@ -180,7 +184,7 @@ module Facet
       {
         :create => [],
         :retrieve => [:attributes] + self.methods.map{ |k| k.to_sym },
-        :update => [:attributes=, :save, :update],
+        :update => [:attributes=, :save, :update, :save_parents, :save_children],
         :destroy => [:destroy]
       }
     end
