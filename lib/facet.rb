@@ -156,7 +156,7 @@ module Facet
     def permissions
       {
         :create => [:new, :create],
-        :retrieve => [:all, :get, :first, :last, :count] + relationships.keys.map{|m| m.to_s.pluralize.to_sym } +
+        :retrieve => [:all, :get, :first, :last, :count] + relationships.keys.map{|m| m.to_s.to_sym } +
         self.methods.map{|m| m.to_sym },
         :update => [:update],
         :destroy => [:destroy]
