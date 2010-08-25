@@ -36,7 +36,7 @@
         .form-element
           = f.submit('Save', :class => 'save-link')
           = link_to('Cancel', projects_path, :class => 'cancel-link')
-  - if User.all.length > @project.users.length
+  - if User.all.count > @project.users.count
     #content-settings-extra
       .rbox.tight
         - form_for(:membership, :url => project_memberships_path(@project)) do |f|
