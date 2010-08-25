@@ -6,7 +6,7 @@
 
   .small.boxed
     .rbox.tight
-      = link_to("Delete", project_user_path(@project, @user), :method => :delete, :class => 'delete-link', 
+      = link_to("Delete", user_path(@project), :method => :delete, :class => 'delete-link', 
                 :confirm => "Do you want to delete the #{@user.name}?\nThere is no undo! Continue?" )
       -form_for(@user, :builder => YogoFormBuilder) do |f|
         = f.text_field(:login, :label => "Login:" )
