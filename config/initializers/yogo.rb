@@ -10,4 +10,3 @@ require 'exceptions'
 
 # Load the Application Version
 load Rails.root / "VERSION"
-

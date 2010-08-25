@@ -30,21 +30,21 @@ gem 'inherited_resources', '~> 1.0.6'
 gem "carrierwave"
 gem "compass"
 gem 'bcrypt-ruby'
-gem "fastercsv"                       unless RUBY_VERSION >= '1.9.1'
 gem "haml"
 gem "mime-types",                     :require => 'mime/types'
 gem "uuidtools"
 gem 'rails_warden'
 
-if defined?(JRUBY_VERSION)
+platforms(:ruby_18, :jruby) { gem "fastercsv" }
+
+platforms :jruby do
   gem "dm-sqlserver-adapter", :require => nil
   gem "jruby-openssl",        :require => nil
   gem "json_pure",            :require => nil
   gem "BlueCloth",            :require => nil # Required for YARD
-#  gem "ruby-debug"
-else
-  gem "ruby-debug"            unless RUBY_VERSION >= '1.9.1'
-  gem "ruby-debug19"          if RUBY_VERSION >= '1.9.1'
+end
+
+platforms :mri do
   gem "json",                 :require => nil
   gem "bluecloth",            :require => nil # Required for YARD
 end
@@ -52,10 +52,15 @@ end
 group :development do
   gem "capistrano",           :require => nil
   gem "rails-footnotes"
+  # Platforms only works in block format in bundler 1.0.0.rc.6
+  platforms(:mri_18) { gem "ruby-debug",             :require => nil }
+  platforms(:mri_19) { gem "ruby-debug19",           :require => nil }
 end
 
-group :test do
-gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug', :require => nil unless defined?(JRUBY_VERSION)
+group :test, :cucumber do
+  # Platforms only works in block format in bundler 1.0.0.rc.6
+  platforms(:mri_18) { gem "ruby-debug",             :require => nil }
+  platforms(:mri_19) { gem "ruby-debug19",           :require => nil }
   gem 'rspec',        '~>1.3.0',   :require => nil
   gem 'rspec-rails',  '~>1.3.2',   :require => 'spec/rails'
   gem 'ZenTest',                   :require => nil
@@ -78,17 +83,8 @@ gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug', :require => ni
   gem "roodi",                     :require => nil
   gem "googlecharts",              :require => nil
   gem "metric_fu",                 :require => nil
-  gem "test-unit", "~>1.2" if RUBY_VERSION.include?('1.9')
-end
-
-group :cucumber do
-  gem 'rspec',        '~>1.3.0',   :require => nil
-  gem 'rspec-rails',  '~>1.3.2',   :require => 'spec/rails'
-  gem 'ZenTest',                   :require => nil
-  gem 'redgreen',                  :require => nil
-  gem 'factory_girl', '~>1.2.3',   :require => nil
   gem 'cucumber',                  :require => nil
-  gem 'cucumber-rails'
+  gem 'cucumber-rails',            :require => nil
   gem 'webrat',                    :require => nil
   gem 'selenium-client',           :require => nil
 end

@@ -17,7 +17,5 @@ class SettingsController < InheritedResources::Base
 
   def resource
     @setting ||= resource_class.get(params[:id])
-    @key = @setting.name
-    @value = @setting.value
   end
 end

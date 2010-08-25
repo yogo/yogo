@@ -38,6 +38,16 @@ namespace :deploy do
 end
 
 namespace :db do
+  desc "Seed initial data"
+  task :seed, :roles => :app do
+    run "bash -c 'cd #{current_path} && RAILS_ENV=production rake db:seed'"
+  end
+
+  desc  "Clear out test data"
+  task :clear, :roles => :app do
+    run "bash -c 'cd #{current_path} && rake db:drop:all'"
+  end
+
   task :setup do
     run "mkdir -p #{deploy_to}#{shared_dir}/db/persvr"
     run "mkdir -p #{deploy_to}#{shared_dir}/db/sqlite3"
@@ -50,6 +60,7 @@ namespace :db do
     run "ln -nfs #{deploy_to}#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
   end
 end
+
 # These are one time setup steps
 after "deploy:setup",       "db:setup"
 after "db:setup",           "persvr:setup"

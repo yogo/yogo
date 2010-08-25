@@ -27,8 +27,6 @@ class User
   property :last_request_at,      DateTime
   property :last_login_at,        DateTime
   property :current_login_at,     DateTime
-  
-  property :api_key,  String, :required => false, :length => 64, :index => true, :writer => :private
 
   property :api_key,  String, :required => false, :length => 64, :index => true, :writer => :private
 

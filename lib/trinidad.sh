@@ -9,7 +9,12 @@ case "$1" in
     echo "Starting trinidad"
     cd $RAILS_APP
     nohup trinidad --config > $RAILS_APP/log/trinidad.log 2>&1 &
-    echo $! > $PIDFILE
+    if [ $! != $$ ]; then
+      rm $PIDFILE
+      echo $! > $PIDFILE
+    else
+      echo "Failed to start trinidad, it appears to already be running."
+    fi
   ;;
 
   restart)
@@ -22,6 +27,14 @@ case "$1" in
     cd $RAILS_APP
     if [ -f $PIDFILE ]; then
       kill -2 `cat $PIDFILE`
+      if [ "x$!" == "x0" ]; then
+        rm $PIDFILE
+      else
+        echo "Failed to kill trinidad, resorting to brute force."
+        # Find the darn thing and kill it
+        TPID="`ps auwx | grep trinidad | grep -v grep | awk '{ print $2 }'`"
+        kill -9 $TPID
+      fi
     fi
   ;;
 

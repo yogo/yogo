@@ -1,3 +1,5 @@
+#content-actions
+  = link_to("New Project", new_project_path, :class => 'new-link')
 - if @projects.empty?
   There are no projects yet, you should create one!
 - for project in @projects
@@ -6,8 +8,6 @@
     #links
       = link_to("Settings", edit_project_path(project), :class => 'settings-link')
       = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?      
-    %br/ 
-    = link_to('Project Description', edit_project_path(project), :title => 'Edit Project Description')
     - if project.description && project.description.length > 0
       %em= tooltip(project.description, project.name + ' Description', 200)
     - else

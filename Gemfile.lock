@@ -43,8 +43,10 @@ GEM
       activesupport (= 2.3.8)
     activesupport (2.3.8)
     addressable (2.2.0)
+    archive-tar-minitar (0.5.2)
     arrayfields (4.7.4)
     bcrypt-ruby (2.1.2)
+    bluecloth (2.0.7)
     bouncy-castle-java (1.5.0145.2)
     builder (2.1.2)
     capistrano (2.5.19)
@@ -53,7 +55,7 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.0.0)
-    carrierwave (0.4.9)
+    carrierwave (0.4.10)
     chronic (0.2.3)
       hoe (>= 1.2.1)
     churn (0.0.12)
@@ -63,6 +65,7 @@ GEM
       main
       ruby_parser (~> 2.0.4)
       sexp_processor (~> 3.0.3)
+    columnize (0.3.1)
     compass (0.10.4)
       haml (>= 3.0.4)
     configatron (2.6.3)
@@ -122,7 +125,6 @@ GEM
       do-jdbc_sqlserver (~> 1.2.4)
       do_jdbc (= 0.10.2)
     extlib (0.9.15)
-    factory_girl (1.2.4)
     fastercsv (1.5.3)
     fattr (2.1.0)
     flay (1.4.0)
@@ -149,7 +151,11 @@ GEM
     jdbc-sqlite3 (3.6.3.054)
     jruby-openssl (0.7.1)
       bouncy-castle-java
+    json (1.4.6)
     json_pure (1.4.6)
+    linecache (0.43)
+    linecache19 (0.5.11)
+      ruby_core_source (>= 0.1.4)
     main (4.2.0)
       arrayfields (>= 4.7.4)
       fattr (>= 2.1.0)
@@ -206,9 +212,24 @@ GEM
     rspec-rails (1.3.2)
       rack (>= 1.0.0)
       rspec (>= 1.3.0)
+    ruby-debug (0.10.3)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.3.0)
+    ruby-debug-base (0.10.3)
+      linecache (>= 0.3)
+    ruby-debug-base19 (0.11.24)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
     ruby2ruby (1.2.4)
       ruby_parser (~> 2.0)
       sexp_processor (~> 3.0)
+    ruby_core_source (0.1.4)
+      archive-tar-minitar (>= 0.5.2)
     ruby_parser (2.0.4)
       sexp_processor (~> 3.0)
     rubyforge (2.0.4)
@@ -241,6 +262,7 @@ DEPENDENCIES
   ZenTest
   arrayfields
   bcrypt-ruby
+  bluecloth
   capistrano
   carrierwave
   chronic
@@ -255,7 +277,6 @@ DEPENDENCIES
   dm-sqlite-adapter
   dm-sqlserver-adapter
   dm-types (~> 1.0.0)!
-  factory_girl (~> 1.2.3)
   fastercsv
   fattr
   flay
@@ -266,6 +287,7 @@ DEPENDENCIES
   hoe
   inherited_resources (~> 1.0.6)
   jruby-openssl
+  json
   json_pure
   main
   metric_fu
@@ -279,6 +301,8 @@ DEPENDENCIES
   roodi
   rspec (~> 1.3.0)
   rspec-rails (~> 1.3.2)
+  ruby-debug
+  ruby-debug19
   ruby2ruby
   ruby_parser
   selenium-client

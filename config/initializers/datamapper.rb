@@ -19,6 +19,9 @@ require 'datamapper/property/raw'
 # When saving models don't be terse
 DataMapper::Model.raise_on_save_failure = true
 
+# When saving models don't be terse
+DataMapper::Model.raise_on_save_failure = true
+
 # Read the configuration from the existing database.yml file
 config = Rails.configuration.database_configuration
 

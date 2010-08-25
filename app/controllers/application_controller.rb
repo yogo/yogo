@@ -89,6 +89,10 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def verify_authenticity_token
+      super unless params.has_key?(:api_key)
+  end
+  
   def rescue_action(e)
     if e.respond_to?(:original_exception) && e.original_exception.kind_of?(Facet::PermissionException::Denied)
       authorization_denied

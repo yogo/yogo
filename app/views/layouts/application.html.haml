@@ -13,10 +13,8 @@
     = javascript_include_tag('jquery-1.4.2.min.js', 
                              'jquery-ui-1.8.1.custom.min.js', 
                              'jquery.fancybox-1.3.1.pack.js',
-                             'jquery.flot.js', 
-                              'jquery.flot.selection.js',
-                              'jquery.flot.navigate.js',
-                             'jrails.js', 'application.js')
+                             'jrails.js',
+                             'application.js')
 
     %script{:type =>"text/javascript",  :src => "http://maps.google.com/maps/api/js?sensor=false"}
     %script{:type => "text/javascript", :src => "http://www.google.com/jsapi"}
@@ -33,8 +31,7 @@
     #logo 
       VOEIS Data Hub 
       %span.smaller.emphasis
-        = "ALPHA v" + YOGO_VERSION
-        / Put in a tooltip/link to information on the update (date, log with changes, etc)
+        = link_to(VOEIS_VERSION, page_url(:changelog))
     #system-menu.box.tight
       #menu-left-col
         = render(:partial => 'layouts/menu_links')
@@ -42,8 +39,7 @@
         = render(:partial => 'layouts/login')
     #menu.box.tight
       #menu-left-col
-        / In the case of pages and dashboards (static controllers we probably want something else)
-        = controller_name.capitalize
+        / = page_title
       #menu-right-col
         = render(:partial => 'layouts/search')
 
@@ -69,7 +65,8 @@
       = yield 
 
   #footnotes_holder
-  =clear_break   
+  =clear_break  
+   
   #footer
     #yogo-brand
       = link_to(image_tag("partners/uky.png", :alt => "University of Kentucky"), 'http://www.uky.edu') 
