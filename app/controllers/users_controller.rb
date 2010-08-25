@@ -15,7 +15,7 @@ class UsersController < InheritedResources::Base
   end
 
   def destroy
-    @user = User.get(params[:id])
+    @user = resource_class.get(params[:id])
     if @user.eql?(current_user)
       flash[:notice] = "You can't destroy yourself"
       redirect_to(users_url)
@@ -25,7 +25,7 @@ class UsersController < InheritedResources::Base
   end
 
   def api_key_update
-    @user = User.get(params[:id])
+    @user = resource_class.get(params[:id])
     if @user.generate_new_api_key!
       flash[:notice] = "Updated API Key"
     else
