@@ -16,7 +16,7 @@ set :copy_exclude, [".git"]
 set  :user, "voeis-demo"
 role :web, "klank.msu.montana.edu"
 role :app, "klank.msu.montana.edu"
-set  :deploy_to, "/home/#{user}/voeis/"
+set  :deploy_to, "/home/#{user}/voeis"
 
 default_run_options[:pty] = false
 
@@ -49,15 +49,15 @@ namespace :db do
   end
 
   task :setup do
-    run "mkdir -p #{deploy_to}#{shared_dir}/db/persvr"
-    run "mkdir -p #{deploy_to}#{shared_dir}/db/sqlite3"
-    run "mkdir -p #{deploy_to}#{shared_dir}/vendor/persevere"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/db/persvr"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/db/sqlite3"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/vendor/persevere"
   end
 
   task :symlink do
-    run "ln -nfs #{deploy_to}#{shared_dir}/db/persvr #{release_path}/db/persvr"
-    run "ln -nfs #{deploy_to}#{shared_dir}/db/sqlite3 #{release_path}/db/sqlite3"
-    run "ln -nfs #{deploy_to}#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/db/persvr #{release_path}/db/persvr"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/db/sqlite3 #{release_path}/db/sqlite3"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
   end
 end
 
@@ -76,8 +76,8 @@ namespace :assets do
   end
 
   task :symlink do
-    run "ln -nfs #{deploy_to}#{shared_dir}/assets/files #{release_path}/public/files"
-    run "ln -nfs #{deploy_to}#{shared_dir}/assets/images #{release_path}/public/images"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/assets/files #{release_path}/public/files"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/assets/images #{release_path}/public/images"
   end
 end
 after "deploy:setup",       "assets:setup"
