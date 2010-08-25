@@ -28,11 +28,12 @@ gem 'inherited_resources', '~> 1.0.6'
 gem "carrierwave"
 gem "compass"
 gem 'bcrypt-ruby'
-platforms(:ruby_18, :jruby) { gem "fastercsv" }
 gem "haml"
 gem "mime-types",                     :require => 'mime/types'
 gem "uuidtools"
 gem 'rails_warden'
+
+platforms(:ruby_18, :jruby) { gem "fastercsv" }
 
 platforms :jruby do
   gem "dm-sqlserver-adapter", :require => nil
@@ -45,7 +46,6 @@ platforms :mri do
   gem "json",                 :require => nil
   gem "bluecloth",            :require => nil # Required for YARD
 end
-
 
 group :development do
   gem "capistrano",           :require => nil
