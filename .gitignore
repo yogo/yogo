@@ -39,3 +39,12 @@ yogo_assets/*
 public/stylesheets/compiled
 htmlreports/**/*
 app/stylesheets/screen.css
+doc/voeis-demo/s6/jquery.js
+doc/voeis-demo/s6/jquery.microsoft.js
+doc/voeis-demo/s6/jquery.slideshow.js
+doc/voeis-demo/s6/print.css
+doc/voeis-demo/s6/projection.css
+doc/voeis-demo/s6/screen.css
+doc/voeis-demo/voeis.css
+doc/voeis-demo/voeis.html
+doc/voeis-demo/voeis.pdf.html
