@@ -21,9 +21,9 @@ headers:
   # gradient:
   #   theme: dark
   #   color1:
-  gradient-theme:   dark
-  gradient-color1:  red
-  gradient-color2:  black
+  # gradient-theme:   dark
+  # gradient-color1:  red
+  # gradient-color2:  black
 
   # todo: use nested config??
   #
