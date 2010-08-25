@@ -55,7 +55,9 @@ namespace :db do
   end
 
   task :symlink do
+    run "rmdir #{release_path}/db/persvr"
     run "ln -nfs #{deploy_to}/#{shared_dir}/db/persvr #{release_path}/db/persvr"
+    run "rmdir #{release_path}/db/sqlite3"
     run "ln -nfs #{deploy_to}/#{shared_dir}/db/sqlite3 #{release_path}/db/sqlite3"
     run "ln -nfs #{deploy_to}/#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
   end
