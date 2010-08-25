@@ -27,7 +27,7 @@ case "$1" in
     cd $RAILS_APP
     if [ -f $PIDFILE ]; then
       kill -2 `cat $PIDFILE`
-      if [ "x$!" == "x0" ]; then
+      if [ $! == 0 ]; then
         rm $PIDFILE
       else
         echo "Failed to kill trinidad, resorting to brute force."
