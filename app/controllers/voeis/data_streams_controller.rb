@@ -95,12 +95,12 @@ class Voeis::DataStreamsController < Voeis::BaseController
               end
             end
             @row_array << temp_array
-          end  
+          end
         else
           # sensor = parent.managed_repository{site.sensor_types.first(:variables => {:id => variable.id})}
-          #sensor1 = parent.managed_repository{Voeis::Variable.get(variable.id).sensor_types.first(:sites => {:id => site.id})}
+          # sensor1 = parent.managed_repository{Voeis::Variable.get(variable.id).sensor_types.first(:sites => {:id => site.id})}
           # sensor1 = variable.sensor_types.first(:sites => {:id => site.id})
-          #this make me want to slam my hand in a door but nothing else is working logically in DM
+          # this make me want to slam my hand in a door but nothing else is working logically in DM
           my_sensor =""
           variable.sensor_types.each do |sensor|
             if sensor.sites.first.id == site.id
@@ -130,7 +130,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
       respond_to do |format|
         format.js do
           render :update do |page|
-            page.replace_html "search_results", :partial => "show_query_results", 
+            page.replace_html "search_results", :partial => "show_query_results",
             :locals => {:site => site_name,
                         :variable => var_name,
                         :start_date => params[:start_date],
@@ -173,7 +173,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
   def pre_upload
    #@project = Project.first(:id => params[:project_id])
     @variables = Variable.all
-    @sites = parent.managed_repository{Voeis::Site.all}
+    @sites = parent.managed_repository{ Voeis::Site.all }
     @sites.each do |site|
       puts site.id.to_s
       puts site.name
@@ -243,11 +243,10 @@ class Voeis::DataStreamsController < Voeis::BaseController
     @data_stream =""
     @site =""
     parent.managed_repository do
-      @data_stream = Voeis::DataStream.create(
-                                   :name => params[:data_stream_name],
-                                   :description => params[:data_stream_description],
-                                   :filename => params[:datafile],
-                                   :start_line => params[:start_line].to_i)
+      @data_stream = Voeis::DataStream.create(:name => params[:data_stream_name],
+                                              :description => params[:data_stream_description],
+                                              :filename => params[:datafile],
+                                              :start_line => params[:start_line].to_i)
       #Add site association to data_stream
       #
       @site = Voeis::Site.first(:id => params[:site])
@@ -321,8 +320,6 @@ class Voeis::DataStreamsController < Voeis::BaseController
     flash[:notice] = "File parsed and stored successfully."
     redirect_to project_path(params[:project_id])
   end
-
-
 
   def index
     @project_array = Array.new
