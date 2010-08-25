@@ -9,6 +9,7 @@ case "$1" in
     echo "Starting trinidad"
     cd $RAILS_APP
     nohup trinidad --config > $RAILS_APP/log/trinidad.log 2>&1 &
+    rm $PIDFILE
     echo $! > $PIDFILE
   ;;
 
@@ -22,6 +23,11 @@ case "$1" in
     cd $RAILS_APP
     if [ -f $PIDFILE ]; then
       kill -2 `cat $PIDFILE`
+      if [ "x$!" == "x0" ]; then
+        rm $PIDFILE
+      else
+        echo "Failed to kill trinidad"
+      fi
     fi
   ;;
 
