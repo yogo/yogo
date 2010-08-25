@@ -11,7 +11,7 @@ Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 - Overview
 - Project Interface
 - Programmatic Access
-- Integration with CUASHI HIS
+- CUASHI HIS Integration
 - Future Features
 
 # Overview
@@ -84,22 +84,22 @@ Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 
 # Projects: Data Download
 
-# Developer Access to VOEIS
+# Programmatic Access to VOEIS
 
 - RESTful Access using API Keys
   - Projects, Users, Roles, Sites Accessible
 - Pulling Data for Web Pages, etc
 - Programmatic upload of data files
 
-# Developer Access: RESTFul Access using API Keys
+# Programmatic Access: RESTFul Access using API Keys
 
 - Projects, Users, Roles, Sites Accessible
 
-# Developer Access: Example Pulling Data
+# Programmatic Access: Example Pulling Data
 
 - Blue Water Task Force Web Page
 
-# Developer Access: Example Uploading Data
+# Programmatic Access: Example Uploading Data
 
 - Custom Data Upload
 
