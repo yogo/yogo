@@ -23,7 +23,7 @@
                 - @project.users.each do |user|
                   %tr
                     %td= user.name
-                    %td= (user.roles | @project.roles).map {|role| role.name }.join(', ')
+                    %td= (user.roles & @project.roles).map {|role| role.name }.join(', ')
                     %td 
                       #operation-links
                         #edit-link
