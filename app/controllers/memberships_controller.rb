@@ -1,86 +1,86 @@
-class MembershipsController < InheritedResources::Base
+class MembershipsController < ApplicationController
 
-  defaults :resource_class => Membership, :collection_name => 'memberships', :instance_name => 'membership'
+  # defaults :resource_class => Membership, :collection_name => 'memberships', :instance_name => 'membership'
 
-  belongs_to :project, :finder => :get
-  belongs_to :user, :finder => :get
+  # belongs_to :project, :user, :finder => :get, :polymorphic => true
 
-  respond_to :html, :json
+  # respond_to :html, :json
 
   def create
     if params.has_key?(:project_id)
-      @project = Project.get(params[:project_id])
+      @project = Project.access_as(current_user).get(params[:project_id])
     else
-      @project = Project.get(params[:id])
+      @project = Project.access_as(current_user).get(params[:id])
     end
-
+  
     if params.has_key?(:user_id)
-      @users = [User.get(params[:user_id])]
+      @users = [User.access_as(current_user).get(params[:user_id])]
     else
-      @users = params[:memberships][:users].map { |idx| User.get(idx) }
+      @users = User.access_as(current_user).all(:id => params[:memberships][:users])
     end
-
-    @roles = params[:memberships][:roles].map { |idx| Role.get(idx) }
-
+  
+    @roles = Role.all(:id => params[:memberships][:roles])
+  
     @users.each do |u|
      @roles.each do |r|
-       Membership.create(:user => u, :role => r, :project => @project)
+       @project.memberships.create(:user => u, :role => r)
      end
     end
-
+  
     redirect_to(:back)
   end
-
+  
   def destroy
     if params.has_key?(:project_id)
-      @project = Project.get(params[:project_id])
+      @project = Project.access_as(current_user).get(params[:project_id])
     else
-      @project = Project.get(params[:id])
+      @project = Project.access_as(current_user).get(params[:id])
     end
-
+  
     if params.has_key?(:user_id)
-      @user = User.get([params[:user_id]])
+      @user = User.access_as(current_user).get([params[:user_id]])
     else
-      @user = User.get(params[:id])
+      @user = User.access_as(current_user).get(params[:id])
     end
-
-    memberships = Membership.all(:user => @user, :project => @project)
+  
+    memberships = @project.memberships.all(:user_id => @user.id)
     memberships.destroy
     redirect_to(:back)
   end
-
+  
   def edit
     if params.has_key?(:project_id)
-      @project = Project.get(params[:project_id])
+      @project = Project.access_as(current_user).get(params[:project_id])
     else
-      @project = Project.get(params[:id])
+      @project = Project.access_as(current_user).get(params[:id])
     end
-
+  
     if params.has_key?(:user_id)
-      @user = User.get([params[:user_id]])
+      @user = User.access_as(current_user).get([params[:user_id]])
     else
-      @user = User.get(params[:id])
+      @user = User.access_as(current_user).get(params[:id])
     end
 
-    @role_names = Role.all(:id => Membership.all(:project => @project, :user => @user).map { |m| m.role_id }).map { |r| r.name }
-
+    # @role_names = Role.all(:id => Membership.all(:project => @project, :user => @user).map { |m| m.role_id }).map { |r| r.name }
+    @role_names = @project.memberships(:user_id => @user.id).map{|m| m.role.name}
     respond_to do |format|
       format.html
     end
   end
-
-
+  
+  
   def update
-    @project = Project.get(params[:project_id])
-    @user = User.get(params[:id])
-    @roles = params[:memberships][:roles].map { |rid| Role.get(rid) }
-
-    memberships = Membership.all(:user => @user, :project => @project)
+    @project = Project.access_as(current_user).get(params[:project_id])
+    @user = User.access_as(current_user).get(params[:id])
+    @roles = Role.all(:id => params[:memberships][:roles])
+  
+    memberships = @project.memberships.all(:user_id => @user.id)
     memberships.destroy
-
+  
     @roles.each do |role|
-      Membership.create(:user => @user, :project => @project, :role => role)
+      @project.memberships.create(:user_id => @user.id, :role_id => role.id)
     end
     redirect_to(edit_project_url(@project))
   end
+  
 end
