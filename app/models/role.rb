@@ -14,7 +14,7 @@ class Role
   property :id, Serial
   property :name, String, :required => true, :unique => true
   property :description, Text
-  property :permissions, Yaml, :default => [].to_yaml
+  property :actions, Yaml, :default => [].to_yaml
 
   has n, :memberships
   has n, :projects, :through => :memberships
