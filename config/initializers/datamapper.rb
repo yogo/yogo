@@ -49,10 +49,10 @@ Variable
 Unit
 Setting
 Membership
-Yogo::Project
+Project
 
 DataMapper.finalize
-DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Yogo::Project.storage_name) &&
+DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(Setting.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(User.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(Role.storage_name) &&

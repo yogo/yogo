@@ -20,7 +20,7 @@ class Role
   has n, :users, :through => :memberships
 
   def self.permission_sources
-    [Yogo::Project]
+    [Project]
   end
 
   def self.available_permissions
