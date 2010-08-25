@@ -44,6 +44,26 @@ class Voeis::DataStreamsController < Voeis::BaseController
     end
   end
 
+  def export
+    headers = JSON[params[:column_array]]
+    rows = JSON[params[:row_array]]
+    column_names = Array.new
+    headers.each do |col|
+      column_names << col[0]
+    end
+    csv_string = FasterCSV.generate do |csv|
+      csv << column_names
+      rows.each do |row|
+        csv << row
+      end
+    end
+
+    filename = params[:site_name] + ".csv"
+    send_data(csv_string,
+      :type => 'text/csv; charset=utf-8; header=present',
+      :filename => filename)
+  end
+
   def query
     @variables = ""
     @sites = ""
@@ -65,6 +85,12 @@ class Voeis::DataStreamsController < Voeis::BaseController
   end
 
   def search
+    puts 'Export:'+params[:export].to_s
+    start_date =  Date.civil(params[:range][:"start_date(1i)"].to_i,params[:range]      [:"start_date(2i)"].to_i,params[:range][:"start_date(3i)"].to_i)
+    end_date = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
+    
+    puts start_date.to_datetime
+    puts end_date.to_datetime
     if !params[:variable].empty? && !params[:site].empty?
       @column_array = Array.new
       @row_array = Array.new
@@ -83,7 +109,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           site.sensor_types.each do |sensor|
             @column_array << [sensor.variables.first.variable_name, 'number']
           end
-          site.sensor_types.first.sensor_values.each do |sens_val|
+          site.sensor_types.first.sensor_values(:timestamp.gte => start_date.to_datetime, :timestamp.lte => end_date.to_datetime).each do |sens_val|
             temp_array = Array.new
             temp_array << sens_val.timestamp.to_datetime
             site.sensor_types.each do |sens|
@@ -110,7 +136,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           if !my_sensor.nil?
             @column_array << ["Timestamp", 'datetime']
             @column_array << [my_sensor.variables.first.variable_name, 'number']
-            my_sensor.sensor_values.each do |sens_val|
+            my_sensor.sensor_values(:timestamp.gte => start_date.to_datetime, :timestamp.lte => end_date.to_datetime).each do |sens_val|
               temp_array = Array.new
               temp_array << sens_val.timestamp.to_datetime
               temp_array << sens_val.value
@@ -127,21 +153,37 @@ class Voeis::DataStreamsController < Voeis::BaseController
           end
         end
       end
-      respond_to do |format|
-        format.js do
-          render :update do |page|
-            page.replace_html "search_results", :partial => "show_query_results",
-            :locals => {:site => site_name,
-                        :variable => var_name,
-                        :start_date => params[:start_date],
-                        :end_data => params[:end_data],
-                        :date_search => params[:date_search],
-                        :row_array => @row_array,
-                        :column_array => @column_array }
+      if params[:export] == 1
+
+         column_names = Array.new
+         @column_array.each do |col|
+           column_names << col[0]
+         end
+         csv_string = FasterCSV.generate do |csv|
+           csv << column_names
+           csv << @row_array
+         end
+
+         filename = site.name + ".csv"
+         send_data(csv_string,
+           :type => 'text/csv; charset=utf-8; header=present',
+           :filename => filename)
+      else
+        respond_to do |format|
+          format.js do
+            render :update do |page|
+              page.replace_html "search_results", :partial => "show_query_results",
+              :locals => {:site => site_name,
+                          :variable => var_name,
+                          :start_date => start_date,
+                          :end_date => end_date,
+                          :row_array => @row_array,
+                          :column_array => @column_array }
+            end
           end
         end
       end
-    end
+    end 
   end
 
   def opts_for_select(opt_array, selected = nil)
