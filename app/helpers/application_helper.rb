@@ -162,7 +162,7 @@ module ApplicationHelper
       s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
             "<option value=''>Jump to Dashboard...</option>" +
             '<option value="" disabled="disabled">---</option>'
-      s << options_for_select(roles, :selected => @role) do |role|
+      s << options_for_jmp_box_select(roles, :selected => @role) do |role|
         dashboard = role.name.gsub(' ', '').underscore
         z = { :value => dashboard_url(dashboard.to_sym) }
         z[:disabled] = 'disabled' unless current_user.roles.include?(role)
@@ -184,7 +184,7 @@ module ApplicationHelper
       s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
             "<option value=''>Jump to Project...</option>" +
             '<option value="" disabled="disabled">---</option>'
-      s << options_for_select(projects, :selected => @project ) do |project|
+      s << options_for_jmp_box_select(projects, :selected => @project ) do |project|
         z = { :value => project_url(project) }
         if logged_in?
           z[:disabled] = 'disabled' unless current_user.projects.include?(project)
@@ -196,7 +196,7 @@ module ApplicationHelper
     end
   end
 
-  def options_for_select(items, options = {})
+  def options_for_jmp_box_select(items, options = {})
     s = ''
     items.each do |item|
       tag_options = {:value => item.id}
