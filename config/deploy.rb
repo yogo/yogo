@@ -40,7 +40,7 @@ end
 namespace :db do
   desc "Seed initial data"
   task :seed, :roles => :app do
-    run "bash -c 'cd #{current_path} && rake db:seed'"
+    run "bash -c 'cd #{current_path} && RAILS_ENV=production rake db:seed'"
   end
 
   desc  "Clear out test data"
