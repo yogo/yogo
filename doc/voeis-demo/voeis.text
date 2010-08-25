@@ -1,5 +1,8 @@
 %%%%%%%%%%%%%%%%%%
-%% Some Headers
+%% VOEIS Demo Slideshow
+%% > gem install slideshow
+%% > slideshow voeis
+%% > open index.html
 
 Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 
