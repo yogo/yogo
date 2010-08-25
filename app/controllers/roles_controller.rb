@@ -1,7 +1,5 @@
 class RolesController < InheritedResources::Base
 
-  belongs_to :project, :user, :optional => true
-
   def create
     create! do |format|
       format.html { redirect_to(roles_url) }

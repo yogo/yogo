@@ -1,8 +1,6 @@
 class UsersController < InheritedResources::Base
   respond_to :html, :json
   
-  belongs_to :projects, :optional => true
-  
   defaults :resource_class => User,
            :collection_name => 'users',
            :instance_name => 'user'

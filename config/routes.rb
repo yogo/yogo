@@ -12,7 +12,6 @@ ActionController::Routing::Routes.draw do |map|
                  :collection => { :search => :get} do |project|
 
     project.resources :memberships, :namespace => nil, :controller => "memberships"
-    project.resources :users, :namespace => nil, :controller => "users"
 
     project.resources :sites, :namespace => nil, :controller => 'voeis/sites',
                       :collection => {:add_site => :get, :save_site => :post}
