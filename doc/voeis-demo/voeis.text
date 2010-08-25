@@ -1,0 +1,140 @@
+%%%%%%%%%%%%%%%%%%
+%% Some Headers
+
+Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
+
+# Outline
+
+- Overview
+- Project Interface
+- Programmatic Access
+- Integration with CUASHI HIS
+- Future Features
+
+# Overview
+
+- Home page
+- Users, Roles, Access Controls
+- Jumpboxes
+- Projects
+
+# Overview: Home Page
+
+# Overview: Users
+
+# Overview: Roles
+
+# Overview: Access Controls
+
+# Overview: Jumpboxes
+
+# Overview: Projects
+
+%%# Dashboards
+%%
+%%- Overview
+%%- Role-based Dashboards
+%%- Project Dashboards
+%%- Latest Activity
+%%
+%%# Dashboards: Overview
+%%
+%%# Dashboards: Role based
+%%
+%%# Dashboards: Latest Activity
+
+# Project User Interface
+
+- Project Dashboard
+- Project Settings
+- User, Role Management
+- Creating or Adding New Sites
+- Uploading Data from CSV
+- Data Interactions
+
+# Projects: Dashboard
+
+# Projects: Settings
+
+- Public / Private Projects
+- Publish to HIS
+
+# Projects: Users and Roles
+
+# Projects: Creating or Adding Sites
+
+# Projects: Uploading Data in CSV Format
+
+- Campbell Scientific LoggerNet
+- Generic CSV
+- Using previously defined template
+
+# Projects: Data Interaction
+
+- Data Browsing and Searching
+- Data Graphing
+- Data Download/Upload
+
+# Projects: Data Browsing and Searching
+
+# Projects: Data Graphing
+
+# Projects: Data Download
+
+# Developer Access to VOEIS
+
+- RESTful Access using API Keys
+  - Projects, Users, Roles, Sites Accessible
+- Pulling Data for Web Pages, etc
+- Programmatic upload of data files
+
+# Developer Access: RESTFul Access using API Keys
+
+- Projects, Users, Roles, Sites Accessible
+
+# Developer Access: Example Pulling Data
+
+- Blue Water Task Force Web Page
+
+# Developer Access: Example Uploading Data
+
+- Custom Data Upload
+
+# CUASHI HIS Integration
+
+- HIS Imported Data
+- Projects Publishing to HIS
+
+# CUASHI HIS Integration: Importing HIS Data
+
+- Bidirectional Synchronization coming
+
+# CUASHI HIS Integration: Publishing to HIS
+
+- Per Project Configuration
+- All data is published currently
+- Selection of finer grained data coming
+
+# Future Features
+- Dashboards
+- VOEIS Data Model Extensions
+  - Field Observed Data
+  - Laboratory Generated Data
+  - Sensor Deployment, Retrieval, Maintenance Interfaces
+  - Resource Management Interfaces
+  - Collaboration (calendaring, notifications, RSS subscriptions)
+- Data Versioning
+  - Implicit versioning on edit
+  - Browse versions
+  - Revert to previous versions
+  - Cherry-pick changes from different version
+- Data Manipulation Extensions
+  - Scripting extensions (similar to Excel Functions)
+  - Quality Control Scripts (detect and change outliers)
+  - Interpolation Scripts (fill in missing or erroneous values with user specified methods)
+  - Data Massaging Scripts (coerce and interpolate different time series data)
+- Expanded HIS Integration
+  - Fine grained publishing for projects
+  - Bidirectional Synchronization of Units, Sites, and Variables
+  - Integrate HIS authenticate/authorization
+  - Leverage HIS Controlled Vocabulary, GeoSpatial, and other services as deployed
