@@ -1,3 +1,7 @@
+-if @user.errors
+  -@user.errors.each do |m|
+    = m
+
 -form_for(@user, :builder => YogoFormBuilder) do |f|
   = f.text_field(:login, :label => "Login:" )
   = f.text_field(:first_name, :label => "First Name:")
@@ -6,6 +10,6 @@
   - if @user.new?
     = f.password_field(:password, :label => "Password: ")
     = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
-  = f.check_box(:admin)
+  = f.select(:system_role_id, SystemRole.all.map{|sr| [sr.name, sr.id]}, :label => 'System Role:')
   = f.submit('Save', :class => 'save-link')
   = link_to('Cancel', root_path, :class => 'cancel-link') 

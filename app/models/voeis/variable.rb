@@ -40,6 +40,7 @@
 
 class Voeis::Variable
   include DataMapper::Resource
+  include Facet::DataMapper::Resource
 
   property :id, Serial
   property :variable_code, String, :required => true, :length => 512

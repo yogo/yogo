@@ -1,11 +1,6 @@
 class UsersController < InheritedResources::Base
-  belongs_to :project, :role, :optional => true
-
-  before_filter :require_user
-  before_filter :require_administrator
-
   respond_to :html, :json
-
+  
   defaults :resource_class => User,
            :collection_name => 'users',
            :instance_name => 'user'
@@ -18,7 +13,7 @@ class UsersController < InheritedResources::Base
   end
 
   def destroy
-    @user = User.get(params[:id])
+    @user = resource_class.get(params[:id])
     if @user.eql?(current_user)
       flash[:notice] = "You can't destroy yourself"
       redirect_to(users_url)
@@ -28,7 +23,7 @@ class UsersController < InheritedResources::Base
   end
 
   def api_key_update
-    @user = User.get(params[:id])
+    @user = resource_class.get(params[:id])
     if @user.generate_new_api_key!
       flash[:notice] = "Updated API Key"
     else
@@ -42,21 +37,13 @@ class UsersController < InheritedResources::Base
   def resource
     @user ||= resource_class.get(params[:id])
   end
-
+  
   def collection
     @users ||= resource_class.all.paginate(:page => params[:page], :per_page => 20, :order => 'login')
   end
 
   def resource_class
-    User
+    User.access_as(current_user)
   end
-
-  ##
-  # Checks to see if the current user is an admin
-  # @return [nil] or it doesn't return.
-  # @api private
-  def require_administrator
-    raise AuthenticationError unless logged_in?
-    raise AuthorizationError  unless current_user.admin?
-  end
+  
 end

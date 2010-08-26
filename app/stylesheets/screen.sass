@@ -46,13 +46,15 @@
 form.bp
   +blueprint-form
 
+
 // Base Body Styles
 body
   +blueprint-typography(true)
   +blueprint-debug
   +blueprint-interaction
   background-color: #264f5c
-  padding-top: 82.2px
+  padding-top: 85px
+  font-size: .9em
   p
     margin-bottom: 0.5em
     
@@ -67,7 +69,7 @@ body
     top: 0
     overflow: none
     clear: both
-    height: 6.85em
+    height: 5.85em
     
     // Links
     a
@@ -91,7 +93,7 @@ body
     #system-menu
       color: #784a1c
       background-color: #2ba3c9
-      font-size: 1.3em
+      font-size: 1.1em
       height: 1.7em
       line-height: 1.7em
       vertical-align: middle
@@ -132,7 +134,7 @@ body
       background-color: #bd8e5e
       height: 1.7em
       line-height: 1.5em
-      font-size: 1.3em
+      font-size: 1em
       vertical-align: middle
       .menu-left-col
         width: 40%
@@ -147,7 +149,7 @@ body
         padding-right: 10px
         float: right
         .search-tab
-          font-size: 1em
+          padding-top: 2px
           vertical-align: middle
 
   // Flash Notices always use blueprint layout
@@ -217,6 +219,7 @@ body
       width: 300px
       font-size: small
     td.datasets
+      vertical-align: top
       font-size: small
       
   // Links
@@ -307,6 +310,7 @@ body
   h1, h2, h3, h4, h5, h6
     &.tight
       margin-bottom: .2em
+
   // Forms
   .form-element
     margin-bottom: .5em
@@ -318,6 +322,24 @@ body
   label
     img
       margin-bottom: -.1em
+  form
+    select
+      font-size: 13px
+    textarea.liquid
+      width: 100%
+    fieldset
+      +borders
+      padding: 5px
+      background-color: #eee - #111
+    legend
+      font-weight: bold
+      margin-left: 10px
+    .field-item
+      padding-left: 2px
+      font-size: .85em
+    .scrollable-users
+      max-height: 300px
+      overflow: auto
       
   // General Styles
   .bold
@@ -344,27 +366,42 @@ body
     margin-top: 0
     text-align: left
     margin-bottom: 0
-    width: 300px
+    width: 40%
+    float: left
     font-size: 1.5em
     #subtitle
-      font-size: .5em
+      font-size: .7em
       color: #777
     #links
-      font-size: .25em
+      font-size: .65em
   #content-actions
     float: right
     width: 40%
     text-align: right
-    line-height: 2em
-     
+  
+  #content-sidebar-right
+    width: 25%
+    float: right
+
+  #main-left
+    width: 70%
+
+.overview-item
+  p
+    font-size: 80%
+    
+.body-text
+  padding: 10px 5px 10px 5px
+  
 .admin-link-list
   font-size: 1.25em
  
 .map
-  width: 300px
-  height: 200px
-  margin: 0px
+  width: 400px
+  height: 300px
+  margin: 5px
   padding: 0px
+  float: left
 
 .map-links
   display: block
@@ -421,6 +458,11 @@ body
 .icon-settings
   background-image: image-url('22x22/settings.png')
   padding-left: 25px
+.icon-private
+  background-image: image-url('icons/private_16.png')
+  background-position: 100% 15%
+  padding-right: 25px
+  padding-left: 0px
 
 .icon-add
   background-image: image-url('add.png')
@@ -428,7 +470,7 @@ body
   background-image: image-url('edit.png')
 .icon-copy
   background-image: image-url('copy.png')
-.icon-del
+.icon-delete
   background-image: image-url('delete.png')
 .icon-move
   background-image: image-url('move.png')

@@ -1,11 +1,11 @@
 class Membership
   include DataMapper::Resource
-
+  include Facet::DataMapper::Resource
+  
   property :project_id, UUID, :key => true
-  property :role_id,    Integer, :key => true
-  property :user_id,    Integer, :key => true
 
-  belongs_to :project
-  belongs_to :role
-  belongs_to :user
+  belongs_to :project, :child_key => [:project_id], :parent_key => [:id], :model => 'Project'
+  belongs_to :role,    :key => true
+  belongs_to :user,    :key => true
+  
 end

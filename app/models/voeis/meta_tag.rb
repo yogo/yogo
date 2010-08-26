@@ -1,5 +1,6 @@
 class Voeis::MetaTag
   include DataMapper::Resource
+  include Facet::DataMapper::Resource
   
   property :id, Serial
   #property :name,     String,  :required => true

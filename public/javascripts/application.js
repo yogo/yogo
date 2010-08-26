@@ -40,10 +40,11 @@ $(document).ready(function(){
   $("#graphs").accordion({
      collapsible: true
    });
+  $("#graphs").accordion('activate', false);
 
-
-   $("#graphs").accordion('activate', false);
-
+  $("#about-accordian").accordion({collapsible: true});
+  $("#about-accordian").accordion('activate', false);
+  
   // Toggle elements on the project-user-roles page
   $('#project-user-roles-form :checkbox').bind('change', function(e){
     if ($(this).attr('checked')) {
@@ -60,9 +61,6 @@ $(document).ready(function(){
   $.fn.yogo_graphit = function(options){
 
   this.each(function(i, domElement){
-
-
-
 
   // hard-code color indices to prevent them from shifting as
   // series are turned on/off
@@ -120,8 +118,6 @@ $(document).ready(function(){
               ++variation;
           }
       }
-
-
   }
   
   function rgbConvert(rgbstr) 

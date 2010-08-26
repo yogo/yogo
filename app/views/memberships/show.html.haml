@@ -1,0 +1,6 @@
+%h1= "Memberships for #{parent.name}"
+
+%ul
+  - for item in collection
+    %li= "#{item.user.name} : #{item.role.name}"
+  

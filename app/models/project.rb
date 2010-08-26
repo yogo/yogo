@@ -12,6 +12,7 @@ require 'yogo/datamapper/repository_manager'
 class Project
   include ::DataMapper::Resource
   include Yogo::DataMapper::RepositoryManager
+  include Facet::DataMapper::Resource
 
   property :id,               UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
   property :name,             String,     :required => true
@@ -20,21 +21,50 @@ class Project
   property :is_private,       Boolean,    :required => true, :default => false
   property :publish_to_his,   Boolean,    :required => false, :default => false
 
-  has n, :memberships
+  has n, :memberships, :parent_key => [:id], :child_key => [:project_id], :model => 'Membership'
   has n, :users, :through => :memberships
   has n, :roles, :through => :memberships
 
+  after :create, :give_current_user_membership
   before :destroy, :destroy_cleanup
   after :save, :publish_his
 
 
-  def self.extended_permissions
-    [:manage_users, super].flatten
+  ##
+  # Permissions on the object for the user that is passed in
+  # 
+  # @param [User or nil] user To check the permissions for
+  # @return [Array] Set of permissions for the current user
+  # @author lamb
+  # @api semipublic
+  def self.permissions_for(user)
+    # By default, all users can retrieve projects
+    (super << "#{permission_base_name}$retrieve").uniq
   end
-
-  private
-  def destroy_cleanup
-    memberships.destroy
+  
+  ##
+  # Same as above, but for instances instead of classes
+  # 
+  # @param [User or nil] user To check permissions for
+  # @return [Array] Set of permissions the current user has
+  # @api semipublic
+  def permissions_for(user)
+    @_permissions_for ||= {}
+    @_permissions_for[user] ||= begin
+      base_permission = []
+      # Default retrieve permissions if project is public
+      base_permission += ["#{permission_base_name}$retrieve", 
+                          "voeis/data_stream$retrieve", 
+                          "voeis/data_stream_column$retrieve", 
+                          "voeis/meta_tag$retrieve", 
+                          "voeis/sensor_type$retrieve", 
+                          "voeis/sensor_value$retrieve", 
+                          "voeis/site$retrieve", 
+                          "voeis/unit$retrieve", 
+                          "voeis/variable$retrieve"] unless self.is_private?
+      return base_permission if user.nil?
+      (super + base_permission + user.memberships(:project_id => self.id).roles.map{|r| r.actions }).flatten.uniq
+    end
   end
   
   def publish_his
@@ -117,6 +147,7 @@ class Project
     end
   end
 
+<<<<<<< HEAD
   public
   
   def self.store_site_to_system(u_id)
@@ -136,6 +167,8 @@ class Project
                                      :county  => site_to_store.county, 
                                      :comments  => site_to_store.comments)
   end
+=======
+>>>>>>> d3c1d4d962e1aa8b9fccf2bcf697210b538a9052
   # Class method for informing Project instances about what kinds of models
   # might be stored inside thier Project#managed_repository.
   #
@@ -259,4 +292,16 @@ class Project
   manage Voeis::SensorValue
   manage Voeis::Unit
   manage Voeis::Variable
+  
+  private
+  
+  def destroy_cleanup
+    memberships.destroy
+  end
+  
+  def give_current_user_membership
+    unless User.current.nil?
+      Membership.create(:user => User.current, :project => self, :role => Role.first(:position => 1))
+    end
+  end
 end # Project

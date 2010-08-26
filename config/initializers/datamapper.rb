@@ -15,7 +15,9 @@ require 'datamapper/dm-userstamp'
 require 'datamapper/property/yogo_file'
 require 'datamapper/property/yogo_image'
 require 'datamapper/property/raw'
-require 'yogo/project_ext'
+
+# When saving models don't be terse
+DataMapper::Model.raise_on_save_failure = true
 
 # When saving models don't be terse
 DataMapper::Model.raise_on_save_failure = true

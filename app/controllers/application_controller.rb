@@ -34,11 +34,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   # Scrub sensitive parameters from your log
-  filter_parameter_logging :password
-
-  rescue_from AuthorizationError, :with => :authorization_denied
-  rescue_from AuthenticationError, :with => :authentication_required
-
+  filter_parameter_logging :password, :password_confirmation
+  
+  # We might not need these lines anymore. See the method 'rescue_action' defined below
+  rescue_from Facet::PermissionException::Denied, :with => :authorization_denied
+  # rescue_from Facet::PermissionException::Denied, :with => :authentication_required
+  
   protected
 
   # Create a custom error handler
@@ -91,4 +92,13 @@ class ApplicationController < ActionController::Base
   def verify_authenticity_token
       super unless params.has_key?(:api_key)
   end
+  
+  def rescue_action(e)
+    if e.respond_to?(:original_exception) && e.original_exception.kind_of?(Facet::PermissionException::Denied)
+      authorization_denied
+    else
+      super
+    end
+  end
+  
 end
