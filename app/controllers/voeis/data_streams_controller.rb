@@ -35,7 +35,6 @@ class Voeis::DataStreamsController < Voeis::BaseController
   def upload
     data_stream_template = parent.managed_repository{Voeis::DataStream.get(params[:data_template_id])}
     parse_logger_csv(params[:datafile].path, data_stream_template, data_stream_template.sites.first)
-    parent.publish_his
     respond_to do |format|
       if params.has_key?(:api_key)
         format.json
@@ -285,12 +284,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
             'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
         redirect_to(:controller =>"projects", :action => "add_stream", :params => {:id => params[:project_id]})
-
       else
-        puts name = params['datafile'].original_filename
-        puts directory = "temp_data"
-        @new_file = File.join(directory,name)
-        File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
+
         # Read the logger file header
         if params[:header_box] == "Campbell"
           @start_line = 4
@@ -424,7 +419,6 @@ class Voeis::DataStreamsController < Voeis::BaseController
     # Parse the csv file using the newly created data_stream template and
     # save the values as sensor_values
     parse_logger_csv(params[:datafile], @data_stream, @site)
-    parent.publish_his
     flash[:notice] = "File parsed and stored successfully."
     redirect_to project_path(params[:project_id])
   end
@@ -520,7 +514,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
    #
    # @api public
    def parse_logger_csv_header(csv_file)
-     #require "lib/yogo/model/csv"
+     require "lib/yogo/model/csv"
      csv_data = CSV.read(csv_file)
      path = File.dirname(csv_file)
 
@@ -555,7 +549,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
    #
    # @api public
    def get_row(csv_file, row)
-     #require "lib/yogo/model/csv"
+     require "lib/yogo/model/csv"
      csv_data = CSV.read(csv_file)
      path = File.dirname(csv_file)
 
@@ -577,7 +571,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
    #
    # @api public
    def parse_logger_csv(csv_file, data_stream_template, site)
-     #require "yogo/model/csv"
+     require "yogo/model/csv"
      csv_data = CSV.read(csv_file)
      path = File.dirname(csv_file)
      sensor_type_array = Array.new

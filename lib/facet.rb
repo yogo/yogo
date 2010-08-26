@@ -21,9 +21,11 @@ module Facet
     alias can_invoke? can_invoke
     
     def permitted_methods
-      permissions = @target.permissions_for(@permission_source)
-      permissions = permissions | @root_target.permissions_for(@permission_source) unless @root_target.nil?
-      @target.methods_permitted_for(*permissions) 
+      ::DataMapper.repository(:default) {
+        permissions = @target.permissions_for(@permission_source)
+        permissions = permissions | @root_target.permissions_for(@permission_source) unless @root_target.nil?
+        @target.methods_permitted_for(*permissions)
+     }
     end
     
     def method_missing(method, *args, &block)
