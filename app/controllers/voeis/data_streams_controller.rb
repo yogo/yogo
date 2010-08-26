@@ -348,6 +348,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
                                               :description => params[:data_stream_description],
                                               :filename => params[:datafile],
                                               :start_line => params[:start_line].to_i)
+      puts @data_stream.errors.inspect
       #Add site association to data_stream
       #
       @site = Voeis::Site.first(:id => params[:site])

@@ -29,7 +29,7 @@ class His::Samples
     return self.name.gsub(/.+::/, '')
   end
   
-  property :id, Serial, :required => true, :key => true, :field => "SimpleID"
+  property :id, Serial, :required => true, :key => true, :field => "SampleID"
   property :sample_type, String, :required => true, :default => 'Unknown', :field => "SampleType"
   property :lab_sample_code, String, :required => true, :field => "LabSampleCode"
   property :lab_method_id, Integer, :required => true, :default => 0, :field => "LabMethodID"
@@ -40,6 +40,6 @@ class His::Samples
   
   validates_with_method :lab_simple_code, :method => :check_lab_sample_code
   def check_lab_sample_code
-    check_ws_absence(self.lab_simple_code, "LabSampleCode")
+    check_ws_absence(self.lab_sample_code, "LabSampleCode")
   end
 end

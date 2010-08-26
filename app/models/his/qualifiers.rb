@@ -19,7 +19,7 @@ class His::Qualifiers
     return self.name.gsub(/.+::/, '')
   end
   
-  property :id, Serial, :required => true, :key => true, :field => "QuaifierID"
+  property :id, Serial, :required => true, :key => true, :field => "QualifierID"
   property :qualifier_code, String, :field => "QualifierCode"
   property :qualifier_description, String, :required => true, :field => "QualifierDescription"
 

@@ -1,8 +1,8 @@
 class ProjectsController < InheritedResources::Base
   respond_to :html, :json
   
-  protected
   
+  protected
   def resource
     @project ||= collection.get(params[:id])
   end

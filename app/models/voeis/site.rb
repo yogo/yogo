@@ -47,4 +47,6 @@ class Voeis::Site
   has n, :data_streams, :model => "Voeis::DataStream", :through => Resource
   has n, :sensor_types,    :model => "Voeis::SensorType", :through => Resource
   has n, :sensor_values,  :model => "Voeis::SensorValue", :through => Resource
+  
+
 end

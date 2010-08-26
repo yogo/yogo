@@ -8,6 +8,7 @@ class Voeis::SensorValue
   property :value,    Float,   :required => true
   property :units,    String,  :required => true
   property :timestamp,    DateTime,  :required => true, :index => true
+  property :published,  Boolean, :required => false
   property :created_at,  DateTime
 
   has n, :site,           :model => "Voeis::Site", :through => Resource
