@@ -82,6 +82,8 @@ GEM
       addressable (~> 2.1)
     deep_merge (0.1.0)
     diff-lcs (1.1.2)
+    dm-adjust (1.0.0)
+      dm-core (~> 1.0.0)
     dm-aggregates (1.0.0)
       dm-core (~> 1.0.0)
     dm-core (1.0.0)
@@ -274,7 +276,7 @@ DEPENDENCIES
   dm-is-list (= 1.0)
   dm-migrations (= 1.0)
   dm-persevere-adapter (= 0.72.0)
-  dm-sqlite-adapter
+  dm-sqlite-adapter (= 1.0)
   dm-sqlserver-adapter
   dm-types (~> 1.0.0)!
   fastercsv
