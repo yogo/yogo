@@ -112,8 +112,8 @@ begin
   puts 'done.'
 
   print 'Adding Users to Projects...'
-  ['brian.mcglynn', 'lucy.marshall', 'geoff.poole', 'ivan.judson', 'sean.cleveland'].each{|login| big_sky.memberships.create(:user => User.find_by_login(login), :role => pi)}
-  ['brian.mcglynn', 'lucy.marshall', 'geoff.poole', 'ivan.judson', 'sean.cleveland'].each{|login| tcef.memberships.create(:user => User.find_by_login(login), :role => pi)}
+  ['brian.mcglynn', 'lucy.marshall', 'geoff.poole', 'ivan.judson', 'sean.cleveland', 'yogo'].each{|login| big_sky.memberships.create(:user => User.find_by_login(login), :role => pi)}
+  ['brian.mcglynn', 'lucy.marshall', 'geoff.poole', 'ivan.judson', 'sean.cleveland', 'yogo'].each{|login| tcef.memberships.create(:user => User.find_by_login(login), :role => pi)}
   puts 'done.'
 
   print 'Creating Sites...'
