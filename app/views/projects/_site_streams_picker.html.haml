@@ -3,11 +3,11 @@
     .collapsible-sites
       - for site in project.managed_repository{ Voeis::Site.all } do
         .field-item
-          = check_box_tag("data[#{site.id}][all]", site.id, false, :class => "data[#{site.id}]", :id => "data[#{site.id}]")
-          = label_tag("data[#{site.id}]", site.name)
+          = check_box_tag("data[#{site.id}][all]", site.id, false, :class => "data[site_#{site.id}]", :id => "data[site_#{site.id}]")
+          = label_tag("data[site_#{site.id}]", site.name)
           - for sensor in site.sensor_types do
-            .field-item
-            = check_box_tag("data[#{site.id}][#{sensor.id}]", site.id, false, :class => "data[#{site.id}][#{sensor.id}]", :id => "data[#{site.id}][#{sensor.id}]")
-            = label_tag("data[#{site.id}][#{sensor.id}]", sensor.name)
+            .field-item-two
+              = check_box_tag("data[#{site.id}][#{sensor.id}]", site.id, false, :class => "data[site_#{site.id}][sensor_#{sensor.id}]", :id => "data[site_#{site.id}][sensor_#{sensor.id}]")
+              = label_tag("data[site_#{site.id}][sensor_#{sensor.id}]", sensor.variables.first.variable_name)
           
   = f.submit('Update', :class => 'update-link')
