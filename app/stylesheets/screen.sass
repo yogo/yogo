@@ -46,9 +46,7 @@
 form.bp
   +blueprint-form
 
-select
-  font-size: 13px
-  
+
 // Base Body Styles
 body
   +blueprint-typography(true)
@@ -312,6 +310,7 @@ body
   h1, h2, h3, h4, h5, h6
     &.tight
       margin-bottom: .2em
+
   // Forms
   .form-element
     margin-bottom: .5em
@@ -323,6 +322,24 @@ body
   label
     img
       margin-bottom: -.1em
+  form
+    select
+      font-size: 13px
+    textarea.liquid
+      width: 100%
+    fieldset
+      +borders
+      padding: 5px
+      background-color: #eee - #111
+    legend
+      font-weight: bold
+      margin-left: 10px
+    .field-item
+      padding-left: 2px
+      font-size: .85em
+    .scrollable-users
+      max-height: 300px
+      overflow: auto
       
   // General Styles
   .bold
@@ -353,7 +370,7 @@ body
     float: left
     font-size: 1.5em
     #subtitle
-      font-size: .5em
+      font-size: .7em
       color: #777
     #links
       font-size: .65em
@@ -361,7 +378,14 @@ body
     float: right
     width: 40%
     text-align: right
-    
+  
+  #content-sidebar-right
+    width: 25%
+    float: right
+
+  #main-left
+    width: 70%
+
 .body-text
   padding: 10px 5px 10px 5px
   
@@ -441,7 +465,7 @@ body
   background-image: image-url('edit.png')
 .icon-copy
   background-image: image-url('copy.png')
-.icon-del
+.icon-delete
   background-image: image-url('delete.png')
 .icon-move
   background-image: image-url('move.png')
