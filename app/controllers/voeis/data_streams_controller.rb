@@ -44,6 +44,69 @@ class Voeis::DataStreamsController < Voeis::BaseController
     end
   end
 
+  def data
+    # params[:start_date]
+    # params[:end_date]
+    # params[:variable_ids]
+    # params[:hourly]
+    # params[:hours]
+    # params[:data_stream_ids]
+    # if !params[:all].nil?
+    #       #get everything in the project
+    #     else
+      #get the data_stream
+      puts "before*************************************************"
+      if !params[:data_stream_ids].empty?
+        puts "here1"
+        params[:data_stream_ids].each do |data_stream_id|
+          data_stream = parent.managed_repository{Voeis::DataStream.get(data_stream_id)}
+          site = data_stream.sites.first
+          @download_meta_array = Array.new
+          @sensor_hash = Hash.new
+          data_stream.data_stream_columns.all(:order => [:column_number.asc]).each do |data_col|
+            puts "here2"
+            @value_array= array.new
+            sensor = data_col.sensor_types.first
+            params[:variable_ids].each do |var_id|
+              if sensor.variables.first.id == var_id     
+                if !params[:start_date].nil? && !params[:end_date].nil?     
+                  sensor.sensor_values(:timestamp.gte => params[:start_date],:timestamp.lte => params[:end_date], :order => (:timestamp.asc)).each do |val|
+                    @value_array << [val.timestamp, val.value]
+                  end #end do val
+                elsif !params[:hours]
+                  last_date = sensor.sensor_values.last(:order => [:timestamp.asc]).timestamp
+                  start_date = (last_date.to_time - params[:hours].to_i.hours).to_datetime
+                  sensor.sensor_values(:timestamp.gte => start_date, :order => (:timestamp.asc)).each do |val|
+                    @value_array << [val.timestamp, val.value]
+                  end #end do val
+                end #end if
+                @data_hash = Hash.new
+                @data_hash[:data] = @value_array
+                @sensor_meta_array = Array.new
+                variable = sensor.variables.first
+                @sensor_meta_array << [{:variable => variable.variable_name}, 
+                                       {:units => Unit.get(variable.variable_units_id)},
+                                       @data_hash]
+                @sensor_hash[sensor.name] = @sensor_meta_array
+              end #end if
+            end #end do var_id
+          end #end do data col
+          @download_meta_array = [{:site => site.name}, 
+                                  {:site_code => site.code}, 
+                                  {:lat => site.latitude}, 
+                                  {:longitude => site.longitude},
+                                  {:sensors => @sensor_hash}]
+        end #end do data_stream
+      end # end if
+    # end
+    respond_to do |format|
+      format.json do
+        render :json => @download_meta_array, :callback => params[:jsoncallback]
+      end
+    end
+  end
+  
+  #export the results of search/browse to a csv file
   def export
     headers = JSON[params[:column_array]]
     rows = JSON[params[:row_array]]

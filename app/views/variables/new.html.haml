@@ -9,10 +9,7 @@
   = f.text_field :variable_name
   =clear_break
   Variable Units ID: 
-  -unit_options = Array.new
-  -@units.all(:order => [:units_name.asc]).each do |unit|
-    -unit_options <<[unit.units_name+':'+unit.units_type, unit.id.to_s]
-  = f.select('variable_units_id',  options_for_select(unit_options))
+  = f.text_field :variable_units_id 
   =clear_break
   Speciation: 
   = f.text_field :speciation
@@ -42,4 +39,4 @@
   = f.text_field :no_data_value
   =clear_break
   = f.submit 'Create'
-= link_to("Cancel", project_path(@project))
+
