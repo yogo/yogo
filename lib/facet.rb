@@ -44,18 +44,18 @@ module Facet
         end
       else
         # logger.debug { "Access denied to method #{method}" }
-        ::Rails.logger.debug("Access denied to method #{method}")
-        raise Facet::PermissionException::Denied, "#{method} is not allowed"
+        ::Rails.logger.debug("Access denied to method #{method} on #{@target}")
+        raise Facet::PermissionException::Denied, "#{method} on #{@target} is not allowed"
       end
     end
     
     def each(&block)
       @target.__send__(:each) do |i|
         if !i.is_facet? && i.respond_to?(:access_as)
-          ::Rails.logger.debug("This should do something")
+          # ::Rails.logger.debug("This should do something")
           yield i.access_as(@permission_source, next_root_target)
         else
-          ::Rails.logger.debug("This is calling my each")
+          # ::Rails.logger.debug("This is calling my each")
           yield i
         end
       end
@@ -182,8 +182,9 @@ module Facet
     def permissions
       {
         :create => [:new, :create],
-        :retrieve => [:all, :get, :first, :last, :count, :map, :each] + relationships.keys.map{|m| m.to_s.to_sym } +
-        self.methods.map{|m| m.to_sym },
+        :retrieve => [:all, :get, :first, :last, :count, :map, :each, :&, :|] + 
+          relationships.keys.map{|m| m.to_s.to_sym } +
+          self.methods.map{|m| m.to_sym },
         :update => [:update],
         :destroy => [:destroy]
       }
