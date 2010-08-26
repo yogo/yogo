@@ -96,7 +96,7 @@
     =clear_break
     Please specify which column should be used as the time-stamp:
     =select_tag("timestamp", @column_options)
-    =hidden_field_tag('datafile', params[:datafile].path)
+    =hidden_field_tag('datafile', @new_file)
     =hidden_field_tag('project_id', @project.id)
     =hidden_field_tag('rows', @row_size)
     =hidden_field_tag("start_line", @start_line)

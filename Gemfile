@@ -25,6 +25,9 @@ gem "rails",                "2.3.8"
 gem "rake",                 :require => nil
 
 gem 'inherited_resources', '~> 1.0.6'
+# gem 'ruby-debug-base'
+# gem 'ruby-debug'
+
 
 # Extra supporting gems
 gem "carrierwave"
