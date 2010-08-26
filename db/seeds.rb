@@ -67,7 +67,7 @@ begin
   User.create(:login => "kathryn.watson",    :email => "kwatson@montana.edu",               :first_name => "Kathryn",  :last_name => "Watson",     :password => "watsonk",    :password_confirmation => "watsonk",      :system_role => user_role)
   User.create(:login => "katie.gibson",      :email => "katie_gibson@ieee.org",             :first_name => "Katie",    :last_name => "Gibson",     :password => "gibsonk",    :password_confirmation => "gibsonk",      :system_role => user_role)
   User.create(:login => "leslie.piper",      :email => "leslie.piper@msu.montana.edu",      :first_name => "Leslie",   :last_name => "Piper",      :password => "piperl",     :password_confirmation => "piperl",       :system_role => user_role)
-  User.create(:login => "Lindell Ormsbee",   :email => "lindell.ormsbee@uky.edu",           :first_name => "Lindell",  :last_name => "Ormsbee",    :password => "ormsbeel",   :password_confirmation => "ormsbeel",     :system_role => user_role)
+  User.create(:login => "lindell.ormsbee",   :email => "lindell.ormsbee@uky.edu",           :first_name => "Lindell",  :last_name => "Ormsbee",    :password => "ormsbeel",   :password_confirmation => "ormsbeel",     :system_role => user_role)
   User.create(:login => "lucy.marshall",     :email => "lmarshall@montana.edu",             :first_name => "Lucy",     :last_name => "Marshall",   :password => "marshalll",  :password_confirmation => "marshalll",    :system_role => user_role)
   User.create(:login => "mari.eggers",       :email => "mari.eggers@biofilm.montana.edu",   :first_name => "Mari",     :last_name => "Eggers",     :password => "eggersm",    :password_confirmation => "eggersm",      :system_role => user_role)
   User.create(:login => "mark.lorang",       :email => "mark.lorang@mso.umt.edu",           :first_name => "Mark",     :last_name => "Lorang",     :password => "lorangm",    :password_confirmation => "lorangm",      :system_role => user_role)
@@ -90,6 +90,7 @@ begin
   User.create(:login => "tom.bansak",        :email => "tom.bansak@flbs.umt.edu",           :first_name => "Tom",      :last_name => "Bansak",     :password => "bansakt",    :password_confirmation => "bansakt",      :system_role => user_role)
   User.create(:login => "wyatt.cross",       :email => "wyatt.cross@montana.edu",           :first_name => "Wyatt",    :last_name => "Cross",      :password => "crossw",     :password_confirmation => "crossw",       :system_role => user_role)
   User.create(:login => "youngee.cho",       :email => "ycho@ntsg.umt.edu",                 :first_name => "Young-ee", :last_name => "Cho",        :password => "choy",       :password_confirmation => "choy",         :system_role => user_role)
+
   puts 'done.'
 
   print 'Creating Roles...'
