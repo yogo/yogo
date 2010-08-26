@@ -146,9 +146,6 @@ class Project
       end #site
     end
   end
-
-<<<<<<< HEAD
-  public
   
   def self.store_site_to_system(u_id)
     site_to_store = self.managed_repository{Voeis::Site.first(:id => u_id)}
@@ -167,8 +164,7 @@ class Project
                                      :county  => site_to_store.county, 
                                      :comments  => site_to_store.comments)
   end
-=======
->>>>>>> d3c1d4d962e1aa8b9fccf2bcf697210b538a9052
+
   # Class method for informing Project instances about what kinds of models
   # might be stored inside thier Project#managed_repository.
   #
