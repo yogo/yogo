@@ -1,27 +1,23 @@
 #content-actions
-  = link_to("Create A Site", new_project_site_path(@project), :class => 'icon icon-add')
-  %br/
-  = link_to("Add A Site", add_site_project_sites_path(@project), :class => 'icon icon-add')
-  %br/
-  = link_to("Create A Variable", new_project_variable_path(@project), :class => 'icon icon-add')
-  %br/
-  = link_to("Add a Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id},:class => 'icon icon-add')
+  = link_to("Settings", edit_project_path(@project), :class => 'icon icon-settings')
 #content-title 
   %span.icon.icon-private= @project.name
-  #links
-    = link_to("Settings", edit_project_path(@project), :class => 'icon icon-settings')
 = clear_break
-.body-text
-  - if @project.description && @project.description.length > 0
-    %em= @project.description
-  - else
-    %em= link_to('[Add Project Description]', edit_project_path(@project))
-%table
-  %tr
-    %td.map
-      = render(:partial => 'overview_map', :locals => { :project => @project } )
-    %td.buttons
-      = link_to("View Data Streams", project_data_streams_path(@project), :class => 'button-link')
-      = clear_break
-      = link_to("Browse/Search Data", query_project_data_streams_path(@project), :class => 'button-link')
-
+#about-accordian
+  %h3
+    %a{:href=>"#"}
+      Project Overview
+  .overview-item
+    = render(:partial => 'overview_map', :locals => { :project => @project } )
+    %p
+      - if @project.description && @project.description.length > 0
+        = @project.description
+      - else
+        = link_to('[Add Project Description]', edit_project_path(@project))
+    
+= link_to("View Data Streams", project_data_streams_path(@project), :class => 'button-link')
+= link_to("Browse/Search Data", query_project_data_streams_path(@project), :class => 'button-link')
+= link_to("Create A Site", new_project_site_path(@project), :class => 'icon icon-add')
+= link_to("Add A Site", add_site_project_sites_path(@project), :class => 'icon icon-add')
+= link_to("Create A Variable", new_project_variable_path(@project), :class => 'icon icon-add')
+= link_to("Add a Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id},:class => 'icon icon-add')
