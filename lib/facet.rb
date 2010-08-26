@@ -38,8 +38,7 @@ module Facet
         if (result.kind_of?(::DataMapper::Collection) && result.model.respond_to?(:access_as)) ||
            (result.kind_of?(::DataMapper::Resource)   && result.respond_to?(:access_as))
           # Reuse the current root_target, or use the current target if it's an instance, not a class
-          @root_target ||= !@target.kind_of?(::Class) ? @target : nil
-          return result.access_as(@permission_source, @root_target)
+          return result.access_as(@permission_source, next_root_target)
         else
           return result
         end
@@ -47,6 +46,18 @@ module Facet
         # logger.debug { "Access denied to method #{method}" }
         ::Rails.logger.debug("Access denied to method #{method}")
         raise Facet::PermissionException::Denied, "#{method} is not allowed"
+      end
+    end
+    
+    def each(&block)
+      @target.__send__(:each) do |i|
+        if !i.is_facet? && i.respond_to?(:access_as)
+          ::Rails.logger.debug("This should do something")
+          yield i.access_as(@permission_source, next_root_target)
+        else
+          ::Rails.logger.debug("This is calling my each")
+          yield i
+        end
       end
     end
     
@@ -60,6 +71,17 @@ module Facet
     
     def root_target
       @root_target
+    end
+    
+    # Reuse the current root_target, or use the current target if it's an instance, not a class
+    def next_root_target
+      if !@root_target.nil?
+        return @root_target
+      elsif @target.kind_of?(::DataMapper::Resource )
+        @target
+      else
+        return nil
+      end
     end
   end
   
