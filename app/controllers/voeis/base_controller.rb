@@ -1,9 +1,9 @@
 # @author Ryan Heimbuch
 # @abstract Base class for Voeis-specific controllers
-# 
-# Voeis models are not "related" to Project as might be expected by the 
+#
+# Voeis models are not "related" to Project as might be expected by the
 # InheritedResources#belongs_to declaration.
-# In fact, Voeis models have no relationship with the top-level 
+# In fact, Voeis models have no relationship with the top-level
 # Project model.
 # Instead Project acts as a RepositoryManager and handles creating
 # and manipulating a "project-specific" DataMapper::Repository
@@ -32,7 +32,7 @@
 # and understand how to properly override the controller actions (index/create/edit/...etc).
 # @see http://github.com/josevalim/inherited_resources/tree/v1.0.6
 class Voeis::BaseController < InheritedResources::Base
-  
+
   # #belongs_to indicates that the resources managed by this controller
   # are nested-resources under /project/.
   # This **does not** mean that any of the resources have any database
@@ -87,7 +87,7 @@ class Voeis::BaseController < InheritedResources::Base
       object.destroy
     }
   end
-  
+
   def parent
     p = super
     return p if p.is_facet?
