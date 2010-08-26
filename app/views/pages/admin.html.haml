@@ -1,15 +1,12 @@
-= [ image_tag("22x22/projects.png"), 
-    [link_to("Projects", projects_url, :class => 'projects-link'),
-    link_to("New", new_project_path, :class => 'new-link')].join(" | ")].join(" ")
-%br/
-= [ image_tag("22x22/users.png"),
-    [link_to("Users", users_url, :class => 'users-link'),
-    link_to("New", new_user_path, :class => 'new-link')].join(" | ")].join(" ")
-%br/
-= [ image_tag("22x22/role.png"),
-    [link_to("Roles & Permissions", roles_url, :class => 'roles-link'),
-    link_to("New", new_role_path, :class => 'new-link')].join(" | ")].join(" ")
-%br/
-= [ image_tag("22x22/settings.png"),
-    link_to("Settings", settings_url, :class => 'settings-link')].join(" ")
+.admin-link-list
+  = [link_to("Projects", projects_url, :class => 'icon icon-projects'),
+      link_to("New", new_project_path, :class => 'icon icon-add')].join(" | ")
+  %br/
+  = [link_to("Users", users_url, :class => 'icon icon-users'),
+      link_to("New", new_user_path, :class => 'icon icon-add')].join(" | ")
+  %br/
+  = [link_to("Roles & Permissions", roles_url, :class => 'icon icon-roles'),
+      link_to("New", new_role_path, :class => 'icon icon-add')].join(" | ")
+  %br/
+  = link_to("Settings", settings_url, :class => 'icon icon-settings')
       

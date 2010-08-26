@@ -1,5 +1,5 @@
 - unless Setting['local_only']
-  #login-links
+  .login-links
     - if logged_in?
       Logged in as
       = link_to(current_user.login, edit_user_path(current_user), :class => 'logged-in-link')

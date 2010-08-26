@@ -52,7 +52,7 @@ body
   +blueprint-debug
   +blueprint-interaction
   background-color: #264f5c
-  padding-top: 6em
+  padding-top: 82.2px
   p
     margin-bottom: 0.5em
     
@@ -67,7 +67,7 @@ body
     top: 0
     overflow: none
     clear: both
-    height: 70px
+    height: 6.85em
     
     // Links
     a
@@ -78,7 +78,7 @@ body
         color: #bd8e5e
     #logo
       padding-left: 10px
-      height: 28px
+      height: 1.2em
       font-size: 2em
       font-variant: small-caps
       // Links
@@ -91,16 +91,17 @@ body
     #system-menu
       color: #784a1c
       background-color: #2ba3c9
-      font-size: 0.9em
-      height: 22px
-      #menu-left-col
-        +column(12)
-        #content-title
-          margin-left: 10px
-        #menu-links
-          line-height: 2em
-          text-align: left
-          margin-left: 10px
+      font-size: 1.3em
+      height: 1.7em
+      line-height: 1.7em
+      vertical-align: middle
+      .menu-left-col
+        width: 40%
+        text-align: left
+        margin: 0px
+        padding-left: 10px
+        float: left
+        .menu-links
           // Links
           a
             padding-right: 8px
@@ -110,11 +111,13 @@ body
               text-decoration: none
               color: #bd8e5e
 
-      #menu-right-col
-        #login-links
-          line-height: 2em
-          text-align: right
-          margin-right: 10px
+      .menu-right-col
+        width: 40%
+        text-align: right
+        margin: 0px
+        padding-right: 10px
+        float: right
+        .login-links
           // Links
           a
             padding-right: 8px
@@ -127,21 +130,26 @@ body
     #menu
       color: #784a1c
       background-color: #bd8e5e
-      height: 24px
-      #menu-left-col
-        +column(12)
-        line-height: 2em
+      height: 1.7em
+      line-height: 1.5em
+      font-size: 1.3em
+      vertical-align: middle
+      .menu-left-col
+        width: 40%
         text-align: left
-        margin-left: 10px
-      #menu-right-col
-        line-height: 2em
+        margin: 0px
+        padding-left: 10px
+        float: left
+      .menu-right-col
+        width: 40%
         text-align: right
-        margin-right: 10px
-        #search-tab
-          width: 400px
-          margin-right: 10px
-          display: inline
-          
+        margin: 0px
+        padding-right: 10px
+        float: right
+        .search-tab
+          font-size: 1em
+          vertical-align: middle
+
   // Flash Notices always use blueprint layout
   #flash
     width: 100%
@@ -336,15 +344,22 @@ body
     margin-top: 0
     text-align: left
     margin-bottom: 0
+    width: 300px
+    font-size: 1.5em
     #subtitle
       font-size: .5em
       color: #777
     #links
       font-size: .25em
   #content-actions
+    float: right
+    width: 40%
     text-align: right
     line-height: 2em
-      
+     
+.admin-link-list
+  font-size: 1.25em
+ 
 .map
   width: 300px
   height: 200px
@@ -389,11 +404,25 @@ body
   width: 80%
   height: 75px
 
-// .new-link
-//   background-image: image-url('add.png')
-//   background-repeat: no-repeat
-//   width: 30px
-.icon-add 
+.icon
+  background-position: 0% 50%
+  background-repeat: no-repeat
+  padding: 2px 0px 3px 20px
+
+.icon-projects
+  background-image: image-url('22x22/projects.png')
+  padding-left: 25px
+.icon-users
+  background-image: image-url('22x22/users.png')
+  padding-left: 25px
+.icon-roles
+  background-image: image-url('22x22/role.png')
+  padding-left: 25px
+.icon-settings
+  background-image: image-url('22x22/settings.png')
+  padding-left: 25px
+
+.icon-add
   background-image: image-url('add.png')
 .icon-edit 
   background-image: image-url('edit.png')
