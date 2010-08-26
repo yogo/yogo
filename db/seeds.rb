@@ -159,15 +159,17 @@ begin
   end
   puts 'done.'
 
-  puts 'Seeding Variables from HIS'
-  Variable.update_from_his
-  puts 'done'
+  if RUBY_PLATFORM == "java"
+    puts 'Seeding Variables from HIS'
+    Variable.update_from_his
+    puts 'done'
 
-  puts 'Seeding Units from HIS'
-  Unit.update_from_his
-  puts 'done'
+    puts 'Seeding Units from HIS'
+    Unit.update_from_his
+    puts 'done'
 
-  puts 'Seeding Sites from HIS'
-  Site.update_from_his
-  puts 'done'
+    puts 'Seeding Sites from HIS'
+    Site.update_from_his
+    puts 'done'
+  end
 end

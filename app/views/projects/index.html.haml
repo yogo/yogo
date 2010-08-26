@@ -1,17 +1,17 @@
 #content-actions
-  = link_to("New Project", new_project_path, :class => 'new-link')
+  = link_to("New Project", new_project_path, :class => 'icon icon-add')
 - if @projects.empty?
   There are no projects yet, you should create one!
 - for project in @projects
   #content-title
     = link_to(project.name, project_path(project))
-    #links
-      = link_to("Settings", edit_project_path(project), :class => 'settings-link')
-      = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?      
-    - if project.description && project.description.length > 0
-      %em= tooltip(project.description, project.name + ' Description', 200)
-    - else
-      %em= link_to('[Add Project Description]', edit_project_path(project))
+  #links
+    = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings')
+    = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?      
+  - if project.description && project.description.length > 0
+    %em= tooltip(project.description, project.name + ' Description', 200)
+  - else
+    %em= link_to('[Add Project Description]', edit_project_path(project))
   %table.project
     %tbody
       %tr
@@ -27,6 +27,6 @@
               -else
                 = site.name + ': never'
               %br/
-            = link_to("Add a Site", new_project_site_path(project), :class => 'new-link')
+            = link_to("Add a Site", new_project_site_path(project), :class => 'icon icon-add')
       
 #pagination-links= pagination_links(Project, params[:page], 5)
