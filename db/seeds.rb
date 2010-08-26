@@ -15,7 +15,7 @@ begin
   user_role.move(:to => 1)
 
   project_manager_role = SystemRole.create(:name => 'Project Manager', :description => 'Able to create projects',
-                                     :actions => ["projects$retrieve", "projects$update"])
+                                     :actions => ["project$retrieve", "project$update", "role$retrieve", "user$retrieve", "role$retrieve"])
   project_manager_role.move(:to => 2)
 
   sys_admin = SystemRole.first_or_new(:name => 'Administrator', :description => 'System role for Administrators',
@@ -93,7 +93,7 @@ begin
   puts 'done.'
 
   print 'Creating Roles...'
-  Role.create(:name => "Principal Investigator", :description => "Principal Investigators create projects to pursue research goals.").move(:to => 1)
+  Role.create(:name => "Principal Investigator", :description => "Principal Investigators create projects to pursue research goals.", :actions => ((Role.available_permissions - Role.to_permissions) + ['role$update'])).move(:to => 1)
   Role.create(:name => "Field Technician",       :description => "Field Technicians manage field activities.").move(:to => 2)
   Role.create(:name => "Laboratory Technician",  :description => "Lab Technicians manage lab activities.").move(:to => 3)
   Role.create(:name => "Data Manager",           :description => "Data Managers manage all the data for a project.").move(:to => 4)
