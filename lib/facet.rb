@@ -94,7 +94,7 @@ module Facet
   module SecurityWrapper
     def access_as(access = nil, root_target = nil)
       # When running in local only, bypass all access by returning self
-      if Setting[:local_only]
+      if ::DataMapper.repository(:default) { Setting[:local_only] }
         self
       else
         Facet::Proxy.new(self, access, root_target)
