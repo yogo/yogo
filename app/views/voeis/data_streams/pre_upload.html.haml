@@ -29,7 +29,7 @@
         %tr
           %th Column
           %th Starting Row Values
-          %th Logger Variable
+          %th Logger Variable/Sensor Name
           %th Logger Unit
           %th Logger Type
           %th Selected VOEIS Variable
@@ -44,8 +44,8 @@
             %td
               =@start_row[i]
             %td 
-              =@header_info[i]["variable"]
-              =hidden_field_tag("variable"+i.to_s, @header_info[i]["variable"])
+              /=@header_info[i]["variable"]
+              =text_field_tag("variable"+i.to_s, @header_info[i]["variable"])
             %td 
               =@header_info[i]["unit"]
               =hidden_field_tag("unit"+i.to_s, @header_info[i]["unit"])
@@ -65,7 +65,7 @@
         %tr
           %th Column
           %th Starting Row Values
-          %th Logger Variable
+          %th Logger Variable/Sensor Name
           %th Logger Unit
           %th Logger Type
           %th Selected VOEIS Variable
