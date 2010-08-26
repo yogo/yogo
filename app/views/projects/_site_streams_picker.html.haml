@@ -1,0 +1,13 @@
+- form_for(:project, :url => collect_data_project_path(@project)) do |f|
+  - field_set_tag("Pick Sites and/or Variables") do
+    .collapsible-sites
+      - for site in project.managed_repository{ Voeis::Site.all } do
+        .field-item
+          = check_box_tag("data[#{site.id}][all]", site.id, false, :class => "data[#{site.id}]", :id => "data[#{site.id}]")
+          = label_tag("data[#{site.id}]", site.name)
+          - for sensor in site.sensor_types do
+            .field-item
+            = check_box_tag("data[#{site.id}][#{sensor.id}]", site.id, false, :class => "data[#{site.id}][#{sensor.id}]", :id => "data[#{site.id}][#{sensor.id}]")
+            = label_tag("data[#{site.id}][#{sensor.id}]", sensor.name)
+          
+  = f.submit('Update', :class => 'update-link')

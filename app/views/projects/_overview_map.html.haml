@@ -1,4 +1,4 @@
-- visualization("#{project.id.to_s}", 'map', { :enableScrollWheel => true, :showTip => true, :useMapTypeControl => true, :html => { :class => 'map' } }) do |map|
+- visualization("#{project.id.to_s}", 'map', { :enableScrollWheel => true, :showTip => true, :useMapTypeControl => true, :html => { :class => class_name } }) do |map|
   - map.register_column(:number, :Lat)
   - map.register_column(:number, :Lon)
   - map.register_column(:string, :Name)

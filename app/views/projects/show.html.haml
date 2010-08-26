@@ -1,23 +1,44 @@
 #content-actions
   = link_to("Settings", edit_project_path(@project), :class => 'icon icon-settings')
 #content-title 
-  %span.icon.icon-private= @project.name
+  - if @project.is_private?
+    %span.icon.icon-private= @project.name
+  - else
+    %span.icon= @project.name
+  #links
+    %span.icon.icon-add Add a: 
+    = link_to("Site", new_project_site_path(@project))
+    = link_to("Variable", new_project_variable_path(@project))
+    = link_to("Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id})
+
 = clear_break
 #about-accordian
   %h3
     %a{:href=>"#"}
       Project Overview
   .overview-item
-    = render(:partial => 'overview_map', :locals => { :project => @project } )
+    = render(:partial => 'overview_map', :locals => { :project => @project, 
+                                                      :class_name => 'show-map' } )
     %p
       - if @project.description && @project.description.length > 0
         = @project.description
       - else
         = link_to('[Add Project Description]', edit_project_path(@project))
     
-= link_to("View Data Streams", project_data_streams_path(@project), :class => 'button-link')
-= link_to("Browse/Search Data", query_project_data_streams_path(@project), :class => 'button-link')
-= link_to("Create A Site", new_project_site_path(@project), :class => 'icon icon-add')
-= link_to("Add A Site", add_site_project_sites_path(@project), :class => 'icon icon-add')
-= link_to("Create A Variable", new_project_variable_path(@project), :class => 'icon icon-add')
-= link_to("Add a Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id},:class => 'icon icon-add')
+        = link_to("View Data Streams", project_data_streams_path(@project), :class => 'button-link')
+        = link_to("Browse/Search Data", query_project_data_streams_path(@project), :class => 'button-link')
+.data-browser
+  #content-sidebar-left
+    = render(:partial => 'site_streams_picker', :locals => { :project => @project })
+  #main-with-sidebar
+    #graph-accordion
+      %h3
+        %a{:href=>"#"}
+          Graph
+      .data-graph
+        = render(:partial => 'graph',:locals => {:class_name => 'data-graph' })
+    = render(:partial => 'data_table', :locals => { :data => [], 
+                                                  :project => @project, 
+                                                  :class_name => 'data-table' })  
+  
+= clear_break

@@ -1,0 +1,7 @@
+- visualization("data-#{project.id.to_s}", 'table', :html => { :class => class_name }) do |table|
+  - table.register_column(:string, "Site")
+  - table.register_column(:string, "Variable")
+  - table.register_column(:number, 0)
+  - data.each do |row| 
+    - table.add_row(row)
+  = ""

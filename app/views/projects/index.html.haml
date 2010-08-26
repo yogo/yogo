@@ -2,33 +2,36 @@
   = link_to("New Project", new_project_path, :class => 'icon icon-add')
 - if @projects.empty?
   There are no projects yet, you should create one!
-- for project in @projects
-  #content-title
-    = link_to(project.name, project_path(project), :class => project.is_private? ? 'icon icon-private' : nil)
-    #links
-      = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings')
-  = clear_break
-  .body-text
-    - if project.description && project.description.length > 0
-      %em= tooltip(project.description, project.name + ' Description', 150)
-    - else
-      %em= link_to('[Add Project Description]', edit_project_path(project))
-  %table.project
-    %tbody
-      %tr
-        %td.map
-          = render(:partial => 'overview_map', :locals => { :project => project } )
-        %td.datasets
+%table
+  %tbody
+    %tr
+      %td
+        - for project in @projects
+          #content-title
+            = link_to(project.name, project_path(project), :class => project.is_private? ? 'icon icon-private' : nil)
           #content-actions
-            = link_to("Add a Site", new_project_site_path(project), :class => 'icon icon-add')
-          #content-tile 
-            %h4 Last Updates:
-          - project.managed_repository do
-            - Voeis::Site.all.each do |site|
-              -if !site.sensor_values.last.nil?
-                = site.name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
-              -else
-                = site.name + ': never'
-              %br/
+            = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings')
+          = clear_break
+          .body-text
+            - if project.description && project.description.length > 0
+              %em= tooltip(project.description, project.name + ' Description', 150)
+            - else
+              %em= link_to('[Add Project Description]', edit_project_path(project))
+          = clear_break
+          %table
+            %tbody
+              %tr
+                %td
+                  = render(:partial => 'overview_map', :locals => { :project => project, :class_name => 'preview-map' } )
+                %td.datasets
+                  #content-tile 
+                    %h4 Last Updates:
+                  - project.managed_repository do
+                    - Voeis::Site.all.each do |site|
+                      -if !site.sensor_values.last.nil?
+                        = site.name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
+                      -else
+                        = site.name + ': never'
+                      %br/
       
 #pagination-links= pagination_links(Project, params[:page], 5)

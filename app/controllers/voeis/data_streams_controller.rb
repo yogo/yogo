@@ -69,8 +69,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
             @value_array= array.new
             sensor = data_col.sensor_types.first
             params[:variable_ids].each do |var_id|
-              if sensor.variables.first.id == var_id     
-                if !params[:start_date].nil? && !params[:end_date].nil?     
+              if sensor.variables.first.id == var_id
+                if !params[:start_date].nil? && !params[:end_date].nil?
                   sensor.sensor_values(:timestamp.gte => params[:start_date],:timestamp.lte => params[:end_date], :order => (:timestamp.asc)).each do |val|
                     @value_array << [val.timestamp, val.value]
                   end #end do val
@@ -85,16 +85,16 @@ class Voeis::DataStreamsController < Voeis::BaseController
                 @data_hash[:data] = @value_array
                 @sensor_meta_array = Array.new
                 variable = sensor.variables.first
-                @sensor_meta_array << [{:variable => variable.variable_name}, 
+                @sensor_meta_array << [{:variable => variable.variable_name},
                                        {:units => Unit.get(variable.variable_units_id)},
                                        @data_hash]
                 @sensor_hash[sensor.name] = @sensor_meta_array
               end #end if
             end #end do var_id
           end #end do data col
-          @download_meta_array = [{:site => site.name}, 
-                                  {:site_code => site.code}, 
-                                  {:lat => site.latitude}, 
+          @download_meta_array = [{:site => site.name},
+                                  {:site_code => site.code},
+                                  {:lat => site.latitude},
                                   {:longitude => site.longitude},
                                   {:sensors => @sensor_hash}]
         end #end do data_stream
@@ -106,7 +106,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
       end
     end
   end
-  
+
   #export the results of search/browse to a csv file
   def export
     headers = JSON[params[:column_array]]
@@ -152,7 +152,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
     puts 'Export:'+params[:export].to_s
     start_date =  Date.civil(params[:range][:"start_date(1i)"].to_i,params[:range]      [:"start_date(2i)"].to_i,params[:range][:"start_date(3i)"].to_i)
     end_date = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
-    
+
     puts start_date.to_datetime
     puts end_date.to_datetime
     if !params[:variable].empty? && !params[:site].empty?
@@ -247,7 +247,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           end
         end
       end
-    end 
+    end
   end
 
   def opts_for_select(opt_array, selected = nil)

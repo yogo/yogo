@@ -45,6 +45,9 @@ $(document).ready(function(){
   $("#about-accordian").accordion({collapsible: true});
   $("#about-accordian").accordion('activate', false);
   
+  $("#graph-accordion").accordion({collapsible: true});
+  $("#graph-accordion").accordion('activate', false);
+  
   // Toggle elements on the project-user-roles page
   $('#project-user-roles-form :checkbox').bind('change', function(e){
     if ($(this).attr('checked')) {

@@ -32,7 +32,7 @@ class Project
 
   ##
   # Permissions on the object for the user that is passed in
-  # 
+  #
   # @param [User or nil] user To check the permissions for
   # @return [Array] Set of permissions for the current user
   # @author lamb
@@ -41,10 +41,10 @@ class Project
     # By default, all users can retrieve projects
     (super << "#{permission_base_name}$retrieve").uniq
   end
-  
+
   ##
   # Same as above, but for instances instead of classes
-  # 
+  #
   # @param [User or nil] user To check permissions for
   # @return [Array] Set of permissions the current user has
   # @api semipublic
@@ -53,20 +53,20 @@ class Project
     @_permissions_for[user] ||= begin
       base_permission = []
       # Default retrieve permissions if project is public
-      base_permission += ["#{permission_base_name}$retrieve", 
-                          "voeis/data_stream$retrieve", 
-                          "voeis/data_stream_column$retrieve", 
-                          "voeis/meta_tag$retrieve", 
-                          "voeis/sensor_type$retrieve", 
-                          "voeis/sensor_value$retrieve", 
-                          "voeis/site$retrieve", 
-                          "voeis/unit$retrieve", 
+      base_permission += ["#{permission_base_name}$retrieve",
+                          "voeis/data_stream$retrieve",
+                          "voeis/data_stream_column$retrieve",
+                          "voeis/meta_tag$retrieve",
+                          "voeis/sensor_type$retrieve",
+                          "voeis/sensor_value$retrieve",
+                          "voeis/site$retrieve",
+                          "voeis/unit$retrieve",
                           "voeis/variable$retrieve"] unless self.is_private?
       return base_permission if user.nil?
       (super + base_permission + user.memberships(:project_id => self.id).roles.map{|r| r.actions }).flatten.uniq
     end
   end
-  
+
   def publish_his
     puts "boooyah"
     if self.publish_to_his
@@ -74,19 +74,19 @@ class Project
       sites.each do |site|
         system_site = Site.first(:site_code => site.code, :site_name => site.name)
         if system_site.nil? #these are function methods but aren't recognized for some reason
-          system_site = Site.first_or_create(:site_code => site.code, 
+          system_site = Site.first_or_create(:site_code => site.code,
                                            :site_name  => site.name,
-                                           :latitude  => site.latitude, 
-                                           :longitude  => site.longitude, 
+                                           :latitude  => site.latitude,
+                                           :longitude  => site.longitude,
                                            :lat_long_datum_id => 1,
-                                           :elevation_m   => 0, 
-                                           :vertical_datum  => "Unknown", 
-                                           :local_x  => 0.0, 
-                                           :local_y  => 0.0, 
+                                           :elevation_m   => 0,
+                                           :vertical_datum  => "Unknown",
+                                           :local_x  => 0.0,
+                                           :local_y  => 0.0,
                                            :local_projection_id  => 1,
-                                           :pos_accuracy_m  => 1, 
-                                           :state  => site.state, 
-                                           :county  => "USA", 
+                                           :pos_accuracy_m  => 1,
+                                           :state  => site.state,
+                                           :county  => "USA",
                                            :comments  => "comment")
         end
         if system_site.his_id.nil?#these are function methods but aren't recognized for some reason
@@ -95,19 +95,19 @@ class Project
             system_site.his_id = his_site.id
           else
             site_to_store = system_site
-            new_his_site = His::Sites.first_or_create(:site_code => site_to_store.site_code, 
+            new_his_site = His::Sites.first_or_create(:site_code => site_to_store.site_code,
                                              :site_name  => site_to_store.site_name,
-                                             :latitude  => site_to_store.latitude, 
-                                             :longitude  => site_to_store.longitude, 
+                                             :latitude  => site_to_store.latitude,
+                                             :longitude  => site_to_store.longitude,
                                              :lat_long_datum_id => site_to_store.lat_long_datum_id,
-                                             :elevation_m   => site_to_store.elevation_m, 
-                                             :vertical_datum  => "Unknown", 
-                                             :local_x  => site_to_store.local_x, 
-                                             :local_y  => site_to_store.local_y, 
+                                             :elevation_m   => site_to_store.elevation_m,
+                                             :vertical_datum  => "Unknown",
+                                             :local_x  => site_to_store.local_x,
+                                             :local_y  => site_to_store.local_y,
                                              :local_projection_id  => site_to_store.local_projection_id,
-                                             :pos_accuracy_m  => site_to_store.pos_accuracy_m, 
-                                             :state  => site_to_store.state, 
-                                             :county  => site_to_store.county, 
+                                             :pos_accuracy_m  => site_to_store.pos_accuracy_m,
+                                             :state  => site_to_store.state,
+                                             :county  => site_to_store.county,
                                              :comments  => site_to_store.comments)
             site_to_store.his_id = new_his_site.id
             site_to_store.save
@@ -123,22 +123,22 @@ class Project
             end
             sensor_type.sensor_values.all(:order => [:timestamp.asc]).each do |val|
               #store DataValue
-              
+
               his_val = His::DataValues.first_or_create(:data_value => val.value,
-                                    :value_accuracy => 1.0,         
+                                    :value_accuracy => 1.0,
                                     :local_date_time => val.timestamp,
                                     :utc_offset => 7,
                                     :date_time_utc => val.timestamp,
                                     :site_id => system_site.his_id,
                                     :variable_id => system_variable.his_id,
-                                    :offset_value => 0,           
-                                    :offset_type_id => 1,      
-                                    :censor_code => 'nc',    
-                                    :qualifier_id => 1,           
-                                    :method_id => 0,              
-                                    :source_id => 1,              
-                                    :sample_id => 3,         
-                                    #:derived_from_id => 1,        
+                                    :offset_value => 0,
+                                    :offset_type_id => 1,
+                                    :censor_code => 'nc',
+                                    :qualifier_id => 1,
+                                    :method_id => 0,
+                                    :source_id => 1,
+                                    :sample_id => 3,
+                                    #:derived_from_id => 1,
                                     :quality_control_level_id => 0)
             end #val
           end #if
@@ -146,22 +146,22 @@ class Project
       end #site
     end
   end
-  
+
   def self.store_site_to_system(u_id)
     site_to_store = self.managed_repository{Voeis::Site.first(:id => u_id)}
-    new_system_site = Site.create(:site_code => site_to_store.code, 
+    new_system_site = Site.create(:site_code => site_to_store.code,
                                      :site_name  => site_to_store.name,
-                                     :latitude  => site_to_store.latitude, 
-                                     :longitude  => site_to_store.longitude, 
+                                     :latitude  => site_to_store.latitude,
+                                     :longitude  => site_to_store.longitude,
                                      :lat_long_datum_id => site_to_store.lat_long_datum_id,
-                                     :elevation_m   => site_to_store.elevation_m, 
-                                     :vertical_datum  => site_to_store.vertical_datum, 
-                                     :local_x  => site_to_store.local_x, 
-                                     :local_y  => site_to_store.local_y, 
+                                     :elevation_m   => site_to_store.elevation_m,
+                                     :vertical_datum  => site_to_store.vertical_datum,
+                                     :local_x  => site_to_store.local_x,
+                                     :local_y  => site_to_store.local_y,
                                      :local_projection_id  => site_to_store.local_projection_id,
-                                     :pos_accuracy_m  => site_to_store.pos_accuracy_m, 
-                                     :state  => site_to_store.state, 
-                                     :county  => site_to_store.county, 
+                                     :pos_accuracy_m  => site_to_store.pos_accuracy_m,
+                                     :state  => site_to_store.state,
+                                     :county  => site_to_store.county,
                                      :comments  => site_to_store.comments)
   end
 
@@ -288,13 +288,13 @@ class Project
   manage Voeis::SensorValue
   manage Voeis::Unit
   manage Voeis::Variable
-  
+
   private
-  
+
   def destroy_cleanup
     memberships.destroy
   end
-  
+
   def give_current_user_membership
     unless User.current.nil?
       Membership.create(:user => User.current, :project => self, :role => Role.first(:position => 1))
