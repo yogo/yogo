@@ -46,13 +46,17 @@
 form.bp
   +blueprint-form
 
+select
+  font-size: 13px
+  
 // Base Body Styles
 body
   +blueprint-typography(true)
   +blueprint-debug
   +blueprint-interaction
   background-color: #264f5c
-  padding-top: 82.2px
+  padding-top: 85px
+  font-size: .9em
   p
     margin-bottom: 0.5em
     
@@ -67,7 +71,7 @@ body
     top: 0
     overflow: none
     clear: both
-    height: 6.85em
+    height: 5.85em
     
     // Links
     a
@@ -91,7 +95,7 @@ body
     #system-menu
       color: #784a1c
       background-color: #2ba3c9
-      font-size: 1.3em
+      font-size: 1.1em
       height: 1.7em
       line-height: 1.7em
       vertical-align: middle
@@ -132,7 +136,7 @@ body
       background-color: #bd8e5e
       height: 1.7em
       line-height: 1.5em
-      font-size: 1.3em
+      font-size: 1em
       vertical-align: middle
       .menu-left-col
         width: 40%
@@ -147,7 +151,7 @@ body
         padding-right: 10px
         float: right
         .search-tab
-          font-size: 1em
+          padding-top: 2px
           vertical-align: middle
 
   // Flash Notices always use blueprint layout
@@ -217,6 +221,7 @@ body
       width: 300px
       font-size: small
     td.datasets
+      vertical-align: top
       font-size: small
       
   // Links
@@ -344,19 +349,22 @@ body
     margin-top: 0
     text-align: left
     margin-bottom: 0
-    width: 300px
+    width: 40%
+    float: left
     font-size: 1.5em
     #subtitle
       font-size: .5em
       color: #777
     #links
-      font-size: .25em
+      font-size: .65em
   #content-actions
     float: right
     width: 40%
     text-align: right
-    line-height: 2em
-     
+    
+.body-text
+  padding: 10px 5px 10px 5px
+  
 .admin-link-list
   font-size: 1.25em
  
@@ -421,6 +429,11 @@ body
 .icon-settings
   background-image: image-url('22x22/settings.png')
   padding-left: 25px
+.icon-private
+  background-image: image-url('icons/private_16.png')
+  background-position: 100% 15%
+  padding-right: 25px
+  padding-left: 0px
 
 .icon-add
   background-image: image-url('add.png')

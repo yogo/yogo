@@ -4,22 +4,25 @@
   There are no projects yet, you should create one!
 - for project in @projects
   #content-title
-    = link_to(project.name, project_path(project))
-  #links
-    = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings')
-    = image_tag('icons/private_16.png', :title => 'Private Project') if project.is_private?      
-  - if project.description && project.description.length > 0
-    %em= tooltip(project.description, project.name + ' Description', 200)
-  - else
-    %em= link_to('[Add Project Description]', edit_project_path(project))
+    = link_to(project.name, project_path(project), :class => project.is_private? ? 'icon icon-private' : nil)
+    #links
+      = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings')
+  = clear_break
+  .body-text
+    - if project.description && project.description.length > 0
+      %em= tooltip(project.description, project.name + ' Description', 150)
+    - else
+      %em= link_to('[Add Project Description]', edit_project_path(project))
   %table.project
     %tbody
       %tr
         %td.map
           = render(:partial => 'overview_map', :locals => { :project => project } )
         %td.datasets
-          Last Updates:
-          %br/
+          #content-actions
+            = link_to("Add a Site", new_project_site_path(project), :class => 'icon icon-add')
+          #content-tile 
+            %h4 Last Updates:
           - project.managed_repository do
             - Voeis::Site.all.each do |site|
               -if !site.sensor_values.last.nil?
@@ -27,6 +30,5 @@
               -else
                 = site.name + ': never'
               %br/
-            = link_to("Add a Site", new_project_site_path(project), :class => 'icon icon-add')
       
 #pagination-links= pagination_links(Project, params[:page], 5)
