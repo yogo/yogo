@@ -50,7 +50,7 @@ class Project
     @_permissions_for ||= {}
     @_permissions_for[user] ||= begin
       base_permission = []
-      base_permission << "#{permission_base_name}$retrieve" unless self.is_private?
+      base_permission += ["#{permission_base_name}$retrieve", "voeis/site$retrieve"] unless self.is_private?
       return base_permission if user.nil?
       (super + base_permission + user.memberships(:project_id => self.id).roles.map{|r| r.actions }).flatten.uniq
     end
