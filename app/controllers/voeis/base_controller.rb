@@ -91,7 +91,7 @@ class Voeis::BaseController < InheritedResources::Base
   def parent
     p = super
     return p if p.is_facet?
-    return p.access_as(current_user) if p.responds_to?(:access_as)
+    return p.access_as(current_user) if p.respond_to?(:access_as)
     return p
   end
 end
