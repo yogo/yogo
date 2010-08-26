@@ -25,6 +25,7 @@
 
 class Voeis::Site
   include DataMapper::Resource
+  include Facet::DataMapper::Resource
 
   property :id, Serial
   property :code, String, :required => true

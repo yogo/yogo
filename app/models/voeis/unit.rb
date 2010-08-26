@@ -8,6 +8,7 @@
 #
 class Voeis::Unit
   include DataMapper::Resource
+  include Facet::DataMapper::Resource
 
   property :id, Serial
   property :units_name, String, :required => true, :length => 512

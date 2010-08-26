@@ -4,6 +4,7 @@
 
 class Voeis::SensorType
   include DataMapper::Resource
+  include Facet::DataMapper::Resource
 
   property :id, Serial
   property :name,     String,  :required => true, :length => 512

@@ -1,0 +1,11 @@
+-form_for(resource, :builder => YogoFormBuilder) do |f|
+  = f.text_field(:name, :label => "Name:" )
+  = f.text_field(:description, :label => "Description:")
+  - SystemRole.available_permissions_by_source.each do |name, perms|
+    .rbox
+      %h3= name
+      - perms.each do |p|
+        = label_tag("system_role_actions_#{p}", p.to_s.humanize)
+        = check_box_tag("system_role[actions][]", p.to_s, resource.actions.include?(p), :id => "system_role_actions_#{p}")
+        %br/
+  = f.submit('Save', :class => 'button-link')

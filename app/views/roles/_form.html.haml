@@ -5,7 +5,9 @@
     .rbox
       %h3= name
       - perms.each do |p|
-        = label_tag("role_permission_#{p}", p.to_s.humanize)
-        = check_box_tag("role[permissions][]", p.to_s, @role.permissions.include?(p), :id => "role_permission_#{p}")
+        / We do this because of name munging differences between the label's 'for' and check_box's 'id'
+        - name = p.split(/\/|\$/).join('_')
+        = label_tag("role_action_#{name}", p.to_s.humanize)
+        = check_box_tag("role[actions][]", p.to_s, @role.actions.include?(p), :id => "role_action_#{name}" )
         %br/
   = f.submit('Save', :class => 'button-link')

@@ -1,5 +1,5 @@
 #content-sidebar-right
-  - if User.all.length > @project.users.length
+  - if User.count > @project.users.count
     - form_for(:membership, :url => project_memberships_path(@project)) do |f|
       - field_set_tag("Add Users") do
         .scrollable-users
@@ -36,7 +36,7 @@
           - @project.users.each do |user|
             %tr
               %td= user.name
-              %td= (user.roles | @project.roles).map {|role| role.name }.join(', ')
+              %td= (user.roles & @project.roles).map {|role| role.name }.join(', ')
               %td 
                 #operation-links
                   #edit-link

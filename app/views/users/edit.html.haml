@@ -1,5 +1,5 @@
 #content-sidebar-right
-  - if Project.all.length > @user.projects.length
+  - if Project.count > @user.projects.count
     - form_for(:membership, :url => user_memberships_path(@user)) do |f|
       - field_set_tag("Add Projects") do
         = select_tag("project_id", options_from_collection_for_select(Project.all.select { |p| not @user.projects.include?(p) }, 'id', 'name'))
@@ -26,7 +26,7 @@
     - if @user.new?
       = f.password_field(:password, :label => "Password: ")
       = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
-    = f.check_box(:admin)
+    = f.select(:system_role_id, SystemRole.all.map{|sr| [sr.name, sr.id]}, :label => 'System Role:')
     %strong API Key:
     = @user.api_key
     = link_to("Generate new API key", api_key_update_user_path(@user), :method => :put, :class => 'update-link')

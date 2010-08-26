@@ -13,6 +13,7 @@
 
 class Voeis::DataStream
   include DataMapper::Resource
+  include Facet::DataMapper::Resource
 
   property :id, Serial
   property :name, String, :required => true, :unique => true, :length => 512
