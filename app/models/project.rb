@@ -50,7 +50,16 @@ class Project
     @_permissions_for ||= {}
     @_permissions_for[user] ||= begin
       base_permission = []
-      base_permission += ["#{permission_base_name}$retrieve", "voeis/site$retrieve"] unless self.is_private?
+      # Default retrieve permissions if project is public
+      base_permission += ["#{permission_base_name}$retrieve", 
+                          "voeis/data_stream$retrieve", 
+                          "voeis/data_stream_column$retrieve", 
+                          "voeis/meta_tag$retrieve", 
+                          "voeis/sensor_type$retrieve", 
+                          "voeis/sensor_value$retrieve", 
+                          "voeis/site$retrieve", 
+                          "voeis/unit$retrieve", 
+                          "voeis/variable$retrieve"] unless self.is_private?
       return base_permission if user.nil?
       (super + base_permission + user.memberships(:project_id => self.id).roles.map{|r| r.actions }).flatten.uniq
     end
