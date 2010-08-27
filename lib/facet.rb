@@ -34,6 +34,7 @@ module Facet
     
     def send(method, *args, &block)
       # ::Rails.logger.debug("Can #{@permission_source} Invoke? #{method} #{can_invoke method}")
+      raise NoMethodError, "undefined method #{method} for #{@target}" unless @target.respond_to?(method) || permitted_methods.include?(method)
       if(can_invoke method)
         result = @target.__send__(method, *args, &block)
         # TODO: Extract out this DataMapper specific code
