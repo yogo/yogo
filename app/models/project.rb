@@ -119,9 +119,29 @@ class Project
             variable = sensor_type.variables.first
             system_variable = Variable.first(:variable_code => variable.variable_code, :variable_name => variable.variable_name)
             if system_variable.his_id.nil?
-              system_variable.store_to_his(system_variable.id)
+              #system_variable.store_to_his(system_variable.id)
+              var_to_store = Variable.first(:id => system_variable.id)
+              if var_to_store.is_regular == true
+                reg = 1
+              else
+                reg =0
+              end
+              new_his_var = His::Variables.first_or_create(:variable_name => var_to_store.variable_name,
+                                                  :variable_code => var_to_store.variable_code,
+                                                  :speciation => var_to_store.speciation,
+                                                  :variable_units_id => var_to_store.variable_units_id,
+                                                  :sample_medium => var_to_store.sample_medium,
+                                                  :value_type => var_to_store.value_type,
+                                                  :is_regular => reg,
+                                                  :time_support => var_to_store.time_support,
+                                                  :time_units_id => var_to_store.time_units_id,
+                                                  :data_type => var_to_store.data_type,
+                                                  :general_category => var_to_store.general_category,
+                                                  :no_data_value => var_to_store.no_data_value)
+              var_to_store.his_id = new_his_var.id
+              var_to_store.save 
             end
-            sensor_type.sensor_values.all(:order => [:timestamp.asc]).each do |val|
+            sensor_type.sensor_values.all(:published => false, :order => [:timestamp.asc]).each do |val|
               #store DataValue
 
               his_val = His::DataValues.first_or_create(:data_value => val.value,
@@ -140,6 +160,9 @@ class Project
                                     :sample_id => 3,
                                     #:derived_from_id => 1,
                                     :quality_control_level_id => 0)
+              val.published = true
+              puts "oh yeah"
+              puts val.save
             end #val
           end #if
         end # sensor_type

@@ -313,7 +313,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
       @var_array[0] = ["","","",""]
       @opts_array = Array.new
       @variables.all(:order => [:variable_name.asc]).each do |var|
-        @opts_array << [var.variable_name+":"+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+        @opts_array << [var.variable_name+":"+':'+var.sample_medium+':'+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
       end
       if params[:data_template] != "None"
           data_template = parent.managed_repository {Voeis::DataStream.first(:id => params[:data_template])}
@@ -592,7 +592,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
            sensor_value = Voeis::SensorValue.new(
                                          :value => row[i],
                                          :units => data_stream_col[i].unit,
-                                         :timestamp => row[data_timestamp_col])
+                                         :timestamp => row[data_timestamp_col],
+                                         :published => false)
            sensor_value.save
            sensor_value.sensor_type << sensor_type_array[i]
            sensor_value.site << site

@@ -10,6 +10,7 @@ class SensorValue
   property :units,    String,  :required => true 
   property :timestamp,    DateTime,  :required => true, :index => true
   property :created_at,  DateTime
+  property :published,  Boolean, :required => true, :default => false
   
   has n, :site, :through => Resource  
   has n, :sensor_type, :model => "SensorType", :through => Resource
