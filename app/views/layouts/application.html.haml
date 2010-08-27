@@ -42,7 +42,8 @@
       /= page_title
       .menu-right-col
         = render(:partial => 'layouts/search')
-
+      #loader
+        =image_tag("ajax-loader.gif")
   / Grid Container 
   #container
     #flash
@@ -61,6 +62,7 @@
           %p.error= link_to(flash[:error], flash[:error_link])
         - else
           %p.error= flash[:alert]
+      
     #content
       = yield 
 

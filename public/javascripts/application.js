@@ -1,5 +1,8 @@
 
 $(document).ready(function(){
+  // show_loader = function(){
+  // $('#loader').attr("display", "visible");
+  // };
   
   $(".date-picker").datepicker();
   
