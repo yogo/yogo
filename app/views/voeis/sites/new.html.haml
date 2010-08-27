@@ -6,7 +6,7 @@ Add an existing to site to the project:
     -site_options = site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
   =select_tag("site", site_options)
   = submit_tag("Add Site")
-  = link_to('Cancel', projects_path(@project), :class => 'icon icon-cancel')
+
   
 =clear_break
 Create a new site for the project:

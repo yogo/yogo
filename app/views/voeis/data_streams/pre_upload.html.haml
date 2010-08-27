@@ -100,4 +100,6 @@
     =hidden_field_tag('project_id', @project.id)
     =hidden_field_tag('rows', @row_size)
     =hidden_field_tag("start_line", @start_line)
+    =clear_break
     =submit_tag("Submit", :onclick => "$('#loader').toggle();")
+    = link_to('Cancel', projects_path(@project), :class => 'icon icon-cancel')
