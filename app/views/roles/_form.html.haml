@@ -1,13 +1,26 @@
 -form_for(@role, :builder => YogoFormBuilder) do |f|
   = f.text_field(:name, :label => "Name:" )
-  = f.text_field(:description, :label => "Description:")
-  - Role.available_permissions_by_source.each do |name, perms|
-    .rbox
-      %h3= name
-      - perms.each do |p|
-        / We do this because of name munging differences between the label's 'for' and check_box's 'id'
-        - name = p.split(/\/|\$/).join('_')
-        = label_tag("role_action_#{name}", p.to_s.humanize)
-        = check_box_tag("role[actions][]", p.to_s, @role.actions.include?(p), :id => "role_action_#{name}" )
-        %br/
-  = f.submit('Save', :class => 'button-link')
+  = f.text_field(:description, :label => "Description:", :size => 80)
+  %table
+    %thead
+      %th Name
+      %th Create
+      %th Retrieve
+      %th Update
+      %th Destroy
+    %tbody
+      - Role.available_permissions_by_source.each do |name, perms|
+        %tr
+          %td.h3= name.demodulize.titleize
+          - [3, 1, 0, 2].each do |idx|
+            - p = perms[idx]
+            / perms.each do |p|
+            / We do this because of name munging differences between the label's 'for' 
+            / and check_box's 'id'
+            %td
+              - attribute_name = p.split(/\/|\$/).join('_')
+              /- display_name = p.to_s.split("$")[1].titleize
+              /= label_tag("role_action_#{attribute_name}", display_name)
+              = check_box_tag("role[actions][]", p.to_s, @role.actions.include?(p), 
+                              :id => "role_action_#{attribute_name}" )
+  = f.submit('Save', :class => 'icon icon-save')

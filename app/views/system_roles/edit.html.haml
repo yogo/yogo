@@ -1,11 +1,9 @@
-.extra-small
-  %h1#content-title
-    #subtitle Edit Role
-    = resource.name
-    
-.extra-small.box
-  .rbox
-    = link_to("Delete Role", system_role_path(resource), 
-      :method => :delete, :class => 'button-link fright', 
-      :confirm => "Are you sure you want to delete the #{resource.name} role?\nThere is no undo! Continue?" )
-    = render(:partial => 'form')
+#content-title
+  = resource.name
+  #subtitle Role Settings
+#content-actions
+  = link_to("Delete", system_role_path(resource), 
+      :class => 'icon icon-delete', :method => :delete,
+      :confirm => "Are you sure you want to delete the #{resource.name} role?\nContinue?" )
+= clear_break
+= render(:partial => 'form')
