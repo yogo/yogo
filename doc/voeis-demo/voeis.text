@@ -7,7 +7,6 @@
 Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 
 # Outline
-
 - Overview
 - Project Interface
 - Programmatic Access
@@ -15,23 +14,34 @@ Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 - Future Features
 
 # Overview
-
 - Home page
 - Users, Roles, Access Controls
 - Jumpboxes
 - Projects
 
 # Overview: Home Page
+- Show Navigational Links
+- Show Version Link
+- Show About
 
 # Overview: Users
+- Show login/logout
+- Show user settings page
+- Password Management (reset, email) not in place yet
+- Show user list
 
 # Overview: Roles
-
-# Overview: Access Controls
+- Role based access controls
+- Show Role list
+- Show a Roles edit page
+- Show the role report
 
 # Overview: Jumpboxes
+- Show the project jump box
 
 # Overview: Projects
+- Home page is the list of projects you can see
+  - Pubic projects and your projects (when logged in)
 
 %%# Dashboards
 %%
@@ -56,6 +66,9 @@ Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 - Data Interactions
 
 # Projects: Dashboard
+- Show Overview
+- Show Action Links: Add
+-
 
 # Projects: Settings
 
