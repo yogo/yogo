@@ -1,10 +1,9 @@
 class ProjectsController < InheritedResources::Base
   respond_to :html, :json
   
-  
   protected
   def resource
-    @project ||= collection.get(params[:id])
+    @project ||= resource_class.get(params[:id])
   end
 
   def collection
@@ -12,6 +11,10 @@ class ProjectsController < InheritedResources::Base
   end
 
   def resource_class
-    Project.access_as(current_user)
+    @initial_query ||= begin
+      q = Project.all(:is_private => false)
+      q =  (q | current_user.projects ) unless current_user.nil?
+      q.access_as(current_user)
+    end
   end
 end
