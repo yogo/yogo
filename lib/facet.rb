@@ -28,6 +28,14 @@ module Facet
      }
     end
     
+    def permitted_actions
+     ::DataMapper.repository(:default) {
+       permissions = @target.permissions_for(@permission_source)
+       permissions = permissions | @root_target.permissions_for(@permission_source) unless @root_target.nil?
+       @target.actions_permitted_for(*permissions)
+      }
+    end
+    
     def method_missing(method, *args, &block)
       self.send(method, *args, &block)
     end
@@ -86,6 +94,25 @@ module Facet
         return nil
       end
     end
+    
+    def can_create?
+      permitted_actions.include?(:create)
+    end
+    
+    def can_retrieve?
+      permitted_actions.include?(:retrieve)
+    end
+    alias can_read? can_retrieve?
+    
+    def can_update?
+      permitted_actions.include?(:update)
+    end
+    
+    def can_destroy?
+      permitted_actions.include?(:destroy)
+    end
+    alias can_delete? can_destroy?
+    
   end
   
   class PermissionException < Exception
@@ -172,7 +199,17 @@ module Facet
       end
       methods.flatten.uniq
     end
-        
+       
+    def actions_permitted_for(*perms)
+      actions = []
+      perms.each do |pstring|
+        name, perm = pstring.split('$')
+        next unless permission_base_name == name
+        actions << perm.to_sym
+      end
+      actions.flatten.uniq
+    end
+    
     def permission_base_name
       ""
     end
