@@ -9,7 +9,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :projects,
                  :member => { :upload => :post, :collect_data => :get },
-                 :collection => { :search => :get, :publish_his => :post} do |project|
+                 :collection => { :search => :get, :publish_his => :post, :export => :post} do |project|
 
     project.resources :memberships, :namespace => nil, :controller => "memberships"
 

@@ -6,7 +6,14 @@ class Voeis::SitesController < Voeis::BaseController
             :collection_name => 'sites',
             :instance_name => 'site',
             :resource_class => Voeis::Site
-
+            
+  def new
+    @project = parent
+    @sites = Site.all
+    
+    
+  end
+  
   def create
     # This should be handled by the framework, but isn't when using jruby.
     params[:site][:latitude] = params[:site][:latitude].strip

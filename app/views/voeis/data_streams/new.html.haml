@@ -21,4 +21,4 @@
     =select_tag("data_template", template_string)
     =clear_break
     = submit_tag("Upload Logger File", :onclick => "$('#loader').toggle();")
-
+    = link_to('Cancel', {:action => 'show', :controller => '/projects', :id=>@project.id }, :class => 'icon icon-cancel', :onclick => "$('#loader').toggle();")

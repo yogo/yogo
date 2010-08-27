@@ -10,7 +10,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
 
 
   def new
-
+    @project = parent
     @data_templates = parent.managed_repository{Voeis::DataStream.all}
     respond_to do |format|
       format.html
@@ -280,6 +280,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
   #
   # @api public
   def pre_upload
+    @project = parent
    #@project = Project.first(:id => params[:project_id])
     @variables = Variable.all
     @sites = parent.managed_repository{ Voeis::Site.all }

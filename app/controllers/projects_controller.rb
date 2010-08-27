@@ -1,6 +1,26 @@
 class ProjectsController < InheritedResources::Base
   respond_to :html, :json
+  #export the results of search/browse to a csv file
+  def export
+    headers = JSON[params[:column_array]]
+    rows = JSON[params[:row_array]]
+    column_names = Array.new
+    headers.each do |col|
+      column_names << col
+    end
+    csv_string = FasterCSV.generate do |csv|
+      csv << column_names
+      rows.each do |row|
+        csv << row
+      end
+    end
 
+    filename = params[:site_name] + ".csv"
+    send_data(csv_string,
+      :type => 'text/csv; charset=utf-8; header=present',
+      :filename => filename)
+  end
+  
   def show
     # This should be a [
     #                   [ timestamp, site.sensor.variable.value, site.sensor.variable.value ]

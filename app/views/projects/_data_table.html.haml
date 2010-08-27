@@ -1,3 +1,9 @@
+-form_tag("export") do 
+  =hidden_field_tag('column_array', @label_array.to_json)
+  =hidden_field_tag('row_array', @current_data.to_json)
+  =hidden_field_tag('site_name', "voeis_results")
+  =submit_tag("Export Results")
+  
 - visualization("data-#{project.id.to_s}", 'table', :html => { :class => class_name }) do |table|
   - if @label_array.length > 1
     - table.register_column(:datetime, @label_array[0])

@@ -8,7 +8,7 @@
       %td
         - for project in @projects
           #content-title
-            = link_to(project.name, project_path(project), :class => project.is_private? ? 'icon icon-private' : nil)
+            = link_to(project.name, project_path(project), :class => project.is_private? ? 'icon icon-private' : nil, :onclick => "$('#loader').toggle();")
           #content-actions
             = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings', :onclick => "$('#loader').toggle();")
           = clear_break

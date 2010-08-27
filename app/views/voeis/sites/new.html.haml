@@ -1,10 +1,21 @@
 %h2
+Add an existing to site to the project:
+-form_tag("save_site") do 
+  -site_options = "Hash.new"""
+  -@sites.all(:order => [:site_name.asc]).each do |site|
+    -site_options = site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
+  =select_tag("site", site_options)
+  = submit_tag("Add Site", :onclick => "$('#loader').toggle();")
+
+  
+=clear_break
+Create a new site for the project:
 - form_for(:site, resource, :url => project_sites_path(@project), :builder => YogoFormBuilder) do |f|
   = f.text_field("name")
   = f.text_field("code")
   = f.text_field("latitude")
   = f.text_field("longitude")
   = f.text_field("state")
-  = f.submit("Submit")
+  = f.submit("Save Site", :onclick => "$('#loader').toggle();")
   = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 
   
