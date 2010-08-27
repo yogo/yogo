@@ -5,4 +5,4 @@
       -site_options = site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
     =select_tag("site", site_options)
     = submit_tag("Submit")
-    = link_to('Cancel', projects_path(@project), :class => 'cancel-link')
+    = link_to('Cancel', projects_path(@project), :class => 'icon icon-cancel')

@@ -11,5 +11,5 @@
     = f.password_field(:password, :label => "Password: ")
     = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
   = f.select(:system_role_id, SystemRole.all.map{|sr| [sr.name, sr.id]}, :label => 'System Role:')
-  = f.submit('Save', :class => 'save-link')
-  = link_to('Cancel', root_path, :class => 'cancel-link') 
+  = f.submit('Save', :class => 'icon icon-save')
+  = link_to('Cancel', root_path, :class => 'icon icon-cancel') 

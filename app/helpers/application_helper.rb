@@ -119,10 +119,10 @@ module ApplicationHelper
   def page_title
     if ["pages", "dashboards"].include?(controller_name)
       "#{controller_name.titleize} >> #{params[:id].humanize}"
-    elsif (not resource.nil?) && resource.respond_to?(:name)
+    elsif defined?(resource) && (!resource.nil?) && resource.respond_to?(:name)
       "#{link_to(controller_name.titleize, :controller => params[:controller], :action => :index)} >> #{resource.name}"
     else
-      controller_name.capitalize
+      controller_name.titleize
     end
   end
 

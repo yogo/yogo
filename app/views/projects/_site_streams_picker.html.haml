@@ -6,8 +6,10 @@
           = check_box_tag("data[#{site.id}][all]", site.id, false, :class => "data[site_#{site.id}]", :id => "data[site_#{site.id}]")
           = label_tag("data[site_#{site.id}]", site.name)
           - for sensor in site.sensor_types do
-            .field-item-two
-              = check_box_tag("data[#{site.id}][#{sensor.id}]", site.id, false, :class => "data[site_#{site.id}][sensor_#{sensor.id}]", :id => "data[site_#{site.id}][sensor_#{sensor.id}]")
-              = label_tag("data[site_#{site.id}][sensor_#{sensor.id}]", sensor.variables.first.variable_name)
+            = check_box_tag("data[#{site.id}][#{sensor.id}]", site.id, false, 
+                            :class => "data[site_#{site.id}][sensor_#{sensor.id}]", 
+                            :id => "data[site_#{site.id}][sensor_#{sensor.id}]")
+            = label_tag("data[site_#{site.id}][sensor_#{sensor.id}]",           
+                        sensor.variables.first.variable_name)
           
-  = f.submit('Update', :class => 'update-link')
+  = f.submit('Update', :class => 'icon icon-save')

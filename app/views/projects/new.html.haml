@@ -7,5 +7,5 @@
     - form_for(:project, @project, :url => projects_path, :builder => YogoFormBuilder) do |f|
       = f.text_field :name, :label => "Project Name:" 
       = f.text_area(:description, :label => "Project Description: ")
-      = f.submit('Save', :class => 'save-link')
-      = link_to('Cancel', root_path, :class => 'cancel-link') 
+      = f.submit('Save', :class => 'icon icon-save')
+      = link_to('Cancel', root_path, :class => 'icon icon-cancel') 

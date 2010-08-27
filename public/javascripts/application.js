@@ -37,16 +37,14 @@ $(document).ready(function(){
   // Tooltip dialogs
   $('.tooltip').dialog({autoOpen:false, width:600});
 
-  $("#graphs").accordion({
-     collapsible: true
-   });
+  $("#graphs").accordion({collapsible: true});
   $("#graphs").accordion('activate', false);
 
-  $("#about-accordian").accordion({collapsible: true});
-  $("#about-accordian").accordion('activate', false);
+  $("#about-accordion").accordion({collapsible: true});
+  $("#about-accordion").accordion('active', true);
   
   $("#graph-accordion").accordion({collapsible: true});
-  $("#graph-accordion").accordion('activate', false);
+  $("#graph-accordion").accordion('active', false);
   
   // Toggle elements on the project-user-roles page
   $('#project-user-roles-form :checkbox').bind('change', function(e){

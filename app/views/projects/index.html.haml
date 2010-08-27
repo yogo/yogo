@@ -24,9 +24,9 @@
               %tr
                 %td
                   = render(:partial => 'overview_map', :locals => { :project => project, :class_name => 'preview-map' } )
-                %td.datasets
-                  #content-tile 
-                    %h4 Last Updates:
+                %td
+                  #content-title Last Updates:
+                  = clear_break
                   - project.managed_repository do
                     - Voeis::Site.all.each do |site|
                       -if !site.sensor_values.last.nil?
@@ -34,5 +34,6 @@
                       -else
                         = site.name + ': never'
                       %br/
+                %td
       
 #pagination-links= pagination_links(Project, params[:page], 5)
