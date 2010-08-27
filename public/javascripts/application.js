@@ -41,10 +41,10 @@ $(document).ready(function(){
   $("#graphs").accordion('activate', false);
 
   $("#about-accordion").accordion({collapsible: true});
-  $("#about-accordion").accordion('active', true);
+  $("#about-accordion").accordion('activate', false);
   
   $("#graph-accordion").accordion({collapsible: true});
-  $("#graph-accordion").accordion('active', false);
+  $("#graph-accordion").accordion('activate', false);
   
   // Toggle elements on the project-user-roles page
   $('#project-user-roles-form :checkbox').bind('change', function(e){

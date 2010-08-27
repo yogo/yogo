@@ -16,13 +16,13 @@ class ProjectsController < InheritedResources::Base
     @label_array = ["timestamp"]
 
     if params.has_key?(:variables_start)
-      @start_time = params[:variables_start].to_date
+      @start_time = params[:variables_start].to_datetime
     else
       @start_time = DateTime.now - 7
     end
 
     if params.has_key?(:variables_end)
-      @end_time = params[:variables_end].to_date
+      @end_time = params[:variables_end].to_datetime
     else
       @end_time = DateTime.now
     end
@@ -46,13 +46,35 @@ class ProjectsController < InheritedResources::Base
     end
 
     # Fill in the current data
-    data_lists = []
+    data_lists = Hash.new
+    timestamps = Set.new
     @items.each do |site, variable|
-      sensor = site.sensor_types.first(:variables => {:id => variable.id })
-      data_lists << sensor.sensor_values(:timestamp.gte => start_time, :timestamp.lte => end_time, :fields => [:timestamp, :value])
+      if site.sensor_types.count > 0
+        sensor = site.sensor_types.select{|s| s.variables.include?(variable)}[0]
+        values = sensor.sensor_values(:timestamp.gte => @start_time, :timestamp.lte => @end_time)
+        data_lists[site] ||= Hash.new
+        data_lists[site][variable] ||= Hash.new
+        values.each do |v|
+          data_lists[site][variable][v.timestamp] = v.value
+        end
+        timestamps.merge(values.map {|v| v.timestamp})
+      end
     end
 
-    debugger
+    timestamps.to_a.sort.each do |ts|
+      tmp_array = Array.new
+      tmp_array << ts
+      @items.each do |site, variable|
+        if data_lists[site][variable].has_key?(ts)
+          value = data_lists[site][variable][ts]
+        else
+          value = nil
+        end
+        tmp_array << value
+      end
+      @current_data << tmp_array
+    end
+    super
   end
 
   protected

@@ -35,9 +35,10 @@
         %a{:href=>"#"}
           Graph
       .data-graph
-        = render(:partial => 'graph',:locals => {:class_name => 'data-graph' })
-    = render(:partial => 'data_table', :locals => { :data => [], 
-                                                  :project => @project, 
-                                                  :class_name => 'data-table' })  
+        = render(:partial => 'graph',:locals => {:data => @current_data, :labels => @label_array,
+                                                  :project => @project, :class_name => 'data-graph' })
+                                                  
+    = render(:partial => 'data_table', :locals => { :data => @current_data, :labels => @label_array,
+                                                    :project => @project, :class_name => 'data-table' })  
   
 = clear_break
