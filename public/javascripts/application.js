@@ -44,7 +44,7 @@ $(document).ready(function(){
   $("#graphs").accordion('activate', false);
 
   $("#about-accordion").accordion({collapsible: true});
-  $("#about-accordion").accordion('activate', false);
+  $("#about-accordion").accordion('activate', true);
   
   $("#graph-accordion").accordion({collapsible: true});
   $("#graph-accordion").accordion('activate', false);
@@ -59,11 +59,12 @@ $(document).ready(function(){
   });
     
   // collapsible
-  // $(".site").show();
-  // $(".site").click(function()
-  //   {
-  //     $(this).children(".sensors").slideToggle(300);
-  //   });
+  $(".site-name").show();
+  $(".site-name").click(function()
+    {
+      $(this).toggleClass('icon-collapsed');
+      $(this).next(".sensors").slideToggle(300);
+    });
 });
 
 (function($){

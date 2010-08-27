@@ -74,6 +74,7 @@ class ProjectsController < InheritedResources::Base
       end
       @current_data << tmp_array
     end
+    puts "************ LABELS: #{@label_array}"
     super
   end
 
@@ -93,7 +94,7 @@ class ProjectsController < InheritedResources::Base
       q.access_as(current_user)
     end
   end
-  
+
   def get_json_data(data_stream_ids, variable_ids, start_date = nil, end_date= nil, hour = nil)
      if !data_stream_ids.empty?
        @download_meta_array = Array.new
@@ -110,8 +111,8 @@ class ProjectsController < InheritedResources::Base
              if !variable_ids.nil?
                var = sensor.variables.first
              variable_ids.each do |var_id|
-               if var.id == var_id.to_i     
-                 if !start_date.nil? && !end_date.nil?     
+               if var.id == var_id.to_i
+                 if !start_date.nil? && !end_date.nil?
                    sensor.sensor_values(:timestamp.gte => start_date,:timestamp.lte => end_date, :order => (:timestamp.asc)).each do |val|
                      @value_array << [val.timestamp, val.value]
                    end #end do val
@@ -126,7 +127,7 @@ class ProjectsController < InheritedResources::Base
                  @data_hash[:data] = @value_array
                  @sensor_meta_array = Array.new
                  variable = sensor.variables.first
-                 @sensor_meta_array << [{:variable => variable.variable_name}, 
+                 @sensor_meta_array << [{:variable => variable.variable_name},
                                         {:units => Unit.get(variable.variable_units_id).units_abbreviation},
                                         @data_hash]
                  @sensor_hash[sensor.name] = @sensor_meta_array
@@ -136,9 +137,9 @@ class ProjectsController < InheritedResources::Base
          end # end if
            end #end if
          end #end do data col
-         @download_meta_array << [{:site => site.name}, 
-                                 {:site_code => site.code}, 
-                                 {:lat => site.latitude}, 
+         @download_meta_array << [{:site => site.name},
+                                 {:site_code => site.code},
+                                 {:lat => site.latitude},
                                  {:longitude => site.longitude},
                                  {:sensors => @sensor_hash}]
        end #end do data_stream

@@ -1,6 +1,7 @@
 - visualization("data-#{project.id.to_s}", 'table', :html => { :class => class_name }) do |table|
-  - table.register_column(:datetime, @label_array[0])
-  - @label_array[1..-1].each do |label|
-    - table.register_column(:number, label)
-  - table.add_rows(@current_data)
-  = ""
+  - if @label_array.length > 1
+    - table.register_column(:datetime, @label_array[0])
+    - @label_array[1..-1].each do |label|
+      - table.register_column(:number, label)
+    - table.add_rows(@current_data)
+    = ""

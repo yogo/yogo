@@ -1,5 +1,6 @@
 - form_for(:project, :url => project_path(@project), :html => {:method => :get}) do |f|
-  - tmp_time = project.managed_repository { Voeis::SensorValue.last(:order => [:timestamp.asc]).timestamp }
+  - a = project.managed_repository { Voeis::SensorValue.last(:order => [:timestamp.asc]) }
+  - tmp_time = a.nil? ? DateTime.now : a.timestamp
   - end_time = DateTime.now
   - start_time = (tmp_time - 30.days).to_datetime
   = hidden_field_tag("variables_start", start_time)
@@ -7,10 +8,7 @@
   - field_set_tag("Pick Sites & Variables") do
     - for site in project.managed_repository{ Voeis::Site.all } do
       .field-item{:class => site.sensor_types.count > 0 ? "site": nil }
-        = check_box_tag("variables[#{site.id}]", site.id, false, 
-                        :class => "variables_#{site.id}", 
-                        :id => "variables_#{site.id}")
-        = label_tag("variables_#{site.id}", site.name)
+        .site-name{:class => 'icon' }= site.name
         .sensors
           - for variable in site.sensor_types.variables do
             .field-item-two

@@ -9,7 +9,7 @@
             = label_tag("memberships_#{role.id}", role.name)
         = f.submit('Update', :class => 'icon icon-save')
 
-#main-with-sidebar
+#main-with-sidebar-right
   #content-actions
     = link_to("Delete", project_path(@project), :method => :delete, :class => 'icon icon-delete', 
               :confirm => "Do you want to delete the #{@user.name}?\nContinue?" )
