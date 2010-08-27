@@ -53,8 +53,14 @@ $(document).ready(function(){
     } else {
       $(this).next('label').text('Does Not Have Role');
     };
+  });
     
-  })
+  // collapsible
+  // $(".site").show();
+  // $(".site").click(function()
+  //   {
+  //     $(this).children(".sensors").slideToggle(300);
+  //   });
 });
 
 (function($){

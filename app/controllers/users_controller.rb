@@ -1,6 +1,6 @@
 class UsersController < InheritedResources::Base
   respond_to :html, :json
-  
+
   defaults :resource_class => User,
            :collection_name => 'users',
            :instance_name => 'user'
@@ -9,7 +9,10 @@ class UsersController < InheritedResources::Base
     # Remove these if they were sent.
     params[:user].delete(:password)
     params[:user].delete(:password_confirmation)
+
     update!
+
+    redirect_to(:back)
   end
 
   def destroy
@@ -37,7 +40,7 @@ class UsersController < InheritedResources::Base
   def resource
     @user ||= resource_class.get(params[:id])
   end
-  
+
   def collection
     @users ||= resource_class.all.paginate(:page => params[:page], :per_page => 20, :order => 'login')
   end
@@ -45,5 +48,5 @@ class UsersController < InheritedResources::Base
   def resource_class
     User.access_as(current_user)
   end
-  
+
 end

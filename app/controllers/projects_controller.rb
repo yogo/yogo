@@ -1,6 +1,60 @@
 class ProjectsController < InheritedResources::Base
   respond_to :html, :json
-  
+
+  def show
+    # This should be a [
+    #                   [ timestamp, site.sensor.variable.value, site.sensor.variable.value ]
+    #                   [ timestamp, site.sensor.variable.value, site.sensor.variable.value ]
+    #                   [ ... ]
+    #                  ]
+    @current_data = Array.new
+    @items = Array.new
+    @start_time = nil
+    @end_time = nil
+
+    # Creates the labels for data
+    @label_array = ["timestamp"]
+
+    if params.has_key?(:variables_start)
+      @start_time = params[:variables_start].to_date
+    else
+      @start_time = DateTime.now - 7
+    end
+
+    if params.has_key?(:variables_end)
+      @end_time = params[:variables_end].to_date
+    else
+      @end_time = DateTime.now
+    end
+
+    if params.has_key?(:variables)
+      params[:variables].keys.each do |site_id|
+        site = resource.managed_repository { Voeis::Site.get(site_id) }
+        if params[:variables][site_id].empty?
+          site.variables.each do |variable|
+            @label_array << "#{site.name} #{variable.variable_name}"
+            @items << [site, variable]
+          end
+        else
+          params[:variables][site_id].each do |variable_id|
+            variable = resource.managed_repository{ Voeis::Variable.get(variable_id) }
+            @label_array << "#{site.name} #{variable.variable_name}"
+            @items << [site, variable]
+          end
+        end
+      end
+    end
+
+    # Fill in the current data
+    data_lists = []
+    @items.each do |site, variable|
+      sensor = site.sensor_types.first(:variables => {:id => variable.id })
+      data_lists << sensor.sensor_values(:timestamp.gte => start_time, :timestamp.lte => end_time, :fields => [:timestamp, :value])
+    end
+
+    debugger
+  end
+
   protected
   def resource
     @project ||= resource_class.get(params[:id])

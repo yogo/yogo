@@ -47,6 +47,6 @@
                               :confirm => "Do you want to remove #{user.name} from the #{@project.name} project?")
         
     = f.submit('Save', :class => 'icon icon-save')
-    = link_to('Cancel', projects_path, :class => 'icon icon-cancel')
+    = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel')
 = clear_break
        

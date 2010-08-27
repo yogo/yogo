@@ -1,15 +1,24 @@
-- form_for(:project, :url => collect_data_project_path(@project)) do |f|
-  - field_set_tag("Pick Sites and/or Variables") do
-    .collapsible-sites
-      - for site in project.managed_repository{ Voeis::Site.all } do
-        .field-item
-          = check_box_tag("data[#{site.id}][all]", site.id, false, :class => "data[site_#{site.id}]", :id => "data[site_#{site.id}]")
-          = label_tag("data[site_#{site.id}]", site.name)
-          - for sensor in site.sensor_types do
-            = check_box_tag("data[#{site.id}][#{sensor.id}]", site.id, false, 
-                            :class => "data[site_#{site.id}][sensor_#{sensor.id}]", 
-                            :id => "data[site_#{site.id}][sensor_#{sensor.id}]")
-            = label_tag("data[site_#{site.id}][sensor_#{sensor.id}]",           
-                        sensor.variables.first.variable_name)
+- form_for(:project, :url => project_path(@project), :html => {:method => :get}) do |f|
+  - end_time = project.managed_repository { Voeis::SensorValue.last(:order => [:timestamp.asc]).timestamp }
+  - start_time = (end_time.to_date - 7).to_datetime
+  = hidden_field_tag("variables[start]", start_time)
+  = hidden_field_tag("variables[end]", end_time)
+  - field_set_tag("Pick Sites & Variables") do
+    - for site in project.managed_repository{ Voeis::Site.all } do
+      .field-item{:class => site.sensor_types.count > 0 ? "site": nil }
+        = check_box_tag("variables[#{site.id}]", site.id, false, 
+                        :class => "variables_#{site.id}", 
+                        :id => "variables_#{site.id}")
+        = label_tag("variables_#{site.id}", site.name)
+        .sensors
+          - for variable in site.sensor_types.variables do
+            .field-item-two
+              = check_box_tag("variables[#{site.id}][]",            
+                              variable.id, false, 
+                              :class => "variables_#{site.id}_#{variable.id}", 
+                              :id => "variables_#{site.id}_#{variable.id}")
+              = label_tag("variables[#{site.id}][#{variable.id}]",           
+                          variable.variable_name)
           
   = f.submit('Update', :class => 'icon icon-save')
+  

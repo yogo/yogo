@@ -50,5 +50,5 @@
                   #delete-link
                     = link_to("Delete", user_membership_path(@user, project), :method => :delete, :class => 'icon icon-delete', :confirm => "Do you want to remove #{@user.first_name} #{@user.last_name} from the #{project.name} project?")
     = f.submit('Save', :class => 'icon icon-save')
-    = link_to('Cancel', users_path, :class => 'icon icon-cancel')
+    = link_to('Cancel', user_path(@user), :class => 'icon icon-cancel')
 = clear_break

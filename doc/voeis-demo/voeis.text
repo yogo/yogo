@@ -42,6 +42,7 @@ Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 # Overview: Projects
 - Home page is the list of projects you can see
   - Pubic projects and your projects (when logged in)
+- Create a new "Demo" Project
 
 %%# Dashboards
 %%
@@ -57,7 +58,6 @@ Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 %%# Dashboards: Latest Activity
 
 # Project User Interface
-
 - Project Dashboard
 - Project Settings
 - User, Role Management
@@ -67,35 +67,34 @@ Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 
 # Projects: Dashboard
 - Show Overview
-- Show Action Links: Add
--
+- Show Action Links: Add Site, Variable, & Data Stream
 
 # Projects: Settings
-
-- Public / Private Projects
-- Publish to HIS
+- Show Name
+- Show Description
+- Show Private Project Setting
+- Publish to HIS Setting: Turn it on
 
 # Projects: Users and Roles
+ - On the settings page
+ - Show the Members list
+ - Show how to Add users
+ - Show how to Remove users
+ - Show how to modify user roles
 
 # Projects: Creating or Adding Sites
+ - Show Adding a predefined Site
+ - Show Creating a Site
 
 # Projects: Uploading Data in CSV Format
-
 - Campbell Scientific LoggerNet
 - Generic CSV
 - Using previously defined template
 
 # Projects: Data Interaction
-
-- Data Browsing and Searching
-- Data Graphing
-- Data Download/Upload
-
-# Projects: Data Browsing and Searching
-
-# Projects: Data Graphing
-
-# Projects: Data Download
+- Show picking sites/variables
+- Show the resulting Graph
+- Show how to download the viewed data
 
 # Programmatic Access to VOEIS
 - [RESTful Access](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm)
@@ -111,29 +110,29 @@ Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
   - Programmatic upload of data files
 
 # Programmatic Access: RESTFul Access
-
 - Secured using API Keys
+- Show the User API Key in the User Settings
 - Access to all of VOEIS: Projects, Users, Roles, Sites Accessible
 
 # Programmatic Access: Example Pulling Data
-
 - Blue Water Task Force Web Page
+- Walk through the Script
 
 # Programmatic Access: Example Uploading Data
-
 - Custom Data Upload
+- Walk through the Script
 
 # CUASHI HIS Integration
-
 - HIS Imported Data
 - Projects Publishing to HIS
 
 # CUASHI HIS Integration: Importing HIS Data
+- Show Sites, Variables, and Units
 
 # CUASHI HIS Integration: Publishing to HIS
-
 - Per Project Configuration
 - All data is project published
+- Show Data in HIS
 
 # Future Features
 - Dashboards
