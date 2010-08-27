@@ -10,7 +10,7 @@
           #content-title
             = link_to(project.name, project_path(project), :class => project.is_private? ? 'icon icon-private' : nil)
           #content-actions
-            = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings')
+            = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings', :onclick => "$('#loader').toggle();")
           = clear_break
           .body-text
             - if project.description && project.description.length > 0

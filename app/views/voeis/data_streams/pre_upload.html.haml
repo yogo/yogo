@@ -100,4 +100,4 @@
     =hidden_field_tag('project_id', @project.id)
     =hidden_field_tag('rows', @row_size)
     =hidden_field_tag("start_line", @start_line)
-    =submit_tag("Submit")
+    =submit_tag("Submit", :onclick => "$('#loader').toggle();")

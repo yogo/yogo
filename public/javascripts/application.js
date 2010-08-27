@@ -1,5 +1,8 @@
 
 $(document).ready(function(){
+  // show_loader = function(){
+  // $('#loader').attr("display", "visible");
+  // };
   
   $(".date-picker").datepicker();
   
@@ -54,7 +57,8 @@ $(document).ready(function(){
       $(this).next('label').text('Does Not Have Role');
     };
     
-  })
+  });
+
 });
 
 (function($){
