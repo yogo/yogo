@@ -31,8 +31,8 @@ DataMapper.setup(:default, config[Rails.env])
 DataMapper.setup(:his, config['his']) if defined?(JRUBY_VERSION)
 
 # Use db configs in the form of "yogo_{default|persvr|sqlite|...}_{RAILS_ENV|development|production|...}"
-yogo_db = ['yogo', (ENV['YOGO_DB'] || 'default'), Rails.env].join('_')
-DataMapper.setup(:collection_data, config[yogo_db])
+# yogo_db = ['yogo', (ENV['YOGO_DB'] || 'default'), Rails.env].join('_')
+# DataMapper.setup(:collection_data, config[yogo_db])
 
 # Map the datamapper logging to rails logging
 DataMapper.logger             = Rails.logger
