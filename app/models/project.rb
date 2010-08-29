@@ -68,7 +68,6 @@ class Project
   end
 
   def publish_his
-    puts "boooyah"
     if self.publish_to_his
       sites = self.managed_repository{Voeis::Site.all}
       sites.each do |site|
@@ -139,7 +138,7 @@ class Project
                                                   :general_category => var_to_store.general_category,
                                                   :no_data_value => var_to_store.no_data_value)
               var_to_store.his_id = new_his_var.id
-              var_to_store.save 
+              var_to_store.save
             end
             sensor_type.sensor_values.all(:published => false, :order => [:timestamp.asc]).each do |val|
               #store DataValue
