@@ -8,16 +8,16 @@
 # lets you define default/fallback headers
 headers:
   generator: <%= Slideshow.generator %>
-  author:  MSU VOEIS Team
-  email:   voeis@listserv.montana.edu
+  author: MSU VOEIS Team
+  email: voeis@listserv.montana.edu
   company: Montana State University - Bozeman
-  title:   VOEIS Data Hub
+  title: VOEIS Data Hub
   subtitle:
   footer: The Virtual Observatory and Ecological Informatics System
   subfooter: An [EPSCoR](http://www.nsf.gov/div/index.jsp?div=EPSC) [Track-II](http://www.nsf.gov/publications/pub_summ.jsp?WT.z_pims_id=503336&ods_key=nsf09571) Project
-  date:  <%= Date.today %>
+  date: <%= Date.today %>
 
-  # todo: use nested config?? eg.
+  # todo: use nested config??
   # gradient:
   #   theme: dark
   #   color1:
@@ -29,12 +29,14 @@ headers:
   #
   # ultraviolet (uv) | coderay (cr)
   code-engine:  uv
+
   # Text Mate Hyperlink for Source?
   code-txmt:  false
+
   # todo: add code-linenumbers??
 
 # shortcuts for fetching template packs
-#   map shortcut to URI
+#  map shortcut to URI
 fetch:
     s6gradients: http://github.com/geraldb/slideshow-s6-gradients/raw/master/s6gradients.txt
     s6syntax: http://github.com/geraldb/slideshow-s6-syntax-highlighter/raw/master/s6syntax.txt
@@ -47,8 +49,8 @@ fetch:
     slippy: http://github.com/geraldb/slideshow-slippy/raw/master/slippy.txt
 
 # your google analytics code
-analytics:
-    google: UA-XXX
+# analytics:
+#     google: UA-XXX
 
 helper:
   renames: []

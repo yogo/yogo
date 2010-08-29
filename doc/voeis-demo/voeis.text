@@ -4,42 +4,61 @@
 %% > slideshow voeis
 %% > open index.html
 
+%% CSS Styles
+%css
+
+.overview { background: fixed #fff url('VOEIS_arch.png')       no-repeat right bottom; }
+.projects { background: fixed #fff url('VOEIS_arch_ui.png')    no-repeat right bottom; }
+.api      { background: fixed #fff url('VOEIS_arch_api.png')   no-repeat right bottom; }
+.his      { background: fixed #fff url('VOEIS_arch_his.png')   no-repeat right bottom; }
+.final    { background: fixed #fff url('VOEIS_arch_small.png') no-repeat right top   ; }
+
+%end
+
 Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 
 # Outline
+!STYLE overview
 - Overview
 - Project Interface
 - Programmatic Access
 - CUASHI HIS Integration
 - Future Features
 
+
 # Overview
+!STYLE overview
 - Home page
 - Users, Roles, Access Controls
 - Jumpboxes
 - Projects
 
 # Overview: Home Page
+!STYLE overview
 - Show Navigational Links
 - Show Version Link
 - Show About
 
 # Overview: Users
+!STYLE overview
 - Show login/logout
 - Show user settings page
 - Password Management (reset, email) not in place yet
 - Show user list
 
 # Overview: Roles
+!STYLE overview
 - Role based access controls
 - Show Role list
 - Show a Roles edit page
 - Show the role report
 
 # Overview: Jumpboxes
+!STYLE overview
 - Show the project jump box
 
 # Overview: Projects
+!STYLE overview
 - Home page is the list of projects you can see
   - Pubic projects and your projects (when logged in)
 - Create a new "Demo" Project
@@ -58,6 +77,7 @@ Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 %%# Dashboards: Latest Activity
 
 # Project User Interface
+!STYLE projects
 - Project Dashboard
 - Project Settings
 - User, Role Management
@@ -66,75 +86,93 @@ Title: VOEIS Data Hub 1.0 Release Candidate 1 Demonstration
 - Data Interactions
 
 # Projects: Dashboard
+!STYLE projects
 - Show Overview
 - Show Action Links: Add Site, Variable, & Data Stream
 
 # Projects: Settings
+!STYLE projects
 - Show Name
 - Show Description
 - Show Private Project Setting
 - Publish to HIS Setting: Turn it on
 
 # Projects: Users and Roles
- - On the settings page
- - Show the Members list
- - Show how to Add users
- - Show how to Remove users
- - Show how to modify user roles
+!STYLE projects
+- On the settings page
+- Show the Members list
+- Show how to Add users
+- Show how to Remove users
+- Show how to modify user roles
 
 # Projects: Creating or Adding Sites
- - Show Adding a predefined Site
- - Show Creating a Site
+!STYLE projects
+- Show Adding a predefined Site
+- Show Creating a Site
 
 # Projects: Uploading Data in CSV Format
+!STYLE projects
 - Campbell Scientific LoggerNet
 - Generic CSV
 - Using previously defined template
 
 # Projects: Data Interaction
+!STYLE projects
 - Show picking sites/variables
 - Show the resulting Graph
 - Show how to download the viewed data
 
 # Programmatic Access to VOEIS
+!STYLE api
 - [RESTful Access](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm)
   - REST is REpresentative|REpresentational State Transfer
   - Simpler than SOAP/XMLSchema, or XML-RPC
 
 - VOEIS REST
   - Secured using API Keys
-  - Access to all of VOEIS: Projects, Users, Roles, Sites, Sensors, Data, Units, Variables, ...
+  - Access to all of VOEIS:
+    - Projects
+    - Users & Roles
+    - Sites, Sensors, Units, Variables
+    - Data
 
 - Examples
   - Pulling Data for Web Pages, etc
   - Programmatic upload of data files
 
 # Programmatic Access: RESTFul Access
+!STYLE api
 - Secured using API Keys
 - Show the User API Key in the User Settings
 - Access to all of VOEIS: Projects, Users, Roles, Sites Accessible
 
 # Programmatic Access: Example Pulling Data
+!STYLE api
 - Blue Water Task Force Web Page
 - Walk through the Script
 
 # Programmatic Access: Example Uploading Data
+!STYLE api
 - Custom Data Upload
 - Walk through the Script
 
 # CUASHI HIS Integration
+!STYLE his
 - HIS Imported Data
 - Projects Publishing to HIS
 
 # CUASHI HIS Integration: Importing HIS Data
+!STYLE his
 - Show Sites, Variables, and Units
 
 # CUASHI HIS Integration: Publishing to HIS
+!STYLE his
 - Per Project Configuration
 - All data is project published
 - Show Data in HIS
 
 # Future Features
+!STYLE final
 - Dashboards
 - VOEIS Data Model Extensions
   - Field Observed Data
