@@ -13,11 +13,16 @@
           - for variable in site.sensor_types.variables do
             .field-item-two
               = check_box_tag("variables[#{site.id}][]",            
-                              variable.id, false, 
+                              variable.id, (params.has_key?("variables") && params["variables"].has_key?(site.id.to_s) && params["variables"][site.id.to_s].include?(variable.id.to_s)), 
                               :class => "variables_#{site.id}_#{variable.id}", 
                               :id => "variables_#{site.id}_#{variable.id}")
               = label_tag("variables[#{site.id}][#{variable.id}]",           
                           variable.variable_name)
-          
+  - field_set_tag("Data Range Selection") do
+    .field-item From: 
+    .field-item= date_select('range', 'start_date', :order => [:month, :day, :year], :default => { :day => @start_time.nil? ? DateTime.now.day : @start_time.day, :month => @start_time.nil? ? DateTime.now.month : @start_time.month, :year => @start_time.nil? ? DateTime.now.year : @start_time.year })
+    .field-item To:
+    .field-item= date_select('range', 'end_date', :order => [:month, :day, :year], :default => { :day => @end_time.nil? ? DateTime.now.day : @end_time.day, :month => @end_time.nil? ? DateTime.now.month : @end_time.month, :year => @end_time.nil? ? DateTime.now.year : @end_time.year })
+  
   = f.submit('Update', :class => 'icon icon-save', :onclick => "$('#loader').toggle();")
   

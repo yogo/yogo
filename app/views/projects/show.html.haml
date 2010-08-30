@@ -6,10 +6,13 @@
   - else
     %span.icon= @project.name
   #links
-    %span.icon.icon-add Add a: 
-    = link_to("Site", new_project_site_path(@project))
-    = link_to("Variable", new_project_variable_path(@project))
-    = link_to("Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id})
+    %span Add a: 
+    = link_to("Site", new_project_site_path(@project), :class => 'icon icon-add')
+    - if @project.managed_repository { Voeis::Site.all.count } > 0
+      = link_to("Variable", new_project_variable_path(@project), :class => 'icon icon-add')
+      = link_to("Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id}, :class => 'icon icon-add')
+      - if @project.managed_repository { Voeis::DataStream.all.count } > 0
+        = link_to("Data", add_project_data_streams_path(@project), :params => {:project_id => @project.id}, :class => 'icon icon-add')
 = clear_break
 #about-accordion
   %h3
@@ -28,7 +31,7 @@
         = link_to("Browse/Search Data", query_project_data_streams_path(@project), :class => 'button-link')
 .data-browser
   #content-sidebar-left
-    = render(:partial => 'site_streams_picker', :locals => { :project => @project })
+    = render(:partial => 'site_streams_picker', :locals => { :project => @project })  
   #main-with-sidebar-left
     #graph-accordion
       %h3
@@ -37,8 +40,8 @@
       .data-graph
         = render(:partial => 'graph',:locals => {:data => @current_data, :labels => @label_array,
                                                   :project => @project, :class_name => 'data-graph' })
-                                                  
-    = render(:partial => 'data_table', :locals => { :data => @current_data, :labels => @label_array,
-                                                    :project => @project, :class_name => 'data-table' })  
+    .data-table                                            
+      = render(:partial => 'data_table', :locals => { :data => @current_data, :labels => @label_array,
+                                                      :project => @project, :class_name => 'data-table' })  
   
 = clear_break

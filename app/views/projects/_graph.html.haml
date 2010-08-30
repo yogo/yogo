@@ -1,6 +1,6 @@
-- visualization("graph-#{project.id.to_s}", 'LineChart', :width => 600, :height => 400, :html => { :class => class_name }) do |table|
+- visualization("graph-#{project.id.to_s}", 'LineChart', :width => 600, :height => 400, :fontSize => '10', :legend => "\'none\'", :html => { :class => class_name }) do |table|
   - if @label_array.length > 1
-    - table.register_column(:datetime, @label_array[0])
+    - table.register_column(:date, @label_array[0])
     - @label_array[1..-1].each do |label|
       - table.register_column(:number, label)
     - table.add_rows(@current_data)

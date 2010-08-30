@@ -80,11 +80,11 @@
             %td
               =@start_row[i]
             %td 
-              =text_field_tag("variable"+i.to_s, @var_array[i][0])
+              =text_field_tag("variable"+i.to_s, @var_array[i][0].empty? ? "Variable #{i.to_s}" : @var_array[i][0])
             %td 
-              =text_field_tag("unit"+i.to_s, @var_array[i][1])
+              =text_field_tag("unit"+i.to_s,  @var_array[i][1].empty? ? "Unit #{i.to_s}" : @var_array[i][1])
             %td 
-              =text_field_tag("type"+i.to_s, @var_array[i][2])
+              =text_field_tag("type"+i.to_s,  @var_array[i][2].empty? ? "Type #{i.to_s}" : @var_array[i][2])
             %td 
               =select_tag("column"+i.to_s, @var_array[i][3])
             %td
