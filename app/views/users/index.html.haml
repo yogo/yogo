@@ -1,26 +1,25 @@
-#users
-  %table
-    %thead
-      %tr
-        %th Login
-        %th First Name
-        %th Last Name
-        %th Email
-        %th Created
-        %th Last Login
-        %th
-    %tbody
-      - for user in @users
-        %tr
-          %td= link_to(user.login, edit_user_path(user))
-          %td= user.first_name
-          %td= user.last_name
-          %td= user.email
-          %td
-            %center= user.created_at.nil? ? '' : user.created_at.strftime("%m/%d/%Y %I:%M %p")
-          %td
-            %center= user.last_login_at.nil? ? '' : user.last_login_at.strftime("%m/%d/%Y %I:%M %p")
-            
-#add-user= link_to("Add User", new_user_path)
+#content-actions= link_to("Add User", new_user_path, :class => 'icon icon-add')
 
-#pagination-links= pagination_links(User, params[:page], 25)
+%table
+  %thead
+    %tr
+      %th Login
+      %th First Name
+      %th Last Name
+      %th Email
+      %th Created
+      %th Last Login
+      %th
+  %tbody
+    - for user in @users
+      %tr
+        %td= link_to(user.login, edit_user_path(user))
+        %td= user.first_name
+        %td= user.last_name
+        %td= user.email
+        %td
+          %center= user.created_at.nil? ? '' : user.created_at.strftime("%m/%d/%Y %I:%M %p")
+        %td
+          %center= user.last_login_at.nil? ? '' : user.last_login_at.strftime("%m/%d/%Y %I:%M %p")
+
+#pagination-links= pagination_links(User, params[:page], 20)

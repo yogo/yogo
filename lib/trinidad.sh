@@ -32,8 +32,7 @@ case "$1" in
       else
         echo "Failed to kill trinidad, resorting to brute force."
         # Find the darn thing and kill it
-        TPID="`ps auwx | grep trinidad | grep -v grep | awk '{ print $2 }'`"
-        kill -9 $TPID
+        kill -9 `ps auwx | grep trinidad | grep -v grep | awk '{ print $2 }'`
       fi
     fi
   ;;
