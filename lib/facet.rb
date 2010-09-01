@@ -224,7 +224,7 @@ module Facet
         :create => [:new, :create],
         :retrieve => [:all, :get, :first, :last, :count, :map, :each, :&, :|] + 
           relationships.keys.map{|m| m.to_s.to_sym } +
-          self.methods.map{|m| m.to_sym },
+          self.methods.map{|m| m.to_sym } - [:update, :destroy],
         :update => [:update],
         :destroy => [:destroy]
       }
@@ -246,7 +246,7 @@ module Facet
     def permissions
       {
         :create => [],
-        :retrieve => [:attributes] + self.methods.map{ |k| k.to_sym },
+        :retrieve => [:attributes] + self.methods.map{ |k| k.to_sym } - [:attributes=, :save, :update, :save_parents, :save_children, :destroy],
         :update => [:attributes=, :save, :update, :save_parents, :save_children],
         :destroy => [:destroy]
       }
