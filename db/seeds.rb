@@ -9,7 +9,7 @@
 begin
 
   print 'Creating System Roles...'
-  
+
   user_role = SystemRole.create(:name => 'User', :description => 'Default user in the system',
                                 :actions => ["project$retrieve"])
   user_role.move(:to => 1)
@@ -21,7 +21,7 @@ begin
   sys_admin = SystemRole.first_or_new(:name => 'Administrator', :description => 'System role for Administrators',
                                       :actions => SystemRole.available_permissions)
   sys_admin.move(:to => 3)
-  
+
   print 'Done'
 
   print 'Creating Users...'
@@ -94,7 +94,7 @@ begin
   puts 'done.'
 
   print 'Creating Roles...'
-  pi = Role.create(:name => "Principal Investigator", :description => "Principal Investigators create projects to pursue research goals.", :actions => ((Role.available_permissions - Role.to_permissions) + ['role$retrieve']))
+  pi = Role.create(:name => "Principal Investigator", :description => "Principal Investigators create projects to pursue research goals.", :actions => ((Role.available_permissions - Role.to_permissions) + ['role$retrieve'] - ['project$destroy']))
   pi.move(:to => 1)
   Role.create(:name => "Field Technician",       :description => "Field Technicians manage field activities.", :actions => ['voeis/meta_tag$retrieve','voeis/sensor_type$update','voeis/sensor_type$retrieve','voeis/sensor_type$create','voeis/data_stream_column$update','voeis/data_stream_column$retrieve','voeis/data_stream_column$create','voeis/data_stream$update','voeis/data_stream$retrieve','voeis/data_stream$create','voeis/sensor_value$update','voeis/sensor_value$retrieve','voeis/sensor_value$create','project$retrieve','voeis/unit$retrieve','voeis/variable$retrieve','voeis/variable$create','voeis/site$update','voeis/site$retrieve','voeis/site$create']).move(:to => 2)
   Role.create(:name => "Laboratory Technician",  :description => "Lab Technicians manage lab activities.", :actions => ['voeis/meta_tag$retrieve','voeis/meta_tag$create','voeis/sensor_type$retrieve','voeis/data_stream_column$retrieve','voeis/data_stream$retrieve','voeis/sensor_value$retrieve','project$retrieve','voeis/unit$retrieve','voeis/variable$retrieve','voeis/site$retrieve']).move(:to => 3)
