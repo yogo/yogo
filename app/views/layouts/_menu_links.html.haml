@@ -5,4 +5,4 @@
   - if logged_in? && current_user.system_role.name.eql?('Administrator')
     = link_to("Administration", page_url(:admin))
   = link_to("About", page_url(:about))
-  = link_to("Help", "http://yogo.msu.montana.edu/", :target => 'blank')
+  = link_to("Help", page_url(:help), :target => 'blank')
