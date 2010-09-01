@@ -55,7 +55,7 @@ module Facet
         end
       else
         # logger.debug { "Access denied to method #{method}" }
-        ::Rails.logger.debug("Access denied to method #{method} on #{@target}")
+        ::Rails.logger.info("Access denied to method #{method} on #{@target}")
         raise Facet::PermissionException::Denied, "#{method} on #{@target} is not allowed"
       end
     end
@@ -224,7 +224,7 @@ module Facet
         :create => [:new, :create],
         :retrieve => [:all, :get, :first, :last, :count, :map, :each, :&, :|] + 
           relationships.keys.map{|m| m.to_s.to_sym } +
-          self.methods.map{|m| m.to_sym } - [:update, :destroy],
+          self.methods.map{|m| m.to_sym } - [:update, :destroy, :new, :create, :create!],
         :update => [:update],
         :destroy => [:destroy]
       }
@@ -246,7 +246,7 @@ module Facet
     def permissions
       {
         :create => [],
-        :retrieve => [:attributes] + self.methods.map{ |k| k.to_sym } - [:attributes=, :save, :update, :save_parents, :save_children, :destroy],
+        :retrieve => [:attributes] + self.methods.map{ |k| k.to_sym } - [:attributes=, :save, :update, :save_parents, :save_children, :destroy, :destroy!],
         :update => [:attributes=, :save, :update, :save_parents, :save_children],
         :destroy => [:destroy]
       }
