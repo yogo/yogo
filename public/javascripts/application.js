@@ -63,6 +63,7 @@ $(document).ready(function(){
   $(".site-name").click(function()
     {
       $(this).toggleClass('icon-collapsed');
+      //$(this).toggleClass('icon-expanded');
       $(this).next(".sensors").slideToggle(300);
     });
 });
