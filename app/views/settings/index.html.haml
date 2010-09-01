@@ -1,8 +1,15 @@
-#content-block
-  - for setting in Setting.all
-    .content-row
-      = setting.name.humanize
-      - if setting.value.is_a?(TrueClass) || setting.value.is_a?(FalseClass)
-        = check_box_tag(setting.name.humanize, setting.value, setting.value, :disabled => true)
-      - else
-        = text_field_tag(setting.name.humanize, setting.value, :disabled => true)
+%table
+  %thead
+    %tr
+      %th Setting Name
+      %th Value
+  %tbody
+    - for setting in Setting.all
+      %tr
+        %td= setting.name.titleize
+        %td
+          - if setting.value.is_a?(TrueClass) || setting.value.is_a?(FalseClass)
+            = check_box_tag(setting.name.humanize, setting.value, setting.value, :disabled => true)
+          - else
+            = text_field_tag(setting.name.humanize, setting.value, :disabled => true)
+              
