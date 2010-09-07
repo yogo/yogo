@@ -324,7 +324,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
       @var_array[0] = ["","","",""]
       @opts_array = Array.new
       @variables.all(:order => [:variable_name.asc]).each do |var|
-        @opts_array << [var.variable_name+":"+':'+var.sample_medium+':'+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+        @opts_array << [var.variable_name+":"+var.sample_medium+':'+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
       end
       if params[:data_template] != "None"
           data_template = parent.managed_repository {Voeis::DataStream.first(:id => params[:data_template])}
@@ -401,34 +401,39 @@ class Voeis::DataStreamsController < Voeis::BaseController
                                 :original_var => params["variable"+i.to_s],
                                 :unit => params["unit"+i.to_s],
                                 :type => params["type"+i.to_s])
-
-          variable = Voeis::Variable.first_or_create(
-                      :variable_code => @var.variable_code,
-                      :variable_name => @var.variable_name,
-                      :speciation =>  @var.speciation,
-                      :variable_units_id => @var.variable_units_id,
-                      :sample_medium =>  @var.sample_medium,
-                      :value_type => @var.value_type,
-                      :is_regular => @var.is_regular,
-                      :time_support => @var.time_support,
-                      :time_units_id => @var.time_units_id,
-                      :data_type => @var.data_type,
-                      :general_category => @var.general_category,
-                      :no_data_value => @var.no_data_value)
-          data_stream_column.variables << variable
-          data_stream_column.data_streams << @data_stream
-          data_stream_column.save
-          sensor_type = Voeis::SensorType.first_or_create(
-                        :name => params["variable"+i.to_s] + @site.name,
-                        :min => params["min"+i.to_s].to_f,
-                        :max => params["max"+i.to_s].to_f,
-                        :difference => params["difference"+i.to_s].to_f)
-          #Add sites and variable associations to senor_type
-          #
-          sensor_type.sites << @site
-          sensor_type.variables <<  variable
-          sensor_type.data_stream_columns << data_stream_column
-          sensor_type.save
+          if !params["ignore"+i.to_s]            
+            variable = Voeis::Variable.first_or_create(
+                        :variable_code => @var.variable_code,
+                        :variable_name => @var.variable_name,
+                        :speciation =>  @var.speciation,
+                        :variable_units_id => @var.variable_units_id,
+                        :sample_medium =>  @var.sample_medium,
+                        :value_type => @var.value_type,
+                        :is_regular => @var.is_regular,
+                        :time_support => @var.time_support,
+                        :time_units_id => @var.time_units_id,
+                        :data_type => @var.data_type,
+                        :general_category => @var.general_category,
+                        :no_data_value => @var.no_data_value)
+            data_stream_column.variables << variable
+            data_stream_column.data_streams << @data_stream
+            data_stream_column.save
+            sensor_type = Voeis::SensorType.first_or_create(
+                          :name => params["variable"+i.to_s] + @site.name,
+                          :min => params["min"+i.to_s].to_f,
+                          :max => params["max"+i.to_s].to_f,
+                          :difference => params["difference"+i.to_s].to_f)
+            #Add sites and variable associations to senor_type
+            #
+            sensor_type.sites << @site
+            sensor_type.variables <<  variable
+            sensor_type.data_stream_columns << data_stream_column
+            sensor_type.save
+          else
+            data_stream_column.name = "ignore"
+            data_stream_column.data_streams << @data_stream
+            data_stream_column.save
+          end
         end
       end
     end
@@ -598,17 +603,20 @@ class Voeis::DataStreamsController < Voeis::BaseController
      csv_data[data_stream_template.start_line..-1].each do |row|
        (0..row.size-1).each do |i|
          if i != data_timestamp_col
-           #save to sensor_value and sensor_type
-           parent.managed_repository{
-           sensor_value = Voeis::SensorValue.new(
-                                         :value => row[i],
-                                         :units => data_stream_col[i].unit,
-                                         :timestamp => row[data_timestamp_col],
-                                         :published => false)
-           sensor_value.save
-           sensor_value.sensor_type << sensor_type_array[i]
-           sensor_value.site << site
-           sensor_value.save}
+           puts data_stream_col
+           if data_stream_col[i].name != "ignore"
+             #save to sensor_value and sensor_type
+             parent.managed_repository{
+             sensor_value = Voeis::SensorValue.new(
+                                           :value => row[i],
+                                           :units => data_stream_col[i].unit,
+                                           :timestamp => row[data_timestamp_col],
+                                           :published => false)
+             sensor_value.save
+             sensor_value.sensor_type << sensor_type_array[i]
+             sensor_value.site << site
+             sensor_value.save}
+          end
          end
        end
      end

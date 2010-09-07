@@ -28,6 +28,7 @@
       %table
         %tr
           %th Column
+          %th Ignore
           %th Starting Row Values
           %th Logger Variable/Sensor Name
           %th Logger Unit
@@ -41,6 +42,8 @@
           %tr
             %td 
               =i.to_s
+            %td
+              =check_box_tag("ignore"+i.to_s)
             %td
               =@start_row[i]
             %td 
@@ -64,6 +67,7 @@
       %table
         %tr
           %th Column
+          %th Ignore
           %th Starting Row Values
           %th Logger Variable/Sensor Name
           %th Logger Unit
@@ -77,6 +81,8 @@
           %tr
             %td 
               =i.to_s
+            %td
+              =check_box_tag("ignore"+i.to_s)
             %td
               =@start_row[i]
             %td 
