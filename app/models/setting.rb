@@ -12,6 +12,7 @@
 # @author Robbie Lamb robbie.lamb@gmail.com
 class Setting
   include DataMapper::Resource
+  include Facet::DataMapper::Resource
 
   property :id,     Serial
   property :name,   String, :unique => true
@@ -28,14 +29,15 @@ class Setting
   # @param [String or Symbol] key
   #  The key to retrieve
   #
-  # @return [Object or nil] Returns the object at the key or nil if it doesn't exist
+  # @return [Object or nil] Returns the object at the key or false if it doesn't exist
   #
   # @author Robbie Lamb robbie.lamb@gmail.com
   #
   # @api public
   def self.[](key)
     key = key.to_s if key.is_a? Symbol
-    first_or_create(:name => key).value
+    setting = first(:name => key)
+    setting.nil? ? false : setting.value
   end
 
   ##
@@ -49,9 +51,9 @@ class Setting
   # @author Yogo Team
   #
   # @api public
-  def to_param
-    self.id.to_s
-  end
+  # def to_param
+  #   self.id.to_s
+  # end
 
   ##
   # Used to set a value for a particular key
@@ -64,7 +66,7 @@ class Setting
   # @param [Object] value
   #   Any object to be stored in the key
   #
-  # @return [Boolean] returns if successful
+  # @return [Boolean] returns true if successful
   #
   # @author Robbie Lamb robbie.lamb@gmail.com
   #

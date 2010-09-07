@@ -8,29 +8,30 @@
 
 begin
 
-  print 'Creating System Roles...'
+  print 'Creating default settings...'
+  Setting.create(:name => 'local_only', :value => false)
+  Setting.create(:name => 'asset_directory', :value => 'yogo_assets')
+  Setting.create(:name => 'anonymous_user_name', :value => 'anonymous')
+  Setting.create(:name => 'allow_api_key', :value => true)
+  Setting.create(:name => 'api_key_name', :value => 'api_key')
+  puts 'done.'
 
+  print 'Creating System Roles...'
   user_role = SystemRole.create(:name => 'User', :description => 'Default user in the system',
                                 :actions => ["project$retrieve"])
   user_role.move(:to => 1)
-
   project_manager_role = SystemRole.create(:name => 'Project Manager', :description => 'Able to create projects',
                                      :actions => ["project$retrieve", "project$update", "role$retrieve", "user$retrieve", "role$retrieve"])
   project_manager_role.move(:to => 2)
-
   sys_admin = SystemRole.first_or_new(:name => 'Administrator', :description => 'System role for Administrators',
                                       :actions => SystemRole.available_permissions)
   sys_admin.move(:to => 3)
-
-  print 'Done'
+  puts 'Done.'
 
   print 'Creating Users...'
-
-  # Create the system administrator user
   User.create(:login => 'yogo', :email => "nobody@home.com", :first_name => "System", :last_name => "Administrator", :password => 'change me', :password_confirmation => 'change me', :system_role => sys_admin)
-  # Create a test user
   User.create(:login => 'test', :email => "test@user.org",   :first_name => "Test",   :last_name => "User",          :password => "VOEISdude", :password_confirmation => "VOEISdude", :system_role => user_role)
-  # Create the actual users...
+
   User.create(:login => "alice.jones",       :email => "alice.jones@eku.edu",               :first_name => "Alice",    :last_name => "Jones",      :password => "jonesa",     :password_confirmation => "jonesa",       :system_role => project_manager_role)
   User.create(:login => "andy.hansen",       :email => "hansen@montana.edu",                :first_name => "Andy",     :last_name => "Hansen",     :password => "hansena",    :password_confirmation => "hansena",      :system_role => project_manager_role)
   User.create(:login => "barbara.kucera",    :email => "bakuce2@uky.edu",                   :first_name => "Barbara",  :last_name => "Kucera",     :password => "kucerab",    :password_confirmation => "kucerab",      :system_role => project_manager_role)
@@ -90,7 +91,6 @@ begin
   User.create(:login => "tom.bansak",        :email => "tom.bansak@flbs.umt.edu",           :first_name => "Tom",      :last_name => "Bansak",     :password => "bansakt",    :password_confirmation => "bansakt",      :system_role => project_manager_role)
   User.create(:login => "wyatt.cross",       :email => "wyatt.cross@montana.edu",           :first_name => "Wyatt",    :last_name => "Cross",      :password => "crossw",     :password_confirmation => "crossw",       :system_role => project_manager_role)
   User.create(:login => "youngee.cho",       :email => "ycho@ntsg.umt.edu",                 :first_name => "Young-ee", :last_name => "Cho",        :password => "choy",       :password_confirmation => "choy",         :system_role => project_manager_role)
-
   puts 'done.'
 
   print 'Creating Roles...'
@@ -101,14 +101,12 @@ begin
   Role.create(:name => "Data Manager",           :description => "Data Managers manage all the data for a project.", :actions => ['voeis/meta_tag$update','voeis/meta_tag$retrieve','voeis/meta_tag$create','voeis/sensor_type$update','voeis/sensor_type$retrieve','voeis/sensor_type$create','voeis/data_stream_column$update','voeis/data_stream_column$retrieve','voeis/data_stream_column$create','voeis/data_stream$update','voeis/data_stream$retrieve','voeis/data_stream$create','voeis/sensor_value$update','voeis/sensor_value$retrieve','voeis/sensor_value$create','project$retrieve','voeis/unit$update','voeis/unit$retrieve','voeis/unit$create','voeis/variable$update','voeis/variable$retrieve','voeis/variable$create','voeis/site$update','voeis/site$retrieve','voeis/site$create']).move(:to => 4)
   Role.create(:name => "Member",                 :description => "General members of projects.", :actions => ['voeis/meta_tag$retrieve','voeis/sensor_type$retrieve','voeis/data_stream_column$retrieve','voeis/data_stream$retrieve','voeis/sensor_value$retrieve','project$retrieve','voeis/unit$retrieve','voeis/variable$retrieve','voeis/site$retrieve']).move(:to => 5)
   Role.create(:name => "Program Manager",        :description => "Program Managers for the research project.", :actions => ['voeis/meta_tag$retrieve','voeis/sensor_type$retrieve','voeis/data_stream_column$retrieve','voeis/data_stream$retrieve','voeis/sensor_value$retrieve','project$retrieve','voeis/unit$retrieve','voeis/variable$retrieve','voeis/site$retrieve']).move(:to => 6)
-
   puts 'done.'
 
   print 'Creating Projects...'
   big_sky = Project.create(:name => "Big Sky",    :description => "In recent decades, the Rocky Mountain West has been one of the fastest growing regions in the United States. Headwater streams in mountain environments may be particularly susceptible to nitrogen enrichment from residential and resort development. The West Fork of the Gallatin River in the northern Rocky Mountains of southwestern Montana drains Big Sky, Moonlight Basin, Yellowstone Club, and Spanish Peaks resort areas. Streams in the West Fork watershed range from first-order, high-gradient, boulder dominated mountain streams in the upper elevations to fourth-order, alluvial streams near the watershed outlet. Since resort development in the Big Sky area, streamwater nitrate concentrations in the West Fork of the Gallatin River have followed a similar upward trend as development. Current work demonstrates the importance of 1) incorporating spatial relationships into water quality modeling, and 2) investigating streamwater chemistry across seasons to gain a more complete understanding of development impacts on streamwater quality.")
 
-  tcef    = Project.create(:name => "Tenderfoot", :description => "The Tenderfoot Creek Experimental Forest (TCEF) comprises 2,200 ha in the Little Belt Mountains of central Montana, and the forest is characteristic of the vast expanses of lodgepole pine found east of the continental divide. TCEF is drained by Tenderfoot Creek, which flows into the Smith River, a tributary of the Missouri River. At TCEF, freezing temperatures and snow can occur every month of the year, with mean annual temperature of 0°C. Mean annual precipitation is 880 mm. The elevation ranges from 1840 to 2421 m and has a full range of slope, aspect, and topographic convergence and divergence. The most compelling aspects of this set of 7 nested TCEF research watersheds are 1) that they are among the most comprehensively instrumented and data rich sites for watershed science; 2) the strongly varying watershed shapes/structures and streamflow response from one similar sized adjacent watershed to the next; 3) the opportunity to build on cumulative understanding of catchment dynamics and elucidating emergent behavior to be captured in watershed models.")
-
+  tcef    = Project.create(:name => "Tenderfoot", :description => "The Tenderfoot Creek Experimental Forest (TCEF) comprises 2,200 ha in the Little Belt Mountains of central Montana, and the forest is characteristic of the vast expanses of lodgepole pine found east of the continental divide. TCEF is drained by Tenderfoot Creek, which flows into the Smith River, a tributary of the Missouri River. At TCEF, freezing temperatures and snow can occur every month of the year, with mean annual temperature of 0C. Mean annual precipitation is 880 mm. The elevation ranges from 1840 to 2421 m and has a full range of slope, aspect, and topographic convergence and divergence. The most compelling aspects of this set of 7 nested TCEF research watersheds are 1) that they are among the most comprehensively instrumented and data rich sites for watershed science; 2) the strongly varying watershed shapes/structures and streamflow response from one similar sized adjacent watershed to the next; 3) the opportunity to build on cumulative understanding of catchment dynamics and elucidating emergent behavior to be captured in watershed models.")
   puts 'done.'
 
   print 'Adding Users to Projects...'

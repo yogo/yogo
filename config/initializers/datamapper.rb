@@ -40,25 +40,25 @@ if Object.const_defined?(:DataObjects)
   DataObjects::Postgres.logger  = Rails.logger if DataObjects.const_defined?(:Postgres)
   DataObjects::Sqlserver.logger = Rails.logger if DataObjects.const_defined?(:Sqlserver)
   DataObjects::Mysql.logger     = Rails.logger if DataObjects.const_defined?(:Mysql)
-  DataObjects::Sqlite3.logger    = Rails.logger if DataObjects.const_defined?(:Sqlite3)
+  DataObjects::Sqlite3.logger   = Rails.logger if DataObjects.const_defined?(:Sqlite3)
 end
 
 # Load the project model and migrate it if needed.
+Project
+Setting
 User
 Role
-Site
-Variable
-Unit
-Setting
 Membership
-Project
+Site
+Unit
+Variable
 
 DataMapper.finalize
 DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(Setting.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(User.storage_name) &&
                                 DataMapper.repository(:default).storage_exists?(Role.storage_name) &&
-DataMapper.repository(:default).storage_exists?(Membership.storage_name) &&
-DataMapper.repository(:default).storage_exists?(Site.storage_name) &&
-DataMapper.repository(:default).storage_exists?(Unit.storage_name) &&
-DataMapper.repository(:default).storage_exists?(Variable.storage_name)
+                                DataMapper.repository(:default).storage_exists?(Membership.storage_name) &&
+                                DataMapper.repository(:default).storage_exists?(Site.storage_name) &&
+                                DataMapper.repository(:default).storage_exists?(Unit.storage_name) &&
+                                DataMapper.repository(:default).storage_exists?(Variable.storage_name)

@@ -58,6 +58,7 @@ group :development do
   # Platforms only works in block format in bundler 1.0.0.rc.6
   platforms(:mri_18) { gem "ruby-debug",             :require => nil }
   platforms(:mri_19) { gem "ruby-debug19",           :require => nil }
+  gem "test-unit", "1.2.3"
 end
 
 group :test, :cucumber do
