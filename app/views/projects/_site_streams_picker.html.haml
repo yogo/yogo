@@ -17,7 +17,7 @@
                               :class => "variables_#{site.id}_#{variable.id}", 
                               :id => "variables_#{site.id}_#{variable.id}")
               = label_tag("variables[#{site.id}][#{variable.id}]",           
-                          variable.variable_name)
+                          variable.variable_name+':'+variable.sample_medium+':'+ variable.data_type+':'+Unit.get(variable.variable_units_id).units_name)
   - field_set_tag("Data Range Selection") do
     .field-item From: 
     .field-item= date_select('range', 'start_date', :order => [:month, :day, :year], :default => { :day => @start_time.nil? ? DateTime.now.day : @start_time.day, :month => @start_time.nil? ? DateTime.now.month : @start_time.month, :year => @start_time.nil? ? DateTime.now.year : @start_time.year })
