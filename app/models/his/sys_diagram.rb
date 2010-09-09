@@ -6,7 +6,7 @@ class His::SysDiagrams
   include DataMapper::Resource
   
   def self.default_repository_name
-    :his
+    :his_rest
   end
   
   def self.storage_name(repository_name)

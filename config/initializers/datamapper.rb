@@ -19,20 +19,13 @@ require 'datamapper/property/raw'
 # When saving models don't be terse
 DataMapper::Model.raise_on_save_failure = true
 
-# When saving models don't be terse
-DataMapper::Model.raise_on_save_failure = true
-
 # Read the configuration from the existing database.yml file
 config = Rails.configuration.database_configuration
 
 # Setup the default datamapper repository corresponding to the current rails environment
 # unnecessary: rails-datamapper handles this
 DataMapper.setup(:default, config[Rails.env])
-DataMapper.setup(:his, config['his']) if defined?(JRUBY_VERSION)
-
-# Use db configs in the form of "yogo_{default|persvr|sqlite|...}_{RAILS_ENV|development|production|...}"
-# yogo_db = ['yogo', (ENV['YOGO_DB'] || 'default'), Rails.env].join('_')
-# DataMapper.setup(:collection_data, config[yogo_db])
+DataMapper.setup(:his_rest, config['his_rest'])
 
 # Map the datamapper logging to rails logging
 DataMapper.logger             = Rails.logger

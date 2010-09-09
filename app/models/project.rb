@@ -14,7 +14,11 @@ class Project
   include Yogo::DataMapper::RepositoryManager
   include Facet::DataMapper::Resource
 
-  property :id,               UUID,       :key => true, :default => lambda { |x,y| UUIDTools::UUID.timestamp_create }
+  if RUBY_VERSION == "1.8.7"
+    property :id,               UUID,       :key => true, :default => lambda { UUIDTools::UUID.timestamp_create }
+  else
+    property :id,               UUID,       :key => true, :default => lambda { |x,y| UUIDTools::UUID.timestamp_create }
+  end
   property :name,             String,     :required => true
   property :description,      Text
 
