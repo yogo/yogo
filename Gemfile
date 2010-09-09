@@ -8,6 +8,7 @@ gem "dm-core",              DATAMAPPER_VERSION
 gem "dm-is-list",           DATAMAPPER_VERSION
 gem "dm-migrations",        DATAMAPPER_VERSION
 gem "dm-persevere-adapter", "0.72.0", :require => nil
+gem "dm-rest-adapter"
 
 # These are required so we can make it simple to interact with legacy data
 gem 'dm-sqlite-adapter',    DATAMAPPER_VERSION, :require => nil
@@ -25,9 +26,6 @@ gem "rails",                "2.3.8"
 gem "rake",                 :require => nil
 
 gem 'inherited_resources', '~> 1.0.6'
-# gem 'ruby-debug-base'
-# gem 'ruby-debug'
-
 
 # Extra supporting gems
 gem "carrierwave"
@@ -41,7 +39,6 @@ gem 'rails_warden'
 platforms(:ruby_18, :jruby) { gem "fastercsv" }
 
 platforms :jruby do
-  gem "dm-sqlserver-adapter", :require => nil
   gem "jruby-openssl",        :require => nil
   gem "json_pure",            :require => nil
   gem "BlueCloth",            :require => nil # Required for YARD
