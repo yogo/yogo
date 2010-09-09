@@ -103,17 +103,20 @@ GEM
       dm-migrations
       dm-types (~> 1.0)
       dm-validations
+    dm-rest-adapter (1.0.0)
+      dm-core (~> 1.0.0)
+      dm-serializer (~> 1.0.0)
+    dm-serializer (1.0.0)
+      dm-core (~> 1.0.0)
+      fastercsv (~> 1.5.3)
+      json_pure (~> 1.4.3)
     dm-sqlite-adapter (1.0.0)
       dm-do-adapter (~> 1.0.0)
       do_sqlite3 (~> 0.10.2)
-    dm-sqlserver-adapter (1.0.0)
-      dm-do-adapter (~> 1.0.0)
-      do_sqlserver (~> 0.10.2)
     dm-timestamps (1.0.0)
       dm-core (~> 1.0.0)
     dm-validations (1.0.0)
       dm-core (~> 1.0.0)
-    do-jdbc_sqlserver (1.2.4-java)
     do_jdbc (0.10.2-java)
       data_objects (= 0.10.2)
     do_sqlite3 (0.10.2)
@@ -122,10 +125,6 @@ GEM
       data_objects (= 0.10.2)
       do_jdbc (= 0.10.2)
       jdbc-sqlite3 (>= 3.5.8)
-    do_sqlserver (0.10.2-java)
-      data_objects (= 0.10.2)
-      do-jdbc_sqlserver (~> 1.2.4)
-      do_jdbc (= 0.10.2)
     extlib (0.9.15)
     fastercsv (1.5.3)
     fattr (2.1.0)
@@ -278,8 +277,8 @@ DEPENDENCIES
   dm-is-list (= 1.0)
   dm-migrations (= 1.0)
   dm-persevere-adapter (= 0.72.0)
+  dm-rest-adapter
   dm-sqlite-adapter (= 1.0)
-  dm-sqlserver-adapter
   dm-types (~> 1.0.0)!
   fastercsv
   fattr
