@@ -295,11 +295,11 @@ class Voeis::DataStreamsController < Voeis::BaseController
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
-        redirect_to(:controller =>"projects", :action => "add_stream", :params => {:id => params[:project_id]})
+        redirect_to(:controller =>"voeis/data_streams", :action => "new", :params => {:id => params[:project_id]})
 
       else
-        puts name = params['datafile'].original_filename
-        puts directory = "temp_data"
+        name = params['datafile'].original_filename
+        directory = "temp_data"
         @new_file = File.join(directory,name)
         File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
         # Read the logger file header
@@ -308,7 +308,6 @@ class Voeis::DataStreamsController < Voeis::BaseController
           @header_info = parse_logger_csv_header(datafile.path)
 
           @start_row = @header_info.last
-
           @row_size = @start_row.size - 1
           if @header_info.empty?
             flash[:error] = "CSV File improperly formatted. Data not uploaded."
@@ -321,7 +320,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
         end
       end
       @var_array = Array.new
-      @var_array[0] = ["","","",""]
+      @var_array[0] = ["","","","","","",""]
       @opts_array = Array.new
       @variables.all(:order => [:variable_name.asc]).each do |var|
         @opts_array << [var.variable_name+":"+var.sample_medium+':'+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
@@ -331,14 +330,14 @@ class Voeis::DataStreamsController < Voeis::BaseController
           (0..@row_size).each do |i|
              puts i
              data_col = data_template.data_stream_columns.first(:column_number => i)
-             if data_col.name != "Timestamp"
+             if data_col.name != "Timestamp" 
                if data_col.variables.empty?
-                 @var_array[i] = [data_col.name, data_col.unit, data_col.type,opts_for_select(@opts_array),data_col.sensor_types.first.min, data_col.sensor_types.first.max, data_col.sensor_types.first.difference]
+                 @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array),"", "", "",data_col.name]
                else
-                 @var_array[i] = [data_col.name, data_col.unit, data_col.type,opts_for_select(@opts_array,Variable.first(:variable_code => data_col.variables.first.variable_code).id.to_s),data_col.sensor_types.first.min, data_col.sensor_types.first.max, data_col.sensor_types.first.difference]
+                 @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array,Variable.first(:variable_code => data_col.variables.first.variable_code).id.to_s),data_col.sensor_types.first.min, data_col.sensor_types.first.max, data_col.sensor_types.first.difference,data_col.name]
                end
               else
-                @var_array[i] = [data_col.name, data_col.unit, data_col.type,opts_for_select(@opts_array),"","",""]
+                @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array),"","","",""]
               end
           end
       else
@@ -347,10 +346,26 @@ class Voeis::DataStreamsController < Voeis::BaseController
          end
       end
 
-      respond_to do |format|
-        format.html
-      end
-    end
+
+        end
+      # respond_to do |format|
+      #   format.js do
+      #     render :update do |page|
+      #       page.replace_html "upload", :partial => "pre_upload",
+      #       :locals => {:sites => @sites,
+      #                   :var_array => @var_array,
+      #                   :opts_array=> @opts_array,
+      #                   :start_line => @start_line,
+      #                   :start_row => @start_row,
+      #                   :new_file => @new_file,
+      #                   :header_box => params[:header_box],
+      #                   :header_info => @header_info,
+      #                   :project_id => @project.id,
+      #                   :row_size => @row_size, }
+      #     end
+      #   end
+      # end
+
   end
 
 
@@ -359,6 +374,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
     #create and save new DataStream
     @data_stream =""
     @site =""
+    redirect_path =Hash.new
     parent.managed_repository do
       @data_stream = Voeis::DataStream.create(:name => params[:data_stream_name],
                                               :description => params[:data_stream_description],
@@ -433,10 +449,10 @@ class Voeis::DataStreamsController < Voeis::BaseController
             data_stream_column.name = "ignore"
             data_stream_column.data_streams << @data_stream
             data_stream_column.save
-          end
-        end
-      end
-    end
+          end #end if
+        end #end managed repository
+      end #end if
+    end #end range.each
     # Parse the csv file using the newly created data_stream template and
     # save the values as sensor_values
     parse_logger_csv(params[:datafile], @data_stream, @site)
