@@ -27,5 +27,5 @@ his_rest:
   format: xml
   host: localhost
   port: 4000
-  # login: VOEIS
-  # password: v0e!5
+  # user: voeis
+  # password: secret
