@@ -17,9 +17,9 @@ class Variable
   property :no_data_value, Float, :required => true, :default => -9999
 
   has n, :units, :model => "Unit", :through => Resource
-  
-  def self.update_from_his
-    his_variables = His::Variables.all
+
+  def load_from_his
+    his_variables = His::Variable.all
 
     his_variables.each do |his_v|
       if self.first(:his_id => his_v.id).nil?
@@ -39,18 +39,15 @@ class Variable
       end
     end
   end
-  
-  #probably don't want to do it this way 
-  #probably want to use self but my brain is blanking 
-  #so I'm writing it this way for now in the name of speed
-  def self.store_to_his(u_id)
+
+  def store_to_his(u_id)
     var_to_store = self.first(:id => u_id)
     if var_to_store.is_regular == true
       reg = 1
     else
       reg =0
     end
-    new_his_var = His::Variables.new(:variable_name => var_to_store.variable_name,
+    new_his_var = His::Variable.new(:variable_name => var_to_store.variable_name,
                                         :variable_code => var_to_store.variable_code,
                                         :speciation => var_to_store.speciation,
                                         :variable_units_id => var_to_store.variable_units_id,
@@ -66,5 +63,6 @@ class Variable
     puts new_his_var.errors.inspect
     var_to_store.his_id = new_his_var.id
     var_to_store.save
+    new_his_var
   end
 end

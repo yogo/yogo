@@ -59,5 +59,5 @@ ActionController::Routing::Routes.draw do |map|
   map.login '/login', :controller => 'user_sessions', :action => 'new'
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => "projects"
+  map.root :controller => 'pages', :action => 'show', :id => :home
 end

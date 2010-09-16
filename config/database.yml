@@ -22,10 +22,10 @@ test:
 #
 # HIS Servers
 #
-his_rest:
+his:
   adapter: rest
   format: xml
   host: localhost
   port: 4000
-  # user: voeis
-  # password: secret
+  user: voeis
+  password: secret

@@ -25,7 +25,7 @@ config = Rails.configuration.database_configuration
 # Setup the default datamapper repository corresponding to the current rails environment
 # unnecessary: rails-datamapper handles this
 DataMapper.setup(:default, config[Rails.env])
-DataMapper.setup(:his_rest, config['his_rest'])
+DataMapper.setup(:his, config['his'])
 
 # Map the datamapper logging to rails logging
 DataMapper.logger             = Rails.logger

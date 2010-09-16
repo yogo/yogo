@@ -1,7 +1,7 @@
 class His::VariablesController < ApplicationController
   # GET /variables
   def index
-    @variables = His::Variables.all
+    @variables = His::Variable.all
     
     respond_to do |format|
       format.html # index.html.erb
@@ -10,7 +10,7 @@ class His::VariablesController < ApplicationController
 
   # GET /variables/1
   def show
-    @variable = His::Variables.get(params[:id])
+    @variable = His::Variable.get(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -19,7 +19,7 @@ class His::VariablesController < ApplicationController
 
   # GET /variables/new
   def new
-    @variable = His::Variables.new
+    @variable = His::Variable.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -28,16 +28,16 @@ class His::VariablesController < ApplicationController
 
   # GET /variables/1/edit
   def edit
-    @variable = His::Variables.get(params[:id])
+    @variable = His::Variable.get(params[:id])
   end
 
   # POST /variables
   def create
-    @variable = His::Variables.new(params[:variable])
+    @variable = His::Variable.new(params[:variable])
 
     respond_to do |format|
       if @variable.save
-        flash[:notice] = 'His::Variables was successfully created.'
+        flash[:notice] = 'His::Variable was successfully created.'
         format.html { (redirect_to(his_variable_path( @variable.id))) }
       else
         format.html { render :action => "new" }
@@ -47,11 +47,11 @@ class His::VariablesController < ApplicationController
 
   # PUT /variables/1
   def update
-    @variable = His::Variables.get(params[:variable])
+    @variable = His::Variable.get(params[:variable])
 
     respond_to do |format|
       if @variable.update_attributes(params[:id])
-        flash[:notice] = 'His::Variables was successfully updated.'
+        flash[:notice] = 'His::Variable was successfully updated.'
         format.html { redirect_to(his_variable_path( @variable.id)) }
       else
         format.html { render :action => "edit" }

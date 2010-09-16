@@ -73,14 +73,14 @@ class Project
 
   def publish_his
     if self.publish_to_his
-      sites = self.managed_repository{Voeis::Site.all}
+      sites = self.managed_repository{ Voeis::Site.all }
       sites.each do |site|
-        system_site = Site.first(:site_code => site.code, :site_name => site.name)
-        if system_site.nil? #these are function methods but aren't recognized for some reason
-          system_site = Site.first_or_create(:site_code => site.code,
+        # Store system wide first
+        system_site = Site.first_or_create(:site_code => site.code,
                                            :site_name  => site.name,
                                            :latitude  => site.latitude,
                                            :longitude  => site.longitude,
+                                           :state  => site.state,
                                            :lat_long_datum_id => 1,
                                            :elevation_m   => 0,
                                            :vertical_datum  => "Unknown",
@@ -88,84 +88,34 @@ class Project
                                            :local_y  => 0.0,
                                            :local_projection_id  => 1,
                                            :pos_accuracy_m  => 1,
-                                           :state  => site.state,
                                            :county  => "USA",
                                            :comments  => "comment")
-        end
-        if system_site.his_id.nil?#these are function methods but aren't recognized for some reason
-          his_site = His::Sites.first(:site_code => system_site.site_code)
-          if !his_site.nil?
-            system_site.his_id = his_site.id
-          else
-            site_to_store = system_site
-            new_his_site = His::Sites.first_or_create(:site_code => site_to_store.site_code,
-                                             :site_name  => site_to_store.site_name,
-                                             :latitude  => site_to_store.latitude,
-                                             :longitude  => site_to_store.longitude,
-                                             :lat_long_datum_id => site_to_store.lat_long_datum_id,
-                                             :elevation_m   => site_to_store.elevation_m,
-                                             :vertical_datum  => "Unknown",
-                                             :local_x  => site_to_store.local_x,
-                                             :local_y  => site_to_store.local_y,
-                                             :local_projection_id  => site_to_store.local_projection_id,
-                                             :pos_accuracy_m  => site_to_store.pos_accuracy_m,
-                                             :state  => site_to_store.state,
-                                             :county  => site_to_store.county,
-                                             :comments  => site_to_store.comments)
-            site_to_store.his_id = new_his_site.id
-            site_to_store.save
-            system_site= site_to_store
-          end
-        end
+        # Push to HIS
+        his_site = system_site.store_to_his
         site.sensor_types.each do |sensor_type|
           if sensor_type.name != "Timestamp"
             variable = sensor_type.variables.first
             system_variable = Variable.first(:variable_code => variable.variable_code, :variable_name => variable.variable_name)
-            if system_variable.his_id.nil?
-              #system_variable.store_to_his(system_variable.id)
-              var_to_store = Variable.first(:id => system_variable.id)
-              if var_to_store.is_regular == true
-                reg = 1
-              else
-                reg =0
-              end
-              new_his_var = His::Variables.first_or_create(:variable_name => var_to_store.variable_name,
-                                                  :variable_code => var_to_store.variable_code,
-                                                  :speciation => var_to_store.speciation,
-                                                  :variable_units_id => var_to_store.variable_units_id,
-                                                  :sample_medium => var_to_store.sample_medium,
-                                                  :value_type => var_to_store.value_type,
-                                                  :is_regular => reg,
-                                                  :time_support => var_to_store.time_support,
-                                                  :time_units_id => var_to_store.time_units_id,
-                                                  :data_type => var_to_store.data_type,
-                                                  :general_category => var_to_store.general_category,
-                                                  :no_data_value => var_to_store.no_data_value)
-              var_to_store.his_id = new_his_var.id
-              var_to_store.save
-            end
+            his_variable = system_variable.store_to_his
             sensor_type.sensor_values.all(:published => false, :order => [:timestamp.asc]).each do |val|
-              #store DataValue
-
-              his_val = His::DataValues.first_or_create(:data_value => val.value,
-                                    :value_accuracy => 1.0,
-                                    :local_date_time => val.timestamp,
-                                    :utc_offset => 7,
-                                    :date_time_utc => val.timestamp,
-                                    :site_id => system_site.his_id,
-                                    :variable_id => system_variable.his_id,
-                                    :offset_value => 0,
-                                    :offset_type_id => 1,
-                                    :censor_code => 'nc',
-                                    :qualifier_id => 1,
-                                    :method_id => 0,
-                                    :source_id => 1,
-                                    :sample_id => 3,
-                                    #:derived_from_id => 1,
-                                    :quality_control_level_id => 0)
+              his_val = His::DataValue.first_or_create(:data_value => val.value,
+                                                        :value_accuracy => 1.0,
+                                                        :local_date_time => val.timestamp,
+                                                        :utc_offset => 7,
+                                                        :date_time_utc => val.timestamp,
+                                                        :site_id => system_site.his_id,
+                                                        :variable_id => system_variable.his_id,
+                                                        :offset_value => 0,
+                                                        :offset_type_id => 1,
+                                                        :censor_code => 'nc',
+                                                        :qualifier_id => 1,
+                                                        :method_id => 0,
+                                                        :source_id => 1,
+                                                        :sample_id => 3,
+                                                        #:derived_from_id => 1,
+                                                        :quality_control_level_id => 0)
               val.published = true
-              puts "oh yeah"
-              puts val.save
+              val.save
             end #val
           end #if
         end # sensor_type

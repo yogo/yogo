@@ -1,4 +1,5 @@
-# Variables
+
+# # Variables
 #
 # This is apart of "Variables"
 # The Variables table lists the full descriptive information about what variables have been
@@ -38,46 +39,30 @@
 # would never expect to measure a water temperature of -9999.  The default value for this
 # field is -9999.
 #
-class His::Variables
-  include DataMapper::Resource
-  include Odhelper
+class His::Variable < His::Base
+  storage_names[:his] = "variables"
 
-  def self.default_repository_name
-    :his_rest
-  end
+  property :id,                 Serial
+  property :variable_code,      String, :required => true,                              :unique => true, :format => /[^\t|\n|\r]/
+  property :variable_name,      String, :required => true
+  property :speciation,         String, :required => true, :default => 'Not Applicable'
+  property :variable_units_id,  Integer,:required => true
+  property :sample_medium,      String, :required => true, :default => 'Unknown'
+  property :value_type,         String, :required => true, :default =>'Unknown'
+  property :is_regular,         Integer,:required => true, :default => 0
+  property :time_support,       Float,  :required => true
+  property :time_units_id,      Integer,:required => true, :default => 103
+  property :data_type,          String, :required => true, :default => 'Unknown'
+  property :general_category,   String, :required => true, :default => 'Unknown'
+  property :no_data_value,      Float,  :required => true, :default => -9999
 
-  def self.storage_name(repository_name)
-    return self.name.gsub(/.+::/, '')
-  end
-
-  property :id,               Serial, :required => true, :key => true, :field => "VariableID"
-  property :variable_code,    String, :required => true, :field => "VariableCode"
-  property :variable_name,    String, :required => true, :field => "VariableName"
-  property :speciation,       String, :required => true, :default => 'Not Applicable', :field => "Speciation"
-  property :variable_units_id,Integer,:required => true, :field => "VariableUnitsID"
-  property :sample_medium,    String, :required => true, :default => 'Unknown', :field => "SampleMedium"
-  property :value_type,       String, :required => true, :default =>'Unknown', :field => "ValueType"
-  property :is_regular,       Integer,:required => true, :default => 0, :field => "IsRegular"
-  property :time_support,     Float,  :required => true, :field => "TimeSupport"
-  property :time_units_id,    Integer,:required => true, :default => 103, :field => "TimeUnitsID"
-  property :data_type,        String, :required => true, :default => 'Unknown', :field => "DataType"
-  property :general_category, String, :required => true, :default => 'Unknown', :field => "GeneralCategory"
-  property :no_data_value,    Float,  :required => true, :default => -9999, :field => "NoDataValue"
-
-  has n, :Categories,               :model => "His::Categories"
-  belongs_to :units,                :model => "His::Units", :child_key => [:time_units_id, :variable_units_id] #will this work?
-  belongs_to :data_type_cv,         :model => "His::DataTypeCV", :child_key => [:data_type]
+  has n,     :Categories,           :model => "His::Category"
+  belongs_to :units,                :model => "His::Unit",              :child_key => [:time_units_id, :variable_units_id] #will this work?
+  belongs_to :data_type_cv,         :model => "His::DataTypeCV",        :child_key => [:data_type]
   belongs_to :general_category_cv,  :model => "His::GeneralCategoryCV", :child_key => [:general_category]
-  belongs_to :sample_medium_cv,     :model => "His::SampleMediumCV", :child_key => [:sample_medium]
-  belongs_to :value_type_cv,        :model => "His::ValueTypeCV", :child_key => [:value_type]
-  belongs_to :variable_name_cv,     :model => "His::VariableNameCV", :child_key => [:variable_name]
-  belongs_to :speciation_cv,        :model => "His::SpeciationCV", :child_key => [:speciation]
-  belongs_to :data_values,          :model => "His::DataValues", :child_key => [:varialbe_id]
-
-  validates_uniqueness_of :variable_code
-
-  validates_with_method :variable_code, :method => :check_variable_code
-  def check_variable_code
-    check_ws_absence(self.variable_code, "VariableCode")
-  end
+  belongs_to :sample_medium_cv,     :model => "His::SampleMediumCV",    :child_key => [:sample_medium]
+  belongs_to :value_type_cv,        :model => "His::ValueTypeCV",       :child_key => [:value_type]
+  belongs_to :variable_name_cv,     :model => "His::VariableNameCV",    :child_key => [:variable_name]
+  belongs_to :speciation_cv,        :model => "His::SpeciationCV",      :child_key => [:speciation]
+  belongs_to :data_values,          :model => "His::DataValue",         :child_key => [:varialbe_id]
 end

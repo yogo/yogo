@@ -5,12 +5,13 @@
       = image_tag("Flathead.jpg", :alt => "Flathead Lake at sunset.", :align => "left",:width=>"550px")
     #login-description
       %p The Virtual Observatory and Ecological Informatics System (VOEIS) provides a framework for data acquisition, analysis, model integration, and display of data products from completed workflows including geospatially explicit models, graphs from statistical analyses, GIS displays of classified ecological attributes on the landscape, and 3-D visualization models of waterscape and landscape processes.
-      #login-box
-        = f.error_messages
-        = f.text_field(:login, :label => "User Name:")
-        = f.password_field(:password, :label => 'Password:')
-        = f.check_box(:remember_me)
-        = f.submit("Login")
+      - if current_user.nil?
+        #login-box
+          = f.error_messages
+          = f.text_field(:login, :label => "User Name:")
+          = f.password_field(:password, :label => 'Password:')
+          = f.check_box(:remember_me)
+          = f.submit("Login")
       %br
       %br
       %h2

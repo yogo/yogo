@@ -11,23 +11,13 @@
 # * This table should be populated before categorical data values are added to the DataValues
 # table.
 #
-class His::Categories
-  include DataMapper::Resource
-  include Odhelper
+class His::Category < His::Base
+  storage_names[:his] = "categories"
 
-  def self.default_repository_name
-    :his_rest
-  end
+  property :id,                   Serial
+  property :data_value,           Float,    :required => true
+  property :category_description, String,   :required => true
 
-  def self.storage_name(repository_name)
-    return self.name.gsub(/.+::/, '')
-  end
-
-  property :id,                   Integer,  :required => true, :key=>true, :field => "VariableID"
-  property :data_value,           Float,    :required => true, :field => "DataValue"
-  property :category_description, String,   :required => true, :field => "CategoryDescription"
-
-  has n,      :data_values, :model => "His::DataValues"
-  belongs_to  :variables,   :model => "His::Variables", :child_key => [:id]
-
+  has n,      :data_values, :model => "His::DataValue"
+  belongs_to  :variables,   :model => "His::Variable", :child_key => [:id]
 end

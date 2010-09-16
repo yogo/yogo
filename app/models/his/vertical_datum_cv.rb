@@ -6,25 +6,11 @@
 # This table is pre-populated within the ODM.  Changes to this controlled vocabulary can be
 # requested at http://water.usu.edu/cuahsi/odm/.
 #
-class His::VerticalDatumCV
-  include DataMapper::Resource
-  include Odhelper
+class His::VerticalDatumCV < His::Base
+  storage_names[:his] = "vertical_datum_cv"
 
-  def self.default_repository_name
-    :his_rest
-  end
+  property :term,       String, :key => true, :required => true, :format => /[^\t|\n|\r]/
+  property :definition, String
 
-  def self.storage_name(repository_name)
-    return self.name.gsub(/.+::/, '')
-  end
-
-  property :term, String, :required => true, :key => true, :field => "Term"
-  property :Definition, String, :field => "Definition"
-
-  has n, :Sites, :model => "His::Sites"
-
-  validates_with_method :term, :method => :check_term
-  def check_term
-    check_ws_absence(self.term, "Term")
-  end
+  has n, :Sites, :model => "His::Site"
 end

@@ -23,7 +23,7 @@
     #subtitle Project Settings
   - form_for(:project, @project, :url => project_path(@project), :builder => YogoFormBuilder, :html => {:method => :put}) do |f|
     = f.check_box(:is_private, :label => "Private Project", :class => 'icon icon-private')
-    = f.check_box(:publish_to_his, :label =>"Publish to HIS")
+    = f.check_box(:publish_to_his, :label =>"Publish to HIS", :disabled => true)
     %h5= f.text_area(:description, :label => "Description: ", :class => "liquid")
     %h5.tight  Members
     %table

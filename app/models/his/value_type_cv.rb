@@ -1,29 +1,14 @@
 # ValueTypeCV
 #
-# The ValueTypeCV table contains the controlled vocabulary for the ValueType field in the 
+# The ValueTypeCV table contains the controlled vocabulary for the ValueType field in the
 # Variables and SeriesCatalog tables.
-# This table is pre-populated within the ODM.  Changes to this controlled vocabulary can be 
+# This table is pre-populated within the ODM.  Changes to this controlled vocabulary can be
 #
-class His::ValueTypeCV
-  include DataMapper::Resource
-  include Odhelper
-  
-  def self.default_repository_name
-    :his_rest
-  end
-  
-  def self.storage_name(repository_name)
-    return self.name.gsub(/.+::/, '')
-  end
-  
-  property :term, String, :required => true, :key => true, :field => "Term"
-  property :definition, String, :field => "Definition"
-  
-  has n, :variables, :model => "His::Variables"
+class His::ValueTypeCV < His::Base
+  storage_names[:his] = "value_type_cvs"
 
-  validates_with_method :term, :method => :check_term
-  def check_term
-    check_ws_absence(self.term, "Term")
-  end
-  
+  property :term,       String, :required => true, :key => true, :format => /[^\t|\n|\r]/
+  property :definition, String
+
+  has n,   :variables, :model => "His::Variable"
 end
