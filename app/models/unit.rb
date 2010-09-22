@@ -16,10 +16,10 @@ class Unit
   property :units_abbreviation, String, :required => true
 
   has n, :variables, :model => "Variable", :through => Resource
-  
-  
-  def self.update_from_his
-    his_units = His::Units.all
+
+
+  def self.load_from_his
+    his_units = His::Unit.all
     his_units.each do |his_u|
       if self.first(:his_id => his_u.id).nil?
         self.create(:his_id => his_u.id,
@@ -29,9 +29,9 @@ class Unit
       end
     end
   end
-  
-  #probably don't want to do it this way 
-  #probably want to use self but my brain is blanking 
+
+  #probably don't want to do it this way
+  #probably want to use self but my brain is blanking
   #so I'm writing it this way for now in the name of speed
   def self.store_to_his(u_id)
     unit_to_store = self.first(:id => u_id)

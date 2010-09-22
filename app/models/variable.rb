@@ -18,7 +18,7 @@ class Variable
 
   has n, :units, :model => "Unit", :through => Resource
 
-  def load_from_his
+  def self.load_from_his
     his_variables = His::Variable.all
 
     his_variables.each do |his_v|

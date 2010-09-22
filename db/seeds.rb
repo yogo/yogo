@@ -179,15 +179,15 @@ begin
   end
   puts 'done.'
 
-  puts 'Seeding Variables from HIS'
-  Variable.update_from_his
-  puts 'done'
+  print 'Seeding Variables from HIS...'
+  Variable.load_from_his
+  puts 'done.'
 
-  puts 'Seeding Units from HIS'
-  Unit.update_from_his
-  puts 'done'
+  print 'Seeding Units from HIS...'
+  Unit.load_from_his
+  puts 'done.'
 
-  puts 'Seeding Sites from HIS'
-  Site.update_from_his
+  print 'Seeding Sites from HIS...'
+  Site.load_from_his
   puts 'done'
 end

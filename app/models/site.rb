@@ -18,7 +18,7 @@ class Site
   property :county,              String,  :required => false
   property :comments,            String,  :required => false, :length => 512
 
-  def load_from_his
+  def self.load_from_his
     his_sites = His::Site.all
     his_sites.each do |his_s|
       if self.first(:his_id => his_s.id).nil?
@@ -27,7 +27,7 @@ class Site
     end
   end
 
-  def create_from_his(id)
+  def self.create_from_his(id)
     his_s = His::Site.get(id)
     my_site = Site.new(:his_id => his_s.id,
                        :site_code => his_s.site_code,
@@ -51,7 +51,6 @@ class Site
   end
 
   def store_to_his
-    debugger
     new_his_site = His::Site.first_or_create(:site_code => site_code, :site_name  => site_name,
                                               :latitude  => latitude,  :longitude  => longitude,
                                               :lat_long_datum_id => lat_long_datum_id,
