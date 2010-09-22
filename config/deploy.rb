@@ -1,5 +1,7 @@
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
+require "mongrel_cluster/recipes"
+
 set :rvm_ruby_string, 'jruby'
 
 set :application, "voeis"
@@ -17,6 +19,8 @@ set  :user, "voeis-demo"
 role :web, "klank.msu.montana.edu"
 role :app, "klank.msu.montana.edu"
 set  :deploy_to, "/home/#{user}/voeis"
+
+set :mongrel_conf, "#{current_path}/config/mongrel_cluster.yml"
 
 default_run_options[:pty] = false
 
