@@ -37,23 +37,6 @@ namespace :deploy do
   end
 end
 
-# namespace :deploy do
-#   desc "Restart Server"
-#   task :restart, :roles => :app do
-#    run "TZ=America/Denver #{current_path}/lib/trinidad.sh restart"
-#   end
-#
-#   desc "Start Server"
-#   task :start, :roles => :app do
-#     run "TZ=America/Denver #{current_path}/lib/trinidad.sh start"
-#   end
-#
-#   desc "Stop Server"
-#   task :stop, :roles => :app do
-#     run "TZ=America/Denver #{current_path}/lib/trinidad.sh stop"
-#   end
-# end
-
 namespace :db do
   desc "Seed initial data"
   task :seed, :roles => :app do
