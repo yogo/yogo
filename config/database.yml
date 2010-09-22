@@ -27,5 +27,3 @@ his:
   format: xml
   host: localhost
   port: 4000
-  user: voeis
-  password: secret
