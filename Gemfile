@@ -36,6 +36,9 @@ gem "mime-types",                     :require => 'mime/types'
 gem "uuidtools"
 gem 'rails_warden'
 
+gem "mongrel", "1.2.0.pre2"
+gem "mongrel_cluster"
+
 platforms(:ruby_18, :jruby) { gem "fastercsv" }
 
 platforms :jruby do
@@ -48,6 +51,7 @@ platforms :mri do
   gem "json",                 :require => nil
   gem "bluecloth",            :require => nil # Required for YARD
 end
+
 
 group :development do
   gem "capistrano",           :require => nil
