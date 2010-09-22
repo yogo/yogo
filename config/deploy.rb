@@ -1,8 +1,7 @@
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
-require "mongrel_cluster/recipes"
 
-set :rvm_ruby_string, 'jruby'
+set :rvm_ruby_string, '1.8.7'
 
 set :application, "voeis"
 set :use_sudo,    false
@@ -20,26 +19,25 @@ role :web, "klank.msu.montana.edu"
 role :app, "klank.msu.montana.edu"
 set  :deploy_to, "/home/#{user}/voeis"
 
-set :mongrel_conf, "#{current_path}/config/mongrel_cluster.yml"
 
 default_run_options[:pty] = false
 
-namespace :deploy do
-  desc "Restart Server"
-  task :restart, :roles => :app do
-   run "TZ=America/Denver #{current_path}/lib/trinidad.sh restart"
-  end
-
-  desc "Start Server"
-  task :start, :roles => :app do
-    run "TZ=America/Denver #{current_path}/lib/trinidad.sh start"
-  end
-
-  desc "Stop Server"
-  task :stop, :roles => :app do
-    run "TZ=America/Denver #{current_path}/lib/trinidad.sh stop"
-  end
-end
+# namespace :deploy do
+#   desc "Restart Server"
+#   task :restart, :roles => :app do
+#    run "TZ=America/Denver #{current_path}/lib/trinidad.sh restart"
+#   end
+#
+#   desc "Start Server"
+#   task :start, :roles => :app do
+#     run "TZ=America/Denver #{current_path}/lib/trinidad.sh start"
+#   end
+#
+#   desc "Stop Server"
+#   task :stop, :roles => :app do
+#     run "TZ=America/Denver #{current_path}/lib/trinidad.sh stop"
+#   end
+# end
 
 namespace :db do
   desc "Seed initial data"
