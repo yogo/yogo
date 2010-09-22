@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/datamapper/dm-types.git
-  revision: 674738f
+  revision: 674738f2a94788b975e99013098323d6b0e9c18a
   ref: 674738f2a94788b975e9
   specs:
     dm-types (1.0.0)
@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: git://github.com/yogo/yogo-project.git
-  revision: c3214cb
+  revision: c3214cbdfad16ffe85107113a2bb5d8d18f0a7e5
   branch: topic/managers
   specs:
     yogo-project (0.3.2)
@@ -29,7 +29,6 @@ GIT
 GEM
   remote: http://rubygems.org/
   specs:
-    BlueCloth (1.0.1)
     Saikuro (1.1.0)
     ZenTest (4.4.0)
     actionmailer (2.3.8)
@@ -42,12 +41,11 @@ GEM
     activeresource (2.3.8)
       activesupport (= 2.3.8)
     activesupport (2.3.8)
-    addressable (2.2.0)
+    addressable (2.2.1)
     archive-tar-minitar (0.5.2)
     arrayfields (4.7.4)
     bcrypt-ruby (2.1.2)
     bluecloth (2.0.7)
-    bouncy-castle-java (1.5.0145.2)
     builder (2.1.2)
     capistrano (2.5.19)
       highline
@@ -70,12 +68,12 @@ GEM
       haml (>= 3.0.4)
     configatron (2.6.3)
       yamler (>= 0.1.0)
-    cucumber (0.8.5)
+    cucumber (0.9.0)
       builder (~> 2.1.2)
       diff-lcs (~> 1.1.2)
-      gherkin (~> 2.1.4)
-      json_pure (~> 1.4.3)
-      term-ansicolor (~> 1.0.4)
+      gherkin (~> 2.2.2)
+      json (~> 1.4.6)
+      term-ansicolor (~> 1.0.5)
     cucumber-rails (0.3.2)
       cucumber (>= 0.8.0)
     data_objects (0.10.2)
@@ -117,14 +115,8 @@ GEM
       dm-core (~> 1.0.0)
     dm-validations (1.0.0)
       dm-core (~> 1.0.0)
-    do_jdbc (0.10.2-java)
-      data_objects (= 0.10.2)
     do_sqlite3 (0.10.2)
       data_objects (= 0.10.2)
-    do_sqlite3 (0.10.2-java)
-      data_objects (= 0.10.2)
-      do_jdbc (= 0.10.2)
-      jdbc-sqlite3 (>= 3.5.8)
     extlib (0.9.15)
     fastercsv (1.5.3)
     fattr (2.1.0)
@@ -134,24 +126,21 @@ GEM
     flog (2.5.0)
       ruby_parser (~> 2.0)
       sexp_processor (~> 3.0)
-    gherkin (2.1.5)
-      trollop (~> 1.16.2)
-    gherkin (2.1.5-java)
+    gherkin (2.2.3)
+      json (~> 1.4.6)
+      term-ansicolor (~> 1.0.5)
       trollop (~> 1.16.2)
     googlecharts (1.6.0)
     haml (3.0.18)
     has_scope (0.5.0)
     highline (1.6.1)
-    hirb (0.3.3)
+    hirb (0.3.4)
     hoe (2.6.2)
       rake (>= 0.8.7)
       rubyforge (>= 2.0.4)
     inherited_resources (1.0.6)
       has_scope (~> 0.5.0)
       responders (~> 0.4.6)
-    jdbc-sqlite3 (3.6.3.054)
-    jruby-openssl (0.7.1)
-      bouncy-castle-java
     json (1.4.6)
     json_pure (1.4.6)
     linecache (0.43)
@@ -172,7 +161,7 @@ GEM
       reek (>= 1.2.6)
       roodi (>= 2.1.0)
     mime-types (1.16)
-    net-scp (1.0.3)
+    net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
@@ -180,8 +169,6 @@ GEM
     net-ssh-gateway (1.0.1)
       net-ssh (>= 1.99.1)
     nokogiri (1.4.3.1)
-    nokogiri (1.4.3.1-java)
-      weakling (>= 0.0.3)
     rack (1.1.0)
     rack-test (0.5.4)
       rack (>= 1.0)
@@ -199,8 +186,7 @@ GEM
     rails_warden (0.5.2)
       warden
     rake (0.8.7)
-    rcov (0.9.8)
-    rcov (0.9.8-java)
+    rcov (0.9.9)
     redgreen (1.2.2)
     reek (1.2.8)
       ruby2ruby (~> 1.2)
@@ -245,7 +231,6 @@ GEM
     uuidtools (2.1.1)
     warden (0.10.7)
       rack (>= 1.0.0)
-    weakling (0.0.4-java)
     webrat (0.7.1)
       nokogiri (>= 1.2.0)
       rack (>= 1.0)
@@ -256,7 +241,6 @@ GEM
       yard (~> 0.2)
 
 PLATFORMS
-  java
   ruby
 
 DEPENDENCIES
