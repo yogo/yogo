@@ -22,6 +22,21 @@ set  :deploy_to, "/home/#{user}/voeis"
 
 default_run_options[:pty] = false
 
+namespace :deploy do
+  task :start, :roles => :app do
+    run "touch #{current_release}/tmp/restart.txt"
+  end
+
+  task :stop, :roles => :app do
+    # Do nothing.
+  end
+
+  desc "Restart Application"
+  task :restart, :roles => :app do
+    run "touch #{current_release}/tmp/restart.txt"
+  end
+end
+
 # namespace :deploy do
 #   desc "Restart Server"
 #   task :restart, :roles => :app do
