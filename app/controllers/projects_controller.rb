@@ -1,6 +1,7 @@
 class ProjectsController < InheritedResources::Base
   respond_to :html, :json
-  #export the results of search/browse to a csv file
+
+   #export the results of search/browse to a csv file
   def export
     headers = JSON[params[:column_array]]
     rows = JSON[params[:row_array]]
@@ -38,18 +39,6 @@ class ProjectsController < InheritedResources::Base
       @end_time = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
       @start_time = @start_time.to_datetime
       @end_time = @end_time.to_datetime + 1.day
-
-      # if params.has_key?(:variables_start)
-      #   @start_time = params[:variables_start].to_datetime
-      # else
-      #   @start_time = DateTime.now - 7
-      # end
-      #
-      # if params.has_key?(:variables_end)
-      #   @end_time = params[:variables_end].to_datetime
-      # else
-      #   @end_time = DateTime.now
-      # end
 
       if params.has_key?(:variables)
         params[:variables].keys.each do |site_id|
@@ -100,6 +89,11 @@ class ProjectsController < InheritedResources::Base
       end
     end
     super
+  end
+
+  def destroy
+    flash[:notice] = "Project deleting is disabled."
+    redirect_to(:back)
   end
 
   protected
