@@ -40,18 +40,43 @@ class ProjectsController < InheritedResources::Base
       @start_time = @start_time.to_datetime
       @end_time = @end_time.to_datetime + 1.day
 
+
+      # if params.has_key?(:variables_start)
+      #   @start_time = params[:variables_start].to_datetime
+      # else
+      #   @start_time = DateTime.now - 7
+      # end
+      #
+      # if params.has_key?(:variables_end)
+      #   @end_time = params[:variables_end].to_datetime
+      # else
+      #   @end_time = DateTime.now
+      # end
+      var_label=""
+
       if params.has_key?(:variables)
         params[:variables].keys.each do |site_id|
           site = resource.managed_repository { Voeis::Site.get(site_id) }
           if params[:variables][site_id].empty?
             site.variables.each do |variable|
-              @label_array << "#{site.name} #{variable.variable_name}"
+              var_label =  site.name if params[:site_display]
+              var_label = var_label +  variable.variable_name
+              var_label = var_label + variable.sample_medium if params[:sample_medium_display]
+              var_label = var_label + variable.data_type if params[:data_type_display]
+              var_label = var_label + Unit.get(variable.variable_units_id).units_name if params[:units_display]
+              
+              @label_array << var_label #{}"#{site.name} #{variable.variable_name}"
               @items << [site, variable]
             end
           else
             params[:variables][site_id].each do |variable_id|
               variable = resource.managed_repository{ Voeis::Variable.get(variable_id) }
-              @label_array << "#{site.name} #{variable.variable_name}"
+              var_label =  site.name if params[:site_display]
+              var_label = var_label +  variable.variable_name
+              var_label = var_label + variable.sample_medium if params[:sample_medium_display]
+              var_label = var_label + variable.data_type if params[:data_type_display]
+              var_label = var_label + Unit.get(variable.variable_units_id).units_name if params[:units_display]
+              @label_array << var_label #{}"#{site.name} #{variable.variable_name}"
               @items << [site, variable]
             end
           end
