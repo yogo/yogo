@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/datamapper/dm-types.git
-  revision: 674738f2a94788b975e99013098323d6b0e9c18a
+  revision: 674738f
   ref: 674738f2a94788b975e9
   specs:
     dm-types (1.0.0)
@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: git://github.com/yogo/yogo-project.git
-  revision: c3214cbdfad16ffe85107113a2bb5d8d18f0a7e5
+  revision: c3214cb
   branch: topic/managers
   specs:
     yogo-project (0.3.2)
@@ -92,6 +92,8 @@ GEM
       dm-core (~> 1.0.0)
     dm-is-list (1.0.0)
       dm-adjust (~> 1.0.0)
+      dm-core (~> 1.0.0)
+    dm-is-versioned (1.0.0)
       dm-core (~> 1.0.0)
     dm-migrations (1.0.0)
       dm-core (~> 1.0.0)
@@ -259,6 +261,7 @@ DEPENDENCIES
   cucumber-rails
   dm-core (= 1.0)
   dm-is-list (= 1.0)
+  dm-is-versioned
   dm-migrations (= 1.0)
   dm-persevere-adapter (= 0.72.0)
   dm-rest-adapter

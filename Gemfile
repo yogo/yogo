@@ -9,6 +9,7 @@ gem "dm-is-list",           DATAMAPPER_VERSION
 gem "dm-migrations",        DATAMAPPER_VERSION
 gem "dm-persevere-adapter", "0.72.0", :require => nil
 gem "dm-rest-adapter"
+gem "dm-is-versioned"
 
 # These are required so we can make it simple to interact with legacy data
 gem 'dm-sqlite-adapter',    DATAMAPPER_VERSION, :require => nil
