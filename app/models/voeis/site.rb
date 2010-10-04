@@ -47,12 +47,9 @@ class Voeis::Site
 
   is_versioned :on => :updated_at
   
-  # before(:save) {
-  #   
-  #   self.updated_at = DateTime.now
-  #   puts self.attributes
-  #   Voeis::Site::Version.create(self.attributes)
-  # }
+  before(:save) {
+    self.updated_at = DateTime.now
+  }
   
   # has n, :projects, :through => Resource
   has n, :data_streams, :model => "Voeis::DataStream", :through => Resource
