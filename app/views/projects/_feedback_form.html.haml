@@ -9,4 +9,4 @@
   = f.text_area("issue_body", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "issue_body")
   =clear_break
   = f.submit("Submit Issue", :class => "feedback-button")
-%label{:id => "issue_close", :onclick=>"$('#feedback').toggle();", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
+%label{:id => "issue_close", :onclick=>"$('#feedback').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
