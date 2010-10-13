@@ -6,3 +6,4 @@
     = link_to("Administration", page_url(:admin))
   = link_to("About", page_url(:about))
   = link_to("Help", page_url(:help), :target => 'blank')
+  %label{:id => "issue", :onclick=>"$('#feedback').toggle();", :class => "icon icon-issue", :onmouseover =>"this.style.cursor='hand'"}Report-Issue

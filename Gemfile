@@ -36,6 +36,10 @@ gem "haml"
 gem "mime-types",                     :require => 'mime/types'
 gem "uuidtools"
 gem 'rails_warden'
+gem 'pony'
+gem 'polyglot'
+gem 'treetop'
+gem 'mail'
 
 platforms(:ruby_18, :jruby) { gem "fastercsv" }
 

@@ -12,6 +12,11 @@ class Voeis::SitesController < Voeis::BaseController
     @sites = Site.all
   end
 
+  def edit
+    @site =  parent.managed_repository{Voeis::Site.get(params[id])}
+    @project = parent
+  end
+
   def create
     # This should be handled by the framework, but isn't when using jruby.
     params[:site][:latitude] = params[:site][:latitude].strip

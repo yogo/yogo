@@ -148,6 +148,10 @@ GEM
     linecache (0.43)
     linecache19 (0.5.11)
       ruby_core_source (>= 0.1.4)
+    mail (2.2.7)
+      activesupport (>= 2.3.6)
+      mime-types
+      treetop (>= 1.4.5)
     main (4.2.0)
       arrayfields (>= 4.7.4)
       fattr (>= 2.1.0)
@@ -171,6 +175,9 @@ GEM
     net-ssh-gateway (1.0.1)
       net-ssh (>= 1.99.1)
     nokogiri (1.4.3.1)
+    polyglot (0.3.1)
+    pony (1.0.1)
+      mail (> 2.0)
     rack (1.1.0)
     rack-test (0.5.4)
       rack (>= 1.0)
@@ -229,6 +236,8 @@ GEM
     term-ansicolor (1.0.5)
     test-unit (1.2.3)
       hoe (>= 1.5.1)
+    treetop (1.4.8)
+      polyglot (>= 0.3.1)
     trollop (1.16.2)
     uuidtools (2.1.1)
     warden (0.10.7)
@@ -279,9 +288,12 @@ DEPENDENCIES
   jruby-openssl
   json
   json_pure
+  mail
   main
   metric_fu
   mime-types
+  polyglot
+  pony
   rails (= 2.3.8)
   rails-footnotes
   rails_warden
@@ -297,6 +309,7 @@ DEPENDENCIES
   ruby_parser
   selenium-client
   test-unit (= 1.2.3)
+  treetop
   uuidtools
   webrat
   yard

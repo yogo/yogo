@@ -13,6 +13,8 @@ $(document).ready(function(){
   });
   
   $("#tabs").tabs();
+  
+  $( "#feedback" ).draggable();
 
   //Hide (Collapse) the toggle containers on load
   $(".toggle-container").hide();

@@ -1,0 +1,55 @@
+%h2
+Editing: #{@site.name}
+
+Create a new site for the project:
+- form_for(:site, resource, :url => project_sites_path(@project), :builder => YogoFormBuilder, :html => {:onsubmit => "return checkform();"} )do |f|
+
+  = f.text_field("name")
+  = f.text_field("code")
+  = f.text_field("latitude")
+  = f.text_field("longitude")
+  = f.text_field("state")
+  = f.submit("Save Site", :onclick => "$('#loader').toggle();")
+  = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 
+
+:javascript  
+  function checkform()
+  {if ($('#site_name').val() =="")
+  {
+  // something is wrong
+  alert('The Name field is required before this form can be submitted.');
+  $('#loader').toggle();
+  return false;
+  }
+  else if ($('#site_code').val() =="")
+  {
+  // something is wrong
+  alert('The Code field is required before this form can be submitted.');
+  $('#loader').toggle();
+  return false;
+  }
+  else if ($('#site_latitude').val() =="")
+  {
+  // something is wrong
+  alert('The Latitude field is required before this form can be submitted.');
+  $('#loader').toggle();
+  return false;
+  }
+  else if ($('#site_longitude').val() =="")
+  {
+  // something is wrong
+  alert('The Longitude field is required before this form can be submitted.');
+  $('#loader').toggle();
+  return false;
+  }
+  else if ($('#site_state').val() =="")
+  {
+  // something is wrong
+  alert('The State field is required before this form can be submitted.');
+  $('#loader').toggle();
+  return false;
+  }
+  // If the script gets this far through all of your fields
+  // without problems, it's ok and you can submit the form
+  return true;
+  }

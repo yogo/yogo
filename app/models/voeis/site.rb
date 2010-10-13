@@ -43,7 +43,7 @@ class Voeis::Site
   property :county, String, :required => false
   property :comments, String, :required => false
   property :description, Text, :required => false
-  property :updated_at, DateTime, :required => true, :default => DateTime.now
+  property :updated_at, DateTime, :required => true,  :default => DateTime.now
 
   is_versioned :on => :updated_at
   

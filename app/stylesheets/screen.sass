@@ -57,7 +57,8 @@ body
   font-size: .9em
   p
     margin-bottom: 0.5em
-    
+  textarea
+    resize:none
   // Header (always blueprint layout)
   #header
     color: #8fdaf2
@@ -467,6 +468,24 @@ body
 #loader
   display: none
   left:  200px
+
+#issue
+  &:hover
+    cursor: pointer
+    color: #bd8e5e
+    
+#feedback
+  display: none
+  position: absolute
+  padding: 1em
+  left: 200px
+  width: 350px
+  height: 275px
+  background-color: #BEBFBD
+  cursor: move
+  z-index: 100
+  textarea.issue_subject, .issue_body
+    resize:none
   
 .icon-projects
   background-image: image-url('22x22/projects.png')
@@ -516,6 +535,15 @@ body
   background-image: image-url('txt.png')
 .icon-file
   background-image: image-url('file.png')
+.icon-issue
+  background-image: image-url('outbox.png')
+.icon-close
+  background-image: image-url('close.png')
+  
+#issue_close
+  position: relative
+  left: 320px
+
 #login-image
   width: 50%
   border-right: 1px
