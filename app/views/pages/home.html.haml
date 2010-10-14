@@ -1,6 +1,6 @@
 #content
   %h3 The Virtual Observatory and Ecological Informatics System (VOEIS)
-  - form_for( :user_session, :url => user_session_path, :builder => YogoFormBuilder ) do |f|
+  - form_for(:user_session, :url => user_session_path, :builder => YogoFormBuilder) do |f|
     #login-image
       = image_tag("Flathead.jpg", :alt => "Flathead Lake at sunset.", :align => "left",:width=>"550px")
     #login-description
@@ -15,4 +15,4 @@
       %br
       %br
       %h2
-        =link_to ("Browse Public Projects in VOEIS", projects_path($project))
+        =link_to("Browse Public Projects in VOEIS", projects_path($project))

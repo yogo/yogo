@@ -1,16 +1,18 @@
+require 'dm-core'
+require 'dm-types/yaml'
 class SystemRole
   include DataMapper::Resource
   include Facet::DataMapper::Resource
-  
+
   property :id, Serial
   property :name, String, :required => true
   property :description, String, :length => 250
   property :actions, Yaml, :default => [].to_yaml
-  
+
   has n, :users
-  
+
   is :list
-  
+
   def self.permission_sources
     [Project, Role, User, SystemRole]
   end
@@ -28,5 +30,5 @@ class SystemRole
   def has_permission?(permission)
     actions.include?(permission)
   end
-  
+
 end

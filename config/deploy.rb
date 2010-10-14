@@ -55,10 +55,11 @@ namespace :db do
   end
 
   task :symlink do
-    run "ln -nfs #{deploy_to}/#{shared_dir}/db/persvr #{release_path}/db/persvr"
-    run "rm -rf #{release_path}/db/sqlite3"
-    run "ln -nfs #{deploy_to}/#{shared_dir}/db/sqlite3 #{release_path}/db/sqlite3"
-    run "ln -nfs #{deploy_to}/#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/config/database.yml #{release_path}/config/database.yml"
+    # run "ln -nfs #{deploy_to}/#{shared_dir}/db/persvr #{release_path}/db/persvr"
+    # run "rm -rf #{release_path}/db/sqlite3"
+    # run "ln -nfs #{deploy_to}/#{shared_dir}/db/sqlite3 #{release_path}/db/sqlite3"
+    # run "ln -nfs #{deploy_to}/#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
   end
 end
 
