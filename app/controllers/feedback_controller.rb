@@ -3,7 +3,7 @@ class FeedbackController < ApplicationController
   before_filter :require_user
   #forge@msu.montana.edu
   def email
-    Pony.mail(:to => 'scleveland@montana.edu', 
+    Pony.mail(:to => 'forge@msu.montana.edu', 
               :subject => params[:subject], 
               :body => "Project: epscor-sensor\nTracker: feedback\n"+params[:body], 
               :via => :smtp, 
