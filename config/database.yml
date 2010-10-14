@@ -25,5 +25,5 @@ test:
 his:
   adapter: rest
   format: xml
-  host: localhost
+  host: voeis.msu.montana.edu
   port: 4000

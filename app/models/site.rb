@@ -45,9 +45,6 @@ class Site
                        :county  => his_s.county,
                        :comments  => his_s.comments)
     my_site.save
-    if !my_site.errors.nil?
-      puts my_site.errors.inspect
-    end
   end
 
   def store_to_his

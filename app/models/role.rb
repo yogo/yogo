@@ -1,11 +1,12 @@
-
-# # Yogo Data Management Toolkit
+# Yogo Data Management Toolkit
 # Copyright (c) 2010 Montana State University
 #
 # License -> see license.txt
 #
 # FILE: Role.rb
 # Roles for projects and users. A Project will have Roles, and users will belong to Roles
+require 'dm-core'
+require 'dm-types/yaml'
 
 class Role
   include DataMapper::Resource
