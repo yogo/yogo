@@ -23,9 +23,26 @@
     = render_visualizations
     
     %link{:rel => "shortcut icon", :href => "#{image_path("favicon.png")}"}/
-
+    
+    :javascript
+      $(function() {
+      $(".feedback-button").click(function() {
+      $('.error').hide();
+      alert("http://localhost:3000/feedback/email?subject=" + $(".issue_subject").val() + "&body=" + $(".issue_body").val());
+      $.post("http://localhost:3000/feedback/email?subject=" + $(".issue_subject").val() + "&body=" + $(".issue_body").val(),
+      function(data) {
+      $(".issue_subject").val("");
+      $(".issue_body").val("");
+      $("#feedback").toggle();
+      alert('Thank you for submitting an issue we will get to it as soon as possible.');
+      }
+      );
+      return false;
+      });
+      });
   %body.typography
-
+  #feedback
+    = render(:partial => "projects/feedback_form")
   / Header (including optional menus)
   #header
     #logo 

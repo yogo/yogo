@@ -52,7 +52,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource  :password, :only => [ :show, :update, :edit ]
   map.resources :dashboards, :only => [ :show ], :requirements => { :id => /[\w]+/ }
   map.resources :pages, :only => [ :show ], :requirements => { :id => /[\w]+/ }
-
+  map.resources :feedback, :collection => { :email => :post}
   # Login & Logout stuff
   map.resource :user_session, :only => [ :show, :new, :create, :destory ]
   map.logout '/logout', :controller => 'user_sessions', :action => 'destroy'

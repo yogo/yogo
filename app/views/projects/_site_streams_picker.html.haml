@@ -24,10 +24,10 @@
     .field-item To:
     .field-item= date_select('range', 'end_date', :order => [:month, :day, :year], :default => { :day => @end_time.nil? ? DateTime.now.day : @end_time.day, :month => @end_time.nil? ? DateTime.now.month : @end_time.month, :year => @end_time.nil? ? DateTime.now.year : @end_time.year })
   - field_set_tag("Header Information") do
-    .field-item Site: #{check_box_tag("site_display", checked=true if params["site_display"])}
-    .field-item Sample Medium: #{check_box_tag("sample_medium_display",checked=true if params["sample_medium_display"])}
-    .field-item Data Type: #{check_box_tag("data_type_display", checked=true if params["data_type_display"])}
-    .field-item Units: #{check_box_tag("unit_display", checked=true if params["unit_display"]}
+    .field-item Site: #{check_box_tag("site_display", checked= !params["site_display"].nil? ? true : false)}
+    .field-item Sample Medium: #{check_box_tag("sample_medium_display",checked= !params["sample_medium_display"].nil? ? true : false)}
+    .field-item Data Type: #{check_box_tag("data_type_display", checked= !params["data_type_display"].nil? ? true : false)}
+    .field-item Units: #{check_box_tag("units_display", checked= !params[:units_display].nil? ? true : false)}
     
   = f.submit('Update', :class => 'icon icon-save', :onclick => "$('#loader').toggle();")
   

@@ -30,8 +30,12 @@ gem "bcrypt-ruby"
 gem "haml"
 gem "mime-types",                   :require => "mime/types"
 gem "uuidtools"
-gem "rails_warden"
+gem 'rails_warden'
 gem "json",                         :require => nil
+gem 'pony'
+gem 'polyglot'
+gem 'treetop'
+gem 'mail'
 
 platforms(:ruby_18, :jruby) { gem "fastercsv" }
 

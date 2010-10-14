@@ -71,11 +71,11 @@ class ProjectsController < InheritedResources::Base
           else
             params[:variables][site_id].each do |variable_id|
               variable = resource.managed_repository{ Voeis::Variable.get(variable_id) }
-              var_label =  site.name if params[:site_display]
+              var_label =  site.name + "|" if params[:site_display]
               var_label = var_label +  variable.variable_name
-              var_label = var_label + variable.sample_medium if params[:sample_medium_display]
-              var_label = var_label + variable.data_type if params[:data_type_display]
-              var_label = var_label + Unit.get(variable.variable_units_id).units_name if params[:units_display]
+              var_label = var_label + "|" + variable.sample_medium if params[:sample_medium_display]
+              var_label = var_label + "|" + variable.data_type if params[:data_type_display]
+              var_label = var_label + "|" + Unit.get(variable.variable_units_id).units_name if params[:units_display]
               @label_array << var_label #{}"#{site.name} #{variable.variable_name}"
               @items << [site, variable]
             end

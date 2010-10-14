@@ -1,0 +1,12 @@
+%h3 Report an Issue to the Developers
+
+- form_for(:feedback, :url => {:controller => "feedback", :action => "create"}, :html => {:onsubmit => "return checkform();"} )do |f|
+  = f.label("Subject:")
+  =clear_break
+  = f.text_area("issue_subject", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "issue_subject")
+  = f.label("Details:")
+  =clear_break
+  = f.text_area("issue_body", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "issue_body")
+  =clear_break
+  = f.submit("Submit Issue", :class => "feedback-button")
+%label{:id => "issue_close", :onclick=>"$('#feedback').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}

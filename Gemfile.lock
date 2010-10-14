@@ -120,6 +120,10 @@ GEM
     linecache (0.43)
     linecache19 (0.5.11)
       ruby_core_source (>= 0.1.4)
+    mail (2.2.7)
+      activesupport (>= 2.3.6)
+      mime-types
+      treetop (>= 1.4.5)
     mime-types (1.16)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
@@ -128,6 +132,9 @@ GEM
     net-ssh (2.0.23)
     net-ssh-gateway (1.0.1)
       net-ssh (>= 1.99.1)
+    polyglot (0.3.1)
+    pony (1.0.1)
+      mail (> 2.0)
     rack (1.1.0)
     rack-debug (1.4.2)
       rack (>= 1.0)
@@ -171,6 +178,8 @@ GEM
     stringex (1.1.0)
     test-unit (1.2.3)
       hoe (>= 1.5.1)
+    treetop (1.4.8)
+      polyglot (>= 0.3.1)
     uuidtools (2.1.1)
     warden (1.0.1)
       rack (>= 1.0.0)
@@ -202,7 +211,10 @@ DEPENDENCIES
   inherited_resources (~> 1.0.6)
   jeweler
   json
+  mail
   mime-types
+  polyglot
+  pony
   rack-debug
   rack-debug19
   rails (= 2.3.8)
@@ -214,6 +226,7 @@ DEPENDENCIES
   ruby-debug
   ruby-debug19
   test-unit (= 1.2.3)
+  treetop
   uuidtools
   yard
   yardstick
