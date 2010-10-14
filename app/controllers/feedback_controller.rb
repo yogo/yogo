@@ -1,11 +1,11 @@
 class FeedbackController < ApplicationController
   
   before_filter :require_user
-  
+  #epscor-sensor-feedback@montana.edu
   def email
-    Pony.mail(:to => 'epscor-sensor-feedback@montana.edu', 
+    Pony.mail(:to => 'forge@msu.montana.edu', 
               :subject => params[:subject], 
-              :body => params[:body], 
+              :body => "Project: epscor-sensor\nTracker: feedback\n"+params[:body], 
               :via => :smtp, 
               :via_options => 
               {
@@ -13,7 +13,7 @@ class FeedbackController < ApplicationController
                 :port => '587',
                 :enable_starttls_auto => true,
                 :user_name => 'voeis.mgmt@gmail.com',
-                :password => '',
+                :password => 'V0eisD3mo',
                 :authentication => :plain, 
                 :domain => "localhost.localdomain"
               }

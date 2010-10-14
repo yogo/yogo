@@ -28,7 +28,6 @@
       $(function() {
       $(".feedback-button").click(function() {
       $('.error').hide();
-      alert("http://localhost:3000/feedback/email?subject=" + $(".issue_subject").val() + "&body=" + $(".issue_body").val());
       $.post("http://localhost:3000/feedback/email?subject=" + $(".issue_subject").val() + "&body=" + $(".issue_body").val(),
       function(data) {
       $(".issue_subject").val("");
