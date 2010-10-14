@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/datamapper/dm-types.git
-  revision: 674738f2a94788b975e99013098323d6b0e9c18a
+  revision: 674738f
   ref: 674738f2a94788b975e9
   specs:
     dm-types (1.0.0)
@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: git://github.com/yogo/yogo-project.git
-  revision: 561646a875fdfd0fcee10fc6a4483756cc023d38
+  revision: 561646a
   specs:
     yogo-project (0.3.2)
       carrierwave
