@@ -12,10 +12,7 @@ ActionController::Routing::Routes.draw do |map|
                  :collection => { :search => :get, :publish_his => :post, :export => :post} do |project|
 
     project.resources :memberships, :namespace => nil, :controller => "memberships"
-
-    project.resources :sites, :namespace => nil, :controller => 'voeis/sites',
-                      :collection => {:add_site => :get, :save_site => :post}
-
+    project.resources :sites, :namespace => nil, :controller => 'voeis/sites'
     project.resources :data_streams, :namespace => nil, :controller => 'voeis/data_streams',
                       :collection => { :pre_upload => :post, :create_stream => :post,
                                        :query => :get, :search => :post, :upload => :post,
@@ -49,6 +46,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :memberships
   map.resources :settings
   map.resources :search
+  map.resources :variable_name_c_vs
+  map.resources :sample_medium_c_vs
   map.resource  :password, :only => [ :show, :update, :edit ]
   map.resources :dashboards, :only => [ :show ], :requirements => { :id => /[\w]+/ }
   map.resources :pages, :only => [ :show ], :requirements => { :id => /[\w]+/ }

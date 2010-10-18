@@ -186,8 +186,18 @@ begin
   print 'Seeding Sites from HIS...'
   Site.load_from_his
   puts 'done'
-
+  
+  print 'Seeding VariableNameCV from HIS...'
+  VariableNameCV.load_from_his
+  puts 'done.'
+  
+  print 'Seeding SampleMediumCV from HIS...'
+  SampleMediumCV.load_from_his
+  puts 'done.'
+  
   print 'Seeding Units from HIS...'
   Unit.load_from_his
   puts 'done.'
+  
+ 
 end

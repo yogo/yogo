@@ -21,6 +21,13 @@ class Method
   property :id, Serial
   property :method_description, Text, :required => true
   property :method_link, String, :required => false
+  property :updated_at, DateTime, :required => true,  :default => DateTime.now
+
+  is_versioned :on => :updated_at
+  
+  before(:save) {
+    self.updated_at = DateTime.now
+  }
 
   #has n, :sensor_types, :model => "SensorType", :through => Resource
 

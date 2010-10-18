@@ -15,6 +15,13 @@ class Variable
   property :data_type, String, :required => true, :default => 'Unknown', :length => 512
   property :general_category, String, :required => true, :default => 'Unknown', :length => 512
   property :no_data_value, Float, :required => true, :default => -9999
+  property :updated_at, DateTime, :required => true,  :default => DateTime.now
+
+  is_versioned :on => :updated_at
+  
+  before(:save) {
+    self.updated_at = DateTime.now
+  }
 
   has n, :units, :model => "Unit", :through => Resource
 

@@ -1,0 +1,26 @@
+Create a new variable name for the controlled vocabulary:
+- form_for(:variable_name_c_v, @variable_name, :url => {:action => 'create', :controller => 'variable_name_c_vs'}, :builder => YogoFormBuilder, :html => {:onsubmit => "return checkform();"} )do |f|
+  = f.text_field("term")
+  = f.text_area("definition")
+  = f.submit("Save Variable Name", :onclick => "$('#loader').toggle();")
+
+:javascript  
+  function checkform()
+  {if ($('#term').val() =="")
+  {
+  // something is wrong
+  alert('The Term field is required before this form can be submitted.');
+  $('#loader').toggle();
+  return false;
+  }
+  else if ($('#definition').val() =="")
+  {
+  // something is wrong
+  alert('The definiton is required before this form can be submitted.');
+  $('#loader').toggle();
+  return false;
+  }
+  // If the script gets this far through all of your fields
+  // without problems, it's ok and you can submit the form
+  return true;
+  }

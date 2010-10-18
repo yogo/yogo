@@ -14,6 +14,13 @@ class Unit
   property :units_name, String, :required => true, :length => 512
   property :units_type, String, :required => true, :length => 512
   property :units_abbreviation, String, :required => true
+  property :updated_at, DateTime, :required => true,  :default => DateTime.now
+
+  is_versioned :on => :updated_at
+  
+  before(:save) {
+    self.updated_at = DateTime.now
+  }
 
   has n, :variables, :model => "Variable", :through => Resource
 

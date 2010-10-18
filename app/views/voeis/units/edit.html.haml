@@ -1,0 +1,15 @@
+%h1
+  New Unit
+ 
+-form_for :unit, @unit, :url => { :action => "create"} do |f|
+  Unit Name: 
+  = f.text_field :units_name
+  =clear_break
+  Unit Type: 
+  = f.text_field :units_type
+  =clear_break
+  Unit Abbreviation: 
+  = f.text_field :units_abbreviation
+  =clear_break
+  = f.submit ('Create', :onclick => "$('#loader').toggle();")
+  = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 

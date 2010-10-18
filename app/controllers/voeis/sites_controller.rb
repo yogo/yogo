@@ -13,7 +13,7 @@ class Voeis::SitesController < Voeis::BaseController
   end
 
   def edit
-    @site =  parent.managed_repository{Voeis::Site.get(params[id])}
+    @site =  parent.managed_repository{Voeis::Site.get(params[:id])}
     @project = parent
   end
 
