@@ -10,7 +10,7 @@ class SampleMediumCV
 
   property :his_id, Integer, :required => false
   property :term,       String, :required => true, :key => true
-  property :definition, String
+  property :definition, Text
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
   
   is_versioned :on => :updated_at
@@ -26,8 +26,8 @@ class SampleMediumCV
     his_sample_mediums.each do |his_sm|
       if self.first(:his_id => his_sm.id).nil?
         self.create(:his_id => his_sm.id,
-                    :term => his_v.term,
-                    :definition=> his_v.definition)
+                    :term => his_sm.term,
+                    :definition=> his_sm.definition)
       end
     end
   end

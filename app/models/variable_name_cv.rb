@@ -8,7 +8,7 @@ class VariableNameCV
   
   property :his_id, Integer, :required => false
   property :term,       String, :required => true, :key => true, :format => /[^\t|\n|\r]/
-  property :definition, String
+  property :definition, Text
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
 
   is_versioned :on => :updated_at

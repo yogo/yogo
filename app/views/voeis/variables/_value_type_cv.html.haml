@@ -1,0 +1,31 @@
+#new_value_type
+  Create a new sample medium for the controlled vocabulary:
+  - form_for(:value_type_c_v )do |f|
+    = f.label("Term:")
+    = f.text_area("term", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "value_type_term")
+    = f.label("Definition:")
+    =clear_break
+    = f.text_area("definition", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "value_type_definition")
+    = f.submit("Save Sample Medium", :class => "new-sample-medium-button")
+  %label{:id => "value_type_close", :onclick=>"$('#new_value_type').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
+  
+  :javascript  
+    $(function() {
+    $(".new-sample-medium-button").click(function() { 
+      
+    $.post("#{root_url + "value_type_c_vs"}"+"?term=" + $(".value_type_term").val()+"&definition=" + $(".value_type_definition").val(),
+    function(data) {
+    $('#variable_value_type').
+    append($("<option></option>").
+    attr("value",$(".value_type_term").val()).
+    text($(".value_type_term").val())); 
+    $('#variable_value_type').val($(".value_type_term").val());
+    $(".value_type_term").val("");
+    $(".value_type_definition").val("");
+    $("#new_value_type").toggle();
+    return false;
+    }
+    );
+    return false;
+    });
+    });

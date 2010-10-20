@@ -195,6 +195,10 @@ begin
   SampleMediumCV.load_from_his
   puts 'done.'
   
+  print 'Seeding ValueTypeCV from HIS...'
+  ValueTypeCV.load_from_his
+  puts 'done.'
+  
   print 'Seeding Units from HIS...'
   Unit.load_from_his
   puts 'done.'

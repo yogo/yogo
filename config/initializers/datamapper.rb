@@ -47,6 +47,7 @@ Unit
 Variable
 VariableNameCV
 SampleMediumCV
+ValueTypeCV
 
 DataMapper.finalize
 DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
@@ -56,4 +57,5 @@ DataMapper.repository(:default).storage_exists?(Role.storage_name) &&
 DataMapper.repository(:default).storage_exists?(Membership.storage_name) &&
 DataMapper.repository(:default).storage_exists?(Site.storage_name) &&
 DataMapper.repository(:default).storage_exists?(Unit.storage_name) &&                         DataMapper.repository(:default).storage_exists?(Variable.storage_name) &&                         DataMapper.repository(:default).storage_exists?(VariableNameCV.storage_name) &&
-DataMapper.repository(:default).storage_exists?(SampleMediumCV.storage_name)
+DataMapper.repository(:default).storage_exists?(SampleMediumCV.storage_name) &&
+DataMapper.repository(:default).storage_exists?(ValueTypeCV.storage_name)
