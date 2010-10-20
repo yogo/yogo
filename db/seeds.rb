@@ -199,6 +199,10 @@ begin
   ValueTypeCV.load_from_his
   puts 'done.'
   
+  print 'Seeding SpeciationCV from HIS...'
+  SpeciationCV.load_from_his
+  puts 'done.'
+  
   print 'Seeding Units from HIS...'
   Unit.load_from_his
   puts 'done.'

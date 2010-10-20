@@ -41,12 +41,12 @@ platforms(:ruby_18, :jruby) { gem "fastercsv" }
 
 # Switching 1.8.7/1.9 breaks for now
 group :development, :test do
-  platforms(:ruby_19) do
+  platforms(:mri_19) do
     gem "ruby-debug19",             :require => "ruby-debug"
     gem "rack-debug19",             :require => "rack-debug"
   end
 
-  platforms(:ruby_18) do
+  platforms(:mri_18) do
     gem "ruby-debug"
     gem "rack-debug"
   end

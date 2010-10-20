@@ -1,0 +1,31 @@
+#new_speciation
+  Create a new speciation for the controlled vocabulary:
+  - form_for(:speciation_c_v )do |f|
+    = f.label("Term:")
+    = f.text_area("term", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "speciation_term")
+    = f.label("Definition:")
+    =clear_break
+    = f.text_area("definition", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "speciation_definition")
+    = f.submit("Save Sample Medium", :class => "new-sample-medium-button")
+  %label{:id => "speciation_close", :onclick=>"$('#new_speciation').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
+  
+  :javascript  
+    $(function() {
+    $(".new-sample-medium-button").click(function() { 
+      
+    $.post("#{root_url + "speciation_c_vs"}"+"?term=" + $(".speciation_term").val()+"&definition=" + $(".speciation_definition").val(),
+    function(data) {
+    $('#variable_speciation').
+    append($("<option></option>").
+    attr("value",$(".speciation_term").val()).
+    text($(".speciation_term").val())); 
+    $('#variable_speciation').val($(".speciation_term").val());
+    $(".speciation_term").val("");
+    $(".speciation_definition").val("");
+    $("#new_speciation").toggle();
+    return false;
+    }
+    );
+    return false;
+    });
+    });
