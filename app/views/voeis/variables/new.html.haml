@@ -1,3 +1,4 @@
+= render(:partial => "variable_name_cv")
 %h1
   New Variable
 
@@ -5,8 +6,12 @@
   Variable Code: 
   = f.text_field :variable_code
   =clear_break
+  -var_name_options = Array.new
   Variable Name: 
-  = f.text_field :variable_name
+  - @variable_names.all(:order => [:term.asc]).each do |var_name|
+    -var_name_options <<[var_name.term]
+  = f.select('variable_name',  options_for_select(var_name_options), :class => "variable_name")
+  %label{:id => "var_name", :onclick=>"$('#new_variable_name').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   =clear_break
   Variable Units ID: 
   -unit_options = Array.new

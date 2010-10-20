@@ -13,6 +13,7 @@ class Voeis::VariablesController < Voeis::BaseController
   def new
     @variable = Variable.new
     @units = Unit.all
+    @variable_names = VariableNameCV.all
     @project = parent
     respond_to do |format|
       format.html # new.html.erb

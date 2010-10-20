@@ -68,6 +68,7 @@ $(document).ready(function(){
       //$(this).toggleClass('icon-expanded');
       $(this).next(".sensors").slideToggle(300);
     });
+    
 });
 
 (function($){

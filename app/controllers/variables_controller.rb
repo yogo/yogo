@@ -5,7 +5,6 @@ class VariablesController < ApplicationController
   # GET /variables/new
   def new
     @variable = Variable.new
-
     respond_to do |format|
       format.html # new.html.erb
     end

@@ -13,12 +13,15 @@ class VariableNameCVsController < ApplicationController
   
   # POST /variables
   def create
-    @variable_name = VariableNameCV.new(params[:variable_name_c_v])
-
+    if params[:variable_name_c_v].nil?
+      @variable_name = VariableNameCV.new(:term=> params[:term], :definition => params[:definition])
+    else
+      @variable_name = VariableNameCV.new(params[:variable_name_c_v])
+    end
     respond_to do |format|
       if @variable_name.save
         flash[:notice] = 'Variable Name was successfully created.'
-        format.html { (redirect_to(variable_path( @variable_name.id))) }
+        format.html { (redirect_to(new_variable_name_c_v_path())) }
       else
         format.html { render :action => "new" }
       end
