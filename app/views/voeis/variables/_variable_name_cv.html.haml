@@ -12,6 +12,7 @@
   :javascript  
     $(function() {
     $(".new-var-name-button").click(function() { 
+      
     $.post("#{root_url + "variable_name_c_vs"}"+"?term=" + $(".var_name_term").val()+"&definition=" + $(".var_name_definition").val(),
     function(data) {
     $('#variable_variable_name').

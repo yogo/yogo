@@ -1,4 +1,5 @@
 = render(:partial => "variable_name_cv")
+= render(:partial => "sample_medium_cv")
 %h1
   New Variable
 
@@ -22,8 +23,12 @@
   Speciation: 
   = f.text_field :speciation
   =clear_break
+  -sample_medium_options = Array.new
   Sample Medium: 
-  = f.text_field :sample_medium
+  - @sample_mediums.all(:order => [:term.asc]).each do |sample_medium|
+    -sample_medium_options <<[sample_medium.term]
+  = f.select('sample_medium',  options_for_select(sample_medium_options), :class => "sample_medium")
+  %label{:id => "samp_medium", :onclick=>"$('#new_sample_medium').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   =clear_break
   Value Type: 
   = f.text_field :value_type

@@ -13,12 +13,15 @@ class SampleMediumCVsController < ApplicationController
   
   # POST /variables
   def create
-    @sample_medium = SampleMediumCV.new(params[:sample_medium_c_v])
-
+    if params[:sample_medium_c_v].nil?
+      @sample_medium = SampleMediumCV.new(:term=> params[:term], :definition => params[:definition])
+    else
+      @sample_medium = SampleMediumCV.new(params[:sample_medium_c_v])
+    end
     respond_to do |format|
       if @sample_medium.save
         flash[:notice] = 'Sample Medium was successfully created.'
-        format.html { (redirect_to(variable_path( @sample_medium.id))) }
+        format.html { (redirect_to(new_sample_medium_c_v_path())) }
       else
         format.html { render :action => "new" }
       end
