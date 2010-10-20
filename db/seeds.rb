@@ -203,6 +203,14 @@ begin
   SpeciationCV.load_from_his
   puts 'done.'
   
+  print 'Seeding DataTypeCV from HIS...'
+  DataTypeCV.load_from_his
+  puts 'done.'
+  
+  print 'Seeding GeneralCategoryCV from HIS...'
+  GeneralCategoryCV.load_from_his
+  puts 'done.'
+  
   print 'Seeding Units from HIS...'
   Unit.load_from_his
   puts 'done.'

@@ -50,6 +50,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :sample_medium_c_vs
   map.resources :value_type_c_vs
   map.resources :speciation_c_vs
+  map.resources :data_type_c_vs
+  map.resources :general_category_c_vs
   map.resource  :password, :only => [ :show, :update, :edit ]
   map.resources :dashboards, :only => [ :show ], :requirements => { :id => /[\w]+/ }
   map.resources :pages, :only => [ :show ], :requirements => { :id => /[\w]+/ }

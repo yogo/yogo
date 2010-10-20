@@ -6,12 +6,12 @@
     = f.label("Definition:")
     =clear_break
     = f.text_area("definition", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "value_type_definition")
-    = f.submit("Save Sample Medium", :class => "new-sample-medium-button")
+    = f.submit("Save Value Type", :class => "new-value-type-button")
   %label{:id => "value_type_close", :onclick=>"$('#new_value_type').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
   
   :javascript  
     $(function() {
-    $(".new-sample-medium-button").click(function() { 
+    $(".new-value-type-button").click(function() { 
       
     $.post("#{root_url + "value_type_c_vs"}"+"?term=" + $(".value_type_term").val()+"&definition=" + $(".value_type_definition").val(),
     function(data) {

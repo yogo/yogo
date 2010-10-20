@@ -17,6 +17,8 @@ class Voeis::VariablesController < Voeis::BaseController
     @sample_mediums= SampleMediumCV.all
     @value_types= ValueTypeCV.all
     @speciations = SpeciationCV.all
+    @data_types = DataTypeCV.all
+    @general_categories = GeneralCategoryCV.all
     @project = parent
     respond_to do |format|
       format.html # new.html.erb

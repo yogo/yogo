@@ -2,6 +2,8 @@
 = render(:partial => "sample_medium_cv")
 = render(:partial => "value_type_cv")
 = render(:partial => "speciation_cv")
+= render(:partial => "data_type_cv")
+= render(:partial => "general_category_cv")
 
 %h1
   New Variable
@@ -58,12 +60,23 @@
   Time Units ID:
   = f.text_field :time_units_id
   =clear_break
-  Data Type: 
-  = f.text_field :data_type
+  
+  -data_type_options = Array.new
+  Data Type:  
+  - @data_types.all(:order => [:term.asc]).each do |data_type|
+    -data_type_options <<[data_type.term]
+  = f.select('data_type',  options_for_select(data_type_options), :class => "data_type")
+  %label{:id => "spec", :onclick=>"$('#new_data_type').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
+  
   =clear_break
   General Category:
-  = f.text_field :general_category
+  -general_category_options = Array.new
+  - @general_categories.all(:order => [:term.asc]).each do |data_type|
+    -general_category_options <<[data_type.term]
+  = f.select('general_category',  options_for_select(general_category_options), :class => "data_type")
+  %label{:id => "spec", :onclick=>"$('#new_general_category').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   =clear_break
+  
   No Data Value: 
   = f.text_field :no_data_value
   =clear_break

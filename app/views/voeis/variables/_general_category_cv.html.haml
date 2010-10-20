@@ -1,0 +1,31 @@
+#new_general_category
+  Create a new General Category for the controlled vocabulary:
+  - form_for(:general_category_c_v )do |f|
+    = f.label("Term:")
+    = f.text_area("term", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "general_category_term")
+    = f.label("Definition:")
+    =clear_break
+    = f.text_area("definition", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "general_category_definition")
+    = f.submit("Save Speciation", :class => "new-general-category-button")
+  %label{:id => "general_category_close", :onclick=>"$('#new_general_category').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
+  
+  :javascript  
+    $(function() {
+    $(".new-general-category-button").click(function() { 
+      
+    $.post("#{root_url + "general_category_c_vs"}"+"?term=" + $(".general_category_term").val()+"&definition=" + $(".general_category_definition").val(),
+    function(data) {
+    $('#variable_general_category').
+    append($("<option></option>").
+    attr("value",$(".general_category_term").val()).
+    text($(".general_category_term").val())); 
+    $('#variable_general_category').val($(".general_category_term").val());
+    $(".general_category_term").val("");
+    $(".general_category_definition").val("");
+    $("#new_general_category").toggle();
+    return false;
+    }
+    );
+    return false;
+    });
+    });
