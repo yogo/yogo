@@ -51,6 +51,7 @@ ValueTypeCV
 SpeciationCV
 DataTypeCV
 GeneralCategoryCV
+SampleTypeCV
 
 DataMapper.finalize
 DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
@@ -64,4 +65,5 @@ DataMapper.repository(:default).storage_exists?(SampleMediumCV.storage_name) &&
 DataMapper.repository(:default).storage_exists?(ValueTypeCV.storage_name) &&
 DataMapper.repository(:default).storage_exists?(SpeciationCV.storage_name) &&
 DataMapper.repository(:default).storage_exists?(DataTypeCV.storage_name) &&
-DataMapper.repository(:default).storage_exists?(GeneralCategoryCV.storage_name)
+DataMapper.repository(:default).storage_exists?(GeneralCategoryCV.storage_name) &&
+DataMapper.repository(:default).storage_exists?(SampleTypeCV.storage_name)

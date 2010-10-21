@@ -1,0 +1,35 @@
+#new_unit
+  %h3 Create a new Unit:
+  - form_for(:unit )do |f|
+  Unit Name: 
+  = f.text_area("units_name", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "units_name")
+  =clear_break
+  Unit Type: 
+  = f.text_field :units_type
+  = f.text_area("units_type", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "units_type")
+  =clear_break
+  Unit Abbreviation: 
+  = f.text_area("units_abbreviation", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "units_abbreviation")
+  = f.submit("Save Unit", :class => "new-unit-button")
+  %label{:id => "data_type_close", :onclick=>"$('#new_unit').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
+  
+  :javascript  
+    $(function() {
+    $(".new-unit-button").click(function() { 
+      
+    $.post("#{root_url + "units"}"+"?units_name=" + $(".units_name").val()+"&units_type=" + $(".units_type").val()+"&units_abbreviation=" + $(".units_abbreviation").val(),
+    function(data) {
+    $('#variable_units_id').
+    append($("<option></option>").
+    attr("value",$(".data_type_term").val()).
+    text($(".data_type_term").val())); unit.units_name+':'+unit.units_type
+    $('#variable_data_type').val($(".data_type_term").val());
+    $(".data_type_term").val("");
+    $(".data_type_definition").val("");
+    $("#new_data_type").toggle();
+    return false;
+    }
+    );
+    return false;
+    });
+    });

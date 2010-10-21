@@ -211,9 +211,15 @@ begin
   GeneralCategoryCV.load_from_his
   puts 'done.'
   
+  print 'Seeding SampleTypeCV from HIS...'
+  SampleTypeCV.load_from_his
+  puts 'done.'
+  
+  
   print 'Seeding Units from HIS...'
   Unit.load_from_his
   puts 'done.'
+  
   
  
 end

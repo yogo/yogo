@@ -10,6 +10,7 @@
     = link_to("Site", new_project_site_path(@project), :class => 'icon icon-add')
     - if @project.managed_repository { Voeis::Site.all.count } > 0
       = link_to("Variable", new_project_variable_path(@project), :class => 'icon icon-add')
+      = link_to("Unit", new_project_unit_path(@project), :class => 'icon icon-add')
       = link_to("Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id}, :class => 'icon icon-add')
       - if @project.managed_repository { Voeis::DataStream.all.count } > 0
         = link_to("Data", add_project_data_streams_path(@project), :params => {:project_id => @project.id}, :class => 'icon icon-add')
