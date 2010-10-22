@@ -32,7 +32,11 @@ class Role
       Voeis::SensorValue,
       Voeis::Site,
       Voeis::Unit,
-      Voeis::Variable]
+      Voeis::Variable,
+      Voeis::DataValue,
+      Voeis::Sample,
+      Voeis::LabMethod,
+      Voeis::MetaTag]
   end
 
   def self.available_permissions

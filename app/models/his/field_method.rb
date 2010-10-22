@@ -1,4 +1,5 @@
-# Methods
+
+# # Methods
 #
 # This is a "Data Collection Methods
 # The Methods table lists the methods used to collect the data and any additional information about
@@ -15,20 +16,10 @@
 # using a temperature sensor or measured using a turbidity sensor).  Details about the
 # specific sensor models and manufacturers can be included in the MethodDescription.
 #
-class Method
-  include DataMapper::Resource
+class His::FieldMethod < His::Base
+  storage_names[:his] = "field_methods"
 
-  property :id, Serial
-  property :method_description, Text, :required => true
+  property :id,                 Serial
+  property :method_description, String, :required => true
   property :method_link, String, :required => false
-  property :updated_at, DateTime, :required => true,  :default => DateTime.now
-
-  is_versioned :on => :updated_at
-  
-  before(:save) {
-    self.updated_at = DateTime.now
-  }
-
-  #has n, :sensor_types, :model => "SensorType", :through => Resource
-
 end

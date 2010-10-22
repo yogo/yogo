@@ -66,4 +66,5 @@ class Voeis::Variable
   has n, :data_stream_columns,      :model => "Voeis::DataStreamColumn", :through => Resource
   has n, :sensor_types,             :model => "Voeis::SensorType", :through => Resource
   has n, :units,                    :model => "Voeis::Unit", :through => Resource
+  has n, :data_values,  :model => "Voeis::DataValue", :through => Resource
 end

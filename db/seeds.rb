@@ -215,9 +215,16 @@ begin
   SampleTypeCV.load_from_his
   puts 'done.'
   
-  
   print 'Seeding Units from HIS...'
   Unit.load_from_his
+  puts 'done.'
+  
+  print 'Seeding LabMethods from HIS...'
+  LabMethod.load_from_his
+  puts 'done.'
+  
+  print 'Seeding Methods from HIS...'
+  FieldMethod.load_from_his
   puts 'done.'
   
   

@@ -36,4 +36,5 @@ class Voeis::Sample
   has n, :data_values,    :model => "Voeis::DataValue", :through => Resource
   has n, :sample_type_cv, :model => "SampleTypeCV", :through => Resource
   has n, :lab_methods,    :model => "Voeis::LabMethod", :through => Resource
+  #has n, :sample_material, :model => "Voeis::SampleMaterial", :through => Resource
 end
