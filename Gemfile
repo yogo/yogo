@@ -14,6 +14,7 @@ gem "dm-types",       "~> 1.0.0",     :git => "#{DATAMAPPER}/dm-types.git",
                                       :require => false # don't require dm-type/json
 
 gem "yogo-project", :git => "git://github.com/yogo/yogo-project.git", :require  => nil
+#gem "yogo-project", :path => "../yogo-project", :require => nil
 
 # Adapters to store or access data
 gem "dm-persevere-adapter", "0.72.0"
