@@ -10,19 +10,33 @@ class Voeis::SamplesController < Voeis::BaseController
 
   def new
     @project = parent
-    @sample = parent.managed_repository{Voeis::Sample.new}
+    @sample = @project.managed_repository{Voeis::Sample.new}
     @sample_types = SampleTypeCV.all
+    @sample_materials = SampleMaterial.all
+    @sites = @project.managed_repository{Voeis::Site.all}
     @lab_methods = LabMethod.all
   end
 
   def edit
-    @sample =  parent.managed_repository{Voeis::Sample.get(params[:id])}
+    @sample =  parent.managed_repository{Voeis::Sample.get(:params[:id])}
     @project = parent
   end
 
   def create
-    create! do |success, failure|
-      success.html { redirect_to :action => 'new' }
+    parent.managed_repository do
+      @sample = Voeis::Sample.new(:sample_type =>   params[:sample][:sample_type],
+                                  :material => params[:sample][:material],
+                                  :lab_sample_code => params[:sample][:lab_sample_code],
+                                  :lab_method_id => params[:sample][:lab_method_id].to_i)
+                                  
+      puts @sample.valid?
+      puts @sample.errors.inspect()
+      if @sample.save   
+        @sample.sites << Voeis::Site.get(params[:site].to_i)
+        @sample.save
+        flash[:notice] = 'Sample was successfully created.'
+        redirect_to :action => 'new'
+      end
     end
   end
 

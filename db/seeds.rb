@@ -227,6 +227,11 @@ begin
   FieldMethod.load_from_his
   puts 'done.'
   
+  print "Seeding Sample Materials"
+  SampleMaterial.create(:material => "Water")
+  SampleMaterial.create(:material => "Rock")
+  SampleMaterial.create(:material => "Insect")
+  puts 'done.'
   
  
 end

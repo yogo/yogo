@@ -24,6 +24,7 @@ ActionController::Routing::Routes.draw do |map|
     project.resources :sensor_types, :namespace => nil, :controller => 'voeis/sensor_types'
     project.resources :data_stream_columns, :namespace => nil, :controller =>'voeis/data_stream_columns'
     project.resources :samples, :namespace => nil, :controller =>'voeis/samples'
+    project.resources :sample_materials, :namespace => nil, :controller =>'voeis/sample_materials'
     project.resources :lab_methods, :namespace => nil, :controller =>'voeis/lab_methods'
     project.resources :data_values, :namespace => nil, :controller =>'voeis/data_values',      
                       :collection => { :pre_process=> :get, :pre_upload => :post, :upload => :post}
@@ -57,6 +58,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :general_category_c_vs
   map.resources :sample_type_c_vs
   map.resources :lab_methods
+  map.resources :sample_materials
   map.resources :field_methods
   map.resource  :password, :only => [ :show, :update, :edit ]
   map.resources :dashboards, :only => [ :show ], :requirements => { :id => /[\w]+/ }

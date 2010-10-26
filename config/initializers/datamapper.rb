@@ -53,6 +53,7 @@ SpeciationCV
 DataTypeCV
 GeneralCategoryCV
 SampleTypeCV
+SampleMaterial
 LabMethod
 
 DataMapper.finalize
@@ -70,4 +71,5 @@ DataMapper.repository(:default).storage_exists?(SpeciationCV.storage_name) &&
 DataMapper.repository(:default).storage_exists?(DataTypeCV.storage_name) &&
 DataMapper.repository(:default).storage_exists?(GeneralCategoryCV.storage_name) &&
 DataMapper.repository(:default).storage_exists?(SampleTypeCV.storage_name) &&
+DataMapper.repository(:default).storage_exists?(SampleMaterial.storage_name) &&
 DataMapper.repository(:default).storage_exists?(LabMethod.storage_name)

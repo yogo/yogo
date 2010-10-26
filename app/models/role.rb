@@ -35,6 +35,7 @@ class Role
       Voeis::Variable,
       Voeis::DataValue,
       Voeis::Sample,
+      Voeis::SampleMaterial,
       Voeis::LabMethod,
       Voeis::MetaTag]
   end

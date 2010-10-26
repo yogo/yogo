@@ -17,5 +17,18 @@
     -lab_method_options = lab_method_options.merge({lab_meth.lab_method_name => lab_meth.id})
   = f.select('lab_method_id',  options_for_select(lab_method_options))
   =clear_break
+  Sample Material
+  -sample_material_options = Array.new
+  - @sample_materials.all(:order => [:material.asc]).each do |mat|
+    -sample_material_options << [mat.material]
+  = f.select('material',  options_for_select(sample_material_options))
+  = clear_break
+  Site: 
+  -@site_options=""
+  -@sites.all(:order => [:name.asc]).each do |site|
+    -if site.id != nil
+      -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
+  =select_tag("site", @site_options)
+  =clear_break
   = f.submit('Save', :class => 'icon icon-save')
   = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 

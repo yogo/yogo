@@ -7,7 +7,8 @@ class Voeis::DataValue
   property :value_accuracy,           Float
   property :local_date_time,          DateTime, :required => true,  :default => DateTime.now
   property :utc_offset,               Float,    :required => true,  :default => 1.0
-  property :date_time_utc,            DateTime, :required => true,  :default => "2009-12-01T02:00:00+00:00"
+  property :date_time_utc,            DateTime, :required => true,  :default => DateTime.now 
+  property :replicate,                String,   :required => true,  :default => "original"
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
 
   is_versioned :on => :updated_at
