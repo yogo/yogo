@@ -27,7 +27,7 @@ ActionController::Routing::Routes.draw do |map|
     project.resources :sample_materials, :namespace => nil, :controller =>'voeis/sample_materials'
     project.resources :lab_methods, :namespace => nil, :controller =>'voeis/lab_methods'
     project.resources :data_values, :namespace => nil, :controller =>'voeis/data_values',      
-                      :collection => { :pre_process=> :get, :pre_upload => :post, :upload => :post}
+                      :collection => { :pre_process=> :get, :pre_upload => :post, :store_sample_data => :post}
   end
 
   map.namespace :his do |his|

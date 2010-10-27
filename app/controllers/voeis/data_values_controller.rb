@@ -133,90 +133,96 @@ class Voeis::DataValuesController < Voeis::BaseController
 
    def store_sample_data
 
-     redirect_path =Hash.new
-     parent.managed_repository do
-       @data_stream = Voeis::DataStream.create(:name => params[:data_stream_name],
-                                               :description => params[:data_stream_description],
-                                               :filename => params[:datafile],
-                                               :start_line => params[:start_line].to_i)
-       puts @data_stream.errors.inspect
-       #Add site association to data_stream
-       #
-       @site = Voeis::Site.first(:id => params[:site])
-       @data_stream.sites << @site
-       @data_stream.save
-       # site.data_streams << data_stream
-       #     site.save
-       #create DataStreamColumns
-       #
-     end
-     range = params[:rows].to_i
+     range = params[:row_size].to_i
+     #store all the Variables in the managed repository
+     @col_vars = Array.new
      (0..range).each do |i|
-       #create the Timestamp column
-       if i == params[:timestamp].to_i
-         puts params["column"+i.to_s]
-         puts @var = Variable.get(params["column"+i.to_s])
-         parent.managed_repository do
-           data_stream_column = Voeis::DataStreamColumn.create(
-                                 :column_number => i,
-                                 :name => "Timestamp",
-                                 :type =>"Timestamp",
-                                 :unit => "NA",
-                                 :original_var => params["variable"+i.to_s])
-           data_stream_column.data_streams << @data_stream
-           data_stream_column.save
-         end
-       else #create other data_stream_columns and create sensor_types
-         puts params["column"+i.to_s]
-         puts @var = Variable.get(params["column"+i.to_s])
-         parent.managed_repository do
-           data_stream_column = Voeis::DataStreamColumn.create(
-                                 :column_number => i,
-                                 :name => params["variable"+i.to_s],
-                                 :original_var => params["variable"+i.to_s],
-                                 :unit => params["unit"+i.to_s],
-                                 :type => params["type"+i.to_s])
-           if !params["ignore"+i.to_s]            
-             variable = Voeis::Variable.first_or_create(
-                         :variable_code => @var.variable_code,
-                         :variable_name => @var.variable_name,
-                         :speciation =>  @var.speciation,
-                         :variable_units_id => @var.variable_units_id,
-                         :sample_medium =>  @var.sample_medium,
-                         :value_type => @var.value_type,
-                         :is_regular => @var.is_regular,
-                         :time_support => @var.time_support,
-                         :time_units_id => @var.time_units_id,
-                         :data_type => @var.data_type,
-                         :general_category => @var.general_category,
-                         :no_data_value => @var.no_data_value)
-             data_stream_column.variables << variable
-             data_stream_column.data_streams << @data_stream
-             data_stream_column.save
-             sensor_type = Voeis::SensorType.first_or_create(
-                           :name => params["variable"+i.to_s] + @site.name,
-                           :min => params["min"+i.to_s].to_f,
-                           :max => params["max"+i.to_s].to_f,
-                           :difference => params["difference"+i.to_s].to_f)
-             #Add sites and variable associations to senor_type
-             #
-             sensor_type.sites << @site
-             sensor_type.variables <<  variable
-             sensor_type.data_stream_columns << data_stream_column
-             sensor_type.save
-           else
-             data_stream_column.name = "ignore"
-             data_stream_column.data_streams << @data_stream
-             data_stream_column.save
-           end #end if
-         end #end managed repository
-       end #end if
-     end #end range.each
-     # Parse the csv file using the newly created data_stream template and
-     # save the values as sensor_values
-     parse_logger_csv(params[:datafile], @data_stream, @site)
-     parent.publish_his
+        @var = Variable.get(params["column"+i.to_s])
+        parent.managed_repository do
+          if !params["ignore"+i.to_s]            
+            variable = Voeis::Variable.first_or_create(
+                        :variable_code => @var.variable_code,
+                        :variable_name => @var.variable_name,
+                        :speciation =>  @var.speciation,
+                        :variable_units_id => @var.variable_units_id,
+                        :sample_medium =>  @var.sample_medium,
+                        :value_type => @var.value_type,
+                        :is_regular => @var.is_regular,
+                        :time_support => @var.time_support,
+                        :time_units_id => @var.time_units_id,
+                        :data_type => @var.data_type,
+                        :general_category => @var.general_category,
+                        :no_data_value => @var.no_data_value)
+            @col_vars[i] = variable
+          end #end if
+        end#managed repo
+     end  #end i loop
+ 
+      puts "DONE WITH VARS"
+     #create csv_row array
+     @csv_row = Array.new
+     csv_data = CSV.read(params[:datafile])
+     i = params[:start_line].to_i-1
+     puts "BEFORE"
+     csv_data[params[:start_line].to_i-1..-1].each do |row|
+       @csv_row[i] = row
+       i = i + 1
+     end#end row loop
+     puts "DONE WITH CSV"
+     (params[:start_line].to_i-1..params[:csv_size].to_i).each do |row|
+       if !@csv_row[row].nil?
+       parent.managed_repository do
+         @sample = Voeis::Sample.get(params["csv_sample"+row.to_s])
+         (0..range).each do |i|
+           puts "outside the if"
+           if params[:replicate].to_i != i && params[:timestamp_col].to_i != i && @csv_row[row][i] != ""
+             #store data value for this column(i) and row
+             puts "We should be saving right"
+             #sort out replicate
+             if params[:replicate] == "None"
+               rep = "0"
+             else
+               rep = @csv_row[row][params[:replicate].to_i]
+             end
+             puts "REPLICATE = #{rep}"
+             #need to store either the timestamp col or the applied timestamp
+             if params[:timestamp_col] == "None"
+               #store the applied timestamp
+               puts "The TIME: #{params[:time]["stamp(1i)"]}-#{params[:time]["stamp(2i)"]}-#{params[:time]["stamp(3i)"]}T#{params[:time]["stamp(4i)"]}:#{params[:time]["stamp(5i)"]}:00#{ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60)}:00"
+               puts d_time = DateTime.parse("#{params[:time]["stamp(1i)"]}-#{params[:time]["stamp(2i)"]}-#{params[:time]["stamp(3i)"]}T#{params[:time]["stamp(4i)"]}:#{params[:time]["stamp(5i)"]}:00#{ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60)}:00")
+               new_data_val = Voeis::DataValue.new(:data_value => @csv_row[row][i].to_f, 
+                  :local_date_time => d_time,
+                  :utc_offset => ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60),  
+                  :date_time_utc => d_time.to_time.utc.to_datetime,  
+                  :replicate => rep) 
+               puts "Value is valid: #{new_data_val.valid?}"
+               new_data_val.save
+               puts new_data_val.errors.inspect() 
+             else
+               #store the column timestamp
+               time = csv_row[row][params[:timestamp_col]]
+               #TODO - make sure time stores correctly
+               new_data_val = Voeis::DataValue.create(:data_value => @csv_row[row][i].to_f, 
+                   :local_date_time => DateTime.new(time),
+                   :utc_offset => ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60),  
+                   :date_time_utc => DateTime.new(time),  
+                   :replicate => rep)
+             end #end if
+             new_data_val.variable << @col_vars[i]
+             new_data_val.save
+             new_data_val.sample << @sample
+             new_data_val.save
+             @sample.sites.each do |site|
+               site.variables << @col_vars[i]
+               site.save
+             end
+            end #end if
+           end #end i loop
+          end #end if @csv_array.nil?
+       end #end managed repo
+     end #end row loop
+     #parent.publish_his
      flash[:notice] = "File parsed and stored successfully."
      redirect_to project_path(params[:project_id])
-   end
+   end# end def
 end
