@@ -12,10 +12,7 @@ ActionController::Routing::Routes.draw do |map|
                  :collection => { :search => :get, :publish_his => :post, :export => :post} do |project|
 
     project.resources :memberships, :namespace => nil, :controller => "memberships"
-
-    project.resources :sites, :namespace => nil, :controller => 'voeis/sites',
-                      :collection => {:add_site => :get, :save_site => :post}
-
+    project.resources :sites, :namespace => nil, :controller => 'voeis/sites'
     project.resources :data_streams, :namespace => nil, :controller => 'voeis/data_streams',
                       :collection => { :pre_upload => :post, :create_stream => :post,
                                        :query => :get, :search => :post, :upload => :post,
@@ -26,7 +23,11 @@ ActionController::Routing::Routes.draw do |map|
     project.resources :sensor_values, :namespace => nil, :controller => 'voeis/sensor_values'
     project.resources :sensor_types, :namespace => nil, :controller => 'voeis/sensor_types'
     project.resources :data_stream_columns, :namespace => nil, :controller =>'voeis/data_stream_columns'
-
+    project.resources :samples, :namespace => nil, :controller =>'voeis/samples'
+    project.resources :sample_materials, :namespace => nil, :controller =>'voeis/sample_materials'
+    project.resources :lab_methods, :namespace => nil, :controller =>'voeis/lab_methods'
+    project.resources :data_values, :namespace => nil, :controller =>'voeis/data_values',      
+                      :collection => { :pre_process=> :get, :pre_upload => :post, :store_sample_data => :post}
   end
 
   map.namespace :his do |his|
@@ -49,6 +50,16 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :memberships
   map.resources :settings
   map.resources :search
+  map.resources :variable_name_c_vs
+  map.resources :sample_medium_c_vs
+  map.resources :value_type_c_vs
+  map.resources :speciation_c_vs
+  map.resources :data_type_c_vs
+  map.resources :general_category_c_vs
+  map.resources :sample_type_c_vs
+  map.resources :lab_methods
+  map.resources :sample_materials
+  map.resources :field_methods
   map.resource  :password, :only => [ :show, :update, :edit ]
   map.resources :dashboards, :only => [ :show ], :requirements => { :id => /[\w]+/ }
   map.resources :pages, :only => [ :show ], :requirements => { :id => /[\w]+/ }

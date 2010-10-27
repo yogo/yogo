@@ -11,6 +11,13 @@ class SensorValue
   property :timestamp,    DateTime,  :required => true, :index => true
   property :created_at,  DateTime
   property :published,  Boolean, :required => true, :default => false
+  property :updated_at, DateTime, :required => true,  :default => DateTime.now
+
+  is_versioned :on => :updated_at
+  
+  before(:save) {
+    self.updated_at = DateTime.now
+  }
   
   has n, :site, :through => Resource  
   has n, :sensor_type, :model => "SensorType", :through => Resource

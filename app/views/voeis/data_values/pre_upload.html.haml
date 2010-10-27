@@ -1,0 +1,84 @@
+%h2
+  = link_to(@project.name, project_path(@project) , :onload=> "$('#loader').toggle();")
+/-if !row_size.nil?  
+%h3 Sample Data Import Form
+
+-form_tag("store_sample_data", :onSubmit => "return checkform();") do 
+  -@column_options= '<option value="None">None</option>'
+  Select what VOEIS variables should be associated with these columns from the Sample Data file
+  %table
+    %tr
+      %th Column
+      %th Ignore
+      %th Row #{@start_line} Values
+      %th Column Header
+      %th Selected VOEIS Variable
+    -(0..@row_size).each do |i|
+      -@column_options= @column_options + "<option value="+i.to_s+">Column "+i.to_s+"</option>"
+      %tr
+        %td 
+          =i.to_s
+        %td
+          -if @var_array[i][7] == "ignore"
+            =check_box_tag("ignore"+i.to_s, true,true)
+          -else
+            =check_box_tag("ignore"+i.to_s)
+        %td
+          =@start_row[i]
+        %td 
+          =@var_array[i][0]
+        %td
+          =select_tag("column"+i.to_s, @var_array[i][3])
+
+  =clear_break
+  Please specify if a column should be used as the time-stamp:
+  =select_tag("timestamp_col", @column_options)
+  &nbsp;OR select a timestamp to apply to all data-values:
+  =datetime_select("time", "stamp", :default => DateTime.now)
+  =clear_break
+  Please specify if a column should be used as a replicate label:
+  =select_tag("replicate", @column_options)
+  =clear_break
+  Select the Time Zone these samples were collected in:
+  = time_zone_select("time", "zone", nil, :default => "Mountain Time (US & Canada)")
+  =clear_break
+  =clear_break
+  -@sample_options=""
+  -@samples.all(:order => [:lab_sample_code.asc]).each do |sample|
+    -if sample.id != nil
+      -@sample_options= @sample_options + "<option value="+sample.id.to_s+">"+sample.lab_sample_code+"</option>"
+  %table
+    %tr
+      %th #{@project.name} Sites
+      %th Row #
+      %th CSV Row Content
+    -(@start_line..@csv_size).each do |i|
+      %tr
+        %td
+          =select_tag("csv_sample"+i.to_s, @sample_options)
+        %td
+          = (i).to_s
+        %td
+          =@csv_array[i].to_s
+  =hidden_field_tag('datafile', @new_file)
+  =hidden_field_tag('row_size', @row_size)
+  =hidden_field_tag("start_line", @start_line)
+  =hidden_field_tag("header_info", @header_info)
+  =hidden_field_tag("csv_size", @csv_size)
+  =clear_break
+  =submit_tag("Submit", :onclick => "$('#loader').toggle();")
+  = link_to('Cancel', {:action => 'show', :controller => '/projects', :id=>@project.id }, :class => 'icon icon-cancel', :onclick => "$('#loader').toggle();", :onload => "$('#loader').toggle();")
+
+:javascript  
+  function checkform(){
+  var r=confirm('Are you sure you are ready to store this data?');
+  if (r==false)
+  {
+  $('#loader').toggle();
+  return false;
+  }
+  else
+  {
+  return true;
+  }
+

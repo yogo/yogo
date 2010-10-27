@@ -1,0 +1,31 @@
+#new_sample_medium
+  %h3 Create a new Sample Medium:
+  - form_for(:sample_medium_c_v )do |f|
+    = f.label("Term:")
+    = f.text_area("term", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "sample_medium_term")
+    = f.label("Definition:")
+    =clear_break
+    = f.text_area("definition", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "sample_medium_definition")
+    = f.submit("Save Sample Medium", :class => "new-sample-medium-button")
+  %label{:id => "sample_medium_close", :onclick=>"$('#new_sample_medium').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
+  
+  :javascript  
+    $(function() {
+    $(".new-sample-medium-button").click(function() { 
+      
+    $.post("#{root_url + "sample_medium_c_vs"}"+"?term=" + $(".sample_medium_term").val()+"&definition=" + $(".sample_medium_definition").val(),
+    function(data) {
+    $('#variable_sample_medium').
+    append($("<option></option>").
+    attr("value",$(".sample_medium_term").val()).
+    text($(".sample_medium_term").val())); 
+    $('#variable_sample_medium').val($(".sample_medium_term").val());
+    $(".sample_medium_term").val("");
+    $(".sample_medium_definition").val("");
+    $("#new_sample_medium").toggle();
+    return false;
+    }
+    );
+    return false;
+    });
+    });

@@ -17,6 +17,13 @@ class Site
   property :pos_accuracy_m,      Float,   :required => false
   property :county,              String,  :required => false
   property :comments,            String,  :required => false, :length => 512
+  property :updated_at, DateTime, :required => true,  :default => DateTime.now
+
+  is_versioned :on => :updated_at
+  
+  before(:save) {
+    self.updated_at = DateTime.now
+  }
 
   def self.load_from_his
     his_sites = His::Site.all

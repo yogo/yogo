@@ -22,6 +22,13 @@ class Voeis::DataStreamColumn
   property :unit, String, :required => true
   property :original_var, String, :required => true
   property :column_number, Integer, :required => true
+  property :updated_at, DateTime, :required => true,  :default => DateTime.now
+
+  is_versioned :on => :updated_at
+  
+  before(:save) {
+    self.updated_at = DateTime.now
+  }
 
   has n, :sensor_types, :model => 'Voeis::SensorType', :through => Resource
   has n, :variables,    :model => 'Voeis::Variable', :through => Resource

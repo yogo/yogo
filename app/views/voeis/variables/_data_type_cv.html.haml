@@ -1,0 +1,31 @@
+#new_data_type
+  %h3 Create a new Data Type:
+  - form_for(:data_type_c_v )do |f|
+    = f.label("Term:")
+    = f.text_area("term", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "data_type_term")
+    = f.label("Definition:")
+    =clear_break
+    = f.text_area("definition", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "data_type_definition")
+    = f.submit("Save Data Type", :class => "new-data-type-button")
+  %label{:id => "data_type_close", :onclick=>"$('#new_data_type').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
+  
+  :javascript  
+    $(function() {
+    $(".new-data-type-button").click(function() { 
+      
+    $.post("#{root_url + "data_type_c_vs"}"+"?term=" + $(".data_type_term").val()+"&definition=" + $(".data_type_definition").val(),
+    function(data) {
+    $('#variable_data_type').
+    append($("<option></option>").
+    attr("value",$(".data_type_term").val()).
+    text($(".data_type_term").val())); 
+    $('#variable_data_type').val($(".data_type_term").val());
+    $(".data_type_term").val("");
+    $(".data_type_definition").val("");
+    $("#new_data_type").toggle();
+    return false;
+    }
+    );
+    return false;
+    });
+    });

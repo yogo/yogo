@@ -13,8 +13,8 @@ gem "dm-types",       "~> 1.0.0",     :git => "#{DATAMAPPER}/dm-types.git",
                                       :ref => "674738f2a94788b975e9",
                                       :require => false # don't require dm-type/json
 
-#gem "yogo-project", :git => "git://github.com/yogo/yogo-project.git"
-gem "yogo-project", :path => "../yogo-project"
+gem "yogo-project", :git => "git://github.com/yogo/yogo-project.git"
+#gem "yogo-project", :path => "../yogo-project"
 
 # Adapters to store or access data
 gem "dm-persevere-adapter", "0.72.0"
@@ -41,17 +41,17 @@ gem 'mail'
 platforms(:ruby_18, :jruby) { gem "fastercsv" }
 
 # Switching 1.8.7/1.9 breaks for now
-group :development, :test do
-  platforms(:ruby_19) do
-    gem "ruby-debug19",             :require => "ruby-debug"
-    gem "rack-debug19",             :require => "rack-debug"
-  end
-
-  platforms(:ruby_18) do
-    gem "ruby-debug"
-    gem "rack-debug"
-  end
-end
+# group :development, :test do
+#   platforms(:mri_19) do
+#     gem "ruby-debug19",             :require => "ruby-debug"
+#     gem "rack-debug19",             :require => "rack-debug"
+#   end
+#
+#   platforms(:mri_18) do
+#     gem "ruby-debug"
+#     gem "rack-debug"
+#   end
+# end
 
 group :development do
   gem "capistrano",                 :require => nil

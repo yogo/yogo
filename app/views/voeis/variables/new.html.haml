@@ -1,3 +1,10 @@
+= render(:partial => "variable_name_cv")
+= render(:partial => "sample_medium_cv")
+= render(:partial => "value_type_cv")
+= render(:partial => "speciation_cv")
+= render(:partial => "data_type_cv")
+= render(:partial => "general_category_cv")
+
 %h1
   New Variable
 
@@ -5,8 +12,13 @@
   Variable Code: 
   = f.text_field :variable_code
   =clear_break
+  -var_name_options = Array.new
   Variable Name: 
-  = f.text_field :variable_name
+  - @variable_names.all(:order => [:term.asc]).each do |var_name|
+    -var_name_options <<[var_name.term]
+  = f.select('variable_name',  options_for_select(var_name_options), :class => "variable_name")
+  %label{:id => "var_name", :onclick=>"$('#new_variable_name').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
+  
   =clear_break
   Variable Units ID: 
   -unit_options = Array.new
@@ -14,15 +26,31 @@
     -unit_options <<[unit.units_name+':'+unit.units_type, unit.id.to_s]
   = f.select('variable_units_id',  options_for_select(unit_options))
   =clear_break
+  
+  -speciation_options = Array.new
   Speciation: 
-  = f.text_field :speciation
+  - @speciations.all(:order => [:term.asc]).each do |speciation|
+    -speciation_options <<[speciation.term]
+  = f.select('speciation',  options_for_select(speciation_options), :class => "speciation")
+  %label{:id => "spec", :onclick=>"$('#new_speciation').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   =clear_break
+  
+  -sample_medium_options = Array.new
   Sample Medium: 
-  = f.text_field :sample_medium
+  - @sample_mediums.all(:order => [:term.asc]).each do |sample_medium|
+    -sample_medium_options <<[sample_medium.term]
+  = f.select('sample_medium',  options_for_select(sample_medium_options), :class => "sample_medium")
+  %label{:id => "samp_medium", :onclick=>"$('#new_sample_medium').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   =clear_break
+  
   Value Type: 
-  = f.text_field :value_type
+  -value_type_options = Array.new
+  - @value_types.all(:order => [:term.asc]).each do |value_type|
+    -value_type_options <<[value_type.term]
+  = f.select('value_type',  options_for_select(value_type_options), :class => "value_type")
+  %label{:id => "val_typ", :onclick=>"$('#new_value_type').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   =clear_break
+  
   Is Regular: 
   = f.text_field :is_regular
   =clear_break
@@ -32,12 +60,23 @@
   Time Units ID:
   = f.text_field :time_units_id
   =clear_break
-  Data Type: 
-  = f.text_field :data_type
+  
+  -data_type_options = Array.new
+  Data Type:  
+  - @data_types.all(:order => [:term.asc]).each do |data_type|
+    -data_type_options <<[data_type.term]
+  = f.select('data_type',  options_for_select(data_type_options), :class => "data_type")
+  %label{:id => "spec", :onclick=>"$('#new_data_type').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
+  
   =clear_break
   General Category:
-  = f.text_field :general_category
+  -general_category_options = Array.new
+  - @general_categories.all(:order => [:term.asc]).each do |data_type|
+    -general_category_options <<[data_type.term]
+  = f.select('general_category',  options_for_select(general_category_options), :class => "data_type")
+  %label{:id => "spec", :onclick=>"$('#new_general_category').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   =clear_break
+  
   No Data Value: 
   = f.text_field :no_data_value
   =clear_break

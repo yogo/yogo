@@ -11,6 +11,13 @@ class Voeis::SensorValue
   property :timestamp,    DateTime,  :required => true, :index => true
   property :published,  Boolean, :required => false
   property :created_at,  DateTime
+  property :updated_at, DateTime, :required => true,  :default => DateTime.now
+
+  is_versioned :on => :updated_at
+  
+  before(:save) {
+    self.updated_at = DateTime.now
+  }
 
   has n, :site,           :model => "Voeis::Site", :through => Resource
   has n, :sensor_type,    :model => "Voeis::SensorType", :through => Resource

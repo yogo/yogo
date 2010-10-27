@@ -8,7 +8,10 @@
   - field_set_tag("Pick Sites & Variables") do
     - for site in project.managed_repository{ Voeis::Site.all } do
       .field-item{:class => site.sensor_types.count > 0 ? "site": nil }
-        .site-name{:class => 'icon' }= site.name
+        .site-name{:class => 'icon' }
+          = site.name
+          - if current_user.system_role.name.eql?('Administrator') ||  current_user.system_role.name.eql?('Principle Investigator') ||  current_user.system_role.name.eql?('Data Manager')
+            =link_to ("",edit_project_site_path(@project, site.id) , :class => "icon icon-edit")
         .sensors
           - for variable in site.sensor_types.variables do
             .field-item-two{:class => 'icon' }

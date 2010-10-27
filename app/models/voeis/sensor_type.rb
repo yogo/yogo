@@ -11,6 +11,13 @@ class Voeis::SensorType
   property :min,      Float,  :required => false
   property :max,      Float,  :required => false
   property :difference,  Float,  :required => false
+  property :updated_at, DateTime, :required => true,  :default => DateTime.now
+
+  is_versioned :on => :updated_at
+  
+  before(:save) {
+    self.updated_at = DateTime.now
+  }
 
   has n, :sites,          :model => "Voeis::Site", :through => Resource
   has n, :data_stream_columns, :model => 'Voeis::DataStreamColumn', :through => Resource
