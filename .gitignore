@@ -53,3 +53,4 @@ temp_data/*
 doc/voeis-demo/voeis.debug.html
 doc/voeis-demo/voeis.debug.text
 doc/voeis-demo/voeis.debug.text.erb
+db/sqlite3/*
