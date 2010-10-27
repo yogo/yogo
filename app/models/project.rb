@@ -33,7 +33,6 @@ class Project
   before :destroy, :destroy_cleanup
   after :save, :publish_his
 
-
   ##
   # Permissions on the object for the user that is passed in
   #
@@ -139,27 +138,6 @@ class Project
                                      :state  => site_to_store.state,
                                      :county  => site_to_store.county,
                                      :comments  => site_to_store.comments)
-  end
-
-  # @author Ryan Heimbuch
-  #
-  # Override required from Yogo::DataMapper::Repository#managed_repository_name
-  #
-  # @return [Symbol] the name for the DataMapper::Repository that the Project manages
-  def managed_repository_name
-    ActiveSupport::Inflector.tableize(id.to_s).to_sym
-  end
-
-  # @author Ryan Heimbuch
-  #
-  # @return [Hash] The adapter configuration for the Project managed_repository
-  # @see DataMapper.setup
-  # @todo Refactor this method into a module in yogo-project
-  def adapter_config
-    {
-      :adapter => 'sqlite',
-      :database => "db/sqlite3/voeis-project-#{managed_repository_name}.db"
-    }
   end
 
   # Ensure that our common Voeis models are ready to be persisted

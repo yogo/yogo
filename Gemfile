@@ -13,13 +13,13 @@ gem "dm-types",       "~> 1.0.0",     :git => "#{DATAMAPPER}/dm-types.git",
                                       :ref => "674738f2a94788b975e9",
                                       :require => false # don't require dm-type/json
 
-gem "yogo-project", :git => "git://github.com/yogo/yogo-project.git", :require  => nil
-#gem "yogo-project", :path => "../yogo-project", :require => nil
+#gem "yogo-project", :git => "git://github.com/yogo/yogo-project.git"
+gem "yogo-project", :path => "../yogo-project"
 
 # Adapters to store or access data
 gem "dm-persevere-adapter", "0.72.0"
 gem "dm-sqlite-adapter"
-#gem "dm-postgres-adapter"
+gem "dm-postgres-adapter"
 gem "dm-rest-adapter"
 
 # Extra supporting gems
