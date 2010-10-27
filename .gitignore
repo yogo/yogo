@@ -1,5 +1,6 @@
 *.rbc
 config/database.yml
+config/database.yml.postgres
 \#*\#
 *~
 SourceImages
