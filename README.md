@@ -36,6 +36,7 @@ The 'yogo' rake tasks manage starting, stopping, and resetting persevere for you
  - Updating the search function to search over all fields except dates
  - Fix loading settings from the database
  
+ 
 0.9.4 2010-07-09
  - Added in complete support for projects to have users and groups
  - Updated the look and feel
