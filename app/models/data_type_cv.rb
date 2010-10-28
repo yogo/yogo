@@ -6,7 +6,6 @@
 class DataTypeCV
   include DataMapper::Resource
   
-  property :his_id, Integer, :required => false
   property :term,       String, :required => true, :key => true, :format => /[^\t|\n|\r]/
   property :definition, Text
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
@@ -23,11 +22,10 @@ class DataTypeCV
     his_data_types = His::DataTypeCV.all
 
     his_data_types.each do |his_dt|
-      if self.first(:his_id => his_dt.id).nil?
-        self.create(:his_id => his_dt.id,
+        self.first_or_create(
                     :term => his_dt.term,
                     :definition=> his_dt.definition)
-      end
+      
     end
   end
 

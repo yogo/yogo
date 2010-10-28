@@ -6,7 +6,6 @@
 class VariableNameCV
   include DataMapper::Resource
   
-  property :his_id, Integer, :required => false
   property :term,       String, :required => true, :key => true, :format => /[^\t|\n|\r]/
   property :definition, Text
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
@@ -23,11 +22,9 @@ class VariableNameCV
     his_variable_names = His::VariableNameCV.all
 
     his_variable_names.each do |his_v|
-      if self.first(:his_id => his_v.id).nil?
-        self.create(:his_id => his_v.id,
+    self.first_or_create(
                     :term => his_v.term,
                     :definition=> his_v.definition)
-      end
     end
   end
 

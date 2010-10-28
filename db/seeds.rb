@@ -187,10 +187,6 @@ begin
   Site.load_from_his
   puts 'done'
   
-  print 'Seeding VariableNameCV from HIS...'
-  VariableNameCV.load_from_his
-  puts 'done.'
-  
   print 'Seeding SampleMediumCV from HIS...'
   SampleMediumCV.load_from_his
   puts 'done.'
@@ -233,5 +229,7 @@ begin
   SampleMaterial.create(:material => "Insect")
   puts 'done.'
   
- 
+  print 'Seeding VariableNameCV from HIS...'
+   VariableNameCV.load_from_his
+   puts 'done.'
 end
