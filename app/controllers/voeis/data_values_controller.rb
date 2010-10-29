@@ -172,10 +172,11 @@ class Voeis::DataValuesController < Voeis::BaseController
      (params[:start_line].to_i-1..params[:csv_size].to_i).each do |row|
        if !@csv_row[row].nil?
        parent.managed_repository do
-         @sample = Voeis::Sample.get(params["csv_sample"+row.to_s])
+         puts "CSVSample: #{params["csv_sample"+(row +1).to_s]}"
+         @sample = Voeis::Sample.get(params["csv_sample"+(row+1).to_s])
          (0..range).each do |i|
            puts "outside the if"
-           if params[:replicate].to_i != i && params[:timestamp_col].to_i != i && @csv_row[row][i] != ""
+           if params[:replicate].to_i != i && params[:timestamp_col].to_i != i && @csv_row[row][i] != ""&& !params["ignore"+i.to_s]
              #store data value for this column(i) and row
              puts "We should be saving right"
              #sort out replicate
@@ -210,6 +211,7 @@ class Voeis::DataValuesController < Voeis::BaseController
              end #end if
              new_data_val.variable << @col_vars[i]
              new_data_val.save
+             puts @sample
              new_data_val.sample << @sample
              new_data_val.save
              @sample.sites.each do |site|
