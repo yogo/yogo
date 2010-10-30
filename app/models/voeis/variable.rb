@@ -68,4 +68,5 @@ class Voeis::Variable
   has n, :units,                    :model => "Voeis::Unit", :through => Resource
   has n, :data_values,  :model => "Voeis::DataValue", :through => Resource
   has n, :sites, :model => "Voeis::Site", :through => Resource
+  has n, :samples, :model => "Voeis::Sample", :through => Resource
 end

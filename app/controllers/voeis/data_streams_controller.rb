@@ -445,10 +445,13 @@ class Voeis::DataStreamsController < Voeis::BaseController
             sensor_type.variables <<  variable
             sensor_type.data_stream_columns << data_stream_column
             sensor_type.save
+            @site.variables << variable
+            @site.save
           else
             data_stream_column.name = "ignore"
             data_stream_column.data_streams << @data_stream
             data_stream_column.save
+            
           end #end if
         end #end managed repository
       end #end if

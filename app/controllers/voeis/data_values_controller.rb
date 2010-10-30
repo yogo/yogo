@@ -158,45 +158,37 @@ class Voeis::DataValuesController < Voeis::BaseController
         end#managed repo
      end  #end i loop
  
-      puts "DONE WITH VARS"
      #create csv_row array
      @csv_row = Array.new
      csv_data = CSV.read(params[:datafile])
      i = params[:start_line].to_i-1
-     puts "BEFORE"
+
      csv_data[params[:start_line].to_i-1..-1].each do |row|
        @csv_row[i] = row
        i = i + 1
      end#end row loop
-     puts "DONE WITH CSV"
      (params[:start_line].to_i-1..params[:csv_size].to_i).each do |row|
        if !@csv_row[row].nil?
        parent.managed_repository do
-         puts "CSVSample: #{params["csv_sample"+(row +1).to_s]}"
          @sample = Voeis::Sample.get(params["csv_sample"+(row+1).to_s])
          (0..range).each do |i|
-           puts "outside the if"
            if params[:replicate].to_i != i && params[:timestamp_col].to_i != i && @csv_row[row][i] != ""&& !params["ignore"+i.to_s]
              #store data value for this column(i) and row
-             puts "We should be saving right"
              #sort out replicate
              if params[:replicate] == "None"
                rep = "0"
              else
                rep = @csv_row[row][params[:replicate].to_i]
              end
-             puts "REPLICATE = #{rep}"
              #need to store either the timestamp col or the applied timestamp
              if params[:timestamp_col] == "None"
                #store the applied timestamp
-               puts "The TIME: #{params[:time]["stamp(1i)"]}-#{params[:time]["stamp(2i)"]}-#{params[:time]["stamp(3i)"]}T#{params[:time]["stamp(4i)"]}:#{params[:time]["stamp(5i)"]}:00#{ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60)}:00"
-               puts d_time = DateTime.parse("#{params[:time]["stamp(1i)"]}-#{params[:time]["stamp(2i)"]}-#{params[:time]["stamp(3i)"]}T#{params[:time]["stamp(4i)"]}:#{params[:time]["stamp(5i)"]}:00#{ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60)}:00")
+               d_time = DateTime.parse("#{params[:time]["stamp(1i)"]}-#{params[:time]["stamp(2i)"]}-#{params[:time]["stamp(3i)"]}T#{params[:time]["stamp(4i)"]}:#{params[:time]["stamp(5i)"]}:00#{ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60)}:00")
                new_data_val = Voeis::DataValue.new(:data_value => @csv_row[row][i].to_f, 
                   :local_date_time => d_time,
                   :utc_offset => ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60),  
                   :date_time_utc => d_time.to_time.utc.to_datetime,  
                   :replicate => rep) 
-               puts "Value is valid: #{new_data_val.valid?}"
                new_data_val.save
                puts new_data_val.errors.inspect() 
              else
@@ -211,9 +203,10 @@ class Voeis::DataValuesController < Voeis::BaseController
              end #end if
              new_data_val.variable << @col_vars[i]
              new_data_val.save
-             puts @sample
              new_data_val.sample << @sample
              new_data_val.save
+             @sample.variables << @col_vars[i]
+             @sample.save
              @sample.sites.each do |site|
                site.variables << @col_vars[i]
                site.save
