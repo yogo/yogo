@@ -20,7 +20,11 @@
 # referencing your data.  Where available, journal citations are encouraged to promote the
 # correct crediting for use of data.
 #
-class His::Source < His::Base
+class His::Source
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "sources"
 
   property :id,                 Serial

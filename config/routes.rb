@@ -38,8 +38,6 @@ Yogo::Application.routes.draw do
         post :pre_upload
         post :store_sample_data
       end
-
-
     end
   end
 
@@ -85,6 +83,6 @@ Yogo::Application.routes.draw do
   resource :user_session
   match '/logout' => 'user_sessions#destroy', :as => :logout
   match '/login' => 'user_sessions#new', :as => :login
-  match '/' => 'pages#show', :id => home
+  match '/' => 'pages#show', :id => :home, :as => :root
 end
 

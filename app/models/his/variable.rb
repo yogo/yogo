@@ -39,7 +39,11 @@
 # would never expect to measure a water temperature of -9999.  The default value for this
 # field is -9999.
 #
-class His::Variable < His::Base
+class His::Variable
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "variables"
 
   property :id,                 Serial

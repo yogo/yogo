@@ -17,7 +17,11 @@
 # default value of 0 for this field indicates that nothing is known about the laboratory
 # method used to analyze the sample.
 #
-class His::Sample < His::Base
+class His::Sample
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "samples"
 
   property :id,               Serial

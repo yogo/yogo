@@ -6,7 +6,11 @@
 # This table is pre-populated within the ODM.  Changes to this controlled vocabulary can be
 # requested at http://water.usu.edu/cuahsi/odm/.
 #
-class His::VerticalDatumCV < His::Base
+class His::VerticalDatumCV
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "vertical_datum_cv"
 
   property :term,       String, :key => true, :required => true, :format => /[^\t|\n|\r]/

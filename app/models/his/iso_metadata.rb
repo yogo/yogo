@@ -25,7 +25,11 @@
 # Abstract, and ProfileVersion = “Unknown” and MetadataLink = NULL.  This record
 # should be the default value for sources with unknown/unspecified metadata.
 #
-class His::ISOMetadata  < His::Base
+class His::ISOMetadata 
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "iso_meta_data"
 
   property :id,               Serial

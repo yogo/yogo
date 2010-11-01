@@ -2,7 +2,11 @@
 #
 # Doesn't appear to be associated with any other tables
 #
-class His::SysDiagram  < His::Base
+class His::SysDiagram 
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "sys_diagrams"
 
   property :name,         String,   :required => true, :unique => true

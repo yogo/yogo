@@ -16,7 +16,11 @@
 # using a temperature sensor or measured using a turbidity sensor).  Details about the
 # specific sensor models and manufacturers can be included in the MethodDescription.
 #
-class His::FieldMethod < His::Base
+class His::FieldMethod
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "field_methods"
 
   property :id,                 Serial

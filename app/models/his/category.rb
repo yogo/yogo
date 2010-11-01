@@ -11,7 +11,11 @@
 # * This table should be populated before categorical data values are added to the DataValues
 # table.
 #
-class His::Category < His::Base
+class His::Category
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "categories"
 
   property :id,                   Serial

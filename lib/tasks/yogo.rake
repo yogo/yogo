@@ -20,6 +20,6 @@ namespace :yogo do
 
   desc "Update the changelog with git log"
   task :update_changelog => :environment do
-    sh "git log --quiet --format=medium #{VOEIS_COMMIT} HEAD > #{RAILS_ROOT}/app/views/pages/changelog.txt"
+    sh "git log --quiet --format=medium #{VOEIS_COMMIT} HEAD > #{Rails.root}/app/views/pages/changelog.txt"
   end
 end

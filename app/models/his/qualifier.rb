@@ -8,7 +8,11 @@
 # * The QualifierID field is the primary key, must be a unique integer, and cannot be NULL.
 # This field should be implemented as an auto number/identity field.
 #
-class His::Qualifier < His::Base
+class His::Qualifier
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "qualifiers"
 
   property :id,                    Serial

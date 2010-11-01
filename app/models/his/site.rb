@@ -22,7 +22,11 @@
 # SpatialReferenceID from the SpatialReferences controlled vocabulary table.  If the spatial
 # reference system of the local coordinates is unknown, a default value of 0 is used.
 #
-class His::Site < His::Base
+class His::Site
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "sites"
 
   property :id,                  Serial

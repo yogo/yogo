@@ -8,7 +8,11 @@
 # added to the database.  Constraints on each field in the SeriesCatalog table are dependent upon
 # the constraints on the fields in the table from which those fields originated.
 #
-class His::SeriesCatalog < His::Base
+class His::SeriesCatalog
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "series_catalogs"
 
   property :SeriesID,                 Serial

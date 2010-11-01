@@ -52,7 +52,11 @@
 # QualityControlLevels table should be populated prior to adding data values with a
 # particular QualityControlLevelID to the DataValues table.
 #
-class His::DataValue < His::Base
+class His::DataValue
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "data_values"
 
   property :id,                       Serial

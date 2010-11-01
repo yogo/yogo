@@ -15,7 +15,7 @@ class User
 
   property :id,                 DataMapper::Types::Serial
   property :login,              String,  :required => true, :index => true, :unique => true
-  property :email,              String,  :length => 256, :format => :email_address
+  property :email,              String,  :length => 256#, :format => :email_address
   property :first_name,         String,  :length => 50
   property :last_name,          String,  :length => 50
 
@@ -46,7 +46,7 @@ class User
 
   belongs_to :system_role
 
-  validates_confirmation_of :password
+  #validates_confirmation_of :password
 
   ##
   # Finds a user by their login
@@ -194,7 +194,7 @@ class User
 
   ##
   # Genertes a new api key for the user
-  # 
+  #
   # @example
   #   a_user.generate_new_api_key!
   #
@@ -205,5 +205,5 @@ class User
     attribute_set(:api_key, ::SecureRandom.hex(32))
     save!
   end
-  
+
 end

@@ -72,6 +72,10 @@ GEM
     data_objects (0.10.2)
       addressable (~> 2.1)
     dataflow (0.3.1)
+    diff-lcs (1.1.2)
+    dm-active_model (1.0.3)
+      activemodel (~> 3.0.0)
+      dm-core (~> 1.0.2)
     dm-adjust (1.0.2)
       dm-core (~> 1.0.2)
     dm-aggregates (1.0.2)
@@ -97,6 +101,12 @@ GEM
     dm-postgres-adapter (1.0.2)
       dm-do-adapter (~> 1.0.2)
       do_postgres (~> 0.10.2)
+    dm-rails (1.0.4)
+      actionpack (~> 3.0.0)
+      activesupport (~> 3.0.0)
+      dm-active_model (~> 1.0.3)
+      dm-core (~> 1.0.0)
+      railties (~> 3.0.0)
     dm-rest-adapter (1.0.2)
       dm-core (~> 1.0.2)
       dm-serializer (~> 1.0.2)
@@ -144,6 +154,8 @@ GEM
       gemcutter (>= 0.1.0)
       git (>= 1.2.5)
       rubyforge (>= 2.0.0)
+    jquery-rails (0.2.4)
+      rails (~> 3.0)
     json (1.4.6)
     json_pure (1.4.6)
     mail (2.2.9)
@@ -175,7 +187,6 @@ GEM
       activesupport (= 3.0.1)
       bundler (~> 1.0.0)
       railties (= 3.0.1)
-    rails-footnotes (3.6.7)
     rails_warden (0.5.2)
       warden
     railties (3.0.1)
@@ -185,10 +196,18 @@ GEM
       thor (~> 0.14.0)
     rake (0.8.7)
     responders (0.6.2)
-    rspec (1.3.1)
-    rspec-rails (1.3.3)
-      rack (>= 1.0.0)
-      rspec (= 1.3.1)
+    rspec (2.0.1)
+      rspec-core (~> 2.0.1)
+      rspec-expectations (~> 2.0.1)
+      rspec-mocks (~> 2.0.1)
+    rspec-core (2.0.1)
+    rspec-expectations (2.0.1)
+      diff-lcs (>= 1.1.2)
+    rspec-mocks (2.0.1)
+      rspec-core (~> 2.0.1)
+      rspec-expectations (~> 2.0.1)
+    rspec-rails (2.0.1)
+      rspec (~> 2.0.0)
     rubyforge (2.0.4)
       json_pure (>= 1.1.7)
     sinatra (1.1.0)
@@ -247,22 +266,26 @@ DEPENDENCIES
   bluecloth
   capistrano
   carrierwave
-  compass
+  compass (>= 0.10.6)
+  data_mapper
+  dm-is-list
+  dm-is-versioned
+  dm-rails
   fastercsv
   haml
   inherited_resources
   jeweler
+  jquery-rails
   json
   mail
   mime-types
   polyglot
   pony
   rails
-  rails-footnotes
   rails_warden
   rake
-  rspec (~> 1.3.0)
-  rspec-rails (~> 1.3.2)
+  rspec
+  rspec-rails
   test-unit (= 1.2.3)
   treetop
   uuidtools

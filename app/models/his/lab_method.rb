@@ -16,7 +16,11 @@
 # samples in the Samples table for which nothing is known about the laboratory method
 # used to analyze the sample.
 #
-class His::LabMethod < His::Base
+class His::LabMethod
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "lab_methods"
 
   property :id,                     Serial

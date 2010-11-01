@@ -2,7 +2,7 @@
 require 'exceptions'
 
 # Load the Application Version
-load RAILS_ROOT / "VERSION"
+load File.join(Rails.root.to_s, "VERSION")
 
 ##
 # Check to make sure the asset directory exists and make it if it doesn't

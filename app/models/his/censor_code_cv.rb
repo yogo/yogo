@@ -6,7 +6,11 @@
 # This table is pre-populated within the ODM.  Changes to this controlled vocabulary can be
 # requested at http://water.usu.edu/cuahsi/odm/.
 #
-class His::CensorCodeCV < His::Base
+class His::CensorCodeCV
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "censor_code_cvs"
 
   property :term,       String, :required => true, :key => true, :format => /[^\t|\n|\r]/

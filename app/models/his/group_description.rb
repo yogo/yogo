@@ -9,7 +9,11 @@
 # should be implemented as an auto number/identity field.
 # * The GroupDescription can be any text string that describes the group of observations.
 #
-class His::GroupDescription < His::Base
+class His::GroupDescription
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "group_descriptions"
 
   property :id,                 Serial

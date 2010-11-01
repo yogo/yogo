@@ -14,7 +14,11 @@
 # example, “Distance from stream bank” is ambiguous because it is not known which bank
 # is being referred to.
 #
-class His::OffsetType < His::Base
+class His::OffsetType
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "offset_types"
 
   property :id,                 Serial

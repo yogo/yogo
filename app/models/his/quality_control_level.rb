@@ -12,7 +12,11 @@
 # quality control levels can be defined.  A quality control level code of -9999 is suggested
 # for data whose quality control level is unknown.
 #
-class His::QualityControlLevel < His::Base
+class His::QualityControlLevel
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "quality_control_levels"
 
   property :id,                         Serial

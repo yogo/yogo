@@ -1,6 +1,6 @@
 namespace :yogo do
-  pid_file = RAILS_ROOT/:tmp/:pids/'server.pid'
-  
+  pid_file = File.join(Rails.root, 'tmp', 'pids', 'server.pid')
+
   desc "Start the Yogo System"
   task :start => ['yogo:stop', 'persvr:start'] do
     cd RAILS_ROOT do
@@ -8,7 +8,7 @@ namespace :yogo do
     end
     Rake::Task['yogo:stop'].reenable
   end
-  
+
   desc "Open Yogo in a web browser"
   task :open do
     times_tried = 0
@@ -34,7 +34,7 @@ namespace :yogo do
     end
     Rake::Task['yogo:open'].reenable
   end
-  
+
   desc "Stop the Yogo System"
   task :stop do
     begin
@@ -66,13 +66,13 @@ namespace :yogo do
       Rake::Task['yogo:start'].reenable
     end
   end
-  
+
   desc "Restart the Yogo System"
   task :restart => ['yogo:stop'] do
     Rake::Task['yogo:start'].invoke
     Rake::Task['yogo:restart'].reenable
   end
-  
+
   desc "Destroy the Yogo databases and restore everything to clean state."
   task :clean => ['yogo:stop', 'persvr:stop_all'] do
     puts "Clearing all yogo data and restoring to clean state!"
@@ -80,12 +80,12 @@ namespace :yogo do
     sh "git clean -X -d -f"
     Rake::Task['yogo:clean'].reenable
   end
-  
+
   desc "Update and install the ruby gems required by yogo"
   task :gems do
     sh "gem bundle"
   end
-  
+
   desc "Update the Yogo system from the source repository"
   task :update => ['yogo:stop'] do
     puts "Updating yogo from the git repository!"

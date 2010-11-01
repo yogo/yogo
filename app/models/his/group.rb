@@ -1,7 +1,11 @@
 #
 # Groups
 #
-class His::Group  < His::Base
+class His::Group 
+  include DataMapper::Resource
+  def self.default_repository_name
+    :his
+  end
   storage_names[:his] = "groups"
 
   property :id,       Serial
