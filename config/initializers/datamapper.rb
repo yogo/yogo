@@ -37,7 +37,7 @@ if Object.const_defined?(:DataObjects)
 end
 
 # Load the project model and migrate it if needed.
-Project
+#Project
 Setting
 User
 Role
@@ -63,7 +63,7 @@ DataMapper.repository(:default).storage_exists?(User.storage_name) &&
 DataMapper.repository(:default).storage_exists?(Role.storage_name) &&
 DataMapper.repository(:default).storage_exists?(Membership.storage_name) &&
 DataMapper.repository(:default).storage_exists?(Site.storage_name) &&
-DataMapper.repository(:default).storage_exists?(Unit.storage_name) &&                         DataMapper.repository(:default).storage_exists?(Variable.storage_name) &&    
+DataMapper.repository(:default).storage_exists?(Unit.storage_name) &&                         DataMapper.repository(:default).storage_exists?(Variable.storage_name) &&
 DataMapper.repository(:default).storage_exists?(FieldMethod.storage_name) &&                      DataMapper.repository(:default).storage_exists?(VariableNameCV.storage_name) &&
 DataMapper.repository(:default).storage_exists?(SampleMediumCV.storage_name) &&
 DataMapper.repository(:default).storage_exists?(ValueTypeCV.storage_name) &&
