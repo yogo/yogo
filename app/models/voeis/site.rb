@@ -47,6 +47,8 @@ class Voeis::Site
 
   is_versioned :on => :updated_at
   
+  validates_uniqueness_of :code
+  
   before(:save) {
     self.updated_at = DateTime.now
   }

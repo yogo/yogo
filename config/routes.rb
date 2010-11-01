@@ -19,7 +19,9 @@ ActionController::Routing::Routes.draw do |map|
                                        :export => :post, :data => :post, :add => :get}
     project.resources :variables, :namespace => nil, :controller => 'voeis/variables'
     project.resources :units, :namespace => nil, :controller => 'voeis/units'
-    project.resources :apiv1, :namespace => nil, :controller => 'voeis/apiv1'
+    project.resources :apivs, :namespace => nil, :controller => 'voeis/apivs',
+                      :collection => {:create_site => :get, :get_site => :get, :get_all_sites => :get,
+                                      :create_variable => :get}
     project.resources :sensor_values, :namespace => nil, :controller => 'voeis/sensor_values'
     project.resources :sensor_types, :namespace => nil, :controller => 'voeis/sensor_types'
     project.resources :data_stream_columns, :namespace => nil, :controller =>'voeis/data_stream_columns'
