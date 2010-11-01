@@ -8,10 +8,7 @@ gem "dm-migrations"
 gem "dm-is-versioned"
 gem "dm-validations"
 
-# 1.0 Release of dm-types has problems with UUID properties, use git master
-gem "dm-types",       "~> 1.0.0",     :git => "#{DATAMAPPER}/dm-types.git",
-                                      :ref => "674738f2a94788b975e9",
-                                      :require => false # don't require dm-type/json
+gem "dm-types",       "~> 1.0.2",     :require => false # don't require dm-type/json
 
 gem "yogo-project", :git => "git://github.com/yogo/yogo-project.git"
 #gem "yogo-project", :path => "../yogo-project"
