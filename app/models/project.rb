@@ -63,6 +63,7 @@ class Project
                           "voeis/sensor_type$retrieve",
                           "voeis/sensor_value$retrieve",
                           "voeis/site$retrieve",
+                          "voeis/site$update",
                           "voeis/unit$retrieve",
                           "voeis/variable$retrieve",
                           "voeis/lab_method$retrieve",
