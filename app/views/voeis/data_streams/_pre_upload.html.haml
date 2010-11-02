@@ -107,7 +107,15 @@
             =text_field_tag("difference"+i.to_s,var_array[i][6],:size=>8)
   =clear_break
   Please specify which column should be used as the time-stamp:
-  =select_tag("timestamp", @column_options)
+  -timestamp_column_options = @column_options + '<option value="None" selected= "selected">None</option>'
+  =select_tag("timestamp", timestamp_column_options)
+  =clear_break
+  %h3 OR
+  Please specifcy the date column
+  =select_tag("date", timestamp_column_options)
+  and the time column
+  =select_tag("time", timestamp_column_options)
+  =clear_break
   =hidden_field_tag('datafile', new_file)
   =hidden_field_tag('project_id', project_id)
   =hidden_field_tag('rows', row_size)
@@ -128,6 +136,13 @@
   {
   // something is wrong
   alert('The Data Stream Name field requires a name before this form can be submitted.');
+  $('#loader').toggle();
+  return false;
+  }
+  if (($('#date').val() == "None") && ($('#time').val() == "None")) && ($('#timestamp').val() == "None")
+  {
+  // something is wrong
+  alert('You must choose either a timestamp column or the date & time columns.');
   $('#loader').toggle();
   return false;
   }

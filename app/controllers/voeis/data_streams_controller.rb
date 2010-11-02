@@ -394,7 +394,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
     range = params[:rows].to_i
     (0..range).each do |i|
       #create the Timestamp column
-      if i == params[:timestamp].to_i
+      if i == params[:timestamp].to_i && params[:timestamp] != "None"
         puts params["column"+i.to_s]
         puts @var = Variable.get(params["column"+i.to_s])
         parent.managed_repository do
@@ -402,6 +402,32 @@ class Voeis::DataStreamsController < Voeis::BaseController
                                 :column_number => i,
                                 :name => "Timestamp",
                                 :type =>"Timestamp",
+                                :unit => "NA",
+                                :original_var => params["variable"+i.to_s])
+          data_stream_column.data_streams << @data_stream
+          data_stream_column.save
+        end
+      elsif i == params[:date].to_i && params[:date] != "None"
+        puts params["column"+i.to_s]
+        puts @var = Variable.get(params["column"+i.to_s])
+        parent.managed_repository do
+          data_stream_column = Voeis::DataStreamColumn.create(
+                                :column_number => i,
+                                :name => "Date",
+                                :type =>"Date",
+                                :unit => "NA",
+                                :original_var => params["variable"+i.to_s])
+          data_stream_column.data_streams << @data_stream
+          data_stream_column.save
+        end
+      elsif i == params[:time].to_i && params[:time] != "None"
+        puts params["column"+i.to_s]
+        puts @var = Variable.get(params["column"+i.to_s])
+        parent.managed_repository do
+          data_stream_column = Voeis::DataStreamColumn.create(
+                                :column_number => i,
+                                :name => "Time",
+                                :type =>"Time",
                                 :unit => "NA",
                                 :original_var => params["variable"+i.to_s])
           data_stream_column.data_streams << @data_stream
@@ -618,19 +644,35 @@ class Voeis::DataStreamsController < Voeis::BaseController
        sensor_type_array[col.column_number] = parent.managed_repository{Voeis::SensorType.first(:name => col.original_var + site.name)}
        data_stream_col[col.column_number] = col
      end
-     data_timestamp_col = data_stream_template.data_stream_columns.first(:name => "Timestamp").column_number
+     if !data_stream_template.data_stream_columns.first(:name => "Timestamp").nil?
+        data_timestamp_col = data_stream_template.data_stream_columns.first(:name => "Timestamp").column_number
+     else
+       data_timestamp_col = ""
+       date_col = data_stream_template.data_stream_columns.first(:name => "Date").column_number
+       time_col = data_stream_template.data_stream_columns.first(:name => "Time").column_number
+     end
      csv_data[data_stream_template.start_line..-1].each do |row|
        (0..row.size-1).each do |i|
-         if i != data_timestamp_col
+         if i != data_timestamp_col && i != date_col && i != time_col
            puts data_stream_col
            if data_stream_col[i].name != "ignore"
              #save to sensor_value and sensor_type
              parent.managed_repository{
-             sensor_value = Voeis::SensorValue.new(
-                                           :value => row[i],
-                                           :units => data_stream_col[i].unit,
-                                           :timestamp => row[data_timestamp_col],
-                                           :published => false)
+             if data_timestamp_col == ""
+               sensor_value = Voeis::SensorValue.new(
+                                              :value => row[i],
+                                              :units => data_stream_col[i].unit,
+                                              :timestamp => Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).to_datetime,
+                                              :published => false)
+             else   
+               sensor_value = Voeis::SensorValue.new(
+                                             :value => row[i],
+                                             :units => data_stream_col[i].unit,
+                                             :timestamp => row[data_timestamp_col.to_i],
+                                             :published => false)
+             end
+             puts sensor_value.valid?
+             puts sensor_value.errors.inspect()
              sensor_value.save
              sensor_value.sensor_type << sensor_type_array[i]
              sensor_value.site << site
