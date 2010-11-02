@@ -10,7 +10,7 @@
       .field-item{:class => site.variables.count > 0 ? "site": nil }
         .site-name{:class => 'icon' }
           = site.name
-          - if current_user.system_role.name.eql?('Administrator') ||  current_user.system_role.name.eql?('Principle Investigator') ||  current_user.system_role.name.eql?('Data Manager')
+          - if current_user.system_role.name.eql?('Administrator') ||  current_user.system_role.name.eql?('Principle Investigator') ||  current_user.system_role.name.eql?('Data Manager') || current_user.system_role.name.eql?('Project Manager')
             =link_to ("",edit_project_site_path(@project, site.id) , :class => "icon icon-edit")
         .sensors
           - for variable in site.variables do
