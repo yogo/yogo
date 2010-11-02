@@ -33,7 +33,6 @@ class ProjectsController < InheritedResources::Base
     @start_time = nil
     @end_time = nil
     @label_array = ["Timestamp"]
-    @project = parent
     if params.has_key?(:range)
       @start_time = Date.civil(params[:range][:"start_date(1i)"].to_i,params[:range]      [:"start_date(2i)"].to_i,params[:range][:"start_date(3i)"].to_i)
       @end_time = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
