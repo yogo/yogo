@@ -24,18 +24,17 @@ gem 'polyglot'
 gem 'treetop'
 gem 'mail'
 
-platforms(:ruby_18, :jruby) { gem "fastercsv" }
+platforms(:ruby_18) { gem "fastercsv" }
 
-group :development do
-  gem "capistrano",                 :require => nil
-  gem "test-unit",        "1.2.3"
-  gem "bluecloth",                  :require => nil # Required for YARD
-end
-
-group :test do
+group(:development, :test) do
+  gem "capistrano",                :require => nil
+  gem "bluecloth",                 :require => nil # Required for YARD
   gem "rake",                      :require => nil
-  gem "rspec",                     :require => nil
-  gem "rspec-rails",               :require => "spec/rails"
+  gem 'rspec'
+  gem 'rspec-core',                :require => 'rspec/core'
+  gem 'rspec-expectations',        :require => 'rspec/expectations'
+  gem 'rspec-mocks',               :require => 'rspec/mocks'
+  gem 'rspec-rails'
   gem "yard",                      :require => nil
   gem "yardstick",                 :require => nil
   gem "jeweler",                   :require => nil
