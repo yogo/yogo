@@ -113,7 +113,7 @@ module ApplicationHelper
   #
   # @api public
   def clear_break
-    "<br clear='all' style='clear: both;'/>"
+    "<br clear='all' style='clear: both;'/>".html_safe
   end
 
   def page_title
@@ -169,7 +169,7 @@ module ApplicationHelper
         z
       end
       s << '</select>'
-      s
+      s.html_safe
     end
   end
 
@@ -192,7 +192,7 @@ module ApplicationHelper
         z
       end
       s << '</select>'
-      s
+      s.html_safe
     end
   end
 
@@ -208,7 +208,7 @@ module ApplicationHelper
       tag_options.merge!(yield(item)) if block_given?
       s << content_tag('option', h(item.name), tag_options)
     end
-    s
+    s.html_safe
   end
 
   def yogo_button(image, text, link)

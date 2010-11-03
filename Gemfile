@@ -1,10 +1,12 @@
 source :rubygems
 
-gem "yogo-framework", :path =>  "../yogo-framework"
-
 gem "data_mapper"
 gem "dm-is-list"
 gem "dm-is-versioned"
+
+gem "yogo-framework", :path =>  "../yogo-framework"
+gem "yogo-project",   :path =>  "../yogo-project"
+
 gem "jquery-rails"
 
 # Extra supporting gems
@@ -38,4 +40,5 @@ group(:development, :test) do
   gem "yard",                      :require => nil
   gem "yardstick",                 :require => nil
   gem "jeweler",                   :require => nil
+  # gem "test-unit", :require => nil
 end
