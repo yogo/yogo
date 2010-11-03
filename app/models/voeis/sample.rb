@@ -38,4 +38,5 @@ class Voeis::Sample
   has n, :sample_type_cv, :model => "SampleTypeCV", :through => Resource
   has n, :lab_methods,    :model => "Voeis::LabMethod", :through => Resource
   has n, :sites, :model => "Voeis::Site", :through => Resource
+  has n, :variables, :model => "Voeis::Variable", :through => Resource
 end

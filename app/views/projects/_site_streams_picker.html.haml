@@ -7,13 +7,13 @@
   = hidden_field_tag("variables_end", end_time)
   - field_set_tag("Pick Sites & Variables") do
     - for site in project.managed_repository{ Voeis::Site.all } do
-      .field-item{:class => site.sensor_types.count > 0 ? "site": nil }
+      .field-item{:class => site.variables.count > 0 ? "site": nil }
         .site-name{:class => 'icon' }
           = site.name
-          - if current_user.system_role.name.eql?('Administrator') ||  current_user.system_role.name.eql?('Principle Investigator') ||  current_user.system_role.name.eql?('Data Manager')
+          - if current_user.system_role.name.eql?('Administrator') ||   current_user.system_role.name.eql?('Project Manager')
             =link_to ("",edit_project_site_path(@project, site.id) , :class => "icon icon-edit")
         .sensors
-          - for variable in site.sensor_types.variables do
+          - for variable in site.variables do
             .field-item-two{:class => 'icon' }
               = check_box_tag("variables[#{site.id}][]",            
                               variable.id, (params.has_key?("variables") && params["variables"].has_key?(site.id.to_s) && params["variables"][site.id.to_s].include?(variable.id.to_s)), 

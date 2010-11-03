@@ -6,7 +6,6 @@
 class GeneralCategoryCV
   include DataMapper::Resource
   
-  property :his_id, Integer, :required => false
   property :term,       String, :required => true, :key => true, :format => /[^\t|\n|\r]/
   property :definition, Text
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
@@ -23,11 +22,10 @@ class GeneralCategoryCV
     his_general_categorys = His::GeneralCategoryCV.all
 
     his_general_categorys.each do |his_gc|
-      if self.first(:his_id => his_gc.id).nil?
-        self.create(:his_id => his_gc.id,
+        self.first_or_create(
                     :term => his_gc.term,
                     :definition=> his_gc.definition)
-      end
+      
     end
   end
 

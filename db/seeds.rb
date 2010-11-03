@@ -21,7 +21,7 @@ begin
                                 :actions => ["project$retrieve"])
   user_role.move(:to => 1)
   project_manager_role = SystemRole.create(:name => 'Project Manager', :description => 'Able to create projects',
-                                     :actions => ["project$retrieve", "project$update", "role$retrieve", "user$retrieve", "role$retrieve"])
+                                     :actions => ["project$create", "project$retrieve", "project$update", "role$retrieve", "user$retrieve", "role$retrieve"])
   project_manager_role.move(:to => 2)
   sys_admin = SystemRole.first_or_new(:name => 'Administrator', :description => 'System role for Administrators',
                                       :actions => SystemRole.available_permissions)
@@ -187,10 +187,6 @@ begin
   Site.load_from_his
   puts 'done'
 
-  print 'Seeding VariableNameCV from HIS...'
-  VariableNameCV.load_from_his
-  puts 'done.'
-
   print 'Seeding SampleMediumCV from HIS...'
   SampleMediumCV.load_from_his
   puts 'done.'
@@ -232,6 +228,8 @@ begin
   SampleMaterial.create(:material => "Rock")
   SampleMaterial.create(:material => "Insect")
   puts 'done.'
-
-
+  
+  print 'Seeding VariableNameCV from HIS...'
+   VariableNameCV.load_from_his
+   puts 'done.'
 end

@@ -1,5 +1,5 @@
 .menu-links
-  = link_to("Home", root_url)
+  = link_to("Projects", projects_url)
   /= render_dashboard_jump_box
   / We should come up with a better way to check if the system role is an 'admin' or not.
   - if logged_in? && current_user.system_role.name.eql?('Administrator')

@@ -41,11 +41,13 @@ class Voeis::Site
   property :pos_accuracy_m, Float, :required => false
   property :state, String, :required => true
   property :county, String, :required => false
-  property :comments, String, :required => false
+  property :comments, Text, :required => false
   property :description, Text, :required => false
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
 
   is_versioned :on => :updated_at
+  
+  validates_uniqueness_of :code
   
   before(:save) {
     self.updated_at = DateTime.now

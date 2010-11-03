@@ -50,7 +50,7 @@ class Voeis::Variable
   property :sample_medium, String, :required => true, :default => 'Unknown', :length => 512
   property :value_type, String, :required => true, :default =>'Unknown', :length => 512
   property :is_regular, Boolean, :required => true, :default => false
-  property :time_support, Float, :required => true
+  property :time_support, Float, :required => true, :default => 1.0
   property :time_units_id, Integer, :required => true, :default => 103
   property :data_type, String, :required => true, :default => 'Unknown', :length => 512
   property :general_category, String, :required => true, :default => 'Unknown', :length => 512
@@ -68,4 +68,5 @@ class Voeis::Variable
   has n, :units,                    :model => "Voeis::Unit", :through => Resource
   has n, :data_values,  :model => "Voeis::DataValue", :through => Resource
   has n, :sites, :model => "Voeis::Site", :through => Resource
+  has n, :samples, :model => "Voeis::Sample", :through => Resource
 end

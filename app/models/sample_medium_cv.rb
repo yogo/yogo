@@ -8,7 +8,6 @@
 class SampleMediumCV
   include DataMapper::Resource
 
-  property :his_id, Integer, :required => false
   property :term,       String, :required => true, :key => true
   property :definition, Text
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
@@ -24,11 +23,9 @@ class SampleMediumCV
     his_sample_mediums = His::SampleMediumCV.all
 
     his_sample_mediums.each do |his_sm|
-      if self.first(:his_id => his_sm.id).nil?
-        self.create(:his_id => his_sm.id,
+        self.first_or_create(
                     :term => his_sm.term,
                     :definition=> his_sm.definition)
-      end
     end
   end
 

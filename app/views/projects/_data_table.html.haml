@@ -4,10 +4,22 @@
   =hidden_field_tag('site_name', "voeis_results")
   =submit_tag("Export Results")
   
-- visualization("data-#{project.id.to_s}", 'table', :html => { :class => class_name }) do |table|
-  - if @label_array.length > 1
-    - table.register_column(:datetime, @label_array[0])
-    - @label_array[1..-1].each do |label|
-      - table.register_column(:number, label)
-    - table.add_rows(@current_data)
-    = ""
+-#- visualization("data-#{project.id.to_s}", 'table', :html => { :class => class_name }) do |table|
+-#  - if @label_array.length > 1
+-#    - table.register_column(:datetime, @label_array[0])
+-#    - @label_array[1..-1].each do |label|
+-#      - table.register_column(:number, label)
+-#    - table.add_rows(@current_data)
+-#    = ""
+%table
+  %tr
+    - @label_array.each do |label|
+      %th 
+        = label
+  -@current_data.each do |row|
+    %tr
+      %td
+        = row[0].to_time.strftime("%m/%d/%Y at %I:%M%p")
+      -row[1..-1].each do |col|
+        %td 
+          = col

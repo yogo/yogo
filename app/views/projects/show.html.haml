@@ -1,7 +1,7 @@
 #content-actions
   = link_to("Settings", edit_project_path(@project), :class => 'icon icon-settings')
 #content-title 
-  - if @project.is_private?
+  - if @project.is_private == true
     %span.icon.icon-private= @project.name
   - else
     %span.icon= @project.name

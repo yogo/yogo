@@ -33,12 +33,11 @@ class ProjectsController < InheritedResources::Base
     @start_time = nil
     @end_time = nil
     @label_array = ["Timestamp"]
-
     if params.has_key?(:range)
       @start_time = Date.civil(params[:range][:"start_date(1i)"].to_i,params[:range]      [:"start_date(2i)"].to_i,params[:range][:"start_date(3i)"].to_i)
       @end_time = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
       @start_time = @start_time.to_datetime
-      @end_time = @end_time.to_datetime + 1.day
+      @end_time = @end_time.to_datetime + 23.hour + 59.minute
 
 
       # if params.has_key?(:variables_start)
@@ -59,18 +58,20 @@ class ProjectsController < InheritedResources::Base
           site = resource.managed_repository { Voeis::Site.get(site_id) }
           if params[:variables][site_id].empty?
             site.variables.each do |variable|
+              var_label = ""
               var_label =  site.name if params[:site_display]
               var_label = var_label +  variable.variable_name
               var_label = var_label + variable.sample_medium if params[:sample_medium_display]
               var_label = var_label + variable.data_type if params[:data_type_display]
               var_label = var_label + Unit.get(variable.variable_units_id).units_name if params[:units_display]
               
-              @label_array << var_label #{}"#{site.name} #{variable.variable_name}"
+              @label_array << var_label #"#{site.name} #{variable.variable_name}"
               @items << [site, variable]
             end
           else
             params[:variables][site_id].each do |variable_id|
               variable = resource.managed_repository{ Voeis::Variable.get(variable_id) }
+              var_label = ""
               var_label =  site.name + "|" if params[:site_display]
               var_label = var_label +  variable.variable_name
               var_label = var_label + "|" + variable.sample_medium if params[:sample_medium_display]
@@ -89,13 +90,29 @@ class ProjectsController < InheritedResources::Base
       @items.each do |site, variable|
         if site.sensor_types.count > 0
           sensor = site.sensor_types.select{|s| s.variables.include?(variable)}[0]
-          values = sensor.sensor_values(:timestamp.gte => @start_time, :timestamp.lte => @end_time)
-          data_lists[site] ||= Hash.new
-          data_lists[site][variable] ||= Hash.new
-          values.each do |v|
-            data_lists[site][variable][v.timestamp] = v.value
+          if !sensor.nil?
+            values = sensor.sensor_values(:timestamp.gte => @start_time, :timestamp.lte => @end_time)
+            data_lists[site] ||= Hash.new
+            data_lists[site][variable] ||= Hash.new
+            values.each do |v|
+              data_lists[site][variable][v.timestamp] = v.value
+            end
+            timestamps.merge(values.map {|v| v.timestamp})
           end
-          timestamps.merge(values.map {|v| v.timestamp})
+        end
+        if site.samples.count > 0
+          sample = site.samples.select{|s| s.variables.include?(variable)}[0]
+          if !sample.nil?
+            values = sample.data_values.all(:local_date_time.gte => @start_time, :local_date_time.lte => @end_time).intersection(variable.data_values)
+            data_lists[site] ||= Hash.new
+            data_lists[site][variable] ||= Hash.new
+            values.each do |v|
+     
+                data_lists[site][variable][v.local_date_time] = v.data_value
+
+            end
+            timestamps.merge(values.map {|v| v.local_date_time})
+          end
         end
       end
 

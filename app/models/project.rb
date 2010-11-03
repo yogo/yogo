@@ -63,11 +63,13 @@ class Project
                           "voeis/sensor_type$retrieve",
                           "voeis/sensor_value$retrieve",
                           "voeis/site$retrieve",
+                          "voeis/site$update",
                           "voeis/unit$retrieve",
                           "voeis/variable$retrieve",
                           "voeis/lab_method$retrieve",
                           "voeis/sample$retrieve",
                           "voeis/sample_material$retrieve",
+                          "voeis/apiv$retrieve",
                           "voeis/data_value$retrieve"] unless self.is_private?
       return base_permission if user.nil?
       (super + base_permission + user.memberships(:project_id => self.id).roles.map{|r| r.actions }).flatten.uniq
@@ -159,6 +161,7 @@ class Project
   manage Voeis::Sample
   manage Voeis::SampleMaterial
   manage Voeis::DataValue
+  manage Voeis::Apiv
   private
 
   def destroy_cleanup
