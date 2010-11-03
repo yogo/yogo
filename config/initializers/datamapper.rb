@@ -22,19 +22,6 @@ DataMapper::Model.raise_on_save_failure = true
 # Read the configuration from the existing database.yml file
 config = Rails.configuration.database_configuration
 
-# Setup the default datamapper repository corresponding to the current rails environment
-# unnecessary: rails-datamapper handles this
-DataMapper.setup(:default, config[Rails.env])
-DataMapper.setup(:his, config['his'])
-
-# Map the datamapper logging to rails logging
-DataMapper.logger             = Rails.logger
-if Object.const_defined?(:DataObjects)
-  DataObjects::Postgres.logger  = Rails.logger if DataObjects.const_defined?(:Postgres)
-  DataObjects::Sqlserver.logger = Rails.logger if DataObjects.const_defined?(:Sqlserver)
-  DataObjects::Mysql.logger     = Rails.logger if DataObjects.const_defined?(:Mysql)
-  DataObjects::Sqlite3.logger   = Rails.logger if DataObjects.const_defined?(:Sqlite3)
-end
 
 # Load the project model and migrate it if needed.
 #Project
@@ -56,20 +43,20 @@ SampleTypeCV
 SampleMaterial
 LabMethod
 
-DataMapper.finalize
-DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
-DataMapper.repository(:default).storage_exists?(Setting.storage_name) &&
-DataMapper.repository(:default).storage_exists?(User.storage_name) &&
-DataMapper.repository(:default).storage_exists?(Role.storage_name) &&
-DataMapper.repository(:default).storage_exists?(Membership.storage_name) &&
-DataMapper.repository(:default).storage_exists?(Site.storage_name) &&
-DataMapper.repository(:default).storage_exists?(Unit.storage_name) &&                         DataMapper.repository(:default).storage_exists?(Variable.storage_name) &&
-DataMapper.repository(:default).storage_exists?(FieldMethod.storage_name) &&                      DataMapper.repository(:default).storage_exists?(VariableNameCV.storage_name) &&
-DataMapper.repository(:default).storage_exists?(SampleMediumCV.storage_name) &&
-DataMapper.repository(:default).storage_exists?(ValueTypeCV.storage_name) &&
-DataMapper.repository(:default).storage_exists?(SpeciationCV.storage_name) &&
-DataMapper.repository(:default).storage_exists?(DataTypeCV.storage_name) &&
-DataMapper.repository(:default).storage_exists?(GeneralCategoryCV.storage_name) &&
-DataMapper.repository(:default).storage_exists?(SampleTypeCV.storage_name) &&
-DataMapper.repository(:default).storage_exists?(SampleMaterial.storage_name) &&
-DataMapper.repository(:default).storage_exists?(LabMethod.storage_name)
+# DataMapper.finalize
+# DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(Setting.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(User.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(Role.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(Membership.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(Site.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(Unit.storage_name) &&                         DataMapper.repository(:default).storage_exists?(Variable.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(FieldMethod.storage_name) &&                      DataMapper.repository(:default).storage_exists?(VariableNameCV.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(SampleMediumCV.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(ValueTypeCV.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(SpeciationCV.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(DataTypeCV.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(GeneralCategoryCV.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(SampleTypeCV.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(SampleMaterial.storage_name) &&
+# DataMapper.repository(:default).storage_exists?(LabMethod.storage_name)

@@ -8,6 +8,10 @@
 
 begin
 
+  print 'Automigrating Database...'
+  DataMapper.finalize.auto_migrate!
+  puts 'done.'
+
   print 'Creating default settings...'
   Setting.create(:name => 'local_only', :value => false)
   Setting.create(:name => 'asset_directory', :value => 'yogo_assets')
