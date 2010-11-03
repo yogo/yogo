@@ -8,35 +8,57 @@
 #
 Yogo::Application.routes.draw do
   resources :projects do
-    resources :memberships
-    resources :sites
-    resources :data_streams do
-      collection do
-        post :pre_upload
-        post :create_stream
-        get :query
-        post :search
-        post :upload
-        post :export
-        post :data
-        get :add
-      end
+    member do
+      post :upload
+      get  :collect_data
     end
+    collection do
+      get  :search
+      post :export
+      post :publish_his
+    end
+    resources :memberships
+    scope :module => "voeis" do
+      resources :sites do
+        collection do
+          post :save_site
+        end
+      end
+      resources :data_streams do
+        collection do
+          post :pre_upload
+          post :create_stream
+          get  :query
+          post :search
+          post :upload
+          post :export
+          post :data
+          get  :add
+        end
+      end
 
-    resources :variables
-    resources :units
-    resources :apiv1
-    resources :sensor_values
-    resources :sensor_types
-    resources :data_stream_columns
-    resources :samples
-    resources :sample_materials
-    resources :lab_methods
-    resources :data_values do
-      collection do
-        get :pre_process
-        post :pre_upload
-        post :store_sample_data
+      resources :variables
+      resources :units
+      resources :apivs do
+        collection do
+          get :create_site
+          get :create_variable
+          get :get_all_sites
+          get :get_site
+        end
+      end
+      resources :sensor_values
+      resources :sensor_types
+      resources :data_stream_columns
+      resources :samples
+      resources :sample_materials
+      resources :lab_methods
+      resources :data_values do
+        collection do
+          get  :pre_process
+          post :pre_upload
+          post :store_sample_data
+        end
       end
     end
   end
@@ -52,6 +74,9 @@ Yogo::Application.routes.draw do
   end
 
   resources :users do
+    member do
+      put :api_key_update
+    end
     resources :memberships
   end
 
@@ -71,16 +96,16 @@ Yogo::Application.routes.draw do
   resources :lab_methods
   resources :sample_materials
   resources :field_methods
-  resource :password
-  resources :dashboards
-  resources :pages
+  resource  :password,                :only => [:show, :update, :edit]
+  resources :dashboards,              :only => [:show], :requirements => {:id => /[\w]+/}
+  resources :pages,                   :only => [:show], :requirements => {:id => /[\w]+/}
   resources :feedback do
     collection do
       post :email
     end
   end
 
-  resource :user_session
+  resource :user_session,             :only => [ :show, :new, :create, :destroy ]
   match '/logout' => 'user_sessions#destroy', :as => :logout
   match '/login' => 'user_sessions#new', :as => :login
   match '/' => 'pages#show', :id => :home, :as => :root
