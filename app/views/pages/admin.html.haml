@@ -1,12 +1,12 @@
 .admin-link-list
   = [link_to("Projects", projects_url, :class => 'icon icon-projects'),
-      link_to("New", new_project_path, :class => 'icon icon-add')].join(" | ")
+      link_to("New", new_project_path, :class => 'icon icon-add')].join(" | ").html_safe
   %br/
   = [link_to("Users", users_url, :class => 'icon icon-users'),
-      link_to("New", new_user_path, :class => 'icon icon-add')].join(" | ")
+      link_to("New", new_user_path, :class => 'icon icon-add')].join(" | ").html_safe
   %br/
   = [link_to("Roles & Permissions", roles_url, :class => 'icon icon-roles'),
-      link_to("New", new_role_path, :class => 'icon icon-add')].join(" | ")
+      link_to("New", new_role_path, :class => 'icon icon-add')].join(" | ").html_safe
   %br/
-  = link_to("Settings", settings_url, :class => 'icon icon-settings')
+  = link_to("Settings", settings_url, :class => 'icon icon-settings').html_safe
       

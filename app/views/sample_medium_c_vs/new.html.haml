@@ -1,5 +1,5 @@
 Create a new sample medium for the controlled vocabulary:
-- form_for(:sample_medium_c_v, @sample_medium, :url => {:action => 'create', :controller => 'sample_medium_c_vs'}, :builder => YogoFormBuilder, :html => {:onsubmit => "return checkform();"} )do |f|
+= form_for(:sample_medium_c_v, @sample_medium, :url => {:action => 'create', :controller => 'sample_medium_c_vs'}, :builder => YogoFormBuilder, :html => {:onsubmit => "return checkform();"} )do |f|
   = f.text_field("term")
   = f.text_area("definition")
   = f.submit("Save Sample Medium", :onclick => "$('#loader').toggle();")

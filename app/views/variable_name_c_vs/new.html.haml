@@ -1,5 +1,5 @@
 Create a new variable name for the controlled vocabulary:
-- form_for(:variable_name_c_v, @variable_name, :url => {:action => 'create', :controller => 'variable_name_c_vs'}, :builder => YogoFormBuilder, :html => {:onsubmit => "return checkform();"} )do |f|
+= form_for(:variable_name_c_v, @variable_name, :url => {:action => 'create', :controller => 'variable_name_c_vs'}, :builder => YogoFormBuilder, :html => {:onsubmit => "return checkform();"} )do |f|
   = f.text_field("term")
   = f.text_area("definition")
   = f.submit("Save Variable Name", :onclick => "$('#loader').toggle();")

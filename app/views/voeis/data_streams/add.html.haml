@@ -1,6 +1,6 @@
 #add
   %h3 Data File Management
-  - form_tag('upload', :multipart => true) do
+  = form_tag('upload', :multipart => true) do
     <label for="upload_file">Select File</label> : 
     = file_field_tag('datafile', :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel")
     = hidden_field_tag('project_id', @project.id)

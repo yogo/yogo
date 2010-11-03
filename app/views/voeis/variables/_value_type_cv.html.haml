@@ -1,10 +1,10 @@
 #new_value_type
   %h3 Create a new Value Type:
-  - form_for(:value_type_c_v )do |f|
+  = form_for(:value_type_c_v )do |f|
     = f.label("Term:")
     = f.text_area("term", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "value_type_term")
     = f.label("Definition:")
-    =clear_break
+    = clear_break
     = f.text_area("definition", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "value_type_definition")
     = f.submit("Save Value Type", :class => "new-value-type-button")
   %label{:id => "value_type_close", :onclick=>"$('#new_value_type').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}

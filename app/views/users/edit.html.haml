@@ -1,7 +1,7 @@
 #content-sidebar-right
   - if Project.count > @user.projects.count
-    - form_for(:membership, :url => user_memberships_path(@user)) do |f|
-      - field_set_tag("Add Projects") do
+    = form_for(:membership, :url => user_memberships_path(@user)) do |f|
+      = field_set_tag("Add Projects") do
         = select_tag("project_id", options_from_collection_for_select(Project.all.select { |p| not @user.projects.include?(p) }, 'id', 'name'))
         - for role in Role.all do
           .field-item
@@ -17,7 +17,7 @@
     = @user.name
     #subtitle User Settings
   %br{:style=>"clear:left;"}/
-  -form_for(@user, :builder => YogoFormBuilder) do |f|
+  =form_for(@user, :builder => YogoFormBuilder) do |f|
     = f.text_field(:login, :label => "Login:" )
     = f.text_field(:first_name, :label => "First Name:")
     = f.text_field(:last_name, :label => "Last Name:")

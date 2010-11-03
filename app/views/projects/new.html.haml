@@ -4,7 +4,7 @@
     
 .small-centered
   .rbox.dashed
-    - form_for(:project, @project, :url => projects_path, :builder => YogoFormBuilder) do |f|
+    = form_for(:project, @project, :url => projects_path, :builder => YogoFormBuilder) do |f|
       = f.text_field :name, :label => "Project Name:" 
       = f.text_area(:description, :label => "Project Description: ")
       = f.submit('Save', :class => 'icon icon-save')

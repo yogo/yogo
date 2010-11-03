@@ -1,7 +1,7 @@
 #content-sidebar-right
   - if User.count > @project.users.count
-    - form_for(:membership, :url => project_memberships_path(@project)) do |f|
-      - field_set_tag("Add Users") do
+    = form_for(:membership, :url => project_memberships_path(@project)) do |f|
+      = field_set_tag("Add Users") do
         .scrollable-users
           - for user in User.all do
             - unless @project.users.include?(user)
@@ -21,7 +21,7 @@
   #content-title
     = @project.name
     #subtitle Project Settings
-  - form_for(:project, @project, :url => project_path(@project), :builder => YogoFormBuilder, :html => {:method => :put}) do |f|
+  = form_for(:project, @project, :url => project_path(@project), :builder => YogoFormBuilder, :html => {:method => :put}) do |f|
     = f.check_box(:is_private, :label => "Private Project", :class => 'icon icon-private')
     = f.check_box(:publish_to_his, :label =>"Publish to HIS", :disabled => true)
     %h5= f.text_area(:description, :label => "Description: ", :class => "liquid")

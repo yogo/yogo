@@ -1,6 +1,6 @@
 #new_unit
   %h3 Create a new Unit:
-  - form_for(:unit )do |f|
+  = form_for(:unit )do |f|
   Unit Name: 
   = f.text_area("units_name", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "units_name")
   =clear_break

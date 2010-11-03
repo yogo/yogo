@@ -1,11 +1,11 @@
-- form_for(:project, :url => project_path(@project), :html => {:method => :get}) do |f|
+= form_for(:project, :url => project_path(@project), :html => {:method => :get}) do |f|
   - a = project.managed_repository { Voeis::SensorValue.last(:order => [:timestamp.asc]) }
   - tmp_time = a.nil? ? DateTime.now : a.timestamp
   - end_time = DateTime.now
   - start_time = (tmp_time - 30.days).to_datetime
   = hidden_field_tag("variables_start", start_time)
   = hidden_field_tag("variables_end", end_time)
-  - field_set_tag("Pick Sites & Variables") do
+  = field_set_tag("Pick Sites & Variables") do
     - for site in project.managed_repository{ Voeis::Site.all } do
       .field-item{:class => site.variables.count > 0 ? "site": nil }
         .site-name{:class => 'icon' }
@@ -21,12 +21,12 @@
                               :id => "variables_#{site.id}_#{variable.id}")
               = label_tag("variables[#{site.id}][#{variable.id}]",           
                           variable.variable_name+':'+variable.sample_medium+':'+ variable.data_type+':'+Unit.get(variable.variable_units_id).units_name)
-  - field_set_tag("Data Range Selection") do
+  = field_set_tag("Data Range Selection") do
     .field-item From: 
     .field-item= date_select('range', 'start_date', :order => [:month, :day, :year], :default => { :day => @start_time.nil? ? DateTime.now.day : @start_time.day, :month => @start_time.nil? ? DateTime.now.month : @start_time.month, :year => @start_time.nil? ? DateTime.now.year : @start_time.year })
     .field-item To:
     .field-item= date_select('range', 'end_date', :order => [:month, :day, :year], :default => { :day => @end_time.nil? ? DateTime.now.day : @end_time.day, :month => @end_time.nil? ? DateTime.now.month : @end_time.month, :year => @end_time.nil? ? DateTime.now.year : @end_time.year })
-  - field_set_tag("Header Information") do
+  = field_set_tag("Header Information") do
     .field-item Site: #{check_box_tag("site_display", checked= !params["site_display"].nil? ? true : false)}
     .field-item Sample Medium: #{check_box_tag("sample_medium_display",checked= !params["sample_medium_display"].nil? ? true : false)}
     .field-item Data Type: #{check_box_tag("data_type_display", checked= !params["data_type_display"].nil? ? true : false)}

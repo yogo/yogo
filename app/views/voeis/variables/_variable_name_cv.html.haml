@@ -1,10 +1,10 @@
 #new_variable_name
   %h3 Create a new Variable Name:
-  - form_for(:variable_name_c_v) do |f|
+  = form_for(:variable_name_c_v) do |f|
     = f.label("Term:")
     = f.text_area("term", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "var_name_term")
     = f.label("Definition:")
-    =clear_break
+    = clear_break
     = f.text_area("definition", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "var_name_definition")
     = f.submit("Save Variable Name", :class => "new-var-name-button")
   %label{:id => "var_name_close", :onclick=>"$('#new_variable_name').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
