@@ -3,7 +3,7 @@ namespace :yogo do
 
   desc "Start the Yogo System"
   task :start => ['yogo:stop', 'persvr:start'] do
-    cd RAILS_ROOT do
+    cd ::Rails.root.to_s do
       sh "script/server -d"
     end
     Rake::Task['yogo:stop'].reenable
@@ -89,7 +89,7 @@ namespace :yogo do
   desc "Update the Yogo system from the source repository"
   task :update => ['yogo:stop'] do
     puts "Updating yogo from the git repository!"
-    cd RAILS_ROOT do
+    cd ::Rails.root.to_s do
       sh "git pull"
     end
     Rake::Task['yogo:gems'].invoke
