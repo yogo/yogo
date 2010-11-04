@@ -34,10 +34,4 @@ class SensorValue
     lu.timestamp unless lu.nil?
   end
   
-  # This method allows us to do things like
-  #    yogo_project_path(@project)
-  # Instead of having to put @project.id
-  def to_param
-    self.name
-  end
 end

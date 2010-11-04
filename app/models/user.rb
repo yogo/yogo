@@ -88,21 +88,6 @@ class User
   end
 
   ##
-  # Compatability method for rails' route generation helpers
-  #
-  # @example
-  #   @project.to_param # returns the ID as a string
-  #
-  # @return [String] the object id as url param
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  def to_param
-    self.id.to_s
-  end
-
-  ##
   # Returns the user first and last name in one string
   #
   # @example
