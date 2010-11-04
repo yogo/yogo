@@ -1,7 +1,7 @@
 %h1
   New Sample
  
--form_for :sample, @sample, :url => { :action => "create"} do |f|
+= form_for :sample, @sample, :url => { :action => "create"} do |f|
   Sample Type:
   -sample_type_options = Array.new
   - @sample_types.all(:order => [:term.asc]).each do |samp_type|

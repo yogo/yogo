@@ -2,7 +2,7 @@
   -@user.errors.each do |m|
     = m
 
--form_for(@user, :builder => YogoFormBuilder) do |f|
+= form_for(@user, :builder => YogoFormBuilder) do |f|
   = f.text_field(:login, :label => "Login:" )
   = f.text_field(:first_name, :label => "First Name:")
   = f.text_field(:last_name, :label => "Last Name:")

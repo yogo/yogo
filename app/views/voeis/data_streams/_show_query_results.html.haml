@@ -21,7 +21,7 @@ For: Variable(
 -if row_array.empty?
   Sorry - there were no results for this search.
 -else
-  -form_tag("export") do 
+  = form_tag("export") do 
     =hidden_field_tag('column_array', column_array.to_json)
     =hidden_field_tag('row_array', row_array.to_json)
     =hidden_field_tag('site_name', site)

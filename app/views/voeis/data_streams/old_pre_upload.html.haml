@@ -3,7 +3,7 @@
 -if !@row_size.nil?  
   %h3 Data Stream Import Form
   =clear_break
-  -form_tag("create_stream") do 
+  = form_tag("create_stream") do 
     -@column_options= ""
     Please give this Data Stream a Name: 
     =text_field_tag ("data_stream_name")

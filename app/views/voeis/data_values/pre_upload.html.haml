@@ -3,7 +3,7 @@
 /-if !row_size.nil?  
 %h3 Sample Data Import Form
 
--form_tag("store_sample_data", :onSubmit => "return checkform();") do 
+= form_tag("store_sample_data", :onSubmit => "return checkform();") do 
   -@column_options= '<option value="None">None</option>'
   Select what VOEIS variables should be associated with these columns from the Sample Data file
   %table
