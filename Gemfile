@@ -5,7 +5,8 @@ gem "dm-is-list"
 gem "dm-is-versioned"
 
 gem "yogo-framework", :path =>  "../yogo-framework"
-gem "yogo-project",   :path =>  "../yogo-project"
+# gem "yogo-project",   :git =>  "git://github.com/yogo/yogo-project.git"
+gem "yogo-project",   :path => "../yogo-project"
 
 gem "jquery-rails"
 
@@ -40,5 +41,9 @@ group(:development, :test) do
   gem "yard",                      :require => nil
   gem "yardstick",                 :require => nil
   gem "jeweler",                   :require => nil
-  # gem "test-unit", :require => nil
+  gem "test-unit",    "~> 1.2.1",  :require => nil # This is annoying that is is required.
+
+  platforms(:mri_19) { gem "ruby-debug19", :require => nil }
+  platforms(:mri_18) { gem "ruby-debug",   :require => nil }
+
 end

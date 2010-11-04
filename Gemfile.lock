@@ -11,6 +11,19 @@ PATH
       yogo-operation
       yogo-project
 
+PATH
+  remote: ../yogo-project
+  specs:
+    yogo-project (0.5.0)
+      carrierwave
+      configatron
+      data_mapper (~> 1.0.2)
+      dm-is-remixable
+      dm-postgres-adapter
+      dm-sqlite-adapter
+      facets
+      yogo-operation
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -42,6 +55,7 @@ GEM
       activesupport (= 3.0.1)
     activesupport (3.0.1)
     addressable (2.2.2)
+    archive-tar-minitar (0.5.2)
     arel (1.0.1)
       activesupport (~> 3.0.0)
     bcrypt-ruby (2.1.2)
@@ -55,6 +69,7 @@ GEM
       net-ssh-gateway (>= 1.0.0)
     carrierwave (0.5.0)
       activesupport (~> 3.0.0)
+    columnize (0.3.1)
     compass (0.10.6)
       haml (>= 3.0.4)
     configatron (2.6.4)
@@ -143,6 +158,9 @@ GEM
     haml (3.0.23)
     has_scope (0.5.0)
     highline (1.6.1)
+    hoe (2.6.2)
+      rake (>= 0.8.7)
+      rubyforge (>= 2.0.4)
     i18n (0.4.2)
     inherited_resources (1.1.2)
       has_scope (~> 0.5.0)
@@ -155,6 +173,9 @@ GEM
       rails (~> 3.0)
     json (1.4.6)
     json_pure (1.4.6)
+    linecache (0.43)
+    linecache19 (0.5.11)
+      ruby_core_source (>= 0.1.4)
     mail (2.2.9)
       activesupport (>= 2.3.6)
       i18n (~> 0.4.1)
@@ -205,12 +226,29 @@ GEM
       rspec-expectations (~> 2.0.1)
     rspec-rails (2.0.1)
       rspec (~> 2.0.0)
+    ruby-debug (0.10.3)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.3.0)
+    ruby-debug-base (0.10.3)
+      linecache (>= 0.3)
+    ruby-debug-base19 (0.11.24)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
+    ruby_core_source (0.1.4)
+      archive-tar-minitar (>= 0.5.2)
     rubyforge (2.0.4)
       json_pure (>= 1.1.7)
     sinatra (1.1.0)
       rack (~> 1.1)
       tilt (~> 1.1)
     stringex (1.1.0)
+    test-unit (1.2.3)
+      hoe (>= 1.5.1)
     thor (0.14.3)
     tilt (1.1)
     treetop (1.4.8)
@@ -242,15 +280,6 @@ GEM
     yogo-operation (0.1.2)
       dataflow
       yogo-support (~> 0.1.0)
-    yogo-project (0.5.0)
-      carrierwave
-      configatron
-      data_mapper (~> 1.0.2)
-      dm-is-remixable
-      dm-postgres-adapter
-      dm-sqlite-adapter
-      facets
-      yogo-operation
     yogo-support (0.1.1)
 
 PLATFORMS
@@ -284,8 +313,12 @@ DEPENDENCIES
   rspec-expectations
   rspec-mocks
   rspec-rails
+  ruby-debug
+  ruby-debug19
+  test-unit (~> 1.2.1)
   treetop
   uuidtools
   yard
   yardstick
   yogo-framework!
+  yogo-project!
