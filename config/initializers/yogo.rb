@@ -1,6 +1,7 @@
 # Custom extensions for Yogo
 require 'exceptions'
 require 'datamapper/pagination'
+
 # Load the Application Version
 load File.join(::Rails.root.to_s, "VERSION")
 

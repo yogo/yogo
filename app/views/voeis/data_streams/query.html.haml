@@ -1,5 +1,5 @@
 %h1 Search
--remote_form_for :query, @query, :url => { :action => 'search'} do |f|
+= form_for(:query, @query, :url => { :action => 'search'}, :remote => true) do |f|
   
   Variable: 
   =select_tag("variable", @var_options)
