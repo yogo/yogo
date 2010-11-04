@@ -72,6 +72,10 @@ module Facet
       end
     end
     
+    def to_param
+      @target.__send__(:to_param)
+    end
+    
     def is_facet?
       true
     end
@@ -162,7 +166,7 @@ module Facet
     
     def unsecured_instance_methods
       # TODO: Evaluate what instance methods should be unsecured
-      [:debugger, :class, :empty?, :is_a?, :nil?, :respond_to?, :to_param, :valid?]  
+      [:debugger, :class, :empty?, :is_a?, :nil?, :respond_to?, :valid?]  
       # self.instance_methods.map{ |k| k.to_sym }) - secured_instance_methods
       # self.instance_methods - secured_instance_methods
     end
