@@ -1,0 +1,4 @@
+This view rendering code was taken from http://github.com/mislav/will_paginate
+
+The DataMapper pagination implementation was largely broken, and it was easier to extend
+DataMapper::Collection to work with WillPaginate's view helpers then to fix WillPaginate::Collection

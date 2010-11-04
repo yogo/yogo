@@ -144,7 +144,7 @@ class ProjectsController < InheritedResources::Base
   end
 
   def collection
-    @projects ||= resource_class.all
+    @projects ||= resource_class.paginate(:page => params[:page])
   end
 
   def resource_class

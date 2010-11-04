@@ -12,4 +12,4 @@
           %td= role.description
           %td= link_to(image_tag("delete.png", :size => "16x16"), system_role_path(role), :method=>:delete, :confirm => 'Are you sure?')
 
-#pagination-links= pagination_links(resource_class, params[:page], 25)
+#pagination-links= will_paginate(collection)

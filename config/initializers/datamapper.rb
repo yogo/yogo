@@ -7,10 +7,8 @@
 #
 
 # Require custom extensions to datamapper.
-require 'datamapper/model'
-require 'datamapper/paginate'
+# require 'datamapper/model'
 require 'datamapper/search'
-require 'datamapper/paginate'
 require 'datamapper/dm-userstamp'
 require 'datamapper/property/yogo_file'
 require 'datamapper/property/yogo_image'
@@ -20,28 +18,28 @@ require 'datamapper/property/raw'
 DataMapper::Model.raise_on_save_failure = true
 
 # Read the configuration from the existing database.yml file
-config = Rails.configuration.database_configuration
+# config = Rails.configuration.database_configuration
 
 
 # Load the project model and migrate it if needed.
 #Project
-Setting
-User
-Role
-Membership
-Site
-Unit
-Variable
-FieldMethod
-VariableNameCV
-SampleMediumCV
-ValueTypeCV
-SpeciationCV
-DataTypeCV
-GeneralCategoryCV
-SampleTypeCV
-SampleMaterial
-LabMethod
+# Setting
+# User
+# Role
+# Membership
+# Site
+# Unit
+# Variable
+# FieldMethod
+# VariableNameCV
+# SampleMediumCV
+# ValueTypeCV
+# SpeciationCV
+# DataTypeCV
+# GeneralCategoryCV
+# SampleTypeCV
+# SampleMaterial
+# LabMethod
 
 # DataMapper.finalize
 # DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&

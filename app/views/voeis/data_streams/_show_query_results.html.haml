@@ -15,7 +15,7 @@ For: Variable(
   ) 
 =clear_break
 /#pagination-links
-/= pagination_links(@query, params[:page], 10)  
+/= will_paginate(@query)  
 
 
 -if row_array.empty?

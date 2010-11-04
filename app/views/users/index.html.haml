@@ -22,4 +22,4 @@
         %td
           %center= user.last_login_at.nil? ? '' : user.last_login_at.strftime("%m/%d/%Y %I:%M %p")
 
-#pagination-links= pagination_links(User, params[:page], 20)
+#pagination-links= will_paginate(@users)

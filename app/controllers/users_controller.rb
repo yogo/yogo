@@ -42,7 +42,7 @@ class UsersController < InheritedResources::Base
   end
 
   def collection
-    @users ||= resource_class.all.paginate(:page => params[:page], :per_page => 20, :order => 'login')
+    @users ||= resource_class.paginate(:page => params[:page], :per_page => 20, :order => 'login')
   end
 
   def resource_class

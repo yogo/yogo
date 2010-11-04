@@ -21,7 +21,7 @@ class RolesController < InheritedResources::Base
   protected
 
   def collection
-    @roles ||= resource_class.all
+    @roles ||= resource_class.paginate(:page => params[:page])
   end
 
   def resource

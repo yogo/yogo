@@ -1,6 +1,6 @@
 # Custom extensions for Yogo
 require 'exceptions'
-
+require 'datamapper/pagination'
 # Load the Application Version
 load File.join(::Rails.root.to_s, "VERSION")
 
@@ -10,3 +10,6 @@ load File.join(::Rails.root.to_s, "VERSION")
 # if Setting['asset_directory'] && ! File.directory?(File.join(::Rails.root.to_s, Setting['asset_directory']))
 #   FileUtils.mkdir_p(File.join(::Rails.root.to_s, Setting['asset_directory']))
 # end
+
+require 'will_paginate/view_helpers/action_view'
+ActionView::Base.send(:include, WillPaginate::ViewHelpers::ActionView)
