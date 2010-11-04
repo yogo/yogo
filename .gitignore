@@ -4,7 +4,6 @@ config/database.yml.postgres
 \#*\#
 *~
 SourceImages
-.rvmrc
 *.cache
 log/*.log*
 *.pid
