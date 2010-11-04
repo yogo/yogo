@@ -18,6 +18,9 @@ class Setting
   property :name,   String, :unique => true
   property :value,  Object
 
+  # @private
+  @@cache = {}
+
   ##
   # Used to query the settings basied on a key
   #
@@ -36,24 +39,13 @@ class Setting
   # @api public
   def self.[](key)
     key = key.to_s if key.is_a? Symbol
-    setting = first(:name => key)
-    setting.nil? ? false : setting.value
+    setting = if @@cache.has_key?(key) 
+        @@cache[key] 
+      else
+        @@cache[key] = first(:name => key).value
+    end
+    setting.nil? ? false : setting
   end
-
-  ##
-  # Compatability method for rails' route generation helpers
-  #
-  # @example
-  #   @project.to_param # returns the ID as a string
-  #
-  # @return [String] the object id as url param
-  #
-  # @author Yogo Team
-  #
-  # @api public
-  # def to_param
-  #   self.id.to_s
-  # end
 
   ##
   # Used to set a value for a particular key
@@ -73,6 +65,7 @@ class Setting
   # @api public
   def self.[]=(key,value)
     key = key.to_s if key.is_a? Symbol
+    @@cache[key] = value
     setting = first_or_create(:name => key)
     setting.value = value
     setting.save
