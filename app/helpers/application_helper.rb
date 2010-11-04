@@ -143,14 +143,15 @@ module ApplicationHelper
   def tooltip(body, title = nil, length = 10)
     id = UUIDTools::UUID.random_create
     if body.length > length
-      <<-TT
+      output= <<-TT
       <div id='#{id}' class='tooltip' title='#{title || "Click to see full text."}'>#{body}</div>
       <span class='tooltip-snippet' onClick="$('##{id}').dialog('open')">
         #{body[0..length]}<span class='more'>&#8230; more</span>
       </span>
       TT
+      output.html_safe
     else
-      body
+      body.html_save
     end
   end
 
@@ -214,40 +215,5 @@ module ApplicationHelper
   def yogo_button(image, text, link)
     link_to(image_tag(image), link)
   end
-
-  # Creates the appropriate HTML for attributes on a model
-  #
-  # For attributes that are files or images it makes a download link work for them
-  #
-  # @example
-  #   <%- @model.usable_properties.each do |p| %>
-  #     <%= yogo_show_helper(d, p, @project, @model) %>
-  #   <%- end %>
-  #
-  # @return [HTML Fragment] the HTML is either a string or a link to the file/image.
-  #
-  # @api public
-  def yogo_show_helper(item, property, project, model)
-    case property
-    when DataMapper::Property::YogoImage
-      file = item[property.name]
-      file = file[0..15] + '...' if file.length > 15
-      img = image_tag(show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name), :width => '100px')
-      link_target = detailed ? img : file
-      link_to(link_target, show_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name, :ext => '.png'),
-        :class => 'fancybox', :title => model.name)
-    when DataMapper::Property::YogoFile
-      file = item[property.name]
-      file = file[0..15] + '...' if file.length > 15
-      link_to(file, download_asset_project_yogo_data_path(project, model, item, :attribute_name => property.name))
-    when DataMapper::Property::Text
-      if !detailed && (item[property.name] && item[property.name].length > 15)
-        tooltip(item[property.name])
-      else
-        item[property.name]
-      end
-    else
-      item[property.name]
-    end
-  end
+  
 end
