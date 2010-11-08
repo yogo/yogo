@@ -30,5 +30,11 @@
       -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
   =select_tag("site", @site_options)
   =clear_break
+  Select a Timestamp for this Sample:
+  =datetime_select("time", "stamp", :default => DateTime.now)
+  =clear_break
+  Select the Time Zone this sample was collected in:
+  = time_zone_select("time", "zone", nil, :default => "Mountain Time (US & Canada)")
+  =clear_break
   = f.submit('Save', :class => 'icon icon-save')
   = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 

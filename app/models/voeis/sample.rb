@@ -23,6 +23,7 @@ class Voeis::Sample
 
   property :id,               Serial
   property :sample_type,      String,   :required => true, :default => 'Unknown'
+  property :local_date_time,  DateTime, :required => true, :default => DateTime.now
   property :material,         String,   :required => true
   property :lab_sample_code,  String,   :required => true,                        :format => /[^\t|\n|\r]/
   property :lab_method_id,    Integer,  :required => true, :default => 0
