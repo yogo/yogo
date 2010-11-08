@@ -5,9 +5,8 @@
 = render(:partial => "data_type_cv")
 = render(:partial => "general_category_cv")
 
-%h1
+%h3
   New Variable
-
 -form_for :variable, @variable, :url => { :action => "create"} do |f|
   Variable Code: 
   = f.text_field :variable_code
@@ -20,7 +19,7 @@
   %label{:id => "var_name", :onclick=>"$('#new_variable_name').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   
   =clear_break
-  Variable Units ID: 
+  Variable Units: 
   -unit_options = Array.new
   -@units.all(:order => [:units_name.asc]).each do |unit|
     -unit_options <<[unit.units_name+':'+unit.units_type, unit.id.to_s]
@@ -55,7 +54,7 @@
   = f.text_field :is_regular
   =clear_break
   Time Support: 
-  = f.text_field :time_support
+  = f.text_field :time_support, :value => 1.0
   =clear_break
   Time Units ID:
   = f.text_field :time_units_id
@@ -82,3 +81,46 @@
   =clear_break
   = f.submit ('Create', :onclick => "$('#loader').toggle();")
   = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 
+=clear_break
+#all_variables
+  %h3
+    Existing Variables
+  #variables_list
+    -i = 0
+    %table
+      %tr
+        %th Variable Name
+        %th Variable Code
+        %th Unit Name
+        %th Speciation
+        %th Sample Medium
+        %th Value Type
+        %th Is Regular
+        %th Time Support
+        %th Time Unit ID
+        %th Data Type
+        %th General Cateogry
+      -@variables.all(:order => [:variable_name.asc]).each do|var|
+        %tr
+          %td 
+            =var.variable_name
+          %td 
+            =var.variable_code
+          %td 
+            =Unit.get(var.variable_units_id).units_name
+          %td 
+            =var.speciation
+          %td 
+            =var.sample_medium
+          %td 
+            =var.value_type
+          %td 
+            =var.is_regular
+          %td 
+            =var.time_support
+          %td 
+            =var.time_units_id
+          %td 
+            =var.data_type
+          %td 
+            =var.general_category

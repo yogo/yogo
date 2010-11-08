@@ -11,6 +11,7 @@ class Voeis::VariablesController < Voeis::BaseController
 
   # GET /variables/new
   def new
+    @variables = Variable.all
     @variable = Variable.new
     @units = Unit.all
     @variable_names = VariableNameCV.all
