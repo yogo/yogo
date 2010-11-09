@@ -1,11 +1,9 @@
-%h1 Search
+%h1 Search Data Streams
 -remote_form_for :query, @query, :url => { :action => 'search'} do |f|
-  
-  Variable: 
-  =select_tag("variable", @var_options)
-  
   Site: 
   =select_tag("site", @site_options)
+  Variable: 
+  =select_tag("variable", @variable_opts)
   =clear_break
   Dates After: 
   = date_select('range', 'start_date', :order => [:month, :day, :year])
@@ -17,3 +15,26 @@
 =clear_break
 
 #search_results
+  :javascript  
+    $(function() {
+    $("#site").change(function() { 
+    $.get("#{site_sensor_variables_project_data_streams_path}"+".json?site_id=" + $("#site").val(),
+    function(data) {
+    $('#variable').empty();
+    if (data.variables.length == 0){
+    $('#variable').append($("<option></option>").attr("value","None").text("None"));
+    }
+    else{  
+    $('#variable').append($("<option></option>").attr("value","All").text("All"));
+    }
+    var i = 0;
+    for(i=0;data.variables.length; i++)
+    {
+    $('#variable'). append($("<option></option>").attr("value",data.variables[i].id).text(data.variables[i].name));
+    }
+    return false;
+    }
+    );
+    return false;
+    });
+    });

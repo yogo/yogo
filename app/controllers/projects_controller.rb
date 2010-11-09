@@ -40,19 +40,8 @@ class ProjectsController < InheritedResources::Base
       @end_time = @end_time.to_datetime + 23.hour + 59.minute
 
 
-      # if params.has_key?(:variables_start)
-      #   @start_time = params[:variables_start].to_datetime
-      # else
-      #   @start_time = DateTime.now - 7
-      # end
-      #
-      # if params.has_key?(:variables_end)
-      #   @end_time = params[:variables_end].to_datetime
-      # else
-      #   @end_time = DateTime.now
-      # end
+      # Create the Labels for the header
       var_label=""
-
       if params.has_key?(:variables)
         params[:variables].keys.each do |site_id|
           site = resource.managed_repository { Voeis::Site.get(site_id) }
@@ -88,6 +77,7 @@ class ProjectsController < InheritedResources::Base
       data_lists = Hash.new
       timestamps = Set.new
       @items.each do |site, variable|
+        #get sensor data
         if site.sensor_types.count > 0
           sensor = site.sensor_types.select{|s| s.variables.include?(variable)}[0]
           if !sensor.nil?
@@ -100,6 +90,7 @@ class ProjectsController < InheritedResources::Base
             timestamps.merge(values.map {|v| v.timestamp})
           end
         end
+        #get sample data
         if site.samples.count > 0
           sample = site.samples.select{|s| s.variables.include?(variable)}[0]
           if !sample.nil?
