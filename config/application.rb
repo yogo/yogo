@@ -16,7 +16,7 @@ module Yogo
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-    config.action_view.javascript_expansions[:defaults] = %w(jquery jquery-ui rails application)
+    config.action_view.javascript_expansions[:defaults] = %w(jquery jquery-ui rails)
 
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(#{Rails.root}/lib)
@@ -38,7 +38,7 @@ module Yogo
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
     # config.i18n.default_locale = :de
-    
+
     config.filter_parameters = [:password, :password_confirmation]
   end
 end

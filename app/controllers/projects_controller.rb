@@ -64,7 +64,7 @@ class ProjectsController < InheritedResources::Base
               var_label = var_label + variable.sample_medium if params[:sample_medium_display]
               var_label = var_label + variable.data_type if params[:data_type_display]
               var_label = var_label + Unit.get(variable.variable_units_id).units_name if params[:units_display]
-              
+
               @label_array << var_label #"#{site.name} #{variable.variable_name}"
               @items << [site, variable]
             end
@@ -107,7 +107,7 @@ class ProjectsController < InheritedResources::Base
             data_lists[site] ||= Hash.new
             data_lists[site][variable] ||= Hash.new
             values.each do |v|
-     
+
                 data_lists[site][variable][v.local_date_time] = v.data_value
 
             end
