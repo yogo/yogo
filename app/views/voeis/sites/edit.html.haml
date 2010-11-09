@@ -3,7 +3,6 @@ Editing: #{@site.name}
 
 Create a new site for the project:
 = form_for(:site, resource, :url => project_sites_path(@project), :builder => YogoFormBuilder, :html => {:onsubmit => "return checkform();"} )do |f|
-
   = f.text_field("name")
   = f.text_field("code")
   = f.text_field("latitude")

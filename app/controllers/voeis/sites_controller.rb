@@ -16,6 +16,28 @@ class Voeis::SitesController < Voeis::BaseController
     @site =  parent.managed_repository{Voeis::Site.get(params[:id])}
     @project = parent
   end
+  
+  def update
+    params[:site][:latitude] = params[:site][:latitude].strip
+    params[:site][:longitude] = params[:site][:longitude].strip
+    
+    parent.managed_repository do 
+      site = Voeis::Site.get(params[:id])
+      params[:site].each do |key, value|
+        site[key] = value
+      end
+      puts site.valid?
+      puts site.errors.inspect()
+      if site.save
+         flash[:notice] = "Site was Updated successfully."
+         redirect_to project_url(parent)
+      end
+    end
+    # update! do |success, failure|
+    #       success.html { redirect_to project_url(parent) }
+    #     end
+    
+  end
 
   def create
     # This should be handled by the framework, but isn't when using jruby.

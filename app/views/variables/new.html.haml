@@ -1,7 +1,10 @@
 %h1
   New Variable
-
-= form_for :variable, @variable, :url => { :action => "create"} do |f|
+#all_variables
+  @variables.all(:order => [:name].asc).each do|var|
+    =var.name + ':' + var.code ':' + Unit.get(var.variable_units_id).name + ':' + var.sample_mdeium + ':' + var.general_category
+    %br
+-form_for :variable, @variable, :url => { :action => "create"} do |f|
   Variable Code: 
   = f.text_field :variable_code
   =clear_break

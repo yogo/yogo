@@ -31,17 +31,17 @@
           =select_tag("column"+i.to_s, @var_array[i][3])
 
   =clear_break
-  Please specify if a column should be used as the time-stamp:
-  =select_tag("timestamp_col", @column_options)
-  &nbsp;OR select a timestamp to apply to all data-values:
-  =datetime_select("time", "stamp", :default => DateTime.now)
-  =clear_break
+  -#Please specify if a column should be used as the time-stamp:
+  -#=select_tag("timestamp_col", @column_options)
+  -#&nbsp;OR select a timestamp to apply to all data-values:
+  -#=datetime_select("time", "stamp", :default => DateTime.now)
+  -#=clear_break
   Please specify if a column should be used as a replicate label:
   =select_tag("replicate", @column_options)
   =clear_break
-  Select the Time Zone these samples were collected in:
-  = time_zone_select("time", "zone", nil, :default => "Mountain Time (US & Canada)")
-  =clear_break
+  -#Select the Time Zone these samples were collected in:
+  -#= time_zone_select("time", "zone", nil, :default => "Mountain Time (US & Canada)")
+  -#=clear_break
   =clear_break
   -@sample_options=""
   -@samples.all(:order => [:lab_sample_code.asc]).each do |sample|

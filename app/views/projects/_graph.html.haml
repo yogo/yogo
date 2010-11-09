@@ -1,9 +1,30 @@
-- visualization("graph-#{project.id.to_s}", 'LineChart', :width => 600, :height => 400, :fontSize => '10', :legend => "\'none\'", :html => { :class => class_name }) do |table|
-  - if @label_array.length > 1
-    - table.register_column(:date, @label_array[0])
-    - @label_array[1..-1].each do |label|
-      - table.register_column(:number, label)
-    - table.add_rows(@current_data)
-  = ""
+-#- visualization("graph-#{project.id.to_s}", 'LineChart', :width => 600, :height => 400, :fontSize => '10', -#:legend => "\'none\'", :html => { :class => class_name }) do |table|
+-#  - if @label_array.length > 1
+-#    - table.register_column(:date, @label_array[0])
+-#    - @label_array[1..-1].each do |label|
+-#      - table.register_column(:number, label)
+-#    - table.add_rows(@current_data)
+-#  = ""
 
+#graphdiv
 
+-graph_csv = '"' + @label_array.join(',') + '\n"' + ' + '
+-@current_data.each do |row|
+  -graph_csv = graph_csv + '"' + Time.parse(row[0].to_s).to_i.to_s + ',' + row[1..-1].join(',') + '\n"' +  ' + '
+:javascript
+  g = new Dygraph(
+  document.getElementById("graphdiv"),
+  #{graph_csv.to_s.chop.chop}
+  ,
+  {
+  xValueFormatter: Dygraph.dateString_,
+  xValueParser: function(x) { return 1000*parseInt(x); },
+  xAxisLabelFormatter: Dygraph.dateString_,
+  xTicker: Dygraph.dateTicker,
+  avoidMinZero: true,
+  drawPoints: true,
+  axisLabelFontSize: 11,
+  xAxisLabelWidth: 100,
+  pixelsPerYLabel: 20
+  }
+  );
