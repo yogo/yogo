@@ -4,9 +4,7 @@ gem "data_mapper"
 gem "dm-is-list"
 gem "dm-is-versioned"
 
-gem "yogo-framework", :path =>  "../yogo-framework"
-# gem "yogo-project",   :git =>  "git://github.com/yogo/yogo-project.git"
-gem "yogo-project",   :path => "../yogo-project"
+gem "yogo-framework"
 
 gem "jquery-rails"
 

@@ -1,29 +1,3 @@
-PATH
-  remote: ../yogo-framework
-  specs:
-    yogo-framework (0.5.1)
-      data_mapper (~> 1.0.2)
-      dm-is-list
-      dm-is-versioned
-      dm-rest-adapter
-      yogo-datamapper
-      yogo-db
-      yogo-operation
-      yogo-project
-
-PATH
-  remote: ../yogo-project
-  specs:
-    yogo-project (0.5.0)
-      carrierwave
-      configatron
-      data_mapper (~> 1.0.2)
-      dm-is-remixable
-      dm-postgres-adapter
-      dm-sqlite-adapter
-      facets
-      yogo-operation
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -276,9 +250,27 @@ GEM
       sinatra
       yogo-datamapper
       yogo-operation
+    yogo-framework (0.5.1)
+      data_mapper (~> 1.0.2)
+      dm-is-list
+      dm-is-versioned
+      dm-rest-adapter
+      yogo-datamapper
+      yogo-db
+      yogo-operation
+      yogo-project
     yogo-operation (0.1.2)
       dataflow
       yogo-support (~> 0.1.0)
+    yogo-project (0.5.1)
+      carrierwave
+      configatron
+      data_mapper (~> 1.0.2)
+      dm-is-remixable
+      dm-postgres-adapter
+      dm-sqlite-adapter
+      facets
+      yogo-operation
     yogo-support (0.1.1)
 
 PLATFORMS
@@ -319,5 +311,4 @@ DEPENDENCIES
   uuidtools
   yard
   yardstick
-  yogo-framework!
-  yogo-project!
+  yogo-framework
