@@ -198,6 +198,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
     @start_date =  Date.civil(params[:range][:"start_date(1i)"].to_i,params[:range]      [:"start_date(2i)"].to_i,params[:range][:"start_date(3i)"].to_i)
     @end_date = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
 
+    @start_date = @start_date.to_datetime
+    @end_time = @end_date.to_datetime + 23.hour + 59.minute
     if !params[:variable].empty? && !params[:site].empty?
       @column_array = Array.new
       @row_array = Array.new
