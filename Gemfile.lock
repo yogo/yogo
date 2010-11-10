@@ -127,8 +127,6 @@ GEM
     extlib (0.9.15)
     facets (2.9.0)
     fastercsv (1.5.3)
-    gemcutter (0.6.1)
-    git (1.2.5)
     haml (3.0.23)
     has_scope (0.5.0)
     highline (1.6.1)
@@ -139,10 +137,6 @@ GEM
     inherited_resources (1.1.2)
       has_scope (~> 0.5.0)
       responders (~> 0.6.0)
-    jeweler (1.4.0)
-      gemcutter (>= 0.1.0)
-      git (>= 1.2.5)
-      rubyforge (>= 2.0.0)
     jquery-rails (0.2.5)
       rails (~> 3.0)
       thor (~> 0.14.4)
@@ -232,8 +226,6 @@ GEM
       rack (>= 1.0.0)
     yamler (0.1.0)
     yard (0.6.1)
-    yardstick (0.2.0)
-      yard (~> 0.6.1)
     yogo-datamapper (0.5.0)
       data_mapper (~> 1.0.2)
       dm-is-remixable
@@ -280,21 +272,14 @@ DEPENDENCIES
   bcrypt-ruby
   bluecloth
   capistrano
-  carrierwave
   compass (>= 0.10.6)
-  data_mapper
-  dm-is-list
-  dm-is-versioned
   dm-rails
   fastercsv
   haml
   inherited_resources
-  jeweler
   jquery-rails
-  json
   mail
   mime-types
-  polyglot
   pony
   rails
   rails_warden
@@ -307,8 +292,5 @@ DEPENDENCIES
   ruby-debug
   ruby-debug19
   test-unit (~> 1.2.1)
-  treetop
-  uuidtools
   yard
-  yardstick
   yogo-framework

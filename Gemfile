@@ -1,47 +1,41 @@
 source :rubygems
 
-gem "data_mapper"
-gem "dm-is-list"
-gem "dm-is-versioned"
+gem "yogo-framework"                            # The Yogo Framework
 
-gem "yogo-framework"
+gem "rails"                                     # Rails application
+gem "dm-rails"                                  # DataMapper integration with Rails
+gem "jquery-rails"                              # jQuery integration with Rails
+gem "compass", ">= 0.10.6"                      # Styling automation for views
+gem "haml"                                      # HAML syntax for views
+gem "inherited_resources"                       # Simplified Rails controllers
+gem "bcrypt-ruby"                               # Encryption for authentication
+gem "rails_warden"                              # Warden integration with Rails for authentication
 
-gem "jquery-rails"
+gem "mime-types", :require => "mime/types"      # For uploading data files
 
-# Extra supporting gems
-gem "rails"
-gem "dm-rails"
-gem "inherited_resources"
-gem "carrierwave"
-gem "compass", ">= 0.10.6"
-gem "bcrypt-ruby"
-gem "haml"
-gem "mime-types",                   :require => "mime/types"
-gem "uuidtools"
-gem 'rails_warden'
-gem "json",                         :require => nil
-gem 'pony'
-gem 'polyglot'
-gem 'treetop'
-gem 'mail'
+gem "pony"                                      # For email feedback
+gem "mail"                                      # For email feedback
 
+# Because in 1.9 fastercsv is default, but in 1.8...
 platforms(:ruby_18) { gem "fastercsv" }
 
 group(:development, :test) do
-  gem "capistrano",                :require => nil
-  gem "bluecloth",                 :require => nil # Required for YARD
+  # For rake tasks to work
   gem "rake",                      :require => nil
-  gem 'rspec'
-  gem 'rspec-core',                :require => 'rspec/core'
-  gem 'rspec-expectations',        :require => 'rspec/expectations'
-  gem 'rspec-mocks',               :require => 'rspec/mocks'
-  gem 'rspec-rails'
+  # For deployment
+  gem "capistrano",                :require => nil
+  # RSpec 2.0 requirements
+  gem "rspec"
+  gem "rspec-core",                :require => "rspec/core"
+  gem "rspec-expectations",        :require => "rspec/expectations"
+  gem "rspec-mocks",               :require => "rspec/mocks"
+  gem "rspec-rails"
+  # YARD Documentation
   gem "yard",                      :require => nil
-  gem "yardstick",                 :require => nil
-  gem "jeweler",                   :require => nil
-  gem "test-unit",    "~> 1.2.1",  :require => nil # This is annoying that is is required.
-
+  gem "bluecloth",                 :require => nil
+  # TODO: We need to find out how to remove this
+  gem "test-unit", "~> 1.2.1",     :require => nil # This is annoying that is is required.
+  # Debugger requirements
   platforms(:mri_19) { gem "ruby-debug19", :require => nil }
   platforms(:mri_18) { gem "ruby-debug",   :require => nil }
-
 end
