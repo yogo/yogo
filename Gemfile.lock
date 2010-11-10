@@ -277,6 +277,7 @@ DEPENDENCIES
   compass (>= 0.10.6)
   dm-is-list
   dm-is-versioned
+  dm-migrations
   dm-rails
   dm-types
   dm-validations
@@ -302,3 +303,4 @@ DEPENDENCIES
   yard
   yardstick
   yogo-framework
+  yogo-project
