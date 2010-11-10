@@ -1,5 +1,7 @@
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
+require "bundler/capistrano"
+
 
 set :rvm_ruby_string, '1.8.7'
 
@@ -84,14 +86,6 @@ namespace :assets do
 end
 after "deploy:setup",       "assets:setup"
 after "deploy:update_code", "assets:symlink"
-
-namespace :bundle do
-  desc "Run bundle install on the server"
-  task :install do
-    run("bash -c 'cd #{release_path} && rm Gemfile.lock && bundle install'")
-  end
-end
-after 'deploy:update_code', 'bundle:install'
 
 namespace :persvr do
   desc "Setup Persevere on the server"
