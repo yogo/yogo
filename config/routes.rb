@@ -50,7 +50,14 @@ Yogo::Application.routes.draw do
       resources :sensor_values
       resources :sensor_types
       resources :data_stream_columns
-      resources :samples
+      resources :samples do
+        collection do
+          get   :query
+          get   :site_sample_variables
+          post  :export
+          post  :search
+        end
+      end
       resources :sample_materials
       resources :lab_methods
       resources :data_values do

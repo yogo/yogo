@@ -138,19 +138,54 @@ class Voeis::DataStreamsController < Voeis::BaseController
       :filename => filename)
   end
 
+  def site_sensor_variables
+    parent.managed_repository do
+      site = Voeis::Site.get(params[:site_id])
+      @variable_hash = Hash.new
+      i = 1
+      @variable_hash['variables'] = Array.new
+      site.sensor_types.variables.each do |var|
+        @var_hash = Hash.new
+        @var_hash['id'] = var.id
+        @var_hash['name'] = var.variable_name+":"+var.data_type
+        @variable_hash['variables'] << @var_hash
+      end
+    end
+    
+    respond_to do |format|
+       format.json do
+         format.html
+         render :json => @variable_hash.to_json, :callback => params[:jsoncallback]
+       end
+     end
+  end
+
   def query
     @variables = ""
     @sites = ""
     parent.managed_repository do
       @sites = Voeis::Site.all
-      @variables = Voeis::Variable.all
+      #@variable_hash = Hash.new
+      #@sites.each do |site|
+        variable_opt_array = Array.new
+        if @sites.all(:order => [:name.asc]).first.sensor_types.count > 0
+          variable_opt_array << ["All", "All"]
+          @sites.first.sensor_types.each do |sensor|
+            var = sensor.variables.first
+            variable_opt_array << [var.variable_name+":"+var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+          end
+        else
+          variable_opt_array << ["None", "None"]
+        end
+        @variable_opts = opts_for_select(variable_opt_array)
+      #end
     end
-    @var_opts_array = Array.new
-    @var_opts_array << ["All", "All"]
-    @variables.all(:order => [:variable_name.asc]).each do |var|
-      @var_opts_array << [var.variable_name+":"+var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
-    end
-    @var_options = opts_for_select(@var_opts_array)
+    # @var_opts_array = Array.new
+    #  @var_opts_array << ["All", "All"]
+    #  @variable_hash[@sites.first.id.to_s].each do |var|
+    #    @var_opts_array << [var.variable_name+":"+var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+    #  end
+    #  @var_options = opts_for_select(@var_opts_array)
     @site_opts_array = Array.new
     @sites.all(:order => [:name.asc]).each do |site|
       @site_opts_array << [site.name, site.id.to_s]
@@ -197,10 +232,6 @@ class Voeis::DataStreamsController < Voeis::BaseController
             @row_array << temp_array
           end
         else
-          # sensor = parent.managed_repository{site.sensor_types.first(:variables => {:id => variable.id})}
-          # sensor1 = parent.managed_repository{Voeis::Variable.get(variable.id).sensor_types.first(:sites => {:id => site.id})}
-          # sensor1 = variable.sensor_types.first(:sites => {:id => site.id})
-          # this make me want to slam my hand in a door but nothing else is working logically in DM
           my_sensor =""
           variable.sensor_types.each do |sensor|
             if sensor.sites.first.id == site.id

@@ -1,0 +1,49 @@
+%h3Query Results
+For: Variable(
+=variable
+), Site(
+=site
+)
+-if !start_date.nil?
+  , Date(
+  -if start_date > end_date
+    ERROR - start date should not come after end date
+  -else
+    =start_date
+    ="-" 
+    = end_date
+  ) 
+=clear_break
+/#pagination-links
+/= pagination_links(@query, params[:page], 10)  
+
+
+-if row_array.empty?
+  Sorry - there were no results for this search.
+-else
+  -form_tag("export") do 
+    =hidden_field_tag('column_array', column_array.to_json)
+    =hidden_field_tag('row_array', row_array.to_json)
+    =hidden_field_tag('site_name', site)
+    =hidden_field_tag('start_date', start_date)
+    =hidden_field_tag('end_date', end_date)
+    =submit_tag("Export Results")
+  %table
+    %tr
+      -column_array.each do |col|
+        %th
+          =col[0]
+    -row_array.each do |row|
+      %tr
+        -row.each do |col|
+          %td
+            =col
+  -visualization "my_table", "Table", :width => 1000, :height => 400, :html => {:class => "g_table"} do |chart|
+    -column_array.each do |col|
+      -if col[0] == "Timestamp"
+        -chart.datetime "Timestamp"
+      -elsif col[1] == 'number'
+        -chart.number col[0]
+    -chart.add_rows(row_array)
+      
+/#pagination-links= pagination_links(@query, params[:page], 10)

@@ -1,26 +1,24 @@
-%h1 Search
-= form_for(:query, @query, :url => { :action => 'search'}, :remote => true) do |f|
-  Variable: 
-  = select_tag("variable", @var_options)
+%h1 Search Sample Data:
+-remote_form_for :query, @query, :url => { :action => 'search'} do |f|
   Site: 
-  = select_tag("site", @site_options)
+  =select_tag("site", @site_options)
   Variable: 
-  = select_tag("variable", @variable_opts)
-  = clear_break
+  =select_tag("variable", @variable_opts)
+  =clear_break
   Dates After: 
   = date_select('range', 'start_date', :order => [:month, :day, :year])
   Dates Before: 
   = date_select('range', 'end_date', :order => [:month, :day, :year])
-  = clear_break
+  =clear_break
 
   = f.submit('Search')
-= clear_break
+=clear_break
 
 #search_results
   :javascript  
     $(function() {
     $("#site").change(function() { 
-    $.get("#{site_sensor_variables_project_data_streams_path}"+".json?site_id=" + $("#site").val(),
+    $.get("#{site_sample_variables_project_samples_path}"+".json?site_id=" + $("#site").val(),
     function(data) {
     $('#variable').empty();
     if (data.variables.length == 0){
