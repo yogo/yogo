@@ -28,6 +28,10 @@ class ProjectsController < InheritedResources::Base
     #                   [ timestamp, site.sensor.variable.value, site.sensor.variable.value ]
     #                   [ ... ]
     #                  ]
+    if resource.nil?
+      flash[:error] = "Could not find that project"
+      redirect_to(:back) and return
+    end
     @current_data = Array.new
     @items = Array.new
     @start_time = nil

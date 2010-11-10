@@ -1,11 +1,13 @@
 source :rubygems
 
 gem "yogo-framework"                            # The Yogo Framework
+gem "yogo-project"
 
 gem "dm-validations"                            # We're validating properties
 gem "dm-is-versioned"                           # TODO: This should be provided by yogo-db
 gem "dm-types"                                  # To enable UUID types
 gem "dm-is-list"                                # RBAC
+gem "dm-migrations"
 
 gem "rails"                                     # Rails application
 gem "dm-rails"                                  # DataMapper integration with Rails

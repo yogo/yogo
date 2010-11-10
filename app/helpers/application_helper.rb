@@ -96,7 +96,7 @@ module ApplicationHelper
       TT
       output.html_safe
     else
-      body.html_save
+      body.html_safe
     end
   end
 
