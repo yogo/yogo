@@ -118,7 +118,7 @@ class Voeis::SamplesController < Voeis::BaseController
     @row_array = Array.new
     site = parent.managed_repository{Voeis::Site.get(params[:site])}
     @site_name =site.name
-    if !site.samples.empty?
+    if !site.samples.empty? && params[:variable] != "None"
       if params[:variable] == "All"
         @var_name = "All"
         timestamp_array = Array.new
@@ -195,6 +195,8 @@ class Voeis::SamplesController < Voeis::BaseController
           format.js 
         end#end format
       end#end if export
+    else
+      @var_name = "None"
     end #end if !site.empty?
   end #end def
   

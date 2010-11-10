@@ -11,13 +11,14 @@
   = date_select('range', 'end_date', :order => [:month, :day, :year])
   = clear_break
 
-  = f.submit('Search')
+  = f.submit('Search', :onclick => "$('#loader').toggle();")
 =clear_break
 
 #search_results
   :javascript  
-    $(function() {
+    $(function() { 
     $("#site").change(function() { 
+    $('#loader').toggle();
     $.get("#{site_sample_variables_project_samples_path}"+".json?site_id=" + $("#site").val(),
     function(data) {
     $('#variable').empty();
@@ -31,10 +32,13 @@
     for(i=0;data.variables.length; i++)
     {
     $('#variable'). append($("<option></option>").attr("value",data.variables[i].id).text(data.variables[i].name));
+    $('#loader').toggle();
     }
+    $('#loader').toggle();
     return false;
     }
     );
     return false;
+    $('#loader').toggle();
     });
     });

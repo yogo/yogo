@@ -6,3 +6,4 @@ $("#search_results").html( '<%= escape_javascript(render(:partial => "show_query
                                       :row_array => @row_array,
                                       :column_array => @column_array }))%>' )
 
+$('#loader').toggle();

@@ -206,11 +206,13 @@ class Voeis::DataStreamsController < Voeis::BaseController
       variable = parent.managed_repository{Voeis::Variable.get(params[:variable])}
       if params[:variable] == "All"
         @var_name = "All"
+      elsif params[:variable] == "None"
+        @var_name = "None"
       else
         @var_name = variable.variable_name
       end
       # if !parent.manged_repository{Voeis::Variable.get(params[:variable]).sensor_types.all(:sites => {:id => site.id})}.nil?
-      if !site.sensor_types.empty?
+      if !site.sensor_types.empty? && params[:variable] != "None"
         if params[:variable] == "All"
           @column_array << ["Timestamp", 'datetime']
           site.sensor_types.each do |sensor|
