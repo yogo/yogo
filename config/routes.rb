@@ -27,7 +27,9 @@ ActionController::Routing::Routes.draw do |map|
     project.resources :sensor_values, :namespace => nil, :controller => 'voeis/sensor_values'
     project.resources :sensor_types, :namespace => nil, :controller => 'voeis/sensor_types'
     project.resources :data_stream_columns, :namespace => nil, :controller =>'voeis/data_stream_columns'
-    project.resources :samples, :namespace => nil, :controller =>'voeis/samples'
+    project.resources :samples, :namespace => nil, :controller =>'voeis/samples',
+                      :collection => { :query => :get, :search => :post, 
+                                       :site_sample_variables => :get, :export => :post}
     project.resources :sample_materials, :namespace => nil, :controller =>'voeis/sample_materials'
     project.resources :lab_methods, :namespace => nil, :controller =>'voeis/lab_methods'
     project.resources :data_values, :namespace => nil, :controller =>'voeis/data_values',      
