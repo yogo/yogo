@@ -7,6 +7,7 @@
     %tr
       %td
         - for project in @projects
+          - logger.info{ "\n**************** Putting Project: #{project.name} **************************"}
           #content-title
             = link_to(project.name, project_path(project), :class => project.is_private? ? 'icon icon-private' : nil, :onclick => "$('#loader').toggle();")
           #content-actions
