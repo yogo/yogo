@@ -30,7 +30,7 @@ class ProjectsController < InheritedResources::Base
     #                  ]
     if resource.nil?
       flash[:error] = "Could not find that project"
-      redirect_to(:back) and return
+      redirect_to(projects_path()) and return
     end
     @current_data = Array.new
     @items = Array.new
