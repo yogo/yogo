@@ -9,18 +9,13 @@
       %th Update
       %th Destroy
     %tbody
-      - Role.available_permissions_by_source.each do |name, perms|
+      - Role.available_permissions_by_source.each do |name, permissions|
         %tr
           %td.h3= name.demodulize.titleize
-          - [3, 1, 0, 2].each do |idx|
-            - p = perms[idx]
-            / perms.each do |p|
-            / We do this because of name munging differences between the label's 'for' 
-            / and check_box's 'id'
+          - ['create', 'retrieve', 'update', 'destroy'].each do |permission_name|
+            - p = permissions.select{|item| item.match(/\$#{permission_name}\z/)}.first
             %td
               - attribute_name = p.split(/\/|\$/).join('_')
-              /- display_name = p.to_s.split("$")[1].titleize
-              /= label_tag("role_action_#{attribute_name}", display_name)
               = check_box_tag("role[actions][]", p.to_s, @role.actions.include?(p), 
                               :id => "role_action_#{attribute_name}" )
   = f.submit('Save', :class => 'icon icon-save')

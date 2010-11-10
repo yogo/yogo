@@ -9,11 +9,11 @@
       %th Update
       %th Destroy
     %tbody
-      - SystemRole.available_permissions_by_source.each do |name, perms|
+      - SystemRole.available_permissions_by_source.each do |name, permissions|
         %tr
           %td.h3= name.demodulize.titleize
-          - [3, 1, 0, 2].each do |idx|
-            - p = perms[idx]
+          - ['create', 'retrieve', 'update', 'destroy'].each do |permission_name|
+            - p = permissions.select{|item| item.match(/\$#{permission_name}\z/)}.first
             %td
               - attribute_name = p.split(/\/|\$/).join('_')
               = check_box_tag("system_role[actions][]", p.to_s, resource.actions.include?(p), 
