@@ -24,10 +24,7 @@ module Yogo
           current_page = options.delete(:page) || 1
           per_page = options.delete(:per_page) || 30
 
-          non_counting_keys = [:order]
-          counting_options = options.dup.delete_if{|key,value| non_counting_keys.include?(key) }
-
-          total_entries = count(counting_options)
+          total_entries = all(options).count()
 
           options.merge!({
             :limit => per_page,
@@ -38,7 +35,7 @@ module Yogo
           paginated_collection.instance_variable_set("@current_page", current_page.to_i)
           paginated_collection.instance_variable_set("@per_page", per_page.to_i)
           paginated_collection.total_entries = total_entries
-    
+          
           return paginated_collection
         end
 
