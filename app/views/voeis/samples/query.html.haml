@@ -1,15 +1,15 @@
 %h1 Search Sample Data:
--remote_form_for :query, @query, :url => { :action => 'search'} do |f|
+= form_for(:query, @query, :url => { :action => 'search'}, :remote => true) do |f|
   Site: 
-  =select_tag("site", @site_options)
+  = select_tag("site", @site_options)
   Variable: 
-  =select_tag("variable", @variable_opts)
-  =clear_break
+  = select_tag("variable", @variable_opts)
+  = clear_break
   Dates After: 
   = date_select('range', 'start_date', :order => [:month, :day, :year])
   Dates Before: 
   = date_select('range', 'end_date', :order => [:month, :day, :year])
-  =clear_break
+  = clear_break
 
   = f.submit('Search')
 =clear_break

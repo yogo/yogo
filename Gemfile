@@ -2,6 +2,11 @@ source :rubygems
 
 gem "yogo-framework"                            # The Yogo Framework
 
+gem "dm-validations"                            # We're validating properties
+gem "dm-is-versioned"                           # TODO: This should be provided by yogo-db
+gem "dm-types"                                  # To enable UUID types
+gem "dm-is-list"                                # RBAC
+
 gem "rails"                                     # Rails application
 gem "dm-rails"                                  # DataMapper integration with Rails
 gem "jquery-rails"                              # jQuery integration with Rails
@@ -12,7 +17,7 @@ gem "bcrypt-ruby"                               # Encryption for authentication
 gem "rails_warden"                              # Warden integration with Rails for authentication
 
 gem "mime-types", :require => "mime/types"      # For uploading data files
-
+gem "uuidtools"                                 # This is for memberships
 gem "pony"                                      # For email feedback
 gem "mail"                                      # For email feedback
 
@@ -33,6 +38,7 @@ group(:development, :test) do
   # YARD Documentation
   gem "yard",                      :require => nil
   gem "bluecloth",                 :require => nil
+  gem "yardstick"
   # TODO: We need to find out how to remove this
   gem "test-unit", "~> 1.2.1",     :require => nil # This is annoying that is is required.
   # Debugger requirements
