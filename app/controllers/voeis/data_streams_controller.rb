@@ -172,7 +172,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           variable_opt_array << ["All", "All"]
           @sites.first.sensor_types.each do |sensor|
             var = sensor.variables.first
-            variable_opt_array << [var.variable_name+":"+var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+            variable_opt_array << [var.variable_name+":"+var.data_type, var.id.to_s]
           end
         else
           variable_opt_array << ["None", "None"]
