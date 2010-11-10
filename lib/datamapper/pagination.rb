@@ -26,9 +26,12 @@ module Yogo
 
           total_entries = all(options).count()
 
+          offset = (current_page.to_i - 1) * per_page
+          limit = [total_entries - offset, per_page].min
+
           options.merge!({
-            :limit => per_page,
-            :offset => (current_page.to_i - 1) * per_page
+            :limit => limit,
+            :offset => offset
           })
 
           paginated_collection = all(options)
@@ -82,4 +85,5 @@ module Yogo
 end # Yogo
 
 DataMapper::Model.append_extensions(Yogo::DataMapper::Model::Pagination)
+DataMapper::Collection.send(:include, Yogo::DataMapper::Model::Pagination)
 DataMapper::Collection.send(:include, Yogo::DataMapper::Collection::Pagination)
