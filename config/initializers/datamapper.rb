@@ -20,7 +20,6 @@ DataMapper::Model.raise_on_save_failure = true
 # Read the configuration from the existing database.yml file
 # config = Rails.configuration.database_configuration
 
-
 # Load the project model and migrate it if needed.
 Project
 Setting
@@ -40,8 +39,14 @@ GeneralCategoryCV
 SampleTypeCV
 SampleMaterial
 LabMethod
-Voeis::Site::Version
-Voeis::Sample::Version
 
 
 DataMapper.finalize
+
+DataMapper::Model.descendants.each do |model|
+  begin
+    model::Version
+  rescue
+  end
+end
+

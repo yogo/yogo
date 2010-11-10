@@ -27,7 +27,7 @@ class SystemRolesController < InheritedResources::Base
    protected
 
    def collection
-     @system_roles ||= resource_class.all
+     @system_roles ||= resource_class.paginate(:page => params[:page])
    end
 
    def resource
