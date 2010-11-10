@@ -109,26 +109,25 @@ class Voeis::SamplesController < Voeis::BaseController
   
   
   def search
-    start_date =  Date.civil(params[:range][:"start_date(1i)"].to_i,params[:range]      [:"start_date(2i)"].to_i,params[:range][:"start_date(3i)"].to_i)
-    end_date = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
-    start_date = 
-    start_date.to_datetime
-    end_time = end_date.to_datetime + 23.hour + 59.minute
+    @start_date =  Date.civil(params[:range][:"start_date(1i)"].to_i,params[:range]      [:"start_date(2i)"].to_i,params[:range][:"start_date(3i)"].to_i)
+    @end_date = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
+    @start_date = @start_date.to_datetime
+    @end_time = @end_date.to_datetime + 23.hour + 59.minute
     
     @column_array = Array.new
     @row_array = Array.new
     site = parent.managed_repository{Voeis::Site.get(params[:site])}
-    site_name =site.name
+    @site_name =site.name
     if !site.samples.empty?
       if params[:variable] == "All"
-        var_name = "All"
+        @var_name = "All"
         timestamp_array = Array.new
         variable_hash = Hash.new #store all the datavalues[timestamp => datavalue] in and array 
         site.samples.variables.each do |variable|
           variable_hash[variable.id] = Hash.new
         end
         site.samples.variables.each do |variable|
-          value = (site.samples.data_values(:local_date_time.gte => start_date, :local_date_time.lte => end_date) & variable.data_values).each do |val|
+          value = (site.samples.data_values(:local_date_time.gte => @start_date, :local_date_time.lte => @end_date) & variable.data_values).each do |val|
             val_hash = Hash.new
             val_hash[val.local_date_time.to_s] = val.data_value
             puts val_hash.to_json
@@ -160,7 +159,7 @@ class Voeis::SamplesController < Voeis::BaseController
         puts "ROWARRAY: #{@row_arrray}" 
       else #we want only one variable
         variable = parent.managed_repository{Voeis::Variable.get(params[:variable])}
-        var_name = variable.variable_name
+        @var_name = variable.variable_name
         my_sample =""
         variable.samples.each do |sample|
           if sample.sites.first.id == site.id
@@ -170,7 +169,7 @@ class Voeis::SamplesController < Voeis::BaseController
         if !my_sample.nil?
           @column_array << ["Timestamp", 'datetime']
           @column_array << [my_sample.variables.first.variable_name, 'number']
-          (variable.samples.data_values(:local_date_time.gte => start_date.to_datetime, :local_date_time.lte => end_date.to_datetime) & site.samples.data_values).each do |data_val|
+          (variable.samples.data_values(:local_date_time.gte => @start_date, :local_date_time.lte => @end_date) & site.samples.data_values).each do |data_val|
             temp_array = Array.new
             temp_array << data_val.local_date_time.to_datetime
             temp_array << data_val.data_value
@@ -193,17 +192,7 @@ class Voeis::SamplesController < Voeis::BaseController
            :filename => filename)
       else
         respond_to do |format|
-          format.js do
-            render :update do |page|
-              page.replace_html "search_results", :partial => "show_query_results",
-              :locals => {:site => site_name,
-                          :variable => var_name,
-                          :start_date => start_date,
-                          :end_date => end_date,
-                          :row_array => @row_array,
-                          :column_array => @column_array }
-            end #end render
-          end #end format.js
+          format.js 
         end#end format
       end#end if export
     end #end if !site.empty?

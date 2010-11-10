@@ -22,39 +22,26 @@ DataMapper::Model.raise_on_save_failure = true
 
 
 # Load the project model and migrate it if needed.
-#Project
-# Setting
-# User
-# Role
-# Membership
-# Site
-# Unit
-# Variable
-# FieldMethod
-# VariableNameCV
-# SampleMediumCV
-# ValueTypeCV
-# SpeciationCV
-# DataTypeCV
-# GeneralCategoryCV
-# SampleTypeCV
-# SampleMaterial
-# LabMethod
+Project
+Setting
+User
+Role
+Membership
+Site
+Unit
+Variable
+FieldMethod
+VariableNameCV
+SampleMediumCV
+ValueTypeCV
+SpeciationCV
+DataTypeCV
+GeneralCategoryCV
+SampleTypeCV
+SampleMaterial
+LabMethod
+Voeis::Site::Version
+Voeis::Sample::Version
 
-# DataMapper.finalize
-# DataMapper.auto_migrate! unless DataMapper.repository(:default).storage_exists?(Project.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(Setting.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(User.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(Role.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(Membership.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(Site.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(Unit.storage_name) &&                         DataMapper.repository(:default).storage_exists?(Variable.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(FieldMethod.storage_name) &&                      DataMapper.repository(:default).storage_exists?(VariableNameCV.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(SampleMediumCV.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(ValueTypeCV.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(SpeciationCV.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(DataTypeCV.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(GeneralCategoryCV.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(SampleTypeCV.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(SampleMaterial.storage_name) &&
-# DataMapper.repository(:default).storage_exists?(LabMethod.storage_name)
+
+DataMapper.finalize

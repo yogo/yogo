@@ -1,0 +1,8 @@
+$("#search_results").html( '<%= escape_javascript(render(:partial => "show_query_results",
+                                      :locals => {:site => @site_name,
+                                      :variable => @var_name,
+                                      :start_date => @start_date,
+                                      :end_date => @end_date,
+                                      :row_array => @row_array,
+                                      :column_array => @column_array }))%>' )
+

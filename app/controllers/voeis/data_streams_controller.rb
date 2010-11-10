@@ -195,21 +195,19 @@ class Voeis::DataStreamsController < Voeis::BaseController
 
   def search
     puts 'Export:'+params[:export].to_s
-    start_date =  Date.civil(params[:range][:"start_date(1i)"].to_i,params[:range]      [:"start_date(2i)"].to_i,params[:range][:"start_date(3i)"].to_i)
-    end_date = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
+    @start_date =  Date.civil(params[:range][:"start_date(1i)"].to_i,params[:range]      [:"start_date(2i)"].to_i,params[:range][:"start_date(3i)"].to_i)
+    @end_date = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
 
-    puts start_date.to_datetime
-    puts end_date.to_datetime
     if !params[:variable].empty? && !params[:site].empty?
       @column_array = Array.new
       @row_array = Array.new
       site = parent.managed_repository{Voeis::Site.get(params[:site])}
-      site_name =site.name
+      @site_name =site.name
       variable = parent.managed_repository{Voeis::Variable.get(params[:variable])}
       if params[:variable] == "All"
-        var_name = "All"
+        @var_name = "All"
       else
-        var_name = variable.variable_name
+        @var_name = variable.variable_name
       end
       # if !parent.manged_repository{Voeis::Variable.get(params[:variable]).sensor_types.all(:sites => {:id => site.id})}.nil?
       if !site.sensor_types.empty?
@@ -218,7 +216,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           site.sensor_types.each do |sensor|
             @column_array << [sensor.variables.first.variable_name, 'number']
           end
-          site.sensor_types.first.sensor_values(:timestamp.gte => start_date.to_datetime, :timestamp.lte => end_date.to_datetime).each do |sens_val|
+          site.sensor_types.first.sensor_values(:timestamp.gte => @start_date.to_datetime, :timestamp.lte => @end_date.to_datetime).each do |sens_val|
             temp_array = Array.new
             temp_array << sens_val.timestamp.to_datetime
             site.sensor_types.each do |sens|
@@ -241,7 +239,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           if !my_sensor.nil?
             @column_array << ["Timestamp", 'datetime']
             @column_array << [my_sensor.variables.first.variable_name, 'number']
-            my_sensor.sensor_values(:timestamp.gte => start_date.to_datetime, :timestamp.lte => end_date.to_datetime).each do |sens_val|
+            my_sensor.sensor_values(:timestamp.gte => @start_date.to_datetime, :timestamp.lte => @end_date.to_datetime).each do |sens_val|
               temp_array = Array.new
               temp_array << sens_val.timestamp.to_datetime
               temp_array << sens_val.value
@@ -275,17 +273,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
            :filename => filename)
       else
         respond_to do |format|
-          format.js do
-            render :update do |page|
-              page.replace_html "search_results", :partial => "show_query_results",
-              :locals => {:site => site_name,
-                          :variable => var_name,
-                          :start_date => start_date,
-                          :end_date => end_date,
-                          :row_array => @row_array,
-                          :column_array => @column_array }
-            end
-          end
+          format.js 
         end
       end
     end

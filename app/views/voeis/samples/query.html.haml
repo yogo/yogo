@@ -1,9 +1,9 @@
 %h1 Search Sample Data:
 = form_for(:query, @query, :url => { :action => 'search'}, :remote => true) do |f|
   Site: 
-  = select_tag("site", @site_options)
+  = select_tag("site", @site_options.html_safe)
   Variable: 
-  = select_tag("variable", @variable_opts)
+  = select_tag("variable", @variable_opts.html_safe)
   = clear_break
   Dates After: 
   = date_select('range', 'start_date', :order => [:month, :day, :year])
