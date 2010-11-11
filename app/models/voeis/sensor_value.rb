@@ -7,6 +7,7 @@ class Voeis::SensorValue
 
   property :id, Serial
   property :value,    Float,   :required => true
+  property :string_value, String, :required => true, :default => "Unknown"
   property :units,    String,  :required => true
   property :timestamp,    DateTime,  :required => true, :index => true
   property :published,  Boolean, :required => false

@@ -28,16 +28,16 @@
         %td 
           =@var_array[i][0]
         %td
-          =select_tag("column"+i.to_s, @var_array[i][3])
+          =select_tag("column"+i.to_s, @var_array[i][3].html_safe)
 
   =clear_break
   -#Please specify if a column should be used as the time-stamp:
-  -#=select_tag("timestamp_col", @column_options)
+  -#=select_tag("timestamp_col", @column_options.html_safe)
   -#&nbsp;OR select a timestamp to apply to all data-values:
   -#=datetime_select("time", "stamp", :default => DateTime.now)
   -#=clear_break
   Please specify if a column should be used as a replicate label:
-  =select_tag("replicate", @column_options)
+  =select_tag("replicate", @column_options.html_safe)
   =clear_break
   -#Select the Time Zone these samples were collected in:
   -#= time_zone_select("time", "zone", nil, :default => "Mountain Time (US & Canada)")
@@ -55,7 +55,7 @@
     -(@start_line..@csv_size).each do |i|
       %tr
         %td
-          =select_tag("csv_sample"+i.to_s, @sample_options)
+          =select_tag("csv_sample"+i.to_s, @sample_options.html_safe)
         %td
           = (i).to_s
         %td

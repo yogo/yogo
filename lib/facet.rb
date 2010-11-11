@@ -226,7 +226,7 @@ module Facet
     def permissions
       {
         :create => [:new, :create],
-        :retrieve => [:all, :get, :first, :last, :count, :map, :each, :&, :|] + 
+        :retrieve => [:all, :get, :first, :last, :count, :map, :each, :join, :&, :|] + 
           relationships.keys.map{|m| m.to_s.to_sym } +
           ::DataMapper::Collection.instance_methods.map{|m| m.to_s.to_sym } +
           self.methods.map{|m| m.to_sym } - [:update, :destroy, :new, :create, :create!],

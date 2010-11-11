@@ -683,16 +683,18 @@ class Voeis::DataStreamsController < Voeis::BaseController
              parent.managed_repository{
              if data_timestamp_col == ""
                sensor_value = Voeis::SensorValue.new(
-                                              :value => row[i],
+                                              :value => /^[-]?[\d]+(\.?\d*)$|^[-]?(\.\d+)$/.match(row[i]) ? row[i] : -9999.0,
                                               :units => data_stream_col[i].unit,
                                               :timestamp => Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).to_datetime,
-                                              :published => false)
+                                              :published => false,
+                                               :string_value => row[i].to_s)
              else   
                sensor_value = Voeis::SensorValue.new(
-                                             :value => row[i],
+                                             :value => /^[-]?[\d]+(\.?\d*)$|^[-]?(\.\d+)$/.match(row[i]) ? row[i] : -9999.0,
                                              :units => data_stream_col[i].unit,
                                              :timestamp => row[data_timestamp_col.to_i],
-                                             :published => false)
+                                             :published => false,
+                                             :string_value => row[i].to_s)
              end
              puts sensor_value.valid?
              puts sensor_value.errors.inspect()

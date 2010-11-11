@@ -185,13 +185,16 @@ class Voeis::DataValuesController < Voeis::BaseController
                #store the applied timestamp
                #d_time = DateTime.parse("#{params[:time]["stamp(1i)"]}-#{params[:time]["stamp(2i)"]}-#{params[:time]["stamp(3i)"]}T#{params[:time]["stamp(4i)"]}:#{params[:time]["stamp(5i)"]}:00#{ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60)}:00")
                
-               new_data_val = Voeis::DataValue.new(:data_value => @csv_row[row][i].to_f, 
+               new_data_val = Voeis::DataValue.new(:data_value => /^[-]?[\d]+(\.?\d*)$|^[-]?(\.\d+)$/.match(@csv_row[row][i]) ? @csv_row[row][i] : -9999.0, 
                   :local_date_time => @sample.local_date_time,
                   :utc_offset => @sample.local_date_time.to_time.utc_offset/(60*60),  
                   :date_time_utc => @sample.local_date_time.to_time.utc.to_datetime,  
-                  :replicate => rep) 
-               new_data_val.save
+                  :replicate => rep,
+                  :string_value =>  @csv_row[row][i].blank? ? "Empty" : @csv_row[row][i]) 
+               new_data_val.valid?
                puts new_data_val.errors.inspect() 
+               new_data_val.save
+               
              # else
              #                #store the column timestamp
              #                #time = csv_row[row][params[:timestamp_col]]

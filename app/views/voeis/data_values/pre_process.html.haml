@@ -15,7 +15,7 @@
     - opt_string = ""
     - (1..20).each do |i|
       - opt_string = opt_string + "<option value="+i.to_s+">"+i.to_s+"</option>"
-    = select_tag('start_line', opt_string)
+    = select_tag('start_line', opt_string.html_safe)
     = clear_break
     = submit_tag("Upload File", :onclick => "$('#loader').toggle();")
     = link_to('Cancel', {:action => 'show', :controller => '/projects', :id=>@project.id }, :class => 'icon icon-cancel', :onclick => "$('#loader').toggle();")

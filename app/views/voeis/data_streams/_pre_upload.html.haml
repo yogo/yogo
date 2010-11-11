@@ -19,7 +19,7 @@
   -sites.all(:order => [:name.asc]).each do |site|
     -if site.id != nil
       -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
-  =select_tag("site", @site_options)
+  =select_tag("site", @site_options.html_safe)
   =clear_break
   =clear_break
   Select what VOEIS variables should be associated with these columns from the Logger file
@@ -59,7 +59,7 @@
             =header_info[i]["type"]
             =hidden_field_tag("type"+i.to_s, header_info[i]["type"])
           %td 
-            =select_tag("column"+i.to_s, var_array[i][3])
+            =select_tag("column"+i.to_s, var_array[i][3].html_safe)
           %td
             =text_field_tag("min"+i.to_s,var_array[i][4], :size=>8)
           %td
@@ -98,7 +98,7 @@
           %td 
             =text_field_tag("type"+i.to_s,  var_array[i][2].empty? ? "Type #{i.to_s}" : var_array[i][2])
           %td 
-            =select_tag("column"+i.to_s, var_array[i][3])
+            =select_tag("column"+i.to_s, var_array[i][3].html_safe)
           %td
             =text_field_tag("min"+i.to_s,var_array[i][4],:size=>8)
           %td
@@ -108,13 +108,13 @@
   =clear_break
   Please specify which column should be used as the time-stamp:
   -timestamp_column_options = @column_options + '<option value="None" selected= "selected">None</option>'
-  =select_tag("timestamp", timestamp_column_options)
+  =select_tag("timestamp", timestamp_column_options.html_safe)
   =clear_break
   %h3 OR
   Please specifcy the date column
-  =select_tag("date", timestamp_column_options)
+  =select_tag("date", timestamp_column_options.html_safe)
   and the time column
-  =select_tag("time", timestamp_column_options)
+  =select_tag("time", timestamp_column_options.html_safe)
   =clear_break
   =hidden_field_tag('datafile', new_file)
   =hidden_field_tag('project_id', project_id)

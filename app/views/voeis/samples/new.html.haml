@@ -28,7 +28,7 @@
   -@sites.all(:order => [:name.asc]).each do |site|
     -if site.id != nil
       -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
-  =select_tag("site", @site_options)
+  =select_tag("site", @site_options.html_safe)
   =clear_break
   Select a Timestamp for this Sample:
   =datetime_select("time", "stamp", :default => DateTime.now)

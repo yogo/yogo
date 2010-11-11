@@ -10,7 +10,7 @@ class Voeis::DataValue
   property :date_time_utc,            DateTime, :required => true,  :default => DateTime.now 
   property :replicate,                String,   :required => true,  :default => "original"
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
-
+  property :string_value, String, :required => true, :default => "Unknown"
   is_versioned :on => :updated_at
   
   before(:save) {
