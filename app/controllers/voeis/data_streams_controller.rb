@@ -315,12 +315,12 @@ class Voeis::DataStreamsController < Voeis::BaseController
     @variables = Variable.all
     @sites = parent.managed_repository{ Voeis::Site.all }
     if !params[:datafile].nil? && datafile = params[:datafile]
-      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
-            'application/octet-stream','application/csv'].include?(datafile.content_type)
-        flash[:error] = "File type #{datafile.content_type} not allowed"
-        redirect_to(:controller =>"voeis/data_streams", :action => "new", :params => {:id => params[:project_id]})
-
-      else
+      # if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
+      #             'application/octet-stream','application/csv'].include?(datafile.content_type)
+      #         flash[:error] = "File type #{datafile.content_type} not allowed"
+      #         redirect_to(:controller =>"voeis/data_streams", :action => "new", :params => {:id => params[:project_id]})
+      #         return true
+      #       else
         name = params['datafile'].original_filename
         directory = "temp_data"
         @new_file = File.join(directory,name)
@@ -341,7 +341,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           @start_row = get_row(datafile.path, params[:start_line].to_i)
           @row_size = @start_row.size-1
         end
-      end
+      
       @var_array = Array.new
       @var_array[0] = ["","","","","","",""]
       @opts_array = Array.new
@@ -371,6 +371,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
 
 
         end
+    #end
       # respond_to do |format|
       #   format.js do
       #     render :update do |page|
