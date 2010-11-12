@@ -2,6 +2,7 @@
   %h3 Create a new Data Type:
   = form_for(:data_type_c_v )do |f|
     = f.label("Term:")
+    = clear_break
     = f.text_area("term", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "data_type_term")
     = f.label("Definition:")
     = clear_break

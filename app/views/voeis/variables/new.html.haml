@@ -12,11 +12,10 @@
   = f.text_field :variable_code
   =clear_break
   -var_name_options = Array.new
-  %label Variable Name: 
+  %label{:id => "var_name", :onclick=>"$('#new_variable_name').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Variable Name: 
   - @variable_names.all(:order => [:term.asc]).each do |var_name|
     -var_name_options <<[var_name.term]
   = f.select('variable_name',  options_for_select(var_name_options), :class => "variable_name")
-  %a{:id => "var_name", :onclick=>"$('#new_variable_name').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   
   =clear_break
   %label Variable Units: 
@@ -27,27 +26,24 @@
   =clear_break
   
   -speciation_options = Array.new
-  %label Speciation: 
+  %label{:id => "spec", :onclick=>"$('#new_speciation').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Speciation: 
   - @speciations.all(:order => [:term.asc]).each do |speciation|
     -speciation_options <<[speciation.term]
   = f.select('speciation',  options_for_select(speciation_options), :class => "speciation")
-  %a{:id => "spec", :onclick=>"$('#new_speciation').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   =clear_break
-  
+    
   -sample_medium_options = Array.new
-  %label Sample Medium: 
+  %label{:id => "samp_medium", :onclick=>"$('#new_sample_medium').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Sample Medium: 
   - @sample_mediums.all(:order => [:term.asc]).each do |sample_medium|
     -sample_medium_options <<[sample_medium.term]
   = f.select('sample_medium',  options_for_select(sample_medium_options), :class => "sample_medium")
-  %a{:id => "samp_medium", :onclick=>"$('#new_sample_medium').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   =clear_break
   
-  %label Value Type: 
+  %label{:id => "val_typ", :onclick=>"$('#new_value_type').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Value Type: 
   -value_type_options = Array.new
   - @value_types.all(:order => [:term.asc]).each do |value_type|
     -value_type_options <<[value_type.term]
   = f.select('value_type',  options_for_select(value_type_options), :class => "value_type")
-  %a{:id => "val_typ", :onclick=>"$('#new_value_type').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   =clear_break
   
   %label Is Regular: 
@@ -61,19 +57,17 @@
   =clear_break
   
   -data_type_options = Array.new
-  %label Data Type:  
+  %label{:id => "spec", :onclick=>"$('#new_data_type').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Data Type:  
   - @data_types.all(:order => [:term.asc]).each do |data_type|
     -data_type_options <<[data_type.term]
   = f.select('data_type',  options_for_select(data_type_options), :class => "data_type")
-  %a{:id => "spec", :onclick=>"$('#new_data_type').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   
   =clear_break
-  %label General Category:
+  %label{:id => "spec", :onclick=>"$('#new_general_category').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}General Category:
   -general_category_options = Array.new
   - @general_categories.all(:order => [:term.asc]).each do |data_type|
     -general_category_options <<[data_type.term]
   = f.select('general_category',  options_for_select(general_category_options), :class => "data_type")
-  %a{:id => "spec", :onclick=>"$('#new_general_category').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}
   =clear_break
   
   %label No Data Value: 
