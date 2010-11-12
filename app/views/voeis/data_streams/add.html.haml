@@ -9,7 +9,7 @@
     - template_string = ""
     - @data_templates.each do |template|
       - template_string = template_string + "<option value="+template.id.to_s+">"+template.name+"</option>"
-    = select_tag("data_template_id", template_string)
+    = select_tag("data_template_id", template_string.html_safe)
     = clear_break
     = submit_tag("Upload Logger File", :onclick => "$('#loader').toggle();", :class => 'icon icon-save')
     = link_to('Cancel', {:action => 'show', :controller => '/projects', :id=>@project.id }, :class => 'icon icon-cancel', :onclick => "$('#loader').toggle();")
