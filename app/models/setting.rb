@@ -42,7 +42,8 @@ class Setting
     setting = if @@cache.has_key?(key) 
         @@cache[key] 
       else
-        @@cache[key] = first(:name => key).value
+        temp = first(:name => key)
+        @@cache[key] = temp.nil? ? nil : temp.value
     end
     setting.nil? ? false : setting
   end
