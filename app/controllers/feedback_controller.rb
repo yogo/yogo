@@ -4,8 +4,8 @@ class FeedbackController < ApplicationController
   #forge@msu.montana.edu
   def email
     Pony.mail(:to => 'forge@msu.montana.edu', 
-              :subject => params[:subject], 
-              :body => "Project: epscor-sensor\nTracker: feedback\n"+params[:body], 
+              :subject => params[:feedback][:issue_subject], 
+              :body => "Project: epscor-sensor\nTracker: feedback\n"+params[:feedback][:issue_body], 
               :via => :smtp, 
               :via_options => 
               {
@@ -18,5 +18,12 @@ class FeedbackController < ApplicationController
                 :domain => "localhost.localdomain"
               }
     )
+    respond_to do |format|
+      format.js 
+    end
+  end
+  
+  def nothing
+    #do nothing
   end
 end
