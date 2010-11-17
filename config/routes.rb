@@ -112,7 +112,7 @@ Yogo::Application.routes.draw do
       post :email
     end
   end
-
+  resources :voeis_mailer
   resource :user_session,             :only => [ :show, :new, :create, :destroy ]
   match '/logout' => 'user_sessions#destroy', :as => :logout
   match '/login' => 'user_sessions#new', :as => :login
