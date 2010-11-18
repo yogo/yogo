@@ -100,8 +100,52 @@ class Voeis::ApivsController < Voeis::BaseController
     end
     respond_to do |format|
       format.json do
-        format.html
         render :json => @site.to_json, :callback => params[:jsoncallback]
+      end
+      format.xml do
+        render :xml => @site.to_xml
+      end
+    end
+  end
+  
+  
+  # update_site
+  # API for creating a new site within in a project
+  # 
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/create_site.json?name=example&code=example&latitude=45.232&longitude=-111.234&state=MT 
+  #
+  # @param [Integer] id the id of the site
+  # @param [String] name the name of the site - <optional>
+  # @param [String] code the unique code for identifying the site - <optional>
+  # @param [Float] latitude the latitude coordinate of the site - <optional>
+  # @param [Float] longitude the longitude coordinate for the site - <optional>
+  # @param [String] state the two letter abbreviation for a US state - <optional>
+  #  
+  # @author Sean Cleveland
+  #
+  def update_site
+    @site = ""
+    parent.managed_repository do
+      @site = Voeis::Site.get(params[:id])
+      @site.update(:name => params[:name], 
+                   :code => params[:code],
+                   :latitude => params[:latitude],
+                   :longitude => params[:longitude],
+                   :state => params[:state])
+      puts @site.valid?
+      puts @site.errors.inspect()
+      begin
+       @site.save
+      rescue
+       puts @site = {:errors => @site.errors}
+      end
+    end
+    respond_to do |format|
+      format.json do
+        render :json => @site.to_json, :callback => params[:jsoncallback]
+      end
+      format.xml do
+        render :xml => @site.to_xml
       end
     end
   end
@@ -121,9 +165,11 @@ class Voeis::ApivsController < Voeis::BaseController
       @site = Voeis::Site.get(params[:id])
     end
     respond_to do |format|
-      format.html
       format.json do
         render :json => @site.to_json, :callback => params[:jsoncallback]
+      end
+      format.xml do
+        render :xml => @site.to_xml
       end
     end
   end
@@ -142,10 +188,11 @@ class Voeis::ApivsController < Voeis::BaseController
       @site = Voeis::Site.all()
     end
     respond_to do |format|
-      
       format.json do
-        format.html
         render :json => @site.to_json, :callback => params[:jsoncallback]
+      end
+      format.xml do
+        render :xml => @site.to_xml
       end
     end
   end

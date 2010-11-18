@@ -11,12 +11,15 @@ class UsersController < InheritedResources::Base
     params[:user].delete(:password_confirmation)
 
     update!
-
-    redirect_to(:back)
+    # respond_to do |format|
+    #   format.html do
+    #     redirect_to(:back)
+    #   end
+    # end
   end
 
   def destroy
-    @user = resource_class.get(params[:id])
+    @user = resource_class.get(params[:id].to_i)
     if @user.eql?(current_user)
       flash[:notice] = "You can't destroy yourself"
       redirect_to(users_url)
@@ -32,7 +35,12 @@ class UsersController < InheritedResources::Base
     else
       flash[:error] = "Failed to update API Key"
     end
-    redirect_to(:back)
+    respond_to do |format|
+      format.js
+      format.html do
+        redirect_to(:back)
+      end
+    end
   end
 
   protected

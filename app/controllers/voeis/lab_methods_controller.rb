@@ -18,8 +18,21 @@ class Voeis::LabMethodsController < Voeis::BaseController
   end
 
   def create
-    create! do |success, failure|
-      success.html { redirect_to project_url(parent) }
+    parent.managed_repository do
+      if params[:lab_method].nil?
+        @lab_method = Voeis::LabMethod.new(:lab_name=> params[:lab_name], :lab_organization => params[:lab_organization], :lab_method_name => params[:lab_method_name], :lab_method_description => params[:lab_method_description])
+      else
+        @lab_method = Voeis::LabMethod.new(params[:lab_method])
+      end
+      respond_to do |format|
+        if @lab_method.save
+          flash[:notice] = 'Lab Method was successfully created.'
+          format.html { (redirect_to(new_project_lab_method_path())) }
+          format.js
+        else
+          format.html { render :action => "new" }
+        end
+      end
     end
   end
 

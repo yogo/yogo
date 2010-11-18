@@ -14,7 +14,7 @@ class Voeis::SamplesController < Voeis::BaseController
     @sample_types = SampleTypeCV.all
     @sample_materials = SampleMaterial.all
     @sites = @project.managed_repository{Voeis::Site.all}
-    @lab_methods = LabMethod.all
+    @lab_methods = @project.managed_repository{Voeis::LabMethod.all}
   end
 
   def edit

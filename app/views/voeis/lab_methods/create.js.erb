@@ -1,0 +1,11 @@
+$('#sample_lab_method_id').
+append($("<option></option>").
+attr("value","<%=@lab_method.id%>").
+text($(".lab_method_name").val())); 
+$('#sample_lab_method_id').val("<%= @lab_method.id.to_s%>");
+$(".lab_name").val("");
+$(".lab_method_name").val("");
+$(".lab_organization").val("");
+$(".lab_method_description").val("");
+$(".lab_method_link").val("");
+$("#new_lab_method").toggle();

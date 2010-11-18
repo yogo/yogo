@@ -1,0 +1,24 @@
+#new_lab_method
+  %h3 Create a new Lab Method:
+  = form_for(:lab_method, :url(:action => 'create')) do |f|
+    = f.label("Lab Name:")
+    =clear_break
+    = f.text_area("lab_name", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "lab_method")
+    =clear_break
+    = f.label("Lab Organization:")
+    =clear_break
+    = f.text_area("lab_organization", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "lab_organization")
+    =clear_break
+    = f.label("Lab Method Name:")
+    =clear_break
+    = f.text_area("lab_method_name", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "lab_method_name")
+    = clear_break
+    = f.label("Lab Method Description:")
+    = clear_break
+    = f.text_area("lab_method_description", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "lab_method_description")
+    =clear_break
+    = f.label("Lab Method Link:")
+    =clear_break
+    = f.text_area("lab_method_link", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "lab_method_link")
+    = f.submit("Save Lab Method", :class => "new-lab-method-button")
+

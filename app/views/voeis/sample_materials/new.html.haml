@@ -1,0 +1,12 @@
+%h1
+  New Sample Material
+ 
+= form_for :sample_material, @sample_material, :url => { :action => "create"} do |f|
+  Material:
+  = f.text_field(:material, :label => "Material:")
+  =clear_break
+  Description:
+  = f.text_area(:description, :label=> "Description:")
+  =clear_break
+  = f.submit('Save', :class => 'icon icon-save')
+  = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel')

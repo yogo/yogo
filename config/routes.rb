@@ -44,6 +44,7 @@ Yogo::Application.routes.draw do
         collection do
           get :create_site
           get :create_variable
+          get :update_site
           get :get_all_sites
           get :get_site
         end
@@ -82,8 +83,8 @@ Yogo::Application.routes.draw do
   end
 
   resources :users do
-    member do
-      put :api_key_update
+    collection do
+      post :api_key_update
     end
     resources :memberships
   end

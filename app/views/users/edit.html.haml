@@ -17,6 +17,12 @@
     = @user.name
     #subtitle User Settings
   %br{:style=>"clear:left;"}/
+  =form_for(:api_key, :url => {:controller => 'users', :action=>'api_key_update'}, :remote => true) do |f|
+    %strong API Key:
+    %label{:id=> 'api_key'}
+      = @user.api_key
+    = hidden_field_tag 'id', @user.id
+    = f.submit('Generate new API Key', :class => 'icon icon-save', :onclick=>"$('#loader').toggle();")
   =form_for(@user, :builder => YogoFormBuilder) do |f|
     = f.text_field(:login, :label => "Login:" )
     = f.text_field(:first_name, :label => "First Name:")
@@ -27,9 +33,6 @@
       = f.password_field(:password, :label => "Password: ")
       = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
     = f.select(:system_role_id, SystemRole.all.map{|sr| [sr.name, sr.id]}, :label => 'System Role:')
-    %strong API Key:
-    = @user.api_key
-    = link_to("Generate new API key", api_key_update_user_path(@user), :method => :put, :class => 'icon icon-save')
     %br/
     %strong Projects
     %table
