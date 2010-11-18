@@ -42,7 +42,7 @@ module Facet
     
     def send(method, *args, &block)
       # ::Rails.logger.debug("Can #{@permission_source} Invoke? #{method} #{can_invoke method}")
-      raise NoMethodError, "undefined method #{method} for #{@target}" unless @target.respond_to?(method) #|| permitted_methods.include?(method.to_sym)
+      raise NoMethodError, "undefined method #{method} for #{@target}" unless @target.respond_to?(method,true) #|| permitted_methods.include?(method.to_sym)
       if(can_invoke method)
         result = @target.__send__(method, *args, &block)
         # TODO: Extract out this DataMapper specific code
@@ -250,7 +250,7 @@ module Facet
     
     def permissions
       {
-        :create => [],
+        :create => [:save_parents, :save_children],
         :retrieve => [:attributes] + self.methods.map{ |k| k.to_sym } - [:attributes=, :save, :update, :save_parents, :save_children, :destroy, :destroy!],
         :update => [:attributes=, :save, :update, :save_parents, :save_children],
         :destroy => [:destroy]

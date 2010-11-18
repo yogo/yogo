@@ -24,7 +24,7 @@ class Role
   is :list
 
   def self.permission_sources
-    [Project, Membership, Role,
+    [Project, Membership, Role, User,
       Voeis::DataStream,
       Voeis::DataStreamColumn,
       Voeis::MetaTag,
