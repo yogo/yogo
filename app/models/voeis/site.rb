@@ -44,21 +44,15 @@ class Voeis::Site
   property :comments,            Text,    :required => false
   property :description,         Text,    :required => false
   
-  timestamps :at
-
   repository(:default){
     property :his_id,            Integer, :required => false, :index => true
   }
+  
+  timestamps :at
 
   is_versioned :on => :updated_at
   
   validates_uniqueness_of :code
-  
-  alias :site_name  :name 
-  alias :site_name= :name=
-  
-  alias :site_code  :code 
-  alias :site_code= :code=
   
   # has n, :projects, :through => Resource
   has n, :data_streams,  :model => "Voeis::DataStream",  :through => Resource
@@ -67,6 +61,12 @@ class Voeis::Site
   has n, :data_values,   :model => "Voeis::DataValue",   :through => Resource
   has n, :samples,       :model => "Voeis::Sample",      :through => Resource
   has n, :variables,     :model => "Voeis::Variable",    :through => Resource
+  
+  alias :site_name  :name 
+  alias :site_name= :name=
+  
+  alias :site_code  :code 
+  alias :site_code= :code=
   
   def self.load_from_his
     his_sites = repository(:his){ His::Site.all }
