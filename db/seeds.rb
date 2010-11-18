@@ -207,9 +207,9 @@ begin
   Voeis::DataTypeCV.load_from_his
   puts 'done.'
 
-  # print 'Seeding GeneralCategoryCV from HIS...'
-  # GeneralCategoryCV.load_from_his
-  # puts 'done.'
+  print 'Seeding GeneralCategoryCV from HIS...'
+  Voeis::GeneralCategoryCV.load_from_his
+  puts 'done.'
   # 
   # print 'Seeding SampleTypeCV from HIS...'
   # SampleTypeCV.load_from_his
