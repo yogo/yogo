@@ -35,9 +35,10 @@ class Voeis::Sample
     self.updated_at = DateTime.now
   }
 
-  has n, :data_values,    :model => "Voeis::DataValue", :through => Resource
-  has n, :sample_type_cv, :model => "Voeis::SampleTypeCV", :through => Resource
-  has n, :lab_methods,    :model => "Voeis::LabMethod", :through => Resource
-  has n, :sites, :model => "Voeis::Site", :through => Resource
-  has n, :variables, :model => "Voeis::Variable", :through => Resource
+  has n, :data_values,      :model => "Voeis::DataValue",      :through => Resource
+  has n, :sample_type_cv,   :model => "Voeis::SampleTypeCV",   :through => Resource
+  has n, :lab_methods,      :model => "Voeis::LabMethod",      :through => Resource
+  has n, :sample_materials, :model => "Voeis::SampleMaterial", :through => Resource
+  has n, :sites,            :model => "Voeis::Site",           :through => Resource
+  has n, :variables,        :model => "Voeis::Variable",       :through => Resource
 end

@@ -15,20 +15,20 @@
 # using a temperature sensor or measured using a turbidity sensor).  Details about the
 # specific sensor models and manufacturers can be included in the MethodDescription.
 #
-class FieldMethod
+class Voeis::FieldMethod
   include DataMapper::Resource
 
-  property :his_id, Integer
-  property :id, Serial
-  property :method_description, Text, :required => true
-  property :method_link, Text, :required => false
-  property :updated_at, DateTime, :required => true,  :default => DateTime.now
+  property :id,                 Serial
+  property :method_description, Text,   :required => true
+  property :method_link,        Text,   :required => false
+  
+  timestamps :at
 
   is_versioned :on => :updated_at
-  
-  before(:save) {
-    self.updated_at = DateTime.now
-  }
+
+  repository(:default) do
+    property :his_id, Integer
+  end
   
   def self.load_from_his
     his_field_methods = His::FieldMethod.all

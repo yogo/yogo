@@ -29,7 +29,7 @@ Membership
 # Site
 # Unit
 # Variable
-FieldMethod
+# FieldMethod
 VariableNameCV
 # SampleMediumCV
 # ValueTypeCV
@@ -37,7 +37,7 @@ VariableNameCV
 # DataTypeCV
 # GeneralCategoryCV
 # SampleTypeCV
-SampleMaterial
+# SampleMaterial
 # LabMethod
 
 

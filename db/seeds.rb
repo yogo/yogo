@@ -223,15 +223,15 @@ begin
   Voeis::LabMethod.load_from_his
   puts 'done.'
 
-  # print 'Seeding Methods from HIS...'
-  # FieldMethod.load_from_his
-  # puts 'done.'
-  # 
-  # print "Seeding Sample Materials"
-  # SampleMaterial.create(:material => "Water")
-  # SampleMaterial.create(:material => "Rock")
-  # SampleMaterial.create(:material => "Insect")
-  # puts 'done.'
+  print 'Seeding Methods from HIS...'
+  Voeis::FieldMethod.load_from_his
+  puts 'done.'
+  
+  print "Seeding Sample Materials"
+  Voeis::SampleMaterial.create(:material => "Water")
+  Voeis::SampleMaterial.create(:material => "Rock")
+  Voeis::SampleMaterial.create(:material => "Insect")
+  puts 'done.'
   # 
   # print 'Seeding VariableNameCV from HIS...'
   #  VariableNameCV.load_from_his
