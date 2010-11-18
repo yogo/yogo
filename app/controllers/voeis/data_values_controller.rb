@@ -83,7 +83,7 @@ class Voeis::DataValuesController < Voeis::BaseController
           @var_array[0] = ["","","","","","",""]
           @opts_array = Array.new
           @variables.all(:general_category => params[:general_category], :order => [:variable_name.asc]).each do |var|
-            @opts_array << [var.variable_name+":"+var.sample_medium+':'+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+            @opts_array << [var.variable_name+":"+var.sample_medium+':'+ var.data_type+':'+Voeis::Unit.get(var.variable_units_id).units_name, var.id.to_s]
           end
           if params[:start_line].to_i != 1
             header_row = get_row(@new_file, params[:start_line].to_i - 1)

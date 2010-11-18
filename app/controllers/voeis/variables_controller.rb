@@ -13,7 +13,7 @@ class Voeis::VariablesController < Voeis::BaseController
   def new
     @variables = Voeis::Variable.all
     @variable = Voeis::Variable.new
-    @units = Unit.all
+    @units = Voeis::Unit.all
     @variable_names = VariableNameCV.all
     @sample_mediums= Voeis::SampleMediumCV.all
     @value_types= Voeis::ValueTypeCV.all

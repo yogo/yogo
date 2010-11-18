@@ -214,11 +214,11 @@ begin
   print 'Seeding SampleTypeCV from HIS...'
   Voeis::SampleTypeCV.load_from_his
   puts 'done.'
-  # 
-  # print 'Seeding Units from HIS...'
-  # Unit.load_from_his
-  # puts 'done.'
-  # 
+  
+  print 'Seeding Units from HIS...'
+  Voeis::Unit.load_from_his
+  puts 'done.'
+  
   # print 'Seeding LabMethods from HIS...'
   # LabMethod.load_from_his
   # puts 'done.'

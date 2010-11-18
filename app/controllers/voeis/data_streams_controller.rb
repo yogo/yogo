@@ -130,7 +130,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
                 @sensor_meta_array = Array.new
                 variable = sensor.variables.first
                 @sensor_meta_array << [{:variable => variable.variable_name},
-                                       {:units => Unit.get(variable.variable_units_id)},
+                                       {:units => Voeis::Unit.get(variable.variable_units_id)},
                                        @data_hash]
                 @sensor_hash[sensor.name] = @sensor_meta_array
               end #end if
