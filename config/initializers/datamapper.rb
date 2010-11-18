@@ -31,7 +31,7 @@ Unit
 # Variable
 FieldMethod
 VariableNameCV
-SampleMediumCV
+# SampleMediumCV
 ValueTypeCV
 SpeciationCV
 DataTypeCV

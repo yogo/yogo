@@ -15,7 +15,7 @@ class Voeis::VariablesController < Voeis::BaseController
     @variable = Voeis::Variable.new
     @units = Unit.all
     @variable_names = VariableNameCV.all
-    @sample_mediums= SampleMediumCV.all
+    @sample_mediums= Voeis::SampleMediumCV.all
     @value_types= ValueTypeCV.all
     @speciations = SpeciationCV.all
     @data_types = DataTypeCV.all

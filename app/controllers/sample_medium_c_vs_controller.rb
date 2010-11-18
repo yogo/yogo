@@ -4,7 +4,7 @@ class SampleMediumCVsController < ApplicationController
 
   # GET /variables/new
   def new
-    @sample_medium = SampleMediumCV.new
+    @sample_medium = Voeis::SampleMediumCV.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -14,9 +14,9 @@ class SampleMediumCVsController < ApplicationController
   # POST /variables
   def create
     if params[:sample_medium_c_v].nil?
-      @sample_medium = SampleMediumCV.new(:term=> params[:term], :definition => params[:definition])
+      @sample_medium = Voeis::SampleMediumCV.new(:term=> params[:term], :definition => params[:definition])
     else
-      @sample_medium = SampleMediumCV.new(params[:sample_medium_c_v])
+      @sample_medium = Voeis::SampleMediumCV.new(params[:sample_medium_c_v])
     end
     respond_to do |format|
       if @sample_medium.save
