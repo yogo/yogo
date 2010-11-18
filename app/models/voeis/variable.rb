@@ -75,6 +75,7 @@ class Voeis::Variable
   has n, :sample_type_csv,     :model => "Voeis::SampleTypeCV",     :through => Resource
   has n, :speciation_cvs,      :model => "Voeis::SpeciationCV",     :through => Resource
   has n, :value_type_cvs,      :model => "Voeis::ValueTypeCV",      :through => Resource
+  has n, :variable_name_cvs,   :model => "Voeis::VariableNameCV",   :through => Resource
     
   def self.load_from_his
     his_variables = repository(:his){ His::Variable.all }

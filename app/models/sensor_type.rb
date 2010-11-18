@@ -18,9 +18,9 @@ class SensorType
     self.updated_at = DateTime.now
   }
 
-  has n, :sites, :through => Resource
+  # has n, :sites, :through => Resource
   has n, :sensor_values, :model => "SensorValue", :through => Resource
-  has n, :variables, :through => Resource
+  # has n, :variables, :through => Resource
   #has n, :methods, :model => "Method", :through => Resource
   
 end

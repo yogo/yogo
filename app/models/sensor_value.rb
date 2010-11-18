@@ -19,7 +19,7 @@ class SensorValue
     self.updated_at = DateTime.now
   }
   
-  has n, :site, :through => Resource  
+  # has n, :site, :through => Resource  
   has n, :sensor_type, :model => "SensorType", :through => Resource
 
   default_scope(:default).update(:order => [:timestamp]) # set default order

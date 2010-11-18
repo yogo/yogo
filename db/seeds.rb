@@ -232,8 +232,9 @@ begin
   Voeis::SampleMaterial.create(:material => "Rock")
   Voeis::SampleMaterial.create(:material => "Insect")
   puts 'done.'
-  # 
-  # print 'Seeding VariableNameCV from HIS...'
-  #  VariableNameCV.load_from_his
-  #  puts 'done.'
+  
+  print 'Seeding VariableNameCV from HIS...'
+  Voeis::VariableNameCV.load_from_his
+  puts 'done.'
+   
 end
