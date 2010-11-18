@@ -72,6 +72,7 @@ class Voeis::Variable
   has n, :samples,             :model => "Voeis::Sample",           :through => Resource
   has n, :data_type_cvs,       :model => "Voeis::DataTypeCV",       :through => Resource
   has n, :general_category_cvs,:model => "Voeis::GeneralCategoryCV",:through => Resource
+  has n, :sample_type_csv,     :model => "Voeis::SampleTypeCV",     :through => Resource
   has n, :speciation_cvs,      :model => "Voeis::SpeciationCV",     :through => Resource
   has n, :value_type_cvs,      :model => "Voeis::ValueTypeCV",      :through => Resource
     

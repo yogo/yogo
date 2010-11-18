@@ -36,7 +36,7 @@ VariableNameCV
 # SpeciationCV
 # DataTypeCV
 # GeneralCategoryCV
-SampleTypeCV
+# SampleTypeCV
 SampleMaterial
 LabMethod
 
