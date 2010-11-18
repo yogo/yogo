@@ -183,57 +183,57 @@ begin
   end
   puts 'done.'
 
-  print 'Seeding Variables from HIS...'
-  Variable.load_from_his
-  puts 'done.'
-
   print 'Seeding Sites from HIS...'
   Voeis::Site.load_from_his
   puts 'done'
 
-  print 'Seeding SampleMediumCV from HIS...'
-  SampleMediumCV.load_from_his
-  puts 'done.'
-
-  print 'Seeding ValueTypeCV from HIS...'
-  ValueTypeCV.load_from_his
-  puts 'done.'
-
-  print 'Seeding SpeciationCV from HIS...'
-  SpeciationCV.load_from_his
-  puts 'done.'
-
-  print 'Seeding DataTypeCV from HIS...'
-  DataTypeCV.load_from_his
-  puts 'done.'
-
-  print 'Seeding GeneralCategoryCV from HIS...'
-  GeneralCategoryCV.load_from_his
-  puts 'done.'
-
-  print 'Seeding SampleTypeCV from HIS...'
-  SampleTypeCV.load_from_his
-  puts 'done.'
-
-  print 'Seeding Units from HIS...'
-  Unit.load_from_his
-  puts 'done.'
-
-  print 'Seeding LabMethods from HIS...'
-  LabMethod.load_from_his
-  puts 'done.'
-
-  print 'Seeding Methods from HIS...'
-  FieldMethod.load_from_his
-  puts 'done.'
-
-  print "Seeding Sample Materials"
-  SampleMaterial.create(:material => "Water")
-  SampleMaterial.create(:material => "Rock")
-  SampleMaterial.create(:material => "Insect")
+  print 'Seeding Variables from HIS...'
+  Voeis::Variable.load_from_his
   puts 'done.'
   
-  print 'Seeding VariableNameCV from HIS...'
-   VariableNameCV.load_from_his
-   puts 'done.'
+  # print 'Seeding SampleMediumCV from HIS...'
+  # SampleMediumCV.load_from_his
+  # puts 'done.'
+  # 
+  # print 'Seeding ValueTypeCV from HIS...'
+  # ValueTypeCV.load_from_his
+  # puts 'done.'
+  # 
+  # print 'Seeding SpeciationCV from HIS...'
+  # SpeciationCV.load_from_his
+  # puts 'done.'
+  # 
+  # print 'Seeding DataTypeCV from HIS...'
+  # DataTypeCV.load_from_his
+  # puts 'done.'
+  # 
+  # print 'Seeding GeneralCategoryCV from HIS...'
+  # GeneralCategoryCV.load_from_his
+  # puts 'done.'
+  # 
+  # print 'Seeding SampleTypeCV from HIS...'
+  # SampleTypeCV.load_from_his
+  # puts 'done.'
+  # 
+  # print 'Seeding Units from HIS...'
+  # Unit.load_from_his
+  # puts 'done.'
+  # 
+  # print 'Seeding LabMethods from HIS...'
+  # LabMethod.load_from_his
+  # puts 'done.'
+  # 
+  # print 'Seeding Methods from HIS...'
+  # FieldMethod.load_from_his
+  # puts 'done.'
+  # 
+  # print "Seeding Sample Materials"
+  # SampleMaterial.create(:material => "Water")
+  # SampleMaterial.create(:material => "Rock")
+  # SampleMaterial.create(:material => "Insect")
+  # puts 'done.'
+  # 
+  # print 'Seeding VariableNameCV from HIS...'
+  #  VariableNameCV.load_from_his
+  #  puts 'done.'
 end

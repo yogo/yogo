@@ -4,7 +4,7 @@ class VariablesController < ApplicationController
 
   # GET /variables/new
   def new
-    @variable = Variable.new
+    @variable = Voeis::Variable.new
     respond_to do |format|
       format.html # new.html.erb
     end
@@ -12,7 +12,7 @@ class VariablesController < ApplicationController
   
   # POST /variables
   def create
-    @variable = Variables.new(params[:variable])
+    @variable = Voeis::Variable.new(params[:variable])
 
     respond_to do |format|
       if @variable.save

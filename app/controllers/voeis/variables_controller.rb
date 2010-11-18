@@ -11,8 +11,8 @@ class Voeis::VariablesController < Voeis::BaseController
 
   # GET /variables/new
   def new
-    @variables = Variable.all
-    @variable = Variable.new
+    @variables = Voeis::Variable.all
+    @variable = Voeis::Variable.new
     @units = Unit.all
     @variable_names = VariableNameCV.all
     @sample_mediums= SampleMediumCV.all
@@ -33,7 +33,7 @@ class Voeis::VariablesController < Voeis::BaseController
   end
   # POST /variables
   def create
-    @variable = Variable.new(params[:variable])
+    @variable = Voeis::Variable.new(params[:variable])
     
     if @variable.save  
       flash[:notice] = 'Variable was successfully created.'

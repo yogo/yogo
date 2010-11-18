@@ -97,7 +97,7 @@ class Project
         site.sensor_types.each do |sensor_type|
           if sensor_type.name != "Timestamp"
             variable = sensor_type.variables.first
-            system_variable = Variable.first(:variable_code => variable.variable_code, :variable_name => variable.variable_name)
+            system_variable = Voeis::Variable.first(:variable_code => variable.variable_code, :variable_name => variable.variable_name)
             his_variable = system_variable.store_to_his
             sensor_type.sensor_values.all(:published => false, :order => [:timestamp.asc]).each do |val|
               his_val = His::DataValue.first_or_create(:data_value => val.value,
