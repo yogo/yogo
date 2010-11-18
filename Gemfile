@@ -10,6 +10,7 @@ gem "dm-is-list"                                # RBAC
 gem "dm-migrations"
 gem "dm-transactions"
 gem "dm-aggregates"
+gem "dm-timestamps"
 
 # gem "rails"                                     # Rails application
 # Only require of rails what we need, not the entire thing.
