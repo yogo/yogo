@@ -16,7 +16,7 @@ class ProjectsController < InheritedResources::Base
       end
     end
 
-    filename = params[:site_name] + ".csv"
+    filename = params[:file_name] + ".csv"
     send_data(csv_string,
     :type => 'text/csv; charset=utf-8; header=present',
     :filename => filename)

@@ -75,10 +75,14 @@
   =clear_break
   = f.submit ('Create', :onclick => "$('#loader').toggle();")
   = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 
-=clear_break
 #all_variables
   %h3
     Existing Variables    
+  = form_for("export", :url => {:controller => '/projects', :action => 'export'}) do 
+    = hidden_field_tag('column_array', @label_array.to_json)
+    = hidden_field_tag('row_array', @current_variables.to_json)
+    = hidden_field_tag('file_name', "voeis_variables")
+    = submit_tag("Export Variables")
   #variables_list
     - visualization("variable-table", 'table', :height => 200) do |table|
       - if @label_array.length > 1
