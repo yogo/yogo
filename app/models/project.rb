@@ -78,7 +78,7 @@ class Project
       sites = self.managed_repository{ Voeis::Site.all }
       sites.each do |site|
         # Store system wide first
-        system_site = Site.first_or_create(:site_code => site.code,
+        system_site = Voeis::Site.first_or_create(:site_code => site.code,
                                            :site_name  => site.name,
                                            :latitude  => site.latitude,
                                            :longitude  => site.longitude,
@@ -127,7 +127,7 @@ class Project
 
   def self.store_site_to_system(u_id)
     site_to_store = self.managed_repository{Voeis::Site.first(:id => u_id)}
-    new_system_site = Site.create(:site_code => site_to_store.code,
+    new_system_site = Voeis::Site.create(:site_code => site_to_store.code,
                                      :site_name  => site_to_store.name,
                                      :latitude  => site_to_store.latitude,
                                      :longitude  => site_to_store.longitude,

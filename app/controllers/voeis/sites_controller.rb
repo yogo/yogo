@@ -9,7 +9,7 @@ class Voeis::SitesController < Voeis::BaseController
 
   def new
     @project = parent
-    @sites = Site.all
+    @sites = Voeis::Site.all
   end
   
   def show
@@ -58,11 +58,11 @@ class Voeis::SitesController < Voeis::BaseController
   end
 
   def add_site
-    @sites = Site.all
+    @sites = Voeis::Site.all
   end
 
   def save_site
-    sys_site = Site.first(:id => params[:site])
+    sys_site = Voeis::Site.first(:id => params[:site])
     parent.managed_repository{Voeis::Site.first_or_create(
                 :code => sys_site.site_code,
                 :name => sys_site.site_name,

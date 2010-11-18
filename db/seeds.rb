@@ -188,7 +188,7 @@ begin
   puts 'done.'
 
   print 'Seeding Sites from HIS...'
-  Site.load_from_his
+  Voeis::Site.load_from_his
   puts 'done'
 
   print 'Seeding SampleMediumCV from HIS...'
