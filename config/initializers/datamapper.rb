@@ -38,7 +38,7 @@ VariableNameCV
 # GeneralCategoryCV
 # SampleTypeCV
 SampleMaterial
-LabMethod
+# LabMethod
 
 
 DataMapper.finalize

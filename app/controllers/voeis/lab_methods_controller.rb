@@ -9,7 +9,7 @@ class Voeis::LabMethodsController < Voeis::BaseController
 
   def new
     @project = parent
-    @lab_methods = LabMethod.all
+    @lab_methods = Voeis::LabMethod.all
   end
 
   def edit
@@ -37,11 +37,11 @@ class Voeis::LabMethodsController < Voeis::BaseController
   end
 
   def add_lab_method
-    @lab_methods = LabMethod.all
+    @lab_methods = Voeis::LabMethod.all
   end
 
   def save_lab_method
-    sys_lab_method = LabMethod.first(:id => params[:lab_method])
+    sys_lab_method = Voeis::LabMethod.first(:id => params[:lab_method])
     parent.managed_repository{Voeis::LabMethod.first_or_create(
       :lab_name => sys_lab_method.lab_name,         
       :lab_organization=> sys_lab_method.lab_organization,
