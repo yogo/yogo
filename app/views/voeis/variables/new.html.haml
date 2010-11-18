@@ -78,43 +78,12 @@
 =clear_break
 #all_variables
   %h3
-    Existing Variables
+    Existing Variables    
   #variables_list
-    -i = 0
-    %table
-      %tr
-        %th Variable Name
-        %th Variable Code
-        %th Unit Name
-        %th Speciation
-        %th Sample Medium
-        %th Value Type
-        %th Is Regular
-        %th Time Support
-        %th Time Unit ID
-        %th Data Type
-        %th General Cateogry
-      -@variables.all(:order => [:variable_name.asc]).each do|var|
-        %tr
-          %td 
-            =var.variable_name
-          %td 
-            =var.variable_code
-          %td 
-            =Unit.get(var.variable_units_id).units_name
-          %td 
-            =var.speciation
-          %td 
-            =var.sample_medium
-          %td 
-            =var.value_type
-          %td 
-            =var.is_regular
-          %td 
-            =var.time_support
-          %td 
-            =var.time_units_id
-          %td 
-            =var.data_type
-          %td 
-            =var.general_category
+    - visualization("variable-table", 'table', :height => 200) do |table|
+      - if @label_array.length > 1
+        - @label_array[0..-1].each do |label|
+          - table.register_column(:string, label)
+        - table.add_rows(@current_variables)
+
+ 

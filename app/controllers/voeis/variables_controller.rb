@@ -20,6 +20,12 @@ class Voeis::VariablesController < Voeis::BaseController
     @speciations = SpeciationCV.all
     @data_types = DataTypeCV.all
     @general_categories = GeneralCategoryCV.all
+    @label_array = Array["Variable Name","Variable Code","Unit Name","Speciation","Sample Medium","Value Type","Is Regular","Time Support","Time Unit ID","Data Type","General Cateogry"]
+    @current_variables = Array.new     
+    @variables.all(:order => [:variable_name.asc]).each do |var|
+      @temp_array =Array[var.variable_name, var.variable_code,@units.get(var.variable_units_id).units_name, var.speciation,var.sample_medium, var.value_type, var.is_regular.to_s, var.time_support.to_s, var.time_units_id.to_s, var.data_type, var.general_category]
+      @current_variables << @temp_array
+    end         
     @project = parent
     respond_to do |format|
       format.html # new.html.erb
