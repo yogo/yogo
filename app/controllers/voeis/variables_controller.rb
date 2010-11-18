@@ -17,8 +17,8 @@ class Voeis::VariablesController < Voeis::BaseController
     @variable_names = VariableNameCV.all
     @sample_mediums= Voeis::SampleMediumCV.all
     @value_types= Voeis::ValueTypeCV.all
-    @speciations = SpeciationCV.all
-    @data_types = DataTypeCV.all
+    @speciations = Voeis::SpeciationCV.all
+    @data_types = Voeis::DataTypeCV.all
     @general_categories = GeneralCategoryCV.all
     @label_array = Array["Variable Name","Variable Code","Unit Name","Speciation","Sample Medium","Value Type","Is Regular","Time Support","Time Unit ID","Data Type","General Cateogry"]
     @current_variables = Array.new     

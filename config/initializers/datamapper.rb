@@ -33,8 +33,8 @@ FieldMethod
 VariableNameCV
 # SampleMediumCV
 # ValueTypeCV
-SpeciationCV
-DataTypeCV
+# SpeciationCV
+# DataTypeCV
 GeneralCategoryCV
 SampleTypeCV
 SampleMaterial

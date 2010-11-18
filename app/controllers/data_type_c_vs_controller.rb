@@ -4,7 +4,7 @@ class DataTypeCVsController < ApplicationController
 
   # GET /variables/new
   def new
-    @data_type = DataTypeCV.new
+    @data_type = Voeis::DataTypeCV.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -14,9 +14,9 @@ class DataTypeCVsController < ApplicationController
   # POST /variables
   def create
     if params[:data_type_c_v].nil?
-      @data_type = DataTypeCV.new(:term=> params[:term], :definition => params[:definition])
+      @data_type = Voeis::DataTypeCV.new(:term=> params[:term], :definition => params[:definition])
     else
-      @data_type = DataTypeCV.new(params[:data_type_c_v])
+      @data_type = Voeis::DataTypeCV.new(params[:data_type_c_v])
     end
     respond_to do |format|
       if @data_type.save

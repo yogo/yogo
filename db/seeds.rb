@@ -199,14 +199,14 @@ begin
   Voeis::ValueTypeCV.load_from_his
   puts 'done.'
   
-  # print 'Seeding SpeciationCV from HIS...'
-  # SpeciationCV.load_from_his
-  # puts 'done.'
-  # 
-  # print 'Seeding DataTypeCV from HIS...'
-  # DataTypeCV.load_from_his
-  # puts 'done.'
-  # 
+  print 'Seeding SpeciationCV from HIS...'
+  Voeis::SpeciationCV.load_from_his
+  puts 'done.'
+
+  print 'Seeding DataTypeCV from HIS...'
+  Voeis::DataTypeCV.load_from_his
+  puts 'done.'
+
   # print 'Seeding GeneralCategoryCV from HIS...'
   # GeneralCategoryCV.load_from_his
   # puts 'done.'
