@@ -191,14 +191,14 @@ begin
   Voeis::Variable.load_from_his
   puts 'done.'
   
-  # print 'Seeding SampleMediumCV from HIS...'
-  # SampleMediumCV.load_from_his
-  # puts 'done.'
-  # 
-  # print 'Seeding ValueTypeCV from HIS...'
-  # ValueTypeCV.load_from_his
-  # puts 'done.'
-  # 
+  print 'Seeding SampleMediumCV from HIS...'
+  Voeis::SampleMediumCV.load_from_his
+  puts 'done.'
+  
+  print 'Seeding ValueTypeCV from HIS...'
+  Voeis::ValueTypeCV.load_from_his
+  puts 'done.'
+  
   # print 'Seeding SpeciationCV from HIS...'
   # SpeciationCV.load_from_his
   # puts 'done.'

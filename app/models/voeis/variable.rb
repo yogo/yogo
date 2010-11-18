@@ -70,6 +70,7 @@ class Voeis::Variable
   has n, :data_values,         :model => "Voeis::DataValue",        :through => Resource
   has n, :sites,               :model => "Voeis::Site",             :through => Resource
   has n, :samples,             :model => "Voeis::Sample",           :through => Resource
+  has n, :value_type_cvs,      :model => "Voeis::ValueTypeCV",      :through => Resource
   
   def self.load_from_his
     his_variables = repository(:his){ His::Variable.all }
