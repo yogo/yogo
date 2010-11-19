@@ -468,9 +468,9 @@ class Voeis::DataStreamsController < Voeis::BaseController
           data_stream_column = Voeis::DataStreamColumn.create(
                                 :column_number => i,
                                 :name => params["variable"+i.to_s].nil? ? "unknown" : params["variable"+i.to_s],
-                                :original_var => !params["variable"+i.to_s].nil? ? "unknown" : params["variable"+i.to_s],
-                                :unit => !params["unit"+i.to_s].nil? ? "unknown" : params["unit"+i.to_s] : "unknown",
-                                :type => !params["type"+i.to_s].nil? ? "unknown" : params["type"+i.to_s])
+                                :original_var => params["variable"+i.to_s].nil? ? "unknown" : params["variable"+i.to_s],
+                                :unit => params["unit"+i.to_s].nil? ? "unknown" : params["unit"+i.to_s],
+                                :type => params["type"+i.to_s].nil? ? "unknown" : params["type"+i.to_s])
           if !params["ignore"+i.to_s]            
             variable = Voeis::Variable.first_or_create(
                         :variable_code => @var.variable_code,
