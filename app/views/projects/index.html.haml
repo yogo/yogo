@@ -1,40 +1,45 @@
 #content-actions
   = link_to("New Project", new_project_path, :class => 'icon icon-add')
 - if @projects.empty?
-  There are no projects yet, you should create one!
+  There are no projects yet, you should create one!  
 %table
   %tbody
     %tr
       %td
+        
         - for project in @projects
+          %hr{:class => "project_seperator"}
           - logger.info{ "\n**************** Putting Project: #{project.name} **************************"}
           #content-title
             = link_to(project.name, project_path(project), :class => project.is_private? ? 'icon icon-private' : nil, :onclick => "$('#loader').toggle();")
-          #content-actions
-            = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings', :onclick => "$('#loader').toggle();")
-          = clear_break
+            #content-actions
+              #links
+                -if !current_user.nil? && current_user.projects.include?(project)
+                  = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings', :onclick => "$('#loader').toggle();")
+          =clear_break  
           .body-text
             - if project.description && project.description.length > 0
               %em= tooltip(project.description, project.name + ' Description', 150)
             - else
               %em= link_to('[Add Project Description]', edit_project_path(project))
-          = clear_break
+
 
           %table
             %tbody
               %tr
-                %td
+                %td{:class => 'map_cell'}
                   = render(:partial => 'overview_map', :locals => { :project => project, :class_name => 'preview-map' } )
                 %td
                   #content-title Last Updates:
                   = clear_break
-                  - project.managed_repository do
-                    - Voeis::Site.all.each do |site|
-                      -if !site.sensor_values.last.nil?
-                        = site.name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
-                      -else
-                        = site.name + ': never'
-                      %br/
+                  #content-sites
+                    - project.managed_repository do
+                      - Voeis::Site.all.each do |site|
+                        -if !site.sensor_values.last.nil?
+                          = site.name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
+                        -else
+                          = site.name + ': no data'
+                        %br/
                 %td
       
 #pagination-links= will_paginate(@projects)

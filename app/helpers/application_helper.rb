@@ -133,7 +133,7 @@ module ApplicationHelper
       s << options_for_jmp_box_select(projects, :selected => @project ) do |project|
         z = { :value => project_url(project) }
         if logged_in?
-          z[:disabled] = 'disabled' unless current_user.projects.include?(project)
+          z[:disabled] = 'disabled' unless (current_user.projects.include?(project) || !project.is_private?)
         end
         z
       end
