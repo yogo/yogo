@@ -467,10 +467,10 @@ class Voeis::DataStreamsController < Voeis::BaseController
         parent.managed_repository do
           data_stream_column = Voeis::DataStreamColumn.create(
                                 :column_number => i,
-                                :name => !params["variable"+i.to_s].nil? ? params["variable"+i.to_s] : "unknown",
-                                :original_var => !params["variable"+i.to_s].nil? ? params["variable"+i.to_s] : "unknown",
-                                :unit => !params["unit"+i.to_s].nil? ? params["unit"+i.to_s] : "unknown",
-                                :type => !params["type"+i.to_s].nil? ? params["type"+i.to_s] : "unknown" )
+                                :name => params["variable"+i.to_s].nil? ? "unknown" : params["variable"+i.to_s],
+                                :original_var => !params["variable"+i.to_s].nil? ? "unknown" : params["variable"+i.to_s],
+                                :unit => !params["unit"+i.to_s].nil? ? "unknown" : params["unit"+i.to_s] : "unknown",
+                                :type => !params["type"+i.to_s].nil? ? "unknown" : params["type"+i.to_s])
           if !params["ignore"+i.to_s]            
             variable = Voeis::Variable.first_or_create(
                         :variable_code => @var.variable_code,
@@ -489,7 +489,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
             data_stream_column.data_streams << @data_stream
             data_stream_column.save
             sensor_type = Voeis::SensorType.first_or_create(
-                          :name => !params["variable"+i.to_s].nil? ? params["variable"+i.to_s] + @site.name : "unknown" + @site.name,
+                          :name => params["variable"+i.to_s].nil? ? "unknown" + @site.name : params["variable"+i.to_s] + @site.name,
                           :min => params["min"+i.to_s].to_f,
                           :max => params["max"+i.to_s].to_f,
                           :difference => params["difference"+i.to_s].to_f)
