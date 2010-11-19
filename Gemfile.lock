@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/indirect/rails-footnotes.git
+  revision: 5fd43b5842bac2a41c271e3d3713d5f721ae4e62
+  specs:
+    rails-footnotes (3.6.7)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -159,8 +165,6 @@ GEM
     net-ssh-gateway (1.0.1)
       net-ssh (>= 1.99.1)
     polyglot (0.3.1)
-    pony (1.1)
-      mail (> 2.0)
     rack (1.2.1)
     rack-mount (0.6.13)
       rack (>= 1.0.0)
@@ -285,10 +289,9 @@ DEPENDENCIES
   haml
   inherited_resources
   jquery-rails
-  mail
   mime-types
-  pony
   rails
+  rails-footnotes!
   rails_warden
   rake
   rspec

@@ -2,7 +2,7 @@ namespace :yogo do
   pid_file = File.join(Rails.root, 'tmp', 'pids', 'server.pid')
 
   desc "Start the Yogo System"
-  task :start => ['yogo:stop', 'persvr:start'] do
+  task :start => ['yogo:stop'] do
     cd ::Rails.root.to_s do
       sh "script/server -d"
     end
@@ -62,7 +62,6 @@ namespace :yogo do
       puts "Server stopped"
       rm_f pid_file
     ensure
-      Rake::Task['persvr:stop'].invoke
       Rake::Task['yogo:start'].reenable
     end
   end
@@ -74,9 +73,8 @@ namespace :yogo do
   end
 
   desc "Destroy the Yogo databases and restore everything to clean state."
-  task :clean => ['yogo:stop', 'persvr:stop_all'] do
+  task :clean => ['yogo:stop'] do
     puts "Clearing all yogo data and restoring to clean state!"
-    Rake::Task['persvr:drop'].invoke
     sh "git clean -X -d -f"
     Rake::Task['yogo:clean'].reenable
   end

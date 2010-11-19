@@ -50,28 +50,10 @@ namespace :db do
     run "bash -c 'cd #{current_path} && rake db:drop:all'"
   end
 
-  task :setup do
-    run "mkdir -p #{deploy_to}/#{shared_dir}/db/persvr"
-    run "mkdir -p #{deploy_to}/#{shared_dir}/db/sqlite3"
-    run "mkdir -p #{deploy_to}/#{shared_dir}/vendor/persevere"
-  end
-
   task :symlink do
     run "ln -nfs #{deploy_to}/#{shared_dir}/config/database.yml #{release_path}/config/database.yml"
-    # run "ln -nfs #{deploy_to}/#{shared_dir}/db/persvr #{release_path}/db/persvr"
-    # run "rm -rf #{release_path}/db/sqlite3"
-    # run "ln -nfs #{deploy_to}/#{shared_dir}/db/sqlite3 #{release_path}/db/sqlite3"
-    # run "ln -nfs #{deploy_to}/#{shared_dir}/vendor/persevere #{release_path}/vendor/persevere"
   end
 end
-
-# These are one time setup steps
-after "deploy:setup",       "db:setup"
-#after "db:setup",           "persvr:setup"
-#after "persvr:setup",       "persvr:start"
-
-# This happens every deploy
-after "deploy:update_code", "db:symlink"
 
 namespace :assets do
   task :setup do
@@ -84,34 +66,11 @@ namespace :assets do
     run "ln -nfs #{deploy_to}/#{shared_dir}/assets/images #{release_path}/public/images"
   end
 end
+
+# These are one time setup steps
+after "deploy:setup",       "db:setup"
 after "deploy:setup",       "assets:setup"
+
+# This happens every deploy
+after "deploy:update_code", "db:symlink"
 after "deploy:update_code", "assets:symlink"
-
-namespace :persvr do
-  desc "Setup Persevere on the server"
-  task :setup do
-    run("bash -c 'cd #{current_path} && rake persvr:setup'")
-  end
-
-  desc "Start Persevere on the server"
-  task :start do
-    puts '************************* This takes me a long time sometimes *************************'
-    puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}/#{shared_dir}/vendor/persevere RAILS_ENV=production'")
-  end
-
-  desc "Stop Persevere on the server"
-  task :stop do
-    puts '************************* This takes me a long time sometimes *************************'
-    puts '************************************* Be patient **************************************'
-    run("bash -c 'cd #{current_path} && rake persvr:start PERSEVERE_HOME=#{deploy_to}/#{shared_dir}/vendor/persevere RAILS_ENV=production'")
-  end
-
-  task :drop do
-    run("bash -c 'cd #{current_path} && rake persvr:drop PERSEVERE_HOME=#{deploy_to}/#{shared_dir}/vendor/persevere RAILS_ENV=production'")
-  end
-
-  task :version do
-    run("bash -c 'cd #{current_path} && rake persvr:version PERSEVERE_HOME=#{deploy_to}/#{shared_dir}/vendor/persevere RAILS_ENV=production'")
-  end
-end

@@ -174,11 +174,18 @@ body
     color: #bd8e5e
     background-color: #264f5c
     text-align: center
-  #footnotes_holder
+
+  #footnotes_debug
     +prepend(2)
-    +column(18)
     +append(2)
-    
+    padding: 5px
+    margin: 5px
+    background: #999
+    color: #333
+    a, fieldset, legend, th, tr, body, table
+      color: #333
+      background: #999
+       
   // Pagination Links
   #pagination-links
     +column($blueprint_grid_columns - 2)
