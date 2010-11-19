@@ -364,7 +364,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
                   @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array),"","","",""]
                 end
               else
-                @var_array[i] = ["","",opts_for_select(@opts_array),"","","",""]
+                @var_array[i] = ["","","",opts_for_select(@opts_array),"","","",""]
               end
           end
       else
