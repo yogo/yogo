@@ -1,24 +1,27 @@
 #content-actions
   = link_to("New Project", new_project_path, :class => 'icon icon-add')
 - if @projects.empty?
-  There are no projects yet, you should create one!
+  There are no projects yet, you should create one!  
 %table
   %tbody
     %tr
       %td
+        
         - for project in @projects
+          %hr{:class => "project_seperator"}
           - logger.info{ "\n**************** Putting Project: #{project.name} **************************"}
           #content-title
             = link_to(project.name, project_path(project), :class => project.is_private? ? 'icon icon-private' : nil, :onclick => "$('#loader').toggle();")
-          #content-actions
-            = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings', :onclick => "$('#loader').toggle();")
-          = clear_break
+            #content-actions
+              #links
+                = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings', :onclick => "$('#loader').toggle();")
+          =clear_break  
           .body-text
             - if project.description && project.description.length > 0
               %em= tooltip(project.description, project.name + ' Description', 150)
             - else
               %em= link_to('[Add Project Description]', edit_project_path(project))
-          = clear_break
+
 
           %table
             %tbody
