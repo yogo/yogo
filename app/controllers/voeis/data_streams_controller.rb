@@ -701,8 +701,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
                                              :published => false,
                                              :string_value => row[i].to_s)
              end
-             puts sensor_value.valid?
-             puts sensor_value.errors.inspect()
+             logger.info {sensor_value.valid?}
+             logger.info{sensor_value.errors.inspect()}
              sensor_value.save
              sensor_value.sensor_type << sensor_type_array[i]
              sensor_value.site << site
