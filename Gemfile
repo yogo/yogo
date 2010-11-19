@@ -20,13 +20,12 @@ gem "rails_warden"                              # Warden integration with Rails 
 
 gem "mime-types", :require => "mime/types"      # For uploading data files
 gem "uuidtools"                                 # This is for memberships
-gem "pony"                                      # For email feedback
-gem "mail"                                      # For email feedback
 
 # Because in 1.9 fastercsv is default, but in 1.8...
 platforms(:ruby_18) { gem "fastercsv" }
 
 group(:development, :test) do
+  gem "rails-footnotes", :git => "https://github.com/indirect/rails-footnotes.git"
   # For rake tasks to work
   gem "rake",                      :require => nil
   # For deployment

@@ -25,7 +25,7 @@ persevere_settings: &PERSEVERE
   versioned: true
   host: localhost
   port: 8080
-  
+
 yogo_development:
   <<: *PERSEVERE
 
@@ -36,6 +36,3 @@ yogo_production:
 yogo_test: &YOGO_TEST
   <<: *PERSEVERE
   port: 8081
-
-yogo_cucumber:
-  <<: *YOGO_TEST
