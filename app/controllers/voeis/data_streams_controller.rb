@@ -704,6 +704,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
              logger.info {sensor_value.valid?}
              logger.info{sensor_value.errors.inspect()}
              sensor_value.save
+             logger.info{sensor_type_array[i]}
              sensor_value.sensor_type << sensor_type_array[i]
              sensor_value.site << site
              sensor_value.save}
