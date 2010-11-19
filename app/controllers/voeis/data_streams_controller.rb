@@ -489,7 +489,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
             data_stream_column.data_streams << @data_stream
             data_stream_column.save
             sensor_type = Voeis::SensorType.first_or_create(
-                          :name => params["variable"+i.to_s] + @site.name,
+                          :name => params["variable"+i.to_s].nil? ? params["variable"+i.to_s] + @site.name : "unknown" + @site.name,
                           :min => params["min"+i.to_s].to_f,
                           :max => params["max"+i.to_s].to_f,
                           :difference => params["difference"+i.to_s].to_f)
@@ -704,7 +704,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
              logger.info {sensor_value.valid?}
              logger.info{sensor_value.errors.inspect()}
              sensor_value.save
-             logger.info{sensor_type_array[i]}
+             logger.info{sensor_type_array[i].id}
              sensor_value.sensor_type << sensor_type_array[i]
              sensor_value.site << site
              sensor_value.save}
