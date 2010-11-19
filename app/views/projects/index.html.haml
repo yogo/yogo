@@ -28,13 +28,14 @@
                 %td
                   #content-title Last Updates:
                   = clear_break
-                  - project.managed_repository do
-                    - Voeis::Site.all.each do |site|
-                      -if !site.sensor_values.last.nil?
-                        = site.name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
-                      -else
-                        = site.name + ': never'
-                      %br/
+                  #content-sites
+                    - project.managed_repository do
+                      - Voeis::Site.all.each do |site|
+                        -if !site.sensor_values.last.nil?
+                          = site.name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
+                        -else
+                          = site.name + ': no data'
+                        %br/
                 %td
       
 #pagination-links= will_paginate(@projects)
