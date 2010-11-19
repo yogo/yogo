@@ -14,7 +14,8 @@
             = link_to(project.name, project_path(project), :class => project.is_private? ? 'icon icon-private' : nil, :onclick => "$('#loader').toggle();")
             #content-actions
               #links
-                = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings', :onclick => "$('#loader').toggle();")
+                -if !current_user.nil? && current_user.projects.include?(project)
+                  = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings', :onclick => "$('#loader').toggle();")
           =clear_break  
           .body-text
             - if project.description && project.description.length > 0
