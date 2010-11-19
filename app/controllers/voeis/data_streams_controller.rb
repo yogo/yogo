@@ -352,15 +352,19 @@ class Voeis::DataStreamsController < Voeis::BaseController
           data_template = parent.managed_repository {Voeis::DataStream.first(:id => params[:data_template])}
           (0..@row_size).each do |i|
              puts i
-             data_col = data_template.data_stream_columns.first(:column_number => i)
-             if data_col.name != "Timestamp" 
-               if data_col.variables.empty?
-                 @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array),"", "", "",data_col.name]
-               else
-                 @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array,Variable.first(:variable_code => data_col.variables.first.variable_code).id.to_s),data_col.sensor_types.first.min, data_col.sensor_types.first.max, data_col.sensor_types.first.difference,data_col.name]
-               end
+             if !data_template.data_stream_columns.first(:column_number => i).nil?
+               data_col = data_template.data_stream_columns.first(:column_number => i)
+               if data_col.name != "Timestamp" 
+                 if data_col.variables.empty?
+                   @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array),"", "", "",data_col.name]
+                 else
+                   @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array,Variable.first(:variable_code => data_col.variables.first.variable_code).id.to_s),data_col.sensor_types.first.min, data_col.sensor_types.first.max, data_col.sensor_types.first.difference,data_col.name]
+                 end
+                else
+                  @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array),"","","",""]
+                end
               else
-                @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array),"","","",""]
+                @var_array[0] = ["","","","","","",""]
               end
           end
       else
