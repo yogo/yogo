@@ -23,7 +23,7 @@
           %table
             %tbody
               %tr
-                %td
+                %td{:class => 'map_cell'}
                   = render(:partial => 'overview_map', :locals => { :project => project, :class_name => 'preview-map' } )
                 %td
                   #content-title Last Updates:
