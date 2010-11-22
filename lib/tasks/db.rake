@@ -66,5 +66,51 @@ namespace :yogo do
         Project.first(:name => "Example Project").destroy!
       end
     end
+  
+    desc "Backup the databases with pg_backup"
+    task :backup_master, :needs => :environment do
+      current_db = repository(:default).adapter.options
+      host          = current_db[:host] || 'localhost'
+      port          = current_db[:port] || 5432
+      username      = current_db[:username]
+      database      = current_db[:path]
+      output_path   = "#{::Rails.root.to_s}/db/backup"
+      command =<<-CMD
+        pg_dump --host #{host}          \
+                --port #{port}          \
+                --username #{username}  \
+                --format plain   \
+                --no-owner --clean --no-privileges --verbose \
+                --file "#{output_path}/#{database}" \
+                "#{database}"
+      CMD
+      # puts command
+      system(command)
+    end
+    
+    desc "Backup project databases with pg_backup"
+    task :backup_projects, :needs => [:environment] do
+      project_config = Rails::DataMapper.configuration.repositories["yogo-db"]["default"]
+      host         = project_config["host"] || localhost
+      port         = project_config["port"] || 5432
+      username     = project_config["username"]
+      output_path  = "#{::Rails.root.to_s}/db/backup"
+      command = []
+      command << 'pg_dump'
+      command << "--host #{host}"
+      command << "--port #{port} "
+      command << "--username #{username} " unless username.blank?
+      command << "--format plain"
+      command << "--no-owner"
+      command << "--clean"
+      command << "--no-privileges"
+      command << "--verbose"
+      Project.all.each do |project|
+        project_opts = project.managed_repository.adapter.options
+        database = project_opts["database"]
+        puts command.join(" ") + "--file \"#{output_path}/#{database}\" \"#{database}\" "
+        system(*command, "--file \"#{output_path}/#{database}\"", "\"#{database}\"")
+      end
+    end
   end
 end
