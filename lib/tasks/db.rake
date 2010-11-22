@@ -88,7 +88,7 @@ namespace :yogo do
       command << "--clean" 
       command << "--no-privileges" 
       # command << "--verbose"
-      command << "--file=#{output_path}/#{database}"
+      command << "--file=#{output_path}/voeis_backup.sql"
       command << "#{database}"
 
       # puts command.join(' ')
@@ -116,7 +116,7 @@ namespace :yogo do
         project_opts = project.managed_repository.adapter.options
         database = project_opts["database"]
         current_commands = command.dup
-        current_commands << "--file=#{output_path}/#{database}"
+        current_commands << "--file=#{output_path}/#{database}.sql"
         current_commands <<  "#{database}"
         # puts current_commands.join(' ')
         system(*current_commands)
@@ -124,49 +124,51 @@ namespace :yogo do
     end
   
     desc "Reload the databases"
-    task :reload, :needs => [:reload_master, :reload_projects]
+    task :load_from_backup, :needs => [:load_master_from_backup, :load_projects_from_backup]
+  
+    task :load_from_backups, :needs => :load_from_backup
   
     desc "Reload the master database"
-    task :reload_master, :needs => [:environment] do
+    task :load_master_from_backup, :needs => [:environment] do
         current_db = repository(:default).adapter.options
         host          = current_db[:host] || 'localhost'
         port          = current_db[:port] || 5432
         username      = current_db[:username]
         database      = current_db[:path]
         output_path   = "#{::Rails.root.to_s}/db/backup"
-        command = []
-        command << "psql"
-        command << "--host=#{host}"
-        command << "--port=#{port}" 
-        command << "--username=#{username}" unless username.blank?
-        command << "--file=#{output_path}/#{database}"
-        command << "#{database}"
+        options = []
+        options << "--host=#{host}"
+        options << "--port=#{port}" 
+        options << "--username=#{username}" unless username.blank?
 
+        create_database = ["createdb"] + options + [database]
+        # puts create_database.join(' ')
+        system(*create_database)
         # puts command.join(' ')
-        system(*command)
+        load_database = ['psql'] + options + ["--file=#{output_path}/voeis_backup.sql", database]
+        system(*load_database)
     end
     
     desc "Reload project databases"
-    task :reload_projects, :needs => [:environment] do
+    task :load_projects_from_backup, :needs => [:environment] do
         project_config = Rails::DataMapper.configuration.repositories["yogo-db"]["default"]
         host         = project_config["host"] || localhost
         port         = project_config["port"] || 5432
         username     = project_config["username"]
         output_path  = "#{::Rails.root.to_s}/db/backup"
-        command = []
-        command << 'psql'
-        command << "--host=#{host}"
-        command << "--port=#{port}"
-        command << "--username=#{username}" unless username.blank?
+        options = []
+        options << "--host=#{host}"
+        options << "--port=#{port}"
+        options << "--username=#{username}" unless username.blank?
         # command << "--verbose"
         Project.all.each do |project|
           project_opts = project.managed_repository.adapter.options
           database = project_opts["database"]
-          current_commands = command.dup
-          current_commands << "--file=#{output_path}/#{database}"
-          current_commands <<  "#{database}"
-          # puts current_commands.join(' ')
-          system(*current_commands)
+          create_database = ["createdb"] + options + [database]
+          system(*create_database)
+          load_database = ['psql'] + options + ["--file=#{output_path}/#{database}.sql", database]
+          # puts load_database.join(' ')
+          system(*load_database)
         end
     end
   end

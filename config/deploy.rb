@@ -53,6 +53,20 @@ namespace :db do
   task :symlink do
     run "ln -nfs #{deploy_to}/#{shared_dir}/config/database.yml #{release_path}/config/database.yml"
   end
+  
+  desc "Get the remote database and save it locally"
+  task :get_remote_database do
+    db.run_backup_task
+    db.download_backup_files
+  end
+  
+  task :download_backup_files do
+    download("#{current_path}/db/backup/", "db/backup/", :recursive => true)
+  end
+  
+  task :run_backup_task do
+    run "cd #{current_path}; rake yogo:db:backup RAILS_ENV=production"
+  end
 end
 
 namespace :assets do
