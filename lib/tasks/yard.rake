@@ -21,5 +21,6 @@ begin
   
   end
 
-rescue
+rescue Exception => e
+  puts 'Yard not loaded'
 end

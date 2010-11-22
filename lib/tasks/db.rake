@@ -79,12 +79,12 @@ namespace :yogo do
       database      = current_db[:path]
       output_path   = "#{::Rails.root.to_s}/db/backup"
       command =<<-CMD
-        pg_dump --host #{host}          \
-                --port #{port}          \
-                --username #{username}  \
-                --format plain   \
+        pg_dump -h #{host}          \
+                -p #{port}          \
+                -U #{username}  \
+                -F plain   \
                 --no-owner --clean --no-privileges --verbose \
-                --file "#{output_path}/#{database}" \
+                -f "#{output_path}/#{database}" \
                 "#{database}"
       CMD
       # puts command
@@ -100,9 +100,9 @@ namespace :yogo do
       output_path  = "#{::Rails.root.to_s}/db/backup"
       command = []
       command << 'pg_dump'
-      command << "--host #{host}"
-      command << "--port #{port} "
-      command << "--username #{username} " unless username.blank?
+      command << "-h #{host}"
+      command << "-p #{port} "
+      command << "-U #{username} " unless username.blank?
       command << "--format plain"
       command << "--no-owner"
       command << "--clean"
@@ -112,7 +112,7 @@ namespace :yogo do
         project_opts = project.managed_repository.adapter.options
         database = project_opts["database"]
         current_commands = command.dup
-        current_commands << "--file \"#{output_path}/#{database}\""
+        current_commands << "-f \"#{output_path}/#{database}\""
         current_commands <<  "\"#{database}\""
         # puts current_commands.join(' ')
         system(*current_commands)

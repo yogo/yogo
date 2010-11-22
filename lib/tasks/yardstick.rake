@@ -14,5 +14,6 @@ begin
     end
   end
 
-rescue
+rescue Exception => e
+  puts 'Yardstick not loaded'
 end
