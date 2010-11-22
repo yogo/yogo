@@ -78,17 +78,21 @@ namespace :yogo do
       username      = current_db[:username]
       database      = current_db[:path]
       output_path   = "#{::Rails.root.to_s}/db/backup"
-      command =<<-CMD
-        pg_dump -h #{host}          \
-                -p #{port}          \
-                -U #{username}  \
-                -F plain   \
-                --no-owner --clean --no-privileges --verbose \
-                -f "#{output_path}/#{database}" \
-                "#{database}"
-      CMD
+      command = []
+      command << "pg_dump"
+      command << "--host=#{host}"
+      command << "--port=#{port}" 
+      command << "--username=#{username}" unless username.blank?
+      command << "--format=plain"
+      command << "--no-owner"
+      command << " --clean" 
+      command << "--no-privileges" 
+      # command << "--verbose"
+      command << "--file=#{output_path}/#{database}"
+      command << "#{database}"
+
       # puts command
-      system(command)
+      system(*command)
     end
     
     desc "Backup project databases with pg_backup"
@@ -100,23 +104,70 @@ namespace :yogo do
       output_path  = "#{::Rails.root.to_s}/db/backup"
       command = []
       command << 'pg_dump'
-      command << "-h #{host}"
-      command << "-p #{port} "
-      command << "-U #{username} " unless username.blank?
-      command << "--format plain"
+      command << "--host=#{host}"
+      command << "--port=#{port}"
+      command << "--username=#{username}" unless username.blank?
+      command << "--format=plain"
       command << "--no-owner"
       command << "--clean"
       command << "--no-privileges"
-      command << "--verbose"
+      # command << "--verbose"
       Project.all.each do |project|
         project_opts = project.managed_repository.adapter.options
         database = project_opts["database"]
         current_commands = command.dup
-        current_commands << "-f \"#{output_path}/#{database}\""
-        current_commands <<  "\"#{database}\""
-        # puts current_commands.join(' ')
+        current_commands << "--file=#{output_path}/#{database}"
+        current_commands <<  "#{database}"
+        puts current_commands.join(' ')
         system(*current_commands)
       end
+    end
+  
+    desc "Reload the databases"
+    task :reload, :needs => [:reload_master, :reload_projects]
+  
+    desc "Reload the master database"
+    task :reload_master, :needs => [:environment] do
+        current_db = repository(:default).adapter.options
+        host          = current_db[:host] || 'localhost'
+        port          = current_db[:port] || 5432
+        username      = current_db[:username]
+        database      = current_db[:path]
+        output_path   = "#{::Rails.root.to_s}/db/backup"
+        command = []
+        command << "psql"
+        command << "--host=#{host}"
+        command << "--port=#{port}" 
+        command << "--username=#{username}" unless username.blank?
+        command << "--file=#{output_path}/#{database}"
+        command << "#{database}"
+
+        # puts command.join(' ')
+        system(*command)
+    end
+    
+    desc "Reload project databases"
+    task :reload_projects, :needs => [:environment] do
+        project_config = Rails::DataMapper.configuration.repositories["yogo-db"]["default"]
+        host         = project_config["host"] || localhost
+        port         = project_config["port"] || 5432
+        username     = project_config["username"]
+        output_path  = "#{::Rails.root.to_s}/db/backup"
+        command = []
+        command << 'psql'
+        command << "--host=#{host}"
+        command << "--port=#{port}"
+        command << "--username=#{username}" unless username.blank?
+        # command << "--verbose"
+        Project.all.each do |project|
+          project_opts = project.managed_repository.adapter.options
+          database = project_opts["database"]
+          current_commands = command.dup
+          current_commands << "--file=#{output_path}/#{database}"
+          current_commands <<  "#{database}"
+          # puts current_commands.join(' ')
+          system(*current_commands)
+        end
     end
   end
 end
