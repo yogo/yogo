@@ -85,13 +85,13 @@ namespace :yogo do
       command << "--username=#{username}" unless username.blank?
       command << "--format=plain"
       command << "--no-owner"
-      command << " --clean" 
+      command << "--clean" 
       command << "--no-privileges" 
       # command << "--verbose"
       command << "--file=#{output_path}/#{database}"
       command << "#{database}"
 
-      # puts command
+      # puts command.join(' ')
       system(*command)
     end
     
@@ -118,7 +118,7 @@ namespace :yogo do
         current_commands = command.dup
         current_commands << "--file=#{output_path}/#{database}"
         current_commands <<  "#{database}"
-        puts current_commands.join(' ')
+        # puts current_commands.join(' ')
         system(*current_commands)
       end
     end
