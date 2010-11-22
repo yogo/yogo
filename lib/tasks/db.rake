@@ -67,6 +67,9 @@ namespace :yogo do
       end
     end
   
+    desc "Backup all databases"
+    task :backup, :needs => [:backup_master, :backup_projects]
+  
     desc "Backup the databases with pg_backup"
     task :backup_master, :needs => :environment do
       current_db = repository(:default).adapter.options
@@ -108,8 +111,11 @@ namespace :yogo do
       Project.all.each do |project|
         project_opts = project.managed_repository.adapter.options
         database = project_opts["database"]
-        puts command.join(" ") + "--file \"#{output_path}/#{database}\" \"#{database}\" "
-        system(*command, "--file \"#{output_path}/#{database}\"", "\"#{database}\"")
+        current_commands = command.dup
+        current_commands << "--file \"#{output_path}/#{database}\""
+        current_commands <<  "\"#{database}\""
+        # puts current_commands.join(' ')
+        system(*current_commands)
       end
     end
   end
