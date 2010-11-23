@@ -6,7 +6,7 @@
   = hidden_field_tag("variables_start", start_time)
   = hidden_field_tag("variables_end", end_time)
   = field_set_tag("Pick Sites & Variables") do
-    - for site in project.managed_repository{ Voeis::Site.all } do
+    - for site in @sites do
       .field-item{:class => site.variables.count > 0 ? "site": nil }
         .site-name{:class => 'icon' }
           = site.name

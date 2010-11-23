@@ -32,6 +32,7 @@ class ProjectsController < InheritedResources::Base
       flash[:error] = "Could not find that project"
       redirect_to(projects_path()) and return
     end
+    @sites = @project.managed_repository{ Voeis::Site.all }
     @current_data = Array.new
     @items = Array.new
     @start_time = nil
@@ -139,7 +140,7 @@ class ProjectsController < InheritedResources::Base
   end
 
   def collection
-    @projects ||= resource_class.paginate(:page => params[:page])
+    @projects ||= resource_class.paginate(:page => params[:page], :per_page => 3)
   end
 
   def resource_class

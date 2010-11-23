@@ -9,7 +9,7 @@
     -if !current_user.nil? && current_user.projects.include?(@project)
       %span Add a: 
       = link_to("Site", new_project_site_path(@project), :class => 'icon icon-add')
-      - if @project.managed_repository { Voeis::Site.all.count } > 0
+      - if @sites.count > 0
         = link_to("Variable", new_project_variable_path(@project), :class => 'icon icon-add')
         = link_to("Unit", new_project_unit_path(@project), :class => 'icon icon-add')
         = link_to("Sample", new_project_sample_path(@project), :class => 'icon icon-add')
@@ -29,7 +29,8 @@
     %a{:href=>"#"}
       Project Overview
   .overview-item
-    = render(:partial => 'overview_map', :locals => { :project => @project, 
+    = render(:partial => 'overview_map', :locals => { :project => @project,
+                                                      :sites => @sites,
                                                       :class_name => 'show-map' } )
     %p
       - if @project.description && @project.description.length > 0
