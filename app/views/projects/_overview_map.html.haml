@@ -2,6 +2,5 @@
   - map.register_column(:number, :Lat)
   - map.register_column(:number, :Lon)
   - map.register_column(:string, :Name)
-  - sites = project.managed_repository{ Voeis::Site.all }
-  - sites.each do |site| 
-    - map.add_row([site.latitude, site.longitude, site.name])
+  - Rails.logger.debug { "**************** There are #{sites.count} sites. *************" }
+  - map.add_rows(sites.collect{|site| [site.latitude, site.longitude, site.name] })

@@ -6,7 +6,6 @@
   %tbody
     %tr
       %td
-        
         - for project in @projects
           %hr{:class => "project_seperator"}
           - logger.info{ "\n**************** Putting Project: #{project.name} **************************"}
@@ -16,7 +15,7 @@
               #links
                 -if !current_user.nil? && current_user.projects.include?(project)
                   = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings', :onclick => "$('#loader').toggle();")
-          =clear_break  
+          = clear_break  
           .body-text
             - if project.description && project.description.length > 0
               %em= tooltip(project.description, project.name + ' Description', 150)
@@ -27,19 +26,14 @@
           %table
             %tbody
               %tr
+                - sites = project.managed_repository{ Voeis::Site.all }
                 %td{:class => 'map_cell'}
-                  = render(:partial => 'overview_map', :locals => { :project => project, :class_name => 'preview-map' } )
+                  = render(:partial => 'overview_map', :locals => { :project => project, :sites => sites, :class_name => 'preview-map' } )
                 %td
                   #content-title Last Updates:
                   = clear_break
                   #content-sites
-                    - project.managed_repository do
-                      - Voeis::Site.all.each do |site|
-                        -if !site.sensor_values.last.nil?
-                          = site.name + ': ' + site.sensor_values.last.timestamp.to_time.strftime("%m/%d/%Y at %I:%M%p, %Z")
-                        -else
-                          = site.name + ': no data'
-                        %br/
+                    = sites_list(sites)
                 %td
       
 #pagination-links= will_paginate(@projects)
