@@ -27,11 +27,12 @@ class Voeis::LabMethod
   property :lab_method_description, Text, :required => true, :default => 'Unknown'
   property :lab_method_link,        Text
   
-  repository(:default) do
+  # repository(:default) do
     property :his_id,               Integer
-  end
+  # end
   
-  timestamps :at
+  property :created_at, DateTime
+  property :updated_at, DateTime
   
   is_versioned :on => :updated_at
   

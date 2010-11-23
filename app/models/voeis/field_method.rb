@@ -22,13 +22,14 @@ class Voeis::FieldMethod
   property :method_description, Text,   :required => true
   property :method_link,        Text,   :required => false
   
-  timestamps :at
+  property :created_at, DateTime
+  property :updated_at, DateTime
 
   is_versioned :on => :updated_at
 
-  repository(:default) do
+  # repository(:default) do
     property :his_id, Integer
-  end
+  # end
   
   def self.load_from_his
     his_field_methods = His::FieldMethod.all

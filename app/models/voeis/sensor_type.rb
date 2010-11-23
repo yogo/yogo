@@ -12,7 +12,8 @@ class Voeis::SensorType
   property :max,         Float,  :required => false
   property :difference,  Float,  :required => false
 
-  timestamps :at
+  property :created_at, DateTime
+  property :updated_at, DateTime
 
   is_versioned :on => :updated_at
 

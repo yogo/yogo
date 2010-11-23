@@ -15,11 +15,12 @@ class Voeis::Unit
   property :units_type, String, :required => true, :length => 512
   property :units_abbreviation, String, :required => true
 
-  repository(:default){
+  # repository(:default){
     property :his_id,            Integer, :required => false, :index => true
-  }
+  # }
 
-  timestamps :at
+  property :created_at, DateTime
+  property :updated_at, DateTime
 
   is_versioned :on => :updated_at  
 

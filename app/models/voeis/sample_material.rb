@@ -9,7 +9,8 @@ class Voeis::SampleMaterial
   property :material,       String, :required => true, :default => 'Unknown'
   property :description,    Text,   :required => false
 
-  timestamps :at
+  property :created_at, DateTime
+  property :updated_at, DateTime
 
   is_versioned :on => :updated_at
 
