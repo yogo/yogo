@@ -42,11 +42,17 @@ Yogo::Application.routes.draw do
       resources :units
       resources :apivs do
         collection do
-          get :create_site
-          get :create_variable
-          get :update_site
-          get :get_all_sites
-          get :get_site
+          get :create_project_site
+          get :create_project_variable
+          get :update_project_site
+          get :get_project_sites
+          get :get_voeis_sites
+          get :get__project_site
+          get :get_project_data_templates
+          get :get_project_variables
+          get :get_project_variable
+          get :get_voies_variables
+          post :upload_logger_data
         end
       end
       resources :sensor_values

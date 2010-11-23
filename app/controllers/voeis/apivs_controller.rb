@@ -67,13 +67,83 @@ class Voeis::ApivsController < Voeis::BaseController
     end
   end
   end
+  #*************DataStreams
+  
+  # 
+  # curl -F datafile=@CR1000_BigSky_Weather_small.dat -F data_template_id=1 http://localhost:3000/projects/a4c62666-f26b-11df-b8fe-002500d43ea0/apivs/upload_logger_data?api_key=2ac150bed4cfa21320d6f37cc6f007b807c603b6c8c33b6ba5a7db92ca821f35
+  
+  # alows us to upload csv file to be processed into data
+  # this requires that a datastream has already been created
+  # to parse this file
+  #
+  # @example
+  # curl -F datafile=@CR1000_2_BigSky_NFork_small.dat -F data_template_id=1 http://localhost:3000/projects/fbf20340-af15-11df-80e4-002500d43ea0/apivs/upload_logger_data.json?api_key=2ac150bed4cfa21320d6f37cc6f007b807c603b6c8c33b6ba5a7db92ca821f35
+  #
+  #
+  # @param [File] :datafile csv file to store
+  # @param [Integer] :data_template_id the id of the data stream used to parse a file
+  #
+  # @return [JSON String] success or error message
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def upload_logger_data
+    msg_hash = Hash.new
+    name = params['datafile'].original_filename
+    directory = "temp_data"
+    @new_file = File.join(directory,name)
+    File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
+    
+    data_stream_template =  parent.managed_repository{Voeis::DataStream.get(params[:data_template_id])}
+    begin
+      parse_logger_csv(@new_file.path, data_stream_template, data_stream_template.sites.first)
+      msg_hash = {:success=> "Data was succesfully saved."}
+    rescue
+      msg_hash = {:errors => "There was a problem parsing and saving the data."}
+    end  
+    #parent.publish_his
+    respond_to do |format|
+      format.json do
+        render :json => msg_hash.to_json, :callback => params[:jsoncallback]
+      end
+      format.xml do
+        render :xml => @msg_hash.to_xml
+      end
+    end
+  end
+  
+  # get_project_data_templates
+  # API for getting a list of the data_templates within a Project
+  #
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_data_templates.json?
+  #
+  # @params[String] id the id of the site within the project
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def get_project_data_templates
+   @dts = ""
+   parent.managed_repository do
+     @dts= Voeis::DataStream.all
+   end
+   respond_to do |format|
+     format.json do
+       render :json => @dts.to_json, :callback => params[:jsoncallback]
+     end
+     format.xml do
+       render :xml => @dts.to_xml
+     end
+   end
+  end
   
   #************Sites
   
-  # create_site
+  # create_project_site
   # API for creating a new site within in a project
   # 
-  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/create_site.json?name=example&code=example&latitude=45.232&longitude=-111.234&state=MT 
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/create_project_site.json?name=example&code=example&latitude=45.232&longitude=-111.234&state=MT 
   #
   # @param [String] name the name of the site
   # @param [String] code the unique code for identifying the site
@@ -83,7 +153,8 @@ class Voeis::ApivsController < Voeis::BaseController
   #  
   # @author Sean Cleveland
   #
-  def create_site
+  # @api public
+  def create_project_site
     @site = ""
     parent.managed_repository do
       @site = Voeis::Site.new(:name => params[:name], 
@@ -109,10 +180,10 @@ class Voeis::ApivsController < Voeis::BaseController
   end
   
   
-  # update_site
-  # API for creating a new site within in a project
+  # update_project_site
+  # API for updating a site within in a project
   # 
-  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/create_site.json?name=example&code=example&latitude=45.232&longitude=-111.234&state=MT 
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/update_project_site.json?name=example&code=example&latitude=45.232&longitude=-111.234&state=MT 
   #
   # @param [Integer] id the id of the site
   # @param [String] name the name of the site - <optional>
@@ -123,10 +194,12 @@ class Voeis::ApivsController < Voeis::BaseController
   #  
   # @author Sean Cleveland
   #
-  def update_site
+  # @api public
+  def update_project_site
     @site = ""
     parent.managed_repository do
       @site = Voeis::Site.get(params[:id])
+      
       @site.update(:name => params[:name], 
                    :code => params[:code],
                    :latitude => params[:latitude],
@@ -150,16 +223,17 @@ class Voeis::ApivsController < Voeis::BaseController
     end
   end
   
-  # get_site
-  # API for getting a site
+  # get_project_site
+  # API for getting a site within a Project
   #
-  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_site.json?id=1
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_site.json?id=1
   #
   # @params[String] id the id of the site within the project
   #
   # @author Sean Cleveland
   #
-  def get_site
+  # @api public
+  def get_project_site
     @site = ""
     parent.managed_repository do
       @site = Voeis::Site.get(params[:id])
@@ -174,15 +248,16 @@ class Voeis::ApivsController < Voeis::BaseController
     end
   end
 
-  # get_all_sites
+  # get_project_sites
   # API for getting all the sites within in a project
   #
   #
-  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_all_sites.json?
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_sites.json?
   # 
   # @author Sean Cleveland
   #
-  def get_all_sites
+  # @api public
+  def get_project_sites
     @site = ""
     parent.managed_repository do
       @site = Voeis::Site.all()
@@ -197,12 +272,33 @@ class Voeis::ApivsController < Voeis::BaseController
     end
   end
    
+   # get_voeis_sites
+   # API for getting all the sites that are public in the VOEIS system
+   #
+   #
+   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_voeis_sites.json?
+   # 
+   # @author Sean Cleveland
+   #
+   # @api public
+   def get_voeis_sites
+     @site = ""
+     @site = Site.all()
+     respond_to do |format|
+       format.json do
+         render :json => @site.to_json, :callback => params[:jsoncallback]
+       end
+       format.xml do
+         render :xml => @site.to_xml
+       end
+     end
+   end
    #************Variables
    
-   # create_variable
-   # API for creating a new site within in a project
+   # create_project_variable
+   # API for creating a new variable within in a project
    # 
-   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/create_variable.json?variable_name=example&variable_code=example&speciation=unkown&sample_medium=surface water&state=MT 
+   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/create_project_variable.json?variable_name=example&variable_code=example&speciation=unkown&sample_medium=surface water&state=MT 
    #
    # @param [String] variable_name the name of the variable - exists in variable_names_cv
    # @param [String] variable_code the unique code for identifying this variable
@@ -210,7 +306,8 @@ class Voeis::ApivsController < Voeis::BaseController
    #  
    # @author Sean Cleveland
    #
-   def create_variable
+   # @api public
+   def create_project_variable
      @variable = ""
      parent.managed_repository do
        @variable = Voeis::Variable.new(:variable_name => params[:variable_name], 
@@ -232,6 +329,74 @@ class Voeis::ApivsController < Voeis::BaseController
        end
      end
    end
-    
-
+   
+   # get_project_variable
+   # API for getting a variable within a Project
+   #
+   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_variable.json?id=1
+   #
+   # @params[String] id the id of the site within the project
+   #
+   # @author Sean Cleveland
+   #
+   # @api public
+   def get_project_variable
+     @variable = ""
+     parent.managed_repository do
+       @variable = Voeis::Variable.get(params[:id])
+     end
+     respond_to do |format|
+       format.json do
+         render :json => @variable.to_json, :callback => params[:jsoncallback]
+       end
+       format.xml do
+         render :xml => @variable.to_xml
+       end
+     end
+   end
+  # get_project_variables
+  # API for getting all the sites within in a project
+  #
+  #
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_variables.json?
+  # 
+  # @author Sean Cleveland
+  #
+  # @api public
+  def get_project_variables
+    @variable = ""
+    parent.managed_repository do
+      @variable = Voeis::Variable.all()
+    end
+    respond_to do |format|
+      format.json do
+        render :json => @variable.to_json, :callback => params[:jsoncallback]
+      end
+      format.xml do
+        render :xml => @variable.to_xml
+      end
+    end
+  end
+  
+   # get_voeis_variables
+   # API for getting all the variables within in the VOEIS system
+   #
+   #
+   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_voeis_variables.json?
+   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_voeis_variables.xml?
+   # @author Sean Cleveland
+   #
+   # @api public
+   def get_voeis_variables
+     @variables = ""
+     @variables = Variable.all()
+     respond_to do |format|
+       format.json do
+         render :json => @variables.to_json, :callback => params[:jsoncallback]
+       end
+       format.xml do
+         render :xml => @variables.to_xml
+       end
+     end
+   end
 end

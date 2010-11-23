@@ -28,15 +28,16 @@ For: Variable(
     =hidden_field_tag('start_date', start_date)
     =hidden_field_tag('end_date', end_date)
     =submit_tag("Export Results")
-  %table
-    %tr
-      -column_array.each do |col|
-        %th
-          =col[0]
-    -row_array.each do |row|
+  #data_stream_results
+    %table
       %tr
-        -row.each do |col|
-          %td
-            =col
+        -column_array.each do |col|
+          %th
+            =col[0]
+      -row_array.each do |row|
+        %tr
+          -row.each do |col|
+            %td
+              =col
       
 -# #pagination-links= pagination_links(@query, params[:page], 10)

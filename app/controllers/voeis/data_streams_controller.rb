@@ -163,6 +163,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
   def query
     @variables = ""
     @sites = ""
+    @units = Unit.all
     parent.managed_repository do
       @sites = Voeis::Site.all
       #@variable_hash = Hash.new
@@ -170,10 +171,13 @@ class Voeis::DataStreamsController < Voeis::BaseController
         variable_opt_array = Array.new
         if @sites.all(:order => [:name.asc]).first.sensor_types.count > 0
           variable_opt_array << ["All", "All"]
+          Voeis::DataStream.all.each do |datastream|
+            variable_opt_array << ["All:"+datastream.name, "All,"+datastream.id.to_s]
+          end
           @sites.first.sensor_types.each do |sensor|
             var = sensor.variables.first
             if !var.nil?
-              variable_opt_array << [var.variable_name+":"+var.data_type, var.id.to_s]
+              variable_opt_array << [var.variable_name+":"+var.variable_code+":"+var.sample_medium+":"+var.data_type+":"+@units.get(var.variable_units_id).units_abbreviation+':'+sensor.data_stream_columns.data_streams.first.name, var.id.to_s + "," + sensor.data_stream_columns.data_streams.first.id.to_s]
             end
           end
         else
@@ -201,17 +205,21 @@ class Voeis::DataStreamsController < Voeis::BaseController
     @end_date = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
 
     @start_date = @start_date.to_datetime
-    @end_time = @end_date.to_datetime + 23.hour + 59.minute
+    @end_date = @end_date.to_datetime + 23.hour + 59.minute
     if !params[:variable].empty? && !params[:site].empty?
       @column_array = Array.new
       @row_array = Array.new
       site = parent.managed_repository{Voeis::Site.get(params[:site])}
       @site_name =site.name
-      variable = parent.managed_repository{Voeis::Variable.get(params[:variable])}
+      var_datastream = params[:variable].split(",")
+      variable = parent.managed_repository{Voeis::Variable.get(var_datastream[0])}
+      datastream = parent.managed_repository{Voeis::DataStream.get(var_datastream[1])}
       if params[:variable] == "All"
         @var_name = "All"
       elsif params[:variable] == "None"
         @var_name = "None"
+      elsif var_datastream[0] == "All"
+        @var_name = "ALL:"+datastream.name
       else
         @var_name = variable.variable_name
       end
@@ -235,13 +243,32 @@ class Voeis::DataStreamsController < Voeis::BaseController
             end
             @row_array << temp_array
           end
+        elsif var_datastream[0] == "All"
+          @column_array << ["Timestamp", 'datetime']
+          datastream.data_stream_columns.sensor_types.each do |sensor|
+            @column_array << [sensor.variables.first.variable_name, 'number']
+          end
+          site.sensor_types.first.sensor_values(:timestamp.gte => @start_date.to_datetime, :timestamp.lte => @end_date.to_datetime).each do |sens_val|
+            temp_array = Array.new
+            temp_array << sens_val.timestamp.to_datetime
+            site.sensor_types.each do |sens|
+              val = sens.sensor_values.first(:timestamp.gte => sens_val.timestamp)
+              if !val.nil?
+                temp_array << val.value
+              else
+                temp_array << -9999.0
+              end
+            end
+            @row_array << temp_array
+          end
         else
           my_sensor =""
-          variable.sensor_types.each do |sensor|
-            if sensor.sites.first.id == site.id
-              my_sensor = sensor
-            end
-          end
+          
+          my_sensor = datastream.data_stream_columns.sensor_types.intersection(variable.sensor_types)#.each do |sensor|
+            #if sensor.sites.first.id == site.id
+              #my_sensor = sensor
+            #end
+          #end
           if !my_sensor.nil?
             @column_array << ["Timestamp", 'datetime']
             @column_array << [my_sensor.variables.first.variable_name, 'number']
@@ -690,14 +717,14 @@ class Voeis::DataStreamsController < Voeis::BaseController
              parent.managed_repository{
              if data_timestamp_col == ""
                sensor_value = Voeis::SensorValue.new(
-                                              :value => /^[-]?[\d]+(\.?\d*)$|^[-]?(\.\d+)$/.match(row[i]) ? row[i] : -9999.0,
+                                              :value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0,
                                               :units => data_stream_col[i].unit,
                                               :timestamp => Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).to_datetime,
                                               :published => false,
                                                :string_value => row[i].to_s)
              else   
                sensor_value = Voeis::SensorValue.new(
-                                             :value => /^[-]?[\d]+(\.?\d*)$|^[-]?(\.\d+)$/.match(row[i]) ? row[i] : -9999.0,
+                                             :value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0,
                                              :units => data_stream_col[i].unit,
                                              :timestamp => row[data_timestamp_col.to_i],
                                              :published => false,
