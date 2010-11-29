@@ -44,7 +44,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
       File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
       begin 
         data_stream_template = parent.managed_repository{Voeis::DataStream.get(params[:data_template_id])}
-        first_row  = get_row(@new_file.path, data_stream_template.start_line)
+        first_row  = get_row(@new_file, data_stream_template.start_line)
         if first_row.count == data_stream_template.data_stream_columns.count
           parse_logger_csv(params[:datafile].path, data_stream_template, data_stream_template.sites.first)
         else
@@ -391,7 +391,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
         # Read the logger file header
         if params[:header_box] == "Campbell"
           @start_line = 4
-          @header_info = parse_logger_csv_header(@new_file.path)
+          @header_info = parse_logger_csv_header(@new_file)
 
           @start_row = @header_info.last
           @row_size = @start_row.size - 1
