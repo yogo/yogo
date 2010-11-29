@@ -9,7 +9,13 @@ gem "dm-types"                                  # To enable UUID types
 gem "dm-is-list"                                # RBAC
 gem "dm-migrations"
 
-gem "rails"                                     # Rails application
+# gem "rails"                                     # Rails application
+# Only require of rails what we need, not the entire thing.
+gem "actionmailer"
+gem "actionpack"
+gem "activesupport"
+gem "railties"
+
 gem "dm-rails"                                  # DataMapper integration with Rails
 gem "jquery-rails"                              # jQuery integration with Rails
 gem "compass", ">= 0.10.6"                      # Styling automation for views
@@ -21,11 +27,13 @@ gem "rails_warden"                              # Warden integration with Rails 
 gem "mime-types", :require => "mime/types"      # For uploading data files
 gem "uuidtools"                                 # This is for memberships
 
+gem 'i18n', "~> 0.4.0"
+
 # Because in 1.9 fastercsv is default, but in 1.8...
 platforms(:ruby_18) { gem "fastercsv" }
 
 group(:development, :test) do
-  gem "rails-footnotes", :git => "https://github.com/indirect/rails-footnotes.git"
+  # gem "rails-footnotes", :git => "https://github.com/indirect/rails-footnotes.git"
   # For rake tasks to work
   gem "rake",                      :require => nil
   # For deployment
