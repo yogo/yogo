@@ -36,12 +36,45 @@ class Voeis::DataStreamsController < Voeis::BaseController
   #
   # @api public
   def upload
-    data_stream_template = parent.managed_repository{Voeis::DataStream.get(params[:data_template_id])}
-    parse_logger_csv(params[:datafile].path, data_stream_template, data_stream_template.sites.first)
+    begin
+      flash_error = Hash.new
+      name = params[:datafile].original_filename + Time.now.to_s
+      directory = "temp_data"
+      @new_file = File.join(directory,name)
+      File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
+      begin 
+        data_stream_template = parent.managed_repository{Voeis::DataStream.get(params[:data_template_id])}
+        first_row  = get_row(@new_file.path, data_stream_template.start_line)
+        if first_row.count == data_stream_template.data_stream_columns.count
+          parse_logger_csv(params[:datafile].path, data_stream_template, data_stream_template.sites.first)
+        else
+          #the file does not match the data_templates number of columns
+          flash_error[:error] = "File does not match the data_templates number of columns."
+          logger.info {"File does not match the data_templates number of columns."}
+          puts "File does not match the data_templates number of columns."
+        end
+      rescue
+        #problem parsing file
+        
+        flash_error[:error] = "There was a problem parsing this file."
+        logger.info {"There was a problem parsing this file."}
+        puts "There was a problem parsing this file."
+      end
+    rescue
+      #problem saving file
+      flash_error[:error] = "There was a problem saving this file."
+      logger.info {"There was a problem saving this file."}
+      puts "There was a problem saving this file."
+    end
     parent.publish_his
     respond_to do |format|
       if params.has_key?(:api_key)
         format.json
+      end
+      if flash_error.empty?
+        flash[:notice] = "File was parsed succesfully."
+      else
+        flash[:warning] = flash_error[:error]
       end
       format.html { redirect_to(project_path(parent)) }
     end
@@ -228,6 +261,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
         if params[:variable] == "All"
           @column_array << ["Timestamp", 'datetime']
           site.sensor_types.each do |sensor|
+            
             @column_array << [sensor.variables.first.variable_name, 'number']
           end
           site.sensor_types.first.sensor_values(:timestamp.gte => @start_date.to_datetime, :timestamp.lte => @end_date.to_datetime).each do |sens_val|
@@ -350,14 +384,14 @@ class Voeis::DataStreamsController < Voeis::BaseController
       #         redirect_to(:controller =>"voeis/data_streams", :action => "new", :params => {:id => params[:project_id]})
       #         return true
       #       else
-        name = params['datafile'].original_filename
+        @file_name = params['datafile'].original_filename + Time.now.to_s
         directory = "temp_data"
-        @new_file = File.join(directory,name)
+        @new_file = File.join(directory,@file_name)
         File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
         # Read the logger file header
         if params[:header_box] == "Campbell"
           @start_line = 4
-          @header_info = parse_logger_csv_header(datafile.path)
+          @header_info = parse_logger_csv_header(@new_file.path)
 
           @start_row = @header_info.last
           @row_size = @start_row.size - 1
@@ -375,7 +409,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
       @var_array[0] = ["","","","","","",""]
       @opts_array = Array.new
       @variables.all(:order => [:variable_name.asc]).each do |var|
-        @opts_array << [var.variable_name+":"+var.sample_medium+':'+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+        @opts_array << [var.variable_name+":"+var.variable_code+":"+var.sample_medium+':'+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
       end
       if params[:data_template] != "None"
           data_template = parent.managed_repository {Voeis::DataStream.first(:id => params[:data_template])}
@@ -517,7 +551,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
             data_stream_column.variables << variable
             data_stream_column.data_streams << @data_stream
             data_stream_column.save
-            sensor_type = Voeis::SensorType.first_or_create(
+            #create a new sensor for each data_stream_column - should only have one data_stream_column associated with it ever.
+            sensor_type = Voeis::SensorType.create(
                           :name => params["variable"+i.to_s].empty? ? "unknown" + @site.name : params["variable"+i.to_s] + @site.name,
                           :min => params["min"+i.to_s].to_f,
                           :max => params["max"+i.to_s].to_f,

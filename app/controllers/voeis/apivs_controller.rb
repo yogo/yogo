@@ -69,7 +69,8 @@ class Voeis::ApivsController < Voeis::BaseController
   end
   #*************DataStreams
   
-  # 
+  # curl -F datafile=@CR1000_BigSky_Weather_small.dat -F data_template_id=1 http://localhost:3000/projects/18402e48-f113-11df-9550-6e9ffb75bc80/apivs/upload_logger_data?api_key=2ac150bed4cfa21320d6f37cc6f007b807c603b6c8c33b6ba5a7db92ca821f35
+  
   # curl -F datafile=@CR1000_BigSky_Weather_small.dat -F data_template_id=1 http://localhost:3000/projects/a4c62666-f26b-11df-b8fe-002500d43ea0/apivs/upload_logger_data?api_key=2ac150bed4cfa21320d6f37cc6f007b807c603b6c8c33b6ba5a7db92ca821f35
   
   # alows us to upload csv file to be processed into data
@@ -77,7 +78,7 @@ class Voeis::ApivsController < Voeis::BaseController
   # to parse this file
   #
   # @example
-  # curl -F datafile=@CR1000_2_BigSky_NFork_small.dat -F data_template_id=1 http://localhost:3000/projects/fbf20340-af15-11df-80e4-002500d43ea0/apivs/upload_logger_data.json?api_key=2ac150bed4cfa21320d6f37cc6f007b807c603b6c8c33b6ba5a7db92ca821f35
+  # curl -F datafile=@CR1000_2_BigSky_NFork_small.dat -F data_template_id=1 http://localhost:4000/projects/fbf20340-af15-11df-80e4-002500d43ea0/apivs/upload_logger_data.json?api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7
   #
   #
   # @param [File] :datafile csv file to store
@@ -90,12 +91,14 @@ class Voeis::ApivsController < Voeis::BaseController
   # @api public
   def upload_logger_data
     msg_hash = Hash.new
-    name = params['datafile'].original_filename
+    name = params[:datafile].original_filename + Time.now.to_s
     directory = "temp_data"
     @new_file = File.join(directory,name)
     File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
     
     data_stream_template =  parent.managed_repository{Voeis::DataStream.get(params[:data_template_id])}
+
+    puts data_stream_template.name
     begin
       parse_logger_csv(@new_file.path, data_stream_template, data_stream_template.sites.first)
       msg_hash = {:success=> "Data was succesfully saved."}
