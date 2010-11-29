@@ -384,9 +384,9 @@ class Voeis::DataStreamsController < Voeis::BaseController
       #         redirect_to(:controller =>"voeis/data_streams", :action => "new", :params => {:id => params[:project_id]})
       #         return true
       #       else
-        @file_name =Time.now.to_s +params['datafile'].original_filename
+        file_name = Time.now.to_s + params['datafile'].original_filename
         directory = "temp_data"
-        @new_file = File.join(directory,@file_name)
+        @new_file = File.join(directory,file_name)
         File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
         # Read the logger file header
         if params[:header_box] == "Campbell"
