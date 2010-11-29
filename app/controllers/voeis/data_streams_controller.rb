@@ -38,7 +38,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
   def upload
     begin
       flash_error = Hash.new
-      name = params[:datafile].original_filename + Time.now.to_s
+      name = Time.now.to_s + params[:datafile].original_filename 
       directory = "temp_data"
       @new_file = File.join(directory,name)
       File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
@@ -384,7 +384,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
       #         redirect_to(:controller =>"voeis/data_streams", :action => "new", :params => {:id => params[:project_id]})
       #         return true
       #       else
-        @file_name = params['datafile'].original_filename + Time.now.to_s
+        @file_name =Time.now.to_s +params['datafile'].original_filename
         directory = "temp_data"
         @new_file = File.join(directory,@file_name)
         File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
