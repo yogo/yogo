@@ -60,17 +60,17 @@ module Facet
       end
     end
     
-    def each(&block)
-      @target.__send__(:each) do |i|
-        if !i.is_facet? && i.respond_to?(:access_as)
-          # ::Rails.logger.debug("This should do something")
-          yield i.access_as(@permission_source, next_root_target)
-        else
-          # ::Rails.logger.debug("This is calling my each")
-          yield i
-        end
-      end
-    end
+    # def each(&block)
+    #   @target.__send__(:each) do |i|
+    #     if !i.is_facet? && i.respond_to?(:access_as)
+    #       # ::Rails.logger.debug("This should do something")
+    #       yield i.access_as(@permission_source, next_root_target)
+    #     else
+    #       # ::Rails.logger.debug("This is calling my each")
+    #       yield i
+    #     end
+    #   end
+    # end
     
     def to_param
       @target.__send__(:to_param)
@@ -226,7 +226,7 @@ module Facet
     def permissions
       {
         :create => [:new, :create],
-        :retrieve => [:all, :get, :first, :last, :count, :map, :each, :join, :&, :|] + 
+        :retrieve => [:all, :get, :first, :last, :count, :map, :each, :join, :&, :|, :to_hash] + 
           relationships.keys.map{|m| m.to_s.to_sym } +
           ::DataMapper::Collection.instance_methods.map{|m| m.to_s.to_sym } +
           self.methods.map{|m| m.to_sym } - [:update, :destroy, :new, :create, :create!],
