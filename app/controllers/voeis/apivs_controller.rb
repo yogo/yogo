@@ -114,7 +114,7 @@ class Voeis::ApivsController < Voeis::BaseController
             path = File.dirname(@new_file)
             logger.info{"AFTER CSV"}
             first_row =  csv_data[data_stream_template.start_line]
-            logger.info{"AFTER FIRST ROW:" first_row.count.to_s}
+            logger.info{"AFTER FIRST ROW:" + first_row.count.to_s}
           if first_row.count == data_stream_template.data_stream_columns.count
             flash_error = flash_error.merge(parse_logger_csv(@new_file, data_stream_template, data_stream_template.sites.first))
           else
