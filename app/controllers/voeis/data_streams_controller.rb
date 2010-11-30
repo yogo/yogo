@@ -729,6 +729,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
    # @api public
    def parse_logger_csv(csv_file, data_stream_template, site)
      csv_data = CSV.read(csv_file)
+     logger.info{"made it past the opening of the CSV File"}
      path = File.dirname(csv_file)
      sensor_type_array = Array.new
      data_stream_col = Array.new

@@ -9,7 +9,7 @@ class SensorValue
   property :value,    Float,   :required => true
   property :units,    String,  :required => true 
   property :timestamp,    DateTime,  :required => true, :index => true
-  property :created_at,  DateTime
+  property :created_at,  DateTime, :required => true,  :default => DateTime.now
   property :published,  Boolean, :required => true, :default => false
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
 

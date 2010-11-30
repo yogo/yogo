@@ -47,11 +47,11 @@ Yogo::Application.routes.draw do
           get :update_project_site
           get :get_project_sites
           get :get_voeis_sites
-          get :get__project_site
+          get :get_project_site
           get :get_project_data_templates
           get :get_project_variables
           get :get_project_variable
-          get :get_voies_variables
+          get :get_voeis_variables
           post :upload_logger_data
         end
       end

@@ -11,7 +11,7 @@ class Voeis::SensorValue
   property :units,    String,  :required => true
   property :timestamp,    DateTime,  :required => true, :index => true
   property :published,  Boolean, :required => false
-  property :created_at,  DateTime
+  property :created_at,  DateTime, :required => true,  :default => DateTime.now
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
 
   is_versioned :on => :updated_at
