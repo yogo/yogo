@@ -72,7 +72,10 @@ class Voeis::ApivsController < Voeis::BaseController
   #*************DataStreams
   # curl -F datafile=@CR1000_BigSky_Weather_small.dat -F data_template_id=2 http://localhost:4000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/upload_logger_data.json?api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7
   
-  
+  # 3b62ef7eda48955abc77a7647b4874e543edd7ffc2bb672a40215c8da51f6d09
+  # 
+  # curl -F datafile=@Next100-sean.csv -F data_template_id=22 -F api_key=3b62ef7eda48955abc77a7647b4874e543edd7ffc2bb672a40215c8da51f6d09 http://voeis.msu.montana.edu/projects/a459c38c-f288-11df-b176-6e9ffb75bc80/apivs/upload_logger_data.json?
+  # 
   # curl -F datafile=@CR1000_BigSky_Weather_small.dat -F data_template_id=1 http://localhost:3000/projects/18402e48-f113-11df-9550-6e9ffb75bc80/apivs/upload_logger_data?api_key=2ac150bed4cfa21320d6f37cc6f007b807c603b6c8c33b6ba5a7db92ca821f35
   
   # curl -F datafile=@CR1000_BigSky_Weather_small.dat -F data_template_id=1 http://localhost:3000/projects/a4c62666-f26b-11df-b8fe-002500d43ea0/apivs/upload_logger_data?api_key=2ac150bed4cfa21320d6f37cc6f007b807c603b6c8c33b6ba5a7db92ca821f35
@@ -111,8 +114,9 @@ class Voeis::ApivsController < Voeis::BaseController
             path = File.dirname(@new_file)
             logger.info{"AFTER CSV"}
             first_row =  csv_data[data_stream_template.start_line]
+            logger.info{"AFTER FIRST ROW:" first_row.count.to_s}
           if first_row.count == data_stream_template.data_stream_columns.count
-            flash_error = flash_error.merge(parse_logger_csv(params[:datafile].path, data_stream_template, data_stream_template.sites.first))
+            flash_error = flash_error.merge(parse_logger_csv(@new_file, data_stream_template, data_stream_template.sites.first))
           else
             #the file does not match the data_templates number of columns
             flash_error[:error] = "File does not match the data_templates number of columns."
