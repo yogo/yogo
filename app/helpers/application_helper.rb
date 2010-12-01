@@ -100,61 +100,24 @@ module ApplicationHelper
     end
   end
 
-  # Renders the project quick-jump box
-  def render_dashboard_jump_box
-    return unless logged_in?
-    roles = Role.all
-    if roles.any?
-      s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
-            "<option value=''>Jump to Dashboard...</option>" +
-            '<option value="" disabled="disabled">---</option>'
-      s << options_for_jmp_box_select(roles, :selected => @role) do |role|
-        dashboard = role.name.gsub(' ', '').underscore
-        z = { :value => dashboard_url(dashboard.to_sym) }
-        z[:disabled] = 'disabled' unless current_user.roles.include?(role)
-        z
-      end
-      s << '</select>'
-      s.html_safe
-    end
-  end
 
   # Renders the project quick-jump box
   def render_project_jump_box
+    projects = Project.all(:is_private => false)
     if logged_in?
-      projects = Project.all
-    else
-      projects = Project.select {|p| not p.is_private? }
+      projects = projects | current_user.projects
     end
-    if projects.any?
+    if projects.count > 0 
       s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
             "<option value=''>Jump to Project...</option>" +
             '<option value="" disabled="disabled">---</option>'
-      s << options_for_jmp_box_select(projects, :selected => @project ) do |project|
-        z = { :value => project_url(project) }
-        if logged_in?
-          z[:disabled] = 'disabled' unless (current_user.projects.include?(project) || !project.is_private?)
-        end
-        z
-      end
+      
+      options = projects.collect{|p| [p.name, "/projects/#{p.id}"]}
+      s << options_for_select(options, @project.nil? ? '' : "/projects/#{@project.id}")
+      
       s << '</select>'
       s.html_safe
     end
-  end
-
-  def options_for_jmp_box_select(items, options = {})
-    s = ''
-    items.each do |item|
-      tag_options = {:value => item.id}
-      if item == options[:selected] || (options[:selected].respond_to?(:include?) && options[:selected].include?(item))
-        tag_options[:selected] = 'selected'
-      else
-        tag_options[:selected] = nil
-      end
-      tag_options.merge!(yield(item)) if block_given?
-      s << content_tag('option', h(item.name), tag_options)
-    end
-    s.html_safe
   end
 
   def yogo_button(image, text, link)

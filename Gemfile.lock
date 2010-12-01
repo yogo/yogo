@@ -1,3 +1,9 @@
+PATH
+  remote: ../rails-footnotes
+  specs:
+    rails-footnotes (3.6.7)
+      data_mapper (~> 1.0.2)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -117,6 +123,10 @@ GEM
       uuidtools (~> 2.1.1)
     dm-validations (1.0.2)
       dm-core (~> 1.0.2)
+    dm-visualizer (0.1.0)
+      dm-core (>= 0.10.2)
+      ruby-graphviz (>= 0.9.10)
+      thor (>= 0.13.4)
     do_postgres (0.10.2)
       data_objects (= 0.10.2)
     do_sqlite3 (0.10.2)
@@ -204,6 +214,7 @@ GEM
       columnize (>= 0.3.1)
       linecache19 (>= 0.5.11)
       ruby-debug-base19 (>= 0.11.19)
+    ruby-graphviz (0.9.20)
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
     rubyforge (2.0.4)
@@ -282,12 +293,14 @@ DEPENDENCIES
   dm-rails
   dm-types
   dm-validations
+  dm-visualizer
   fastercsv
   haml
   i18n (~> 0.4.0)
   inherited_resources
   jquery-rails
   mime-types
+  rails-footnotes!
   rails_warden
   railties
   rake

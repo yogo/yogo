@@ -2,7 +2,6 @@ $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
 require "bundler/capistrano"
 
-
 set :rvm_ruby_string, '1.8.7'
 
 set :application, "voeis"
@@ -20,7 +19,6 @@ set  :user, "voeis-demo"
 role :web, "klank.msu.montana.edu"
 role :app, "klank.msu.montana.edu"
 set  :deploy_to, "/home/#{user}/voeis"
-
 
 default_run_options[:pty] = false
 

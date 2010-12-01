@@ -11,5 +11,7 @@
 # Load the rails application
 require File.expand_path('../application', __FILE__)
 
+Footnotes::Filter.notes += [:datamapper]
+
 # Initialize the rails application
 Yogo::Application.initialize!
