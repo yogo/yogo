@@ -1,5 +1,5 @@
 = render(:partial => "lab_method")
-
+= render(:partial => "sample_material")
 %h1
   New Sample
  
@@ -19,10 +19,12 @@
     -lab_method_options = lab_method_options.merge({lab_meth.lab_method_name => lab_meth.id})
   = f.select('lab_method_id',  options_for_select(lab_method_options))
   =clear_break
-  Sample Material
+  %label{:id => "sample_mat", :onclick=>"$('#new_sample_material').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Sample Material
   -sample_material_options = Array.new
   - @sample_materials.all(:order => [:material.asc]).each do |mat|
     -sample_material_options << [mat.material]
+  - @project_sample_materials.all(:order => [:material.asc]).each do |mat|
+    -sample_material_options << [mat.material]  
   = f.select('material',  options_for_select(sample_material_options))
   = clear_break
   Site: 
@@ -40,3 +42,17 @@
   =clear_break
   = f.submit('Save', :class => 'icon icon-save')
   = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 
+#all_variables
+  %h3
+    Existing Samples    
+  = form_for("export", :url => {:controller => '/projects', :action => 'export'}) do 
+    = hidden_field_tag('column_array', @label_array.to_json)
+    = hidden_field_tag('row_array', @current_samples.to_json)
+    = hidden_field_tag('file_name', "project_samples")
+    = submit_tag("Export Samples")
+  #variables_list
+    - visualization("sample-table", 'table', :height => 200) do |table|
+      - if @label_array.length > 1
+        - @label_array[0..-1].each do |label|
+          - table.register_column(:string, label)
+        - table.add_rows(@current_samples)
