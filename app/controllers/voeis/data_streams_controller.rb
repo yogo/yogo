@@ -401,7 +401,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           end
         else
           @start_line = params[:start_line].to_i
-          @start_row = get_row(datafile.path, params[:start_line].to_i)
+          @start_row = get_row(@new_file, params[:start_line].to_i)
           @row_size = @start_row.size-1
         end
       
