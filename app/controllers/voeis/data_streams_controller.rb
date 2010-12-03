@@ -258,6 +258,9 @@ class Voeis::DataStreamsController < Voeis::BaseController
       var_datastream = params[:variable].split(",")
       variable = parent.managed_repository{Voeis::Variable.get(var_datastream[0])}
       datastream = parent.managed_repository{Voeis::DataStream.get(var_datastream[1])}
+      if datastream.nil?
+        datastream = parent.managed_repository{Voeis::DataStream.first}
+      end
       if params[:variable] == "All"
         @var_name = "All"
       elsif params[:variable] == "None"
