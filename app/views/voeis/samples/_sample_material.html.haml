@@ -1,0 +1,15 @@
+#new_sample_material
+  %h3 Create a new Sample Material:
+  = form_for(:sample_material, :url=>{:controller => "sample_materials", :action=>"create"}, :remote => true) do |f|
+    = f.label("Material:")
+    =clear_break
+    = f.text_area("material", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "material")
+    =clear_break
+    = f.label("Description:")
+    =clear_break
+    = f.text_area("description", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "description")
+    =clear_break
+    = f.submit("Save Sample Material ", :class => "new-sample-material-button")
+  %label{:id => "sample_material_close", :onclick=>"$('#new_sample_material').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
+
+

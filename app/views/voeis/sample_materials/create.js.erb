@@ -1,0 +1,8 @@
+$('#sample_material').
+append($("<option></option>").
+attr("value","<%=@sample_material.material%>").
+text("<%=@sample_material.material%>")); 
+$('#sample_material').val("<%= @sample_material.material%>");
+$(".material").val("");
+$(".description").val("");
+$("#new_sample_material").toggle();
