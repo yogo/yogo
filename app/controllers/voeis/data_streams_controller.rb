@@ -196,9 +196,20 @@ class Voeis::DataStreamsController < Voeis::BaseController
   def query
     @variables = ""
     @sites = ""
+    @start_year=""
+    @end_year =""
     @units = Unit.all
     parent.managed_repository do
       @sites = Voeis::Site.all
+      @start_year = Voeis::SensorValue.first(:order => [:timestamp.asc])
+      @end_year = Voeis::SensorValue.last(:order => [:timestamp.asc])
+      if @start_year.nil? || @end_year.nil?
+        @start_year = Time.now.year
+        @end_year = Time.now.year
+      else
+        @start_year = @start_year.timestamp.to_time.year
+        @end_year = @end_year.timestamp.to_time.year
+      end
       #@variable_hash = Hash.new
       #@sites.each do |site|
         variable_opt_array = Array.new
