@@ -9,9 +9,9 @@
     - for site in @sites do
       .field-item{:class => site.variables.count > 0 ? "site": nil }
         .site-name{:class => 'icon' }
+          = link_to("", edit_project_site_path(@project, site.id) , :class => "icon icon-edit")
           = site.name
           - if !current_user.nil? && (current_user.system_role.name.eql?('Administrator') ||   (current_user.system_role.name.eql?('Project Manager')  && current_user.projects.include?(project)))
-            =link_to ("",edit_project_site_path(@project, site.id) , :class => "icon icon-edit")
         .sensors
           - for variable in site.variables do
             .field-item-two{:class => 'icon' }

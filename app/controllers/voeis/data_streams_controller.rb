@@ -196,9 +196,20 @@ class Voeis::DataStreamsController < Voeis::BaseController
   def query
     @variables = ""
     @sites = ""
+    @start_year=""
+    @end_year =""
     @units = Unit.all
     parent.managed_repository do
       @sites = Voeis::Site.all
+      @start_year = Voeis::SensorValue.first(:order => [:timestamp.asc])
+      @end_year = Voeis::SensorValue.last(:order => [:timestamp.asc])
+      if @start_year.nil? || @end_year.nil?
+        @start_year = Time.now.year
+        @end_year = Time.now.year
+      else
+        @start_year = @start_year.timestamp.to_time.year
+        @end_year = @end_year.timestamp.to_time.year
+      end
       #@variable_hash = Hash.new
       #@sites.each do |site|
         variable_opt_array = Array.new
@@ -247,6 +258,9 @@ class Voeis::DataStreamsController < Voeis::BaseController
       var_datastream = params[:variable].split(",")
       variable = parent.managed_repository{Voeis::Variable.get(var_datastream[0])}
       datastream = parent.managed_repository{Voeis::DataStream.get(var_datastream[1])}
+      if datastream.nil?
+        datastream = parent.managed_repository{Voeis::DataStream.first}
+      end
       if params[:variable] == "All"
         @var_name = "All"
       elsif params[:variable] == "None"
@@ -401,7 +415,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           end
         else
           @start_line = params[:start_line].to_i
-          @start_row = get_row(datafile.path, params[:start_line].to_i)
+          @start_row = get_row(@new_file, params[:start_line].to_i)
           @row_size = @start_row.size-1
         end
       

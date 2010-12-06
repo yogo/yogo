@@ -13,8 +13,18 @@ class Voeis::SamplesController < Voeis::BaseController
     @sample = @project.managed_repository{Voeis::Sample.new}
     @sample_types = SampleTypeCV.all
     @sample_materials = SampleMaterial.all
+    @project_sample_materials = @project.managed_repository{Voeis::SampleMaterial.all}
     @sites = @project.managed_repository{Voeis::Site.all}
     @lab_methods = @project.managed_repository{Voeis::LabMethod.all}
+    
+    @label_array = Array["Sample Type","Lab Sample Code","Lab Method","Sample Material","Site","Timestamp"]
+    @current_samples = Array.new     
+    @samples = @project.managed_repository{Voeis::Sample.all}
+    @samples.all(:order => [:lab_sample_code.asc]).each do |samp|
+      @temp_array =Array[samp.sample_type, samp.lab_sample_code, @lab_methods.get(samp.lab_method_id).lab_method_name, samp.material,samp.sites.first.name, samp.local_date_time.to_s]
+        @current_samples << @temp_array
+    end
+    
   end
 
   def edit

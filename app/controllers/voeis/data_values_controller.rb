@@ -8,12 +8,25 @@ class Voeis::DataValuesController < Voeis::BaseController
             :instance_name => 'data_value',
             :resource_class => Voeis::DataValue
   
-  
+  # Gather information necessary to store sample data
+  #
+  #
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
   def pre_process
     @project = parent
     @general_categories = GeneralCategoryCV.all
   end
-  
+
+  # Gather information necessary to store sample data
+  #
+  #
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
   def pre_upload
      require 'csv_helper'
      
@@ -29,13 +42,13 @@ class Voeis::DataValuesController < Voeis::BaseController
           redirect_to(:controller =>"voeis/data_values", :action => "pre_process", :params => {:id => params[:project_id]})
 
         else
-          name = params['datafile'].original_filename
+          name = Time.now.to_s + params['datafile'].original_filename
           directory = "temp_data"
           @new_file = File.join(directory,name)
           File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
           
           @start_line = params[:start_line].to_i
-          @start_row = get_row(datafile.path, params[:start_line].to_i)
+          @start_row = get_row(@new_file, params[:start_line].to_i)
           @row_size = @start_row.size-1
           
           header_row = Array.new
@@ -47,7 +60,7 @@ class Voeis::DataValuesController < Voeis::BaseController
             @opts_array << [var.variable_name+":"+var.sample_medium+':'+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
           end
           if params[:start_line].to_i != 1
-            header_row = get_row(datafile.path, params[:start_line].to_i - 1)
+            header_row = get_row(@new_file, params[:start_line].to_i - 1)
           
             (0..@row_size).each do |i|
                @var_array[i] = [header_row[i],"","",opts_for_select(@opts_array),"","",""]
@@ -130,7 +143,21 @@ class Voeis::DataValuesController < Voeis::BaseController
        end
      end
    end
-
+   
+   # Parses a csv file containing sample data values
+   #
+   # @example parse_logger_csv_header?datafile='myfilename'&start_line=3&replicate=2&column1=23&column2=24
+   #
+   # @param [File] datafile the csv file containing the data
+   # @param [Integer] replicate a row that defines a replicate identifier
+   # @param [Integer] start_line the row of the csv file that the data begins
+   # @param [Integer] column/d stores the project variable id to associate with the csv column
+   #
+   # @return
+   #
+   # @author Sean Cleveland
+   #
+   # @api public
    def store_sample_data
 
      range = params[:row_size].to_i
@@ -185,7 +212,7 @@ class Voeis::DataValuesController < Voeis::BaseController
                #store the applied timestamp
                #d_time = DateTime.parse("#{params[:time]["stamp(1i)"]}-#{params[:time]["stamp(2i)"]}-#{params[:time]["stamp(3i)"]}T#{params[:time]["stamp(4i)"]}:#{params[:time]["stamp(5i)"]}:00#{ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60)}:00")
                
-               new_data_val = Voeis::DataValue.new(:data_value => /^[-]?[\d]+(\.?\d*)$|^[-]?(\.\d+)$/.match(@csv_row[row][i]) ? @csv_row[row][i] : -9999.0, 
+               new_data_val = Voeis::DataValue.new(:data_value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0, 
                   :local_date_time => @sample.local_date_time,
                   :utc_offset => @sample.local_date_time.to_time.utc_offset/(60*60),  
                   :date_time_utc => @sample.local_date_time.to_time.utc.to_datetime,  

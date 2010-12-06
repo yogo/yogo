@@ -15,8 +15,21 @@ class Voeis::SampleMaterialsController < Voeis::BaseController
 
 
   def create
-     create! do |success, failure|
-      success.html { redirect_to project_url(parent) }
+    parent.managed_repository do
+      if params[:sample_material].nil?
+        @sample_material = Voeis::SampleMaterial.new(:material=> params[:material], :description => params[:description])
+      else
+        @sample_material = Voeis::SampleMaterial.new(params[:sample_material])
+      end
+      respond_to do |format|
+        if @sample_material.save
+          flash[:notice] = 'Sample Material was successfully created.'
+          format.html { (redirect_to(new_project_sample_material_path())) }
+          format.js
+        else
+          format.html { render :action => "new" }
+        end
+      end
     end
   end
 
