@@ -29,6 +29,8 @@ gem "uuidtools"                                 # This is for memberships
 
 gem 'i18n', "~> 0.4.0"
 
+gem 'exception_notification',      :git => 'git://github.com/rails/exception_notification.git'
+
 # Because in 1.9 fastercsv is default, but in 1.8...
 platforms(:ruby_18) { gem "fastercsv" }
 

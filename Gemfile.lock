@@ -3,6 +3,10 @@ GIT
   revision: b7139bc69275f13af45aaa9dbc48135a8718cd02
   specs:
     rails-footnotes (3.6.7)
+  remote: git://github.com/rails/exception_notification.git
+  revision: 192a49a02d63d28b23ed41cebadfedd490929cf1
+  specs:
+    exception_notification (1.0.0)
 
 GEM
   remote: http://rubygems.org/
@@ -296,6 +300,7 @@ DEPENDENCIES
   dm-types
   dm-validations
   dm-visualizer
+  exception_notification!
   fastercsv
   haml
   i18n (~> 0.4.0)

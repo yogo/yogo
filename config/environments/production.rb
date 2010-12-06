@@ -46,4 +46,9 @@ Yogo::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+  
+  config.middleware.use ExceptionNotifier,
+      :email_prefix => "[VOEIS Exception] ",
+      :sender_address => %{"Voeis Management" <voeis.mgmt@gmail.com>},
+      :exception_recipients => %w{forge@msu.montana.edu irjudson@gmail.com sean.b.cleveland@gmail.com}
 end
