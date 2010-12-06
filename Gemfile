@@ -34,8 +34,7 @@ platforms(:ruby_18) { gem "fastercsv" }
 
 group(:development, :test) do
   gem "dm-visualizer"
-  gem "rails-footnotes", :git => "https://github.com/indirect/rails-footnotes.git"
-  #gem "rails-footnotes", :path => "../rails-footnotes"
+  gem "rails-footnotes", :git => "https://github.com/irjudson/rails-footnotes.git"
   # For rake tasks to work
   gem "rake",                      :require => nil
   # For deployment

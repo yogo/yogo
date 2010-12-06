@@ -1,6 +1,6 @@
 GIT
-  remote: https://github.com/indirect/rails-footnotes.git
-  revision: 5fd43b5842bac2a41c271e3d3713d5f721ae4e62
+  remote: https://github.com/irjudson/rails-footnotes.git
+  revision: b7139bc69275f13af45aaa9dbc48135a8718cd02
   specs:
     rails-footnotes (3.6.7)
 
