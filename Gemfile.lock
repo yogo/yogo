@@ -2,7 +2,6 @@ PATH
   remote: ../rails-footnotes
   specs:
     rails-footnotes (3.6.7)
-      data_mapper (~> 1.0.2)
 
 GEM
   remote: http://rubygems.org/
