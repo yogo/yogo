@@ -96,14 +96,14 @@ class Voeis::SamplesController < Voeis::BaseController
   
   def query
     parent.managed_repository do
-      @start_year = Voeis::SensorValue.first(:order => [:timestamp.asc])
-      @end_year = Voeis::SensorValue.last(:order => [:timestamp.asc])
+      @start_year = Voeis::DataValue.first(:order => [:local_date_time.asc])
+      @end_year = Voeis::DataValue.last(:order => [:local_date_time.asc])
       if @start_year.nil? || @end_year.nil?
         @start_year = Time.now.year
         @end_year = Time.now.year
       else
-        @start_year = @start_year.timestamp.to_time.year
-        @end_year = @end_year.timestamp.to_time.year
+        @start_year = @start_year.local_date_time.to_time.year
+        @end_year = @end_year.local_date_time.to_time.year
       end
       @sites = Voeis::Site.all
         variable_opt_array = Array.new
