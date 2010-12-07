@@ -6,9 +6,9 @@
   = select_tag("variable", @variable_opts.html_safe)
   = clear_break
   Dates After: 
-  = date_select('range', 'start_date', :order => [:month, :day, :year])
+  = date_select('range', 'start_date', :start_year => @start_year, :end_year => @end_year, :order => [:month, :day, :year])
   Dates Before: 
-  = date_select('range', 'end_date', :order => [:month, :day, :year])
+  = date_select('range', 'end_date', :start_year => @start_year, :end_year => @end_year, :order => [:month, :day, :year])
   = clear_break
 
   = f.submit('Search', :onclick => "$('#loader').toggle();")

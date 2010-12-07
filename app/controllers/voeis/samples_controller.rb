@@ -96,6 +96,15 @@ class Voeis::SamplesController < Voeis::BaseController
   
   def query
     parent.managed_repository do
+      @start_year = Voeis::SensorValue.first(:order => [:timestamp.asc])
+      @end_year = Voeis::SensorValue.last(:order => [:timestamp.asc])
+      if @start_year.nil? || @end_year.nil?
+        @start_year = Time.now.year
+        @end_year = Time.now.year
+      else
+        @start_year = @start_year.timestamp.to_time.year
+        @end_year = @end_year.timestamp.to_time.year
+      end
       @sites = Voeis::Site.all
         variable_opt_array = Array.new
         if @sites.all(:order => [:name.asc]).first.samples.count > 0
@@ -122,7 +131,7 @@ class Voeis::SamplesController < Voeis::BaseController
     @start_date =  Date.civil(params[:range][:"start_date(1i)"].to_i,params[:range]      [:"start_date(2i)"].to_i,params[:range][:"start_date(3i)"].to_i)
     @end_date = Date.civil(params[:range][:"end_date(1i)"].to_i,params[:range]    [:"end_date(2i)"].to_i,params[:range][:"end_date(3i)"].to_i)
     @start_date = @start_date.to_datetime
-    @end_time = @end_date.to_datetime + 23.hour + 59.minute
+    @end_date = @end_date.to_datetime + 23.hour + 59.minute
     
     @column_array = Array.new
     @row_array = Array.new

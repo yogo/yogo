@@ -212,7 +212,7 @@ class Voeis::DataValuesController < Voeis::BaseController
                #store the applied timestamp
                #d_time = DateTime.parse("#{params[:time]["stamp(1i)"]}-#{params[:time]["stamp(2i)"]}-#{params[:time]["stamp(3i)"]}T#{params[:time]["stamp(4i)"]}:#{params[:time]["stamp(5i)"]}:00#{ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60)}:00")
                
-               new_data_val = Voeis::DataValue.new(:data_value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0, 
+               new_data_val = Voeis::DataValue.new(:data_value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i].to_s) ? row[i].to_f : -9999.0, 
                   :local_date_time => @sample.local_date_time,
                   :utc_offset => @sample.local_date_time.to_time.utc_offset/(60*60),  
                   :date_time_utc => @sample.local_date_time.to_time.utc.to_datetime,  
