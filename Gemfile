@@ -29,13 +29,15 @@ gem "uuidtools"                                 # This is for memberships
 
 gem 'i18n', "~> 0.4.0"
 
+gem 'exception_notification',      :require => 'exception_notifier',
+                                   :git => 'git://github.com/rails/exception_notification.git'
+
 # Because in 1.9 fastercsv is default, but in 1.8...
 platforms(:ruby_18) { gem "fastercsv" }
 
 group(:development, :test) do
   gem "dm-visualizer"
-  gem "rails-footnotes", :git => "https://github.com/indirect/rails-footnotes.git"
-  #gem "rails-footnotes", :path => "../rails-footnotes"
+  gem "rails-footnotes", :git => "https://github.com/irjudson/rails-footnotes.git"
   # For rake tasks to work
   gem "rake",                      :require => nil
   # For deployment

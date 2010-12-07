@@ -40,5 +40,6 @@ module Yogo
     # config.i18n.default_locale = :de
 
     config.filter_parameters = [:password, :password_confirmation]
+    
   end
 end

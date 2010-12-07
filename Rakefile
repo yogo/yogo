@@ -5,6 +5,3 @@ require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
 Yogo::Application.load_tasks
-
-require 'dm-visualizer/rake/rails/graphviz_task'
-DataMapper::Visualizer::Rake::Rails::GraphVizTask.new
