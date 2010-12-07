@@ -214,9 +214,9 @@ class Voeis::DataStreamsController < Voeis::BaseController
       #@sites.each do |site|
         variable_opt_array = Array.new
         if @sites.all(:order => [:name.asc]).first.sensor_types.count > 0
-          variable_opt_array << ["All", "All"]
+          #variable_opt_array << ["All", "All"]
           Voeis::DataStream.all.each do |datastream|
-            variable_opt_array << ["All:"+datastream.name, "All,"+datastream.id.to_s]
+            #variable_opt_array << ["All:"+datastream.name, "All,"+datastream.id.to_s]
           end
           @sites.first.sensor_types.each do |sensor|
             var = sensor.variables.first
