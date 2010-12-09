@@ -14,6 +14,12 @@ Yogo::Application.configure do
   config.action_view.debug_rjs             = true
   config.action_controller.perform_caching = false
 
+  # require 'memprof/tracer'
+  #   config.middleware.insert(0, Memprof::Tracer)
+  
+  # require 'memprof/middleware'
+  # config.middleware.use(Memprof::Middleware)
+  
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
 

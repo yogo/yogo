@@ -36,6 +36,8 @@ gem 'exception_notification',      :require => 'exception_notifier',
 platforms(:ruby_18) { gem "fastercsv" }
 
 group(:development, :test) do
+  gem "memprof"
+  gem "ruby-prof"
   gem "dm-visualizer"
   gem "rails-footnotes", :git => "https://github.com/irjudson/rails-footnotes.git"
   # For rake tasks to work

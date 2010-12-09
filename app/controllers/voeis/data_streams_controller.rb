@@ -36,48 +36,48 @@ class Voeis::DataStreamsController < Voeis::BaseController
   #
   # @api public
   def upload
-    begin
-      flash_error = Hash.new
-      name = Time.now.to_s + params[:datafile].original_filename 
-      directory = "temp_data"
-      @new_file = File.join(directory,name)
-      File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
-      begin 
-        data_stream_template = parent.managed_repository{Voeis::DataStream.get(params[:data_template_id])}
-        first_row  = get_row(@new_file, data_stream_template.start_line)
-        if first_row.count == data_stream_template.data_stream_columns.count
-          parse_logger_csv(params[:datafile].path, data_stream_template, data_stream_template.sites.first)
-        else
-          #the file does not match the data_templates number of columns
-          flash_error[:error] = "File does not match the data_templates number of columns."
-          logger.info {"File does not match the data_templates number of columns."}
-          puts "File does not match the data_templates number of columns."
+       logger.info{"AT THE BEGINNING OF UPLOAD"}
+          first_row = Array.new
+          flash_error = Hash.new
+          name = Time.now.to_s + params[:datafile].original_filename 
+          directory = "temp_data"
+          @new_file = File.join(directory,name)
+          File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
+          begin 
+              #data_stream_template = Voeis::DataStream.get(params[:data_template_id])
+              start_line = parent.managed_repository{Voeis::DataStream.get(params[:data_template_id]).start_line}
+              data_col_count = parent.managed_repository{Voeis::DataStream.get(params[:data_template_id]).data_stream_columns.count}
+              site_id = parent.managed_repository{Voeis::DataStream.get(params[:data_template_id]).sites.first.id}
+              logger.info {"FETCHED ******* Data Template start line:" + start_line.to_s}
+              csv = CSV.open(@new_file, "r")
+              (0..start_line).each do
+                first_row = csv.readline
+              end
+              
+            if first_row.count == data_col_count
+              flash_error = flash_error.merge(parse_logger_csv(@new_file, params[:data_template_id], site_id))
+            else
+              #the file does not match the data_templates number of columns
+              flash_error[:error] = "File does not match the data_templates number of columns."
+              logger.info {"File does not match the data_templates number of columns."}
+            end
+          rescue
+            #problem parsing file
+            flash_error[:error] = "There was a problem parsing this file."
+            logger.info {"There was a problem parsing this file."}
+          end
+        #parent.publish_his
+        respond_to do |format|
+          if params.has_key?(:api_key)
+            format.json
+          end
+          if flash_error.empty?
+            flash[:notice] = "File was parsed succesfully."
+          else
+            flash[:warning] = flash_error[:error]
+          end
+          format.html { redirect_to(project_path(parent)) }
         end
-      rescue
-        #problem parsing file
-        
-        flash_error[:error] = "There was a problem parsing this file."
-        logger.info {"There was a problem parsing this file."}
-        puts "There was a problem parsing this file."
-      end
-    rescue
-      #problem saving file
-      flash_error[:error] = "There was a problem saving this file."
-      logger.info {"There was a problem saving this file."}
-      puts "There was a problem saving this file."
-    end
-    parent.publish_his
-    respond_to do |format|
-      if params.has_key?(:api_key)
-        format.json
-      end
-      if flash_error.empty?
-        flash[:notice] = "File was parsed succesfully."
-      else
-        flash[:warning] = flash_error[:error]
-      end
-      format.html { redirect_to(project_path(parent)) }
-    end
   end
 
   def add
@@ -477,20 +477,21 @@ class Voeis::DataStreamsController < Voeis::BaseController
 
   def create_stream
     #create and save new DataStream
-    @data_stream =""
-    @site =""
+    data_stream =""
+    site =""
     redirect_path =Hash.new
+    data_stream=""
     parent.managed_repository do
-      @data_stream = Voeis::DataStream.create(:name => params[:data_stream_name],
+      data_stream = Voeis::DataStream.create(:name => params[:data_stream_name],
                                               :description => params[:data_stream_description],
                                               :filename => params[:datafile],
                                               :start_line => params[:start_line].to_i)
-      puts @data_stream.errors.inspect
+      puts data_stream.errors.inspect
       #Add site association to data_stream
       #
-      @site = Voeis::Site.first(:id => params[:site])
-      @data_stream.sites << @site
-      @data_stream.save
+      site = Voeis::Site.first(:id => params[:site])
+      data_stream.sites << site
+      data_stream.save
       # site.data_streams << data_stream
       #     site.save
       #create DataStreamColumns
@@ -500,8 +501,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
     (0..range).each do |i|
       #create the Timestamp column
       if i == params[:timestamp].to_i && params[:timestamp] != "None"
-        puts params["column"+i.to_s]
-        puts @var = Variable.get(params["column"+i.to_s])
+        #puts params["column"+i.to_s]
+        var = Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           data_stream_column = Voeis::DataStreamColumn.create(
                                 :column_number => i,
@@ -509,12 +510,12 @@ class Voeis::DataStreamsController < Voeis::BaseController
                                 :type =>"Timestamp",
                                 :unit => "NA",
                                 :original_var => params["variable"+i.to_s])
-          data_stream_column.data_streams << @data_stream
+          data_stream_column.data_streams << data_stream
           data_stream_column.save
         end
       elsif i == params[:date].to_i && params[:date] != "None"
-        puts params["column"+i.to_s]
-        puts @var = Variable.get(params["column"+i.to_s])
+        #puts params["column"+i.to_s]
+        var = Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           data_stream_column = Voeis::DataStreamColumn.create(
                                 :column_number => i,
@@ -522,12 +523,12 @@ class Voeis::DataStreamsController < Voeis::BaseController
                                 :type =>"Date",
                                 :unit => "NA",
                                 :original_var => params["variable"+i.to_s])
-          data_stream_column.data_streams << @data_stream
+          data_stream_column.data_streams << data_stream
           data_stream_column.save
         end
       elsif i == params[:time].to_i && params[:time] != "None"
-        puts params["column"+i.to_s]
-        puts @var = Variable.get(params["column"+i.to_s])
+        #puts params["column"+i.to_s]
+        var = Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           data_stream_column = Voeis::DataStreamColumn.create(
                                 :column_number => i,
@@ -535,12 +536,12 @@ class Voeis::DataStreamsController < Voeis::BaseController
                                 :type =>"Time",
                                 :unit => "NA",
                                 :original_var => params["variable"+i.to_s])
-          data_stream_column.data_streams << @data_stream
+          data_stream_column.data_streams << data_stream
           data_stream_column.save
         end
       else #create other data_stream_columns and create sensor_types
-        puts params["column"+i.to_s]
-        puts @var = Variable.get(params["column"+i.to_s])
+        #puts params["column"+i.to_s]
+        var = Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           data_stream_column = Voeis::DataStreamColumn.create(
                                 :column_number => i,
@@ -550,38 +551,38 @@ class Voeis::DataStreamsController < Voeis::BaseController
                                 :type =>         params["type"+i.to_s].empty? ? "unknown" : params["type"+i.to_s])
           if !params["ignore"+i.to_s]            
             variable = Voeis::Variable.first_or_create(
-                        :variable_code => @var.variable_code,
-                        :variable_name => @var.variable_name,
-                        :speciation =>  @var.speciation,
-                        :variable_units_id => @var.variable_units_id,
-                        :sample_medium =>  @var.sample_medium,
-                        :value_type => @var.value_type,
-                        :is_regular => @var.is_regular,
-                        :time_support => @var.time_support,
-                        :time_units_id => @var.time_units_id,
-                        :data_type => @var.data_type,
-                        :general_category => @var.general_category,
-                        :no_data_value => @var.no_data_value)
+                        :variable_code => var.variable_code,
+                        :variable_name => var.variable_name,
+                        :speciation =>  var.speciation,
+                        :variable_units_id => var.variable_units_id,
+                        :sample_medium =>  var.sample_medium,
+                        :value_type => var.value_type,
+                        :is_regular => var.is_regular,
+                        :time_support => var.time_support,
+                        :time_units_id => var.time_units_id,
+                        :data_type => var.data_type,
+                        :general_category => var.general_category,
+                        :no_data_value => var.no_data_value)
             data_stream_column.variables << variable
-            data_stream_column.data_streams << @data_stream
+            data_stream_column.data_streams << data_stream
             data_stream_column.save
             #create a new sensor for each data_stream_column - should only have one data_stream_column associated with it ever.
             sensor_type = Voeis::SensorType.create(
-                          :name => params["variable"+i.to_s].empty? ? "unknown" + @site.name : params["variable"+i.to_s] + @site.name,
+                          :name => params["variable"+i.to_s].empty? ? "unknown" + site.name : params["variable"+i.to_s] + site.name,
                           :min => params["min"+i.to_s].to_f,
                           :max => params["max"+i.to_s].to_f,
                           :difference => params["difference"+i.to_s].to_f)
             #Add sites and variable associations to senor_type
             #
-            sensor_type.sites << @site
+            sensor_type.sites << site
             sensor_type.variables <<  variable
             sensor_type.data_stream_columns << data_stream_column
             sensor_type.save
-            @site.variables << variable
-            @site.save
+            site.variables << variable
+            site.save
           else
             data_stream_column.name = "ignore"
-            data_stream_column.data_streams << @data_stream
+            data_stream_column.data_streams << data_stream
             data_stream_column.save
             
           end #end if
@@ -590,7 +591,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
     end #end range.each
     # Parse the csv file using the newly created data_stream template and
     # save the values as sensor_values
-    parse_logger_csv(params[:datafile], @data_stream, @site)
+    parse_logger_csv(params[:datafile], data_stream.id, site.id)
     parent.publish_his
     flash[:notice] = "File parsed and stored successfully."
     redirect_to project_path(params[:project_id])
@@ -741,55 +742,94 @@ class Voeis::DataStreamsController < Voeis::BaseController
    # @author Yogo Team
    #
    # @api public
-   def parse_logger_csv(csv_file, data_stream_template, site)
-     csv_data = CSV.read(csv_file)
-     logger.info{"made it past the opening of the CSV File"}
-     path = File.dirname(csv_file)
-     sensor_type_array = Array.new
-     data_stream_col = Array.new
-     data_stream_template.data_stream_columns.each do |col|
-       sensor_type_array[col.column_number] = parent.managed_repository{Voeis::SensorType.first(:name => col.original_var + site.name)}
-       data_stream_col[col.column_number] = col
-     end
-     if !data_stream_template.data_stream_columns.first(:name => "Timestamp").nil?
-        data_timestamp_col = data_stream_template.data_stream_columns.first(:name => "Timestamp").column_number
+   def parse_logger_csv(csv_file, data_stream_template_id, site_id)
+     require 'memory_profiler'
+     
+     MemoryProfiler.start
+     if !parent.managed_repository{Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Timestamp").nil?}
+        data_timestamp_col = parent.managed_repository{Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Timestamp").column_number}
+        date_col=""
+        time_col=""
      else
        data_timestamp_col = ""
-       date_col = data_stream_template.data_stream_columns.first(:name => "Date").column_number
-       time_col = data_stream_template.data_stream_columns.first(:name => "Time").column_number
+       date_col = parent.managed_repository{Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Date").column_number}
+       time_col = parent.managed_repository{Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Time").column_number}
      end
-     csv_data[data_stream_template.start_line..-1].each do |row|
-       (0..row.size-1).each do |i|
-         if i != data_timestamp_col && i != date_col && i != time_col
-           puts data_stream_col
-           if data_stream_col[i].name != "ignore"
-             #save to sensor_value and sensor_type
-             parent.managed_repository{
-             if data_timestamp_col == ""
-               sensor_value = Voeis::SensorValue.new(
-                                              :value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0,
-                                              :units => data_stream_col[i].unit,
-                                              :timestamp => Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).to_datetime,
-                                              :published => false,
-                                               :string_value => row[i].to_s)
-             else   
-               sensor_value = Voeis::SensorValue.new(
-                                             :value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0,
-                                             :units => data_stream_col[i].unit,
-                                             :timestamp => row[data_timestamp_col.to_i],
-                                             :published => false,
-                                             :string_value => row[i].to_s)
-             end
-             logger.info {sensor_value.valid?}
-             logger.info{sensor_value.errors.inspect()}
-             sensor_value.save
-             logger.info{sensor_type_array[i].id}
-             sensor_value.sensor_type << sensor_type_array[i]
-             sensor_value.site << site
-             sensor_value.save}
-          end
-         end
-       end
+     start_line = parent.managed_repository{Voeis::DataStream.get(data_stream_template_id).start_line}
+     CSV.open(csv_file, "r"){ |csv|
+     (0..start_line-1).each do
+        header_row = csv.readline
      end
+     logger.info{"Parsing CSV"}
+     while row = csv.readline
+         parse_logger_row(data_timestamp_col, data_stream_template_id, date_col, time_col, row, site_id)
+     end
+     }
+     GC.start
    end
+   
+   
+   
+   # Parses a csv row using an existing data_column template
+    # column values are stored in sensor_values
+    #
+    # @example parse_logger_csv_header("filename")
+    #
+    # @param [String] csv_file
+    # @param [Object] data_stream_template
+    # @param [Object] site
+    #
+    # @return
+    #
+    # @author Yogo Team
+    #
+    # @api public
+   def parse_logger_row(data_timestamp_col, data_stream_id, date_col, time_col, row, site_id)
+     
+     site = parent.managed_repository{Voeis::Site.get(site_id)}
+     data_col_array = Array.new
+     data_col_array = 
+     parent.managed_repository{
+       temp= Array.new
+       Voeis::DataStream.get(data_stream_id).data_stream_columns.each do |col|
+         temp[col.column_number] = {:sensor => col.sensor_types.first,
+           :unit => col.unit,
+           :name => col.name}
+       end
+       temp
+     }
+       logger.info{"Parsing Row"}
+     # sensor_type_array = Array.new
+     # data_stream_col_unit = Array.new
+     # data_stream_col_name = Array.new
+     # data_stream_template.data_stream_columns.each do |col|
+     #      sensor_type_array[col.column_number] = col.sensor_types.first
+     #      data_stream_col_unit[col.column_number] = col.unit
+     #      data_stream_col_name[col.column_number] = col.name
+     # end
+     (0..row.size-1).each do |i|
+       if i != data_timestamp_col && i != date_col && i != time_col
+        if data_col_array[i][:name] != "ignore"
+          #save to sensor_value and sensor_type
+          # 
+          logger.info{"Parsing Inside"}
+          cv = /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0
+          timestamp = (data_timestamp_col == "") ? Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).to_datetime : row[data_timestamp_col.to_i]
+          parent.managed_repository{
+            sensor_value = Voeis::SensorValue.new(
+                                           :value => cv,
+                                           :units => data_col_array[i][:unit],
+                                           :timestamp => timestamp,
+                                           :published => false,
+                                            :string_value => row[i].to_s)
+          sensor_value.save
+          sensor_value.sensor_type << data_col_array[i][:sensor]
+          sensor_value.site << site
+          sensor_value.save}
+       end
+      end
+     end
+     GC.start
+   end 
+   
 end
