@@ -53,15 +53,16 @@ class Voeis::DataStreamsController < Voeis::BaseController
               (0..start_line).each do
                 first_row = csv.readline
               end
-              
+              csv.close()
             if first_row.count == data_col_count
-              flash_error = flash_error.merge(parse_logger_csv(@new_file, params[:data_template_id], site_id))
+              flash_error = flash_error.merge(parent.managed_repository{Voeis::SensorValue.parse_logger_csv(@new_file, params[:data_template_id], site_id)})
             else
               #the file does not match the data_templates number of columns
               flash_error[:error] = "File does not match the data_templates number of columns."
               logger.info {"File does not match the data_templates number of columns."}
             end
-          rescue
+          rescue Exception => e
+            logger.info {e.to_s}
             #problem parsing file
             flash_error[:error] = "There was a problem parsing this file."
             logger.info {"There was a problem parsing this file."}
@@ -727,109 +728,5 @@ class Voeis::DataStreamsController < Voeis::BaseController
 
      csv_data[row-1]
    end
-
-   # Parses a csv file using an existing data_column template
-   # column values are stored in sensor_values
-   #
-   # @example parse_logger_csv_header("filename")
-   #
-   # @param [String] csv_file
-   # @param [Object] data_stream_template
-   # @param [Object] site
-   #
-   # @return
-   #
-   # @author Yogo Team
-   #
-   # @api public
-   def parse_logger_csv(csv_file, data_stream_template_id, site_id)
-     require 'memory_profiler'
-     
-     MemoryProfiler.start
-     if !parent.managed_repository{Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Timestamp").nil?}
-        data_timestamp_col = parent.managed_repository{Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Timestamp").column_number}
-        date_col=""
-        time_col=""
-     else
-       data_timestamp_col = ""
-       date_col = parent.managed_repository{Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Date").column_number}
-       time_col = parent.managed_repository{Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Time").column_number}
-     end
-     start_line = parent.managed_repository{Voeis::DataStream.get(data_stream_template_id).start_line}
-     CSV.open(csv_file, "r"){ |csv|
-     (0..start_line-1).each do
-        header_row = csv.readline
-     end
-     logger.info{"Parsing CSV"}
-     while row = csv.readline
-         parse_logger_row(data_timestamp_col, data_stream_template_id, date_col, time_col, row, site_id)
-     end
-     }
-     GC.start
-   end
-   
-   
-   
-   # Parses a csv row using an existing data_column template
-    # column values are stored in sensor_values
-    #
-    # @example parse_logger_csv_header("filename")
-    #
-    # @param [String] csv_file
-    # @param [Object] data_stream_template
-    # @param [Object] site
-    #
-    # @return
-    #
-    # @author Yogo Team
-    #
-    # @api public
-   def parse_logger_row(data_timestamp_col, data_stream_id, date_col, time_col, row, site_id)
-     
-     site = parent.managed_repository{Voeis::Site.get(site_id)}
-     data_col_array = Array.new
-     data_col_array = 
-     parent.managed_repository{
-       temp= Array.new
-       Voeis::DataStream.get(data_stream_id).data_stream_columns.each do |col|
-         temp[col.column_number] = {:sensor => col.sensor_types.first,
-           :unit => col.unit,
-           :name => col.name}
-       end
-       temp
-     }
-       logger.info{"Parsing Row"}
-     # sensor_type_array = Array.new
-     # data_stream_col_unit = Array.new
-     # data_stream_col_name = Array.new
-     # data_stream_template.data_stream_columns.each do |col|
-     #      sensor_type_array[col.column_number] = col.sensor_types.first
-     #      data_stream_col_unit[col.column_number] = col.unit
-     #      data_stream_col_name[col.column_number] = col.name
-     # end
-     (0..row.size-1).each do |i|
-       if i != data_timestamp_col && i != date_col && i != time_col
-        if data_col_array[i][:name] != "ignore"
-          #save to sensor_value and sensor_type
-          # 
-          logger.info{"Parsing Inside"}
-          cv = /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0
-          timestamp = (data_timestamp_col == "") ? Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).to_datetime : row[data_timestamp_col.to_i]
-          parent.managed_repository{
-            sensor_value = Voeis::SensorValue.new(
-                                           :value => cv,
-                                           :units => data_col_array[i][:unit],
-                                           :timestamp => timestamp,
-                                           :published => false,
-                                            :string_value => row[i].to_s)
-          sensor_value.save
-          sensor_value.sensor_type << data_col_array[i][:sensor]
-          sensor_value.site << site
-          sensor_value.save}
-       end
-      end
-     end
-     GC.start
-   end 
    
 end

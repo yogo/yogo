@@ -8,6 +8,7 @@ gem "dm-is-versioned"                           # TODO: This should be provided 
 gem "dm-types"                                  # To enable UUID types
 gem "dm-is-list"                                # RBAC
 gem "dm-migrations"
+gem "dm-transactions"
 
 # gem "rails"                                     # Rails application
 # Only require of rails what we need, not the entire thing.
@@ -36,10 +37,10 @@ gem 'exception_notification',      :require => 'exception_notifier',
 platforms(:ruby_18) { gem "fastercsv" }
 
 group(:development, :test) do
-  gem "memprof"
-  gem "ruby-prof"
+  #gem "memprof"
+  #gem "ruby-prof"
   gem "dm-visualizer"
-  gem "rails-footnotes", :git => "https://github.com/irjudson/rails-footnotes.git"
+  #gem "rails-footnotes", :git => "https://github.com/irjudson/rails-footnotes.git"
   # For rake tasks to work
   gem "rake",                      :require => nil
   # For deployment
