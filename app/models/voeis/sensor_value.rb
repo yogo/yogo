@@ -115,25 +115,48 @@ class Voeis::SensorValue
      unit = 1
      
      Voeis::SensorValue.transaction do
+       '2010-12-07T12:32:59-07:00'
+       created_at = updated_at = Time.now.strftime("%Y-%m-%dT%H:%M:%S%z")
+       row_values = []
        (0..row.size-1).each do |i|
          if i != data_timestamp_col && i != date_col && i != time_col
           if data_col_array[i][name] != "ignore"
             cv = /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0
-            timestamp = (data_timestamp_col == "") ? Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).to_datetime : row[data_timestamp_col.to_i]
-            sensor_value = Voeis::SensorValue.create(
-                                           :value => cv,
-                                           :units => data_col_array[i][unit],
-                                           :timestamp => timestamp,
-                                           :published => false,
-                                            :string_value => row[i].to_s)
-            sensor_value.sensor_type << data_col_array[i][sensor]
+            timestamp = (data_timestamp_col == "") ? Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).strftime("%Y-%m-%dT%H:%M:%S%z") : row[data_timestamp_col.to_i]
+            
+            row_values << "(#{cv.to_s}, '#{data_col_array[i][unit]}', '#{timestamp}', FALSE, '#{row[i].to_s}', '#{created_at}', '#{updated_at}')"
+            # 
+            # sensor_value = Voeis::SensorValue.create(
+            #                                :value => cv,
+            #                                :units => data_col_array[i][unit],
+            #                                :timestamp => timestamp,
+            #                                :published => false,
+            #                                 :string_value => row[i].to_s)
+            # sensor_value.sensor_type << data_col_array[i][sensor]
             #sensor_value.site << site
-            sensor_value.save
+            # sensor_value.save
           end
         end
        end
+        sql = "INSERT INTO \"#{self.class.repository_name}\" (\"value\",\"units\",\"timestamp\",\"published\",\"string_value\",\"created_at\",\"updated_at\") VALUES "
+        sql << row_values.join(',')
+        sql << "RETURNING id"
+        puts sql
+        result_ids = repository.adapter.select(sql)
+        
+        sql = "INSERT INTO \"voeis_sensor_value_sites\" (\"sensor_value_id\", \"site_id\") VALUES "
+        sql << result_ids.collect{|i| "(#{i},#{site.id})"}.join(',')
+        puts sql
+        repository.adapter.select(sql)
+        
+        sql = "INSERT INTO \"voeis_sensor_type_sensor_values\" (\"sensor_value_id\",\"sensor_type_id\" VALUES"
+        sql << (0..result_ids.length-1).collect{|i| "(#{result_ids[i]},#{data_col_array[i][sensor].id})"}
+        puts sql
+        repository.adapter.select(sql)
       end
       GC.start
   end
+
+  "INSERT INTO \"roles\" (\"name\",\"position\") VALUES  ('blah7',12), ('blah8',13) RETURNING \"id\""
 
 end
