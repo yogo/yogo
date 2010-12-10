@@ -389,7 +389,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
   # @api public
   def pre_upload
     @project = parent
-   #@project = Project.first(:id => params[:project_id])
+
     @variables = Variable.all
     @sites = parent.managed_repository{ Voeis::Site.all }
     if !params[:datafile].nil? && datafile = params[:datafile]
@@ -450,28 +450,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           @var_array[i] = ["","","",opts_for_select(@opts_array),"","",""]
          end
       end
-
-
-        end
-    #end
-      # respond_to do |format|
-      #   format.js do
-      #     render :update do |page|
-      #       page.replace_html "upload", :partial => "pre_upload",
-      #       :locals => {:sites => @sites,
-      #                   :var_array => @var_array,
-      #                   :opts_array=> @opts_array,
-      #                   :start_line => @start_line,
-      #                   :start_row => @start_row,
-      #                   :new_file => @new_file,
-      #                   :header_box => params[:header_box],
-      #                   :header_info => @header_info,
-      #                   :project_id => @project.id,
-      #                   :row_size => @row_size, }
-      #     end
-      #   end
-      # end
-
+    end
   end
 
 
@@ -484,9 +463,9 @@ class Voeis::DataStreamsController < Voeis::BaseController
     data_stream=""
     parent.managed_repository do
       data_stream = Voeis::DataStream.create(:name => params[:data_stream_name],
-                                              :description => params[:data_stream_description],
-                                              :filename => params[:datafile],
-                                              :start_line => params[:start_line].to_i)
+        :description => params[:data_stream_description],
+        :filename => params[:datafile],
+        :start_line => params[:start_line].to_i)
       puts data_stream.errors.inspect
       #Add site association to data_stream
       #
