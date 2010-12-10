@@ -571,7 +571,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
     end #end range.each
     # Parse the csv file using the newly created data_stream template and
     # save the values as sensor_values
-    parse_logger_csv(params[:datafile], data_stream.id, site.id)
+    parent.managed_repository{Voeis::SensorValue.parse_logger_csv(params[:datafile], data_stream.id, site.id)}
     parent.publish_his
     flash[:notice] = "File parsed and stored successfully."
     redirect_to project_path(params[:project_id])

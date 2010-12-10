@@ -64,22 +64,25 @@ class Voeis::SensorValue
        time_col = Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Time").column_number
      end
      start_line = Voeis::DataStream.get(data_stream_template_id).start_line
-     
      site = Voeis::Site.get(site_id)
       data_col_array = Array.new
+      sensor_cols = Array.new
       Voeis::DataStream.get(data_stream_template_id).data_stream_columns.each do |col|
         data_col_array[col.column_number] = [col.sensor_types.first, col.unit, col.name]
+        if col.name != "Timestamp"  && col.name != "Time" && col.name != "Date"
+          sensor_cols << col.column_number
+        end
       end
+    
      CSV.open(csv_file, "r") do |csv|
        (0..start_line-2).each do
           header_row = csv.readline
        end
        csv.each do |row|
            #logger.info {row.join(', ')}
-           parse_logger_row(data_timestamp_col, data_stream_template_id, date_col, time_col, row, site, data_col_array)
+           parse_logger_row(data_timestamp_col, data_stream_template_id, date_col, time_col, row, site, data_col_array, sensor_cols)
        end
      end
-     GC.start
      return {}
    end
    
@@ -99,23 +102,11 @@ class Voeis::SensorValue
     # @author Yogo Team
     #
     # @api public
-   def self.parse_logger_row(data_timestamp_col, data_stream_id, date_col, time_col, row, site, data_col_array)
-     # sensor_type_array = Array.new
-     # data_stream_col_unit = Array.new
-     # data_stream_col_name = Array.new
-     # data_stream_template.data_stream_columns.each do |col|
-     #      sensor_type_array[col.column_number] = col.sensor_types.first
-     #      data_stream_col_unit[col.column_number] = col.unit
-     #      data_stream_col_name[col.column_number] = col.name
-     # end
-     # 
-     # 
+   def self.parse_logger_row(data_timestamp_col, data_stream_id, date_col, time_col, row, site, data_col_array, sensor_cols)
      name = 2
      sensor = 0
      unit = 1
-     
      Voeis::SensorValue.transaction do
-       '2010-12-07T12:32:59-07:00'
        created_at = updated_at = Time.now.strftime("%Y-%m-%dT%H:%M:%S%z")
        row_values = []
        (0..row.size-1).each do |i|
@@ -138,25 +129,18 @@ class Voeis::SensorValue
           end
         end
        end
-        sql = "INSERT INTO \"#{self.class.repository_name}\" (\"value\",\"units\",\"timestamp\",\"published\",\"string_value\",\"created_at\",\"updated_at\") VALUES "
+        sql = "INSERT INTO \"#{self.storage_name}\" (\"value\",\"units\",\"timestamp\",\"published\",\"string_value\",\"created_at\",\"updated_at\") VALUES "
         sql << row_values.join(',')
-        sql << "RETURNING id"
-        puts sql
+        sql << " RETURNING \"id\""
         result_ids = repository.adapter.select(sql)
-        
         sql = "INSERT INTO \"voeis_sensor_value_sites\" (\"sensor_value_id\", \"site_id\") VALUES "
         sql << result_ids.collect{|i| "(#{i},#{site.id})"}.join(',')
-        puts sql
-        repository.adapter.select(sql)
-        
-        sql = "INSERT INTO \"voeis_sensor_type_sensor_values\" (\"sensor_value_id\",\"sensor_type_id\" VALUES"
-        sql << (0..result_ids.length-1).collect{|i| "(#{result_ids[i]},#{data_col_array[i][sensor].id})"}
-        puts sql
-        repository.adapter.select(sql)
+        repository.adapter.execute(sql)
+        sql = "INSERT INTO \"voeis_sensor_type_sensor_values\" (\"sensor_value_id\",\"sensor_type_id\") VALUES "
+        sql << (0..result_ids.length-1).collect{|i|
+           "(#{result_ids[i]},#{data_col_array[sensor_cols[i]][sensor].id})"
+          }.join(',')
+        repository.adapter.execute(sql)
       end
-      GC.start
   end
-
-  "INSERT INTO \"roles\" (\"name\",\"position\") VALUES  ('blah7',12), ('blah8',13) RETURNING \"id\""
-
 end
