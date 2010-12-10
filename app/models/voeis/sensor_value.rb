@@ -52,7 +52,7 @@ class Voeis::SensorValue
    #
    # @author Yogo Team
    #
-   # @api public
+   # @api publicsenosr
    def self.parse_logger_csv(csv_file, data_stream_template_id, site_id)
      if !Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Timestamp").nil?
         data_timestamp_col = Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Timestamp").column_number
@@ -73,10 +73,14 @@ class Voeis::SensorValue
           sensor_cols << col.column_number
         end
       end
-     starting_id = Voeis::SensorValue.last(:order =>[:id.asc]).id
+     if Voeis::SensorValue.last(:order =>[:id.asc]).nil?
+       startin_id = -9999
+     else
+       starting_id = Voeis::SensorValue.last(:order =>[:id.asc]).id
+     end
      rows_parsed = 0
      CSV.open(csv_file, "r") do |csv|
-       (0..start_line-2).each do
+       (0..start_line-1).each do
           header_row = csv.readline
        end
        csv.each do |row|
@@ -86,7 +90,11 @@ class Voeis::SensorValue
        end
      end
      sensor_value = Voeis::SensorValue.last(:order =>[:id.asc]) 
-     total_records = sensor_value.id - starting_id
+     if starting_id == -9999
+       total_records = senosr_value.id - Voeis::SensorValue.first(:order => [Lid.asc]).id
+     else
+       total_records = sensor_value.id - starting_id
+     end
      return_hash = {:total_records_saved => total_records, :total_rows_parsed => rows_parsed, :last_record => sensor_value.as_json}
    end
    
