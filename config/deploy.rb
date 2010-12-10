@@ -82,7 +82,7 @@ end
 namespace :jobs do
   desc "Start up worker jobs"
   task :start do
-    run "bash -l -c 'cd #{current_release}; RAILS_ENV=production nohup bundle exec rake jobs:worker >> log/delayed_worker.log &'"
+    run "bash -l -c 'cd #{current_release}; RAILS_ENV=production bundle exec rake jobs:work >> log/delayed_worker.log'"
   end
   
   desc "Stop the remote worker jobs"
