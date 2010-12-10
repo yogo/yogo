@@ -79,6 +79,18 @@ namespace :assets do
   end
 end
 
+namespace :jobs do
+  desc "Start up worker jobs"
+  task :start do
+    run "bash -l -c 'cd #{current_release}; bundle exec rake job:worker &'"
+  end
+  
+  desc "Stop the remote worker jobs"
+  task :stop do
+    run "bash -l -c 'cd #{current_release}; bundle exec rake job:stop'"
+  end
+end
+
 # These are one time setup steps
 after "deploy:setup",       "db:setup"
 after "deploy:setup",       "assets:setup"
@@ -86,3 +98,6 @@ after "deploy:setup",       "assets:setup"
 # This happens every deploy
 after "deploy:update_code", "db:symlink"
 after "deploy:update_code", "assets:symlink"
+
+before "deploy:update_code", "jobs:stop"
+after  "deploy:symlink",     "jobs:start"

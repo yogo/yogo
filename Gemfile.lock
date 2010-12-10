@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/robbielamb/delayed_job.git
-  revision: a620732fd35f30e52963370f718de077bd6f07cd
+  revision: 1c05c84d2d9d1d60a9d98c68c516b1854e75fabe
   specs:
     delayed_job (1.7.0)
       dm-core (~> 1.0.2)
