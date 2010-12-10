@@ -9,6 +9,7 @@ gem "dm-types"                                  # To enable UUID types
 gem "dm-is-list"                                # RBAC
 gem "dm-migrations"
 gem "dm-transactions"
+gem "dm-aggregates"
 
 # gem "rails"                                     # Rails application
 # Only require of rails what we need, not the entire thing.

@@ -73,17 +73,21 @@ class Voeis::SensorValue
           sensor_cols << col.column_number
         end
       end
-    
+     starting_id = Voeis::SensorValue.last(:order =>[:id.asc]).id
+     rows_parsed = 0
      CSV.open(csv_file, "r") do |csv|
        (0..start_line-2).each do
           header_row = csv.readline
        end
        csv.each do |row|
+           rows_parsed += 1 
            #logger.info {row.join(', ')}
            parse_logger_row(data_timestamp_col, data_stream_template_id, date_col, time_col, row, site, data_col_array, sensor_cols)
        end
      end
-     return {}
+     sensor_value = Voeis::SensorValue.last(:order =>[:id.asc]) 
+     total_records = sensor_value.id - starting_id
+     return_hash = {:total_records_saved => total_records, :total_rows_parsed => rows_parsed, :last_record => sensor_value.as_json}
    end
    
    

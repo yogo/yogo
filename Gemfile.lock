@@ -296,6 +296,7 @@ DEPENDENCIES
   capistrano
   compass (>= 0.10.6)
   delayed_job!
+  dm-aggregates
   dm-is-list
   dm-is-versioned
   dm-migrations

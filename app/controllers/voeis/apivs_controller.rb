@@ -70,7 +70,7 @@ class Voeis::ApivsController < Voeis::BaseController
   
   
   #*************DataStreams
-  # curl -F datafile=@CR1000_BigSky_Weather_small.dat -F data_template_id=2 http://localhost:4000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/upload_logger_data.json?api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7
+  # curl -F datafile=@YB_Hill.csv -F data_template_id=26 http://localhost:3000/projects/a459c38c-f288-11df-b176-6e9ffb75bc80/apivs/upload_logger_data.json?api_key=3b62ef7eda48955abc77a7647b4874e543edd7ffc2bb672a40215c8da51f6d09
   
   # 3b62ef7eda48955abc77a7647b4874e543edd7ffc2bb672a40215c8da51f6d09
   # 
@@ -108,21 +108,23 @@ class Voeis::ApivsController < Voeis::BaseController
         @new_file = File.join(directory,name)
         File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
         begin 
-            data_stream_template = Voeis::DataStream.get(params[:data_template_id])
-            logger.info {"FETCHED ******* Data Template start line:" + data_stream_template.start_line.to_s}
-            csv_data = CSV.read(@new_file)
+            data_stream_template = Voeis::DataStream.get(params[:data_template_id].to_i)
+            start_line = data_stream_template.start_line
+            csv = CSV.open(@new_file, "r")
+            (0..start_line).each do
+              first_row = csv.readline
+            end
+            csv.close()
             path = File.dirname(@new_file)
-            logger.info{"AFTER CSV"}
-            first_row =  csv_data[data_stream_template.start_line]
-            logger.info{"AFTER FIRST ROW:" + first_row.count.to_s}
           if first_row.count == data_stream_template.data_stream_columns.count
-            flash_error = flash_error.merge(parse_logger_csv(@new_file, data_stream_template, data_stream_template.sites.first))
+            flash_error = flash_error.merge(parent.managed_repository{Voeis::SensorValue.parse_logger_csv(@new_file, data_stream_template.id, data_stream_template.sites.first.id)})
           else
             #the file does not match the data_templates number of columns
             flash_error[:error] = "File does not match the data_templates number of columns."
             logger.info {"File does not match the data_templates number of columns."}
           end
-        rescue
+        rescue   Exception => e
+            logger.info {e.to_s}
           #problem parsing file
           flash_error[:error] = "There was a problem parsing this file."
           logger.info {"There was a problem parsing this file."}
