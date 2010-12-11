@@ -79,11 +79,14 @@ class Voeis::SensorValue
        starting_id = Voeis::SensorValue.last(:order =>[:id.asc]).id
      end
      rows_parsed = 0
+     
      CSV.open(csv_file, "r") do |csv|
-       (0..start_line-1).each do
+       if start_line != 1
+         (1..start_line-1).each do
           header_row = csv.readline
+         end
        end
-       csv.each do |row|
+       while row = csv.readline
            rows_parsed += 1 
            #logger.info {row.join(', ')}
            parse_logger_row(data_timestamp_col, data_stream_template_id, date_col, time_col, row, site, data_col_array, sensor_cols)
@@ -121,26 +124,26 @@ class Voeis::SensorValue
      Voeis::SensorValue.transaction do
        created_at = updated_at = Time.now.strftime("%Y-%m-%dT%H:%M:%S%z")
        row_values = []
-       (0..row.size-1).each do |i|
-         if i != data_timestamp_col && i != date_col && i != time_col
-          if data_col_array[i][name] != "ignore"
-            cv = /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0
-            timestamp = (data_timestamp_col == "") ? Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).strftime("%Y-%m-%dT%H:%M:%S%z") : row[data_timestamp_col.to_i]
-            
-            row_values << "(#{cv.to_s}, '#{data_col_array[i][unit]}', '#{timestamp}', FALSE, '#{row[i].to_s}', '#{created_at}', '#{updated_at}')"
-            # 
-            # sensor_value = Voeis::SensorValue.create(
-            #                                :value => cv,
-            #                                :units => data_col_array[i][unit],
-            #                                :timestamp => timestamp,
-            #                                :published => false,
-            #                                 :string_value => row[i].to_s)
-            # sensor_value.sensor_type << data_col_array[i][sensor]
-            #sensor_value.site << site
-            # sensor_value.save
+       timestamp = (data_timestamp_col == "") ? Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).strftime("%Y-%m-%dT%H:%M:%S%z") : row[data_timestamp_col.to_i]
+       if t = Date.parse(timestamp) rescue nil?
+         (0..row.size-1).each do |i|
+           if i != data_timestamp_col && i != date_col && i != time_col
+            if data_col_array[i][name] != "ignore"
+              cv = /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0
+              row_values << "(#{cv.to_s}, '#{data_col_array[i][unit]}', '#{timestamp}', FALSE, '#{row[i].to_s}', '#{created_at}', '#{updated_at}')"
+              # 
+              # sensor_value = Voeis::SensorValue.create(
+              #                                :value => cv,
+              #                                :units => data_col_array[i][unit],
+              #                                :timestamp => timestamp,
+              #                                :published => false,
+              #                                 :string_value => row[i].to_s)
+              # sensor_value.sensor_type << data_col_array[i][sensor]
+              #sensor_value.site << site
+              # sensor_value.save
+            end
           end
-        end
-       end
+         end
         sql = "INSERT INTO \"#{self.storage_name}\" (\"value\",\"units\",\"timestamp\",\"published\",\"string_value\",\"created_at\",\"updated_at\") VALUES "
         sql << row_values.join(',')
         sql << " RETURNING \"id\""
@@ -150,9 +153,10 @@ class Voeis::SensorValue
         repository.adapter.execute(sql)
         sql = "INSERT INTO \"voeis_sensor_type_sensor_values\" (\"sensor_value_id\",\"sensor_type_id\") VALUES "
         sql << (0..result_ids.length-1).collect{|i|
-           "(#{result_ids[i]},#{data_col_array[sensor_cols[i]][sensor].id})"
-          }.join(',')
+         "(#{result_ids[i]},#{data_col_array[sensor_cols[i]][sensor].id})"
+        }.join(',')
         repository.adapter.execute(sql)
       end
+    end
   end
 end

@@ -72,7 +72,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           if params.has_key?(:api_key)
             format.json
           end
-          if flash_error.empty?
+          if flash_error[:error].nil?
             flash[:notice] = "File was parsed succesfully."
           else
             flash[:warning] = flash_error[:error]
