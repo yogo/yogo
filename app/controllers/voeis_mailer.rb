@@ -7,4 +7,10 @@ class VoeisMailer < ActionMailer::Base
          :subject => subject, 
          :body => body ).deliver
   end
+  
+  def email(to, subject = 'From Voeis', message = '')
+    @message = message
+    mail(:to => to,
+         :subject => subject)
+  end
 end
