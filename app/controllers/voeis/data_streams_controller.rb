@@ -173,16 +173,21 @@ class Voeis::DataStreamsController < Voeis::BaseController
   end
 
   def site_sensor_variables
+    @units  = Unit.all
     parent.managed_repository do
       site = Voeis::Site.get(params[:site_id])
       @variable_hash = Hash.new
       i = 1
       @variable_hash['variables'] = Array.new
-      site.sensor_types.variables.each do |var|
-        @var_hash = Hash.new
-        @var_hash['id'] = var.id
-        @var_hash['name'] = var.variable_name+":"+var.data_type
-        @variable_hash['variables'] << @var_hash
+      site.sensor_types.each do |sensor|
+        var = sensor.variables.first
+        if !var.nil?
+      #site.sensor_types.variables.each do |var|
+          @var_hash = Hash.new
+          @var_hash['id'] = var.id.to_s + "," + sensor.data_stream_columns.data_streams.first.id.to_s
+          @var_hash['name'] = var.variable_name+":"+var.variable_code+":"+var.sample_medium+":"+var.data_type+":"+@units.get(var.variable_units_id).units_abbreviation+':'+sensor.data_stream_columns.data_streams.first.name
+          @variable_hash['variables'] << @var_hash
+        end
       end
     end
     

@@ -536,4 +536,9 @@ class Voeis::ApivsController < Voeis::BaseController
 
        csv_data[row-1]
      end
+     
+     #'http://glassfish.msu.montana.edu/yogo/projects/Big%20Sky.json?api_key=Red-0bl_n0qxeOIwh4WQ&sitecode=UPGL-GLTNR24--MSU_UPGL-GLTNR24_MF_ESTBSWS&sensors[]=H2OCond_Avg&sensors[]=H2OTemp_Avg&sensors[]=AirTemp_Avg&sensors[]=AirTemp_SMP&hours=48&jsoncallback=?'
+     def get_project_data_by_site_and_sensor
+      
+     end
 end
