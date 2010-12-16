@@ -5,12 +5,13 @@ class Voeis::SensorValue
   include DataMapper::Resource
   include Facet::DataMapper::Resource
 
-  property :id, Serial
+  property :id, Serial, :key => false, :index => true
   property :value,    Float,   :required => true
   property :string_value, String, :required => true, :default => "Unknown"
   property :units,    String,  :required => true
-  property :timestamp,    DateTime,  :required => true, :index => true
+  property :timestamp,    DateTime,  :required => true, :index => true, :key => true
   property :published,  Boolean, :required => false
+  property :sensor_id, Integer, :required => true, :default => -1, :key => true, :index => true
   property :created_at,  DateTime, :required => true,  :default => DateTime.now
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
 
@@ -21,7 +22,8 @@ class Voeis::SensorValue
   }
 
   has n, :site,           :model => "Voeis::Site", :through => Resource
-  has n, :sensor_type,    :model => "Voeis::SensorType", :through => Resource
+  has 1, :sensor_type_sensor_value, :model => "Voeis::SensorTypeSensorValue", :parent_key => [:id], :child_key => [:sensor_value_id]
+  has 1, :sensor_type,     :through => :sensor_type_sensor_value
   has n, :meta_tags,      :model => "Voeis::MetaTag", :through => Resource
   
   default_scope(:default).update(:order => [:timestamp]) # set default order
@@ -94,7 +96,7 @@ class Voeis::SensorValue
      end
      sensor_value = Voeis::SensorValue.last(:order =>[:id.asc]) 
      if starting_id == -9999
-       total_records = senosr_value.id - Voeis::SensorValue.first(:order => [Lid.asc]).id
+       total_records = sensor_value.id - Voeis::SensorValue.first(:order => [Lid.asc]).id
      else
        total_records = sensor_value.id - starting_id
      end
@@ -121,16 +123,17 @@ class Voeis::SensorValue
      name = 2
      sensor = 0
      unit = 1
-     Voeis::SensorValue.transaction do
-       created_at = updated_at = Time.now.strftime("%Y-%m-%dT%H:%M:%S%z")
-       row_values = []
-       timestamp = (data_timestamp_col == "") ? Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).strftime("%Y-%m-%dT%H:%M:%S%z") : row[data_timestamp_col.to_i]
-       if t = Date.parse(timestamp) rescue nil?
+     #Voeis::SensorValue.transaction do
+     timestamp = (data_timestamp_col == "") ? Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).strftime("%Y-%m-%dT%H:%M:%S%z") : row[data_timestamp_col.to_i]
+     if t = Date.parse(timestamp) rescue nil?
+       if Voeis::SensorValue.first(:timestamp => timestamp, :sensor_id => data_col_array[sensor_cols[0]][sensor].id).nil?
+         created_at = updated_at = Time.now.strftime("%Y-%m-%dT%H:%M:%S%z")
+         row_values = []
          (0..row.size-1).each do |i|
            if i != data_timestamp_col && i != date_col && i != time_col
             if data_col_array[i][name] != "ignore"
               cv = /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0
-              row_values << "(#{cv.to_s}, '#{data_col_array[i][unit]}', '#{timestamp}', FALSE, '#{row[i].to_s}', '#{created_at}', '#{updated_at}')"
+              row_values << "(#{cv.to_s}, '#{data_col_array[i][unit]}', '#{timestamp}', FALSE, '#{row[i].to_s}', '#{created_at}', '#{updated_at}', #{data_col_array[i][sensor].id})"
               # 
               # sensor_value = Voeis::SensorValue.create(
               #                                :value => cv,
@@ -144,7 +147,7 @@ class Voeis::SensorValue
             end
           end
          end
-        sql = "INSERT INTO \"#{self.storage_name}\" (\"value\",\"units\",\"timestamp\",\"published\",\"string_value\",\"created_at\",\"updated_at\") VALUES "
+        sql = "INSERT INTO \"#{self.storage_name}\" (\"value\",\"units\",\"timestamp\",\"published\",\"string_value\",\"created_at\",\"updated_at\", \"sensor_id\") VALUES "
         sql << row_values.join(',')
         sql << " RETURNING \"id\""
         result_ids = repository.adapter.select(sql)

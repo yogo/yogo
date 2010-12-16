@@ -10,14 +10,19 @@ module Odhelper
       rescue
       end
     end
-    Project.all.each do |project|
+    Project.all.reverse.each do |project|
       project.managed_repository do
         # 
         puts project.name
         DataMapper.auto_upgrade!
+        Voeis::SensorTypeSensorValue.auto_upgrade!
         Voeis::SensorValue.auto_upgrade!
-        Voeis::Variable.auto_upgrade!
-        Voeis::SensorValueVariable.auto_upgrade!
+        Voeis::SensorType.auto_upgrade!
+        # Voeis::SensorType.all.each do |sensor|
+        #   if !sensor.sensor_values.nil?
+        #     sensor.sensor_values.all.update!(:sensor_id => sensor.id)
+        #   end
+        # end
       end
     end
   end
