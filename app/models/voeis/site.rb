@@ -56,7 +56,7 @@ class Voeis::Site
   # has n, :projects, :through => Resource
   has n, :data_streams, :model => "Voeis::DataStream", :through => Resource
   has n, :sensor_types,    :model => "Voeis::SensorType", :through => Resource
-  has n, :sensor_values,  :model => "Voeis::SensorValue", :through => Resource
+  #has n, :sensor_values,  :model => "Voeis::SensorValue", :through => Resource
   has n, :data_values,  :model => "Voeis::DataValue", :through => Resource
   has n, :samples,  :model => "Voeis::Sample", :through => Resource
   has n, :variables, :model => "Voeis::Variable", :through => Resource

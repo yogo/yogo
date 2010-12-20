@@ -21,7 +21,7 @@ class Voeis::SensorValue
     self.updated_at = DateTime.now
   }
 
-  has n, :site,           :model => "Voeis::Site", :through => Resource
+  #has n, :site,           :model => "Voeis::Site", :through => Resource
   has 1, :sensor_type_sensor_value, :model => "Voeis::SensorTypeSensorValue", :parent_key => [:id], :child_key => [:sensor_value_id]
   has 1, :sensor_type,     :through => :sensor_type_sensor_value
   has n, :meta_tags,      :model => "Voeis::MetaTag", :through => Resource

@@ -9,6 +9,7 @@ class Voeis::DataValue
   property :utc_offset,               Float,    :required => true,  :default => 1.0
   property :date_time_utc,            DateTime, :required => true,  :default => DateTime.now 
   property :replicate,                String,   :required => true,  :default => "original"
+  #property :measurement_timestamp,    DateTime, :required => false
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
   property :string_value, String, :required => true, :default => "Unknown"
   is_versioned :on => :updated_at

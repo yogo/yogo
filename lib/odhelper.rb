@@ -10,7 +10,7 @@ module Odhelper
       rescue
       end
     end
-    Project.all.reverse.each do |project|
+    Project.all.each do |project|
       project.managed_repository do
         # 
         puts project.name
@@ -18,6 +18,9 @@ module Odhelper
         Voeis::SensorTypeSensorValue.auto_upgrade!
         Voeis::SensorValue.auto_upgrade!
         Voeis::SensorType.auto_upgrade!
+        Voeis::Site.auto_upgrade!
+        Voeis::Sample.auto_upgrade!
+        Voeis::DataValue.auto_upgrade!
         # Voeis::SensorType.all.each do |sensor|
         #   if !sensor.sensor_values.nil?
         #     sensor.sensor_values.all.update!(:sensor_id => sensor.id)

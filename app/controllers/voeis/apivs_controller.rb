@@ -438,6 +438,244 @@ class Voeis::ApivsController < Voeis::BaseController
      end
    end
    
+  # import_voeis_variable_to_project
+  # API for getting a variable within in the VOEIS system into the current project
+  #
+  #
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_voeis_variables.json?
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_voeis_variables.xml?
+  # 
+  # @params[Integer] voeis_variable_id, the id of the Voeis variable to import
+  # 
+  # @author Sean Cleveland
+  #
+  # @api public
+  def import_voeis_variable_to_project    
+    @var = Variable.get(params[:voeis_variable_id].to_i)
+    @new_var
+    parent.managed_repository do     
+        begin      
+          @new_var = Voeis::Variable.first_or_create(
+                    :variable_code => @var.variable_code,
+                    :variable_name => @var.variable_name,
+                    :speciation =>  @var.speciation,
+                    :variable_units_id => @var.variable_units_id,
+                    :sample_medium =>  @var.sample_medium,
+                    :value_type => @var.value_type,
+                    :is_regular => @var.is_regular,
+                    :time_support => @var.time_support,
+                    :time_units_id => @var.time_units_id,
+                    :data_type => @var.data_type,
+                    :general_category => @var.general_category,
+                    :no_data_value => @var.no_data_value)
+        rescue
+          @new_var = {"error" => @new_var.errors.inspect().to_s}
+        end
+    end#managed repo
+    respond_to do |format|
+      format.json do
+        render :json => @new_var.to_json, :callback => params[:jsoncallback]
+      end
+      format.xml do
+        render :xml => @new_var.to_xml
+      end
+    end
+  end
+  # **********SAMPLES*************** 
+   
+  # get_project_samples
+  # API for getting all the samples within the current project
+  #
+  #
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_samples.json?
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_samples.xml?
+  # @author Sean Cleveland
+  #
+  # @api public
+  def get_project_samples
+   @samples = ""
+   parent.managed_repository do
+     @samples = Voeis::Sample.all()
+   end
+   respond_to do |format|
+     format.json do
+       render :json => @samples.to_json, :callback => params[:jsoncallback]
+     end
+     format.xml do
+       render :xml => @samples.to_xml
+     end
+   end
+  end
+
+  # get_project_sample
+  # API for getting a sample within the current project
+  #
+  #
+  # @example http://voeis.msu.montana.edu/projects/8524239c-e700-11df-8da7-6e9ffb75bc80/apivs/get_project_samples.json?api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_samples.xml?
+  # 
+  # @params[id] id the id of the sample within the project
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def get_project_sample
+   @sample = ""
+   parent.managed_repository do
+     @sample = Voeis::Sample.get(params[:id].to_i)
+   end
+   
+   respond_to do |format|
+     format.json do
+       render :json => @sample.to_json, :callback => params[:jsoncallback]
+     end
+     format.xml do
+       render :xml => @sample.to_xml
+     end
+   end
+  end
+   
+  # create_project_sample
+  # API for creating a new sample within the current project
+  #
+  #
+  # @example http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/create_project_sample.json?site_id=1&sample_type=Unknown&local_date_time=2010-11-12T12:25:31-07:00&material=insect&lab_sample_code=sampleco0004&lab_method_id=1&api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_samples.xml?
+  # 
+  # @params[Integer] id the id of the sample within the project
+  # @params[String] sample_type, this is what type of sample this is example "grab"
+  # @params[DateTime] local_date_time, this is the timestamp the sample was taken
+  # @params[String] material, the type of the material the sample is examples (water, insect)
+  # @params[String] lab_sample_code, this it the unique code used to identify the sample example "stream_sample_001"
+  # @params[Integer] lab_method_id, this is the id of the method used to collect this sample
+  # @params[Integer] site_id, this the id of the site that this sample was collected at
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def create_project_sample
+   @sample = ""
+   parent.managed_repository do
+     @site = Voeis::Site.get(params[:site_id].to_i)
+     if @site.nil?
+       @sample[:error] = "The Site ID:" + params[:site_id] +" is incorrect."
+     else
+       @sample = Voeis::Sample.new(:sample_type => params[:sample_type],
+                                   :local_date_time => params[:local_date_time],
+                                   :material => params[:material],
+                                   :lab_sample_code => params[:lab_sample_code],
+                                   :lab_method_id => params[:lab_method_id].to_i) 
+       @sample.sites << @site
+       begin
+         @sample.save
+       rescue
+         @sample = {"error" => @sample.error.inspect().to_s}
+       end
+     end
+   end
+   respond_to do |format|
+     format.json do
+       render :json => @sample.to_json, :callback => params[:jsoncallback]
+     end
+     format.xml do
+       render :xml => @sample.to_xml
+     end
+   end
+  end
+  
+  # get_project_sample_measurements
+  # API for getting all the samples within the current project
+  #
+  #
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_samples.json?
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_samples.xml?
+  # 
+  # @params[Integer] sample_id, the id of the sample to fetch measurements for
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def get_project_sample_measurements
+   @measurements = ""
+   parent.managed_repository do
+     @measurements = Voeis::Sample.get(params[:sample_id].to_i).data_values
+   end
+   respond_to do |format|
+     format.json do
+       render :json => @measurements.to_json, :callback => params[:jsoncallback]
+     end
+     format.xml do
+       render :xml => @measurements.to_xml
+     end
+   end
+  end
+  
+  
+  # create_project_sample_measurement
+  # API for creating a new sample measurement within the current project
+  #
+  #
+  # @example http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/create_project_sample_measurement.json?sample_id=5&variable_id=30&value=10.23423&replicate=3&api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7
+  # @example curl -d "sample_id=5&variable_id=30&value=10.23423&replicate=3&api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7" http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/create_project_sample_measurement.json?
+  # 
+  # @params[Integer] sample_id the id of the sample within the project
+  # @params[Integer] variable_id the id of variable to associate with this measurement
+  # @params[String] value, this is what type of sample this is example "grab"
+  # @params[String] replicate, specify if what replicate this was (OPTIONAL)
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def create_project_sample_measurement
+    @measurement = ""
+
+     parent.managed_repository do
+       @sample = Voeis::Sample.get(params[:sample_id].to_i)
+       @variable = Voeis::Variable.get(params[:variable_id].to_i)
+       if @sample.nil? 
+         @measurement = {:error => "The Site ID:" + params[:site_id] +" is incorrect."}
+       else
+         if @variable.nil?
+           @measurement = {:error => "The Variable ID:" + params[:variable_id] +" is incorrect."}
+         else
+           @measurement = Voeis::DataValue.new(                      
+                          :data_value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(params[:value].to_s) ? params[:value].to_f : -9999.0,
+                          :local_date_time => @sample.local_date_time,
+                          :utc_offset => @sample.local_date_time.to_time.utc_offset/(60*60),  
+                          :date_time_utc => @sample.local_date_time.to_time.utc.to_datetime,            
+                          :replicate => params[:replicate].empty? ? "None" : params[:replicate].to_s,
+                          :string_value => params[:value].to_s)                                   
+           @measurement.site << @sample.sites.first
+           @measurement.sample << @sample
+           @measurement.variable << @variable
+           begin
+             @measurement.save
+           rescue
+             @measurement = {"error" => @measurement.errors.inspect().to_s}
+           end
+           
+           begin
+             @sample.variables << @variable
+             @sample.save
+           rescue
+             @measurement = @measurement.merge({"error" => @sample.errors.inspect().to_s})
+           end
+          end
+       end
+     end
+     respond_to do |format|
+       format.json do
+         render :json => @measurement.to_json, :callback => params[:jsoncallback]
+       end
+       format.xml do
+         render :xml => @measurement.to_xml
+       end
+     end
+  end
+   
+   
+   
+   
    private
     # Parses a csv file using an existing data_column template
     # column values are stored in sensor_values

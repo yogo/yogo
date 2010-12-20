@@ -52,7 +52,13 @@ Yogo::Application.routes.draw do
           get :get_project_variables
           get :get_project_variable
           get :get_voeis_variables
+          get :get_project_sample
+          get :get_project_samples
+          get :get_project_sample_measurements
           post :upload_logger_data
+          post :create_project_sample
+          post :create_project_sample_measurement
+          post :import_voeis_variable_to_project 
         end
       end
       resources :sensor_values

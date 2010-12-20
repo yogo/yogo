@@ -21,8 +21,12 @@ class Voeis::SamplesController < Voeis::BaseController
     @current_samples = Array.new     
     @samples = @project.managed_repository{Voeis::Sample.all}
     @samples.all(:order => [:lab_sample_code.asc]).each do |samp|
-      @temp_array =Array[samp.sample_type, samp.lab_sample_code, @lab_methods.get(samp.lab_method_id).lab_method_name, samp.material,samp.sites.first.name, samp.local_date_time.to_s]
-        @current_samples << @temp_array
+      begin
+       @temp_array =Array[samp.sample_type, samp.lab_sample_code, @lab_methods.get(samp.lab_method_id).lab_method_name, samp.material,samp.sites.first.name, samp.local_date_time.to_s]
+       @current_samples << @temp_array
+      rescue
+      
+      end
     end
     
   end
