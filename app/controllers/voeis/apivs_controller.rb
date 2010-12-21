@@ -154,7 +154,7 @@ class Voeis::ApivsController < Voeis::BaseController
   #
   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_data_templates.json?
   #
-  # @params[String] id the id of the site within the project
+  # @param [String] id the id of the site within the project
   #
   # @author Sean Cleveland
   #
@@ -266,7 +266,7 @@ class Voeis::ApivsController < Voeis::BaseController
   #
   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_site.json?id=1
   #
-  # @params[String] id the id of the site within the project
+  # @param [String] id the id of the site within the project
   #
   # @author Sean Cleveland
   #
@@ -373,7 +373,7 @@ class Voeis::ApivsController < Voeis::BaseController
    #
    # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_variable.json?id=1
    #
-   # @params[String] id the id of the site within the project
+   # @param [String] id the id of the site within the project
    #
    # @author Sean Cleveland
    #
@@ -445,7 +445,7 @@ class Voeis::ApivsController < Voeis::BaseController
   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_voeis_variables.json?
   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_voeis_variables.xml?
   # 
-  # @params[Integer] voeis_variable_id, the id of the Voeis variable to import
+  # @param [Integer] voeis_variable_id, the id of the Voeis variable to import
   # 
   # @author Sean Cleveland
   #
@@ -514,7 +514,7 @@ class Voeis::ApivsController < Voeis::BaseController
   # @example http://voeis.msu.montana.edu/projects/8524239c-e700-11df-8da7-6e9ffb75bc80/apivs/get_project_samples.json?api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7
   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_samples.xml?
   # 
-  # @params[id] id the id of the sample within the project
+  # @param [Integer] id the id of the sample within the project
   #
   # @author Sean Cleveland
   #
@@ -542,13 +542,13 @@ class Voeis::ApivsController < Voeis::BaseController
   # @example http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/create_project_sample.json?site_id=1&sample_type=Unknown&local_date_time=2010-11-12T12:25:31-07:00&material=insect&lab_sample_code=sampleco0004&lab_method_id=1&api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7
   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_samples.xml?
   # 
-  # @params[Integer] id the id of the sample within the project
-  # @params[String] sample_type, this is what type of sample this is example "grab"
-  # @params[DateTime] local_date_time, this is the timestamp the sample was taken
-  # @params[String] material, the type of the material the sample is examples (water, insect)
-  # @params[String] lab_sample_code, this it the unique code used to identify the sample example "stream_sample_001"
-  # @params[Integer] lab_method_id, this is the id of the method used to collect this sample
-  # @params[Integer] site_id, this the id of the site that this sample was collected at
+  # @param [Integer] id the id of the sample within the project
+  # @param [String] sample_type, this is what type of sample this is example "grab"
+  # @param [DateTime] local_date_time, this is the timestamp the sample was taken
+  # @param [String] material, the type of the material the sample is examples (water, insect)
+  # @param [String] lab_sample_code, this it the unique code used to identify the sample example "stream_sample_001"
+  # @param [Integer] lab_method_id, this is the id of the method used to collect this sample
+  # @param [Integer] site_id, this the id of the site that this sample was collected at
   #
   # @author Sean Cleveland
   #
@@ -590,7 +590,7 @@ class Voeis::ApivsController < Voeis::BaseController
   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_samples.json?
   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/get_project_samples.xml?
   # 
-  # @params[Integer] sample_id, the id of the sample to fetch measurements for
+  # @param [Integer] sample_id, the id of the sample to fetch measurements for
   #
   # @author Sean Cleveland
   #
@@ -618,10 +618,10 @@ class Voeis::ApivsController < Voeis::BaseController
   # @example http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/create_project_sample_measurement.json?sample_id=5&variable_id=30&value=10.23423&replicate=3&api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7
   # @example curl -d "sample_id=5&variable_id=30&value=10.23423&replicate=3&api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7" http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/create_project_sample_measurement.json?
   # 
-  # @params[Integer] sample_id the id of the sample within the project
-  # @params[Integer] variable_id the id of variable to associate with this measurement
-  # @params[String] value, this is what type of sample this is example "grab"
-  # @params[String] replicate, specify if what replicate this was (OPTIONAL)
+  # @param [Integer] sample_id the id of the sample within the project
+  # @param [Integer] variable_id the id of variable to associate with this measurement
+  # @param [String] value, this is what type of sample this is example "grab"
+  # @param [String] replicate, specify if what replicate this was (OPTIONAL)
   #
   # @author Sean Cleveland
   #

@@ -35,7 +35,7 @@
   =select_tag("site", @site_options.html_safe)
   =clear_break
   Select a Timestamp for this Sample:
-  =datetime_select("time", "stamp", :default => DateTime.now)
+  =datetime_select("time", "stamp", :default => DateTime.now, :start_year => 1900)
   =clear_break
   Select the Time Zone this sample was collected in:
   = time_zone_select("time", "zone", nil, :default => "Mountain Time (US & Canada)")
