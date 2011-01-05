@@ -176,6 +176,191 @@ class Voeis::ApivsController < Voeis::BaseController
    end
   end
   
+  
+  
+   # http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/create_project_data_stream.json?
+   # "name=mytest&start_line=1&site_id=1&api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7"
+   
+   
+  # create_project_data_stream
+  # API for creating a new data stream within a Project
+  #
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/create_project_data_stream.json?
+  #
+  # @param [String] name the name of the data stream 
+  # @param [Integer] start_line then line in the file the data begins on
+  # @param [Integer] site_id the id of the project site to associate with this data_stream
+  #
+  # @author Sean Cleveland
+  #
+  # @return [JSON String] an array of data_templates that exist for the project and each ones properties and values
+  # 
+  # @api public
+  def create_project_data_stream
+    @stream = ""
+    parent.managed_repository do
+      @stream = Voeis::DataStream.first_or_create(
+        :name => params[:name], 
+        :start_line => params[:start_line], 
+        :filename => "NA")
+      @stream.sites << Voeis::Site.get(params[:site_id])
+      @stream.save
+    end
+    respond_to do |format|
+     format.json do
+       render :json => @stream.to_json, :callback => params[:jsoncallback]
+     end
+     format.xml do
+       render :xml => @stream.to_xml
+     end
+    end
+  end
+  
+  
+  # http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/create_project_data_stream_column.json?
+   # "name=mytestcol&column_number=1&type="Legacy"&unit="None"&original_var="Whatever"&variable_id=20&data_stream_id=8&api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7"
+  
+  
+  # create_project_data_stream_column
+  # API for creating a new data_stream_column within a Project
+  #
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/create_project_data_stream_column.json?
+  #
+  # @param [String] name the name of the data stream column - header name usually
+  # @param [Integer] column_number the column number to parse with this data_stream_column object
+  # @param [String] type the type of data_stream_column i.e. ("Legacy, Sensor") - optional
+  # @param [String] unit the name of the unit - optional
+  # @param [String] original_var the name of original headers variable name - optional
+  # @param [Integer] variable_id the id of the project variable to associate with this data_stream_column
+  # @param[Integer] data_stream_id the id of the data_stream to associate this data_stream_column with
+  #
+  # @author Sean Cleveland
+  #
+  # @return [JSON String] an array of data_templates that exist for the project and each ones properties and values
+  # 
+  # @api public
+  def create_project_data_stream_column
+     @data_column = ""
+      parent.managed_repository do
+        @data_column = Voeis::DataStreamColumn.create(
+          :column_number => params[:column_number],
+          :name => params[:name],
+          :type => params[:type],
+          :unit => params[:unit],
+          :original_var => params[:original_var])
+        @data_column.data_streams << Voeis::DataStream.get(params[:data_stream_id])
+        @data_column.variables << Voeis::Variable.get(params[:variable_id])
+        @data_column.save!
+      end
+      respond_to do |format|
+       format.json do
+         render :json => @data_column.to_json, :callback => params[:jsoncallback]
+       end
+       format.xml do
+         render :xml => @data_column.to_xml
+       end
+      end
+  end
+  
+  
+  # http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/create_project_sensor_type.json?
+   # "name=mytest_sensor&min=0&max=0&differece=0&data_stream_column_id=92&variable_id=20&api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7"
+  
+  
+  # create_project_sensor_type
+  # API for creating a sensor_type within a Project
+  #
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/create_project_sensor_type.json?
+  #
+  # @param [String] name the name of the data stream 
+  # @param [Integer] min the minimum sensor should read if working correctly
+  # @param [Integer] max the maximum a sensor should read if working correctly
+  # @param [Integer] difference the most one reading should differ from the last
+  # @param [Integer] data_stream_column_id the data_stream_column to associate with this sensor_type
+  # @param [Integer] variable_id the id of the project variable to associate with this data_stream_column
+  #
+  # @author Sean Cleveland
+  #
+  # @return [JSON String] an array of data_templates that exist for the project and each ones properties and values
+  # 
+  # @api public
+  def create_project_sensor_type
+    @sensor_type = ""
+    parent.managed_repository do
+      @sensor_type = Voeis::SensorType.create(
+                    :name => params[:name],
+                    :min => params[:min],
+                    :max => params[:max],
+                    :difference => params[:difference])
+      #Add sites and variable associations to senor_type
+      data_column = Voeis::DataStreamColumn.get(params[:data_stream_column_id])
+      project_site = data_column.data_streams.first.sites.first
+      project_var = Voeis::Variable.get(params[:variable_id])
+      @sensor_type.sites << project_site
+      @sensor_type.variables <<  project_var
+      @sensor_type.data_stream_columns << data_column
+      @sensor_type.save!
+      project_site.variables << project_var
+      project_site.save!
+    end
+    respond_to do |format|
+     format.json do
+       render :json => @sensor_type.to_json, :callback => params[:jsoncallback]
+     end
+     format.xml do
+       render :xml => @sensor_type.to_xml
+     end
+    end
+  end
+  
+  #************Sensor Values
+  
+  # http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/create_project_sensor_value.json?
+   # "value=23.2&unit=Whatever&timestamp=Sat Nov 20 13:54:18 -0700 2010&published=false&sensor_type_id=61&api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7"
+  
+  # create_project_sensor_value
+  # API for creating a sensor_value within a Project
+  #
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/create_project_sensor_value.json?
+  #
+  # @param [Float] value the value of the sensor measurement
+  # @param [String] unit the name of the units
+  # @param [Timestamp] timestamp the timestamp the sensor measurement was taken at
+  # @param [Boolean] published - true if this sensor measurement has been published to the HIS server
+  # @param [Integer] sensor_type_id the sensor_type to associate this sensor_value with
+  #
+  # @author Sean Cleveland
+  #
+  # @return [JSON String] an array of data_templates that exist for the project and each ones properties and values
+  # 
+  # @api public
+  def create_project_sensor_value
+    @sensor_type = ""
+    @sensor_value = 
+    parent.managed_repository do
+      @sensor_type = Voeis::SensorType.get(params[:sensor_type_id])
+      @sensor_value = Voeis::SensorValue.create(
+        :value => params[:value].to_f,
+        :units => params[:unit],
+        :timestamp => params[:timestamp],
+        :published => params[:published],
+        :string_value => params[:value])
+      @sensor_value.sensor_type << @sensor_type
+      @sensor_value.site << @sensor_type.sites.first
+      @sensor_value.variables << @sensor_type.variables.first
+      @sensor_value.save!
+    end
+    respond_to do |format|
+     format.json do
+       render :json => @sensor_value.to_json, :callback => params[:jsoncallback]
+     end
+     format.xml do
+       render :xml => @sensor_value.to_xml
+     end
+    end
+  end
+  
+  
   #************Sites
   
   # create_project_site
@@ -677,105 +862,7 @@ class Voeis::ApivsController < Voeis::BaseController
    
    
    private
-    # Parses a csv file using an existing data_column template
-    # column values are stored in sensor_values
-    #
-    # @example parse_logger_csv_header("filename")
-    #
-    # @param [String] csv_file
-    # @param [Object] data_stream_template
-    # @param [Object] site
-    #
-    # @return
-    #
-    # @author Yogo Team
-    #
-    # @api private
-    def parse_logger_csv(csv_file, data_stream_template, site)
-      value_count = 0
-      row_count = 0
-      logger.info{"made BEFORE the opening of the CSV File"}
-      csv_data = CSV.read(csv_file)
-      logger.info{"made it past the opening of the CSV File"}
-      path = File.dirname(csv_file)
-      sensor_type_array = Array.new
-      data_stream_col = Array.new
-      data_stream_template.data_stream_columns.each do |col|
-        sensor_type_array[col.column_number] = parent.managed_repository{Voeis::SensorType.first(:name => col.original_var + site.name)}
-        data_stream_col[col.column_number] = col
-      end
-      if !data_stream_template.data_stream_columns.first(:name => "Timestamp").nil?
-         data_timestamp_col = data_stream_template.data_stream_columns.first(:name => "Timestamp").column_number
-      else
-        data_timestamp_col = ""
-        date_col = data_stream_template.data_stream_columns.first(:name => "Date").column_number
-        time_col = data_stream_template.data_stream_columns.first(:name => "Time").column_number
-      end
-      parent.managed_repository do
-        @sensor_value = ""
-        csv_data[data_stream_template.start_line..-1].each do |row|
-          (0..row.size-1).each do |i|
-            if i != data_timestamp_col && i != date_col && i != time_col
-              puts data_stream_col
-              if data_stream_col[i].name != "ignore"
-                #save to sensor_value and sensor_type
-                if data_timestamp_col == ""
-                  @sensor_value = Voeis::SensorValue.new(
-                                                 :value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0,
-                                                 :units => data_stream_col[i].unit,
-                                                 :timestamp => Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).to_datetime,
-                                                 :published => false,
-                                                  :string_value => row[i].to_s)
-                else   
-                  @sensor_value = Voeis::SensorValue.new(
-                                                :value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0,
-                                                :units => data_stream_col[i].unit,
-                                                :timestamp => row[data_timestamp_col.to_i],
-                                                :published => false,
-                                                :string_value => row[i].to_s)
-                end
-                logger.info {@sensor_value.valid?}
-                logger.info{@sensor_value.errors.inspect()}
-                @sensor_value.save
-                logger.info{sensor_type_array[i].id}
-                @sensor_value.sensor_type << sensor_type_array[i]
-                @sensor_value.site << site
-                @sensor_value.save
-                value_count = value_count + 1
-             end #end if
-            end #end if
-          end #end each_do[i]
-          row_count = row_count + 1
-        end #end each do [row]
-        return_hash = Hash.new
-        logger.info{"DONE PARSING"}
-        logger.info{@sensor_value.as_json}
-        return_hash = {:total_records_saved => value_count, :total_rows_parsed => row_count, :last_record => @sensor_value.as_json}
-      end #end managed_repository
-    end
-    
-     # Returns the specified row of a csv
-     #
-     # @example get_row("filename",4)
-     #
-     # @param [String] csv_file
-     # @param [Integer] row
-     #
-     # @return [Array] an array whose elements are a csv-row columns
-     #
-     # @author Yogo Team
-     #
-     # @api private
-     def get_row(csv_file, row)
-       logger.info{"BEFORE CSV"}
-       puts "BEFORE CSV"
-       csv_data = CSV.read(csv_file)
-       logger.info{"AFTER CSV"}
-       path = File.dirname(csv_file)
-       logger.info{"MORE AFTER CSV"}
-
-       csv_data[row-1]
-     end
+ 
      
      #'http://glassfish.msu.montana.edu/yogo/projects/Big%20Sky.json?api_key=Red-0bl_n0qxeOIwh4WQ&sitecode=UPGL-GLTNR24--MSU_UPGL-GLTNR24_MF_ESTBSWS&sensors[]=H2OCond_Avg&sensors[]=H2OTemp_Avg&sensors[]=AirTemp_Avg&sensors[]=AirTemp_SMP&hours=48&jsoncallback=?'
      def get_project_data_by_site_and_sensor

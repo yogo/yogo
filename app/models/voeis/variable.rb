@@ -69,4 +69,20 @@ class Voeis::Variable
   has n, :data_values,  :model => "Voeis::DataValue", :through => Resource
   has n, :sites, :model => "Voeis::Site", :through => Resource
   has n, :samples, :model => "Voeis::Sample", :through => Resource
+  
+  def self.store_from_his(his_v)
+        self.create(
+                    :variable_name => his_v.variable_name,
+                    :variable_code => his_v.variable_code,
+                    :speciation => his_v.speciation,
+                    :variable_units_id => his_v.variable_units_id,
+                    :sample_medium => his_v.sample_medium,
+                    :value_type => his_v.value_type,
+                    :is_regular => his_v.is_regular,
+                    :time_support => his_v.time_support,
+                    :time_units_id => his_v.time_units_id,
+                    :data_type => his_v.data_type,
+                    :general_category => his_v.general_category,
+                    :no_data_value => his_v.no_data_value)
+  end
 end

@@ -59,6 +59,10 @@ Yogo::Application.routes.draw do
           post :create_project_sample
           post :create_project_sample_measurement
           post :import_voeis_variable_to_project 
+          post :create_project_sensor_value
+          post :create_project_sensor_type
+          post :create_project_data_stream
+          post :create_project_data_stream_column
         end
       end
       resources :sensor_values
@@ -77,8 +81,11 @@ Yogo::Application.routes.draw do
       resources :data_values do
         collection do
           get  :pre_process
+          get  :pre_process_samples_and_data
           post :pre_upload
+          post :pre_upload_samples_and_data
           post :store_sample_data
+          post :store_samples_and_data
         end
       end
     end
