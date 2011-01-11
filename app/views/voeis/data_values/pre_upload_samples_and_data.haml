@@ -1,11 +1,13 @@
 %h2
   = link_to(@project.name, project_path(@project) , :onload=> "$('#loader').toggle();")
 /-if !row_size.nil?  
-%h3 Sample Data Import Form
+%h3 Samples and Data Import Form
 
-= form_tag("store_sample_data", :onSubmit => "return checkform();") do 
+= form_tag("store_samples_and_data", :onSubmit => "return checkform();") do 
   Please give this Parsing Template a name: 
-  =text_field_tag ("template_name")
+  =text_field_tag ("template_name", @template_name)
+  =check_box_tag 'no_save', 'no', true
+  Check this box if you do not wish to save a new parsing template.
   =clear_break
   -@column_options= '<option value="None">None</option>'
   Select what VOEIS variables should be associated with these columns from the Sample Data file
@@ -29,59 +31,89 @@
         %td
           =@start_row[i]
         %td 
-          =@var_array[i][0]
+          =@header_row[i]
+          =hidden_field_tag('variable' + i.to_s, @header_row[i])
         %td
           =select_tag("column"+i.to_s, @var_array[i][3].html_safe)
 
   =clear_break
-  #Please specify which column should be used as the time-stamp:
-  -=select_tag("timestamp_col", @column_options.html_safe)
-  -#&nbsp;OR select a timestamp to apply to all data-values:
-  -#=datetime_select("time", "stamp", :default => DateTime.now)
-  -#=clear_break
+  Please specify which column should be used as the time-stamp:
+  =select_tag("timestamp_col", @column_options.html_safe)
+  &nbsp;OR select a timestamp to apply to all data-values:
+  =datetime_select("time", "stamp", :default => DateTime.now)
+  =clear_break
   Please specify wich column should be used as the Sample ID:
   =select_tag("sample_id", @column_options.html_safe)
   =clear_break
-  -#Select the Time Zone these samples were collected in:
-  -#= time_zone_select("time", "zone", nil, :default => "Mountain Time (US & Canada)")
-  -#=clear_break
-  =clear_break
-  -@sample_options=""
-  -@samples.all(:order => [:lab_sample_code.asc]).each do |sample|
-    -if sample.id != nil
-      -@sample_options= @sample_options + "<option value="+sample.id.to_s+">"+sample.lab_sample_code+"</option>"
-  %table
-    %tr
-      %th #{@project.name} Sites
-      %th Row #
-      %th CSV Row Content
-    -(@start_line..@csv_size).each do |i|
-      %tr
-        %td
-          =select_tag("csv_sample"+i.to_s, @sample_options.html_safe)
-        %td
-          = (i).to_s
-        %td
-          =@csv_array[i].to_s
+
   =hidden_field_tag('datafile', @new_file)
   =hidden_field_tag('row_size', @row_size)
   =hidden_field_tag("start_line", @start_line)
   =hidden_field_tag("header_info", @header_info)
   =hidden_field_tag("csv_size", @csv_size)
   =clear_break
+  Sample Type:
+  -sample_type_options = Array.new
+  - @sample_types.all(:order => [:term.asc]).each do |samp_type|
+    -sample_type_options <<[samp_type.term]
+  = select_tag('sample_type',  options_for_select(sample_type_options))
+  =clear_break
+  %label{:id => "lab_meth", :onclick=>"$('#new_lab_method').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Lab Method:
+  -lab_method_options = Hash.new
+  - @lab_methods.all(:order => [:lab_method_name.asc]).each do |lab_meth|
+    -lab_method_options = lab_method_options.merge({lab_meth.lab_method_name => lab_meth.id})
+  = select_tag('lab_method_id',  options_for_select(lab_method_options))
+  =clear_break
+  %label{:id => "sample_mat", :onclick=>"$('#new_sample_material').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Sample Material
+  -sample_material_options = Array.new
+  - @sample_materials.all(:order => [:material.asc]).each do |mat|
+    -sample_material_options << [mat.material]
+  - @project_sample_materials.all(:order => [:material.asc]).each do |mat|
+    -sample_material_options << [mat.material]  
+  = select_tag('material',  options_for_select(sample_material_options))
+  = clear_break
+  Site: 
+  -@site_options=""
+  -@sites.all(:order => [:name.asc]).each do |site|
+    -if site.id != nil
+      -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
+  =select_tag("site", @site_options.html_safe)
+  =clear_break
+  Select the Time Zone this sample was collected in:
+  = time_zone_select("time", "zone", nil, :default => "Mountain Time (US & Canada)")
+  =clear_break
   =submit_tag("Submit", :onclick => "$('#loader').toggle();")
   = link_to('Cancel', {:action => 'show', :controller => '/projects', :id=>@project.id }, :class => 'icon icon-cancel', :onclick => "$('#loader').toggle();", :onload => "$('#loader').toggle();")
 
 :javascript  
-  function checkform(){
-  var r=confirm('Are you sure you are ready to store this data?');
-  if (r==false)
+  $(document).ready(function() {
+  $("#sample_id").val(#{@sample_column});
+  $("#timestamp_col").val(#{@timestamp_column});
+  });
+  function checkform()
+  {if ($('#data_stream_name').val() =="")
   {
+  // something is wrong
+  alert('The Data Stream Name field requires a name before this form can be submitted.');
   $('#loader').toggle();
   return false;
   }
+  if ($('#data_stream_name').val() == "#{@template_name}")
+  {
+  // something could be wrong
+  if ($('no_save').val() == "no")
+  {
+    return true;
+  }
   else
   {
+  alert('The Data Stream Name field requires a NEW name before this form can be submitted or check the box to indicate you want to use the template without changes.');
+  $('#loader').toggle();
+  return false;
+  }
+  }
+  // If the script gets this far through all of your fields
+  // without problems, it's ok and you can submit the form
   return true;
   }
 

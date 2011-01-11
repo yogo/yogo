@@ -532,7 +532,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
                                 :column_number => i,
                                 :name =>         params["variable"+i.to_s].empty? ? "unknown" : params["variable"+i.to_s],
                                 :original_var => params["variable"+i.to_s].empty? ? "unknown" : params["variable"+i.to_s],
-                                :unit =>         params["unit"+i.to_s].empty? ? "unknown" : params["unit"+i.to_s],
+                                :unit =>         "NA",
                                 :type =>         params["type"+i.to_s].empty? ? "unknown" : params["type"+i.to_s])
           if !params["ignore"+i.to_s]            
             variable = Voeis::Variable.first_or_create(
@@ -552,34 +552,33 @@ class Voeis::DataStreamsController < Voeis::BaseController
             data_stream_column.data_streams << data_stream
             data_stream_column.save
             #create a new sensor for each data_stream_column - should only have one data_stream_column associated with it ever.
-            sensor_type = Voeis::SensorType.create(
-                          :name => params["variable"+i.to_s].empty? ? "unknown" + site.name : params["variable"+i.to_s] + site.name,
-                          :min => params["min"+i.to_s].to_f,
-                          :max => params["max"+i.to_s].to_f,
-                          :difference => params["difference"+i.to_s].to_f)
-            #Add sites and variable associations to senor_type
-            #
-            sensor_type.sites << site
-            sensor_type.variables <<  variable
-            sensor_type.data_stream_columns << data_stream_column
-            sensor_type.save
-            site.variables << variable
-            site.save
-          else
-            data_stream_column.name = "ignore"
-            data_stream_column.data_streams << data_stream
-            data_stream_column.save
-            
+             sensor_type = Voeis::SensorType.create(
+                           :name => params["variable"+i.to_s].empty? ? "unknown" + site.name : params["variable"+i.to_s] + site.name,
+                           :min => params["min"+i.to_s].to_f,
+                           :max => params["max"+i.to_s].to_f,
+                           :difference => params["difference"+i.to_s].to_f)
+             #Add sites and variable associations to senor_type
+             #
+             sensor_type.sites << site
+             sensor_type.variables <<  variable
+             sensor_type.data_stream_columns << data_stream_column
+             sensor_type.save
+             site.variables << variable
+             site.save
+           else
+             data_stream_column.name = "ignore"
+             data_stream_column.data_streams << data_stream
+             data_stream_column.save
           end #end if
         end #end managed repository
       end #end if
     end #end range.each
     # Parse the csv file using the newly created data_stream template and
     # save the values as sensor_values
-    parent.managed_repository{Voeis::SensorValue.parse_logger_csv(params[:datafile], data_stream.id, site.id)}
-    parent.publish_his
-    flash[:notice] = "File parsed and stored successfully."
-    redirect_to project_path(params[:project_id])
+    # parent.managed_repository{Voeis::SensorValue.parse_logger_csv(params[:datafile], data_stream.id, site.id)}
+    # parent.publish_his
+    # flash[:notice] = "File parsed and stored successfully."
+    # redirect_to project_path(params[:project_id])
   end
 
   def index

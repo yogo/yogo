@@ -17,5 +17,9 @@
       - opt_string = opt_string + "<option value="+i.to_s+">"+i.to_s+"</option>"
     = select_tag('start_line', opt_string.html_safe)
     = clear_break
+    = clear_break
+    = link_to('I Have Samples and Data to Upload', {:action => 'pre_process_samples_and_data', :controller => 'data_values', :id=>@project.id })
+    = clear_break
+    = clear_break
     = submit_tag("Upload File", :onclick => "$('#loader').toggle();")
     = link_to('Cancel', {:action => 'show', :controller => '/projects', :id=>@project.id }, :class => 'icon icon-cancel', :onclick => "$('#loader').toggle();")

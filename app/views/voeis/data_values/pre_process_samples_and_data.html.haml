@@ -1,6 +1,6 @@
 #upload
   %h3 Sample And Data Upload
-  = form_tag ('pre_sample_and_data_upload', :multipart => true) do
+  = form_tag ('pre_upload_samples_and_data', :multipart => true) do
     = 'File to upload:'
     = file_field_tag (:datafile, :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel")
     = hidden_field_tag( :project_id, :value =>@project.id)
