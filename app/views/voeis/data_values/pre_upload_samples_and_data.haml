@@ -58,13 +58,13 @@
     -sample_type_options <<[samp_type.term]
   = select_tag('sample_type',  options_for_select(sample_type_options))
   =clear_break
-  %label{:id => "lab_meth", :onclick=>"$('#new_lab_method').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Lab Method:
+  %label Lab Method:
   -lab_method_options = Hash.new
   - @lab_methods.all(:order => [:lab_method_name.asc]).each do |lab_meth|
     -lab_method_options = lab_method_options.merge({lab_meth.lab_method_name => lab_meth.id})
   = select_tag('lab_method_id',  options_for_select(lab_method_options))
   =clear_break
-  %label{:id => "sample_mat", :onclick=>"$('#new_sample_material').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Sample Material
+  %label Sample Material
   -sample_material_options = Array.new
   - @sample_materials.all(:order => [:material.asc]).each do |mat|
     -sample_material_options << [mat.material]
