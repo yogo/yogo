@@ -142,6 +142,7 @@ class Voeis::SamplesController < Voeis::BaseController
     site = parent.managed_repository{Voeis::Site.get(params[:site])}
     @site_name =site.name
     if !site.samples.empty? && params[:variable] != "None"
+      
       if params[:variable] == "All"
         @var_name = "All"
         timestamp_array = Array.new
@@ -183,7 +184,7 @@ class Voeis::SamplesController < Voeis::BaseController
       else #we want only one variable
         variable = parent.managed_repository{Voeis::Variable.get(params[:variable])}
         @var_name = variable.variable_name
-        my_sample =""
+        my_sample = nil
         variable.samples.each do |sample|
           if sample.sites.first.id == site.id
             my_sample = sample
@@ -191,8 +192,8 @@ class Voeis::SamplesController < Voeis::BaseController
         end
         if !my_sample.nil?
           @column_array << ["Timestamp", 'datetime']
-          @column_array << [my_sample.variables.first.variable_name, 'number']
-          (variable.samples.data_values(:local_date_time.gte => @start_date, :local_date_time.lte => @end_date) & site.samples.data_values).each do |data_val|
+          @column_array << [variable.variable_name, 'number']
+          (variable.samples.data_values(:local_date_time.gte => @start_date, :local_date_time.lte => @end_date) & site.samples.data_values & variable.data_values).each do |data_val|
             temp_array = Array.new
             temp_array << data_val.local_date_time.to_datetime
             temp_array << data_val.data_value
