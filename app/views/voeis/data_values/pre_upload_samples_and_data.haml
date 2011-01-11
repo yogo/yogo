@@ -6,7 +6,7 @@
 = form_tag("store_samples_and_data", :onSubmit => "return checkform();") do 
   Please give this Parsing Template a name: 
   =text_field_tag ("template_name", @template_name)
-  =check_box_tag 'no_save', 'no', true
+  =check_box_tag 'no_save', 'no', @template_name == "" ? false : true
   Check this box if you do not wish to save a new parsing template.
   =clear_break
   -@column_options= '<option value="None">None</option>'
