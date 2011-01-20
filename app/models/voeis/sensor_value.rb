@@ -10,6 +10,7 @@ class Voeis::SensorValue
   property :string_value, String, :required => true, :default => "Unknown"
   property :units,    String,  :required => true
   property :timestamp,    DateTime,  :required => true, :index => true, :key => true
+  property :vertical_offset, Float, :required => true, :default => 0.0
   property :published,  Boolean, :required => false
   property :sensor_id, Integer, :required => true, :default => -1, :key => true, :index => true
   property :created_at,  DateTime, :required => true,  :default => DateTime.now
