@@ -66,13 +66,18 @@ class Voeis::SensorValue
        date_col = Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Date").column_number
        time_col = Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Time").column_number
      end
+     if !Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Vertical-Offset").nil?
+       vertical_offset_col = Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Vertical-Offset").column_number
+     else
+       vertical_offset_col = ""
+     end
      start_line = Voeis::DataStream.get(data_stream_template_id).start_line
      site = Voeis::Site.get(site_id)
       data_col_array = Array.new
       sensor_cols = Array.new
       Voeis::DataStream.get(data_stream_template_id).data_stream_columns.each do |col|
         data_col_array[col.column_number] = [col.sensor_types.first, col.unit, col.name]
-        if col.name != "Timestamp"  && col.name != "Time" && col.name != "Date"
+        if col.name != "Timestamp"  && col.name != "Time" && col.name != "Date" && col.name !=  "Vertical-Offset"
           sensor_cols << col.column_number
         end
       end
@@ -85,14 +90,14 @@ class Voeis::SensorValue
      
      CSV.open(csv_file, "r") do |csv|
        if start_line != 1
-         (1..start_line-1).each do
+         (1..start_line).each do
           header_row = csv.readline
          end
        end
        while row = csv.readline
            rows_parsed += 1 
            #logger.info {row.join(', ')}
-           parse_logger_row(data_timestamp_col, data_stream_template_id, date_col, time_col, row, site, data_col_array, sensor_cols)
+           parse_logger_row(data_timestamp_col, data_stream_template_id, vertical_offset_col, date_col, time_col,  row, site, data_col_array, sensor_cols)
        end
      end
      sensor_value = Voeis::SensorValue.last(:order =>[:id.asc]) 
@@ -120,21 +125,22 @@ class Voeis::SensorValue
     # @author Yogo Team
     #
     # @api public
-   def self.parse_logger_row(data_timestamp_col, data_stream_id, date_col, time_col, row, site, data_col_array, sensor_cols)
+   def self.parse_logger_row(data_timestamp_col, data_stream_id, vertical_offset_col, date_col, time_col, row, site, data_col_array, sensor_cols)
      name = 2
      sensor = 0
      unit = 1
      #Voeis::SensorValue.transaction do
      timestamp = (data_timestamp_col == "") ? Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).strftime("%Y-%m-%dT%H:%M:%S%z") : row[data_timestamp_col.to_i]
+     vertical_offset = row[vertical_offset_col.to_i] == "" ? 0.0 : row[vertical_offset_col.to_i].to_f
      if t = Date.parse(timestamp) rescue nil?
        if Voeis::SensorValue.first(:timestamp => timestamp, :sensor_id => data_col_array[sensor_cols[0]][sensor].id).nil?
          created_at = updated_at = Time.now.strftime("%Y-%m-%dT%H:%M:%S%z")
          row_values = []
          (0..row.size-1).each do |i|
-           if i != data_timestamp_col && i != date_col && i != time_col
+           if i != data_timestamp_col && i != date_col && i != time_col && i != vertical_offset_col
             if data_col_array[i][name] != "ignore"
               cv = /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(row[i]) ? row[i].to_f : -9999.0
-              row_values << "(#{cv.to_s}, '#{data_col_array[i][unit]}', '#{timestamp}', FALSE, '#{row[i].to_s}', '#{created_at}', '#{updated_at}', #{data_col_array[i][sensor].id})"
+              row_values << "(#{cv.to_s}, '#{data_col_array[i][unit]}', '#{timestamp}', '#{vertical_offset}',FALSE, '#{row[i].to_s}', '#{created_at}', '#{updated_at}', #{data_col_array[i][sensor].id})"
               # 
               # sensor_value = Voeis::SensorValue.create(
               #                                :value => cv,
@@ -148,7 +154,7 @@ class Voeis::SensorValue
             end
           end
          end
-        sql = "INSERT INTO \"#{self.storage_name}\" (\"value\",\"units\",\"timestamp\",\"published\",\"string_value\",\"created_at\",\"updated_at\", \"sensor_id\") VALUES "
+        sql = "INSERT INTO \"#{self.storage_name}\" (\"value\",\"units\",\"timestamp\",\"vertical_offset\",\"published\",\"string_value\",\"created_at\",\"updated_at\", \"sensor_id\") VALUES "
         sql << row_values.join(',')
         sql << " RETURNING \"id\""
         result_ids = repository.adapter.select(sql)

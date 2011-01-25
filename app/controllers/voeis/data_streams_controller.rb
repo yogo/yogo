@@ -486,8 +486,6 @@ class Voeis::DataStreamsController < Voeis::BaseController
     (0..range).each do |i|
       #create the Timestamp column
       if i == params[:timestamp].to_i && params[:timestamp] != "None"
-        #puts params["column"+i.to_s]
-        var = Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           data_stream_column = Voeis::DataStreamColumn.create(
                                 :column_number => i,
@@ -499,8 +497,6 @@ class Voeis::DataStreamsController < Voeis::BaseController
           data_stream_column.save
         end
       elsif i == params[:date].to_i && params[:date] != "None"
-        #puts params["column"+i.to_s]
-        var = Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           data_stream_column = Voeis::DataStreamColumn.create(
                                 :column_number => i,
@@ -512,13 +508,22 @@ class Voeis::DataStreamsController < Voeis::BaseController
           data_stream_column.save
         end
       elsif i == params[:time].to_i && params[:time] != "None"
-        #puts params["column"+i.to_s]
-        var = Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           data_stream_column = Voeis::DataStreamColumn.create(
                                 :column_number => i,
                                 :name => "Time",
                                 :type =>"Time",
+                                :unit => "NA",
+                                :original_var => params["variable"+i.to_s])
+          data_stream_column.data_streams << data_stream
+          data_stream_column.save
+        end
+      elsif i == params[:vertical_offset].to_i
+        parent.managed_repository do
+          data_stream_column = Voeis::DataStreamColumn.create(
+                                :column_number => i,
+                                :name => "Vertical-Offset",
+                                :type =>"Offset",
                                 :unit => "NA",
                                 :original_var => params["variable"+i.to_s])
           data_stream_column.data_streams << data_stream
@@ -575,10 +580,10 @@ class Voeis::DataStreamsController < Voeis::BaseController
     end #end range.each
     # Parse the csv file using the newly created data_stream template and
     # save the values as sensor_values
-    # parent.managed_repository{Voeis::SensorValue.parse_logger_csv(params[:datafile], data_stream.id, site.id)}
+    parent.managed_repository{Voeis::SensorValue.parse_logger_csv(params[:datafile], data_stream.id, site.id)}
     # parent.publish_his
-    # flash[:notice] = "File parsed and stored successfully."
-    # redirect_to project_path(params[:project_id])
+     flash[:notice] = "File parsed and stored successfully."
+     redirect_to project_path(params[:project_id])
   end
 
   def index
