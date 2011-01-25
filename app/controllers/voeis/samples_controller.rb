@@ -41,7 +41,7 @@ class Voeis::SamplesController < Voeis::BaseController
     puts d_time = DateTime.parse("#{params[:time]["stamp(1i)"]}-#{params[:time]["stamp(2i)"]}-#{params[:time]["stamp(3i)"]}T#{params[:time]["stamp(4i)"]}:#{params[:time]["stamp(5i)"]}:00#{ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60)}:00")
     parent.managed_repository do
       @sample = Voeis::Sample.new(:sample_type =>   params[:sample][:sample_type],
-                                  :material => params[:material],
+                                  :material => params[:sample][:material],
                                   :lab_sample_code => params[:sample][:lab_sample_code],
                                   :lab_method_id => params[:sample][:lab_method_id].to_i,
                                   :local_date_time => d_time)

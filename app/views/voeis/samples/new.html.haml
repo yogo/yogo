@@ -19,7 +19,7 @@
     -lab_method_options = lab_method_options.merge({lab_meth.lab_method_name => lab_meth.id})
   = f.select('lab_method_id',  options_for_select(lab_method_options))
   =clear_break
-  %label{:id => "sample_mat", :onclick=>"$('#new_sample_material').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Sample Material
+  %label{:id => "sample_mat", :onclick=>"$('#new_sample_material').toggle('fold');", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Sample Medium
   -sample_material_options = Array.new
   - @sample_materials.all(:order => [:material.asc]).each do |mat|
     -sample_material_options << [mat.material]
