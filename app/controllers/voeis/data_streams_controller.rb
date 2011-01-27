@@ -171,30 +171,79 @@ class Voeis::DataStreamsController < Voeis::BaseController
       :type => 'text/csv; charset=utf-8; header=present',
       :filename => filename)
   end
-
-  def site_sensor_variables
-    @units  = Unit.all
+  
+  def site_data_stream_options(site_id)
+    
+    @data_stream_array = Array.new
     parent.managed_repository do
-      site = Voeis::Site.get(params[:site_id])
-      @variable_hash = Hash.new
-      i = 1
-      @variable_hash['variables'] = Array.new
-      site.sensor_types.each do |sensor|
-        var = sensor.variables.first
-        if !var.nil?
-      #site.sensor_types.variables.each do |var|
-          @var_hash = Hash.new
-          @var_hash['id'] = var.id.to_s + "," + sensor.data_stream_columns.data_streams.first.id.to_s
-          @var_hash['name'] = var.variable_name+":"+var.variable_code+":"+var.sample_medium+":"+var.data_type+":"+@units.get(var.variable_units_id).units_abbreviation+':'+sensor.data_stream_columns.data_streams.first.name
-          @variable_hash['variables'] << @var_hash
+      site= Voeis::Site.get(site_id)
+      if !site.nil?
+        site.data_streams.all(:order => [:name.asc]).each do |data_stream|
+          @data_stream_hash = Hash.new
+          @data_stream_hash['id'] = data_stream.id.to_s
+          @data_stream_hash['name'] =  data_stream.name.capitalize
+          @data_stream_array << @data_stream_hash
         end
+      else
+        @data_stream_hash = Hash.new
+        @data_stream_hash['id'] ="None"
+        @data_stream_hash['name'] = "None"
+        @data_stream_array << @data_stream_hash
       end
     end
-    
+    return @data_stream_array
+  end
+  
+  
+  
+  def data_stream_var_options (data_stream_id)
+    @units  = Unit.all
+    @variable_array = Array.new
+    parent.managed_repository do
+      data_stream = Voeis::DataStream.get(data_stream_id)
+      @variable_hash = Hash.new
+      i = 1
+      if !data_stream.nil?
+         @variable_hash ['id'] = "All"
+         @variable_hash['name'] = "All"
+         @variable_array << @variable_hash
+         data_stream.data_stream_columns.sensor_types.each do |sensor|
+           var = sensor.variables.first
+           if !var.nil?
+             @var_hash = Hash.new
+             @var_hash['id'] = var.id.to_s + "," + sensor.data_stream_columns.data_streams.first.id.to_s
+             unit_abbreviation = @units.first(:id => var.variable_units_id).nil? ? "NA" : @units.first(:id => var.variable_units_id).units_abbreviation.to_s 
+             @var_hash['name'] = var.variable_name+":"+var.variable_code+":"+var.sample_medium+":"+var.data_type+":"+unit_abbreviation.to_s+":"+sensor.data_stream_columns.data_streams.first.name
+             @variable_array << @var_hash
+           end
+         end
+      else
+        @var_hash = Hash.new
+        @var_hash['id'] ="None"
+        @var_hash['name'] = "None"
+        @variable_array << @var_hash
+      end
+    end
+    return @variable_array
+  end
+  
+  def data_stream_sensor_variables
+    @variable_hash = Hash.new
+    @variable_hash= {"variables" => data_stream_var_options(params[:data_stream_id])}
     respond_to do |format|
        format.json do
          format.html
          render :json => @variable_hash.to_json, :callback => params[:jsoncallback]
+       end
+     end
+  end
+  def site_data_streams
+    @data_stream_hash = Hash.new
+    @data_stream_hash ={"data_streams" => site_data_stream_options(params[:site_id])}
+    respond_to do |format|
+       format.json do
+         format.html
+         render :json => @data_stream_hash.to_json, :callback => params[:jsoncallback]
        end
      end
   end
@@ -216,37 +265,20 @@ class Voeis::DataStreamsController < Voeis::BaseController
         @start_year = @start_year.timestamp.to_time.year
         @end_year = @end_year.timestamp.to_time.year
       end
-      #@variable_hash = Hash.new
-      #@sites.each do |site|
-        variable_opt_array = Array.new
-        if @sites.all(:order => [:name.asc]).first.sensor_types.count > 0
-          #variable_opt_array << ["All", "All"]
-          Voeis::DataStream.all.each do |datastream|
-            #variable_opt_array << ["All:"+datastream.name, "All,"+datastream.id.to_s]
-          end
-          @sites.first.sensor_types.each do |sensor|
-            var = sensor.variables.first
-            if !var.nil?
-              variable_opt_array << [var.variable_name+":"+var.variable_code+":"+var.sample_medium+":"+var.data_type+":"+@units.get(var.variable_units_id).units_abbreviation+':'+sensor.data_stream_columns.data_streams.first.name, var.id.to_s + "," + sensor.data_stream_columns.data_streams.first.id.to_s]
-            end
-          end
-        else
-          variable_opt_array << ["None", "None"]
-        end
-        @variable_opts = opts_for_select(variable_opt_array)
-      #end
+      @data_stream_opts_array = Array.new
+      site_data_stream_options(@sites.all(:order => [:name.asc]).first.id).each do |ds|
+        @data_stream_opts_array << [ds['name'], ds['id']]
+      end
+      @variable_opts_array = Array.new
+      data_stream_var_options(@data_stream_opts_array.sort[0][1]).each do |var|
+        @variable_opts_array << [var['name'], var['id']]
+      end
     end
-    # @var_opts_array = Array.new
-    #  @var_opts_array << ["All", "All"]
-    #  @variable_hash[@sites.first.id.to_s].each do |var|
-    #    @var_opts_array << [var.variable_name+":"+var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
-    #  end
-    #  @var_options = opts_for_select(@var_opts_array)
     @site_opts_array = Array.new
     @sites.all(:order => [:name.asc]).each do |site|
-      @site_opts_array << [site.name, site.id.to_s]
+      @site_opts_array << [site.name.capitalize, site.id.to_s]
     end
-    @site_options = opts_for_select(@site_opts_array)
+    #@site_options = options_for_select(@site_opts_array)
   end
 
   def search
@@ -278,8 +310,9 @@ class Voeis::DataStreamsController < Voeis::BaseController
       end
       # if !parent.manged_repository{Voeis::Variable.get(params[:variable]).sensor_types.all(:sites => {:id => site.id})}.nil?
       if !site.sensor_types.empty? && params[:variable] != "None"
-        if params[:variable] == "All"
+        if @var_name == "All"
           @column_array << ["Timestamp", 'datetime']
+          @column_array << ["Vertical Offset", 'number']
           site.sensor_types.each do |sensor|
             
             @column_array << [sensor.variables.first.variable_name, 'number']
@@ -287,6 +320,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
           site.sensor_types.first.sensor_values(:timestamp.gte => @start_date.to_datetime, :timestamp.lte => @end_date.to_datetime).each do |sens_val|
             temp_array = Array.new
             temp_array << sens_val.timestamp.to_datetime
+            temp_array << sens_val.vertical_offset
             site.sensor_types.each do |sens|
               val = sens.sensor_values.first(:timestamp.gte => sens_val.timestamp)
               if !val.nil?
@@ -298,14 +332,17 @@ class Voeis::DataStreamsController < Voeis::BaseController
             @row_array << temp_array
           end
         elsif var_datastream[0] == "All"
+          debugger
           @column_array << ["Timestamp", 'datetime']
-          datastream.data_stream_columns.sensor_types.each do |sensor|
+          @column_array << ["Vertical Offset", 'number']
+          datastream.data_stream_columns.sensor_types.all(:order => [:name.asc]).each do |sensor|
             @column_array << [sensor.variables.first.variable_name, 'number']
           end
           site.sensor_types.first.sensor_values(:timestamp.gte => @start_date.to_datetime, :timestamp.lte => @end_date.to_datetime).each do |sens_val|
             temp_array = Array.new
             temp_array << sens_val.timestamp.to_datetime
-            site.sensor_types.each do |sens|
+            temp_array << sens_val.vertical_offset
+            site.sensor_types.all(:order => [:name.asc]).each do |sens|
               val = sens.sensor_values.first(:timestamp.gte => sens_val.timestamp)
               if !val.nil?
                 temp_array << val.value
@@ -325,10 +362,12 @@ class Voeis::DataStreamsController < Voeis::BaseController
           #end
           if !my_sensor.nil?
             @column_array << ["Timestamp", 'datetime']
+            @column_array << ["Vertical Offset", 'number']
             @column_array << [my_sensor.variables.first.variable_name, 'number']
             my_sensor.sensor_values(:timestamp.gte => @start_date.to_datetime, :timestamp.lte => @end_date.to_datetime).each do |sens_val|
               temp_array = Array.new
               temp_array << sens_val.timestamp.to_datetime
+              temp_array << sens_val.vertical_offset
               temp_array << sens_val.value
               @row_array << temp_array
             end

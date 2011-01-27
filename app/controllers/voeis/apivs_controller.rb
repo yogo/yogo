@@ -326,6 +326,7 @@ class Voeis::ApivsController < Voeis::BaseController
   # @param [Float] value the value of the sensor measurement
   # @param [String] unit the name of the units
   # @param [Timestamp] timestamp the timestamp the sensor measurement was taken at
+  # @param [Float] vertical_offset - the offset from the sites offset (by default is 0.0)
   # @param [Boolean] published - true if this sensor measurement has been published to the HIS server
   # @param [Integer] sensor_type_id the sensor_type to associate this sensor_value with
   #
@@ -343,6 +344,7 @@ class Voeis::ApivsController < Voeis::BaseController
         :value => params[:value].to_f,
         :units => params[:unit],
         :timestamp => params[:timestamp],
+        :vertical_offset => params[:vertical_offset].to_f,
         :published => params[:published],
         :string_value => params[:value])
       @sensor_value.sensor_type << @sensor_type

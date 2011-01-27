@@ -28,7 +28,8 @@ Yogo::Application.routes.draw do
         collection do
           get  :add
           get  :query
-          get  :site_sensor_variables
+          get  :data_stream_sensor_variables
+          get  :site_data_streams
           post :pre_upload
           post :create_stream
           post :search
