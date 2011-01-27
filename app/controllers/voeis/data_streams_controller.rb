@@ -270,11 +270,11 @@ class Voeis::DataStreamsController < Voeis::BaseController
         @data_stream_opts_array << [ds['name'], ds['id']]
       end
       @variable_opts_array = Array.new
-      if !@data_stream_opts_array.nil?
-        data_stream_var_options(@data_stream_opts_array.sort[0][1]).each do |var|
-          @variable_opts_array << [var['name'], var['id']]
-        end
-      end
+      #if !@data_stream_opts_array.nil?
+      #  data_stream_var_options(@data_stream_opts_array.sort[0][1]).each do |var|
+      #    @variable_opts_array << [var['name'], var['id']]
+      #  end
+      #end
     end
     @site_opts_array = Array.new
     @sites.all(:order => [:name.asc]).each do |site|
