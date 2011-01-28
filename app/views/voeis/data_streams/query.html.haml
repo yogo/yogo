@@ -22,7 +22,10 @@
 #search_results
   :javascript  
     $(function() {
-      
+    
+    $(document).ready(function() {
+    update_variables();
+    });
     function update_variables(){
     $('#loader').toggle();
     $.get("#{data_stream_sensor_variables_project_data_streams_path}"+".json?data_stream_id=" + $("#data_stream").val(),

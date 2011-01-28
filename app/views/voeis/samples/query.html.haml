@@ -2,6 +2,7 @@
 = form_for(:query, @query, :url => { :action => 'search'}, :remote => true) do |f|
   Site: 
   = select_tag("site", @site_options.html_safe)
+  = clear_break
   Variable: 
   = select_tag("variable", @variable_opts.html_safe)
   = clear_break

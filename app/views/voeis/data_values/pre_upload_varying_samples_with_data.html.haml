@@ -14,7 +14,7 @@
   -@site_options=""
   -@sites.all(:order => [:name.asc]).each do |site|
     -if site.id != nil
-      -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
+      -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name.capitalize+"|"+site.code+"</option>"
   =select_tag("site", @site_options.html_safe)
   =clear_break
   Select the Time Zone this sample was collected in:

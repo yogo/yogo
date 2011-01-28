@@ -278,7 +278,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
     end
     @site_opts_array = Array.new
     @sites.all(:order => [:name.asc]).each do |site|
-      @site_opts_array << [site.name.capitalize, site.id.to_s]
+      @site_opts_array << [site.name.capitalize+" | "+site.code, site.id.to_s]
     end
     #@site_options = options_for_select(@site_opts_array)
   end
