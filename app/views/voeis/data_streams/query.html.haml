@@ -16,6 +16,7 @@
   = clear_break
 
   = f.submit('Search', :onclick => "$('#loader').toggle();")
+  = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 
 = clear_break
 
 #search_results
