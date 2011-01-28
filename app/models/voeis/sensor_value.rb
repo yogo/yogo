@@ -131,7 +131,7 @@ class Voeis::SensorValue
      unit = 1
      #Voeis::SensorValue.transaction do
      timestamp = (data_timestamp_col == "") ? Time.parse(row[date_col].to_s + ' ' + row[time_col].to_s).strftime("%Y-%m-%dT%H:%M:%S%z") : row[data_timestamp_col.to_i]
-     vertical_offset = row[vertical_offset_col.to_i] == "" ? 0.0 : row[vertical_offset_col.to_i].to_f
+     vertical_offset = vertical_offset_col == "" ? 0.0 : row[vertical_offset_col.to_i].to_f
      if t = Date.parse(timestamp) rescue nil?
        if Voeis::SensorValue.first(:timestamp => timestamp, :sensor_id => data_col_array[sensor_cols[0]][sensor].id).nil?
          created_at = updated_at = Time.now.strftime("%Y-%m-%dT%H:%M:%S%z")
