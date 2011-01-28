@@ -83,10 +83,13 @@ Yogo::Application.routes.draw do
         collection do
           get  :pre_process
           get  :pre_process_samples_and_data
+          get  :pre_process_varying_samples_with_data
           post :pre_upload
           post :pre_upload_samples_and_data
+          post :pre_upload_varying_samples_with_data
           post :store_sample_data
           post :store_samples_and_data
+          post :store_varying_samples_with_data
         end
       end
     end

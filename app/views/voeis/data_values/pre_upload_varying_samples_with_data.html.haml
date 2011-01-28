@@ -3,32 +3,13 @@
 /-if !row_size.nil?  
 %h3 Samples and Data Import Form
 
-= form_tag("store_samples_and_data", :onSubmit => "return checkform();") do 
+= form_tag("store_varying_samples_with_data", :onSubmit => "return checkform();") do 
   Please give this Parsing Template a name: 
   =text_field_tag ("template_name", @template_name)
   =check_box_tag 'no_save', 'no', @template_name == "" ? false : true
   Check this box if you do not wish to save a new parsing template.
   =clear_break
-  Sample Type:
-  -sample_type_options = Array.new
-  - @sample_types.all(:order => [:term.asc]).each do |samp_type|
-    -sample_type_options <<[samp_type.term]
-  = select_tag('sample_type',  options_for_select(sample_type_options))
-  =clear_break
-  %label Lab Method:
-  -lab_method_options = Hash.new
-  - @lab_methods.all(:order => [:lab_method_name.asc]).each do |lab_meth|
-    -lab_method_options = lab_method_options.merge({lab_meth.lab_method_name => lab_meth.id})
-  = select_tag('lab_method_id',  options_for_select(lab_method_options))
-  =clear_break
-  %label Sample Material
-  -sample_material_options = Array.new
-  - @sample_materials.all(:order => [:material.asc]).each do |mat|
-    -sample_material_options << [mat.material]
-  - @project_sample_materials.all(:order => [:material.asc]).each do |mat|
-    -sample_material_options << [mat.material]  
-  = select_tag('material',  options_for_select(sample_material_options))
-  = clear_break
+  
   Site: 
   -@site_options=""
   -@sites.all(:order => [:name.asc]).each do |site|
@@ -76,6 +57,39 @@
   =select_tag("sample_id", @column_options.html_safe)
   =clear_break
 
+  -sample_type_options = Array.new
+  - @sample_types.all(:order => [:term.asc]).each do |samp_type|
+    -sample_type_options <<[samp_type.term]  
+  -lab_method_options = Hash.new
+  - @lab_methods.all(:order => [:lab_method_name.asc]).each do |lab_meth|
+    -lab_method_options = lab_method_options.merge({lab_meth.lab_method_name => lab_meth.id})
+  -sample_material_options = Array.new
+  - @sample_materials.all(:order => [:material.asc]).each do |mat|
+    -sample_material_options << [mat.material]
+  - @project_sample_materials.all(:order => [:material.asc]).each do |mat|
+    -sample_material_options << [mat.material]  
+  
+  = clear_break
+  
+  %table
+    %tr
+      %th Sample Type
+      %th Sample Medium
+      %th Sample/Lab Method
+      %th Row #
+      %th CSV Row Content
+    -(@start_line..@csv_size).each do |i|
+      %tr
+        %td
+          = select_tag('sample_type'+i.to_s,  options_for_select(sample_type_options))
+        %td
+          = select_tag('material'+i.to_s,  options_for_select(sample_material_options))
+        %td
+          = select_tag('lab_method_id'+i.to_s,  options_for_select(lab_method_options))
+        %td
+          = (i).to_s
+        %td
+          =@csv_array[i].to_s
   =hidden_field_tag('datafile', @new_file)
   =hidden_field_tag('row_size', @row_size)
   =hidden_field_tag("start_line", @start_line)
