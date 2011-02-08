@@ -55,7 +55,7 @@ class Voeis::DataValuesController < Voeis::BaseController
   # @api public
   def pre_upload
      require 'csv_helper'
-     
+     @sites = parent.managed_repository{ Voeis::Site.all }
      @project = parent
      #@project = Project.first(:id => params[:project_id])
       @variables = Variable.all

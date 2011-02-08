@@ -47,15 +47,22 @@
   -@samples.all(:order => [:lab_sample_code.asc]).each do |sample|
     -if sample.id != nil
       -@sample_options= @sample_options + "<option value="+sample.id.to_s+">"+sample.lab_sample_code+"</option>"
+  -@site_options=""
+  -@sites.all(:order => [:name.asc]).each do |site|
+    -if site.id != nil
+      -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name.capitalize+"|"+site.code+"</option>"
   %table
     %tr
       %th #{@project.name} Sites
+      %th Samples
       %th Row #
       %th CSV Row Content
     -(@start_line..@csv_size).each do |i|
       %tr
         %td
-          =select_tag("csv_sample"+i.to_s, @sample_options.html_safe)
+          =select_tag("site-"+i.to_s, @site_options.html_safe)
+        %td
+          =select_tag("csv_sample-"+i.to_s, @sample_options.html_safe)
         %td
           = (i).to_s
         %td
