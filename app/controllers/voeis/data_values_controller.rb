@@ -693,6 +693,8 @@ class Voeis::DataValuesController < Voeis::BaseController
      @csv_row = Array.new
      csv_data = CSV.read(params[:datafile])
      i = params[:start_line].to_i-1
+     debugger
+     
      d_time = DateTime.parse("#{params[:time]["stamp(1i)"]}-#{params[:time]["stamp(2i)"]}-#{params[:time]["stamp(3i)"]}T#{params[:time]["stamp(4i)"]}:#{params[:time]["stamp(5i)"]}:00#{ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60)}:00")
      csv_data[params[:start_line].to_i-1..-1].each do |row|
        @csv_row[i] = row

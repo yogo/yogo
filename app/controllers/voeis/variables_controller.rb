@@ -37,7 +37,7 @@ class Voeis::VariablesController < Voeis::BaseController
     
     if @variable.save  
       flash[:notice] = 'Variable was successfully created.'
-      redirect_to(project_path(parent))
+      redirect_to(new_project_variable_path(parent))
     else
       respond_to do |format|
         flash[:warning] = 'There was a problem saving the Variables.'

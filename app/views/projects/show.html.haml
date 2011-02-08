@@ -19,7 +19,6 @@
         - if @project.managed_repository { Voeis::DataStream.all.count } > 0
           = link_to("Data", add_project_data_streams_path(@project), :params => {:project_id => @project.id}, :class => 'icon icon-add')
     - if @project.managed_repository { Voeis::DataStream.all.count } > 0
-      = link_to("View Data Streams", project_data_streams_path(@project), :class => 'button-link')
       = link_to("Browse Data Streams", query_project_data_streams_path(@project), :class => 'button-link')
     - if @project.managed_repository { !Voeis::DataValue.first.nil? }
       = link_to("Browse Sample Data", query_project_samples_path(@project), :class => 'button-link')

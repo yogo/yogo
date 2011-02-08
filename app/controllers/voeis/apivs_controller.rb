@@ -70,6 +70,66 @@ class Voeis::ApivsController < Voeis::BaseController
   
   
   #*************DataStreams
+
+
+
+  # pulls data from a data stream
+  #
+  # @example
+  # http://localhost:4000/projects/fbf20340-af15-11df-80e4-002500d43ea0/apivs/get_data_stream_data.json?api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7&data_stream_id=1&start_datetime=12/1/2010 12:23&end_datetime=12/1/2010 24:00:00
+  #
+  #
+  # @param [Integer] :data_stream_id
+  # @param [DateTime] :start_datetime pull data after this datetime
+  # @param [DateTime] :end_datetime pull date before this datetime
+  #
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def get_data_stream_data    
+   @dts = ""
+   @data_stream_values = Hash.new
+   @values = Array.new
+   parent.managed_repository do
+     @dts= Voeis::DataStream.get(params[:data_stream_id].to_i)
+     @dts.data_stream_columns.sensor_types.each do |sensor|
+       @var_hash = Hash.new
+       @var_hash = sensor.variables.first.as_json
+       @var_hash = @var_hash.merge({'data' => sensor.sensor_values.all(:timestamp.gte => params[:start_datetime].to_time, :timestamp.lte => params[:end_datetime].to_time)})
+       @values << @var_hash
+     end
+     @data_stream_values[:variables] = @values
+   end
+   respond_to do |format|
+     format.json do
+       render :json => @data_stream_values.as_json, :callback => params[:jsoncallback]
+     end
+     format.xml do
+       render :xml => @data_stream_values.to_xml
+     end
+   end
+  end
+   #  @data_stream_values = Hash.new
+   #   parent.managed_repository do
+   #     @data_stream = Voeis::DataStream.get(params[:data_stream_id].to_i)
+   #     @data_stream.data_stream_columns.sensor_types.each do |sensor|
+   #     #  @data_stream_values[sensor.variables.first.variable_name] = sensor.sensor_values.all(:timestamp.gte => params[:start_datetime].to_time, :timestamp.lte => params[:end_datetime].to_time)
+   #       debugger
+   #     #end
+   #   end
+   #   respond_to do |format|//home/rochellec/GPS
+   #      format.json do
+   #        render :json => @data_stream_values.to_json, :callback => params[:jsoncallback]
+   #      end
+   #   #   format.xml do
+   #   #     render :xml => @data_stream_values.to_xml
+   #   #   end
+   #   end
+   #   
+   # end
+
+
   # 
   # curl -F datafile=@NFork_tail.csv -F data_template_id=4 -F api_key=e79b135dcfeb6699bbaa6c9ba9c1d0fc474d7adb755fa215446c398cae057adf http://voeis.msu.montana.edu/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80//apivs/upload_logger_data.json?
   # curl -F datafile=@YB_Hill.csv -F data_template_id=26 http://localhost:3000/projects/a459c38c-f288-11df-b176-6e9ffb75bc80/apivs/upload_logger_data.json?api_key=3b62ef7eda48955abc77a7647b4874e543edd7ffc2bb672a40215c8da51f6d09
