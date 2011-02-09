@@ -93,13 +93,17 @@ class Voeis::ApivsController < Voeis::BaseController
    @values = Array.new
    parent.managed_repository do
      @dts= Voeis::DataStream.get(params[:data_stream_id].to_i)
-     @dts.data_stream_columns.sensor_types.each do |sensor|
-       @var_hash = Hash.new
-       @var_hash = sensor.variables.first.as_json
-       @var_hash = @var_hash.merge({'data' => sensor.sensor_values.all(:timestamp.gte => params[:start_datetime].to_time, :timestamp.lte => params[:end_datetime].to_time)})
-       @values << @var_hash
+     if @dts.nil?
+       @data_stream_values[:error] = "There is no Data Stream with ID:"+params[:data_stream_id]
+     else
+       @dts.data_stream_columns.sensor_types.each do |sensor|
+         @var_hash = Hash.new
+         @var_hash = sensor.variables.first.as_json
+         @var_hash = @var_hash.merge({'data' => sensor.sensor_values.all(:timestamp.gte => params[:start_datetime].to_time, :timestamp.lte => params[:end_datetime].to_time)})
+         @values << @var_hash
+       end
+       @data_stream_values[:variables] = @values
      end
-     @data_stream_values[:variables] = @values
    end
    respond_to do |format|
      format.json do
@@ -447,17 +451,21 @@ class Voeis::ApivsController < Voeis::BaseController
    @values = Array.new
    parent.managed_repository do
      @site= Voeis::Site.get(params[:site_id].to_i)
-     @site.variables. each do |var|
-       @var_hash = Hash.new
-       @var_hash = var.as_json
-       if !var.sensor_types.first.nil?
-         @var_hash = @var_hash.merge({'time_series_data' => @site.sensor_types.sensor_values.all(:timestamp.gte => params[:start_datetime].to_time, :timestamp.lte => params[:end_datetime].to_time) & var.sensor_types.sensor_values.all(:timestamp.gte => params[:start_datetime].to_time, :timestamp.lte => params[:end_datetime].to_time)})
+     if @site.nil?
+        @data_values[:error] = "There is no Site with ID:"+ params[:site_id]
+     else
+       @site.variables. each do |var|
+         @var_hash = Hash.new
+         @var_hash = var.as_json
+         if !var.sensor_types.first.nil?
+           @var_hash = @var_hash.merge({'time_series_data' => @site.sensor_types.sensor_values.all(:timestamp.gte => params[:start_datetime].to_time, :timestamp.lte => params[:end_datetime].to_time) & var.sensor_types.sensor_values.all(:timestamp.gte => params[:start_datetime].to_time, :timestamp.lte => params[:end_datetime].to_time)})
+         end
+         @var_hash = @var_hash.merge({'sample_data' => var.data_values.all(:local_date_time.gte => params[:start_datetime].to_time, :local_date_time.lte => params[:end_datetime].to_time)})
+         @values << @var_hash
        end
-       @var_hash = @var_hash.merge({'sample_data' => var.data_values.all(:local_date_time.gte => params[:start_datetime].to_time, :local_date_time.lte => params[:end_datetime].to_time)})
-       @values << @var_hash
+       @data_values[:variables] = @values
+       @data_values[:site] = @site.as_json
      end
-     @data_values[:variables] = @values
-     @data_values[:site] = @site.as_json
    end
    respond_to do |format|
      format.json do
@@ -623,6 +631,51 @@ class Voeis::ApivsController < Voeis::BaseController
      end
    end
    #************Variables
+   
+   # pulls data from a within a project's by the variable
+   #
+   # @example
+   # http://localhost:4000/projects/fbf20340-af15-11df-80e4-002500d43ea0/apivs/get_project_variable_data.json?api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7&variable_id=1&start_datetime=12/1/2010 12:23&end_datetime=12/1/2010 24:00:00
+   #
+   #
+   # @param [Integer] :variable_id the id of the variable to pull data for
+   # @param [DateTime] :start_datetime pull data after this datetime
+   # @param [DateTime] :end_datetime pull date before this datetime
+   #
+   #
+   # @author Sean Cleveland
+   #
+   # @api public
+   def get_project_variable_data    
+    @var = ""
+    @data_values = Hash.new
+    @values = Array.new
+    parent.managed_repository do
+      @var= Voeis::Variable.get(params[:variable_id].to_i)
+      if @var.nil?
+        @data_values[:error] = "There is no variable with the ID:"+params[:variable_id]
+      else
+        @var_hash = Hash.new
+        @var_hash = @var.as_json
+        if !@var.sensor_types.first.nil?
+          @var_hash = @var_hash.merge({'time_series_data' =>  @var.sensor_types.sensor_values.all(:timestamp.gte => params[:start_datetime].to_time, :timestamp.lte => params[:end_datetime].to_time)})
+          @var_hash = @var_hash.merge({'sample_data' => @var.data_values.all(:local_date_time.gte => params[:start_datetime].to_time, :local_date_time.lte => params[:end_datetime].to_time)})
+          @values << @var_hash
+        end
+        @data_values[:variable] = @values
+        @data_values[:project] = parent.as_json
+      end
+    end
+    respond_to do |format|
+      format.json do
+        render :json => @data_values.as_json, :callback => params[:jsoncallback]
+      end
+      format.xml do
+        render :xml => @data_values.to_xml
+      end
+    end
+   end 
+   
    
    # create_project_variable
    # API for creating a new variable within in a project
