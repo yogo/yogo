@@ -73,4 +73,31 @@ class Voeis::SitesController < Voeis::BaseController
 
     redirect_to project_url(parent)
   end
+
+  # site_samples 
+  # Returns the samples for a given site
+  #
+  #
+  # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/site/site_sample.json?site_id=1
+  # 
+  # @param [Integer] :site_id the id of the site within the project
+  # 
+  # @return [JSON String] an array of samples that exist for the projects site and each ones properties and values
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def site_samples
+    @samples = Hash.new
+    parent.managed_repository do
+      site = Voeis::Site.get(params[:site_id])
+      @samples ={"samples" => site.samples.all(:order => [:lab_sample_code.asc])}
+    end
+    respond_to do |format|
+       format.json do
+         format.html
+         render :json => @samples.as_json, :callback => params[:jsoncallback]
+       end
+     end
+  end
 end

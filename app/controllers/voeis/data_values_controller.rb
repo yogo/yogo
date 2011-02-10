@@ -802,7 +802,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      (params[:start_line].to_i-1..params[:csv_size].to_i).each do |row|
        if !@csv_row[row].nil?
        parent.managed_repository do
-         @sample = Voeis::Sample.get(params["csv_sample"+(row+1).to_s])
+         @sample = Voeis::Sample.get(params["csv_sample-"+(row+1).to_s])
          (0..range).each do |i|
            if params[:replicate].to_i != i && params[:timestamp_col].to_i != i && @csv_row[row][i] != ""&& !params["ignore"+i.to_s]
              #store data value for this column(i) and row

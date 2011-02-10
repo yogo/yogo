@@ -60,7 +60,7 @@
     -(@start_line..@csv_size).each do |i|
       %tr
         %td
-          =select_tag("site-"+i.to_s, @site_options.html_safe)
+          =select_tag("site-"+i.to_s, @site_options.html_safe, :class => "sites")
         %td
           =select_tag("csv_sample-"+i.to_s, @sample_options.html_safe)
         %td
@@ -76,16 +76,27 @@
   =submit_tag("Submit", :onclick => "$('#loader').toggle();")
   = link_to('Cancel', {:action => 'show', :controller => '/projects', :id=>@project.id }, :class => 'icon icon-cancel', :onclick => "$('#loader').toggle();", :onload => "$('#loader').toggle();")
 
+
 :javascript  
-  function checkform(){
-  var r=confirm('Are you sure you are ready to store this data?');
-  if (r==false)
+  $(function() {
+  $('.sites').change(function() { 
+     var num = $(this).attr("id").split("-");
+  $.get("#{site_samples_project_sites_path}"+".json?site_id=" + $(this).val(),
+  function(data) {
+  $('#csv_sample-' + num[1]).empty();
+  if (data.samples.length == 0){
+  $('#csv_sample-' + num[1]).append($("<option></option>").attr("value","None").text("None"));
+  }
+  else{
+  var i = 0;
+  for(i=0;i< data.samples.length; i++)
   {
-  $('#loader').toggle();
+  $('#csv_sample-' + num[1]).append($("<option></option>").attr("value",data.samples[i].id).text(data.samples[i].lab_sample_code));
+  }}
   return false;
   }
-  else
-  {
-  return true;
-  }
+  );
+  return false;
+  });
+  });
 
