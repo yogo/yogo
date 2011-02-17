@@ -1,0 +1,50 @@
+%h2
+  = link_to(@project.name, project_path(@project) , :onload=> "$('#loader').toggle();")
+
+%h3 Field Data Measurement Input Form
+
+= form_tag("create_sensor_value", :onSubmit => "return checkform();") do 
+  Data Measurement Value: 
+  =text_field_tag ("sensor_value")
+  =clear_break
+  Please select the site this Data should be associated with:
+  -@site_options=""
+  -@sites.all(:order => [:name.asc]).each do |site|
+    -if site.id != nil
+      -@site_options= @site_options + "<option value="+site.id.to_s+">"+site.name+"</option>"
+  =select_tag("site", @site_options.html_safe)
+  =clear_break
+  -@variable_options=""
+  Select what VOEIS variable this is:
+  -@variables.all(:order => [:variable_name.asc]).each do |var|
+    -if var.id != nil
+      -unit_abbreviation = @units.first(:id => var.variable_units_id).nil? ? "NA" : @units.first(:id => var.variable_units_id).units_abbreviation.to_s 
+      -@variable_options= @variable_options + "<option value="+var.id.to_s+">"+var.variable_name+":"+var.variable_code+":"+var.sample_medium+":"+var.data_type+":"+unit_abbreviation.to_s+"</option>"
+  =select_tag("variable", @variable_options.html_safe)
+  =clear_break
+  Select a Timestamp for this Measurement:
+  =datetime_select("time", "stamp", :default => DateTime.now, :start_year => 1900)
+  =clear_break
+  Select the Time Zone this Measurement was collected in:
+  = time_zone_select("time", "zone", nil, :default => "Mountain Time (US & Canada)")
+  =clear_break
+  Enter the vertical offset for the Measurement:
+  =text_field_tag("vertical_offset", 0.0)
+  =clear_break
+  =clear_break
+  =submit_tag("Submit", :onclick => "$('#loader').toggle();")
+  = link_to('Cancel', {:action => 'show', :controller => '/projects', :id=>@project.id }, :class => 'icon icon-cancel', :onclick => "$('#loader').toggle();", :onload => "$('#loader').toggle();")
+
+:javascript  
+  function checkform()
+  {if ($('#vertical_offset').val() =="")
+  {
+  // something is wrong
+  alert('The Vertical Offset field requires a value before this form can be submitted.');
+  $('#loader').toggle();
+  return false;
+  }
+  // If the script gets this far through all of your fields
+  // without problems, it's ok and you can submit the form
+  return true;
+  }
