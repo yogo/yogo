@@ -24,8 +24,9 @@ class Voeis::SitesController < Voeis::BaseController
     parent.managed_repository do 
       site = Voeis::Site.get(params[:id])
       params[:site].each do |key, value|
-        site[key] = value
+        site[key] = value.empty? ? nil : value
       end
+      site.updated_at = Time.now
       puts site.valid?
       puts site.errors.inspect()
       if site.save
@@ -42,8 +43,10 @@ class Voeis::SitesController < Voeis::BaseController
   def create
     # This should be handled by the framework, but isn't when using jruby.
     params[:site][:latitude] = params[:site][:latitude].strip
-    params[:site][:longitude] = params[:site][:longitude].strip
-
+    fparams[:site][:longitude] = params[:site][:longitude].strip
+    params[:site].each_key do |key|
+      params[:site][key] = params[:site][key].empty? ? nil : params[:site][key]
+    end
     create! do |success, failure|
       success.html { redirect_to project_url(parent) }
     end

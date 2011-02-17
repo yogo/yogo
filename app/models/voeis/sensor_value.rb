@@ -18,10 +18,13 @@ class Voeis::SensorValue
 
   is_versioned :on => :updated_at
   
-  before(:save) {
+  before :save do 
     self.updated_at = DateTime.now
-  }
-
+  end
+  
+  before :update do
+    self.updated_at = DateTime.now
+  end
   #has n, :site,           :model => "Voeis::Site", :through => Resource
   has 1, :sensor_type_sensor_value, :model => "Voeis::SensorTypeSensorValue", :parent_key => [:id], :child_key => [:sensor_value_id]
   has 1, :sensor_type,     :through => :sensor_type_sensor_value

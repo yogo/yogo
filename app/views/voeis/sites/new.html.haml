@@ -11,12 +11,21 @@ Add an existing to site to the project:
 =clear_break
 Create a new site for the project:
 = form_for(:site, resource, :url => project_sites_path(@project), :builder => YogoFormBuilder, :html => {:onsubmit => "return checkform();"} )do |f|
+  
 
   = f.text_field("name")
   = f.text_field("code")
   = f.text_field("latitude")
   = f.text_field("longitude")
-  = f.text_field("state")
+  = f.text_field("elevation_m")         
+  = f.text_field("vertical_datum")      
+  = f.text_field("local_x")             
+  = f.text_field("local_y")             
+  = f.text_field("local_projection_id") 
+  = f.text_field("pos_accuracy_m")      
+  = f.text_field("county", :value => "USA")     
+  = f.text_field("state")         
+  = f.text_area("comments")            
   = f.submit("Save Site", :onclick => "$('#loader').toggle();")
   = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 
 
