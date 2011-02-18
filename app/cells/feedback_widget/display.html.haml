@@ -13,7 +13,7 @@
     = submit_tag ("Submit Issue", :class => "feedback-button", :onclick=>'$("#sm-loader").toggle();')
   %label{:id => "issue_close", :onclick=>"$('#feedback').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
   #sm-loader
-    = image_tag "small_load.gif"
+    = image_tag "smal_load.gif"
   :javascript
     var form = $('##{widget_id} form');
     form.submit(function() {
