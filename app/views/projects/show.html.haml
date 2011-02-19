@@ -16,6 +16,7 @@
         - if @project.managed_repository { Voeis::Sample.all.count } > 0
           = link_to("Sample Data", pre_process_project_data_values_path(@project), :class => 'icon icon-add')
         = link_to("Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id}, :class => 'icon icon-add')
+        = link_to("Field Data", new_field_measurement_project_sensor_values_path(@project), :params => {:project_id => @project.id}, :class => 'icon icon-add')
         - if @project.managed_repository { Voeis::DataStream.all.count } > 0
           = link_to("Data", add_project_data_streams_path(@project), :params => {:project_id => @project.id}, :class => 'icon icon-add')
     - if @project.managed_repository { Voeis::DataStream.all.count } > 0

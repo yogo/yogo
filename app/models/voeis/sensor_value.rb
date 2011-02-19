@@ -5,7 +5,7 @@ class Voeis::SensorValue
   include DataMapper::Resource
   include Facet::DataMapper::Resource
 
-  property :id, Serial, :key => false, :index => true
+  property :id, Serial
   property :value,    Float,   :required => true
   property :string_value, String, :required => true, :default => "Unknown"
   property :units,    String,  :required => true

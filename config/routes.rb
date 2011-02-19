@@ -70,7 +70,12 @@ Yogo::Application.routes.draw do
           post :create_project_data_stream_column
         end
       end
-      resources :sensor_values
+      resources :sensor_values do
+        collection do
+          get   :new_field_measurement
+          post   :create_field_measurement
+        end
+      end
       resources :sensor_types
       resources :data_stream_columns
       resources :samples do

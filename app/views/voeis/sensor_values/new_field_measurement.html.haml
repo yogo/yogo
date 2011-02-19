@@ -3,7 +3,7 @@
 
 %h3 Field Data Measurement Input Form
 
-= form_tag("create_sensor_value", :onSubmit => "return checkform();") do 
+= form_tag("create_field_measurement", :url => "create",:onSubmit => "return checkform();") do 
   Data Measurement Value: 
   =text_field_tag ("sensor_value")
   =clear_break
