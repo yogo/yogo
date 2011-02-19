@@ -41,11 +41,11 @@ class Voeis::SensorValuesController < Voeis::BaseController
       variable.save
       site = Voeis::Site.get(params[:site].to_i)
       #create field measurments data_stream
-      data_stream = Voeis::DataStream.first_or_create(:name => "Field Measurements-"+site.name,
+      data_stream = Voeis::DataStream.first_or_create(:name => "Field Measurements-"+site.code,
                                                       :filename => "NA",
                                                       :start_line => -1,
                                                       :type => "Field Measurements")
-      data_stream_column = Voeis::DataStreamColumn.first_or_create(:name => "FieldMeasurementColumn_"+variable.variable_code , 
+      data_stream_column = Voeis::DataStreamColumn.first_or_create(:name => "FieldMeasurementColumn_"+variable.variable_code+'_'+site.code , 
                                                                    :type => "Na", 
                                                                    :unit => variable.units.first.units_name,  
                                                                    :original_var => variable.variable_name, 
