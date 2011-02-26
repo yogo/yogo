@@ -43,7 +43,7 @@ class Voeis::SitesController < Voeis::BaseController
   def create
     # This should be handled by the framework, but isn't when using jruby.
     params[:site][:latitude] = params[:site][:latitude].strip
-    fparams[:site][:longitude] = params[:site][:longitude].strip
+    params[:site][:longitude] = params[:site][:longitude].strip
     params[:site].each_key do |key|
       params[:site][key] = params[:site][key].empty? ? nil : params[:site][key]
     end
