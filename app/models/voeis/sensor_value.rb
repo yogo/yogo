@@ -85,7 +85,7 @@ class Voeis::SensorValue
         end
       end
      if Voeis::SensorValue.last(:order =>[:id.asc]).nil?
-       startin_id = -9999
+       starting_id = -9999
      else
        starting_id = Voeis::SensorValue.last(:order =>[:id.asc]).id
      end
@@ -161,9 +161,9 @@ class Voeis::SensorValue
         sql << row_values.join(',')
         sql << " RETURNING \"id\""
         result_ids = repository.adapter.select(sql)
-        sql = "INSERT INTO \"voeis_sensor_value_sites\" (\"sensor_value_id\", \"site_id\") VALUES "
-        sql << result_ids.collect{|i| "(#{i},#{site.id})"}.join(',')
-        repository.adapter.execute(sql)
+        # sql = "INSERT INTO \"voeis_sensor_value_sites\" (\"sensor_value_id\", \"site_id\") VALUES "
+        # sql << result_ids.collect{|i| "(#{i},#{site.id})"}.join(',')
+        # repository.adapter.execute(sql)
         sql = "INSERT INTO \"voeis_sensor_type_sensor_values\" (\"sensor_value_id\",\"sensor_type_id\") VALUES "
         sql << (0..result_ids.length-1).collect{|i|
          "(#{result_ids[i]},#{data_col_array[sensor_cols[i]][sensor].id})"
