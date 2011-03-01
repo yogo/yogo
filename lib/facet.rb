@@ -251,7 +251,7 @@ module Facet
     def permissions
       {
         :create => [:save_parents, :save_children],
-        :retrieve => [:attributes] + self.methods.map{ |k| k.to_sym } - [:attributes=, :save, :update, :save_parents, :save_children, :destroy, :destroy!],
+        :retrieve => [:attributes, :properties] + self.methods.map{ |k| k.to_sym } - [:attributes=, :save, :update, :save_parents, :save_children, :destroy, :destroy!],
         :update => [:attributes=, :save, :update, :save_parents, :save_children],
         :destroy => [:destroy]
       }
