@@ -44,3 +44,4 @@ doc/voeis-demo/*
 temp_data/*
 db/sqlite3/*
 db/backup/*.sql
+.vagrant
