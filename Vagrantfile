@@ -46,9 +46,9 @@ Vagrant::Config.run do |config|
   config.vm.provision :chef_solo do |chef|
     chef.log_level = :debug
     chef.cookbooks_path = ["config/cookbooks", "vendor/opscode-cookbooks"]
-    #chef.add_recipe "apt"
-    #chef.add_recipe "rvm"
-    chef.add_recipe "voeis_server"
+    chef.add_recipe "apt"
+    chef.add_recipe "rvm"
+    chef.add_recipe "voeis_dev"
   end
 
   # Enable provisioning with chef server, specifying the chef server URL,
