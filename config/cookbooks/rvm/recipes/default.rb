@@ -41,4 +41,9 @@ bash "make 1.8.7 the default RVM ruby" do
 end
 
 # Ensure chef is installed in default rvm ruby
-gem_package "chef"
+gem_package "chef" do
+  gem_binary "/usr/local/bin/gem"
+  only_if "test -e /usr/local/bin/gem"
+end
+
+
