@@ -16,6 +16,7 @@ Yogo::Application.routes.draw do
       get  :search
       post :export
       post :publish_his
+      get  :get_user_projects
     end
     resources :memberships
     scope :module => "voeis" do
@@ -91,6 +92,7 @@ Yogo::Application.routes.draw do
       resources :data_values do
         collection do
           get  :pre_process
+          get  :pre_process_samples
           get  :pre_process_samples_and_data
           get  :pre_process_varying_samples_with_data
           post :pre_upload

@@ -133,6 +133,19 @@ class ProjectsController < InheritedResources::Base
     flash[:notice] = "Project deleting is disabled."
     redirect_to(:back)
   end
+  
+  def get_user_projects
+    @projects = Array.new
+    current_user.projects.all(:fields => [:id, :name, :description]).map {|project| @projects << {"id" => project.id.to_s, "name" => project.name, "description" => project.description} }
+    respond_to do |format|
+      format.json do
+       render :json => @projects.as_json, :callback => params[:jsoncallback]
+      end
+      format.xml do
+       render :xml => @projects.to_xml
+      end
+    end
+  end
 
   protected
   def resource
@@ -150,6 +163,13 @@ class ProjectsController < InheritedResources::Base
       q.access_as(current_user)
     end
   end
+
+
+
+
+
+
+
 
   def get_json_data(data_stream_ids, variable_ids, start_date = nil, end_date= nil, hour = nil)
     if !data_stream_ids.empty?

@@ -846,4 +846,8 @@ class Voeis::DataValuesController < Voeis::BaseController
      flash[:notice] = "File parsed and stored successfully."
      redirect_to project_path(params[:project_id])
    end# end def
+
+  def pre_process_samples
+    @columns = [1,2,3,4,5,6]
+  end
 end
