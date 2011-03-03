@@ -1,3 +1,4 @@
+
 #
 # Cookbook Name:: rvm
 # Recipe:: default
@@ -26,7 +27,11 @@ bash "install RVM" do
   not_if "which rvm && rvm --version"
 end
 
-cookbook_file "/etc/profile.d/rvm.sh"
+cookbook_file "/etc/profile.d/rvm.sh" do
+  mode 0644
+  owner "root"
+  group "root"
+end
 
 # Set default RVM Ruby
 bash "install default RVM ruby" do
