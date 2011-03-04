@@ -60,6 +60,7 @@ Yogo::Application.routes.draw do
           get :get_project_sample_measurements
           get :get_data_stream_data
           get :get_project_site_data
+          get :get_project_site_sensor_data_last_update    
           get :get_project_variable_data   
           post :upload_logger_data
           post :create_project_sample
