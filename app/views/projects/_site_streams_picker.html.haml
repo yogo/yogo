@@ -9,7 +9,7 @@
     - for site in @sites do
       .field-item{:class => site.variables.count > 0 ? "site": nil }
         .site-name{:class => 'icon' }
-          - if current_user.projects.include?(project)
+          - if !current_user.nil? && current_user.projects.include?(project)
             = link_to("", edit_project_site_path(@project, site.id) , :class => "icon icon-edit")
           = link_to(site.name, project_site_path(@project, site.id))
           - if !current_user.nil? && (current_user.system_role.name.eql?('Administrator') ||   (current_user.system_role.name.eql?('Project Manager')  && current_user.projects.include?(project)))
