@@ -850,4 +850,60 @@ class Voeis::DataValuesController < Voeis::BaseController
   def pre_process_samples
     @columns = [1,2,3,4,5,6]
   end
+  
+  def mock_pre_process_samples
+    @columns = [1,2,3,4,5,6]
+    @vars = Hash.new
+    Variable.all.each do |v| 
+      @vars=@vars.merge({v.variable_name => v.id})
+    end
+    @sites = Hash.new
+    parent.managed_repository{Voeis::Site.all}.each do |s|
+      @sites = @sites.merge({s.name => s.id})
+    end
+    @variables = Variable.all
+    @variable = Variable.new
+    @units = Unit.all
+    @variable_names = VariableNameCV.all
+    @sample_mediums= SampleMediumCV.all
+    @value_types= ValueTypeCV.all
+    @speciations = SpeciationCV.all
+    @data_types = DataTypeCV.all
+    @general_categories = GeneralCategoryCV.all
+    @label_array = Array["Variable Name","Variable Code","Unit Name","Speciation","Sample Medium","Value Type","Is Regular","Time Support","Time Unit ID","Data Type","General Cateogry"]
+    @current_variables = Array.new     
+    @variables.all(:order => [:variable_name.asc]).each do |var|
+      @temp_array =Array[var.variable_name, var.variable_code,@units.get(var.variable_units_id).units_name, var.speciation,var.sample_medium, var.value_type, var.is_regular.to_s, var.time_support.to_s, var.time_units_id.to_s, var.data_type, var.general_category]
+      @current_variables << @temp_array
+    end         
+    @project = parent
+    
+    
+  end
+  
+  # def dojo_variables_for_tree
+  #   @var_hash = Hash.new
+  #   @var_hash = {:identifier=> 'id', :label=> 'name', :items=>Variable.all().map{|v| {:id=>v.id, :name=>v.variable_name}}
+  #   Variable.general_categories.each do |cat|
+  #     cat_hash={:id=>cat, :name=>cat}
+  #     vars = Variable.all(:general_category=>cat,:fields=>[:variable_name],:unique=>true, :order=>[:variable_name.asc])
+  #     @var_name_array = array.new
+  #     vars.each |v|
+  #       var_name_hash = Hash.new
+  #       var_name_hash[:id=>v.name, :name=> v.name]
+  #       var_name_hash[:children]=Variable.all(:general_category=>cat, :variable_name=> v ).map{|var| {:_reference=>var.id}}.as_json
+  #       @var_name_array << var_name_hash
+  #     end
+  #     cat_hash[:children] = vars.map{|v| {:_reference=>v}}
+  #     @var_hash[:items] << cat_hash
+  #   end
+  #   respond_to do |format|
+  #      format.json do
+  #        render :json => @var_hash.to_json, :callback => params[:jsoncallback]
+  #      end
+  #      format.xml do
+  #        render :xml => @var_hash.to_xml
+  #      end
+  #    end
+  # end
 end

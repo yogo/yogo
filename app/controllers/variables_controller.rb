@@ -26,6 +26,8 @@ class VariablesController < ApplicationController
   def show
     
   end
+  
+
 
   def invalid_page
     redirect_to(:back)

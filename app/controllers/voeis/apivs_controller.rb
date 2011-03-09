@@ -871,6 +871,37 @@ class Voeis::ApivsController < Voeis::BaseController
       end
     end
   end
+ 
+ 
+ 
+  def dojo_variables_for_tree
+    @var_hash = Hash.new
+    @var_hash = {:identifier=> 'id', :label=> 'name', :items=>Variable.all().map{|v| {:id=>v.id, :name=>v.variable_name, :type=>"variable_code"}}}
+    Variable.general_categories.each do |cat|
+      cat_hash=Hash.new
+      cat_hash={:id=>cat, :name=>cat, :type=>"general_category"}
+      vars = Variable.all(:general_category=>cat,:fields=>[:variable_name],:unique=>true, :order=>[:variable_name.asc]).map{|v| v.variable_name}
+      cat_hash[:children] = vars.map{|v| {"_reference"=>v}}
+      @var_name_array = Array.new
+      vars.each do |v| 
+        var_name_hash = Hash.new
+        var_name_hash = {:id=>v, :name=> v,:type=>"variable_name"}
+        var_name_hash[:children] =  Variable.all(:general_category=>cat, :variable_name=> v ).map{|var| {"_reference"=>var.id.to_s}}
+        @var_name_array << var_name_hash
+      end
+      @var_hash[:items] << cat_hash
+      @var_hash[:items] << @var_name_array
+    end
+    respond_to do |format|
+      format.json do
+       render :json => @var_hash.as_json, :callback => params[:jsoncallback]
+      end
+      format.xml do
+       render :xml => @var_hash.to_xml
+      end
+    end
+  end
+ 
   # **********SAMPLES*************** 
    
   # get_project_samples

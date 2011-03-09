@@ -41,10 +41,11 @@ Yogo::Application.routes.draw do
         end
       end
 
-      resources :variables
+      resources :variables 
       resources :units
       resources :apivs do
         collection do
+          get :dojo_variables_for_tree
           get :create_project_site
           get :create_project_variable
           get :update_project_site
@@ -93,6 +94,7 @@ Yogo::Application.routes.draw do
       resources :data_values do
         collection do
           get  :pre_process
+          get  :mock_pre_process_samples
           get  :pre_process_samples
           get  :pre_process_samples_and_data
           get  :pre_process_varying_samples_with_data

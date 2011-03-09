@@ -1,0 +1,89 @@
+-#variable partial
+= render(:partial => "variable", :locals =>{:variable => @variables,
+                                            :variable =>@variable,
+                                            :units=>@units,
+                                            :variable_names=>@variable_names,
+                                            :sample_mediums=>@sample_mediums,
+                                            :value_types=>@value_types,
+                                            :speciations=>@speciations,
+                                            :data_types=>@data_types,
+                                            :general_categories=> @general_categories,
+                                            :label_array=>@label_array,
+                                            :current_variables=>@current_variables,
+                                            :project=>@project})
+%h2
+  Setup File Parsing Options
+Form Progress:
+%div{:dojoType=>"dijit.ProgressBar", :jsId=>"jsProgress", :id=>"downloadProgress", :maximum=>"10"}
+#column_panes
+  %div{:dojoType=>"dijit.TitlePane", :title=>"Sample Information"}
+    %label{:id=>"site_label"}
+      Site
+    %div{:dojoType=>"dijit.Tooltip", :connectId=> "site_label", :position=>"above"}
+      Select the Site to associate all the data in this file with.
+    =select_tag("site", options_for_select(@sites))
+    =clear_break
+    Timestamp Column:
+    =select_tag("timestamp", options_for_select(@columns))
+    =clear_break
+    Sample ID Column
+    =select_tag("sample_id", options_for_select(@columns))
+    =clear_break  
+    %button{:dojoType=>"dijit.form.Button", :title=>"Next", :onclick=>"download();" }
+      Next
+  - @columns.each do |col|
+    %div{:id => "Column"+col.to_s, :dojoType=>"dijit.TitlePane", :title=>"Column"+col.to_s, :open => "false "}
+      = "Header Information:"
+      =clear_break
+      = "Row 1 Value:"
+      =clear_break
+      %label{:id => "var", :onclick=>'dijit.byId("new_variable").show();', :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Variable
+      =select_tag("var", options_for_select(@vars), :options=>{:dojoType=>"dijit.form.Select"})
+      =clear_break  
+      %div{:dojoType=>"dojo.data.ItemFileReadStore", :jsId=>"variableStore", :url=>"http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/dojo_variables_for_tree.json?"}
+      %div{:dojoType=>"dijit.tree.ForestStoreModel", :jsId=>"variableModel", :store=>"variableStore",
+      :query=>"{type:'general_category'}", :rootId=>"general_categoryRoot", :rootLabel=>"General Categories",
+      :childrenAttrs=>"children"}
+      %div{:dojoType=>"dijit.Tree", :id=>"mytree"+col.to_s, :model=>"variableModel", :openOnClick=>"true"}
+      =clear_break
+      %button{:dojoType=>"dijit.form.Button", :title=>"Next"}
+        Next
+=clear_break
+=clear_break
+#sample_table
+  %table
+    %tr
+      %th &nbsp;
+      - @columns.each do |col|
+        %th
+          = "Column" + col.to_s
+    %tr
+      %th Variable Assigned
+      - @columns.each do |col|
+        %td
+          = "Variable" + col.to_s
+  =submit_tag("Save Samples")
+  = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel')
+:javascript  
+  $(document).ready(function() {
+  $("#accordion").accordion();
+  });
+  dojo.require("dijit.layout.AccordionContainer");
+  dojo.require("dijit.layout.ContentPane");
+  dojo.require("dijit.form.Select");
+  dojo.require("dijit.Dialog");
+  dojo.require("dijit.ProgressBar");
+  dojo.require("dojo.data.ItemFileReadStore");
+  dojo.require("dijit.Tree");
+  dojo.require("dijit.TitlePane");
+  dojo.require("dijit.Tooltip");
+  var i = 0;
+  function download() {
+  jsProgress.update({
+  maximum: 10,
+  progress: ++i
+  });
+  //if (i < 10) {
+  //setTimeout(download, 100 + Math.floor(Math.random() * 100));
+  //}
+  }

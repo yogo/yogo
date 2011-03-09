@@ -25,6 +25,10 @@ class Variable
 
   has n, :units, :model => "Unit", :through => Resource
 
+  def self.general_categories
+    self.all(:fields=>[:general_category], :unique=> true, :order=>[:general_category.asc]).map{|v| v.general_category}
+  end
+  
   def self.load_from_his
     his_variables = His::Variable.all
 
