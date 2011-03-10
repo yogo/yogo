@@ -35,6 +35,7 @@ Form Progress:
     %button{:dojoType=>"dijit.form.Button", :title=>"Next", :id=>"next0", :disabled=>"disabled", :onclick=>"sampleButtonClick();" }
       Next
   - @columns.each do |col|
+    =hidden_field_tag "column"+col.to_s
     %div{:id => "Column"+col.to_s, :dojoType=>"dijit.TitlePane", :title=>"Column"+col.to_s, :open => "false", :class => "column_panes", :toggleable=>"false"}
       = "Header Information:"
       =clear_break
@@ -45,47 +46,54 @@ Form Progress:
       =clear_break
       %hr
       %b Column Assignment Options (Choose One): 
-      #assignment_tab
-        %div{:dojoType=>"dijit.layout.TabContainer", :class=>"option_tab" }
-          %div{:dojoType=>"dijit.layout.ContentPane", :title=>"Voeis Variables", :selected=>"true"}
-            To assign a variable to associate with this column for parsing click one of the buttons below.
-            =clear_break
-            =clear_break
-            %button{:dojoType=>"dijit.form.Button", :title=>"Add Variable", :id=>"add_variable"+col.to_s, :onclick=>'dijit.byId("new_variable").show();', :class=>"icon icon-add"}
-              %span
-                Add A New Variable
-            %div{:dojoType=>"dijit.form.DropDownButton", :id=>"variable_select_button"+col.to_s}
-              %span
-                Assign An Existing Variable
-              %div{:dojoType=>"dijit.TooltipDialog", :id =>"variable_tooltip_dialog"+col.to_s}
-                Hi there
-                %div{:dojoType=>"dijit.Tree", :id=>"mytree-"+col.to_s, :model=>"variableModel", :openOnClick=>"true"}
-                  %script{:type=>"dojo/method", :event=>"onClick", :args=>"item"}
-                    if ($("#var_span#{col.to_s}").text() == "None"){
-                    updateProgressBar();
-                    }
-                    $("#var_span#{col.to_s}").text("Variable: "+ variableStore.getLabel(item));
-                    $("#var_td#{col.to_s}").text(variableStore.getLabel(item));
-                    dijit.byId("next#{col.to_s}").set("disabled", false);
-                    dijit.byId("next#{col.to_s}").focus();
-                    dijit.byId("next#{col.to_s}").selected();
-                    dijit.byId("Column#{col.to_s}").set("title", "Column#{col.to_s}: "+ variableStore.getLabel(item));
-          %div{:dojoType=>"dijit.layout.ContentPane", :title=>"Timestamp"}
-            To indicate that this column should be parsed as a timestamp click the button below.
-            =clear_break
-            =clear_break
-            %button{:dojoType=>"dijit.form.Button", :title=>"Assign Timestamp", :id=>"assign_timestamp"+col.to_s, :onClick=>"assignTimestamp(#{col});", :class=>"icon icon-add"}
-              %span
-                Assign The Timestamp To This Column
-          %div{:dojoType=>"dijit.layout.ContentPane", :title=>"Sample ID"}      
-            To indicate that this column should be parsed as a Sample ID click the button below.
-            =clear_break
-            =clear_break
-            %button{:dojoType=>"dijit.form.Button", :title=>"Assign SampleID", :id=>"assign_sampleid"+col.to_s, :onClick=>"assignSample(#{col});", :class=>"icon icon-add"}
-              %span
-                Assign The Sample ID To This Column
-      =clear_break      
       
+      %div{:dojoType=>"dijit.form.DropDownButton", :id=>"assignment_select_button"+col.to_s}
+        %span
+          Select Column Assignment
+        %div{:dojoType=>"dijit.TooltipDialog", :id =>"assignment_tooltip_dialog"+col.to_s}
+          %div{:dojoType=>"dijit.form.DropDownButton", :id=>"variable_select_button"+col.to_s}
+            %span
+              Assign An Existing Variable
+            %div{:dojoType=>"dijit.TooltipDialog", :id =>"variable_tooltip_dialog"+col.to_s}
+              Select A Voeis Variable:
+              %div{:dojoType=>"dijit.Tree", :id=>"mytree-"+col.to_s, :model=>"variableModel", :openOnClick=>"true"}
+                %script{:type=>"dojo/method", :event=>"onClick", :args=>"item"}
+                  if ($("#var_span#{col.to_s}").text() == "None"){
+                  updateProgressBar();
+                  }
+                  $("#var_span#{col.to_s}").text("Variable: "+ variableStore.getLabel(item));
+                  $("#var_td#{col.to_s}").text(variableStore.getLabel(item));
+                  dijit.byId("next#{col.to_s}").set("disabled", false);
+                  dijit.byId("Column#{col.to_s}").set("title", "Column#{col.to_s}: "+ variableStore.getLabel(item));
+                  dijit.byId("next#{col.to_s}").focus();
+                  dijit.byId("next#{col.to_s}").set("label","Next");
+                  if($("#sample_id_column").val() == #{col}){
+                  $("#sample_id_column").val("");
+                  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Sample ID"){btn.set("disabled", false);}});
+                  }
+                  if($("#timestamp_column").val() == #{col}){
+                  $("#timestamp_column").val("");
+                  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Timestamp"){btn.set("disabled", false);}});
+                  }
+          =clear_break
+          %button{:dojoType=>"dijit.form.Button", :title=>"Add Variable", :id=>"add_variable"+col.to_s, :onclick=>'dijit.byId("new_variable").show();', :class=>"icon icon-add"}
+            %span
+              Add A New Variable
+          =clear_break
+          %button{:dojoType=>"dijit.form.Button", :title=>"Assign Timestamp", :id=>"assign_timestamp"+col.to_s, :onClick=>"assignTimestamp(#{col});", :class=>"timestamp_button"}
+            %span
+              Assign The Timestamp To This Column
+          =clear_break
+          %button{:dojoType=>"dijit.form.Button", :title=>"Assign Sample ID", :id=>"assign_sampleid"+col.to_s, :onClick=>"assignSample(#{col});", :class=>"icon icon-add"}
+            %span
+              Assign The Sample ID To This Column
+          
+          
+
+      
+      =clear_break      
+      =hidden_field_tag "sample_id_column"
+      =hidden_field_tag "timestamp_column"
       %button{:dojoType=>"dijit.form.Button", :title=>"Next", :id=>"next"+col.to_s, :disabled=>"disabled", :onClick=>"nextButton(#{col})"}
         Next
 =clear_break
@@ -147,7 +155,7 @@ Form Progress:
   $("#site_span").text($("#site option[value ="+$("#site").val()+"]").text());
   dijit.byId("next0").set("disabled", false);
   dijit.byId("next0").focus();
-  dijit.byId("next0").selected();
+  dijit.byId("next0").set("label","Next");
   }
   function assignSample(column){
   if ($("#var_span"+column).text() == "None"){
@@ -155,8 +163,12 @@ Form Progress:
   }
   $("#var_span"+column).text("Sample ID");
   $("#var_td"+column).text("Sample ID");
-  dijit.byId("next"+column).set("disabled", false);
+  $("#sample_id_column").val(column);
   dijit.byId("Column"+column).set("title", "Column"+column+": Sample ID");
+  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Sample ID"){btn.set("disabled", true);}});
+  dijit.byId("next"+column).set("disabled", false);
+  dijit.byId("next"+column).focus();
+  dijit.byId("next"+column).set("label","Next");
   }
   function assignTimestamp(column){
   if ($("#var_span"+column).text() == "None"){
@@ -164,8 +176,12 @@ Form Progress:
   }
   $("#var_span"+column).text("Timestamp");
   $("#var_td"+column).text("Timestamp");
+  $("#timestamp_column").val(column);
   dijit.byId("next"+column).set("disabled", false);
   dijit.byId("Column"+column).set("title", "Column"+column+": Timestamp");
+  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Timestamp"){btn.set("disabled", true);}});
+  dijit.byId("next"+column).focus();
+  dijit.byId("next"+column).set("label","Next");
   }
   function updateProgressBar(){
   jsProgress.update({
