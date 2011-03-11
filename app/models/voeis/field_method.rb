@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Methods
 #
 # This is a "Data Collection Methods
@@ -22,8 +23,7 @@ class Voeis::FieldMethod
   property :method_description, Text,   :required => true
   property :method_link,        Text,   :required => false
   
-  property :created_at, DateTime
-  property :updated_at, DateTime
+  timestamps :at
 
   is_versioned :on => :updated_at
 

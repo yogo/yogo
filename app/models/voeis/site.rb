@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Sites TODO- validate the best practices below
 #
 # This is a "Monitoring Site Locations"
@@ -48,8 +49,7 @@ class Voeis::Site
     property :his_id,            Integer, :required => false, :index => true
   # }
   
-  property :created_at, DateTime
-  property :updated_at, DateTime
+  timestamps :at
 
   is_versioned :on => :updated_at
   

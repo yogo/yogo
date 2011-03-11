@@ -3,12 +3,9 @@ class Voeis::Apiv
   include Facet::DataMapper::Resource
 
   property :id, Serial
-  property :updated_at, DateTime, :required => true,  :default => DateTime.now
+
+  timestamps :at
 
   is_versioned :on => :updated_at
   
-  before(:save) {
-    self.updated_at = DateTime.now
-  }
-
 end

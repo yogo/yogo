@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # LabMethods
 #
 # This is a "Data Collection Methods"
@@ -31,14 +32,14 @@ class Voeis::LabMethod
     property :his_id,               Integer
   # end
   
-  property :created_at, DateTime
-  property :updated_at, DateTime
+  timestamps :at
   
   is_versioned :on => :updated_at
   
-  has n, :samples, :model => "Voeis::Sample", :through => Resource
+  # has n, :samples, :model => "Voeis::Sample", :through => Resource
 
   def self.load_from_his
+    puts "loading lab methods"
     his_lab_methods = His::LabMethod.all
 
     his_lab_methods.each do |his_lm|

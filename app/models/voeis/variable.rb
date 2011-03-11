@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Variables
 #
 # This is apart of "Variables"
@@ -60,9 +61,8 @@ class Voeis::Variable
     property :his_id,            Integer, :required => false, :index => true
   # }
   
-  property :created_at, DateTime
-  property :updated_at, DateTime
-
+  timestamps :at
+  
   is_versioned :on => :updated_at
 
   has n, :data_stream_columns, :model => "Voeis::DataStreamColumn", :through => Resource

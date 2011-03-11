@@ -5,12 +5,12 @@
 #
 class Voeis::VariableNameCV
   include DataMapper::Resource
-  
-  property :term,       String, :required => true, :key => true, :format => /[^\t|\n|\r]/
+
+  property :id,         Serial
+  property :term,       String, :required => true, :index => true, :format => /[^\t|\n|\r]/
   property :definition, Text
   
-  property :created_at, DateTime
-  property :updated_at, DateTime
+  timestamps :at
 
   is_versioned :on => :updated_at
   

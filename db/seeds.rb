@@ -6,6 +6,11 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
 
+
+# Ensure our 'print' statments are displayed when we expect them
+# to be.
+STDOUT.sync = true
+
 begin
 
   print 'Automigrating Database...'

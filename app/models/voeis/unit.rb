@@ -10,7 +10,7 @@ class Voeis::Unit
   include DataMapper::Resource
   include Facet::DataMapper::Resource
 
-  property :id, Serial
+  property :id,         Serial
   property :units_name, String, :required => true, :length => 512
   property :units_type, String, :required => true, :length => 512
   property :units_abbreviation, String, :required => true
@@ -19,9 +19,8 @@ class Voeis::Unit
     property :his_id,            Integer, :required => false, :index => true
   # }
 
-  property :created_at, DateTime
-  property :updated_at, DateTime
-
+  timestamps :at
+  
   is_versioned :on => :updated_at  
 
   has n, :data_stream_columns,  :model => "Voeis::DataStreamColumn", :through =>Resource

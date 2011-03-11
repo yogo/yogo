@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Samples
 #
 # This is a "Data Collection Methods"
@@ -27,16 +28,13 @@ class Voeis::Sample
   property :material,         String,   :required => true
   property :lab_sample_code,  String,   :required => true,                        :format => /[^\t|\n|\r]/
   property :lab_method_id,    Integer,  :required => true, :default => 0
-  property :updated_at, DateTime, :required => true,  :default => DateTime.now
 
+  timestamps :at
+  
   is_versioned :on => :updated_at
   
-  before(:save) {
-    self.updated_at = DateTime.now
-  }
-
   has n, :data_values,      :model => "Voeis::DataValue",      :through => Resource
-  has n, :sample_type_cv,   :model => "Voeis::SampleTypeCV",   :through => Resource
+#  has n, :sample_type_cv,   :model => "Voeis::SampleTypeCV",   :through => Resource
   has n, :lab_methods,      :model => "Voeis::LabMethod",      :through => Resource
   has n, :sample_materials, :model => "Voeis::SampleMaterial", :through => Resource
   has n, :sites,            :model => "Voeis::Site",           :through => Resource

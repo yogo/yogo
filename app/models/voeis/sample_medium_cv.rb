@@ -8,11 +8,11 @@
 class Voeis::SampleMediumCV
   include DataMapper::Resource
 
-  property :term,       String, :required => true, :key => true
+  property :id,         Serial
+  property :term,       String, :required => true, :index => true
   property :definition, Text
 
-  property :created_at, DateTime
-  property :updated_at, DateTime
+  timestamps :at
   
   is_versioned :on => :updated_at
 

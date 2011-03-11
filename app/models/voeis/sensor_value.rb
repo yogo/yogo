@@ -9,19 +9,19 @@ class Voeis::SensorValue
   property :value,           Float,    :required => true
   property :string_value,    String,   :required => true, :default => "Unknown"
   property :units,           String,   :required => true
-  property :timestamp,       DateTime, :required => true, :index => true, :key => true
+  property :timestamp,       DateTime, :required => true, :index => true
   property :vertical_offset, Float,    :required => true, :default => 0.0
   property :published,       Boolean,  :required => false
-  property :sensor_id,       Integer,  :required => true, :default => -1, :key => true, :index => true
+  property :sensor_id,       Integer,  :required => true, :default => -1, :index => true
   
   timestamps :at
 
   is_versioned :on => :updated_at
 
-  has n, :site,        :model => "Voeis::Site",       :through => Resource
-  has 1, :sensor_type_sensor_value, :model => "Voeis::SensorTypeSensorValue", :parent_key => [:id], :child_key => [:sensor_value_id]
-  has n, :sensor_type, :model => "Voeis::SensorType", :through => Resource
-  has n, :meta_tags,   :model => "Voeis::MetaTag",    :through => Resource
+  has n, :site,         :model => "Voeis::Site",       :through => Resource
+
+  has n, :sensor_types, :model => "Voeis::SensorType", :through => Resource
+  has n, :meta_tags,    :model => "Voeis::MetaTag",    :through => Resource
 
   
   default_scope(:default).update(:order => [:timestamp]) # set default order
