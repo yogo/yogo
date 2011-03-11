@@ -1,5 +1,64 @@
+# Ensure our 'print' statments are displayed when we expect them
+# to be.
+STDOUT.sync = true
+
 namespace :yogo do
   namespace :destructive do
+
+
+    def model_has_field?(model, field)
+      model.properties.map(&:name).include?(field.to_sym)
+    end
+    
+    def model_has_created_at?(model)
+      #      model.properties.map(&:name).include?(:created_at)
+      model_has_field?(model, :created_at)
+    end
+
+    def table_has_field?(model, field, repo_name = :default)
+      table_name = model.storage_name(repo_name)
+      schema_name = repository(repo_name).adapter.schema_name
+
+      columns = repository(repo_name).adapter.select(<<-SQL.compress_lines, schema_name, table_name)
+            SELECT "column_name"
+                 , "data_type"
+                 , "column_default"
+                 , "is_nullable"
+                 , "character_maximum_length"
+                 , "numeric_precision"
+              FROM "information_schema"."columns"
+             WHERE "table_schema" = ?
+               AND "table_name" = ?
+          ORDER BY "ordinal_position"
+        SQL
+
+
+      return columns.collect{ |i| i.column_name }.include?(field.to_s)
+    end
+    
+    def table_has_created_at?(model, repo_name = :default)
+      return table_has_field?(model, "created_at", repo_name)
+    end
+
+    def fix_timestamp_column(model, repo_name)
+      if model.storage_exists?(repo_name) && model_has_field?(model, :sensor_value_timestamp) && table_has_field?(model, "sensor_value_timsestamp", repo_name)
+        puts "Fixing Column in #{model.name}"
+        repository(repo_name).adapter.execute("ALTER TABLE #{model.storage_name} RENAME sensor_value_timsestamp TO sensor_value_timestamp")
+      end
+    end
+    
+    desc "Remove all 'voeis_*' datababses"
+    task :remove_all, :needs => :environment do
+     databases = repository(:default).adapter.select("SELECT datname FROM pg_database WHERE datname like 'voeis_%'")
+
+      puts 'Deleting those tables'
+
+      databases.each do |database|
+        repository(:default).adapter.execute("DROP DATABASE \"#{database}\"")
+      end
+      
+    end
+    
     desc "Destroy and reacreate the database from ashes."
     task :firebird, :needs => :environment do
       puts 'Reworking master database'
@@ -33,12 +92,37 @@ namespace :yogo do
       repository(:default).adapter.execute("ALTER TABLE voeis_sites RENAME site_name TO name")
       repository(:default).adapter.execute("ALTER TABLE voeis_sites RENAME site_code TO code")
 
+      
+      models = DataMapper::Model.descendants.collect{ |i| i }
+
+      models.each do |model|
+        if model.storage_exists? && model_has_created_at?(model) && !table_has_created_at?(model)
+          # Make stupid column in the table
+          puts "Add Column in #{model.name}"
+          repository(:default).adapter.execute("ALTER TABLE #{model.storage_name} ADD COLUMN created_at timestamp without time zone")
+#          model.all.update_attri
+          # Seed it with something interesting
+          # Fix column to make it non nullable
+        end
+      end
+
       puts 'Running auto_upgrade! on the master repository'
+      
       DataMapper.auto_upgrade!
       
       Project.all.each do |p| 
         puts "Running auto_upgrade! on #{p.managed_repository_name}"
-        p.managed_repository{ DataMapper.auto_upgrade!(p.managed_repository_name)}
+        p.managed_repository do
+          models.each do |model|
+            fix_timestamp_column(model, p.managed_repository_name)
+            if model.storage_exists?(p.managed_repository_name) && model_has_created_at?(model) && !table_has_created_at?(model, p.managed_repository_name)
+              puts "Add Column in #{model.name}"
+              repository(p.managed_repository_name).adapter.execute("ALTER TABLE #{model.storage_name} ADD COLUMN created_at timestamp without time zone")
+            end
+          end
+          puts "Auto Migrating now"
+          DataMapper.auto_upgrade!(p.managed_repository_name)
+        end
       end
     end
     
