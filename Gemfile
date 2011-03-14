@@ -36,8 +36,8 @@ gem 'exception_notification',      :require => 'exception_notifier',
                                    :git => 'git://github.com/rails/exception_notification.git'
                                    
 gem 'delayed_job',                 :git => 'git://github.com/robbielamb/delayed_job.git'
-gem "cells", "3.4.4"
-gem 'apotomo'
+gem "cells", "~> 3.5.4"
+gem 'apotomo', "~> 1.1"
 # Because in 1.9 fastercsv is default, but in 1.8...
 platforms(:ruby_18) { gem "fastercsv" }
 
