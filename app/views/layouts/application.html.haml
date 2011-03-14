@@ -20,8 +20,8 @@
     %link{:rel => "shortcut icon", :href => "#{image_path("favicon.png")}"}/
     
   %body.typography
-  #feedback
-    = render(:partial => "projects/feedback_form")
+  #give_feedback
+    = render_widget 'feedback'
   / Header (including optional menus)
   #header
     #logo 

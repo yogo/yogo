@@ -23,7 +23,7 @@ gem "jquery-rails"                              # jQuery integration with Rails
 gem "compass", ">= 0.10.6"                      # Styling automation for views
 gem "haml"                                      # HAML syntax for views
 gem "inherited_resources"                       # Simplified Rails controllers
-gem "bcrypt-ruby"                               # Encryption for authentication
+gem "bcrypt-ruby", "2.1.1"                               # Encryption for authentication
 gem "rails_warden"                              # Warden integration with Rails for authentication
 
 gem "mime-types", :require => "mime/types"      # For uploading data files
@@ -35,7 +35,8 @@ gem 'exception_notification',      :require => 'exception_notifier',
                                    :git => 'git://github.com/rails/exception_notification.git'
                                    
 gem 'delayed_job',                 :git => 'git://github.com/robbielamb/delayed_job.git'
-
+gem "cells", "3.4.4"
+gem 'apotomo'
 # Because in 1.9 fastercsv is default, but in 1.8...
 platforms(:ruby_18) { gem "fastercsv" }
 
