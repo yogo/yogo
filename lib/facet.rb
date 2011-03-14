@@ -59,6 +59,17 @@ module Facet
         raise Facet::PermissionException::Denied, "#{method} on #{@target} is not allowed"
       end
     end
+
+    alias __send__ send
+
+    # Really, REALLY forward as_json and to_json to target
+    def as_json(*args, &block)
+      send(:as_json, *args, &block)
+    end
+
+    def to_json(*args, &block)
+      send(:to_json, *args, &block)
+    end
     
     # def each(&block)
     #   @target.__send__(:each) do |i|
