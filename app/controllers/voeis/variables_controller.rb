@@ -11,14 +11,14 @@ class Voeis::VariablesController < Voeis::BaseController
 
   # GET /variables/new
   def new
-    @variables = Variable.all
-    @variable = Variable.new
-    @units = Unit.all
-    @variable_names = VariableNameCV.all
-    @sample_mediums= SampleMediumCV.all
-    @value_types= ValueTypeCV.all
-    @speciations = SpeciationCV.all
-    @data_types = DataTypeCV.all
+    @variables = Voeis::Variable.all
+    @variable = Voeis::Variable.new
+    @units = Voeis::Unit.all
+    @variable_names = Voeis::VariableNameCV.all
+    @sample_mediums= Voeis::SampleMediumCV.all
+    @value_types= Voeis::ValueTypeCV.all
+    @speciations = Voeis::SpeciationCV.all
+    @data_types = Voeis::DataTypeCV.all
     @general_categories = GeneralCategoryCV.all
     @label_array = Array["Variable Name","Variable Code","Unit Name","Speciation","Sample Medium","Value Type","Is Regular","Time Support","Time Unit ID","Data Type","General Cateogry"]
     @current_variables = Array.new     
@@ -33,7 +33,7 @@ class Voeis::VariablesController < Voeis::BaseController
   end
   # POST /variables
   def create
-    @variable = Variable.new(params[:variable])
+    @variable = Voeis::Variable.new(params[:variable])
     
     if @variable.save  
       flash[:notice] = 'Variable was successfully created.'

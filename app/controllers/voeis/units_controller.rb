@@ -10,7 +10,7 @@ class Voeis::UnitsController < Voeis::BaseController
             
   # GET /variables/new
   def new
-    @unit = Unit.new
+    @unit = Voeis::Unit.new
     @project = parent
     respond_to do |format|
       format.html # new.html.erb
@@ -18,7 +18,7 @@ class Voeis::UnitsController < Voeis::BaseController
   end
   # POST /variables
   def create
-    @unit = Unit.new(params[:unit])
+    @unit = Voeis::Unit.new(params[:unit])
 
     if @unit.save  
       flash[:notice] = 'Unit was successfully created.'

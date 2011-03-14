@@ -4,7 +4,7 @@ class GeneralCategoryCVsController < ApplicationController
 
   # GET /variables/new
   def new
-    @general_category = GeneralCategoryCV.new
+    @general_category = Voeis::GeneralCategoryCV.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -14,9 +14,9 @@ class GeneralCategoryCVsController < ApplicationController
   # POST /variables
   def create
     if params[:general_category_c_v].nil?
-      @general_category = GeneralCategoryCV.new(:term=> params[:term], :definition => params[:definition])
+      @general_category = Voeis::GeneralCategoryCV.new(:term=> params[:term], :definition => params[:definition])
     else
-      @general_category = GeneralCategoryCV.new(params[:general_category_c_v])
+      @general_category = Voeis::GeneralCategoryCV.new(params[:general_category_c_v])
     end
     respond_to do |format|
       if @general_category.save

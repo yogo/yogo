@@ -5,19 +5,18 @@
  # This table is pre-populated within the ODM.  Changes to this controlled vocabulary can be
  # requested at http://water.usu.edu/cuahsi/odm/.
  #
- class SampleTypeCV
+ class Voeis::SampleTypeCV
    include DataMapper::Resource
-   
-   property :term,       String, :required => true, :key => true, :format => /[^\t|\n|\r]/
+
+   property :id,         Serial
+   property :term,       String, :required => true, :index => true, :format => /[^\t|\n|\r]/
    property :definition, Text
-   property :updated_at, DateTime, :required => true,  :default => DateTime.now
+   
+   timestamps :at
 
    is_versioned :on => :updated_at
 
-   before(:save) {
-     self.updated_at = DateTime.now
-   }
-   has n,   :variables, :model => "Variable", :through => Resource
+   has n,   :variables, :model => "Voeis::Variable", :through => Resource
 
 
    def self.load_from_his

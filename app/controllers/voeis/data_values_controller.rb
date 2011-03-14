@@ -58,7 +58,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      @sites = parent.managed_repository{ Voeis::Site.all }
      @project = parent
      #@project = Project.first(:id => params[:project_id])
-      @variables = Variable.all
+      @variables = Voeis::Variable.all
       @sites = parent.managed_repository{ Voeis::Site.all }
       @samples = parent.managed_repository{ Voeis::Sample.all }
       if !params[:datafile].nil? && datafile = params[:datafile]
@@ -83,7 +83,7 @@ class Voeis::DataValuesController < Voeis::BaseController
           @var_array[0] = ["","","","","","",""]
           @opts_array = Array.new
           @variables.all(:general_category => params[:general_category], :order => [:variable_name.asc]).each do |var|
-            @opts_array << [var.variable_name+":"+var.sample_medium+':'+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+            @opts_array << [var.variable_name+":"+var.sample_medium+':'+ var.data_type+':'+Voeis::Unit.get(var.variable_units_id).units_name, var.id.to_s]
           end
           if params[:start_line].to_i != 1
             header_row = get_row(@new_file, params[:start_line].to_i - 1)
@@ -769,7 +769,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      #store all the Variables in the managed repository
      @col_vars = Array.new
      (0..range).each do |i|
-        @var = Variable.get(params["column"+i.to_s])
+        @var = Voeis::Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           if !params["ignore"+i.to_s]            
             variable = Voeis::Variable.first_or_create(

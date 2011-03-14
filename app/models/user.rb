@@ -1,4 +1,4 @@
-require 'dm-types/bcrypt_hash'
+#require 'dm-types/bcrypt_hash'
 
 class User
   include DataMapper::Resource

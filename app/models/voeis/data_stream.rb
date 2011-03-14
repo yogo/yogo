@@ -15,20 +15,16 @@ class Voeis::DataStream
   include DataMapper::Resource
   include Facet::DataMapper::Resource
 
-  property :id, Serial
-  property :name, String, :required => true, :unique => true, :length => 512
-  property :description, Text, :required => false
-  property :filename, String, :required => true, :length => 512
-  property :start_line, Integer, :required => true, :default => 0
-  property :type, String, :required => true, :default => "Sensor"
-  property :updated_at, DateTime, :required => true,  :default => DateTime.now
+  property :id,          Serial
+  property :name,        String,  :required => true, :unique => true, :length => 512
+  property :description, Text,    :required => false
+  property :filename,    String,  :required => true, :length => 512
+  property :start_line,  Integer, :required => true, :default => 0
+  property :type,        String,  :required => true, :default => "Sensor"
 
+  timestamps :at
   is_versioned :on => :updated_at
   
-  before(:save) {
-    self.updated_at = DateTime.now
-  }
-
   #property :project_id, Integer, :required =>true, :default => 1
 
   validates_uniqueness_of   :name

@@ -310,7 +310,7 @@ DEPENDENCIES
   dm-is-versioned
   dm-migrations
   dm-rails
-  dm-transactions
+  dm-timestamps
   dm-types
   dm-validations
   dm-visualizer

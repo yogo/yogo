@@ -3,20 +3,17 @@
 # The DataType CV table contains the controlled vocabulary for the DataType field in
 # the Variable model
 #
-class DataTypeCV
+class Voeis::DataTypeCV
   include DataMapper::Resource
   
   property :term,       String, :required => true, :key => true, :format => /[^\t|\n|\r]/
   property :definition, Text
-  property :updated_at, DateTime, :required => true,  :default => DateTime.now
 
+  timestamps :at
+  
   is_versioned :on => :updated_at
   
-  before(:save) {
-    self.updated_at = DateTime.now
-  }
-  has n,   :variables, :model => "Variable", :through => Resource
-  
+  has n,   :variables, :model => "Voeis::Variable", :through => Resource
   
   def self.load_from_his
     his_data_types = His::DataTypeCV.all

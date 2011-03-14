@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # LabMethods
 #
 # This is a "Data Collection Methods"
@@ -26,14 +27,50 @@ class Voeis::LabMethod
   property :lab_method_name,        Text, :required => true, :default => 'Unknown', :format => /[^\t|\n|\r]/
   property :lab_method_description, Text, :required => true, :default => 'Unknown'
   property :lab_method_link,        Text
-  property :updated_at, DateTime, :required => true,  :default => DateTime.now
-
+  
+  # repository(:default) do
+    property :his_id,               Integer
+  # end
+  
+  timestamps :at
+  
   is_versioned :on => :updated_at
   
-  before(:save) {
-    self.updated_at = DateTime.now
-  }
-  
-  has n, :samples, :model => "Voeis::Sample", :through => Resource
+  # has n, :samples, :model => "Voeis::Sample", :through => Resource
+
+  def self.load_from_his
+    puts "loading lab methods"
+    his_lab_methods = His::LabMethod.all
+
+    his_lab_methods.each do |his_lm|
+      if self.first(:his_id => his_lm.id).nil?
+        self.create(:his_id => his_lm.id,
+                    :lab_name => his_lm.lab_name,
+                    :lab_organization=> his_lm.lab_organization,
+                    :lab_method_name => his_lm.lab_method_name,
+                    :lab_method_description => his_lm.lab_method_description,
+                    :lab_method_link => his_lm.lab_method_link)
+      end
+    end
+  end
+
+  def store_to_his(u_id)
+    lab_methodto_store = self.first(:id => u_id)
+    if lab_methodto_store.is_regular == true
+      reg = 1
+    else
+      reg =0
+    end
+    new_his_lab_method = His::LabMethod.new(:lab_name => lab_methodto_store.lab_name,
+                                            :lab_organization=> lab_methodto_store.lab_organization,
+                                            :lab_method_name => lab_methodto_store.lab_method_name,
+                                            :lab_method_description => lab_methodto_store.lab_method_description,
+                                            :lab_method_link => lab_methodto_store.lab_method_link)
+    new_his_lab_method.save
+    puts new_his_lab_method.errors.inspect
+    lab_methodto_store.his_id = new_his_lab_method.id
+    lab_methodto_store.save
+    new_his_lab_method
+  end
   
 end
