@@ -1,13 +1,13 @@
 %h1 Search Data Streams:
 = form_for(:query, @query, :url => { :action => 'search'}, :remote => true) do |f|
   Site: 
-  = select_tag ("site", options_for_select(@site_opts_array.sort))
+  = select_tag("site", options_for_select(@site_opts_array.sort))
   =clear_break
   Data Stream:
-  = select_tag ("data_stream", options_for_select(@data_stream_opts_array.sort))
+  = select_tag("data_stream", options_for_select(@data_stream_opts_array.sort))
   =clear_break
   Variable: 
-  = select_tag ("variable", options_for_select(@variable_opts_array.sort))                                                                              
+  = select_tag("variable", options_for_select(@variable_opts_array.sort))                                                                              
   = clear_break
   Dates After: 
   = date_select('range', 'start_date', :start_year => @start_year, :end_year => @end_year, :order => [:month, :day, :year])

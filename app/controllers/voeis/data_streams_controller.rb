@@ -197,7 +197,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
   
   
   def data_stream_var_options (data_stream_id)
-    @units  = Unit.all
+    @units  = Voeis::Unit.all
     @variable_array = Array.new
     parent.managed_repository do
       data_stream = Voeis::DataStream.get(data_stream_id)
@@ -253,7 +253,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
     @sites = ""
     @start_year=""
     @end_year =""
-    @units = Unit.all
+    @units = Voeis::Unit.all
     parent.managed_repository do
       @sites = Voeis::Site.all
       @start_year = Voeis::SensorValue.first(:order => [:timestamp.asc])
@@ -470,7 +470,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
       @var_array[0] = ["","","","","","",""]
       @opts_array = Array.new
       @variables.all(:order => [:variable_name.asc]).each do |var|
-        @opts_array << [var.variable_name+":"+var.variable_code+":"+var.sample_medium+':'+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+        @opts_array << [var.variable_name+":"+var.variable_code+":"+var.sample_medium+':'+ var.data_type+':'+Voeis::Unit.get(var.variable_units_id).units_name, var.id.to_s]
       end
       if params[:data_template] != "None"
           data_template = parent.managed_repository {Voeis::DataStream.first(:id => params[:data_template])}
