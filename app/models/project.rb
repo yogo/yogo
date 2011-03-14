@@ -1,5 +1,6 @@
 require 'dm-core'
 require 'dm-types/uuid'
+require 'uuid_json'
 
 require 'yogo/datamapper/repository_manager'
 
@@ -159,6 +160,11 @@ class Project
   manage Voeis::SampleMaterial
   manage Voeis::DataValue
   manage Voeis::Apiv
+
+  def sites
+    managed_repository{ Voeis::Site.all }
+  end
+  
   private
 
   def destroy_cleanup
