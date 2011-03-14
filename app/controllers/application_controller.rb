@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem
   include AuthorizationSystem
-  include Apotomo::Rails::ControllerMethods    
+  
   protect_from_forgery
   
   has_widgets do |root|
-    root << widget(:feedback_widget, 'feedback')
+    root << widget(:feedback, 'feedback')
   end
   
   # Check for local connections before anything else
