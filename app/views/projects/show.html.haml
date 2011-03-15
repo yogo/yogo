@@ -41,6 +41,7 @@
       
 .data-browser
   #content-sidebar-left
+    = render_cell(:site_browser, :display, :project => resource)
     = render(:partial => 'site_streams_picker', :locals => { :project => @project })  
   #main-with-sidebar-left
     #graph-accordion
