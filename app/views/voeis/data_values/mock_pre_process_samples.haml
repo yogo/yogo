@@ -16,7 +16,8 @@
 Form Progress:
 %div{:dojoType=>"dijit.ProgressBar", :jsId=>"jsProgress", :id=>"downloadProgress", :maximum=>"10"}
 
-%div{:dojoType=>"dojo.data.ItemFileReadStore", :jsId=>"variableStore", :url=>"http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/dojo_variables_for_tree.json?"}
+%div{:dojoType=>"dojo.data.ItemFileReadStore", :jsId=>"variableStore", :url=>"#{root_url+"/projects/"+@project.id+"/apivs/dojo_variables_for_tree.json?"}"}
+%div{:dojoType=>"dojo.data.ItemFileReadStore", :jsId=>"variableStore2", :url=>"#{root_url+"/projects/"+@project.id+"/apivs/get_dojo_voeis_variables.json?"}"}
 %div{:dojoType=>"dijit.tree.ForestStoreModel", :jsId=>"variableModel", :store=>"variableStore",
 :query=>"{type:'general_category'}", :rootId=>"general_categoryid", :rootLabel=>"Variable General Categories",:childrenAttrs=>"children"}
 #column_panes
@@ -35,11 +36,11 @@ Form Progress:
     %button{:dojoType=>"dijit.form.Button", :title=>"Next", :id=>"next0", :disabled=>"disabled", :onclick=>"sampleButtonClick();" }
       Next
   - @columns.each do |col|
-    =hidden_field_tag "column"+col.to_s
+    =hidden_field_tag "column"+col.to_s, :onChange=>"updateVarSpans(#{col.to_s})";
     %div{:id => "Column"+col.to_s, :dojoType=>"dijit.TitlePane", :title=>"Column"+col.to_s, :open => "false", :class => "column_panes", :toggleable=>"false"}
       = "Header Information:"
       =clear_break
-      = "Row 1 Value:"
+      = "Starting Row Value For This Column:"
       =clear_break
       Currently Assigned:
       %span{:id => "var_span"+col.to_s, :class=>"var_spans"}None
@@ -76,7 +77,7 @@ Form Progress:
                   dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Timestamp"){btn.set("disabled", false);}});
                   }
           =clear_break
-          %button{:dojoType=>"dijit.form.Button", :title=>"Add Variable", :id=>"add_variable"+col.to_s, :onclick=>'dijit.byId("new_variable").show();', :class=>"icon icon-add"}
+          %button{:dojoType=>"dijit.form.Button", :title=>"Add Variable", :id=>"add_variable"+col.to_s, :onclick=>"addNewVariable(#{col});", :class=>"icon icon-add"}
             %span
               Add A New Variable
           =clear_break
@@ -91,7 +92,14 @@ Form Progress:
           
 
       
-      =clear_break      
+      =clear_break 
+      #grid_div    
+        %table{:dojoType=>"dojox.grid.DataGrid", :store=>"variableStore2", :jsId=>"grid", :id => "display_grid"+col.to_s}
+          %thead
+            %tr
+              %th{:field=>"variable_code"}Variable Code
+              %th{:field=>"variable_name"}Variable Name
+   
       =hidden_field_tag "sample_id_column"
       =hidden_field_tag "timestamp_column"
       %button{:dojoType=>"dijit.form.Button", :title=>"Next", :id=>"next"+col.to_s, :disabled=>"disabled", :onClick=>"nextButton(#{col})"}
@@ -112,16 +120,25 @@ Form Progress:
         %th
           = "Column" + col.to_s
     %tr
+      %th Header Information
+    %tr
+      %th Starting Row Data
+    %tr
       %th Assigned
       - @columns.each do |col|
         %td
-          %span{:id => "var_td"+col.to_s}None
+          %span{:id => "var_td"+col.to_s, :onClick=>"editColumn(#{col})", :class=>"column_td"}None
   =submit_tag("Save Samples")
   = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel')
+
+
 :javascript  
   $(document).ready(function() {
-  $("#accordion").accordion();
   });
+  var current_column ="";
+  var current_id_to_update="";
+  var update_text="";
+  var mystore ="";
   dojo.require("dijit.layout.TabContainer");
   dojo.require("dijit.layout.AccordionContainer");
   dojo.require("dijit.layout.ContentPane");
@@ -134,6 +151,12 @@ Form Progress:
   dojo.require("dijit.Tooltip");
   dojo.require("dijit.form.DropDownButton");
   dojo.require("dijit.TooltipDialog");
+  dojo.require("dojox.grid.DataGrid");
+  dojo.addOnLoad( function(){
+  variableStore2.fetch();
+  dijit.byId("display_grid1")._refresh();
+  });
+  
   
   function nextButton(column){
   dijit.byId("Column"+column).set('open',false);
@@ -146,6 +169,7 @@ Form Progress:
   dijit.byId("samplePane").set("open", false);
   dijit.byId("Column1").set("open", true);
   }
+  
   function updateSite(){
   if ($("#site_span").text() == "None"){
   updateProgressBar();
@@ -157,6 +181,7 @@ Form Progress:
   dijit.byId("next0").focus();
   dijit.byId("next0").set("label","Next");
   }
+  
   function assignSample(column){
   if ($("#var_span"+column).text() == "None"){
   updateProgressBar();
@@ -170,6 +195,7 @@ Form Progress:
   dijit.byId("next"+column).focus();
   dijit.byId("next"+column).set("label","Next");
   }
+  
   function assignTimestamp(column){
   if ($("#var_span"+column).text() == "None"){
   updateProgressBar();
@@ -183,9 +209,34 @@ Form Progress:
   dijit.byId("next"+column).focus();
   dijit.byId("next"+column).set("label","Next");
   }
+  
   function updateProgressBar(){
   jsProgress.update({
   maximum: #{@columns.length + 1},
   progress: ++i
   });
+  }
+  
+  function editColumn(column){
+  if (dijit.byId("Column"+column).toggleable){
+  dijit.byId("Column"+column).set("open",true);
+  }
+  }
+  
+  function addNewVariable(column){
+    current_column = column;
+    current_id_to_update="column"+column;
+    dijit.byId("new_variable").show();
+    variableStore.close();
+    variableStore.fetch();
+    dijit.registry.byClass("dijit.Tree").forEach(function(tree){
+    id = tree.attr("id")
+    tree.destroy();
+    tree.create()
+    });
+  }
+  function updateVarSpans(column){
+    $("#var_span"+column).text(update_text);
+    $("#var_td"+column).text(update_text);
+    dijit.byId("Column"+column).set("title", "Column"+column+": "+update_text);
   }

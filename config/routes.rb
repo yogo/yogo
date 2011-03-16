@@ -51,11 +51,13 @@ Yogo::Application.routes.draw do
           get :update_project_site
           get :get_project_sites
           get :get_voeis_sites
+          get :get_voeis_sites
           get :get_project_site
           get :get_project_data_templates
           get :get_project_variables
           get :get_project_variable
           get :get_voeis_variables
+          get :get_dojo_voeis_variables
           get :get_project_sample
           get :get_project_samples
           get :get_project_sample_measurements

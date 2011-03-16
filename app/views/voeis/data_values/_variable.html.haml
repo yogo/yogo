@@ -9,7 +9,7 @@
     %label{:id=>"var_code"} Variable Code: 
     %div{:dojoType=>"dijit.Tooltip", :connectId=> "var_code", :position=>"above"}
       This is the specific code or "name" that you want to identify your measurement with.
-    = f.text_field :variable_code
+    = f.text_field :variable_code, :class=>"variable_code"
     =clear_break
     -var_name_options = Array.new
     %label{:id => "var_name", :onclick=>"dijit.byId('new_variable_name_1').show();", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Variable Name: 
@@ -26,7 +26,7 @@
     -unit_options = Array.new
     -units.all(:order => [:units_name.asc]).each do |unit|
       -unit_options <<[unit.units_name+':'+unit.units_type, unit.id.to_s]
-    = f.select('variable_units_id',  options_for_select(unit_options))
+    = f.select('variable_units_id',  options_for_select(unit_options), :class=>"variable_units_id")
     =clear_break
   
     -speciation_options = Array.new
@@ -82,31 +82,23 @@
     =clear_break
   
     %label No Data Value: 
-    = f.text_field :no_data_value
+    = f.text_field :no_data_value, :class=>"no_data_value"
     =clear_break
-    %button{:id=> 'new_variable_button',:dojoType=>"dijit.form.Button", :title=>'Create', :onclick => "$('#loader').toggle();"}
-      Save Variable
+    %button{:id=> 'new_variable_button',:dojoType=>"dijit.form.Button", :title=>'Create', :onClick=>"createVariable();"}
+      Create Variable
 
   
   :javascript  
-    $(function() {
-    $(".new-variable-button").click(function() { 
-  
-    $.post("#{root_url + "data_type_c_vs"}"+"?term=" + $(".data_type_term").val()+"&definition=" + $(".data_type_definition").val(),
+    function  createVariable(){ 
+    $.post("#{root_url + "variables"}.json?variable_code=" +$("#variable_variable_code").val()+"&variable_name=" + $("#variable_variable_name").val()+"&speciation="+$("#variable_speciation").val()+"&variable_units_id="+ $("#variable_variable_units_id").val() + "&sample_medium="+ $("#variable_sample_medium").val() + "&value_type="+$("#variable_value_type").val(0)+"&is_regular="+$("#variable_is_regular").val()+"&time_support="+$("#variable_time_support").val()+"&time_units_id="+$("#variable_time_units_id").val()+"&data_type="+$("#variable_data_type").val()+"&general_category="+$("#variable_general_category").val()+"&no_data_value="+$("#variable_no_data_value").val(),
     function(data) {
-    $('#variable_data_type').
-    append($("<option></option>").
-    attr("value",$(".data_type_term").val()).
-    text($(".data_type_term").val())); 
-    $('#variable_data_type').val($(".data_type_term").val());
-    $(".data_type_term").val("");
-    $(".data_type_definition").val("");
-    $("#new_data_type").toggle();
-    return false;
+    update_text= data["variable_code"];
+    $("#"+current_id_to_update).val(data["id"]);
+    updateVarSpans(current_column);
+    $("#variable_variable_name").val("");
+    dijit.byId("new_variable").hide();
     }
     );
-    return false;
-    });
-    });
+    }
     dojo.require("dijit.Tooltip");
     

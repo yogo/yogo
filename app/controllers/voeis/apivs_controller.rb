@@ -820,7 +820,21 @@ class Voeis::ApivsController < Voeis::BaseController
      @variables = Variable.all()
      respond_to do |format|
        format.json do
-         render :json => @variables.to_json, :callback => params[:jsoncallback]
+         render :json => @variables.as_json, :callback => params[:jsoncallback]
+       end
+       format.xml do
+         render :xml => @variables.to_xml
+       end
+     end
+   end
+   
+   
+   def get_dojo_voeis_variables
+     @variables = Hash.new
+     @variables = {:identifer=>"id", :label=> "variable_code", :items => Variable.all()}
+     respond_to do |format|
+       format.json do
+         render :json => @variables.as_json, :callback => params[:jsoncallback]
        end
        format.xml do
          render :xml => @variables.to_xml

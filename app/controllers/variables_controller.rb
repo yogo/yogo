@@ -12,11 +12,18 @@ class VariablesController < ApplicationController
   
   # POST /variables
   def create
-    @variable = Variables.new(params[:variable])
-
+    if params[:variable].nil?
+      @variable = Variable.new(:variable_code=> params[:variable_code], :variable_name => params[:variable_name], :speciation => params[:speciation], :variable_units_id => params[:variable_units_id], :sample_medium=>params[:sample_medium],:value_type=>params[:value_type],
+      :is_regular=>params[:is_regular], :time_support=>params[:time_support],:time_units_id=>params[:time_units_id], :data_type=>params[:data_type], :general_category=>params[:general_category], :no_data_value=>params[:no_data_value], :updated_at=>Time.now)
+    else
+      @variable = Variable.new(params[:variable])
+    end
     respond_to do |format|
       if @variable.save
         flash[:notice] = 'Variables was successfully created.'
+        format.json do
+          render :json => @variable.as_json, :callback => params[:jsoncallback]
+        end
         format.html { (redirect_to(variable_path( @variable.id))) }
       else
         format.html { render :action => "new" }
