@@ -57,16 +57,6 @@
     = f.select('value_type',  options_for_select(value_type_options), :class => "value_type")
     =clear_break
   
-    %label Is Regular: 
-    = f.text_field :is_regular
-    =clear_break
-    %label Time Support: 
-    = f.text_field :time_support, :value => 1.0
-    =clear_break
-    %label Time Units ID:
-    = f.text_field :time_units_id
-    =clear_break
-  
     -data_type_options = Array.new
     %label{:id => "spec", :onclick=>"dijit.byId('new_data_type_1').show();", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Data Type:  
     - data_types.all(:order => [:term.asc]).each do |data_type|
@@ -84,6 +74,22 @@
     %label No Data Value: 
     = f.text_field :no_data_value, :class=>"no_data_value"
     =clear_break
+    
+    %label Detection Limit: 
+    = text_field :detection_limit, :class=>"detection_limit"
+    =clear_break
+    
+    Optional:
+    #optional
+      %label Is Regular: 
+      = f.text_field :is_regular, :disabled=>"disabeled"
+      =clear_break
+      %label Time Support: 
+      = f.text_field :time_support, :value => 1.0, :disabled=>"disabeled"
+      =clear_break
+      %label Time Units ID:
+      = f.text_field :time_units_id, :disabled=>"disabeled"
+      =clear_break
     %button{:id=> 'new_variable_button',:dojoType=>"dijit.form.Button", :title=>'Create', :onClick=>"createVariable();"}
       Create Variable
 

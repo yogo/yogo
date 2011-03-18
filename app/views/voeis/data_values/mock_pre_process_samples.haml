@@ -93,12 +93,12 @@ Form Progress:
 
       
       =clear_break 
-      #grid_div    
-        %table{:dojoType=>"dojox.grid.DataGrid", :store=>"variableStore2", :jsId=>"grid", :id => "display_grid"+col.to_s}
-          %thead
-            %tr
-              %th{:field=>"variable_code"}Variable Code
-              %th{:field=>"variable_name"}Variable Name
+      -##grid_div    
+      -#  %table{:dojoType=>"dojox.grid.DataGrid", :store=>"variableStore2", :jsId=>"grid", :id => "display_grid"+col.to_s}
+      -#    %thead
+      -#      %tr
+      -#        %th{:field=>"variable_code"}Variable Code
+      -#        %th{:field=>"variable_name"}Variable Name
    
       =hidden_field_tag "sample_id_column"
       =hidden_field_tag "timestamp_column"
@@ -153,8 +153,8 @@ Form Progress:
   dojo.require("dijit.TooltipDialog");
   dojo.require("dojox.grid.DataGrid");
   dojo.addOnLoad( function(){
-  variableStore2.fetch();
-  dijit.byId("display_grid1")._refresh();
+  //variableStore2.fetch();
+  //dijit.byId("display_grid1")._refresh();
   });
   
   
@@ -227,16 +227,22 @@ Form Progress:
     current_column = column;
     current_id_to_update="column"+column;
     dijit.byId("new_variable").show();
-    variableStore.close();
-    variableStore.fetch();
-    dijit.registry.byClass("dijit.Tree").forEach(function(tree){
-    id = tree.attr("id")
-    tree.destroy();
-    tree.create()
-    });
+    //variableStore.close();
+    //variableStore.fetch();
+    //dijit.registry.byClass("dijit.Tree").forEach(function(tree){
+    //id = tree.attr("id")
+    //tree.destroy();
+    //tree.create()
+    //});
   }
   function updateVarSpans(column){
-    $("#var_span"+column).text(update_text);
+    if ($("#var_span"+column).text() == "None"){
+    updateProgressBar();
+    }
+    $("#var_span"+column).text("Variable:"+update_text);
     $("#var_td"+column).text(update_text);
     dijit.byId("Column"+column).set("title", "Column"+column+": "+update_text);
+    dijit.byId("next"+column).set("disabled", false);
+    dijit.byId("next"+column).focus();
+    dijit.byId("next"+column).set("label","Next");
   }
