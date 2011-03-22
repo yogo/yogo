@@ -39,7 +39,7 @@ gem 'delayed_job',                 :git => 'git://github.com/robbielamb/delayed_
 gem "cells", "~> 3.5.4"
 gem 'apotomo', "~> 1.1"
 # Because in 1.9 fastercsv is default, but in 1.8...
-platforms(:ruby_18) { gem "fastercsv" }
+platforms(:ruby_18, :jruby) { gem "fastercsv" }
 
 group(:development, :test) do
   #gem "memprof"
@@ -58,7 +58,7 @@ group(:development, :test) do
   gem "rspec-rails"
   # YARD Documentation
   gem "yard",                      :require => nil
-  gem "bluecloth",                 :require => nil
+  # gem "bluecloth",                 :require => nil
   gem "yardstick"
   # TODO: We need to find out how to remove this
   gem "test-unit", "~> 1.2.1",     :require => nil # This is annoying that is is required.
