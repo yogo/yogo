@@ -56,7 +56,7 @@ module Facet
       else
         # logger.debug { "Access denied to method #{method}" }
         ::Rails.logger.info("Access denied to method #{method} on #{@target}")
-        raise Facet::PermissionException::Denied, "#{method} on #{@target} is not allowed"
+        raise ::Facet::PermissionException::Denied, "#{method} on #{@target} is not allowed"
       end
     end
 
