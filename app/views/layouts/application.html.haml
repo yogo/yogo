@@ -39,6 +39,7 @@
       dojo.require("dojo.data.ObjectStore");
       dojo.require("dijit.tree.ForestStoreModel");
       dojo.require("dijit.Tree");
+      dojo.require("voeis.MenuLink");
       
       dojo.addOnLoad(function(){        
         dojo.parser.parse();
@@ -87,28 +88,18 @@
           %span{:style => "font-weight:bold"}
             DataHub
           %div{:dojoType => "dijit.Menu"}
-            %span{:dojoType => "dijit.MenuItem"}
-              Browse Projects
-            %span{:dojoType => "dijit.MenuItem"}
-              Create Project...
-            %span{:dojoType => "dijit.MenuItem"}
-              = link_to("About", page_url(:about))
-            %span{:dojoType => "dijit.MenuItem"}
-              = link_to("Help", page_url(:help), :target => 'blank', :dojoType => "dijit.MenuItem")
-      
-        #projectButton{:dojoType => "dijit.form.DropDownButton", :iconClass => "project-icon-25"}
-          %span Project
-          %div{:dojoType => "dijit.Menu"}          
+            = link_to("Browse Projects", projects_path, :dojoType => "voeis.MenuLink")
+            = link_to("Create Project...", new_project_path, :dojoType => "voeis.MenuLink")
+            = link_to("About", page_url(:about), :dojoType => "voeis.MenuLink")
+            = link_to("Help", page_url(:help), :dojoType => "voeis.MenuLink")      
             
-            %span{:dojoType => "dijit.MenuItem"} Preferences...
-            
-        #loginButton{:dojoType => "dijit.form.DropDownButton", :style => "float:right"}
+        #loginButton{:dojoType => "dijit.form.DropDownButton", :style => "float:right", :iconClass => "user-icon-25"}
           - if logged_in?
             %span
               = current_user.login
             %ul{:dojoType => "dijit.Menu"}
-              %li{:dojoType => "dijit.MenuItem"} Account Settings
-              %li{:dojoType => "dijit.MenuItem"} Log Out
+              -# = link_to("Account Settings", "", :dojoType => "voeis.MenuLink")
+              = link_to("Logout", logout_path, :dojoType => "voeis.MenuLink")
           - else
             %span Login
             %div{:dojoType => "dijit.TooltipDialog"}
