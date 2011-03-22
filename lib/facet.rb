@@ -60,7 +60,6 @@ module Facet
       end
     end
 
-    alias __send__ send
 
     # Really, REALLY forward as_json and to_json to target
     def as_json(*args, &block)
