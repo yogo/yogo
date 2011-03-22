@@ -1,15 +1,17 @@
 source :rubygems
 
+DM_VERSION = "1.1.0"
+
 gem "yogo-framework"                            # The Yogo Framework
-gem "yogo-project"
+gem "yogo-project",                             :git => "git://github.com/yogo/yogo-project.git"
 
 gem "dm-validations"                            # We're validating properties
 gem "dm-is-versioned"                           # TODO: This should be provided by yogo-db
-gem "dm-types"                                  # To enable UUID types
-gem "dm-is-list"                                # RBAC
-gem "dm-migrations"
-gem "dm-transactions"
-gem "dm-aggregates"
+gem "dm-types",        DM_VERSION               # To enable UUID types
+gem "dm-is-list",      DM_VERSION               # RBAC
+gem "dm-migrations",   DM_VERSION
+gem "dm-transactions", DM_VERSION
+gem "dm-aggregates",   DM_VERSION
 gem "dm-timestamps"
 
 # gem "rails"                                     # Rails application
@@ -19,12 +21,12 @@ gem "actionpack"
 gem "activesupport"
 gem "railties"
 
-gem "dm-rails"                                  # DataMapper integration with Rails
+gem "dm-rails",        DM_VERSION               # DataMapper integration with Rails
 gem "jquery-rails"                              # jQuery integration with Rails
 gem "compass", ">= 0.10.6"                      # Styling automation for views
 gem "haml"                                      # HAML syntax for views
 gem "inherited_resources"                       # Simplified Rails controllers
-gem "bcrypt-ruby", "2.1.1"                               # Encryption for authentication
+
 gem "rails_warden"                              # Warden integration with Rails for authentication
 
 gem "mime-types", :require => "mime/types"      # For uploading data files
@@ -32,8 +34,7 @@ gem "uuidtools"                                 # This is for memberships
 
 gem 'i18n', "~> 0.4.0"
 
-gem 'exception_notification',      :require => 'exception_notifier',
-                                   :git => 'git://github.com/rails/exception_notification.git'
+gem 'exception_notification',      :require => 'exception_notifier'                                   
                                    
 gem 'delayed_job',                 :git => 'git://github.com/robbielamb/delayed_job.git'
 gem "cells", "~> 3.5.4"

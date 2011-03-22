@@ -14,7 +14,16 @@ group "rvm" do
   members ['vagrant']
 end
 
-gem_package "bundler"
+gem_package "bundler" do
+  gem_binary "/usr/local/bin/gem"
+  only_if "test -e /usr/local/bin/gem"
+end
+
+gem_package "ruby-debug19" do
+  gem_binary "/usr/local/bin/gem"
+  only_if "test -e /usr/local/bin/gem"
+  options '-- --with-ruby-include="$rvm_src_path/$(rvm tools identifier)/"'
+end
 
 require_recipe "postgresql::server"
 package "libpq-dev"
@@ -39,13 +48,13 @@ end
 dev_path = "/vagrant"
 bundle_path = "/tmp/voeis_bundle"
 
-script 'Bundling Gems' do
-  interpreter 'bash'
-  cwd dev_path
-  code <<-CODE
-    bundle install --deployment --path #{bundle_path}
-  CODE
-end
+# script 'Bundling Gems' do
+#   interpreter 'bash'
+#   cwd dev_path
+#   code <<-CODE
+#     bundle install --deployment --path #{bundle_path}
+#   CODE
+# end
 
 # bash "Bundling Gems" do
 #   user "vagrant"

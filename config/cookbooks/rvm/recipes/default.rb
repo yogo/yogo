@@ -36,13 +36,20 @@ end
 # Set default RVM Ruby
 bash "install default RVM ruby" do
   user "root"
-  code "rvm install 1.8.7"
-  not_if "rvm list | grep 1.8.7"
+  code "rvm install 1.9.2"
+  not_if "rvm list | grep 1.9.2"
 end
 
-bash "make 1.8.7 the default RVM ruby" do
+bash "make 1.9.2 the default RVM ruby" do
   user "root"
-  code "rvm --default 1.8.7"
+  code "rvm --default 1.9.2"
+end
+
+# ruby-debug19 is a pain to install under rvm
+bash "install ruby-debug19 under rvm" do
+  user "root"
+  code 'rvm 1.9.2 gem install ruby-debug19 -- --with-ruby-include="$rvm_src_path/$(rvm tools identifier)/"'
+  not_if "rvm 1.9.2 gem list | grep ruby-debug19"
 end
 
 # Ensure chef is installed in default rvm ruby

@@ -1,17 +1,26 @@
 GIT
-  remote: git://github.com/rails/exception_notification.git
-  revision: 192a49a02d63d28b23ed41cebadfedd490929cf1
-  specs:
-    exception_notification (1.0.0)
-
-GIT
   remote: git://github.com/robbielamb/delayed_job.git
-  revision: c505e726ee86c5a12a78a69a9d76eb2b759ca5f4
+  revision: 6e81aa9b1dfccd92cb337243f0ce41b630820a50
   specs:
     delayed_job (1.7.0)
-      dm-core (~> 1.0.2)
-      dm-timestamps (~> 1.0.2)
-      dm-types (~> 1.0.2)
+      dm-core (~> 1.1.0)
+      dm-timestamps (~> 1.1.0)
+      dm-types (~> 1.1.0)
+
+GIT
+  remote: git://github.com/yogo/yogo-project.git
+  revision: ee883545fbeaaed813fc5b5d140abef817cb8e9f
+  specs:
+    yogo-project (0.5.1)
+      carrierwave
+      configatron
+      data_mapper (= 1.1.0)
+      dm-is-remixable
+      dm-postgres-adapter
+      dm-sqlite-adapter
+      facets
+      yogo-operation
+      yogo-project
 
 GEM
   remote: http://rubygems.org/
@@ -51,15 +60,21 @@ GEM
       rails (~> 3.0)
     archive-tar-minitar (0.5.2)
     arel (2.0.9)
-    bcrypt-ruby (2.1.1)
+    backports (2.0.2)
+    bcrypt-ruby (2.1.4)
     builder (2.1.2)
-    capistrano (2.5.19)
+    capistrano (2.5.20)
+      highline
       highline
       net-scp (>= 1.0.0)
+      net-scp
+      net-sftp
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
+      net-ssh
+      net-ssh-gateway
       net-ssh-gateway (>= 1.0.0)
-    carrierwave (0.5.2)
+    carrierwave (0.5.3)
       activesupport (~> 3.0)
     cells (3.5.5)
       actionpack (~> 3.0.0)
@@ -67,100 +82,87 @@ GEM
     columnize (0.3.2)
     compass (0.10.6)
       haml (>= 3.0.4)
-    configatron (2.7.0)
+    configatron (2.7.1)
       yamler (>= 0.1.0)
-    data_mapper (1.0.2)
-      dm-aggregates (= 1.0.2)
-      dm-constraints (= 1.0.2)
-      dm-core (= 1.0.2)
-      dm-migrations (= 1.0.2)
-      dm-serializer (= 1.0.2)
-      dm-timestamps (= 1.0.2)
-      dm-transactions (= 1.0.2)
-      dm-types (= 1.0.2)
-      dm-validations (= 1.0.2)
+    data_mapper (1.1.0)
+      dm-aggregates (= 1.1.0)
+      dm-constraints (= 1.1.0)
+      dm-core (= 1.1.0)
+      dm-migrations (= 1.1.0)
+      dm-serializer (= 1.1.0)
+      dm-timestamps (= 1.1.0)
+      dm-transactions (= 1.1.0)
+      dm-types (= 1.1.0)
+      dm-validations (= 1.1.0)
     data_objects (0.10.3)
       addressable (~> 2.1)
     dataflow (0.3.1)
     diff-lcs (1.1.2)
-    dm-active_model (1.0.3)
-      activemodel (~> 3.0.0)
-      dm-core (~> 1.0.2)
-    dm-adjust (1.0.2)
-      dm-core (~> 1.0.2)
-    dm-aggregates (1.0.2)
-      dm-core (~> 1.0.2)
-    dm-constraints (1.0.2)
-      dm-core (~> 1.0.2)
-      dm-migrations (~> 1.0.2)
-    dm-core (1.0.2)
-      addressable (~> 2.2)
-      extlib (~> 0.9.15)
-    dm-do-adapter (1.0.2)
+    dm-active_model (1.1.0)
+      activemodel (~> 3.0.4)
+      dm-core (~> 1.1.0)
+    dm-adjust (1.1.0)
+      dm-core (~> 1.1.0)
+    dm-aggregates (1.1.0)
+      dm-core (~> 1.1.0)
+    dm-constraints (1.1.0)
+      dm-core (~> 1.1.0)
+    dm-core (1.1.0)
+      addressable (~> 2.2.4)
+    dm-do-adapter (1.1.0)
       data_objects (~> 0.10.2)
-      dm-core (~> 1.0.2)
-    dm-is-list (1.0.2)
-      dm-adjust (~> 1.0.2)
-      dm-core (~> 1.0.2)
-    dm-is-remixable (1.0.2)
-      dm-core (~> 1.0.2)
-    dm-is-versioned (1.0.2)
-      dm-core (~> 1.0.2)
-    dm-migrations (1.0.2)
-      dm-core (~> 1.0.2)
-    dm-postgres-adapter (1.0.2)
-      dm-do-adapter (~> 1.0.2)
+      dm-core (~> 1.1.0)
+    dm-is-list (1.1.0)
+      dm-adjust (~> 1.1.0)
+    dm-is-remixable (1.1.0)
+      dm-core (~> 1.1.0)
+    dm-is-versioned (1.1.0)
+      dm-core (~> 1.1.0)
+    dm-migrations (1.1.0)
+      dm-core (~> 1.1.0)
+    dm-postgres-adapter (1.1.0)
+      dm-do-adapter (~> 1.1.0)
       do_postgres (~> 0.10.2)
-    dm-rails (1.0.4)
-      actionpack (~> 3.0.0)
-      activesupport (~> 3.0.0)
-      dm-active_model (~> 1.0.3)
-      dm-core (~> 1.0.0)
-      railties (~> 3.0.0)
-    dm-rest-adapter (1.0.2)
-      dm-core (~> 1.0.2)
-      dm-serializer (~> 1.0.2)
-    dm-serializer (1.0.2)
-      dm-core (~> 1.0.2)
-      fastercsv (~> 1.5.3)
-      json_pure (~> 1.4)
-    dm-sqlite-adapter (1.0.2)
-      dm-do-adapter (~> 1.0.2)
+    dm-rails (1.1.0)
+      actionpack (~> 3.0.4)
+      dm-active_model (~> 1.1.0)
+      dm-core (~> 1.1.0)
+      railties (~> 3.0.4)
+    dm-rest-adapter (1.1.0)
+      dm-serializer (~> 1.1.0)
+    dm-serializer (1.1.0)
+      dm-core (~> 1.1.0)
+      fastercsv (~> 1.5.4)
+      json (~> 1.4.6)
+    dm-sqlite-adapter (1.1.0)
+      dm-do-adapter (~> 1.1.0)
       do_sqlite3 (~> 0.10.2)
-    dm-timestamps (1.0.2)
-      dm-core (~> 1.0.2)
-    dm-transactions (1.0.2)
-      dm-core (~> 1.0.2)
-    dm-types (1.0.2)
-      dm-core (~> 1.0.2)
-      fastercsv (~> 1.5.3)
-      json_pure (~> 1.4)
-      stringex (~> 1.1.0)
-      uuidtools (~> 2.1.1)
-    dm-validations (1.0.2)
-      dm-core (~> 1.0.2)
+    dm-timestamps (1.1.0)
+      dm-core (~> 1.1.0)
+    dm-transactions (1.1.0)
+      dm-core (~> 1.1.0)
+    dm-types (1.1.0)
+      bcrypt-ruby (~> 2.1.4)
+      dm-core (~> 1.1.0)
+      fastercsv (~> 1.5.4)
+      json (~> 1.4.6)
+      stringex (~> 1.2.0)
+      uuidtools (~> 2.1.2)
+    dm-validations (1.1.0)
+      dm-core (~> 1.1.0)
     dm-visualizer (0.2.1)
       dm-core (>= 1.0.0)
       ruby-graphviz (>= 0.9.10)
-    do_jdbc (0.10.3-java)
-      data_objects (= 0.10.3)
     do_postgres (0.10.3)
       data_objects (= 0.10.3)
-    do_postgres (0.10.3-java)
-      data_objects (= 0.10.3)
-      do_jdbc (= 0.10.3)
-      jdbc-postgres (>= 8.2)
     do_sqlite3 (0.10.3)
       data_objects (= 0.10.3)
-    do_sqlite3 (0.10.3-java)
-      data_objects (= 0.10.3)
-      do_jdbc (= 0.10.3)
-      jdbc-sqlite3 (>= 3.5.8)
     erubis (2.6.6)
       abstract (>= 1.0.0)
-    extlib (0.9.15)
+    exception_notification (2.4.0)
     facets (2.9.1)
     fastercsv (1.5.4)
+    git (1.2.5)
     haml (3.0.25)
     has_scope (0.5.0)
     highline (1.6.1)
@@ -171,14 +173,14 @@ GEM
     inherited_resources (1.2.1)
       has_scope (~> 0.5.0)
       responders (~> 0.6.0)
-    jdbc-postgres (9.0.801)
-    jdbc-sqlite3 (3.6.14.2.056-java)
+    jeweler (1.5.2)
+      bundler (~> 1.0.0)
+      git (>= 1.2.5)
+      rake
     jquery-rails (0.2.7)
       rails (~> 3.0)
       thor (~> 0.14.4)
-    json (1.5.1)
-    json (1.5.1-java)
-    json_pure (1.5.1)
+    json (1.4.6)
     linecache (0.43)
     linecache19 (0.5.11)
       ruby_core_source (>= 0.1.4)
@@ -188,6 +190,8 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    monkey-lib (0.5.4)
+      backports
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
@@ -202,6 +206,9 @@ GEM
       rack (>= 1.0.0)
     rack-test (0.5.7)
       rack (>= 1.0)
+    racksh (0.9.8)
+      rack (>= 1.0)
+      rack-test (>= 0.5)
     rails (3.0.5)
       actionmailer (= 3.0.5)
       actionpack (= 3.0.5)
@@ -248,65 +255,50 @@ GEM
     ruby-graphviz (0.9.20)
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
-    sinatra (1.2.0)
+    sinatra (1.2.1)
       rack (~> 1.1)
       tilt (< 2.0, >= 1.2.2)
-    stringex (1.1.0)
+    sinatra-advanced-routes (0.5.1)
+      monkey-lib (~> 0.5.0)
+      sinatra (~> 1.0)
+      sinatra-sugar (~> 0.5.0)
+    sinatra-reloader (0.5.0)
+      sinatra (~> 1.0)
+      sinatra-advanced-routes (~> 0.5.0)
+    sinatra-sugar (0.5.0)
+      monkey-lib (~> 0.5.0)
+      sinatra (~> 1.0)
+    stringex (1.2.1)
     test-unit (1.2.3)
       hoe (>= 1.5.1)
     thor (0.14.6)
     tilt (1.2.2)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
-    tzinfo (0.3.24)
+    tzinfo (0.3.25)
     uuidtools (2.1.2)
     warden (1.0.3)
       rack (>= 1.0.0)
     yamler (0.1.0)
     yard (0.6.5)
-    yardstick (0.2.0)
-      yard (~> 0.6.1)
-    yogo-datamapper (0.5.0)
-      data_mapper (~> 1.0.2)
-      dm-is-remixable
-      yogo-operation
-      yogo-support
-    yogo-db (0.5.0)
-      activesupport
-      carrierwave
-      data_mapper (~> 1.0.2)
-      dm-postgres-adapter
-      dm-sqlite-adapter
-      json
-      rack
-      sinatra
-      yogo-datamapper
-      yogo-operation
-    yogo-framework (0.5.1)
-      data_mapper (~> 1.0.2)
+    yardstick (0.3.0)
+      yard (~> 0.6.5)
+    yogo-framework (0.4.0)
+      data_mapper
       dm-is-list
       dm-is-versioned
       dm-rest-adapter
-      yogo-datamapper
-      yogo-db
-      yogo-operation
-      yogo-project
+      jeweler
+      racksh
+      rake
+      sinatra-reloader
+      yard
     yogo-operation (0.1.2)
       dataflow
       yogo-support (~> 0.1.0)
-    yogo-project (0.5.1)
-      carrierwave
-      configatron
-      data_mapper (~> 1.0.2)
-      dm-is-remixable
-      dm-postgres-adapter
-      dm-sqlite-adapter
-      facets
-      yogo-operation
     yogo-support (0.1.1)
 
 PLATFORMS
-  java
   ruby
 
 DEPENDENCIES
@@ -314,22 +306,21 @@ DEPENDENCIES
   actionpack
   activesupport
   apotomo (~> 1.1)
-  bcrypt-ruby (= 2.1.1)
   capistrano
   cells (~> 3.5.4)
   compass (>= 0.10.6)
   delayed_job!
-  dm-aggregates
-  dm-is-list
+  dm-aggregates (= 1.1.0)
+  dm-is-list (= 1.1.0)
   dm-is-versioned
-  dm-migrations
-  dm-rails
+  dm-migrations (= 1.1.0)
+  dm-rails (= 1.1.0)
   dm-timestamps
-  dm-transactions
-  dm-types
+  dm-transactions (= 1.1.0)
+  dm-types (= 1.1.0)
   dm-validations
   dm-visualizer
-  exception_notification!
+  exception_notification
   fastercsv
   haml
   i18n (~> 0.4.0)
@@ -351,4 +342,4 @@ DEPENDENCIES
   yard
   yardstick
   yogo-framework
-  yogo-project
+  yogo-project!
