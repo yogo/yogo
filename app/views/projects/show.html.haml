@@ -1,24 +1,31 @@
+- content_for(:toolbar) do
+  #projectButton{:dojoType => "dijit.form.DropDownButton", :iconClass => "project-icon-25"}
+    %span Project
+    %div{:dojoType => "dijit.Menu"}                    
+      -if !current_user.nil? && current_user.projects.include?(@project)
+        = link_to("Add Site", new_project_site_path(@project), :dojoType => "voeis.MenuLink")
+      - if @sites.count > 0
+        = link_to("Add Variable", new_project_variable_path(@project), :dojoType => "voeis.MenuLink")
+        = link_to("Add Unit", new_project_unit_path(@project), :dojoType => "voeis.MenuLink")
+        = link_to("Add Sample", new_project_sample_path(@project), :dojoType => "voeis.MenuLink")
+      - if @project.managed_repository { Voeis::Sample.all.count } > 0
+        = link_to("Add Sample Data", pre_process_project_data_values_path(@project), :dojoType => "voeis.MenuLink")
+        = link_to("Add Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id}, :dojoType => "voeis.MenuLink")
+        = link_to("Add Field Data", new_field_measurement_project_sensor_values_path(@project), :params => {:project_id => @project.id}, :dojoType => "voeis.MenuLink")
+      - if @project.managed_repository { Voeis::DataStream.all.count } > 0
+        = link_to("Add Data", add_project_data_streams_path(@project), :params => {:project_id => @project.id}, :dojoType => "voeis.MenuLink")
+      = link_to("Settings...", edit_project_path(@project), :dojoType => "voeis.MenuLink")
+
+            
 #content-actions
-  = link_to("Settings", edit_project_path(@project), :class => 'icon icon-settings')
+  
 #content-title 
   - if @project.is_private == true
     %span.icon.icon-private= @project.name
   - else
     %span.icon= @project.name
   #links
-    -if !current_user.nil? && current_user.projects.include?(@project)
-      %span Add a: 
-      = link_to("Site", new_project_site_path(@project), :class => 'icon icon-add')
-      - if @sites.count > 0
-        = link_to("Variable", new_project_variable_path(@project), :class => 'icon icon-add')
-        = link_to("Unit", new_project_unit_path(@project), :class => 'icon icon-add')
-        = link_to("Sample", new_project_sample_path(@project), :class => 'icon icon-add')
-        - if @project.managed_repository { Voeis::Sample.all.count } > 0
-          = link_to("Sample Data", pre_process_project_data_values_path(@project), :class => 'icon icon-add')
-        = link_to("Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id}, :class => 'icon icon-add')
-        = link_to("Field Data", new_field_measurement_project_sensor_values_path(@project), :params => {:project_id => @project.id}, :class => 'icon icon-add')
-        - if @project.managed_repository { Voeis::DataStream.all.count } > 0
-          = link_to("Data", add_project_data_streams_path(@project), :params => {:project_id => @project.id}, :class => 'icon icon-add')
+
     - if @project.managed_repository { Voeis::DataStream.all.count } > 0
       = link_to("Browse Data Streams", query_project_data_streams_path(@project), :class => 'button-link')
     - if @project.managed_repository { !Voeis::DataValue.first.nil? }
