@@ -6,6 +6,10 @@
 # FILE: datamapper.rb
 #
 
+# Patch dm-rails to not try creating dm-rest repositories
+# during `rake db:create`
+require 'dm-rails/rest-storage.rb'
+
 # Require custom extensions to datamapper.
 # require 'datamapper/model'
 require 'datamapper/search'
