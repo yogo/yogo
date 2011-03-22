@@ -7,15 +7,33 @@ class UsersController < InheritedResources::Base
 
   def update
     # Remove these if they were sent.
-    params[:user].delete(:password)
-    params[:user].delete(:password_confirmation)
-
+    # 
+    if params[:user].empty?
+      params[:user].delete(:password)
+      params[:user].delete(:password_confirmation)
+    end
     update!
     # respond_to do |format|
     #   format.html do
     #     redirect_to(:back)
     #   end
     # end
+  end
+ 
+  def change_password
+    user = User.get(params[:id])
+    code = {:message => "Password Change Failed"}
+    if params[:password] == params[:confirmation]
+      user.password = params[:password]
+      user.password_confirmation = params[:confirmation]
+      user.save
+      code = {:message =>"Password Change Was Successful"}
+    end
+    respond_to do |format|
+      format.json do
+        render :json => code.as_json, :callback => params[:jsoncallback]
+      end
+    end
   end
 
   def destroy

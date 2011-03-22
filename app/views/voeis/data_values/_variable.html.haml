@@ -98,6 +98,7 @@
     function  createVariable(){ 
     $.post("#{root_url + "variables"}.json?variable_code=" +$("#variable_variable_code").val()+"&variable_name=" + $("#variable_variable_name").val()+"&speciation="+$("#variable_speciation").val()+"&variable_units_id="+ $("#variable_variable_units_id").val() + "&sample_medium="+ $("#variable_sample_medium").val() + "&value_type="+$("#variable_value_type").val(0)+"&is_regular="+$("#variable_is_regular").val()+"&time_support="+$("#variable_time_support").val()+"&time_units_id="+$("#variable_time_units_id").val()+"&data_type="+$("#variable_data_type").val()+"&general_category="+$("#variable_general_category").val()+"&no_data_value="+$("#variable_no_data_value").val(),
     function(data) {
+    updated_var = data  
     update_text= data["variable_code"];
     $("#"+current_id_to_update).val(data["id"]);
     updateVarSpans(current_column);

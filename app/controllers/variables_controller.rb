@@ -31,7 +31,11 @@ class VariablesController < ApplicationController
     end
   end
   def show
-    
+    respond_to do |format|
+      format.json do
+        
+      end
+    end
   end
   
 

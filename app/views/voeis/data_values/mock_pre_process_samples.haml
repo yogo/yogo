@@ -123,11 +123,13 @@ Form Progress:
       %th Header Information
     %tr
       %th Starting Row Data
-    %tr
-      %th Assigned
-      - @columns.each do |col|
-        %td
-          %span{:id => "var_td"+col.to_s, :onClick=>"editColumn(#{col})", :class=>"column_td"}None
+    -@var_properties.each do |prop|
+      %tr
+        %th #{prop.to_s.capitalize!.gsub("_", " ")}
+        - @columns.each do |col|
+          %td
+            %span{:id => "var_td_"+prop.to_s+"_"+col.to_s, :onClick=>"editColumn(#{col})", :class=>"column_td"}None
+              
   =submit_tag("Save Samples")
   = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel')
 
@@ -135,7 +137,9 @@ Form Progress:
 :javascript  
   $(document).ready(function() {
   });
+  
   var current_column ="";
+  var updated_var = "";
   var current_id_to_update="";
   var update_text="";
   var mystore ="";
@@ -239,8 +243,12 @@ Form Progress:
     if ($("#var_span"+column).text() == "None"){
     updateProgressBar();
     }
+    
     $("#var_span"+column).text("Variable:"+update_text);
-    $("#var_td"+column).text(update_text);
+    $("#var_td_variable_code_"+column).text(update_text);
+    $("#var_td_variable_name_"+column).text(updated_var["variable_name"]);
+    
+    
     dijit.byId("Column"+column).set("title", "Column"+column+": "+update_text);
     dijit.byId("next"+column).set("disabled", false);
     dijit.byId("next"+column).focus();

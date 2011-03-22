@@ -862,6 +862,12 @@ class Voeis::DataValuesController < Voeis::BaseController
       @sites = @sites.merge({s.name => s.id})
     end
     @variables = Variable.all
+    @var_properties = Array.new
+    Variable.properties.each do |prop|
+      @var_properties << prop.name
+    end
+    @var_properties.delete_if {|x| x.to_s == "id" || x.to_s == "his_id" || x.to_s == "time_units_id" || x.to_s == "is_regular" || x.to_s == "time_support"}
+    
     @variable = Variable.new
     @units = Unit.all
     @variable_names = VariableNameCV.all
