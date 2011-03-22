@@ -17,7 +17,7 @@ class Voeis::DataValuesController < Voeis::BaseController
   # @api public
   def pre_process
     @project = parent
-    @general_categories = GeneralCategoryCV.all
+    @general_categories = Voeis::GeneralCategoryCV.all
   end
   
   # Gather information necessary to store samples and data
@@ -30,7 +30,7 @@ class Voeis::DataValuesController < Voeis::BaseController
   def pre_process_samples_and_data
     @project = parent
     @templates = parent.managed_repository{Voeis::DataStream.all(:type => "Sample")}
-    @general_categories = GeneralCategoryCV.all
+    @general_categories = Voeis::GeneralCategoryCV.all
   end
 
   # Gather information necessary to store samples and data
@@ -43,7 +43,7 @@ class Voeis::DataValuesController < Voeis::BaseController
   def pre_process_varying_samples_with_data
     @project = parent
     @templates = parent.managed_repository{Voeis::DataStream.all(:type => "Sample")}
-    @general_categories = GeneralCategoryCV.all
+    @general_categories = Voeis::GeneralCategoryCV.all
   end
 
   # Gather information necessary to store sample data
@@ -125,8 +125,8 @@ class Voeis::DataValuesController < Voeis::BaseController
     @variables = Variable.all
     @sites = parent.managed_repository{ Voeis::Site.all }
     @samples = parent.managed_repository{ Voeis::Sample.all }
-    @sample_types = SampleTypeCV.all
-    @sample_materials = SampleMaterial.all
+    @sample_types = Voeis::SampleTypeCV.all
+    @sample_materials = Voeis::SampleMaterial.all
     @project_sample_materials = @project.managed_repository{Voeis::SampleMaterial.all}
     @lab_methods = @project.managed_repository{Voeis::LabMethod.all}
      
@@ -219,11 +219,11 @@ class Voeis::DataValuesController < Voeis::BaseController
     require 'csv_helper'
      
     @project = parent
-    @variables = Variable.all
+    @variables = Voeis::Variable.all
     @sites = parent.managed_repository{ Voeis::Site.all }
     @samples = parent.managed_repository{ Voeis::Sample.all }
-    @sample_types = SampleTypeCV.all
-    @sample_materials = SampleMaterial.all
+    @sample_types = Voeis::SampleTypeCV.all
+    @sample_materials = Voeis::SampleMaterial.all
     @project_sample_materials = @project.managed_repository{Voeis::SampleMaterial.all}
     @lab_methods = @project.managed_repository{Voeis::LabMethod.all}
      
@@ -430,7 +430,7 @@ class Voeis::DataValuesController < Voeis::BaseController
              end
           else #create other data_stream_columns and create sensor_types
             #puts params["column"+i.to_s]
-            var = Variable.get(params["column"+i.to_s])
+            var = Voeis::Variable.get(params["column"+i.to_s])
             parent.managed_repository do
               data_stream_column = Voeis::DataStreamColumn.create(
                                     :column_number => i,
@@ -621,7 +621,7 @@ class Voeis::DataValuesController < Voeis::BaseController
             end
          else #create other data_stream_columns and create sensor_types
            #puts params["column"+i.to_s]
-           var = Variable.get(params["column"+i.to_s])
+           var = Voeis::Variable.get(params["column"+i.to_s])
            parent.managed_repository do
              data_stream_column = Voeis::DataStreamColumn.create(
                                    :column_number => i,
@@ -668,7 +668,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      #store all the Variables in the managed repository
      @col_vars = Array.new
      (0..range).each do |i|
-        @var = Variable.get(params["column"+i.to_s])
+        @var = Voeis::Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           if !params["ignore"+i.to_s]            
             variable = Voeis::Variable.first_or_create(

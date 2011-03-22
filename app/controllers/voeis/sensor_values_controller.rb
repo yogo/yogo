@@ -10,13 +10,13 @@ class Voeis::SensorValuesController < Voeis::BaseController
   
   def new_field_measurement
       @sites = parent.managed_repository{Voeis::Site.all}
-      @variables = Variable.all
-      @units = Unit.all
+      @variables = Voeis::Variable.all
+      @units = Voeis::Unit.all
   end
   
   def create_field_measurement
-    @var = Variable.get(params[:variable].to_i)
-    units = Unit.all
+    @var = Voeis::Variable.get(params[:variable].to_i)
+    units = Voeis::Unit.all
     @unit = units.first(:id => @var.variable_units_id)
     parent.managed_repository do
       d_time = DateTime.parse("#{params[:time]["stamp(1i)"]}-#{params[:time]["stamp(2i)"]}-#{params[:time]["stamp(3i)"]}T#{params[:time]["stamp(4i)"]}:#{params[:time]["stamp(5i)"]}:00#{ActiveSupport::TimeZone[params[:time][:zone]].utc_offset/(60*60)}:00")

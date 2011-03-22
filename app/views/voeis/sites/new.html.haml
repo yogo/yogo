@@ -2,7 +2,7 @@
 Add an existing to site to the project:
 = form_tag("save_site") do 
   - site_options = "Hash.new"""
-  - @sites.all(:order => [:site_name.asc]).each do |site|
+  - @sites.all(:order => [:name.asc]).each do |site|
     - site_options = site_options + "<option value="+site.id.to_s+">"+site.site_name+"</option>"
   = select_tag("site", site_options.html_safe)
   = submit_tag("Add Site", :onclick => "$('#loader').toggle();")

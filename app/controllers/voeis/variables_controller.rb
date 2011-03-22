@@ -19,7 +19,7 @@ class Voeis::VariablesController < Voeis::BaseController
     @value_types= Voeis::ValueTypeCV.all
     @speciations = Voeis::SpeciationCV.all
     @data_types = Voeis::DataTypeCV.all
-    @general_categories = GeneralCategoryCV.all
+    @general_categories = Voeis::GeneralCategoryCV.all
     @label_array = Array["Variable Name","Variable Code","Unit Name","Speciation","Sample Medium","Value Type","Is Regular","Time Support","Time Unit ID","Data Type","General Cateogry"]
     @current_variables = Array.new     
     @variables.all(:order => [:variable_name.asc]).each do |var|
