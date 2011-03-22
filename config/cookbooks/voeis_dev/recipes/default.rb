@@ -7,6 +7,13 @@
 # All rights reserved - Do Not Redistribute
 #
 
+# Add vagrant user to rvm group
+group "rvm" do
+  action :modify
+  append true
+  members ['vagrant']
+end
+
 gem_package "bundler"
 
 require_recipe "postgresql::server"
