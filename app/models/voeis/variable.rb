@@ -57,7 +57,8 @@ class Voeis::Variable
   property :no_data_value, Float, :required => true, :default => -9999
   #property :limit_of_detection, Float, :required => false
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
-
+  property :detection_limit,   Float,   :required => false
+  
   is_versioned :on => :updated_at
   
   before(:save) {

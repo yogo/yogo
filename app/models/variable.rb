@@ -16,7 +16,8 @@ class Variable
   property :general_category, String, :required => true, :default => 'Unknown', :length => 512
   property :no_data_value, Float, :required => true, :default => -9999
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
-
+  property :detection_limit,   Float,   :required => false
+  
   is_versioned :on => :updated_at
   
   before(:save) {
