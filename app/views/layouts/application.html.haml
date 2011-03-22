@@ -39,6 +39,9 @@
       dojo.require("dojo.data.ObjectStore");
       dojo.require("dijit.tree.ForestStoreModel");
       dojo.require("dijit.Tree");
+      dojo.require("dijit.form.TextBox");
+      dojo.require("dijit.form.CheckBox");
+      
       dojo.require("voeis.MenuLink");
       
       dojo.addOnLoad(function(){        
@@ -103,16 +106,19 @@
           - else
             %span Login
             %div{:dojoType => "dijit.TooltipDialog"}
-              %label Username
-              %label Password
+              = form_for( :user_session, :url => user_session_path, :builder => YogoFormBuilder ) do |f|
+                = f.text_field(:login, :label => "User", :dojoType => "dijit.form.TextBox")
+                = f.password_field(:password, :label => 'Pass', :dojoType => "dijit.form.TextBox")
+                = f.check_box(:remember_me, :dojoType => "dijit.form.CheckBox")
+                = f.submit("Login", :label => "Login", :dojoType => "dijit.form.Button")
         
         = yield :toolbar
                 
               
         
       #main_split{:dojoType => "dijit.layout.BorderContainer", :design => "sidebar", :region => "center", :gutters => "false"}
-        #left_sidebar{:dojoType => "dijit.layout.ContentPane", :region => "left", :style => "width:200px"}
-          = yield :sidebar
+        -# #left_sidebar{:dojoType => "dijit.layout.ContentPane", :region => "left", :style => "width:200px"}
+        -#   = yield :sidebar
           
         #container{:dojoType => "dijit.layout.ContentPane", :region => "center"}
           = yield
