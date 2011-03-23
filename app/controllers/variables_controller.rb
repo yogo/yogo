@@ -18,6 +18,9 @@ class VariablesController < ApplicationController
     else
       @variable = Variable.new(params[:variable])
     end
+    if @variable.detection_limit.empty?
+      @variable.detection_limit = nil
+    end
     respond_to do |format|
       if @variable.save
         flash[:notice] = 'Variables was successfully created.'

@@ -34,7 +34,9 @@ class Voeis::VariablesController < Voeis::BaseController
   # POST /variables
   def create
     @variable = Variable.new(params[:variable])
-    
+    if @variable.detection_limit.empty?
+      @variable.detection_limit = nil
+    end
     if @variable.save  
       flash[:notice] = 'Variable was successfully created.'
       redirect_to(new_project_variable_path(parent))
