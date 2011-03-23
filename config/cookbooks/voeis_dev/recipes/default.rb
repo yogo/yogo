@@ -15,13 +15,13 @@ group "rvm" do
 end
 
 gem_package "bundler" do
-  gem_binary "/usr/local/bin/gem"
-  only_if "test -e /usr/local/bin/gem"
+  gem_binary "rvm 1.9.2,1.8.7 gem"
+  only_if "test -e /usr/local/bin/rvm"
 end
 
 gem_package "ruby-debug19" do
-  gem_binary "/usr/local/bin/gem"
-  only_if "test -e /usr/local/bin/gem"
+  gem_binary "rvm 1.9.2 gem"
+  only_if "test -e /usr/local/bin/rvm"
   options '-- --with-ruby-include="$rvm_src_path/$(rvm tools identifier)/"'
 end
 
