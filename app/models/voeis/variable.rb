@@ -56,6 +56,7 @@ class Voeis::Variable
   property :data_type,         String,  :required => true, :default => 'Unknown', :length => 512
   property :general_category,  String,  :required => true, :default => 'Unknown', :length => 512
   property :no_data_value,     Float,   :required => true, :default => -9999
+  property :detection_limit,   Float,   :required => false
   
   # repository(:default){
     property :his_id,            Integer, :required => false, :index => true
