@@ -116,12 +116,9 @@
                 
               
         
-      #main_split{:dojoType => "dijit.layout.BorderContainer", :design => "sidebar", :region => "center", :gutters => "false"}
-        -# #left_sidebar{:dojoType => "dijit.layout.ContentPane", :region => "left", :style => "width:200px"}
-        -#   = yield :sidebar
-          
-        #container{:dojoType => "dijit.layout.ContentPane", :region => "center"}
-          = yield
+      #main_container{:dojoType => "dijit.layout.ContentPane", :region => "center", :gutters => "false", :style => "padding:0"}
+        = content_for?(:content) ? yield(:content) : yield
+
 
    
   -# #footnotes_holder
