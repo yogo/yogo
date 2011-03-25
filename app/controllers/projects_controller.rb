@@ -1,6 +1,6 @@
 class ProjectsController < InheritedResources::Base
   respond_to :html, :json
- 
+  layout 'split_map'
 
    #export the results of search/browse to a csv file
   def export
