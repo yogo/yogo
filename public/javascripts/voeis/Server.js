@@ -1,6 +1,8 @@
 dojo.provide("voeis.Server");
 dojo.require("dojo.store.JsonRest");
 dojo.require("dojo.data.ObjectStore");
+dojo.require("voeis.store.Projects");
+dojo.require("voeis.maps.google.MapMarkers");
 
 dojo.declare("voeis.Server", null, {
     constructor: function(args){
@@ -22,7 +24,7 @@ dojo.declare("voeis.Server", null, {
 
     /** Stores **/
     projects: function() {
-        this._projects = this._projects ||  new dojo.store.JsonRest({target:this.projectsPath() + "/"});
+        this._projects = this._projects || voeis.store.Projects(new dojo.store.JsonRest({target:this.projectsPath() + "/"}), this);
         return this._projects;
     },
     projectsDataStore: function() {
@@ -30,7 +32,7 @@ dojo.declare("voeis.Server", null, {
     },
 
     projectSites: function(projectId) {
-        this._projectSites = this._projectSites ||new dojo.store.JsonRest({target:this.projectSitesPath(projectId) + "/"});
+        this._projectSites = this._projectSites || voeis.maps.google.MapMarkers(new dojo.store.JsonRest({target:this.projectSitesPath(projectId) + "/"}));
         return this._projectSites;
     },
     projectSitesDataStore: function(projectId) {
