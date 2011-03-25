@@ -26,7 +26,7 @@ dojo.declare("voeis.Server", null, {
         return this._projects;
     },
     projectsDataStore: function() {
-        return new dojo.data.ObjectStore({objectStore:this.projectStore()});
+        return new dojo.data.ObjectStore({objectStore:this.projects()});
     },
 
     projectSites: function(projectId) {
@@ -34,7 +34,7 @@ dojo.declare("voeis.Server", null, {
         return this._projectSites;
     },
     projectSitesDataStore: function(projectId) {
-        return new dojo.data.ObjectStore({objectStore:this.projectSiteStore(projectId)});
+        return new dojo.data.ObjectStore({objectStore:this.projectSites(projectId)});
     }
 
 });
