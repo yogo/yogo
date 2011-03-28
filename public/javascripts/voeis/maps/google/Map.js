@@ -9,8 +9,6 @@ dojo.declare("voeis.maps.google.Map", dijit._Widget, {
     zoom: 1,
     latitude: 0,
     longitude: 0,
-    width: 300,
-    height: 300,
     
     constructor: function() {
         this._mapDfd = new dojo.Deferred();
