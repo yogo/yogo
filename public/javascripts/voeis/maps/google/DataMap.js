@@ -7,6 +7,8 @@ dojo.declare("voeis.maps.google.DataMap", voeis.maps.google.Map, {
     store: null,
     query: null,
     
+    markerIcon: "",
+    
     constructor: function() {
         this._markers = [];
         this.setStore(this.store || new dojo.store.Memory());
@@ -63,7 +65,8 @@ dojo.declare("voeis.maps.google.DataMap", voeis.maps.google.Map, {
     markerFromItem: function(item) {
         return new google.maps.Marker({
             title: this.itemTitle(item),
-            position: this.itemPosition(item)
+            position: this.itemPosition(item),
+            icon: this.markerIcon
         });
     },
     markerBounds: function(markers) {
