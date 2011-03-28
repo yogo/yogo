@@ -44,7 +44,7 @@ class Voeis::Site
   property :comments, Text, :required => false
   property :description, Text, :required => false
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
-  property :time_zone_offset, String, :required => false, :default => "unkown"
+  property :time_zone_offset, String, :required => false, :default => "unknown"
   is_versioned :on => :updated_at
   
   validates_uniqueness_of :code

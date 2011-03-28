@@ -40,7 +40,7 @@ Form Progress:
       Currently Selected Sample Type:
       = select_tag('sample_type',  options_for_select(@sample_type_options, "Grab"))
       =clear_break
-      Currently Selected Sample Mediume:
+      Currently Selected Sample Medium:
       = select_tag('sample_medium',  options_for_select(@sample_medium_options, "Surface Water"))
       =clear_break
       %button{:dojoType=>"dijit.form.Button", :title=>"Next", :id=>"next0", :disabled=>"disabled", :onclick=>"sampleButtonClick();" }

@@ -1145,8 +1145,7 @@ class Voeis::DataValuesController < Voeis::BaseController
                                          :material => params[:sample_medium],
                                          :lab_sample_code => @csv_row[row][@sample_col],
                                          :lab_method_id => -1,
-                                         :local_date_time => DateTime.civil(sample_datetime.year,sample_datetime.month,sample_datetime.day,sample_datetime.hour,sample_datetime.min, sample_datetime.sec,site.time_zone_offset.to_i/24.to_f) )
-            debugger                             
+                                         :local_date_time => DateTime.civil(sample_datetime.year,sample_datetime.month,sample_datetime.day,sample_datetime.hour,sample_datetime.min, sample_datetime.sec,site.time_zone_offset.to_i/24.to_f) )           
              @sample.valid?
              puts @sample.errors.inspect()
              @sample.save
