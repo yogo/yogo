@@ -13,8 +13,7 @@
 %table{:id => 'projects_table', :dojoType => "dojox.grid.EnhancedGrid", :store => "projectsDataStore", :plugins => "{indirectSelection: true}"}
   %thead
     %tr
-      %th{:field => "name", :width => "50%"} Project
-      %th{:field => "id", :width => "50%"} ID
+      %th{:field => "name", :width => "auto"} Project
   %script{:type => "dojo/method", :event => "onSelected", :args => "idx"}
     :plain
       console.log("selected:");
