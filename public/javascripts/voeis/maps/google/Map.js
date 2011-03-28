@@ -4,13 +4,17 @@ dojo.require("voeis.maps.google");
 
 dojo.declare("voeis.maps.google.Map", dijit._Widget, {
     _map: null,
+    _mapDfd: null,
     mapType: "satellite",
-    zoom: 8,
-    latitude: -34.397,
-    longitude: 150.644,
+    zoom: 1,
+    latitude: 0,
+    longitude: 0,
     width: 300,
     height: 300,
     
+    constructor: function() {
+        this._mapDfd = new dojo.Deferred();
+    },
     _mapOptions: function() {
         return {
             mapTypeId: this.mapType,
@@ -20,6 +24,7 @@ dojo.declare("voeis.maps.google.Map", dijit._Widget, {
     },
     _createMap: function() {
         this._map = this._map || new google.maps.Map(this.domNode, this._mapOptions());
+        this._mapDfd.resolve(this._map);
     },
     postCreate: function() {
         dojo.when(voeis.maps.google.load(), dojo.hitch(this, "_createMap"));
