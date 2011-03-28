@@ -14,14 +14,14 @@ module Odhelper
       project.managed_repository do
         # 
         puts project.name
-        DataMapper.auto_upgrade!
+        #DataMapper.auto_upgrade!
         # Voeis::SensorTypeSensorValue.auto_upgrade!
         # Voeis::SensorValue.auto_upgrade!
         # Voeis::SensorType.auto_upgrade!
-        # Voeis::Site.auto_upgrade!
+        Voeis::Site.auto_upgrade!
         # Voeis::Sample.auto_upgrade!
         # Voeis::DataValue.auto_upgrade!
-        Voeis::Variable.auto_upgrade!
+        #Voeis::Variable.auto_upgrade!
         # Voeis::DataStream.auto_upgrade!
         # Voeis::SensorType.all.each do |sensor|
         #   if !sensor.sensor_values.nil?

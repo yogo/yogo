@@ -44,7 +44,7 @@ class Voeis::Site
   property :comments, Text, :required => false
   property :description, Text, :required => false
   property :updated_at, DateTime, :required => true,  :default => DateTime.now
-
+  property :time_zone_offset, String, :required => false, :default => "unkown"
   is_versioned :on => :updated_at
   
   validates_uniqueness_of :code
@@ -60,4 +60,19 @@ class Voeis::Site
   has n, :data_values,  :model => "Voeis::DataValue", :through => Resource
   has n, :samples,  :model => "Voeis::Sample", :through => Resource
   has n, :variables, :model => "Voeis::Variable", :through => Resource
+  
+  def fetch_time_zone
+    require 'net/http'
+    require 'rexml/document'
+    connection = Net::HTTP.new("www.earthtools.org")
+    response = ""
+    connection.start do |http|
+      req = Net::HTTP::Get.new("/timezone-1.1/40.71417/-74.00639")
+      response = http.request(req)
+    end
+    doc = REXML::Document.new(response.body)
+    self.time_zone_offset = doc.elements["timezone/offset"].text
+    self.save
+  end
+  
 end
