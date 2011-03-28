@@ -1,4 +1,5 @@
 dojo.provide("voeis.store.Projects");
+dojo.require("dojo.store.util.QueryResults");
 
 voeis.store.Projects = function(store, server) {
     if(store._projectsServer) {
@@ -48,7 +49,13 @@ voeis.store.Projects = function(store, server) {
 
     var origQuery = store.query;
     store.query = function() {
-        return origQuery.apply(this, arguments).map(enhanceObject);
+        var dfd = new dojo.Deferred();
+        
+        dojo.when(origQuery.apply(this, arguments).map(extendedObject), function(results) {
+            dfd.resolve(results);
+        });
+        
+        return dojo.store.util.QueryResults(dfd);
     }
 
 
