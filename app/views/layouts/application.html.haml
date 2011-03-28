@@ -47,8 +47,10 @@
       
       voeis.maps.google.load();
       
-      dojo.addOnLoad(function(){        
-        dojo.parser.parse();
+      dojo.addOnLoad(function(){
+        dojo.when(voeis.maps.google.load(), function() {
+          dojo.parser.parse();
+        });
       });
 
     = yield(:javascripts)
