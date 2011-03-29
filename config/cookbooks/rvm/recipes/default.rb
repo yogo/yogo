@@ -23,7 +23,7 @@ rvm_dev_packages.each {|p| package p}
 # Install RVM
 bash "install RVM" do
   user "root"
-  code "bash < <( curl -L http://bit.ly/rvm-install-system-wide )"
+  code "bash < <(curl -B http://rvm.beginrescueend.com/install/rvm)"
   not_if "which rvm && rvm --version"
 end
 
