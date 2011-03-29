@@ -15,6 +15,7 @@ class Voeis::SitesController < Voeis::BaseController
   def show
     @site =  parent.managed_repository{Voeis::Site.get(params[:id])}
     @project = parent
+    show!
   end
   
   def edit
