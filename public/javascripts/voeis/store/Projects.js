@@ -59,7 +59,5 @@ voeis.store.Projects = function(store, server) {
     }
 
 
-
-    var origPut = store
     return store;
 };
