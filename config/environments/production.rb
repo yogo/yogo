@@ -48,7 +48,8 @@ Yogo::Application.configure do
   config.active_support.deprecation = :notify
   
   config.middleware.use ExceptionNotifier,
-      :email_prefix => "Project: epscor-sensor\nTracker: feedback\n",
-      :sender_address => %{"Voeis Management" <voeis.mgmt@gmail.com>},
-      :exception_recipients => %w{forge@msu.montana.edu irjudson@gmail.com sean.b.cleveland@gmail.com}
+    :email_prefix => "Project: epscor-sensor\nTracker: feedback\n",
+    :sender_address => %{"Voeis Management" <voeis.mgmt@gmail.com>},
+    :exception_recipients => %w{forge@msu.montana.edu irjudson@gmail.com sean.b.cleveland@gmail.com},
+    :ignore_exceptions => [ ::AbstractController::ActionNotFound, ::ActionController::RoutingError ]
 end
