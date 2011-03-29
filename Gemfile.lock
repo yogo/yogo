@@ -1,10 +1,4 @@
 GIT
-  remote: git://github.com/rails/exception_notification.git
-  revision: 192a49a02d63d28b23ed41cebadfedd490929cf1
-  specs:
-    exception_notification (1.0.0)
-
-GIT
   remote: git://github.com/robbielamb/delayed_job.git
   revision: c505e726ee86c5a12a78a69a9d76eb2b759ca5f4
   specs:
@@ -142,6 +136,7 @@ GEM
       data_objects (= 0.10.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    exception_notification (2.4.0)
     extlib (0.9.15)
     facets (2.9.0)
     fastercsv (1.5.3)
@@ -305,7 +300,7 @@ DEPENDENCIES
   dm-types
   dm-validations
   dm-visualizer
-  exception_notification!
+  exception_notification
   fastercsv
   haml
   i18n (~> 0.4.0)
