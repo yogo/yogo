@@ -1,0 +1,6 @@
+-if @projects.count > 0 
+  -@projects.each do |project|
+    =link_to(project.name, project_path(project.id), :dojoType => "voeis.MenuLink")
+
+-else
+  None
