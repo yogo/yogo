@@ -3,6 +3,8 @@
     dojo.require("dojox.grid.EnhancedGrid");
     dojo.require("dojox.grid.enhanced.plugins.IndirectSelection");
     dojo.require("voeis.Server");
+    dojo.require("dijit.layout.TabContainer");
+    dojo.require("voeis.ui.SitePane");
     
     projectsDataStore = voeis.Server.DEFAULT.projectsDataStore();
 
@@ -10,23 +12,41 @@
   = stylesheet_link_tag("/javascripts/dojox/grid/enhanced/resources/EnhancedGrid.css")
   = stylesheet_link_tag("/javascripts/dojox/grid/enhanced/resources/claro/EnhancedGrid.css")
 
-%table{:id => 'projects_table', :dojoType => "dojox.grid.EnhancedGrid", :store => "projectsDataStore", :plugins => "{indirectSelection: true}"}
-  %thead
-    %tr
-      %th{:field => "name", :width => "auto"} Project
-  %script{:type => "dojo/method", :event => "onSelected", :args => "idx"}
-    :plain
-      console.log("selected:");
-      console.log(arguments);
-      var map = dijit.byId('split_map');
-      var item = this.getItem(idx);
-      map.store.add(item);
-  %script{:type => "dojo/method", :event => "onDeselected", :args => "idx"}
-    :plain
-      console.log("deselected:");
-      console.log(arguments);
-      var map = dijit.byId('split_map');
-      var item = this.getItem(idx);
-      map.store.remove(item.id);
-      
+#tab_browser{:dojoType => "dijit.layout.TabContainer"}
+  %table{:id => 'projects_table', :title => "Projects", :dojoType => "dojox.grid.EnhancedGrid", :store => "projectsDataStore", :plugins => "{indirectSelection: true}"}
+    %thead
+      %tr
+        %th{:field => "name", :width => "auto"} Project
+    %script{:type => "dojo/method", :event => "onSelected", :args => "idx"}
+      :plain
+        console.log("selected:");
+        console.log(arguments);
+        var map = dijit.byId('split_map');
+        var item = this.getItem(idx);
+        map.store.add(item);
+    %script{:type => "dojo/method", :event => "onDeselected", :args => "idx"}
+      :plain
+        console.log("deselected:");
+        console.log(arguments);
+        var map = dijit.byId('split_map');
+        var item = this.getItem(idx);
+        map.store.remove(item.id);
+
+:javascript
+  (function(){
+    var openSiteTab = function(tabs, projectId, siteId) {
+      var sitePane = new voeis.ui.SitePane();
+      tabs.addChild(sitePane);
+      sitePane.set({projectId: projectId, siteId: siteId});
+      tabs.selectChild(sitePane);
+    };
+
+  dojo.subscribe("voeis/project/site/selected", function(projectId, siteId) {
+    console.log(arguments);
+    var tab_browser = dijit.byId('tab_browser');    
+    openSiteTab(tab_browser, projectId, siteId);
+  });
+  })();
+  
+
       
