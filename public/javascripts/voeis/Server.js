@@ -2,6 +2,7 @@ dojo.provide("voeis.Server");
 dojo.require("dojo.store.JsonRest");
 dojo.require("dojo.data.ObjectStore");
 dojo.require("voeis.store.Projects");
+dojo.require("voeis.store.Sites");
 
 dojo.declare("voeis.Server", null, {
     constructor: function(args){
@@ -32,7 +33,7 @@ dojo.declare("voeis.Server", null, {
 
     projectSites: function(projectId) {
         this._projectSites = this.projectSites || {};
-        this._projectSites[projectId] = this._projectSites[projectId] || new dojo.store.JsonRest({target:this.projectSitesPath(projectId) + "/"});
+        this._projectSites[projectId] = this._projectSites[projectId] || voeis.store.Sites(new dojo.store.JsonRest({target:this.projectSitesPath(projectId) + "/"}), projectId, this);
         return this._projectSites[projectId];
     },
     projectSitesDataStore: function(projectId) {
