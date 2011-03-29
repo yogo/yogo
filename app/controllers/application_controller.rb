@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   helper :all
 
   # Specify the layout for the yogo application
-  layout 'application'
+  layout Proc.new { |controller| controller.request.xhr? ? false : 'application' }
 
   # See ActionController::RequestForgeryProtection for details
   protect_from_forgery
