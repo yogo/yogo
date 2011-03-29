@@ -42,5 +42,21 @@ dojo.declare("voeis.maps.google.ProjectsMap", voeis.maps.google.DataMap, {
 
         
         return dfd;
+    },
+
+    markerFromItem: function(item) {
+        var marker = this.inherited(arguments);
+        marker._voeisSite = item;
+
+        var markerClick = dojo.hitch(this, function(evt){
+            this._siteClick(item);
+        });
+
+        google.maps.event.addListener(marker, 'click', markerClick);
+        return marker;
+    },
+
+    _siteClick: function(site) {
+        dojo.publish("voeis/project/site/selected", [site.projectId(), site.id]);
     }
 });
