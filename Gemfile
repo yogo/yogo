@@ -14,12 +14,9 @@ gem "dm-transactions", DM_VERSION
 gem "dm-aggregates",   DM_VERSION
 gem "dm-timestamps"
 
-# gem "rails"                                     # Rails application
+# We have been bitten many times by not including rails directly.
+gem "rails"                                     # Rails application
 # Only require of rails what we need, not the entire thing.
-gem "actionmailer"
-gem "actionpack"
-gem "activesupport"
-gem "railties"
 
 gem "dm-rails",        DM_VERSION               # DataMapper integration with Rails
 gem "jquery-rails"                              # jQuery integration with Rails
