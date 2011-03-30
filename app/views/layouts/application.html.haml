@@ -102,11 +102,12 @@
             = link_to("Create Project...", new_project_path, :dojoType => "voeis.MenuLink")
             = link_to("About", page_url(:about), :dojoType => "voeis.MenuLink")
             = link_to("Help", page_url(:help), :dojoType => "voeis.MenuLink")      
-            %div{:dojoType=>"dijit.MenuSeparator"}
-            %div{:dojoType=>"dijit.PopupMenuItem"}
-              %span My Projects
-              %div{:dojoType=>"dijit.Menu", :id=>"submenu1"}
-                =render_cell(:project_menu, :display, :project => resource)
+            - if logged_in?
+              %div{:dojoType=>"dijit.MenuSeparator"}
+              %div{:dojoType=>"dijit.PopupMenuItem"}
+                %span My Projects
+                %div{:dojoType=>"dijit.Menu", :id=>"submenu1"}
+                  =render_cell(:project_menu, :display, :current_user => current_user)
             
         #loginButton{:dojoType => "dijit.form.DropDownButton", :style => "float:right", :iconClass => "user-icon-25"}
           - if logged_in?
