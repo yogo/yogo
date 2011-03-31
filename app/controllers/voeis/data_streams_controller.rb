@@ -22,7 +22,8 @@ class Voeis::DataStreamsController < Voeis::BaseController
   # to parse this file
   #
   # @example http://localhost:3000/project/upload/
-  # curl -F datafile=@CR1000_2_BigSky_NFork_small.dat -F data_template_id=1 http://localhost:3000/projects/fbf20340-af15-11df-80e4-002500d43ea0/data_streams/pre_upload/?api_key=5c47e1d3ab117c4b009a65ed7ff346bc1e00dac9d56c64b0e61ecfd9a514806ea
+  # curl -F datafile=@CR1000_2_BigSky_NFork_small.dat -F data_template_id=1 http://localhost:3000/projects/fbf20340-af15-11df-80e4-002500d43ea0/data_streams/
+  # /?api_key=5c47e1d3ab117c4b009a65ed7ff346bc1e00dac9d56c64b0e61ecfd9a514806ea
   #
   # curl -X POST -F datafile=@CR1000_2_BigSky_NFork_small.dat -F data_template_id=1 http://localhost:3000/projects/fbf20340-af15-11df-80e4-002500d43ea0/data_streams/upload?api_key=5c47e1d3ab117c4b009a65ed7ff346bc1e00dac9d56c64b0e61ecfd9a514806e&
   #
@@ -436,7 +437,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
   def pre_upload
     @project = parent
 
-    @variables = Variable.all
+    @variables = Voeis::Variable.all
     @sites = parent.managed_repository{ Voeis::Site.all }
     if !params[:datafile].nil? && datafile = params[:datafile]
       # if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
@@ -482,7 +483,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
                  if data_col.variables.empty?
                    @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array),"", "", "",data_col.name]
                  else
-                   @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array,Variable.first(:variable_code => data_col.variables.first.variable_code).id.to_s),data_col.sensor_types.first.min, data_col.sensor_types.first.max, data_col.sensor_types.first.difference,data_col.name]
+                   @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array,Voeis::Variable.first(:variable_code => data_col.variables.first.variable_code).id.to_s),data_col.sensor_types.first.min, data_col.sensor_types.first.max, data_col.sensor_types.first.difference,data_col.name]
                  end
                 else
                   @var_array[i] = [data_col.original_var, data_col.unit, data_col.type,opts_for_select(@opts_array),"","","",""]
@@ -508,7 +509,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
     redirect_path =Hash.new
     data_stream=""
     parent.managed_repository do
-      data_stream = Voeis::DataStream.create(:name => params[:data_stream_name],
+      data_stream = Voeis::DataStream.first_or_create(:name => params[:data_stream_name],
         :description => params[:data_stream_description],
         :filename => params[:datafile],
         :start_line => params[:start_line].to_i)
@@ -572,7 +573,7 @@ class Voeis::DataStreamsController < Voeis::BaseController
         end
       else #create other data_stream_columns and create sensor_types
         #puts params["column"+i.to_s]
-        var = Variable.get(params["column"+i.to_s])
+        var = Voeis::Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           data_stream_column = Voeis::DataStreamColumn.create(
                                 :column_number => i,

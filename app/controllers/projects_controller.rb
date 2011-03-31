@@ -87,7 +87,7 @@ class ProjectsController < InheritedResources::Base
         if site.sensor_types.count > 0
           sensor = site.sensor_types.select{|s| s.variables.include?(variable)}[0]
           if !sensor.nil?
-            values = sensor.sensor_values(:timestamp.gte => @start_time, :timestamp.lte => @end_time)
+            values = sensor.sensor_values.all(:timestamp.gte => @start_time, :timestamp.lte => @end_time)
             data_lists[site] ||= Hash.new
             data_lists[site][variable] ||= Hash.new
             values.each do |v|

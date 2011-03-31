@@ -8,9 +8,10 @@
         = link_to("Add Variable", new_project_variable_path(@project), :dojoType => "voeis.MenuLink")
         = link_to("Add Unit", new_project_unit_path(@project), :dojoType => "voeis.MenuLink")
         = link_to("Add Sample", new_project_sample_path(@project), :dojoType => "voeis.MenuLink")
+        = link_to("Add Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id}, :dojoType => "voeis.MenuLink")
+        
       - if @project.managed_repository { Voeis::Sample.all.count } > 0
         = link_to("Add Sample Data", pre_process_project_data_values_path(@project), :dojoType => "voeis.MenuLink")
-        = link_to("Add Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id}, :dojoType => "voeis.MenuLink")
         = link_to("Add Field Data", new_field_measurement_project_sensor_values_path(@project), :params => {:project_id => @project.id}, :dojoType => "voeis.MenuLink")
       - if @project.managed_repository { Voeis::DataStream.all.count } > 0
         = link_to("Add Data", add_project_data_streams_path(@project), :params => {:project_id => @project.id}, :dojoType => "voeis.MenuLink")
