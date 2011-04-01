@@ -33,6 +33,7 @@ class ProjectsController < InheritedResources::Base
       flash[:error] = "Could not find that project"
       redirect_to(projects_path()) and return
     end
+    @site = @project.managed_repository{ Voeis::Site.new }
     @sites = @project.managed_repository{ Voeis::Site.all }
     @current_data = Array.new
     @items = Array.new

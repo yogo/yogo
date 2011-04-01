@@ -79,6 +79,7 @@ class Voeis::SensorValue
         sensor_cols << col.column_number
       end
     end
+
     if Voeis::SensorValue.last(:order =>[:id.asc]).nil?
       starting_id = -9999
     else

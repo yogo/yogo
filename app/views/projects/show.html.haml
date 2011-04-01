@@ -1,9 +1,15 @@
+- content_for(:javascripts) do
+  :javascript
+    dojo.require("dijit.Dialog");
+    
 - content_for(:toolbar) do
   #projectButton{:dojoType => "dijit.form.DropDownButton", :iconClass => "project-icon-25"}
     %span Project
     %div{:dojoType => "dijit.Menu"}                    
       -if !current_user.nil? && current_user.projects.include?(@project)
         = link_to("Add Site", new_project_site_path(@project), :dojoType => "voeis.MenuLink")
+        %div{:dojoType=>"dijit.MenuItem", :onClick=>'dijit.byId("add_site").show();'}
+          Add New Site
       - if @sites.count > 0
         = link_to("Add Variable", new_project_variable_path(@project), :dojoType => "voeis.MenuLink")
         = link_to("Add Unit", new_project_unit_path(@project), :dojoType => "voeis.MenuLink")
@@ -64,3 +70,8 @@
                                                       :project => @project, :class_name => 'data-table' })  
   
 = clear_break
+
+
+
+#hidden-cells-and-partial
+  =render_cell(:add_site, :display_form, :site => @site, :project => @project)
