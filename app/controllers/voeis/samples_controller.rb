@@ -149,7 +149,7 @@ class Voeis::SamplesController < Voeis::BaseController
         site.samples.variables.each do |variable|
           value = (site.samples.data_values(:local_date_time.gte => @start_date, :local_date_time.lte => @end_date) & variable.data_values).each do |val|
             val_hash = Hash.new
-            val_hash[val.local_date_time.to_s] = val.data_value
+            val_hash[val.local_date_time.to_s] = val.string_value
             puts val_hash.to_json
             timestamp_array << val.local_date_time
             variable_hash[variable.id] = variable_hash[variable.id].merge(val_hash)
