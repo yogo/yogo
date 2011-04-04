@@ -1,4 +1,6 @@
-require 'dm-types/bcrypt_hash'
+#require 'dm-types/bcrypt_hash'
+require 'bcrypt'
+BCrypt::Password.class_eval{ def hash; end; }
 
 class User
   include DataMapper::Resource

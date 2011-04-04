@@ -59,7 +59,7 @@ Form Progress:
               %td  
                 = @csv_array[row][col-1]
         =clear_break
-        = "Starting Row Value For This Column:" + (@csv_array[@start_line-1][col-1] == nil ? "" : @csv_array[@start_line][col-1])
+        = "Starting Row Value For This Column:" + (@csv_array[@start_line-1][col-1] == nil ? "" : @csv_array[@start_line-1][col-1])
         =clear_break
         Currently Assigned:
         %span{:id => "var_span"+col.to_s, :class=>"var_spans"}None
