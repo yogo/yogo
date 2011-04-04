@@ -33,7 +33,7 @@ gem 'i18n', "~> 0.4.0"
 
 gem 'exception_notification',      :require => 'exception_notifier'
                                    
-gem 'delayed_job',   "1.7.0",   :ref => "c505e726ee86c5a12a78",  :git => 'git://github.com/robbielamb/delayed_job.git'
+gem 'delayed_job',   "1.7.0",   :ref => "c505e726ee86c5a12a78",  :git => 'git://github.com/robbielamb/delayed_job.git' 
 
 
 # Because in 1.9 fastercsv is default, but in 1.8...
