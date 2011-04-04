@@ -114,7 +114,7 @@
             %span
               = current_user.login
             %ul{:dojoType => "dijit.Menu"}
-              -# = link_to("Account Settings", "", :dojoType => "voeis.MenuLink")
+              = link_to("Account Settings", edit_user_path(current_user.id), :dojoType => "voeis.MenuLink")
               = link_to("Logout", logout_path, :dojoType => "voeis.MenuLink")
           - else
             %span Login
