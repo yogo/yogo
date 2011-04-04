@@ -1,15 +1,15 @@
 source :rubygems
 
 gem "yogo-framework"                            # The Yogo Framework
-gem "yogo-project"
+gem "yogo-project"     
 
-gem "dm-validations"                            # We're validating properties
-gem "dm-is-versioned"                           # TODO: This should be provided by yogo-db
-gem "dm-types"                                  # To enable UUID types
-gem "dm-is-list"                                # RBAC
-gem "dm-migrations"
-gem "dm-transactions"
-gem "dm-aggregates"
+gem "dm-validations"       ,"1.0.2"                     # We're validating properties
+gem "dm-is-versioned"      ,"1.0.2"                     # TODO: This should be provided by yogo-db
+gem "dm-types"             ,"1.0.2"                     # To enable UUID types
+gem "dm-is-list"           ,"1.0.2"                     # RBAC
+gem "dm-migrations"        ,"1.0.2"
+gem "dm-transactions"      ,"1.0.2"
+gem "dm-aggregates"        ,"1.0.2"
 
 # gem "rails"                                     # Rails application
 # Only require of rails what we need, not the entire thing.
@@ -18,7 +18,7 @@ gem "actionpack"
 gem "activesupport"
 gem "railties"
 
-gem "dm-rails"                                  # DataMapper integration with Rails
+gem "dm-rails"       ,"1.0.4"                           # DataMapper integration with Rails
 gem "jquery-rails"                              # jQuery integration with Rails
 gem "compass", ">= 0.10.6"                      # Styling automation for views
 gem "haml"                                      # HAML syntax for views
@@ -33,7 +33,8 @@ gem 'i18n', "~> 0.4.0"
 
 gem 'exception_notification',      :require => 'exception_notifier'
                                    
-gem 'delayed_job',                 :git => 'git://github.com/robbielamb/delayed_job.git'
+gem 'delayed_job',   "1.7.0",   :ref => "c505e726ee86c5a12a78",  :git => 'git://github.com/robbielamb/delayed_job.git'
+
 
 # Because in 1.9 fastercsv is default, but in 1.8...
 platforms(:ruby_18) { gem "fastercsv" }
