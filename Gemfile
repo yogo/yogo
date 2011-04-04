@@ -16,7 +16,7 @@ gem "dm-aggregates"        ,"1.0.2"
 gem "actionmailer"
 gem "actionpack"
 gem "activesupport"
-gem "railties"
+gem "railties" 
 
 gem "dm-rails"       ,"1.0.4"                           # DataMapper integration with Rails
 gem "jquery-rails"                              # jQuery integration with Rails
