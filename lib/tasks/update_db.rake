@@ -19,7 +19,7 @@ namespace :yogo do
       table_name = model.storage_name(repo_name)
       schema_name = repository(repo_name).adapter.schema_name
 
-      columns = repository(repo_name).adapter.select(<<-SQL.compress_lines, schema_name, table_name)
+      query = DataMapper::Ext::String.compress_lines(<<-SQL)
             SELECT "column_name"
                  , "data_type"
                  , "column_default"
@@ -31,8 +31,9 @@ namespace :yogo do
                AND "table_name" = ?
           ORDER BY "ordinal_position"
         SQL
-
-
+      
+      columns = repository(repo_name).adapter.select(query, schema_name, table_name)
+      
       return columns.collect{ |i| i.column_name }.include?(field.to_s)
     end
     
@@ -46,8 +47,18 @@ namespace :yogo do
         repository(repo_name).adapter.execute("ALTER TABLE #{model.storage_name} RENAME sensor_value_timsestamp TO sensor_value_timestamp")
       end
     end
+
+    def add_missing_fields(model, repo_name = :default)
+      return if model.name.match(/^His/) || !model.storage_exists?(repo_name)
+      model.properties.each do |prop|
+        if !table_has_field?(model, prop.name, repo_name)
+          puts "Adding a #{prop.name} to #{model.name}"
+          repository(repo_name).adapter.execute("ALTER TABLE #{model.storage_name} ADD COLUMN #{prop.name} integer")
+        end
+      end
+    end
     
-    desc "Remove all 'voeis_*' datababses"
+    desc "Remove all 'voeis_*' datababses (might not work)"
     task :remove_all, :needs => :environment do
      databases = repository(:default).adapter.select("SELECT datname FROM pg_database WHERE datname like 'voeis_%'")
 
@@ -92,7 +103,7 @@ namespace :yogo do
       repository(:default).adapter.execute("ALTER TABLE voeis_sites RENAME site_name TO name")
       repository(:default).adapter.execute("ALTER TABLE voeis_sites RENAME site_code TO code")
 
-      
+      # Change this DatMapper Set into an array
       models = DataMapper::Model.descendants.collect{ |i| i }
 
       models.each do |model|
@@ -113,14 +124,25 @@ namespace :yogo do
       Project.all.each do |p| 
         puts "Running auto_upgrade! on #{p.managed_repository_name}"
         p.managed_repository do
+          models = DataMapper::Model.descendants.collect{ |i| i }
+          puts "There are supposidly #{models.count} models"
           models.each do |model|
+            next if !model.storage_exists?(p.managed_repository_name)
             fix_timestamp_column(model, p.managed_repository_name)
             if model.storage_exists?(p.managed_repository_name) && model_has_created_at?(model) && !table_has_created_at?(model, p.managed_repository_name)
-              puts "Add Column in #{model.name}"
-              repository(p.managed_repository_name).adapter.execute("ALTER TABLE #{model.storage_name} ADD COLUMN created_at timestamp without time zone")
+                puts "Add Column in #{model.name}"
+                repository(p.managed_repository_name).adapter.execute("ALTER TABLE #{model.storage_name} ADD COLUMN created_at timestamp without time zone")
+            end
+            add_missing_fields(model, p.managed_repository_name)
+            
+            if model_has_created_at?(model)
+#              puts "UPDATE #{model.storage_name} SET created_at = '#{DateTime.now.strftime("%Y-%m-%d %T")}' WHERE created_at IS NULL"
+              repository(p.managed_repository_name).adapter.execute("UPDATE #{model.storage_name} SET created_at = '#{DateTime.now.strftime("%Y-%m-%d %T")}' WHERE created_at IS NULL" )
             end
           end
-          puts "Auto Migrating now"
+          # Threading issue?
+
+#          models.each{|m| puts "Auto Upgrading #{m.name}"; m.auto_upgrade!(p.managed_repository_name) }
           DataMapper.auto_upgrade!(p.managed_repository_name)
         end
       end
@@ -128,3 +150,6 @@ namespace :yogo do
     
   end
 end
+
+
+
