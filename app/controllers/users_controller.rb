@@ -17,6 +17,22 @@ class UsersController < InheritedResources::Base
     #   end
     # end
   end
+  
+  def change_password
+    user = User.get(params[:id])
+    code = {:message => "Password Change Failed"}
+    if params[:password] == params[:confirmation]
+      user.password = params[:password]
+      user.password_confirmation = params[:confirmation]
+      user.save
+      code = {:message =>"Password Change Was Successful"}
+    end
+    respond_to do |format|
+      format.json do
+        render :json => code.as_json, :callback => params[:jsoncallback]
+      end
+    end
+  end
 
   def destroy
     @user = resource_class.get(params[:id].to_i)
