@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/datamapper/dm-is-versioned.git
+  revision: 4a936a5bcb776367bc557e9d541bd038c2c19e8d
+  ref: 4a936a5bcb776367bc55
+  specs:
+    dm-is-versioned (1.1.0)
+      dm-core (~> 1.1.0)
+
+GIT
   remote: git://github.com/robbielamb/delayed_job.git
   revision: 6e81aa9b1dfccd92cb337243f0ce41b630820a50
   specs:
@@ -66,8 +74,8 @@ GEM
     capistrano (2.5.20)
       highline
       highline
-      net-scp
       net-scp (>= 1.0.0)
+      net-scp
       net-sftp
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
@@ -116,8 +124,6 @@ GEM
     dm-is-list (1.1.0)
       dm-adjust (~> 1.1.0)
     dm-is-remixable (1.1.0)
-      dm-core (~> 1.1.0)
-    dm-is-versioned (1.1.0)
       dm-core (~> 1.1.0)
     dm-migrations (1.1.0)
       dm-core (~> 1.1.0)
@@ -316,7 +322,7 @@ DEPENDENCIES
   delayed_job!
   dm-aggregates (= 1.1.0)
   dm-is-list (= 1.1.0)
-  dm-is-versioned
+  dm-is-versioned!
   dm-migrations (= 1.1.0)
   dm-rails (= 1.1.0)
   dm-timestamps
