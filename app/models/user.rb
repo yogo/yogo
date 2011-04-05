@@ -73,6 +73,22 @@ class User
   def self.find_by_login(login)
     self.first(:login => login)
   end
+  ##
+  # Tells if a user is a System Administrator
+  #
+  # @example
+  #   usesr.admin? # Returns a true if the user is a System Adminstrator
+  #
+  # @return [Boolean]
+  #   Returns true if the user is a System Administrator
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def admin?
+    self.system_role.name == "Administrator"
+  end
+
 
   ##
   # Finds a user by their api key

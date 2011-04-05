@@ -25,7 +25,7 @@
                 dijit.byId("new_password").set("value","");
                 dijit.byId("confirm").set("value", "");
                 dijit.byId("pass").hide();
-                alert(data["message"]);
+                alert(data["message"]); 
             }
            );
         }
@@ -36,7 +36,7 @@
       }
       
 #content-sidebar-right
-  - if Project.count > @user.projects.count
+  - if Project.count > @user.projects.count && current_user.admin?
     = form_for(:membership, :url => user_memberships_path(@user)) do |f|
       = field_set_tag("Add Projects") do
         = select_tag("project_id", options_from_collection_for_select(Project.all.select { |p| not @user.projects.include?(p) }, 'id', 'name'))
@@ -48,7 +48,8 @@
 
 #main-with-sidebar-right
   #content-actions
-    = link_to("Delete", project_path(@project), :method => :delete, :class => 'icon icon-delete', 
+    - if @user.admin?
+      = link_to("Delete", project_path(@project), :method => :delete, :class => 'icon icon-delete', 
               :confirm => "Do you want to delete the #{@user.name}?\nContinue?" )
     %button{:id => "password_button", :dojoType=> "dijit.form.Button", :type=>"button", :onClick=>'dijit.byId("pass").show();'}Change Password
   #content-title
@@ -70,7 +71,8 @@
     - if @user.new?
       = f.password_field(:password, :label => "Password: ")
       = f.password_field(:password_confirmation, :label => "Password Confirmation: ")
-    = f.select(:system_role_id, SystemRole.all.map{|sr| [sr.name, sr.id]}, :label => 'System Role:')
+    - if current_user.admin?  
+      = f.select(:system_role_id, SystemRole.all.map{|sr| [sr.name, sr.id]}, :label => 'System Role:')
     %br/
     %strong Projects
     %table
