@@ -1,0 +1,15 @@
+#upload
+  %h3 Sample And Data Upload
+  = form_tag 'pre_process_sample_file', :multipart => true do
+    = 'File to upload:'
+    = file_field_tag(:datafile)
+    = hidden_field_tag( :project_id, :value =>@project.id)
+    =clear_break
+    Please indicate which line data begins on.
+    - opt_string = ""
+    - (1..60).each do |i|
+      - opt_string = opt_string + "<option value="+i.to_s+">"+i.to_s+"</option>"
+    = select_tag('start_line', opt_string.html_safe)
+    = clear_break
+    = submit_tag("Upload File", :onclick => "$('#loader').toggle();")
+    = link_to('Cancel', {:action => 'show', :controller => '/projects', :id=>@project.id }, :class => 'icon icon-cancel', :onclick => "$('#loader').toggle();")

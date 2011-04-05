@@ -1,0 +1,34 @@
+#new_data_type_1{:dojoType=>"dijit.Dialog", :title=>"New Data Type"}
+  = form_for(:data_type_c_v )do |f|
+    = f.label("Term:")
+    = clear_break
+    = f.text_area("term", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "data_type_term")
+    =clear_break
+    = f.label("Definition:")
+    = clear_break
+    = f.text_area("definition", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "data_type_definition")
+    =clear_break
+    = f.submit("Save Data Type", :class => "new-data-type-button")
+
+  
+  :javascript  
+    $(function() {
+    $(".new-data-type-button").click(function() { 
+      
+    $.post("#{root_url + "data_type_c_vs"}"+"?term=" + $(".data_type_term").val()+"&definition=" + $(".data_type_definition").val(),
+    function(data) {
+    $('#variable_data_type').
+    append($("<option></option>").
+    attr("value",$(".data_type_term").val()).
+    text($(".data_type_term").val())); 
+    $('#variable_data_type').val($(".data_type_term").val());
+    $(".data_type_term").val("");
+    $(".data_type_definition").val("");
+    $("#new_data_type").toggle();
+    dijit.byId('new_data_type_1').hide();
+    return false;
+    }
+    );
+    return false;
+    });
+    });

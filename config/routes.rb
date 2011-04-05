@@ -94,6 +94,8 @@ Yogo::Application.routes.draw do
         collection do
           get  :pre_process
           get  :pre_process_samples
+          get  :pre_process_sample_file_upload
+          post :pre_process_sample_file
           get  :pre_process_samples_and_data
           get  :pre_process_varying_samples_with_data
           post :pre_upload
