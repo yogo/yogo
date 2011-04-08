@@ -8,13 +8,12 @@
     %div{:dojoType => "dijit.Menu"}                    
       -if !current_user.nil? && current_user.projects.include?(@project)
         = link_to("Add Site", new_project_site_path(@project), :dojoType => "voeis.MenuLink")
-        %div{:dojoType=>"dijit.MenuItem", :onClick=>'dijit.byId("add_site").show();'}
-          Add New Site
+
       - if @sites.count > 0
         = link_to("Add Variable", new_project_variable_path(@project), :dojoType => "voeis.MenuLink")
         = link_to("Add Unit", new_project_unit_path(@project), :dojoType => "voeis.MenuLink")
         = link_to("Add Sample", new_project_sample_path(@project), :dojoType => "voeis.MenuLink")
-        = link_to("Upload Sample Data", @project.id.to_s+"/data_values/pre_process_sample_file_upload", :dojoType => "voeis.MenuLink")
+        -#= link_to("Upload Sample Data", @project.id.to_s+"/data_values/pre_process_sample_file_upload", :dojoType => "voeis.MenuLink")
         = link_to("Add Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id}, :dojoType => "voeis.MenuLink")
         
       - if @project.managed_repository { Voeis::Sample.all.count } > 0
