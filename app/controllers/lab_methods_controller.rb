@@ -4,7 +4,7 @@ class LabMethodsController < ApplicationController
 
   # GET /lab_methods/new
   def new
-    @lab_method = LabMethod.new
+    @lab_method = Voeis::LabMethod.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -14,9 +14,9 @@ class LabMethodsController < ApplicationController
   # POST /lab_methods
   def create
     if params[:lab_method].nil?
-      @lab_method = LabMethod.new(:lab_name=> params[:lab_name], :lab_organization => params[:lab_organization], :lab_method_name => params[:lab_method_name], :lab_method_description => params[:lab_method_description])
+      @lab_method = Voeis::LabMethod.new(:lab_name=> params[:lab_name], :lab_organization => params[:lab_organization], :lab_method_name => params[:lab_method_name], :lab_method_description => params[:lab_method_description])
     else
-      @lab_method = LabMethod.new(params[:lab_method])
+      @lab_method = Voeis::LabMethod.new(params[:lab_method])
     end
     respond_to do |format|
       if @lab_method.save

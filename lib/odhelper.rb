@@ -134,4 +134,23 @@ module Odhelper
         end #each |var|
       end #if
   end #def
+  
+  
+  
+  def search_to_ruport
+    p = Project.first
+    r = Array.new
+    p.managed_repository{Voeis::SensorValue.properties.map{|k| r << k.name}}
+    csv = r.to_csv + p.managed_repository{Voeis::SensorValue.all(:id.gt => 130100).to_csv}
+    File.open("my_temp.csv", 'w'){|f| f.write(csv)}
+    csv_data = CSV.read "my_temp.csv"
+    headers = csv_data.shift.map{|i| i.to_s}
+    string_data = csv_data.map{|row| row.map{|cell| cell.to_s} }
+    table = Ruport::Data::Table.new :data=> string_data, :column_names => headers
+    table.pivot 'sensor_id', :group_by => "timestamp", :values => "string_value"
+    
+    
+    
+    
+  end
 end

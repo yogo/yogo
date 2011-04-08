@@ -11,8 +11,8 @@ class Voeis::SamplesController < Voeis::BaseController
   def new
     @project = parent
     @sample = @project.managed_repository{Voeis::Sample.new}
-    @sample_types = SampleTypeCV.all
-    @sample_materials = SampleMaterial.all
+    @sample_types = Voeis::SampleTypeCV.all
+    @sample_materials = Voeis::SampleMaterial.all
     @project_sample_materials = @project.managed_repository{Voeis::SampleMaterial.all}
     @sites = @project.managed_repository{Voeis::Site.all}
     @lab_methods = @project.managed_repository{Voeis::LabMethod.all}

@@ -1,5 +1,6 @@
 class ProjectsController < InheritedResources::Base
   respond_to :html, :json
+  layout 'split_map'
 
    #export the results of search/browse to a csv file
   def export
@@ -32,6 +33,7 @@ class ProjectsController < InheritedResources::Base
       flash[:error] = "Could not find that project"
       redirect_to(projects_path()) and return
     end
+    @site = @project.managed_repository{ Voeis::Site.new }
     @sites = @project.managed_repository{ Voeis::Site.all }
     @current_data = Array.new
     @items = Array.new
@@ -57,7 +59,7 @@ class ProjectsController < InheritedResources::Base
               var_label = var_label +  variable.variable_name
               var_label = var_label + variable.sample_medium if params[:sample_medium_display]
               var_label = var_label + variable.data_type if params[:data_type_display]
-              var_label = var_label + Unit.get(variable.variable_units_id).units_name if params[:units_display]
+              var_label = var_label + Voeis::Unit.get(variable.variable_units_id).units_name if params[:units_display]
 
               @label_array << var_label #"#{site.name} #{variable.variable_name}"
               @items << [site, variable]
@@ -70,7 +72,7 @@ class ProjectsController < InheritedResources::Base
               var_label = var_label +  variable.variable_name
               var_label = var_label + "|" + variable.sample_medium if params[:sample_medium_display]
               var_label = var_label + "|" + variable.data_type if params[:data_type_display]
-              var_label = var_label + "|" + Unit.get(variable.variable_units_id).units_name if params[:units_display]
+              var_label = var_label + "|" + Voeis::Unit.get(variable.variable_units_id).units_name if params[:units_display]
               @label_array << var_label #{}"#{site.name} #{variable.variable_name}"
               @items << [site, variable]
             end
@@ -86,7 +88,7 @@ class ProjectsController < InheritedResources::Base
         if site.sensor_types.count > 0
           sensor = site.sensor_types.select{|s| s.variables.include?(variable)}[0]
           if !sensor.nil?
-            values = sensor.sensor_values(:timestamp.gte => @start_time, :timestamp.lte => @end_time)
+            values = sensor.sensor_values.all(:timestamp.gte => @start_time, :timestamp.lte => @end_time)
             data_lists[site] ||= Hash.new
             data_lists[site][variable] ||= Hash.new
             values.each do |v|
@@ -204,7 +206,7 @@ class ProjectsController < InheritedResources::Base
                     @sensor_meta_array = Array.new
                     variable = sensor.variables.first
                     @sensor_meta_array << [{:variable => variable.variable_name},
-                      {:units => Unit.get(variable.variable_units_id).units_abbreviation},
+                      {:units => Voeis::Unit.get(variable.variable_units_id).units_abbreviation},
                       @data_hash]
                       @sensor_hash[sensor.name] = @sensor_meta_array
                     end #end if

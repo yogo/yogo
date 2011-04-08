@@ -1,8 +1,12 @@
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem
   include AuthorizationSystem
+  
   protect_from_forgery
   
+  has_widgets do |root|
+    root << widget(:feedback, 'feedback')
+  end
   
   # Check for local connections before anything else
   before_filter :check_local_only
@@ -19,7 +23,7 @@ class ApplicationController < ActionController::Base
   helper :all
 
   # Specify the layout for the yogo application
-  layout 'application'
+  layout Proc.new { |controller| controller.request.xhr? ? false : 'application' }
 
   # See ActionController::RequestForgeryProtection for details
   protect_from_forgery
@@ -88,4 +92,8 @@ class ApplicationController < ActionController::Base
       super
     end
   end
+  
+  
+  
+   
 end

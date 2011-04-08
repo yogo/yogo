@@ -1,0 +1,297 @@
+-#variable partial
+= render(:partial => "variable", :locals =>{:variable => @variables,
+                                            :variable =>@variable,
+                                            :units=>@units,
+                                            :variable_names=>@variable_names,
+                                            :sample_mediums=>@sample_mediums,
+                                            :value_types=>@value_types,
+                                            :speciations=>@speciations,
+                                            :data_types=>@data_types,
+                                            :general_categories=> @general_categories,
+                                            :label_array=>@label_array,
+                                            :current_variables=>@current_variables,
+                                            :project=>@project})
+%h2
+  Setup File Parsing Options
+Form Progress:
+
+=form_tag("mock_store_samples_and_data", :method => :post) do
+  %div{:dojoType=>"dijit.ProgressBar", :jsId=>"jsProgress", :id=>"downloadProgress", :maximum=>"10"}
+  
+  %div{:dojoType=>"dojo.data.ItemFileReadStore", :jsId=>"variableStore", :url=>"#{root_url+"projects/"+@project.id+"/apivs/dojo_variables_for_tree.json?"}"}
+  %div{:dojoType=>"dojo.data.ItemFileReadStore", :jsId=>"variableStore2", :url=>"#{root_url+"projects/"+@project.id+"/apivs/get_dojo_voeis_variables.json?"}"}
+  %div{:dojoType=>"dijit.tree.ForestStoreModel", :jsId=>"variableModel", :store=>"variableStore",
+  :query=>"{type:'general_category'}", :rootId=>"general_categoryid", :rootLabel=>"Variable General Categories",:childrenAttrs=>"children"}
+  #column_panes
+    %div{:dojoType=>"dijit.TitlePane", :title=>"Sample Information", :id=> "samplePane"}
+      Please Select the Information that will be associated with each sample created.
+      =clear_break
+      %label{:id=>"site_label"}
+        Choose A Site:
+      %div{:dojoType=>"dijit.Tooltip", :connectId=> "site_label", :position=>"above"}
+        Select the Site to associate all the data in this file with.
+      =select_tag("site", options_for_select(@sites, "None"), :onChange=>"updateSite()")
+      =clear_break
+      =clear_break
+      #selectedSite
+        Currenlty Selected Site:  
+        %span{:id => "selected_site", :class=>"var_spans"}None
+      =clear_break  
+      Currently Selected Sample Type:
+      = select_tag('sample_type',  options_for_select(@sample_type_options, "Grab"))
+      =clear_break
+      Currently Selected Sample Medium:
+      = select_tag('sample_medium',  options_for_select(@sample_medium_options, "Surface Water"))
+      =clear_break
+      %button{:dojoType=>"dijit.form.Button", :title=>"Next", :id=>"next0", :disabled=>"disabled", :onclick=>"sampleButtonClick();" }
+        Next
+    - @columns.each do |col|
+      =hidden_field_tag "column"+col.to_s, :onChange=>"updateVarSpans(#{col.to_s})";
+      %div{:id => "Column"+col.to_s, :dojoType=>"dijit.TitlePane", :title=>"Column"+col.to_s, :open => "false", :class => "column_panes", :toggleable=>"false"}
+        = "Header Information:"
+        =clear_break
+        -if @header_rows == -1
+          None
+        %table
+          - (0..@header_rows).each do |row|
+            %tr
+              %td Row #{row}
+              %td  
+                = @csv_array[row][col-1]
+        =clear_break
+        = "Starting Row Value For This Column:" + (@csv_array[@start_line-1][col-1] == nil ? "" : @csv_array[@start_line-1][col-1])
+        =clear_break
+        Currently Assigned:
+        %span{:id => "var_span"+col.to_s, :class=>"var_spans"}None
+        =clear_break
+        %hr
+        %b Column Assignment Options (Choose One): 
+    
+        %div{:dojoType=>"dijit.form.DropDownButton", :id=>"assignment_select_button"+col.to_s}
+          %span
+            Select Column Assignment
+          %div{:dojoType=>"dijit.TooltipDialog", :id =>"assignment_tooltip_dialog"+col.to_s}
+            %div{:dojoType=>"dijit.form.DropDownButton", :id=>"variable_select_button"+col.to_s}
+              %span
+                Assign An Existing Variable
+              %div{:dojoType=>"dijit.TooltipDialog", :id =>"variable_tooltip_dialog"+col.to_s}
+                Select A Voeis Variable:
+                %div{:dojoType=>"dijit.Tree", :id=>"mytree-"+col.to_s, :model=>"variableModel", :openOnClick=>"true"}
+                  %script{:type=>"dojo/method", :event=>"onClick", :args=>"item"}
+                    if ($("#var_span#{col.to_s}").text() == "None"){
+                    updateProgressBar();
+                    }
+                    $("#var_span#{col.to_s}").text("Variable: "+ variableStore.getLabel(item));
+                    $("#var_td_variable_code_#{col.to_s}").text(variableStore.getLabel(item));
+                    dijit.byId("next#{col.to_s}").set("disabled", false);
+                    dijit.byId("Column#{col.to_s}").set("title", "Column#{col.to_s}: "+ variableStore.getLabel(item) + ":" + variableStore.getValue(item, "id"));
+                    $("#column#{col}").val(variableStore.getValue(item, "id"));
+                    dijit.byId("next#{col.to_s}").focus();
+                    dijit.byId("next#{col.to_s}").set("label","Next");
+                    if($("#sample_id_column").val() == #{col}){
+                    $("#sample_id_column").val("");
+                    dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Sample ID"){btn.set("disabled", false);}});
+                    }
+                    if($("#timestamp_column").val() == #{col}){
+                    $("#timestamp_column").val("");
+                    dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Timestamp"){btn.set("disabled", false);}});
+                    }
+            =clear_break
+            %button{:dojoType=>"dijit.form.Button", :title=>"Add Variable", :id=>"add_variable"+col.to_s, :onclick=>"addNewVariable(#{col});", :class=>"icon icon-add"}
+              %span
+                Add A New Variable
+            =clear_break
+            %button{:dojoType=>"dijit.form.Button", :title=>"Assign Timestamp", :id=>"assign_timestamp"+col.to_s, :onClick=>"assignTimestamp(#{col});", :class=>"timestamp_button"}
+              %span
+                Assign The Timestamp To This Column
+            =clear_break
+            %button{:dojoType=>"dijit.form.Button", :title=>"Assign Sample ID", :id=>"assign_sampleid"+col.to_s, :onClick=>"assignSample(#{col});", :class=>"icon icon-add"}
+              %span
+                Assign The Sample ID To This Column
+        
+        
+
+    
+        =clear_break 
+        -##grid_div    
+        -#  %table{:dojoType=>"dojox.grid.DataGrid", :store=>"variableStore2", :jsId=>"grid", :id => "display_grid"+col.to_s}
+        -#    %thead
+        -#      %tr
+        -#        %th{:field=>"variable_code"}Variable Code
+        -#        %th{:field=>"variable_name"}Variable Name
+ 
+        =hidden_field_tag "sample_id_column", "-1"
+        =hidden_field_tag "timestamp_column", "-1"
+        =hidden_field_tag "row_size", @columns.length
+        =hidden_field_tag "datafile", @new_file
+        =hidden_field_tag "start_line", @start_line
+        %button{:dojoType=>"dijit.form.Button", :title=>"Next", :id=>"next"+col.to_s, :disabled=>"disabled", :onClick=>"nextButton(#{col})"}
+          Next
+  =clear_break
+  =clear_break
+  %hr
+  #sample_table
+    %h2 Summary of Parsing Instructions:
+    Site to Associate with All Samples:
+    %span{:id => "site_span", :class =>"var_spans"}None
+    =clear_break
+    =clear_break
+    %table
+      %tr
+        %th &nbsp;
+        - @columns.each do |col|
+          %th
+            = "Column" + col.to_s
+      - if @header_rows == -1
+        %tr
+          %th Header Information
+          - @columns.each do |col|
+            %td
+              None
+      - (0..@header_rows).each do |row|
+        %tr
+          %th Header Information
+          - @columns.each do |col|
+            %td
+              = @csv_array[row][col-1]
+      %tr
+        %th Starting Row Data
+        - @columns.each do |col|
+          %td
+            = @csv_array[@start_line-1][col-1]
+      -@var_properties.each do |prop|
+        %tr
+          %th #{prop.to_s.capitalize!.gsub("_", " ")}
+          - @columns.each do |col|
+            %td
+              %span{:id => "var_td_"+prop.to_s+"_"+col.to_s, :onClick=>"editColumn(#{col})", :class=>"column_td"}None
+            
+  =submit_tag("Save Samples")
+  = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel')
+  
+  
+  
+:javascript  
+  $(document).ready(function() {
+  });
+
+  var current_column ="";
+  var updated_var = "";
+  var update_id ="";
+  var current_id_to_update="";
+  var update_text="";
+  var mystore ="";
+  dojo.require("dijit.layout.TabContainer");
+  dojo.require("dijit.layout.AccordionContainer");
+  dojo.require("dijit.layout.ContentPane");
+  dojo.require("dijit.form.Select");
+  dojo.require("dijit.Dialog");
+  dojo.require("dijit.ProgressBar");
+  dojo.require("dojo.data.ItemFileReadStore");
+  dojo.require("dijit.Tree");
+  dojo.require("dijit.TitlePane");
+  dojo.require("dijit.Tooltip");
+  dojo.require("dijit.form.DropDownButton");
+  dojo.require("dijit.TooltipDialog");
+  dojo.require("dojox.grid.DataGrid");
+  dojo.addOnLoad( function(){
+  //variableStore2.fetch();
+  //dijit.byId("display_grid1")._refresh();
+  });
+
+
+  function nextButton(column){
+  dijit.byId("Column"+column).set('open',false);
+  dijit.byId("Column"+column).set('toggleable',true);
+  var next_column = column +1;
+  dijit.byId("Column"+next_column).set('open',true);
+  }
+  var i = 0;
+  function sampleButtonClick() {
+  dijit.byId("samplePane").set("open", false);
+  dijit.byId("Column1").set("open", true);
+  }
+
+  function updateSite(){
+  if ($("#site_span").text() == "None"){
+  updateProgressBar();
+  $("#selectedSite").show();
+  $("#site option[value='None']").remove();
+  }
+  $("#selected_site").text($("#site option[value ="+$("#site").val()+"]").text());
+  $("#site_span").text($("#site option[value ="+$("#site").val()+"]").text());
+  dijit.byId("next0").set("disabled", false);
+  dijit.byId("next0").focus();
+  dijit.byId("next0").set("label","Next");
+  }
+
+  function assignSample(column){
+  if ($("#var_span"+column).text() == "None"){
+  updateProgressBar();
+  }
+  $("#var_span"+column).text("Sample ID");
+  $("#var_td_variable_code_"+column).text("Sample ID");
+  $("#sample_id_column").val(""+column);
+  $("#column"+column).val("sample_id");
+  dijit.byId("Column"+column).set("title", "Column"+column+": Sample ID");
+  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Sample ID"){btn.set("disabled", true);}});
+  dijit.byId("next"+column).set("disabled", false);
+  dijit.byId("next"+column).focus();
+  dijit.byId("next"+column).set("label","Next");
+  }
+
+  function assignTimestamp(column){
+  if ($("#var_span"+column).text() == "None"){
+  updateProgressBar();
+  }
+  $("#var_span"+column).text("Timestamp");
+  $("#var_td_variable_code_"+column).text("Timestamp");
+  $("#timestamp_column").val(""+column);
+  $("#column"+column).val("timestamp");
+  dijit.byId("next"+column).set("disabled", false);
+  dijit.byId("Column"+column).set("title", "Column"+column+": Timestamp");
+  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Timestamp"){btn.set("disabled", true);}});
+  dijit.byId("next"+column).focus();
+  dijit.byId("next"+column).set("label","Next");
+  }
+
+  function updateProgressBar(){
+  jsProgress.update({
+  maximum: #{@columns.length + 1},
+  progress: ++i
+  });
+  }
+
+  function editColumn(column){
+  if (dijit.byId("Column"+column).toggleable){
+  dijit.byId("Column"+column).set("open",true);
+  }
+  }
+
+  function addNewVariable(column){
+    current_column = column;
+    current_id_to_update="column"+column;
+    dijit.byId("new_variable").show();
+    //variableStore.close();
+    //variableStore.fetch();
+    //dijit.registry.byClass("dijit.Tree").forEach(function(tree){
+    //id = tree.attr("id")
+    //tree.destroy();
+    //tree.create()
+    //});
+  }
+  function updateVarSpans(column){
+    if ($("#var_span"+column).text() == "None"){
+    updateProgressBar();
+    }
+
+    $("#var_span"+column).text("Variable:"+update_text);
+    $("#var_td_variable_code_"+column).text(update_text);
+    $("#var_td_variable_name_"+column).text(updated_var["variable_name"]);
+    $("#column"+column).val(""+update_id);
+
+    dijit.byId("Column"+column).set("title", "Column"+column+": "+update_text);
+    dijit.byId("next"+column).set("disabled", false);
+    dijit.byId("next"+column).focus();
+    dijit.byId("next"+column).set("label","Next");
+  }

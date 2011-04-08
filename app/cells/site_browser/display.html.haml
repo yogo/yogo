@@ -1,0 +1,15 @@
+:javascript
+  dojo.require("dijit.TitlePane");
+  dojo.require("dojo.store.JsonRest");
+  dojo.require("dojo.data.ObjectStore");
+
+  dojo.addOnLoad(function(){
+    
+  });
+
+.sites{:dojoType => "dijit.TitlePane", :title => "Sites"}
+
+  - @sites.each do |site|
+    .site-name{:class => 'icon'}
+      = link_to(site.name, project_site_path(@project, site.id))
+    

@@ -1,4 +1,11 @@
-#require 'dm-types/bcrypt_hash'
+
+# This is a really ugly work around.
+# dm-types undefines the hash method on BCrypt::Password, only there
+# doesn't appear to be a hash method, so things blow up right
+# there. We define one here, before that file is loaded, so there will
+# be one to remove.  This problem appears to be fixed in the github
+# version of dm-types.
+
 require 'bcrypt'
 BCrypt::Password.class_eval{ def hash; end; }
 
@@ -15,7 +22,7 @@ class User
   # @api public
   attr_accessor :password, :password_confirmation
 
-  property :id,                 DataMapper::Types::Serial
+  property :id,                 Serial
   property :login,              String,  :required => true, :index => true, :unique => true
   property :email,              String,  :length => 256#, :format => :email_address
   property :first_name,         String,  :length => 50
@@ -68,6 +75,22 @@ class User
   def self.find_by_login(login)
     self.first(:login => login)
   end
+  ##
+  # Tells if a user is a System Administrator
+  #
+  # @example
+  #   usesr.admin? # Returns a true if the user is a System Adminstrator
+  #
+  # @return [Boolean]
+  #   Returns true if the user is a System Administrator
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def admin?
+    self.system_role.name == "Administrator"
+  end
+
 
   ##
   # Finds a user by their api key

@@ -14,8 +14,51 @@
     = stylesheet_link_tag('jquery-ui-1.8.1.custom', 'jquery.fancybox-1.3.1')
     
     = javascript_include_tag(:defaults, 'jquery.fancybox-1.3.1.pack.js', 'dygraph-combined.js')
-    = javascript_include_tag("http://ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/dojo.xd.js")
-    = javascript_include_tag("http://maps.google.com/maps/api/js?sensor=false")    
+    
+
+    = stylesheet_link_tag("/javascripts/dijit/themes/claro/claro.css")
+    = stylesheet_link_tag("/javascripts/dojox/grid/resources/Grid.css")
+    = stylesheet_link_tag("/javascripts/dojox/grid/resources/claroGrid.css")
+
+    = yield(:stylesheets)
+
+    = javascript_include_tag("dojo/dojo.js")
+
+
+
+    :javascript
+      dojo.require("dojo.parser");
+      
+      
+      dojo.require("dijit.layout.BorderContainer");
+      dojo.require("dijit.layout.ContentPane");
+      dojo.require("dijit.Toolbar");    
+      dojo.require("dijit.form.DropDownButton");
+      dojo.require("dijit.Menu");
+      dojo.require("dijit.MenuItem");
+      dojo.require("dijit.TooltipDialog");
+      
+      
+      
+      dojo.require("dijit.form.TextBox");
+      dojo.require("dijit.form.CheckBox");
+      dojo.require("dijit.form.Button");
+      
+      dojo.require("voeis.MenuLink");
+      dojo.require("voeis.maps.google");    
+      
+      voeis.maps.google.load();
+      
+      dojo.addOnLoad(function(){
+        dojo.when(voeis.maps.google.load(), function() {
+          dojo.parser.parse();
+        });
+      });
+
+    = yield(:javascripts)
+      
+      
+
 
     = include_visualization_api
     = render_visualizations
@@ -26,62 +69,92 @@
       dojo.parser.parse();  
       });
     %link{:rel => "shortcut icon", :href => "#{image_path("favicon.png")}"}/
+
+    = yield :head
+
+    :css
+      body, html { width:100%; height:100%; margin:0; padding:0; overflow:hidden; }
+      #border_container { width:100%; height:100% }
+
+      
+      .datahub-icon-25 { 
+        background-image: url('/images/datahub_icon_25.png');
+        background-repeat: no-repeat;
+        width: 25px;
+        height: 25px;
+        text-align: center;
+      }
+      .project-icon-25 { 
+        background-image: url('/images/project_icon_25.png');
+        background-repeat: no-repeat;
+        width: 25px;
+        height: 25px;
+        text-align: center;
+      }
+      .user-icon-25 { 
+        background-image: url('/images/user_icon_25.png');
+        background-repeat: no-repeat;
+        width: 25px;
+        height: 25px;
+        text-align: center;
+      }
+
     
   %body.typography.claro
-  
-  #feedback
-    = render(:partial => "projects/feedback_form")
-  / Header (including optional menus)
-  #header
-    #logo 
-      VOEIS Data Hub 
-      %span.smaller.emphasis
-        = link_to(VOEIS_VERSION, page_url(:changelog))
-    #system-menu.box.tight
-      .menu-left-col
-        = render(:partial => 'layouts/menu_links')
-      .menu-right-col
-        = render(:partial => 'layouts/login')
-    #menu.box.tight
-      .menu-left-col
-      /= page_title
-      .menu-right-col
-        = render(:partial => 'layouts/search')
-      #loader
-        = image_tag("ajax-loader.gif")
-  / Grid Container 
-  #container
-    #flash
-      - if flash[:notice]
-        - if flash[:notice_link]
-          %p.notice= link_to(flash[:notice], flash[:notice_link])
-        - else
-          %p.notice= flash[:notice]
-      - if flash[:error]
-        - if flash[:error_link]
-          %p.error= link_to(flash[:error], flash[:error_link])
-        - else
-          %p.error= flash[:error]
-      - if flash[:alert]
-        - if flash[:error_link]
-          %p.error= link_to(flash[:error], flash[:error_link])
-        - else
-          %p.error= flash[:alert]
-      
-    #content
-      = yield
-   
-  #footnotes_holder
 
-  #footer
-    #yogo-brand
-      = link_to(image_tag("partners/uky.png", :alt => "University of Kentucky"), 'http://www.uky.edu') 
-      = link_to(image_tag("partners/umt.png", :alt => "The University of Montana"), 'http://www.umt.edu') 
-      = link_to(image_tag("partners/FLBS.png", :alt => "Flathead Lake Biological Station"), 'http://www.umt.edu/FLBS/') 
-      = link_to(image_tag("partners/hbfs.png", :alt => "Hancock Biological Field Station"), 'http://www.murraystate.edu/qacd/cos/hbs/hbs.htm') 
-      = link_to(image_tag("partners/eku.png", :alt => "Eastern Kentucky University"), 'http://www.eku.edu') 
-      = link_to(image_tag("partners/msu.png", :alt => "Montana State University"), 'http://www.montana.edu') 
-      = link_to(image_tag("partners/ul.png", :alt => "University of Louisville"), 'http://www.louisville.edu') 
-      = link_to(image_tag("partners/murray.png", :alt => "Murray State University"), 'http://www.murraystate.edu') 
-      = link_to(image_tag("partners/yerc.png", :alt => "Yellowstone Ecological Research Center"), 'http://www.yellowstoneresearch.org')
-      = link_to(image_tag("partners/yogo.png", :alt => "The Yogo Data Management Toolkit Logo"), 'http://yogo.msu.montana.edu/')
+    #border_container{:dojoType => "dijit.layout.BorderContainer", :gutters => 'false'}
+      #top{:dojoType => "dijit.Toolbar", :region => "top"}
+        #datahubButton{:dojoType => "dijit.form.DropDownButton", :iconClass => "datahub-icon-25"}
+          %span{:style => "font-weight:bold"}
+            DataHub
+          %div{:dojoType => "dijit.Menu"}
+            = link_to("Browse Projects", projects_path, :dojoType => "voeis.MenuLink")
+            = link_to("Create Project...", new_project_path, :dojoType => "voeis.MenuLink")
+            = link_to("About", page_url(:about), :dojoType => "voeis.MenuLink")
+            = link_to("Help", page_url(:help), :dojoType => "voeis.MenuLink")      
+            - if logged_in?
+              %div{:dojoType=>"dijit.MenuSeparator"}
+              %div{:dojoType=>"dijit.PopupMenuItem"}
+                %span My Projects
+                %div{:dojoType=>"dijit.Menu", :id=>"submenu1"}
+                  =render_cell(:project_menu, :display, :current_user => current_user)
+            
+        #loginButton{:dojoType => "dijit.form.DropDownButton", :style => "float:right", :iconClass => "user-icon-25"}
+          - if logged_in?
+            %span
+              = current_user.login
+            %ul{:dojoType => "dijit.Menu"}
+              = link_to("Account Settings", edit_user_path(current_user.id), :dojoType => "voeis.MenuLink")
+              = link_to("Logout", logout_path, :dojoType => "voeis.MenuLink")
+          - else
+            %span Login
+            %div{:dojoType => "dijit.TooltipDialog"}
+              = form_for( :user_session, :url => user_session_path, :builder => YogoFormBuilder ) do |f|
+                = f.text_field(:login, :label => "User", :dojoType => "dijit.form.TextBox")
+                = f.password_field(:password, :label => 'Pass', :dojoType => "dijit.form.TextBox")
+                = f.check_box(:remember_me, :dojoType => "dijit.form.CheckBox")
+                = f.submit("Login", :label => "Login", :dojoType => "dijit.form.Button")
+        
+        = yield :toolbar
+                
+              
+        
+      #main_container{:dojoType => "dijit.layout.ContentPane", :region => "center", :gutters => "false", :style => "padding:0"}
+        = content_for?(:content) ? yield(:content) : yield
+
+
+   
+  -# #footnotes_holder
+
+  -# #footer
+  -#   #yogo-brand
+  -#     = link_to(image_tag("partners/uky.png", :alt => "University of Kentucky"), 'http://www.uky.edu') 
+  -#     = link_to(image_tag("partners/umt.png", :alt => "The University of Montana"), 'http://www.umt.edu') 
+  -#     = link_to(image_tag("partners/FLBS.png", :alt => "Flathead Lake Biological Station"), 'http://www.umt.edu/FLBS/') 
+  -#     = link_to(image_tag("partners/hbfs.png", :alt => "Hancock Biological Field Station"), 'http://www.murraystate.edu/qacd/cos/hbs/hbs.htm') 
+  -#     = link_to(image_tag("partners/eku.png", :alt => "Eastern Kentucky University"), 'http://www.eku.edu') 
+  -#     = link_to(image_tag("partners/msu.png", :alt => "Montana State University"), 'http://www.montana.edu') 
+  -#     = link_to(image_tag("partners/ul.png", :alt => "University of Louisville"), 'http://www.louisville.edu') 
+  -#     = link_to(image_tag("partners/murray.png", :alt => "Murray State University"), 'http://www.murraystate.edu') 
+  -#     = link_to(image_tag("partners/yerc.png", :alt => "Yellowstone Ecological Research Center"), 'http://www.yellowstoneresearch.org')
+  -#     = link_to(image_tag("partners/yogo.png", :alt => "The Yogo Data Management Toolkit Logo"), 'http://yogo.msu.montana.edu/')

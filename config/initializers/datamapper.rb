@@ -30,19 +30,24 @@ Setting
 User
 Role
 Membership
-Site
-Unit
-Variable
-FieldMethod
-VariableNameCV
-SampleMediumCV
-ValueTypeCV
-SpeciationCV
-DataTypeCV
-GeneralCategoryCV
-SampleTypeCV
-SampleMaterial
-LabMethod
+# Site
+# Unit
+# Variable
+# FieldMethod
+# VariableNameCV
+# SampleMediumCV
+# ValueTypeCV
+# SpeciationCV
+# DataTypeCV
+# GeneralCategoryCV
+# SampleTypeCV
+# SampleMaterial
+# LabMethod
+
+# Make sure all of our models are required.
+Dir[File.join(::Rails.root.to_s, 'app', 'models', '**', '*.rb')].each do |f|
+  require f
+end
 
 
 DataMapper.finalize

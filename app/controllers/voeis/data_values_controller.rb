@@ -17,7 +17,7 @@ class Voeis::DataValuesController < Voeis::BaseController
   # @api public
   def pre_process
     @project = parent
-    @general_categories = GeneralCategoryCV.all
+    @general_categories = Voeis::GeneralCategoryCV.all
   end
   
   # Gather information necessary to store samples and data
@@ -30,7 +30,7 @@ class Voeis::DataValuesController < Voeis::BaseController
   def pre_process_samples_and_data
     @project = parent
     @templates = parent.managed_repository{Voeis::DataStream.all(:type => "Sample")}
-    @general_categories = GeneralCategoryCV.all
+    @general_categories = Voeis::GeneralCategoryCV.all
   end
 
   # Gather information necessary to store samples and data
@@ -56,7 +56,7 @@ class Voeis::DataValuesController < Voeis::BaseController
   def pre_process_varying_samples_with_data
     @project = parent
     @templates = parent.managed_repository{Voeis::DataStream.all(:type => "Sample")}
-    @general_categories = GeneralCategoryCV.all
+    @general_categories = Voeis::GeneralCategoryCV.all
   end
 
   # Gather information necessary to store sample data
@@ -71,7 +71,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      @sites = parent.managed_repository{ Voeis::Site.all }
      @project = parent
      #@project = Project.first(:id => params[:project_id])
-      @variables = Variable.all
+      @variables = Voeis::Variable.all
       @sites = parent.managed_repository{ Voeis::Site.all }
       @samples = parent.managed_repository{ Voeis::Sample.all }
       if !params[:datafile].nil? && datafile = params[:datafile]
@@ -96,7 +96,7 @@ class Voeis::DataValuesController < Voeis::BaseController
           @var_array[0] = ["","","","","","",""]
           @opts_array = Array.new
           @variables.all(:general_category => params[:general_category], :order => [:variable_name.asc]).each do |var|
-            @opts_array << [var.variable_name+":"+var.sample_medium+':'+ var.data_type+':'+Unit.get(var.variable_units_id).units_name, var.id.to_s]
+            @opts_array << [var.variable_name+":"+var.sample_medium+':'+ var.data_type+':'+Voeis::Unit.get(var.variable_units_id).units_name, var.id.to_s]
           end
           if params[:start_line].to_i != 1
             header_row = get_row(@new_file, params[:start_line].to_i - 1)
@@ -138,8 +138,8 @@ class Voeis::DataValuesController < Voeis::BaseController
     @variables = Variable.all
     @sites = parent.managed_repository{ Voeis::Site.all }
     @samples = parent.managed_repository{ Voeis::Sample.all }
-    @sample_types = SampleTypeCV.all
-    @sample_materials = SampleMaterial.all
+    @sample_types = Voeis::SampleTypeCV.all
+    @sample_materials = Voeis::SampleMaterial.all
     @project_sample_materials = @project.managed_repository{Voeis::SampleMaterial.all}
     @lab_methods = @project.managed_repository{Voeis::LabMethod.all}
      
@@ -232,11 +232,11 @@ class Voeis::DataValuesController < Voeis::BaseController
     require 'csv_helper'
      
     @project = parent
-    @variables = Variable.all
+    @variables = Voeis::Variable.all
     @sites = parent.managed_repository{ Voeis::Site.all }
     @samples = parent.managed_repository{ Voeis::Sample.all }
-    @sample_types = SampleTypeCV.all
-    @sample_materials = SampleMaterial.all
+    @sample_types = Voeis::SampleTypeCV.all
+    @sample_materials = Voeis::SampleMaterial.all
     @project_sample_materials = @project.managed_repository{Voeis::SampleMaterial.all}
     @lab_methods = @project.managed_repository{Voeis::LabMethod.all}
      
@@ -443,7 +443,7 @@ class Voeis::DataValuesController < Voeis::BaseController
              end
           else #create other data_stream_columns and create sensor_types
             #puts params["column"+i.to_s]
-            var = Variable.get(params["column"+i.to_s])
+            var = Voeis::Variable.get(params["column"+i.to_s])
             parent.managed_repository do
               data_stream_column = Voeis::DataStreamColumn.create(
                                     :column_number => i,
@@ -634,7 +634,7 @@ class Voeis::DataValuesController < Voeis::BaseController
             end
          else #create other data_stream_columns and create sensor_types
            #puts params["column"+i.to_s]
-           var = Variable.get(params["column"+i.to_s])
+           var = Voeis::Variable.get(params["column"+i.to_s])
            parent.managed_repository do
              data_stream_column = Voeis::DataStreamColumn.create(
                                    :column_number => i,
@@ -681,7 +681,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      #store all the Variables in the managed repository
      @col_vars = Array.new
      (0..range).each do |i|
-        @var = Variable.get(params["column"+i.to_s])
+        @var = Voeis::Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           if !params["ignore"+i.to_s]            
             variable = Voeis::Variable.first_or_create(
@@ -782,7 +782,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      #store all the Variables in the managed repository
      @col_vars = Array.new
      (0..range).each do |i|
-        @var = Variable.get(params["column"+i.to_s])
+        @var = Voeis::Variable.get(params["column"+i.to_s])
         parent.managed_repository do
           if !params["ignore"+i.to_s]            
             variable = Voeis::Variable.first_or_create(
@@ -864,7 +864,22 @@ class Voeis::DataValuesController < Voeis::BaseController
     @columns = [1,2,3,4,5,6]
   end
   
-  def mock_pre_process_samples
+
+  # Gather information necessary to store samples and data
+  #
+  #
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def pre_process_sample_file_upload
+    @project = parent
+    @templates = parent.managed_repository{Voeis::DataStream.all(:type => "Sample")}
+  end
+  
+  
+  def pre_process_sample_file
+
     require 'csv_helper'
      
     @project = parent
@@ -894,29 +909,35 @@ class Voeis::DataValuesController < Voeis::BaseController
         @columns = Array.new
         (1..@start_row.size).map{|x| @columns << x}
         @vars = Hash.new
-        Variable.all.each do |v| 
+
+        Voeis::Variable.all.each do |v| 
+
           @vars=@vars.merge({v.variable_name => v.id})
         end
         @sites = {"None"=>"None"}
         parent.managed_repository{Voeis::Site.all}.each do |s|
           @sites = @sites.merge({s.name => s.id})
         end
-        @variables = Variable.all
+
+        @variables = Voeis::Variable.all
         @var_properties = Array.new
-        Variable.properties.each do |prop|
+        Voeis::Variable.properties.each do |prop|
+
           @var_properties << prop.name
         end
         @var_properties.delete_if {|x| x.to_s == "id" || x.to_s == "his_id" || x.to_s == "time_units_id" || x.to_s == "is_regular" || x.to_s == "time_support"}
     
-        @variable = Variable.new
-        @units = Unit.all
-        @variable_names = VariableNameCV.all
-        @sample_mediums= SampleMediumCV.all
-        @sample_types = SampleTypeCV.all
-        @value_types= ValueTypeCV.all
-        @speciations = SpeciationCV.all
-        @data_types = DataTypeCV.all
-        @general_categories = GeneralCategoryCV.all
+
+        @variable = Voeis::Variable.new
+        @units = Voeis::Unit.all
+        @variable_names = Voeis::VariableNameCV.all
+        @sample_mediums= Voeis::SampleMediumCV.all
+        @sample_types = Voeis::SampleTypeCV.all
+        @value_types= Voeis::ValueTypeCV.all
+        @speciations = Voeis::SpeciationCV.all
+        @data_types = Voeis::DataTypeCV.all
+        @general_categories = Voeis::GeneralCategoryCV.all
+
         @label_array = Array["Variable Name","Variable Code","Unit Name","Speciation","Sample Medium","Value Type","Is Regular","Time Support","Time Unit ID","Data Type","General Cateogry"]
         @current_variables = Array.new     
         @variables.all(:order => [:variable_name.asc]).each do |var|
@@ -947,97 +968,12 @@ class Voeis::DataValuesController < Voeis::BaseController
       end       
 
     else
-      redirect_to(:controller =>"voeis/data_values", :action => "mock_pre_process_samples_file_upload", :params => {:id => params[:project_id]})
+        redirect_to(:controller =>"voeis/data_values", :action => "pre_process_sample_file_upload", :params => {:id => params[:project_id]})
+      end
     end
   end
   
-  #columns is an array of the columns that store the variable id
-  def create_sample_and_data_parsing_template(template_name, timestamp_col, sample_id_col, columns_array, ignore_array, site, datafile, start_line, row_size)
-     @data_stream
-     parent.managed_repository do
-       @data_stream = Voeis::DataStream.create(:name => template_name.to_s+Time.now.to_s,
-         :description => "NA",
-         :filename => datafile,
-         :start_line => start_line.to_i,
-         :type => "Sample")
-       #Add site association to data_stream
-       
-       @data_stream.sites << site
-      @data_stream.save
-     end
-     @timestamp_col = -1
-
-     range = row_size.to_i-1
-     (0..range).each do |i|
-       #create the Timestamp column
-       if i == timestamp_col.to_i && timestamp_col != "None"
-         #puts params["column"+i.to_s]
-         @timestamp_col = timestamp_col.to_i
-         parent.managed_repository do
-           data_stream_column = Voeis::DataStreamColumn.create(
-                                 :column_number => i,
-                                 :name => "Timestamp",
-                                 :type =>"Timestamp",
-                                 :unit => "NA",
-                                 :original_var => "NA")
-           data_stream_column.data_streams << @data_stream
-
-           data_stream_column.save
-         end
-       elsif i == sample_id_col.to_i
-         @sample_col = sample_id_col.to_i
-          parent.managed_repository do
-            data_stream_column = Voeis::DataStreamColumn.create(
-                                  :column_number => i,
-                                  :name => "SampleID",
-                                  :type =>"SampleID",
-                                  :unit => "NA",
-                                  :original_var => "NA")
-            data_stream_column.data_streams << @data_stream
-            data_stream_column.save
-          end
-       elsif  columns_array[i] != nil#create other data_stream_columns and create sensor_types
-         #puts params["column"+i.to_s]
-         var = Variable.get(columns_array[i].to_i)
-         parent.managed_repository do
-           data_stream_column = Voeis::DataStreamColumn.create(
-                                 :column_number => i,
-                                 :name =>         var.variable_code,
-                                 :original_var => var.variable_name,
-                                 :unit =>         "NA",
-                                 :type =>         "NA")
-           if !ignore_array[i].nil?            
-             variable = Voeis::Variable.first_or_create(
-                         :variable_code => var.variable_code,
-                         :variable_name => var.variable_name,
-                         :speciation =>  var.speciation,
-                         :variable_units_id => var.variable_units_id,
-                         :sample_medium =>  var.sample_medium,
-                         :value_type => var.value_type,
-                         :is_regular => var.is_regular,
-                         :time_support => var.time_support,
-                         :time_units_id => var.time_units_id,
-                         :data_type => var.data_type,
-                         :general_category => var.general_category,
-                         :no_data_value => var.no_data_value)
-             data_stream_column.variables << variable
-             data_stream_column.data_streams << @data_stream
-             data_stream_column.save
-           else
-             data_stream_column.name = "ignore"
-             data_stream_column.data_streams << @data_stream
-             data_stream_column.save
-           end #end if
-         end #end managed repository
-       end #end if
-     end #end range.each
-     data_template_hash = Hash.new
-     #return our Awesome new data_stream or template if you would be so kind
-     data_template_hash = {:data_template_id => @data_stream.id}
-  end
-  
-  
-  
+ 
   # Parses a csv file containing samples and data values
    #
    # @example parse_logger_csv_header?datafile='myfilename'&start_line=3&replicate=2&column1=23&column2=24
@@ -1184,32 +1120,96 @@ class Voeis::DataValuesController < Voeis::BaseController
          flash[:notice] = "File parsed and stored successfully."
          redirect_to project_path(params[:project_id])
    end# end def
+
+    
+    
+    
+   
+   
+   #columns is an array of the columns that store the variable id
+   def create_sample_and_data_parsing_template(template_name, timestamp_col, sample_id_col, columns_array, ignore_array, site, datafile, start_line, row_size)
+      @data_stream
+      parent.managed_repository do
+        @data_stream = Voeis::DataStream.create(:name => template_name.to_s+Time.now.to_s,
+          :description => "NA",
+          :filename => datafile,
+          :start_line => start_line.to_i,
+          :type => "Sample")
+        #Add site association to data_stream
+
+        @data_stream.sites << site
+       @data_stream.save
+      end
+      @timestamp_col = -1
+
+      range = row_size.to_i-1
+      (0..range).each do |i|
+        #create the Timestamp column
+        if i == timestamp_col.to_i && timestamp_col != "None"
+          #puts params["column"+i.to_s]
+          @timestamp_col = timestamp_col.to_i
+          parent.managed_repository do
+            data_stream_column = Voeis::DataStreamColumn.create(
+                                  :column_number => i,
+                                  :name => "Timestamp",
+                                  :type =>"Timestamp",
+                                  :unit => "NA",
+                                  :original_var => "NA")
+            data_stream_column.data_streams << @data_stream
+
+            data_stream_column.save
+          end
+        elsif i == sample_id_col.to_i
+          @sample_col = sample_id_col.to_i
+           parent.managed_repository do
+             data_stream_column = Voeis::DataStreamColumn.create(
+                                   :column_number => i,
+                                   :name => "SampleID",
+                                   :type =>"SampleID",
+                                   :unit => "NA",
+                                   :original_var => "NA")
+             data_stream_column.data_streams << @data_stream
+             data_stream_column.save
+           end
+        elsif  columns_array[i] != nil#create other data_stream_columns and create sensor_types
+          #puts params["column"+i.to_s]
+          var = Variable.get(columns_array[i].to_i)
+          parent.managed_repository do
+            data_stream_column = Voeis::DataStreamColumn.create(
+                                  :column_number => i,
+                                  :name =>         var.variable_code,
+                                  :original_var => var.variable_name,
+                                  :unit =>         "NA",
+                                  :type =>         "NA")
+            if !ignore_array[i].nil?            
+              variable = Voeis::Variable.first_or_create(
+                          :variable_code => var.variable_code,
+                          :variable_name => var.variable_name,
+                          :speciation =>  var.speciation,
+                          :variable_units_id => var.variable_units_id,
+                          :sample_medium =>  var.sample_medium,
+                          :value_type => var.value_type,
+                          :is_regular => var.is_regular,
+                          :time_support => var.time_support,
+                          :time_units_id => var.time_units_id,
+                          :data_type => var.data_type,
+                          :general_category => var.general_category,
+                          :no_data_value => var.no_data_value)
+              data_stream_column.variables << variable
+              data_stream_column.data_streams << @data_stream
+              data_stream_column.save
+            else
+              data_stream_column.name = "ignore"
+              data_stream_column.data_streams << @data_stream
+              data_stream_column.save
+            end #end if
+          end #end managed repository
+        end #end if
+      end #end range.each
+      data_template_hash = Hash.new
+      #return our Awesome new data_stream or template if you would be so kind
+      data_template_hash = {:data_template_id => @data_stream.id}
+   end
   
-  
-  
-  # def dojo_variables_for_tree
-  #   @var_hash = Hash.new
-  #   @var_hash = {:identifier=> 'id', :label=> 'name', :items=>Variable.all().map{|v| {:id=>v.id, :name=>v.variable_name}}
-  #   Variable.general_categories.each do |cat|
-  #     cat_hash={:id=>cat, :name=>cat}
-  #     vars = Variable.all(:general_category=>cat,:fields=>[:variable_name],:unique=>true, :order=>[:variable_name.asc])
-  #     @var_name_array = array.new
-  #     vars.each |v|
-  #       var_name_hash = Hash.new
-  #       var_name_hash[:id=>v.name, :name=> v.name]
-  #       var_name_hash[:children]=Variable.all(:general_category=>cat, :variable_name=> v ).map{|var| {:_reference=>var.id}}.as_json
-  #       @var_name_array << var_name_hash
-  #     end
-  #     cat_hash[:children] = vars.map{|v| {:_reference=>v}}
-  #     @var_hash[:items] << cat_hash
-  #   end
-  #   respond_to do |format|
-  #      format.json do
-  #        render :json => @var_hash.to_json, :callback => params[:jsoncallback]
-  #      end
-  #      format.xml do
-  #        render :xml => @var_hash.to_xml
-  #      end
-  #    end
-  # end
+
 end

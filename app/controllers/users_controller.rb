@@ -19,7 +19,7 @@ class UsersController < InheritedResources::Base
     #   end
     # end
   end
- 
+
   def change_password
     user = User.get(params[:id])
     code = {:message => "Password Change Failed"}

@@ -4,7 +4,7 @@ class SampleMaterialsController < ApplicationController
 
   # GET /sample_materials/new
   def new
-    @sample_material = SampleMaterial.new
+    @sample_material = Voeis::SampleMaterial.new
     respond_to do |format|
       format.html # new.html.erb
     end
@@ -12,7 +12,7 @@ class SampleMaterialsController < ApplicationController
   
   # POST /sample_materials
   def create
-    @sample_material = SampleMaterials.new(params[:sample_material])
+    @sample_material = Voeis::SampleMaterials.new(params[:sample_material])
 
     respond_to do |format|
       if @sample_material.save

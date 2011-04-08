@@ -56,11 +56,10 @@ module Facet
       else
         # logger.debug { "Access denied to method #{method}" }
         ::Rails.logger.info("Access denied to method #{method} on #{@target}")
-        raise Facet::PermissionException::Denied, "#{method} on #{@target} is not allowed"
+        raise ::Facet::PermissionException::Denied, "#{method} on #{@target} is not allowed"
       end
     end
 
-    alias __send__ send
 
     # Really, REALLY forward as_json and to_json to target
     def as_json(*args, &block)
@@ -238,7 +237,7 @@ module Facet
       {
         :create => [:new, :create],
         :retrieve => [:all, :get, :first, :last, :count, :map, :each, :join, :&, :|, :to_hash] + 
-          relationships.keys.map{|m| m.to_s.to_sym } +
+          relationships.map{|m| m.name.to_sym } +
           ::DataMapper::Collection.instance_methods.map{|m| m.to_s.to_sym } +
           self.methods.map{|m| m.to_sym } - [:update, :destroy, :new, :create, :create!],
         :update => [:update],

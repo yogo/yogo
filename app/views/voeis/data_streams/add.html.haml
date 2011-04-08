@@ -2,7 +2,7 @@
   %h3 Data File Management
   = form_tag('upload', :multipart => true) do
     <label for="upload_file">Select File</label> : 
-    = file_field_tag('datafile', :accept => "text/csv,text/comma-separated-values,application/vnd.ms-excel")
+    = file_field_tag('datafile')
     = hidden_field_tag('project_id', @project.id)
     = clear_break
     You can select a DataTemplate to apply to this CSV:

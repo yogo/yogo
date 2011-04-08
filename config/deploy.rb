@@ -2,25 +2,53 @@ $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 require "rvm/capistrano"
 require "bundler/capistrano"
 
-set :rvm_ruby_string, '1.8.7'
+desc "Setup Development Settings"
+task :development do
+  set :rvm_ruby_string, '1.9.2'
+  
+  set :application, "voeis"
+  set :use_sudo,    false
+  
+  set :scm, :git
+  set :repository,  "git://github.com/yogo/yogo.git"
+  set :shell, "/bin/bash"
+  
+  set :branch, "apps/voeis-dev"
+  set :deploy_via, :remote_cache
+  set :copy_exclude, [".git"]
+  
+  set  :user, "voeis-dev"
+  role :web, "153.90.178.140"
+  role :app, "153.90.178.140"
+  set  :deploy_to, "/home/#{user}/voeis"
+  
+  default_run_options[:pty] = false
+end
 
-set :application, "voeis"
-set :use_sudo,    false
 
-set :scm, :git
-set :repository,  "git://github.com/yogo/yogo.git"
-set :shell, "/bin/bash"
 
-set :branch, "apps/voeis"
-set :deploy_via, :remote_cache
-set :copy_exclude, [".git"]
-
-set  :user, "voeis-demo"
-role :web, "klank.msu.montana.edu"
-role :app, "klank.msu.montana.edu"
-set  :deploy_to, "/home/#{user}/voeis"
-
-default_run_options[:pty] = false
+desc "Setup Production Settings"
+task :production do
+  set :rvm_ruby_string, '1.8.7'
+  
+  set :application, "voeis"
+  set :use_sudo,    false
+  
+  set :scm, :git
+  set :repository,  "git://github.com/yogo/yogo.git"
+  set :shell, "/bin/bash"
+  
+  set :branch, "apps/voeis"
+  set :deploy_via, :remote_cache
+  set :copy_exclude, [".git"]
+  
+  set  :user, "voeis-demo"
+  role :web, "klank.msu.montana.edu"
+  role :app, "klank.msu.montana.edu"
+  set  :deploy_to, "/home/#{user}/voeis"
+  
+  default_run_options[:pty] = false
+end
 
 namespace :deploy do
   task :start, :roles => :app do
@@ -92,12 +120,12 @@ namespace :jobs do
 end
 
 # These are one time setup steps
-after "deploy:setup",       "db:setup"
+#after "deploy:setup",       "db:setup"
 after "deploy:setup",       "assets:setup"
 
 # This happens every deploy
 after "deploy:update_code", "db:symlink"
 after "deploy:update_code", "assets:symlink"
 
-before "deploy:update_code", "jobs:stop"
-after  "deploy:symlink",     "jobs:start"
+#before "deploy:update_code", "jobs:stop"
+#after  "deploy:symlink",     "jobs:start"

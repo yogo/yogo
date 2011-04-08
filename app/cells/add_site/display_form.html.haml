@@ -1,0 +1,72 @@
+#add_site{:dojoType=>"dijit.Dialog", :title=>"New Site", :class => "add_new_item_div"}
+  = form_for(:site, @site, :url => project_sites_path(@project), :html=>{:dojoType => "dijit.form.Form"}) do |f|
+    %table
+      %tr
+        %td
+          = f.label("Name")
+        %td
+          = f.text_field("name",:dojoType=>"dijit.form.ValidationTextBox",:required=>"true")
+      %tr
+        %td
+          = f.label("Code")
+        %td
+          = f.text_field("code", :dojoType=>"dijit.form.ValidationTextBox",:required=>"true")
+      %tr
+        %td
+          = f.label("latitude")
+        %td
+          = f.text_field("latitude", :dojoType=>"dijit.form.ValidationTextBox",:required=>"true")
+      %tr
+        %td
+          = f.label("Longitude")
+        %td
+          = f.text_field("longitude", :dojoType=>"dijit.form.ValidationTextBox",:required=>"true")
+      %tr
+        %td
+          = f.label("Elevation(m)")
+        %td  
+          = f.text_field("elevation_m", :dojoType=>"dijit.form.ValidationTextBox")         
+      %rr
+        %td
+          = f.label("Vertical Offset")
+        %td  
+          = f.text_field("vertical_datum", :dojoType=>"dijit.form.ValidationTextBox")    
+      %tr
+        %td
+          = f.label("Local X")  
+        %td  
+          = f.text_field("local_x", :dojoType=>"dijit.form.ValidationTextBox")   
+      %tr
+        %td
+          = f.label("Local Y")          
+        %td  
+          = f.text_field("local_y", :dojoType=>"dijit.form.ValidationTextBox")  
+      %tr
+        %td  
+          = f.label("Position Accuray(m)")
+        %td  
+          = f.text_field("pos_accuracy_m", :dojoType=>"dijit.form.ValidationTextBox")    
+      %tr
+        %td  
+          = f.label("County")  
+        %td  
+          = f.text_field("county", :dojoType=>"dijit.form.ValidationTextBox")     
+      %tr
+        %td
+          = f.label("State")
+        %td
+          = f.text_field("state", :dojoType=>"dijit.form.ValidationTextBox")   
+      %tr
+        %td
+          = f.label("Comments:") 
+        %td
+          = f.text_area("comments", :dojoType=>"dijit.form.Textarea")    
+    %br   
+    %button{:dojoType=>"dijit.form.Button"}
+      Create Site
+:javascript
+  dojo.require("dijit.form.Form");
+  dojo.require("dijit.form.Button");
+  dojo.require("dijit.form.Textarea");
+  dojo.require("dijit.form.ValidationTextBox");
+  dojo.require("dijit.form.DateTextBox");

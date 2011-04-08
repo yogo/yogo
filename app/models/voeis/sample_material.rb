@@ -6,16 +6,13 @@ class Voeis::SampleMaterial
   include Facet::DataMapper::Resource
 
   property :id,             Serial
-  property :material,       String,   :required => true, :default => 'Unknown'
+  property :material,       String, :required => true, :default => 'Unknown'
   property :description,    Text,   :required => false
-  property :updated_at, DateTime, :required => true,  :default => DateTime.now
 
-  is_versioned :on => :updated_at
+  timestamps :at
   
-  before(:save) {
-    self.updated_at = DateTime.now
-  }
+  is_versioned :on => :updated_at
 
-  has n, :samples,    :model => "Voeis::Sample", :through => Resource
+  has n, :samples, :model => "Voeis::Sample", :through => Resource
 
 end

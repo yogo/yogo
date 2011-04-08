@@ -4,7 +4,7 @@ class SpeciationCVsController < ApplicationController
 
   # GET /variables/new
   def new
-    @speciation = SpeciationCV.new
+    @speciation = Voeis::SpeciationCV.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -14,9 +14,9 @@ class SpeciationCVsController < ApplicationController
   # POST /variables
   def create
     if params[:speciation_c_v].nil?
-      @speciation = SpeciationCV.new(:term=> params[:term], :definition => params[:definition])
+      @speciation = Voeis::SpeciationCV.new(:term=> params[:term], :definition => params[:definition])
     else
-      @speciation = SpeciationCV.new(params[:speciation_c_v])
+      @speciation = Voeis::SpeciationCV.new(params[:speciation_c_v])
     end
     respond_to do |format|
       if @speciation.save

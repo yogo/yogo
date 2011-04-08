@@ -1,0 +1,22 @@
+- widget_div do
+  %h3 Report an Issue to the Developers
+
+  - form_tag "feedback", "data-event-url" => url_for_event(:submit) do 
+    = label_tag "Subject:"
+    =clear_break
+    = text_area_tag "issue_subject", nil, :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "issue_subject"
+    =clear_break
+    = label_tag("Details:")
+    =clear_break
+    = text_area_tag "issue_body", nil, :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "issue_body"
+    =clear_break
+    = submit_tag ("Submit Issue", :class => "feedback-button", :onclick=>'$("#sm-loader").toggle();')
+  %label{:id => "issue_close", :onclick=>"$('#feedback').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
+  #sm-loader
+    = image_tag "small_load.gif"
+  :javascript
+    var form = $('##{widget_id} form');
+    form.submit(function() {
+      $.ajax({url: form.attr("data-event-url"), data: form.serialize()});
+      return false;
+    });

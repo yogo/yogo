@@ -1,38 +1,52 @@
-#content-actions
-  = link_to("New Project", new_project_path, :class => 'icon icon-add')
-- if @projects.empty?
-  There are no projects yet, you should create one!  
-%table
-  %tbody
-    %tr
-      %td
-        - for project in @projects
-          %hr{:class => "project_seperator"}
-          #content-title
-            = link_to(project.name, project_path(project), :class => project.is_private? ? 'icon icon-private' : nil, :onclick => "$('#loader').toggle();")
-            #content-actions
-              #links
-                -if !current_user.nil? && current_user.projects.include?(project)
-                  = link_to("Settings", edit_project_path(project), :class => 'icon icon-settings', :onclick => "$('#loader').toggle();")
-          = clear_break  
-          .body-text
-            - if project.description && project.description.length > 0
-              %em= tooltip(project.description, project.name + ' Description', 150)
-            - else
-              %em= link_to('[Add Project Description]', edit_project_path(project))
+- content_for(:javascripts) do
+  :javascript
+    dojo.require("dojox.grid.EnhancedGrid");
+    dojo.require("dojox.grid.enhanced.plugins.IndirectSelection");
+    dojo.require("voeis.Server");
+    dojo.require("dijit.layout.TabContainer");
+    dojo.require("voeis.ui.SitePane");
+    
+    projectsDataStore = voeis.Server.DEFAULT.projectsDataStore();
 
+- content_for(:stylesheets) do
+  = stylesheet_link_tag("/javascripts/dojox/grid/enhanced/resources/EnhancedGrid.css")
+  = stylesheet_link_tag("/javascripts/dojox/grid/enhanced/resources/claro/EnhancedGrid.css")
 
-          %table
-            %tbody
-              %tr
-                - sites = project.managed_repository{ Voeis::Site.all }
-                %td{:class => 'map_cell'}
-                  = render(:partial => 'overview_map', :locals => { :project => project, :sites => sites, :class_name => 'preview-map' } )
-                %td
-                  #content-title Last Updates:
-                  = clear_break
-                  #content-sites
-                    -#= sites_list(sites)
-                %td
+#tab_browser{:dojoType => "dijit.layout.TabContainer"}
+  %table{:id => 'projects_table', :title => "Projects", :dojoType => "dojox.grid.EnhancedGrid", :store => "projectsDataStore", :plugins => "{indirectSelection: true}"}
+    %thead
+      %tr
+        %th{:field => "name", :width => "auto"} Project
+    %script{:type => "dojo/method", :event => "onSelected", :args => "idx"}
+      :plain
+        console.log("selected:");
+        console.log(arguments);
+        var map = dijit.byId('split_map');
+        var item = this.getItem(idx);
+        map.store.add(item);
+    %script{:type => "dojo/method", :event => "onDeselected", :args => "idx"}
+      :plain
+        console.log("deselected:");
+        console.log(arguments);
+        var map = dijit.byId('split_map');
+        var item = this.getItem(idx);
+        map.store.remove(item.id);
+
+:javascript
+  (function(){
+    var openSiteTab = function(tabs, projectId, siteId) {
+      var sitePane = new voeis.ui.SitePane();
+      tabs.addChild(sitePane);
+      sitePane.set({projectId: projectId, siteId: siteId});
+      tabs.selectChild(sitePane);
+    };
+
+  dojo.subscribe("voeis/project/site/selected", function(projectId, siteId) {
+    console.log(arguments);
+    var tab_browser = dijit.byId('tab_browser');    
+    openSiteTab(tab_browser, projectId, siteId);
+  });
+  })();
+  
+
       
-#pagination-links= will_paginate(@projects)

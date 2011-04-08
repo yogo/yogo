@@ -1,12 +1,16 @@
+- content_for(:javascripts) do
+  :javascript
+    dojo.require("dijit.dijit");
+    dojo.require("dijit.Declaration");
+    dojo.require("dojox.layout.TableContainer");
+    dojo.require("dijit.form.TextBox");
+    
 %h2
-  #{@site.name}
+  #{resource.name}
 
-%table 
-  -@site.properties.each do |prop|
-    %tr
-      %td
-        %b
-          =prop.name
-      %td
-        =@site[prop.name]
-= link_to('Cancel', project_path(@project), :class => 'icon icon-cancel')
+%div{:dojoType=>"dijit.Declaration", :widgetClass=>"Property"}
+ 
+%div{:dojoType=>"dojox.layout.TableContainer", :cols=>"1", :id=>"tc1", :customClass=>"labelsAndValues"}
+  - resource.properties.each do |prop|
+    %div{:dojoType=>"Property", :title=> prop.name.capitalize, :value=>resource[prop.name]}
+      #{resource[prop.name]}

@@ -4,7 +4,7 @@ class VariableNameCVsController < ApplicationController
 
   # GET /variables/new
   def new
-    @variable_name = VariableNameCV.new
+    @variable_name = Voesi::VariableNameCV.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -14,9 +14,9 @@ class VariableNameCVsController < ApplicationController
   # POST /variables
   def create
     if params[:variable_name_c_v].nil?
-      @variable_name = VariableNameCV.new(:term=> params[:term], :definition => params[:definition])
+      @variable_name = Voeis::VariableNameCV.new(:term=> params[:term], :definition => params[:definition])
     else
-      @variable_name = VariableNameCV.new(params[:variable_name_c_v])
+      @variable_name = Voeis::VariableNameCV.new(params[:variable_name_c_v])
     end
     respond_to do |format|
       if @variable_name.save

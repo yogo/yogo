@@ -4,7 +4,7 @@ class SampleTypeCVsController < ApplicationController
 
   # GET /variables/new
   def new
-    @sample_type = SampleTypeCV.new
+    @sample_type = Voeis::SampleTypeCV.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -14,9 +14,9 @@ class SampleTypeCVsController < ApplicationController
   # POST /variables
   def create
     if params[:sample_type_c_v].nil?
-      @sample_type = SampleTypeCV.new(:term=> params[:term], :definition => params[:definition])
+      @sample_type = Voeis::SampleTypeCV.new(:term=> params[:term], :definition => params[:definition])
     else
-      @sample_type = SampleTypeCV.new(params[:sample_type_c_v])
+      @sample_type = Voeis::SampleTypeCV.new(params[:sample_type_c_v])
     end
     respond_to do |format|
       if @sample_type.save
