@@ -48,21 +48,7 @@ class Voeis::Variable
   property :variable_name,     String,  :required => true, :length => 512
   property :speciation,        String,  :required => true, :default => 'Not Applicable', :length => 512
   property :variable_units_id, Integer, :required => true
-<<<<<<< HEAD
-  property :sample_medium, String, :required => true, :default => 'Unknown', :length => 512
-  property :value_type, String, :required => true, :default =>'Unknown', :length => 512
-  property :is_regular, Boolean, :required => true, :default => false
-  property :time_support, Float, :required => true, :default => 1.0
-  property :time_units_id, Integer, :required => true, :default => 103
-  property :data_type, String, :required => true, :default => 'Unknown', :length => 512
-  property :general_category, String, :required => true, :default => 'Unknown', :length => 512
-  property :no_data_value, Float, :required => true, :default => -9999
-  #property :limit_of_detection, Float, :required => false
-  property :updated_at, DateTime, :required => true,  :default => DateTime.now
-  property :detection_limit,   Float,   :required => false
-  
-  is_versioned :on => :updated_at
-=======
+
   property :sample_medium,     String,  :required => true, :default => 'Unknown', :length => 512
   property :value_type,        String,  :required => true, :default =>'Unknown', :length => 512
   property :is_regular,        Boolean, :required => true, :default => false
@@ -72,7 +58,7 @@ class Voeis::Variable
   property :general_category,  String,  :required => true, :default => 'Unknown', :length => 512
   property :no_data_value,     Float,   :required => true, :default => -9999
   property :detection_limit,   Float,   :required => false
->>>>>>> apps/voeis-dev
+
   
   # repository(:default){
     property :his_id,            Integer, :required => false, :index => true
