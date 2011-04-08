@@ -1,0 +1,11 @@
+#new_general_category{:dojoType=>"dijit.Dialog", :title=>"New General Category"}
+  = form_tag('general_category_c_v', :remote=>true) do 
+    = label_tag("Term:")
+    %br
+    = text_area_tag("term")
+    %br
+    = label_tag("Definition:")
+    %br
+    = text_area_tag("definition")
+    = submit_tag("Save", :class => "new-general-category-button")
+  

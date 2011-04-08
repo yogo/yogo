@@ -1,7 +1,14 @@
+- content_for(:javascripts) do
+  :javascript
+    dojo.require("dijit.dijit");
+    dojo.require("dijit.Dialog");
+    dojo.require("dijit.form.Form");
+    dojo.require("dijit.form.Button");
+    dojo.require("dojox.form.Uploader");
 #upload
   %h3 Sample And Data Upload
-  = form_tag 'pre_process_sample_file', :multipart => true do
-    = 'File to upload:'
+  = form_tag 'pre_process_sample_file', :multipart => true, :html=>{:dojoType=>"dijit.form.Form"} do
+    = 'Select a file to upload:'
     = file_field_tag(:datafile)
     = hidden_field_tag( :project_id, :value =>@project.id)
     =clear_break
@@ -13,3 +20,5 @@
     = clear_break
     = submit_tag("Upload File", :onclick => "$('#loader').toggle();")
     = link_to('Cancel', {:action => 'show', :controller => '/projects', :id=>@project.id }, :class => 'icon icon-cancel', :onclick => "$('#loader').toggle();")
+
+=render_cell(:add_meta_data, :display_general_category_cv)

@@ -947,8 +947,246 @@ class Voeis::DataValuesController < Voeis::BaseController
       end       
 
     else
-      redirect_to(:controller =>"voeis/data_values", :action => "mock_pre_process_samples_file_upload", :params => {:id => params[:project_id]})
+      redirect_to(:controller =>"voeis/data_values", :action => "pre_process_sample_file_upload", :params => {:id => params[:project_id]})
     end
   end
+  
+  # Parses a csv file containing samples and data values
+   #
+   # @example parse_logger_csv_header?datafile='myfilename'&start_line=3&replicate=2&column1=23&column2=24
+   #
+   # @param [File] datafile the csv file containing the data
+   # @param [Integer] replicate a row that defines a replicate identifier
+   # @param [Integer] start_line the row of the csv file that the data begins
+   # @param [Integer] column/d stores the project variable id to associate with the csv column
+   #
+   # @return
+   #
+   # @author Sean Cleveland
+   #
+   # @api public
+   def mock_store_samples_and_data
+     data_stream =""
+     timestamp_col =""
+     sample_id_col = ""
+     site = parent.managed_repository{Voeis::Site.first(:id => params[:site])}
+     redirect_path =Hash.new
+     #put this back in later
+       #if params[:no_save] != "no"
+     
+     #create a parsing template
+     #create and save new DataStream
+     columns_array = Array.new
+     ignore_array = Array.new
+     (1..params[:row_size].to_i).each do |i|
+       columns_array[i-1]  = params["column"+i.to_s]
+       ignore_array[i-1] = params["ignore"+i.to_s]
+       if params["column"+i.to_s] == "timestamp"
+         timestamp_col = i-1
+       elsif params["column"+i.to_s] == "sample_id"
+         sample_id_col = i-1
+       end
+     end
+     
+
+     #use this when we decide to save templates and reuse them
+     #data_stream_id = create_sample_and_data_parsing_template(params[:template_name], timestamp_col, sample_id_col, columns_array, ignore_array, site, params[:datafile], params[:start_line], params[:row_size])
+     @sample_col = params[:sample_id].to_i
+       
+    
+     #put this back in at a later time 
+     # else #use the existing template
+     #        data_stream = parent.managed_repository{Voeis::DataStream.first(:name => params[:template_name])}
+     #        if !data_stream.data_stream_columns.first(:name => "Timestamp").nil?
+     #          @timestamp_col = data_stream.data_stream_columns.first(:name => "Timestamp").column_number
+     #        else
+     #          @timestamp_col = -1
+     #        end
+     #        @sample_col = data_stream.data_stream_columns.first(:name => "SampleID").column_number
+     #      end #end if 'no_save'
+      
+     
+     range = params[:row_size].to_i - 1
+     #store all the Variables in the managed repository
+     @col_vars = Array.new
+     (0..range).each do |i|
+       if columns_array[i] != nil && i != timestamp_col && i != sample_id_col
+         @var = Variable.get(columns_array[i].to_i)
+         parent.managed_repository do
+           if !params["ignore"+i.to_s]            
+             variable = Voeis::Variable.first_or_create(
+                        :variable_code => @var.variable_code,
+                        :variable_name => @var.variable_name,
+                        :speciation =>  @var.speciation,
+                        :variable_units_id => @var.variable_units_id,
+                        :sample_medium =>  @var.sample_medium,
+                        :value_type => @var.value_type,
+                        :is_regular => @var.is_regular,
+                        :time_support => @var.time_support,
+                        :time_units_id => @var.time_units_id,
+                        :data_type => @var.data_type,
+                        :general_category => @var.general_category,
+                        :no_data_value => @var.no_data_value)
+              @col_vars[i] = variable
+            end #end if
+          end#managed repo
+        end #end if
+     end  #end i loop
+ 
+     #create csv_row array
+     @csv_row = Array.new
+     csv_temp_data = CSV.read(params[:datafile])
+     csv_size = csv_temp_data.length
+     csv_data = CSV.read(params[:datafile])
+     
+
+     
+     if site.time_zone_offset.to_s == "unkown"
+       site.fetch_time_zone
+     end
+     i = params[:start_line].to_i
+     csv_data[params[:start_line].to_i-1..-1].each do |row|
+       @csv_row[i] = row
+           i = i + 1
+     end#end row loop
+         (params[:start_line].to_i-1..csv_size.to_i).each do |row|
+           if !@csv_row[row].nil?
+           parent.managed_repository do
+             #create sample
+             sample_datetime = @csv_row[row][timestamp_col].to_datetime
+             @sample = Voeis::Sample.new(:sample_type =>   params[:sample_type],
+                                         :material => params[:sample_medium],
+                                         :lab_sample_code => @csv_row[row][@sample_col],
+                                         :lab_method_id => -1,
+                                         :local_date_time => DateTime.civil(sample_datetime.year,sample_datetime.month,sample_datetime.day,sample_datetime.hour,sample_datetime.min, sample_datetime.sec,site.time_zone_offset.to_i/24.to_f) )           
+             @sample.valid?
+             puts @sample.errors.inspect()
+             @sample.save
+             @sample.sites << site
+             @sample.save
+             (0..range).each do |i|
+               if sample_id_col != i && timestamp_col != i && @csv_row[row][i] != ""&& !params["ignore"+i.to_s] && columns_array[i] != nil
+                   new_data_val = Voeis::DataValue.new(:data_value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(@csv_row[row][i].to_s) ? @csv_row[row][i].to_f : -9999.0, 
+                      :local_date_time => @sample.local_date_time,
+                      :utc_offset => site.time_zone_offset.to_i,  
+                      :date_time_utc => @sample.local_date_time.utc,  
+                      :replicate => 0,
+                      :string_value =>  @csv_row[row][i].blank? ? "Empty" : @csv_row[row][i]) 
+                 new_data_val.valid?
+                 puts new_data_val.errors.inspect() 
+                 new_data_val.save
+                 new_data_val.variable << @col_vars[i]
+                 new_data_val.save
+                 new_data_val.sample << @sample
+                 new_data_val.save
+                 @sample.variables << @col_vars[i]
+                 @sample.save
+                 samp_site = @sample.sites.first
+                 samp_site.variables << @col_vars[i]
+                 samp_site.save
+                 # @sample.sites.each do |samp_site|
+                 #                    samp_site.variables << @col_vars[i]
+                 #                    samp_site.save
+                 #                  end
+                end #end if
+               end #end i loop
+              end #end if @csv_array.nil?
+           end #end managed repo
+         end #end row loop
+         parent.publish_his
+         flash[:notice] = "File parsed and stored successfully."
+         redirect_to project_path(params[:project_id])
+   end# end def
+    
+    
+    
+   
+   
+   #columns is an array of the columns that store the variable id
+   def create_sample_and_data_parsing_template(template_name, timestamp_col, sample_id_col, columns_array, ignore_array, site, datafile, start_line, row_size)
+      @data_stream
+      parent.managed_repository do
+        @data_stream = Voeis::DataStream.create(:name => template_name.to_s+Time.now.to_s,
+          :description => "NA",
+          :filename => datafile,
+          :start_line => start_line.to_i,
+          :type => "Sample")
+        #Add site association to data_stream
+
+        @data_stream.sites << site
+       @data_stream.save
+      end
+      @timestamp_col = -1
+
+      range = row_size.to_i-1
+      (0..range).each do |i|
+        #create the Timestamp column
+        if i == timestamp_col.to_i && timestamp_col != "None"
+          #puts params["column"+i.to_s]
+          @timestamp_col = timestamp_col.to_i
+          parent.managed_repository do
+            data_stream_column = Voeis::DataStreamColumn.create(
+                                  :column_number => i,
+                                  :name => "Timestamp",
+                                  :type =>"Timestamp",
+                                  :unit => "NA",
+                                  :original_var => "NA")
+            data_stream_column.data_streams << @data_stream
+
+            data_stream_column.save
+          end
+        elsif i == sample_id_col.to_i
+          @sample_col = sample_id_col.to_i
+           parent.managed_repository do
+             data_stream_column = Voeis::DataStreamColumn.create(
+                                   :column_number => i,
+                                   :name => "SampleID",
+                                   :type =>"SampleID",
+                                   :unit => "NA",
+                                   :original_var => "NA")
+             data_stream_column.data_streams << @data_stream
+             data_stream_column.save
+           end
+        elsif  columns_array[i] != nil#create other data_stream_columns and create sensor_types
+          #puts params["column"+i.to_s]
+          var = Variable.get(columns_array[i].to_i)
+          parent.managed_repository do
+            data_stream_column = Voeis::DataStreamColumn.create(
+                                  :column_number => i,
+                                  :name =>         var.variable_code,
+                                  :original_var => var.variable_name,
+                                  :unit =>         "NA",
+                                  :type =>         "NA")
+            if !ignore_array[i].nil?            
+              variable = Voeis::Variable.first_or_create(
+                          :variable_code => var.variable_code,
+                          :variable_name => var.variable_name,
+                          :speciation =>  var.speciation,
+                          :variable_units_id => var.variable_units_id,
+                          :sample_medium =>  var.sample_medium,
+                          :value_type => var.value_type,
+                          :is_regular => var.is_regular,
+                          :time_support => var.time_support,
+                          :time_units_id => var.time_units_id,
+                          :data_type => var.data_type,
+                          :general_category => var.general_category,
+                          :no_data_value => var.no_data_value)
+              data_stream_column.variables << variable
+              data_stream_column.data_streams << @data_stream
+              data_stream_column.save
+            else
+              data_stream_column.name = "ignore"
+              data_stream_column.data_streams << @data_stream
+              data_stream_column.save
+            end #end if
+          end #end managed repository
+        end #end if
+      end #end range.each
+      data_template_hash = Hash.new
+      #return our Awesome new data_stream or template if you would be so kind
+      data_template_hash = {:data_template_id => @data_stream.id}
+   end
+  
+  
   
 end

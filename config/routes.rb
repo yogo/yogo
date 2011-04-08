@@ -45,6 +45,7 @@ Yogo::Application.routes.draw do
       resources :units
       resources :apivs do
         collection do
+          get :dojo_variables_for_tree
           get :create_project_site
           get :create_project_variable
           get :update_project_site
