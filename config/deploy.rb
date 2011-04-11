@@ -29,7 +29,7 @@ end
 
 desc "Setup Production Settings"
 task :production do
-  set :rvm_ruby_string, '1.8.7'
+  set :rvm_ruby_string, '1.9.2'
   
   set :application, "voeis"
   set :use_sudo,    false
