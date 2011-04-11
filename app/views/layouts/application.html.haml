@@ -44,13 +44,13 @@
       dojo.require("dijit.form.CheckBox");
       dojo.require("dijit.form.Button");
       
-      dojo.require("voeis.MenuLink");
-      dojo.require("voeis.maps.google");    
+      dojo.require("yogo.ui.MenuLink");
+      dojo.require("yogo.maps.google");    
       
-      voeis.maps.google.load();
+      yogo.maps.google.load();
       
       dojo.addOnLoad(function(){
-        dojo.when(voeis.maps.google.load(), function() {
+        dojo.when(yogo.maps.google.load(), function() {
           dojo.parser.parse();
         });
       });
@@ -108,10 +108,10 @@
           %span{:style => "font-weight:bold"}
             DataHub
           %div{:dojoType => "dijit.Menu"}
-            = link_to("Browse Projects", projects_path, :dojoType => "voeis.MenuLink")
-            = link_to("Create Project...", new_project_path, :dojoType => "voeis.MenuLink")
-            = link_to("About", page_url(:about), :dojoType => "voeis.MenuLink")
-            = link_to("Help", page_url(:help), :dojoType => "voeis.MenuLink")      
+            = link_to("Browse Projects", projects_path, :dojoType => "yogo.ui.MenuLink")
+            = link_to("Create Project...", new_project_path, :dojoType => "yogo.ui.MenuLink")
+            = link_to("About", page_url(:about), :dojoType => "yogo.ui.MenuLink")
+            = link_to("Help", page_url(:help), :dojoType => "yogo.ui.MenuLink")      
             - if logged_in?
               %div{:dojoType=>"dijit.MenuSeparator"}
               %div{:dojoType=>"dijit.PopupMenuItem"}
@@ -124,8 +124,8 @@
             %span
               = current_user.login
             %ul{:dojoType => "dijit.Menu"}
-              = link_to("Account Settings", edit_user_path(current_user.id), :dojoType => "voeis.MenuLink")
-              = link_to("Logout", logout_path, :dojoType => "voeis.MenuLink")
+              = link_to("Account Settings", edit_user_path(current_user.id), :dojoType => "yogo.ui.MenuLink")
+              = link_to("Logout", logout_path, :dojoType => "yogo.ui.MenuLink")
           - else
             %span Login
             %div{:dojoType => "dijit.TooltipDialog"}
