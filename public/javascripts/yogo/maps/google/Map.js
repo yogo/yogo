@@ -25,6 +25,6 @@ dojo.declare("yogo.maps.google.Map", dijit._Widget, {
         this._mapDfd.resolve(this._map);
     },
     postCreate: function() {
-        dojo.when(voeis.maps.google.load(), dojo.hitch(this, "_createMap"));
+        dojo.when(yogo.maps.google.load(), dojo.hitch(this, "_createMap"));
     }
 });

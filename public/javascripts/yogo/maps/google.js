@@ -13,7 +13,7 @@ dojo.provide("yogo.maps.google");
         
         if(force || (!loaded && !loading)) {
             loading = true;
-            var globalCallbackName = "__voeis_maps_google_load_" + callbackCount;
+            var globalCallbackName = "__yogo_maps_google_load_" + callbackCount;
             window[globalCallbackName] = function(){ 
                 loaded = true;
                 loading = false;
