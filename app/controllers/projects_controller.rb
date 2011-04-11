@@ -10,7 +10,7 @@ class ProjectsController < InheritedResources::Base
     headers.each do |col|
       column_names << col
     end
-    csv_string = FasterCSV.generate do |csv|
+    csv_string = CSV.generate do |csv|
       csv << column_names
       rows.each do |row|
         csv << row

@@ -1,14 +1,11 @@
-<<<<<<< HEAD
 
-=======
 - content_for(:javascripts) do
   :javascript
     dojo.require("dijit.form.Button");
     dojo.require("dijit.Dialog");
     dojo.require("dojox.form.PasswordValidator");
 
-  
->>>>>>> apps/voeis-dev
+
 #pass{:dojoType=>"dijit.Dialog", :title=>"Change Password"}
   #valid{:dojoType=>"dojox.form.PasswordValidator", :name=>"password"}
     %label
@@ -29,11 +26,8 @@
                 dijit.byId("new_password").set("value","");
                 dijit.byId("confirm").set("value", "");
                 dijit.byId("pass").hide();
-<<<<<<< HEAD
                 alert(data["message"]);
-=======
-                alert(data["message"]); 
->>>>>>> apps/voeis-dev
+
             }
            );
         }
@@ -42,10 +36,7 @@
           alert("The new password and the confirmation do not match!");
         }
       }
-<<<<<<< HEAD
-=======
-      
->>>>>>> apps/voeis-dev
+
 #content-sidebar-right
   - if Project.count > @user.projects.count && current_user.admin?
     = form_for(:membership, :url => user_memberships_path(@user)) do |f|
@@ -62,11 +53,9 @@
     - if @user.admin?
       = link_to("Delete", project_path(@project), :method => :delete, :class => 'icon icon-delete', 
               :confirm => "Do you want to delete the #{@user.name}?\nContinue?" )
-<<<<<<< HEAD
-    %button{:id => "password_button", :dojoType=> "dijit.form.Button", :type=>"button"}Change Password
-=======
+
     %button{:id => "password_button", :dojoType=> "dijit.form.Button", :type=>"button", :onClick=>'dijit.byId("pass").show();'}Change Password
->>>>>>> apps/voeis-dev
+
   #content-title
     = @user.name
     #subtitle User Settings
@@ -111,17 +100,4 @@
     = link_to('Cancel', user_path(@user), :class => 'icon icon-cancel')
 = clear_break
 
-<<<<<<< HEAD
-:javascript
-  dojo.require("dijit.form.Button");
-  dojo.require("dijit.Dialog");
-  dojo.require("dojox.form.PasswordValidator");
-  dojo.addOnLoad(function() {
-      // create the dialog:
-      var dialogPass = dijit.byId("pass");
 
-      // connect t the button so we display the dialog onclick:
-      dojo.connect(dijit.byId("password_button"), "onClick", dialogPass, "show");
-  });
-=======
->>>>>>> apps/voeis-dev

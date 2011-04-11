@@ -21,7 +21,7 @@ class Voeis::VariablesController < Voeis::BaseController
     @speciations = Voeis::SpeciationCV.all
     @data_types = Voeis::DataTypeCV.all
     @general_categories = Voeis::GeneralCategoryCV.all
-    @label_array = Array["Variable Name","Variable Code","Unit Name","Speciation","Sample Medium","Value Type","Is Regular","Time Support","Time Unit ID","Data Type","General Cateogry"]
+    @label_array = Array["Variable Name","Variable Code","Unit Name","Speciation","Sample Medium","Value Type","Is Regular","Time Support","Time Unit ID","Data Type","General Cateogry", "Detection Limit"]
 
     @current_variables = Array.new     
     @variables.all(:order => [:variable_name.asc]).each do |var|
@@ -37,7 +37,12 @@ class Voeis::VariablesController < Voeis::BaseController
   def create
 
     @variable = Voeis::Variable.new(params[:variable])
-
+    if @variable.variable_code.nil?
+      @variable.variable_code = @variable.id.to_s+@variable.variable_name+@variable.speciation+Voeis::Unit.get(@variable.variable_units_id).units_name
+    end
+    if @variable.detection_limit.empty?
+      @variable.detection_limit = nil
+    end
     if @variable.save  
       flash[:notice] = 'Variable was successfully created.'
       redirect_to(new_project_variable_path(parent))
