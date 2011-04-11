@@ -1,9 +1,9 @@
-dojo.provide("voeis.maps.google.DataMap");
-dojo.require("voeis.maps.google.Map");
+dojo.provide("yogo.maps.google.DataMap");
+dojo.require("yogo.maps.google.Map");
 dojo.require("dojo.store.Observable");
 dojo.require("dojo.store.Memory");
 
-dojo.declare("voeis.maps.google.DataMap", voeis.maps.google.Map, {
+dojo.declare("yogo.maps.google.DataMap", yogo.maps.google.Map, {
     store: null,
     query: null,
     

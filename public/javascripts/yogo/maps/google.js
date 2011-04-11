@@ -1,4 +1,4 @@
-dojo.provide("voeis.maps.google");
+dojo.provide("yogo.maps.google");
 
 (function(){
     var callbackCount = 0;
@@ -6,7 +6,7 @@ dojo.provide("voeis.maps.google");
     var loading = false;
     var deferred = new dojo.Deferred();
     
-    voeis.maps.google.load = function(options) {
+    yogo.maps.google.load = function(options) {
         var options = options || {};
         var useSensor = options['sensor'] || false;
         var force = options['force'] || false;

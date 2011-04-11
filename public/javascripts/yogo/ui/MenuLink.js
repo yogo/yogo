@@ -1,7 +1,7 @@
-dojo.provide("voeis.MenuLink");
+dojo.provide("yogo.ui.MenuLink");
 dojo.require("dijit.MenuItem");
 
-dojo.declare("voeis.MenuLink", dijit.MenuItem, {
+dojo.declare("yogo.ui.MenuLink", dijit.MenuItem, {
     href: "",
     onClick: function(evt) {
         if(this.href) {

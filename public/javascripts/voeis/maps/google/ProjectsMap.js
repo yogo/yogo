@@ -1,9 +1,9 @@
 dojo.provide("voeis.maps.google.ProjectsMap");
-dojo.require("voeis.maps.google.DataMap");
+dojo.require("yogo.maps.google.DataMap");
 dojo.require("dojo.DeferredList");
 
 
-dojo.declare("voeis.maps.google.ProjectsMap", voeis.maps.google.DataMap, {
+dojo.declare("voeis.maps.google.ProjectsMap", yogo.maps.google.DataMap, {
     createMarkers: function() {
         var dfd = new dojo.Deferred();
 

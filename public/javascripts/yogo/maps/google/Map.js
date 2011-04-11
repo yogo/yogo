@@ -1,8 +1,8 @@
-dojo.provide("voeis.maps.google.Map");
+dojo.provide("yogo.maps.google.Map");
 dojo.require("dijit._Widget");
-dojo.require("voeis.maps.google");
+dojo.require("yogo.maps.google");
 
-dojo.declare("voeis.maps.google.Map", dijit._Widget, {
+dojo.declare("yogo.maps.google.Map", dijit._Widget, {
     _map: null,
     _mapDfd: null,
     mapType: "satellite",
