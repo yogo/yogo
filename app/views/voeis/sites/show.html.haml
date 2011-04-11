@@ -8,9 +8,13 @@
 %h2
   #{resource.name}
 
-%div{:dojoType=>"dijit.Declaration", :widgetClass=>"Property"}
- 
-%div{:dojoType=>"dojox.layout.TableContainer", :cols=>"1", :id=>"tc1", :customClass=>"labelsAndValues"}
+%table
   - resource.properties.each do |prop|
-    %div{:dojoType=>"Property", :title=> prop.name.capitalize, :value=>resource[prop.name]}
-      #{resource[prop.name]}
+    %tr
+      %td
+        %b
+          #{prop.name.capitalize}
+      %td
+        #{resource[prop.name]}
+
+= link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 
