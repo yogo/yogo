@@ -26,7 +26,9 @@ gem "dm-rails",        DM_VERSION               # DataMapper integration with Ra
 gem "jquery-rails"                              # jQuery integration with Rails
 gem "compass", ">= 0.10.6"                      # Styling automation for views
 gem "haml"                                      # HAML syntax for views
-gem "inherited_resources"                       # Simplified Rails controllers
+# Simplified Rails controllers
+gem "inherited_resources",                      :git => "git://github.com/josevalim/inherited_resources.git",
+                                                :ref => "5d988cfcfa632cc9c67fff4cb100594ea683482a"
 
 gem "rails_warden"                              # Warden integration with Rails for authentication
 

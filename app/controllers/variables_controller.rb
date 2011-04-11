@@ -1,7 +1,14 @@
-class VariablesController < ApplicationController
+class VariablesController < InheritedResources::Base
   rescue_from ActionView::MissingTemplate, :with => :invalid_page
 
+  defaults  :route_collection_name => 'variables',
+            :route_instance_name => 'variable',
+            :collection_name => 'variables',
+            :instance_name => 'variable',
+            :resource_class => Voeis::Variable
 
+  respond_to :html, :json
+  
   # GET /variables/new
   def new
     @variable = Voeis::Variable.new
@@ -28,13 +35,14 @@ class VariablesController < ApplicationController
       end
     end
   end
-  def show
-    respond_to do |format|
-      format.json do
+
+  # def show
+  #   respond_to do |format|
+  #     format.json do
         
-      end
-    end
-  end
+  #     end
+  #   end
+  # end
   
 
 
