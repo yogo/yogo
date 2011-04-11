@@ -78,9 +78,7 @@
   %label Detection Limit: 
   = f.text_field :detection_limit
   =clear_break
-  = f.submit ('Create', :onclick => "$('#loader').toggle();")
-
-
+  = f.submit ('Create')
   = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 
 #all_variables
   %h3

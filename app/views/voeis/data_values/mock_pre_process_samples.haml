@@ -18,8 +18,8 @@ Form Progress:
 =form_tag("mock_store_samples_and_data", :method => :post) do
   %div{:dojoType=>"dijit.ProgressBar", :jsId=>"jsProgress", :id=>"downloadProgress", :maximum=>"10"}
   
-  %div{:dojoType=>"dojo.data.ItemFileReadStore", :jsId=>"variableStore", :url=>"#{root_url+"/projects/"+@project.id+"/apivs/dojo_variables_for_tree.json?"}"}
-  %div{:dojoType=>"dojo.data.ItemFileReadStore", :jsId=>"variableStore2", :url=>"#{root_url+"/projects/"+@project.id+"/apivs/get_dojo_voeis_variables.json?"}"}
+  %div{:dojoType=>"dojo.data.ItemFileReadStore", :jsId=>"variableStore", :url=>"#{root_url+"projects/"+@project.id+"/apivs/dojo_variables_for_tree.json?"}"}
+  %div{:dojoType=>"dojo.data.ItemFileReadStore", :jsId=>"variableStore2", :url=>"#{root_url+"projects/"+@project.id+"/apivs/get_dojo_voeis_variables.json?"}"}
   %div{:dojoType=>"dijit.tree.ForestStoreModel", :jsId=>"variableModel", :store=>"variableStore",
   :query=>"{type:'general_category'}", :rootId=>"general_categoryid", :rootLabel=>"Variable General Categories",:childrenAttrs=>"children"}
   #column_panes
@@ -74,9 +74,9 @@ Form Progress:
             %div{:dojoType=>"dijit.form.DropDownButton", :id=>"variable_select_button"+col.to_s}
               %span
                 Assign An Existing Variable
-              %div{:dojoType=>"dijit.TooltipDialog", :id =>"variable_tooltip_dialog"+col.to_s}
+              %div{:dojoType=>"dijit.TooltipDialog", :id =>"variable_tooltip_dialog"+col.to_s,  :class=>"var_tree"}
                 Select A Voeis Variable:
-                %div{:dojoType=>"dijit.Tree", :id=>"mytree-"+col.to_s, :model=>"variableModel", :openOnClick=>"true"}
+                %div{:dojoType=>"dijit.Tree", :id=>"mytree-"+col.to_s, :model=>"variableModel", :openOnClick=>"true", :class=>"var_tree"}
                   %script{:type=>"dojo/method", :event=>"onClick", :args=>"item"}
                     if ($("#var_span#{col.to_s}").text() == "None"){
                     updateProgressBar();

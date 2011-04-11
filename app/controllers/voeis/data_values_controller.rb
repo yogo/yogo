@@ -43,7 +43,7 @@ class Voeis::DataValuesController < Voeis::BaseController
   def mock_pre_process_samples_file_upload
     @project = parent
     @templates = parent.managed_repository{Voeis::DataStream.all(:type => "Sample")}
-    @general_categories = GeneralCategoryCV.all
+    @general_categories = Voeis::GeneralCategoryCV.all
   end
 
   # Gather information necessary to store samples and data
@@ -973,6 +973,100 @@ class Voeis::DataValuesController < Voeis::BaseController
     
   end
   
+  def mock_pre_process_samples
+
+    require 'csv_helper'
+     
+    @project = parent
+     
+    #save uploaded file if possible
+    if !params[:datafile].nil? && datafile = params[:datafile]
+      if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
+            'application/octet-stream','application/csv'].include?(datafile.content_type)
+        flash[:error] = "File type #{datafile.content_type} not allowed"
+        redirect_to(:controller =>"voeis/data_values", :action => "mock_pre_process_samples_file_upload", :params => {:id => params[:project_id]})
+
+      else
+        #file can be saved
+        name = Time.now.to_s + params['datafile'].original_filename
+        directory = "temp_data"
+        @new_file = File.join(directory,name)
+        File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
+        
+        @start_line = params[:start_line].to_i
+        #get the first row that has information in the CSV file
+        @start_row = get_row(@new_file, params[:start_line].to_i)
+        @row_size = @start_row.size-1
+        
+        @header_rows = @start_line < 2 ? -1 : @start_line -2
+    
+        
+        @columns = Array.new
+        (1..@start_row.size).map{|x| @columns << x}
+        @vars = Hash.new
+
+        Voeis::Variable.all.each do |v| 
+
+          @vars=@vars.merge({v.variable_name => v.id})
+        end
+        @sites = {"None"=>"None"}
+        parent.managed_repository{Voeis::Site.all}.each do |s|
+          @sites = @sites.merge({s.name => s.id})
+        end
+
+        @variables = Voeis::Variable.all
+        @var_properties = Array.new
+        Voeis::Variable.properties.each do |prop|
+
+          @var_properties << prop.name
+        end
+        @var_properties.delete_if {|x| x.to_s == "id" || x.to_s == "his_id" || x.to_s == "time_units_id" || x.to_s == "is_regular" || x.to_s == "time_support"}
+    
+
+        @variable = Voeis::Variable.new
+        @units = Voeis::Unit.all
+        @variable_names = Voeis::VariableNameCV.all
+        @sample_mediums= Voeis::SampleMediumCV.all
+        @sample_types = Voeis::SampleTypeCV.all
+        @value_types= Voeis::ValueTypeCV.all
+        @speciations = Voeis::SpeciationCV.all
+        @data_types = Voeis::DataTypeCV.all
+        @general_categories = Voeis::GeneralCategoryCV.all
+
+        @label_array = Array["Variable Name","Variable Code","Unit Name","Speciation","Sample Medium","Value Type","Is Regular","Time Support","Time Unit ID","Data Type","General Cateogry"]
+        @current_variables = Array.new     
+        @variables.all(:order => [:variable_name.asc]).each do |var|
+          @temp_array =Array[var.variable_name, var.variable_code,@units.get(var.variable_units_id).units_name, var.speciation,var.sample_medium, var.value_type, var.is_regular.to_s, var.time_support.to_s, var.time_units_id.to_s, var.data_type, var.general_category]
+          @current_variables << @temp_array
+        end
+        
+        @sample_type_options = Array.new
+        @sample_types.all(:order => [:term.asc]).each do |samp_type|
+          @sample_type_options <<[samp_type.term]  
+        end
+
+        @sample_medium_options = Array.new
+        @sample_mediums.all(:order => [:term.asc]).each do |mat|
+          @sample_medium_options << [mat.term]
+        end
+        #parse csv file into array
+        @csv_array = Array.new
+        csv_data = CSV.read(@new_file)
+        i = 0
+        csv_data[0..-1].each do |row|
+          temp_array = Array.new
+          row.map! { |k| temp_array << k }
+          @csv_array[i] = temp_array
+          i = i + 1
+        end
+        @csv_size = i -1
+      end       
+
+    else
+        redirect_to(:controller =>"voeis/data_values", :action => "pre_process_sample_file_upload", :params => {:id => params[:project_id]})
+      end
+    
+  end
  
   # Parses a csv file containing samples and data values
    #
@@ -1034,7 +1128,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      @col_vars = Array.new
      (0..range).each do |i|
        if columns_array[i] != nil && i != timestamp_col && i != sample_id_col
-         @var = Variable.get(columns_array[i].to_i)
+         @var = Voeis::Variable.get(columns_array[i].to_i)
          parent.managed_repository do
            if !params["ignore"+i.to_s]            
              variable = Voeis::Variable.first_or_create(
