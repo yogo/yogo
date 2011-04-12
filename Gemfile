@@ -6,7 +6,7 @@ gem "yogo-framework"                            # The Yogo Framework
 gem "yogo-project",                             :git => "git://github.com/yogo/yogo-project.git"
 
 gem "dm-validations"                            # We're validating properties
-gem "dm-is-versioned",                          :git => "git://github.com/datamapper/dm-is-versioned.git", :ref => "4a936a5bcb776367bc55"
+gem "dm-is-versioned",                          :git => "git://github.com/yogo/dm-is-versioned.git", :branch => "voeis/patches"
 gem "dm-types",        DM_VERSION               # To enable UUID types
 gem "dm-is-list",      DM_VERSION               # RBAC
 gem "dm-migrations",   DM_VERSION
