@@ -129,6 +129,8 @@ Yogo::Application.routes.draw do
     collection do
       post :api_key_update
       post :change_password
+      get :reset_password
+      post :email_reset_password
     end
     resources :memberships
   end
