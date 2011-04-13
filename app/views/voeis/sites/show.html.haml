@@ -16,5 +16,20 @@
           #{prop.name.to_s.capitalize}
       %td
         #{resource[prop.name]}
-
 = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel') 
+
+%br
+%br
+
+- if @versions.count > 0
+  %h3
+    Versions
+    - @versions.each do |ver|
+      %table
+        - resource.properties.each do |prop|
+          %tr
+            %td
+              %b
+                #{prop.name.to_s.capitalize}
+            %td
+              #{ver[prop.name.to_s]}
