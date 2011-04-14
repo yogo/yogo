@@ -15,6 +15,7 @@ class Voeis::VariablesController < Voeis::BaseController
     @variables = Voeis::Variable.all
     @variable = Voeis::Variable.new
     @units = Voeis::Unit.all
+    @time_units = Voeis::Unit.all(:units_type.like=>'%Time%')
     @variable_names = Voeis::VariableNameCV.all
     @sample_mediums= Voeis::SampleMediumCV.all
     @value_types= Voeis::ValueTypeCV.all
