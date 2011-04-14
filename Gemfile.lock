@@ -235,19 +235,19 @@ GEM
       thor (~> 0.14.4)
     rake (0.8.7)
     responders (0.6.2)
-    rspec (2.5.0)
-      rspec-core (~> 2.5.0)
-      rspec-expectations (~> 2.5.0)
-      rspec-mocks (~> 2.5.0)
+    rspec (2.2.0)
+      rspec-core (~> 2.2)
+      rspec-expectations (~> 2.2)
+      rspec-mocks (~> 2.2)
     rspec-core (2.5.1)
     rspec-expectations (2.5.0)
       diff-lcs (~> 1.1.2)
-    rspec-mocks (2.5.0)
-    rspec-rails (2.5.0)
+    rspec-mocks (2.4.0)
+    rspec-rails (2.2.1)
       actionpack (~> 3.0)
       activesupport (~> 3.0)
       railties (~> 3.0)
-      rspec (~> 2.5.0)
+      rspec (~> 2.2.0)
     ruby-debug (0.10.4)
       columnize (>= 0.1)
       ruby-debug-base (~> 0.10.4.0)
@@ -264,7 +264,7 @@ GEM
     ruby-graphviz (0.9.21)
     ruby_core_source (0.1.5)
       archive-tar-minitar (>= 0.5.2)
-    sinatra (1.2.2)
+    sinatra (1.2.3)
       rack (~> 1.1)
       tilt (< 2.0, >= 1.2.2)
     sinatra-advanced-routes (0.5.1)
@@ -293,9 +293,9 @@ GEM
     warden (1.0.3)
       rack (>= 1.0.0)
     yamler (0.1.0)
-    yard (0.6.7)
-    yardstick (0.3.0)
-      yard (~> 0.6.5)
+    yard (0.6.3)
+    yardstick (0.2.0)
+      yard (~> 0.6.1)
     yogo-framework (0.4.0)
       data_mapper
       dm-is-list
@@ -344,14 +344,14 @@ DEPENDENCIES
   rspec
   rspec-core
   rspec-expectations
-  rspec-mocks
+  rspec-mocks (= 2.4.0)
   rspec-rails
   ruby-debug
   ruby-debug19
   test-unit (~> 1.2.1)
   thin
   uuidtools
-  yard
+  yard (= 0.6.3)
   yardstick
   yogo-framework
   yogo-project!
