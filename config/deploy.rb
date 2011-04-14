@@ -21,7 +21,7 @@ task :development do
   role :web, "153.90.178.140"
   role :app, "153.90.178.140"
   set  :deploy_to, "/home/#{user}/voeis"
-  run "mkdir /home/#{user}/voeis/current/temp_data"
+  
   default_run_options[:pty] = false
 end
 
@@ -46,7 +46,7 @@ task :production do
   role :web, "klank.msu.montana.edu"
   role :app, "klank.msu.montana.edu"
   set  :deploy_to, "/home/#{user}/voeis"
-  run "mkdir /home/#{user}/voeis/current/temp_data"
+
   default_run_options[:pty] = false
 end
 
@@ -99,11 +99,13 @@ namespace :assets do
   task :setup do
     run "mkdir -p #{deploy_to}/#{shared_dir}/assets/files"
     run "mkdir -p #{deploy_to}/#{shared_dir}/assets/images"
+    run "mkdir -p #{deploy_to}/#{shared_dir}/assets/temp_data"
   end
 
   task :symlink do
     run "ln -nfs #{deploy_to}/#{shared_dir}/assets/files #{release_path}/public/files"
     run "ln -nfs #{deploy_to}/#{shared_dir}/assets/images #{release_path}/public/images"
+    run "ln -nfs #{deploy_to}/#{shared_dir}/assets/temp_data #{release_path}/temp_data"
   end
 end
 
