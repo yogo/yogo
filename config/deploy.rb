@@ -21,7 +21,7 @@ task :development do
   role :web, "153.90.178.140"
   role :app, "153.90.178.140"
   set  :deploy_to, "/home/#{user}/voeis"
-  run "mkdir temp_data"
+  run "mkdir /home/#{user}/voeis/current/temp_data"
   default_run_options[:pty] = false
 end
 
@@ -46,7 +46,7 @@ task :production do
   role :web, "klank.msu.montana.edu"
   role :app, "klank.msu.montana.edu"
   set  :deploy_to, "/home/#{user}/voeis"
-  run "mkdir temp_data"
+  run "mkdir /home/#{user}/voeis/current/temp_data"
   default_run_options[:pty] = false
 end
 
