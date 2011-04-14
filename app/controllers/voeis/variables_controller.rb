@@ -40,7 +40,7 @@ class Voeis::VariablesController < Voeis::BaseController
     if @variable.variable_code.nil?
       @variable.variable_code = @variable.id.to_s+@variable.variable_name+@variable.speciation+Voeis::Unit.get(@variable.variable_units_id).units_name
     end
-    if @variable.detection_limit.empty?
+    if params[:variable][:detection_limit].empty?
       @variable.detection_limit = nil
     end
     if @variable.save  
