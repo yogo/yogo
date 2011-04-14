@@ -69,10 +69,10 @@
   Optional:
   #optional
     %label Is Regular: 
-    = f.text_field :is_regular, :disabled => true
+    = f.select :is_regular, options_for_select({"true"=>"true", "false"=>"false"})
     =clear_break
     %label Time Support: 
-    = f.text_field :time_support, :value => 1.0, :disabled => true
+    = f.text_field :time_support, :value => 1.0
     =clear_break
     %label Time Units ID:
     = f.text_field :time_units_id, :disabled => true
