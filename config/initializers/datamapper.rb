@@ -30,6 +30,7 @@ Setting
 User
 Role
 Membership
+Voeis::Site::Version
 # Site
 # Unit
 # Variable
@@ -54,7 +55,7 @@ DataMapper.finalize
 
 DataMapper::Model.descendants.each do |model|
   begin
-    model::Version
+    require model
   rescue
   end
 end

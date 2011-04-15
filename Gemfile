@@ -62,10 +62,10 @@ group(:development, :test) do
   gem "rspec"
   gem "rspec-core",                :require => "rspec/core"
   gem "rspec-expectations",        :require => "rspec/expectations"
-  gem "rspec-mocks",               :require => "rspec/mocks"
+  gem "rspec-mocks",        "2.4.0",       :require => "rspec/mocks"
   gem "rspec-rails"
   # YARD Documentation
-  gem "yard",                      :require => nil
+  gem "yard",          "0.6.3",            :require => nil
   # gem "bluecloth",                 :require => nil
   gem "yardstick"
   # TODO: We need to find out how to remove this

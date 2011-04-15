@@ -13,4 +13,10 @@ class VoeisMailer < ActionMailer::Base
     mail(:to => to,
          :subject => subject)
   end
+  
+  def email_user(address, subject, body)
+     mail(:to => address, 
+         :subject => subject, 
+         :body => body ).deliver
+  end
 end

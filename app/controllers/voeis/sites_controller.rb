@@ -14,8 +14,16 @@ class Voeis::SitesController < Voeis::BaseController
   
   def show
     @site =  parent.managed_repository{Voeis::Site.get(params[:id])}
-    @versions = parent.managed_repository{Voeis::Site.get(params[:id]).versions}
-
+    #@versions = parent.managed_repository{Voeis::Site.get(params[:id]).versions}
+    @sites = parent.managed_repository{Voeis::Site.all}
+    @label_array = Array["Sample Type","Lab Sample Code","Sample Medium","Site","Timestamp"]
+    @current_samples = Array.new
+    @samples = @site.samples
+    @samples.all(:order => [:lab_sample_code.asc]).each do |samp|
+       @temp_array = Array.new
+       @temp_array=Array[samp.sample_type, samp.lab_sample_code, samp.material,samp.sites.first.name, samp.local_date_time.to_s]
+       @current_samples << @temp_array
+    end
     @project = parent
     show!
   end

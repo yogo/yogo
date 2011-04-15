@@ -18,7 +18,7 @@ module Odhelper
         # Voeis::SensorTypeSensorValue.auto_upgrade!
         # Voeis::SensorValue.auto_upgrade!
         # Voeis::SensorType.auto_upgrade!
-        Voeis::Site.auto_upgrade!
+        Voeis::DataTypeCV.auto_upgrade!
         # Voeis::Sample.auto_upgrade!
         # Voeis::DataValue.auto_upgrade!
         #Voeis::Variable.auto_upgrade!

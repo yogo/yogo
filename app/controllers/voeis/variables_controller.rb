@@ -15,6 +15,7 @@ class Voeis::VariablesController < Voeis::BaseController
     @variables = Voeis::Variable.all
     @variable = Voeis::Variable.new
     @units = Voeis::Unit.all
+    @time_units = Voeis::Unit.all(:units_type.like=>'%Time%')
     @variable_names = Voeis::VariableNameCV.all
     @sample_mediums= Voeis::SampleMediumCV.all
     @value_types= Voeis::ValueTypeCV.all
@@ -40,7 +41,7 @@ class Voeis::VariablesController < Voeis::BaseController
     if @variable.variable_code.nil?
       @variable.variable_code = @variable.id.to_s+@variable.variable_name+@variable.speciation+Voeis::Unit.get(@variable.variable_units_id).units_name
     end
-    if @variable.detection_limit.empty?
+    if params[:variable][:detection_limit].empty?
       @variable.detection_limit = nil
     end
     if @variable.save  
