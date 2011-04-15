@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/irjudson/dm-rest-adapter.git
+  revision: bcfa6031a9c8a93051e691fc4520f149bf35572e
+  specs:
+    dm-rest-adapter (1.1.0)
+      dm-serializer (~> 1.1.0)
+
+GIT
   remote: git://github.com/josevalim/inherited_resources.git
   revision: 5d988cfcfa632cc9c67fff4cb100594ea683482a
   ref: 5d988cfcfa632cc9c67fff4cb100594ea683482a
@@ -139,8 +146,6 @@ GEM
       dm-active_model (~> 1.1.0)
       dm-core (~> 1.1.0)
       railties (~> 3.0.4)
-    dm-rest-adapter (1.1.0)
-      dm-serializer (~> 1.1.0)
     dm-serializer (1.1.0)
       dm-core (~> 1.1.0)
       fastercsv (~> 1.5.4)
@@ -326,6 +331,7 @@ DEPENDENCIES
   dm-is-versioned!
   dm-migrations (= 1.1.0)
   dm-rails (= 1.1.0)
+  dm-rest-adapter!
   dm-timestamps
   dm-transactions (= 1.1.0)
   dm-types (= 1.1.0)
