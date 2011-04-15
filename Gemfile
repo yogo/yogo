@@ -2,6 +2,8 @@ source :rubygems
 
 DM_VERSION = "1.1.0"
 
+# Once the .freeze fix is integrated we can remove this again - IRJ
+gem "dm-rest-adapter",                          :git => "git://github.com/irjudson/dm-rest-adapter.git"
 gem "yogo-framework"                            # The Yogo Framework
 gem "yogo-project",                             :git => "git://github.com/yogo/yogo-project.git"
 
@@ -38,8 +40,8 @@ gem "uuidtools"                                 # This is for memberships
 gem 'i18n', "~> 0.4.0"
 
 
-gem 'exception_notification',      :require => 'exception_notifier'                                   
-                                   
+gem 'exception_notification',      :require => 'exception_notifier'
+
 gem 'delayed_job',                 :git => 'git://github.com/robbielamb/delayed_job.git'
 gem "cells", "~> 3.5.4"
 gem 'apotomo', "~> 1.1"
