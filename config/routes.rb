@@ -49,6 +49,8 @@ Yogo::Application.routes.draw do
           get :create_project_site
           get :create_project_variable
           get :update_project_site
+          get :update_project_variable
+          get :update_voeis_variable
           get :get_project_sites
           get :get_voeis_sites
           get :get_voeis_sites
