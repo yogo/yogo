@@ -31,6 +31,7 @@ gem "haml"                                      # HAML syntax for views
 # Simplified Rails controllers
 gem "inherited_resources",                      :git => "git://github.com/josevalim/inherited_resources.git",
                                                 :ref => "5d988cfcfa632cc9c67fff4cb100594ea683482a"
+gem "responders", "~> 0.6.2"
 
 gem "rails_warden"                              # Warden integration with Rails for authentication
 
@@ -45,6 +46,12 @@ gem 'exception_notification',      :require => 'exception_notifier'
 gem 'delayed_job',                 :git => 'git://github.com/robbielamb/delayed_job.git'
 gem "cells", "~> 3.5.4"
 gem 'apotomo', "~> 1.1"
+
+gem 'rql', ">= 0.0.1",        :git => "git://github.com/rheimbuch/rql-ruby.git", :branch => "topic/voeis"
+platforms(:ruby_18, :ruby_19) {
+  gem "therubyracer", :require => "v8"
+}
+platforms(:jruby) { gem "therubyrhino" }
 
 # Because in 1.9 fastercsv is default, but in 1.8...
 platforms(:ruby_18, :jruby) { gem "fastercsv" }
