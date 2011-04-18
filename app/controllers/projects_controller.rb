@@ -1,7 +1,17 @@
+require 'responders/rql'
+
 class ProjectsController < InheritedResources::Base
+  responders :rql
+  
   respond_to :html, :json
   layout 'split_map'
 
+  def index
+    index! do
+      logger.debug(request.env['QUERY_STRING'])
+    end
+  end
+  
    #export the results of search/browse to a csv file
   def export
     headers = JSON[params[:column_array]]

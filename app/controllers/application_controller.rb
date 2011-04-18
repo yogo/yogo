@@ -1,6 +1,10 @@
+require 'responders/rql'
+
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem
   include AuthorizationSystem
+
+  responders :rql
   
   protect_from_forgery
   

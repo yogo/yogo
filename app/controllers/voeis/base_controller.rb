@@ -1,3 +1,5 @@
+require 'responders/rql'
+
 # @author Ryan Heimbuch
 # @abstract Base class for Voeis-specific controllers
 #
@@ -41,6 +43,8 @@ class Voeis::BaseController < InheritedResources::Base
 
   # All Voeis resources should handle html and json
   respond_to :html, :json
+
+  responders :rql
 
   protected
 
