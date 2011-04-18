@@ -59,15 +59,15 @@
         - @label_array[0..-1].each do |label|
           - table.register_column(:string, label)
         - table.add_rows(@current_samples)
--#- if @versions.count > 0
--#  %h3
--#    Versions
--#    - @versions.each do |ver|
--#      %table
--#        - resource.properties.each do |prop|
--#          %tr
--#            %td
--#              %b
--#                #{prop.name.to_s.capitalize}
--#            %td
--#              #{ver[prop.name.to_s]}
+- if @versions.count > 0
+  %h3
+    Versions
+    - @versions.each do |ver|
+      %table
+        - resource.properties.each do |prop|
+          %tr
+            %td
+              %b
+                #{prop.name.to_s.capitalize}
+            %td
+              #{ver[prop.name.to_s]}
