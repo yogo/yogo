@@ -11,5 +11,12 @@
 # Load the rails application
 require File.expand_path('../application', __FILE__)
 
+require 'rack/rql'
+Yogo::Application.configure do
+  config.middleware.insert_before(ActionDispatch::Head, Rack::RqlQuery)
+end
+
 # Initialize the rails application
 Yogo::Application.initialize!
+
+
