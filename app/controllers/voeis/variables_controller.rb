@@ -44,13 +44,24 @@ class Voeis::VariablesController < Voeis::BaseController
     if params[:variable][:detection_limit].empty?
       @variable.detection_limit = nil
     end
+  
     if @variable.save  
-      flash[:notice] = 'Variable was successfully created.'
-      redirect_to(new_project_variable_path(parent))
+      respond_to do |format|
+        flash[:notice] = 'Variable was successfully created.'
+        redirect_to(new_project_variable_path(parent))
+        format.json do
+           render :json => @variable.as_json, :callback => params[:jsoncallback]
+        end
+        return
+      end
     else
       respond_to do |format|
         flash[:warning] = 'There was a problem saving the Variables.'
         format.html { render :action => "new" }
+        format.json do
+           render :json => @variable.as_json, :callback => params[:jsoncallback]
+        end
+        return
       end
     end
   end

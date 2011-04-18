@@ -40,7 +40,7 @@ class Voeis::DataValuesController < Voeis::BaseController
   # @author Sean Cleveland
   #
   # @api public
-  def mock_pre_process_samples_file_upload
+  def pre_process_samples_file_upload
     @project = parent
     @templates = parent.managed_repository{Voeis::DataStream.all(:type => "Sample")}
     @general_categories = Voeis::GeneralCategoryCV.all
@@ -889,7 +889,7 @@ class Voeis::DataValuesController < Voeis::BaseController
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
-        redirect_to(:controller =>"voeis/data_values", :action => "mock_pre_process_samples_file_upload", :params => {:id => params[:project_id]})
+        redirect_to(:controller =>"voeis/data_values", :action => "pre_process_samples_file_upload", :params => {:id => params[:project_id]})
 
       else
         #file can be saved
@@ -973,7 +973,7 @@ class Voeis::DataValuesController < Voeis::BaseController
     
   end
   
-  def mock_pre_process_samples
+  def pre_process_samples_file
 
     require 'csv_helper'
      
@@ -984,7 +984,7 @@ class Voeis::DataValuesController < Voeis::BaseController
       if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
             'application/octet-stream','application/csv'].include?(datafile.content_type)
         flash[:error] = "File type #{datafile.content_type} not allowed"
-        redirect_to(:controller =>"voeis/data_values", :action => "mock_pre_process_samples_file_upload", :params => {:id => params[:project_id]})
+        redirect_to(:controller =>"voeis/data_values", :action => "pre_process_samples_file_upload", :params => {:id => params[:project_id]})
 
       else
         #file can be saved
@@ -1082,10 +1082,11 @@ class Voeis::DataValuesController < Voeis::BaseController
    # @author Sean Cleveland
    #
    # @api public
-   def mock_store_samples_and_data
+   def store_samples_and_data_from_file
      data_stream =""
      timestamp_col =""
      sample_id_col = ""
+     vertical_offset_col = ""
      site = parent.managed_repository{Voeis::Site.first(:id => params[:site])}
      redirect_path =Hash.new
      #put this back in later
@@ -1102,6 +1103,8 @@ class Voeis::DataValuesController < Voeis::BaseController
          timestamp_col = i-1
        elsif params["column"+i.to_s] == "sample_id"
          sample_id_col = i-1
+       elsif params["column"+i.to_s] == "vertical_offset"
+          vertical_offset_col = i-1
        end
      end
      
@@ -1127,7 +1130,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      #store all the Variables in the managed repository
      @col_vars = Array.new
      (0..range).each do |i|
-       if columns_array[i] != nil && i != timestamp_col && i != sample_id_col
+       if columns_array[i] != nil && i != timestamp_col && i != sample_id_col && i != vertical_offset_col
          @var = Voeis::Variable.get(columns_array[i].to_i)
          parent.managed_repository do
            if !params["ignore"+i.to_s]            
@@ -1176,20 +1179,21 @@ class Voeis::DataValuesController < Voeis::BaseController
                                          :material => params[:sample_medium],
                                          :lab_sample_code => @csv_row[row][@sample_col],
                                          :lab_method_id => -1,
-                                         :local_date_time => DateTime.civil(sample_datetime.year,sample_datetime.month,sample_datetime.day,sample_datetime.hour,sample_datetime.min, sample_datetime.sec,site.time_zone_offset.to_i/24.to_f) )           
+                                         :local_date_time => DateTime.civil(sample_datetime.year,sample_datetime.month,sample_datetime.day,sample_datetime.hour,sample_datetime.min, sample_datetime.sec,site.time_zone_offset.to_i/24.to_f))           
              @sample.valid?
              puts @sample.errors.inspect()
              @sample.save
              @sample.sites << site
              @sample.save
              (0..range).each do |i|
-               if sample_id_col != i && timestamp_col != i && @csv_row[row][i] != ""&& !params["ignore"+i.to_s] && columns_array[i] != nil
+               if sample_id_col != i && timestamp_col != i && @csv_row[row][i] != ""&& !params["ignore"+i.to_s] && columns_array[i] != nil && vertical_offset_col != i
                    new_data_val = Voeis::DataValue.new(:data_value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(@csv_row[row][i].to_s) ? @csv_row[row][i].to_f : -9999.0, 
                       :local_date_time => @sample.local_date_time,
                       :utc_offset => site.time_zone_offset.to_i,  
                       :date_time_utc => @sample.local_date_time.utc,  
                       :replicate => 0,
-                      :string_value =>  @csv_row[row][i].blank? ? "Empty" : @csv_row[row][i]) 
+                      :string_value =>  @csv_row[row][i].blank? ? "Empty" : @csv_row[row][i],
+                      :vertical_offset =>  vertical_offset_col.nil? ? nil : @csv_row[row][vertical_offset_col]) 
                  new_data_val.valid?
                  puts new_data_val.errors.inspect() 
                  new_data_val.save

@@ -15,7 +15,7 @@
   Setup File Parsing Options
 Form Progress:
 
-=form_tag("mock_store_samples_and_data", :method => :post) do
+=form_tag("store_samples_and_data_from_file", :method => :post) do
   %div{:dojoType=>"dijit.ProgressBar", :jsId=>"jsProgress", :id=>"downloadProgress", :maximum=>"10"}
   
   %div{:dojoType=>"dojo.data.ItemFileReadStore", :jsId=>"variableStore", :url=>"#{root_url+"projects/"+@project.id+"/apivs/dojo_variables_for_tree.json?"}"}
@@ -96,6 +96,10 @@ Form Progress:
                     $("#timestamp_column").val("");
                     dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Timestamp"){btn.set("disabled", false);}});
                     }
+                    if($("#vertical_offset_column").val() == #{col}){
+                    $("#vertical_offset_column").val("");
+                    dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Vertical Offset Column"){btn.set("disabled", false);}});
+                    }
             =clear_break
             %button{:dojoType=>"dijit.form.Button", :title=>"Add Variable", :id=>"add_variable"+col.to_s, :onclick=>"addNewVariable(#{col});", :class=>"icon icon-add"}
               %span
@@ -108,7 +112,10 @@ Form Progress:
             %button{:dojoType=>"dijit.form.Button", :title=>"Assign Sample ID", :id=>"assign_sampleid"+col.to_s, :onClick=>"assignSample(#{col});", :class=>"icon icon-add"}
               %span
                 Assign The Sample ID To This Column
-        
+            =clear_break
+            %button{:dojoType=>"dijit.form.Button", :title=>"Assign Vertical Offset Column", :id=>"assign_vertical_offset"+col.to_s, :onClick=>"assignVerticalOffset(#{col});", :class=>"icon icon-add"}
+              %span
+                Assign The Vertical Offset To This Column
         
 
     
@@ -122,6 +129,7 @@ Form Progress:
  
         =hidden_field_tag "sample_id_column", "-1"
         =hidden_field_tag "timestamp_column", "-1"
+        =hidden_field_tag "vertical_offset_column", "-1"
         =hidden_field_tag "row_size", @columns.length
         =hidden_field_tag "datafile", @new_file
         =hidden_field_tag "start_line", @start_line
@@ -238,6 +246,14 @@ Form Progress:
   dijit.byId("next"+column).set("disabled", false);
   dijit.byId("next"+column).focus();
   dijit.byId("next"+column).set("label","Next");
+  if($("#timestamp_column").val() == column){
+  $("#timestamp_column").val("");
+  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Timestamp"){btn.set("disabled", false);}});
+  }
+  if($("#vertical_offset_column").val() == column){
+  $("#vertical_offset_column").val("");
+  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Vertical Offset Column"){btn.set("disabled", false);}});
+  }
   }
 
   function assignTimestamp(column){
@@ -253,8 +269,39 @@ Form Progress:
   dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Timestamp"){btn.set("disabled", true);}});
   dijit.byId("next"+column).focus();
   dijit.byId("next"+column).set("label","Next");
+  if($("#sample_id_column").val() == column){
+  $("#sample_id_column").val("");
+  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Sample ID"){btn.set("disabled", false);}});
   }
-
+  if($("#vertical_offset_column").val() == column){
+  $("#vertical_offset_column").val("");
+  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Vertical Offset Column"){btn.set("disabled", false);}});
+  }
+  }
+  
+  function assignVerticalOffset(column){
+  if ($("#var_span"+column).text() == "None"){
+  updateProgressBar();
+  }
+  $("#var_span"+column).text("Vertical Offset");
+  $("#var_td_variable_code_"+column).text("Vertical Offset");
+  $("#vertical_offset_column").val(""+column);
+  $("#column"+column).val("vertical_offset");
+  dijit.byId("Column"+column).set("title", "Column"+column+": Vertical Offset");
+  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Vertical Offset Column"){btn.set("disabled", true);}});
+  dijit.byId("next"+column).set("disabled", false);
+  dijit.byId("next"+column).focus();
+  dijit.byId("next"+column).set("label","Next");
+  if($("#sample_id_column").val() == column){
+  $("#sample_id_column").val("");
+  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Sample ID"){btn.set("disabled", false);}});
+  }
+  if($("#timestamp_column").val() == column){
+  $("#timestamp_column").val("");
+  dijit.registry.byClass("dijit.form.Button").forEach(function(btn){if(btn.attr("title") == "Assign Timestamp"){btn.set("disabled", false);}});
+  }
+  }
+  
   function updateProgressBar(){
   jsProgress.update({
   maximum: #{@columns.length + 1},

@@ -98,9 +98,9 @@ Yogo::Application.routes.draw do
       resources :data_values do
         collection do
           get  :pre_process
-          post  :mock_pre_process_samples
-          get  :mock_pre_process_samples_file_upload
-          post :mock_store_samples_and_data
+          post  :pre_process_samples_file
+          get  :pre_process_samples_file_upload
+          post :store_samples_and_data_from_file
           get  :pre_process_samples
           get  :pre_process_sample_file_upload
           post :pre_process_sample_file
