@@ -1,5 +1,4 @@
 *.rbc
-vendor/opscode-cookbooks
 config/database.yml
 config/database.yml.postgres
 \#*\#
