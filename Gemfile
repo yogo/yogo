@@ -39,7 +39,6 @@ gem "uuidtools"                                 # This is for memberships
 
 gem 'i18n', "~> 0.4.0"
 
-
 gem 'exception_notification',      :require => 'exception_notifier'
 
 gem 'delayed_job',                 :git => 'git://github.com/robbielamb/delayed_job.git'
@@ -50,8 +49,6 @@ gem 'apotomo', "~> 1.1"
 platforms(:ruby_18, :jruby) { gem "fastercsv" }
 
 group(:development, :test) do
-  #gem "memprof"
-  #gem "ruby-prof"
   gem "dm-visualizer"
   #gem "rails-footnotes", :git => "https://github.com/irjudson/rails-footnotes.git"
   # For rake tasks to work
