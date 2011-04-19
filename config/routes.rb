@@ -49,6 +49,8 @@ Yogo::Application.routes.draw do
           get :create_project_site
           get :create_project_variable
           get :update_project_site
+          get :update_project_variable
+          get :update_voeis_variable
           get :get_project_sites
           get :get_voeis_sites
           get :get_voeis_sites
@@ -96,9 +98,9 @@ Yogo::Application.routes.draw do
       resources :data_values do
         collection do
           get  :pre_process
-          post  :mock_pre_process_samples
-          get  :mock_pre_process_samples_file_upload
-          post :mock_store_samples_and_data
+          post  :pre_process_samples_file
+          get  :pre_process_samples_file_upload
+          post :store_samples_and_data_from_file
           get  :pre_process_samples
           get  :pre_process_sample_file_upload
           post :pre_process_sample_file

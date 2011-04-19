@@ -18,6 +18,9 @@ require 'datamapper/property/yogo_file'
 require 'datamapper/property/yogo_image'
 require 'datamapper/property/raw'
 
+# Require Rql support for Datamapper
+require 'rql/evaluator/datamapper'
+
 # When saving models don't be terse
 DataMapper::Model.raise_on_save_failure = true
 

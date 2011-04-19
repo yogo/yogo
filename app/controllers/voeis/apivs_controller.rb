@@ -694,7 +694,7 @@ class Voeis::ApivsController < Voeis::BaseController
    # @api public
    def get_voeis_sites
      @site = ""
-     @site = Site.all()
+     @site = Voeis::Site.all()
      respond_to do |format|
        format.json do
          render :json => @site.to_json, :callback => params[:jsoncallback]
@@ -845,13 +845,75 @@ class Voeis::ApivsController < Voeis::BaseController
    # @api public
    def get_voeis_variables
      @variables = ""
-     @variables = Variable.all()
+     @variables = Voeis::Variable.all()
      respond_to do |format|
        format.json do
          render :json => @variables.as_json, :callback => params[:jsoncallback]
        end
        format.xml do
          render :xml => @variables.to_xml
+       end
+     end
+   end
+   
+   
+   # update_project_variable
+   # API for creating a new variable within in a project
+   # 
+   # @example http://voeis.msu.montana.edu/projects/e787bee8-e3ab-11df-b985-002500d43ea0/apivs/create_project_variable.json?variable_name=example&variable_code=example&speciation=unkown&sample_medium=surface water&state=MT 
+   #
+   # @param [Integer] id the ID of the project variable - this is required
+   # @param [String] variable_name the name of the variable - exists in variable_names_cv
+   # @param [String] variable_code the unique code for identifying this variable
+   # @param [String] speciation the speciation of the vairable - may be "unknown"
+   #  
+   # @author Sean Cleveland
+   #
+   # @api public
+   def update_project_variable
+     @variable = ""
+     if !params[:id].nil?
+       parent.managed_repository do
+         @variable = Voeis::Variable.get(params[:id])
+         Voeis::Variable.properties.each do |prop|
+           if prop.name.to_s != "id"
+             if !params[prop.name].nil?
+               @variable[prop.name.to_s] = params[prop.name.to_s]
+             end
+           end
+         end
+         @variable.save
+       end
+     end
+     respond_to do |format|
+       format.json do
+         render :json => @variable.to_json, :callback => params[:jsoncallback]
+       end
+       format.xml do
+         render :xml => @variable.to_xml
+       end
+     end
+   end
+   
+   def update_voeis_variable
+     @variable = ""
+     if !params[:id].nil?
+       @variable = Voeis::Variable.get(params[:id])
+       Voeis::Variable.properties.each do |prop|
+         if prop.name.to_s != "id"
+           if !params[prop.name].nil?
+             @variable[prop.name.to_s] = params[prop.name.to_s]
+           end
+         end
+       end
+       @variable.save
+     end
+     respond_to do |format|
+       format.json do
+         render :json => @variable.to_json, :callback => params[:jsoncallback]
+       end
+       format.xml do
+         render :xml => @variable.to_xml
        end
      end
    end
@@ -883,7 +945,7 @@ class Voeis::ApivsController < Voeis::BaseController
   #
   # @api public
   def import_voeis_variable_to_project    
-    @var = Variable.get(params[:voeis_variable_id].to_i)
+    @var = Voeis::Variable.get(params[:voeis_variable_id].to_i)
     @new_var
     parent.managed_repository do     
         begin      

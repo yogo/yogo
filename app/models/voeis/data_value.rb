@@ -12,7 +12,7 @@ class Voeis::DataValue
   
   property :replicate,                String,   :required => true,  :default => "original"
   #property :measurement_timestamp,    DateTime, :required => false
-
+  property :vertical_offset,          Float, :required=>false
   property :string_value, String, :required => true, :default => "Unknown"
 
   timestamps :at
