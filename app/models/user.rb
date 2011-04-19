@@ -131,7 +131,6 @@ class User
     end
   end
 
-
   ##
   # Password setter
   #
@@ -215,5 +214,4 @@ class User
     attribute_set(:api_key, ::SecureRandom.hex(32))
     save!
   end
-
 end
