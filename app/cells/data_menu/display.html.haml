@@ -1,0 +1,5 @@
+- if @queries.count > 0 
+  - @queries.each do |project|
+    = link_to(query.name, query_path(query.id), :dojoType => "yogo.ui.MenuLink")
+- else
+  None

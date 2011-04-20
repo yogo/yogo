@@ -41,7 +41,7 @@ Yogo::Application.routes.draw do
         end
       end
 
-      resources :variables 
+      resources :variables
       resources :units
       resources :apivs do
         collection do
@@ -65,12 +65,12 @@ Yogo::Application.routes.draw do
           get :get_project_sample_measurements
           get :get_data_stream_data
           get :get_project_site_data
-          get :get_project_site_sensor_data_last_update    
-          get :get_project_variable_data   
+          get :get_project_site_sensor_data_last_update
+          get :get_project_variable_data
           post :upload_logger_data
           post :create_project_sample
           post :create_project_sample_measurement
-          post :import_voeis_variable_to_project 
+          post :import_voeis_variable_to_project
           post :create_project_sensor_value
           post :create_project_sensor_type
           post :create_project_data_stream
@@ -138,6 +138,8 @@ Yogo::Application.routes.draw do
   end
 
   resources :roles
+  resources :visits
+  resources :campaigns
   resources :system_roles
   resources :variables
   resources :memberships

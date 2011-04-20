@@ -1,0 +1,42 @@
+- content_for(:javascripts) do
+  :javascript
+    dojo.require("dijit.layout.BorderContainer");
+    dojo.require("dijit.layout.ContentPane");
+    dojo.require("dijit.Editor");
+    dojo.require("dijit.form.DateTextBox");
+    dojo.require("dijit.form.TimeTextBox");
+    dojo.require("dijit.form.Button");
+    dojo.require("dojox.form.CheckedMultiSelect");
+    dojo.require("dijit.form.DropDownButton");
+    dojo.require("dijit.Menu");
+    dojo.require("dijit.MenuItem");
+    
+- content_for(:stylesheets) do
+  = stylesheet_link_tag("/javascripts/dojox/form/resources/CheckedMultiSelect.css")
+
+= form_for(:campaign, :url => new_campaign_path, :builder => YogoFormBuilder, :html => {:dojoType => "dijit.layout.BorderContainer", :gutters => 'false'} ) do |f|
+
+  .CampaignFormHeader{:dojoType => "dijit.layout.ContentPane", :region => "top"}
+    %h1 New Campaign 
+
+  .CampaignFormBody{:dojoType => "dijit.layout.ContentPane", :region => "center"}
+    .FormInternalLayout{:dojoType => "dijit.layout.BorderContainer"}
+      .FormInternalHeader{:dojoType => "dijit.layout.ContentPane", :region => "top"}
+        .Campaign{:style => "float:left;width:50%"}
+          = f.text_field(:id, :label => "Campaign", :disabled => true, :style => "width:80%")
+          = f.text_field(:date_begun, :label => "Start Date", :dojoType => "dijit.form.DateTextBox", :style => "width:80%")
+          = f.text_field(:date_ended, :label => "End Date", :dojoType => "dijit.form.DateTextBox", :style => "width:80%")
+        .description{:style => "float:left;width:50%"}
+          = f.text_area(:description, :label => "Notes", :style => "width:100%", :dojoType => "dijit.Editor", :height => "80px", :plugins => "['cut','copy','paste','|','bold','italic','underline','strikethrough','subscript','superscript','|', 'indent', 'outdent', 'justifyLeft', 'justifyCenter', 'justifyRight']")
+      .FormInternalHeader{:dojoType => "dijit.layout.ContentPane", :region => "center"}
+        .FormInsideLayout{:dojoType => "dijit.layout.BorderContainer", :gutters => 'false'}
+          .FormCol1Content{:dojoType => "dijit.layout.ContentPane", :region => "left", :style => "min-width:100px;width:10%"}
+            = f.collection_select(:projects, Project.all, :id, :name, {}, {:dojoType => "dojox.form.CheckedMultiSelect", :multiple => true, :style => "height:180px;width:100%"})
+          .FormCol2Content{:dojoType => "dijit.layout.ContentPane", :region => "center", :style => "min-width:150px;width:20%"}
+            = f.collection_select(:users, User.all, :id, :login, {}, {:dojoType => "dojox.form.CheckedMultiSelect", :multiple => true, :style => "height:180px;width:100%"})
+          .FormCol3Content{:dojoType => "dijit.layout.ContentPane", :region => "right", :style => "min-width:200px;width:70%"}
+            = f.collection_select(:visits, Voeis::Visit.all, :id, :login, {}, {:dojoType => "dojox.form.CheckedMultiSelect", :multiple => true, :style => "height:180px;width:100%"})
+
+  .CampaignFormFooter{:dojoType => "dijit.layout.ContentPane", :region => "bottom"}
+    = f.submit("Save Campaign", :label => "Save", :dojoType => "dijit.form.Button")
+    %button{:dojoType => "dijit.form.Button"} Cancel

@@ -2,23 +2,14 @@
 /*~~~~~~~~~~~ Overall Layout Elements ~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/*
-Link Brown: #703824
-Header Turq: #214A5D
-*/
-
 * {
-	margin:0;
-	padding:0;
-} 
+  margin:0;
+  padding:0;
+}
 
 html, body {
-	height: 100%;
+  height: 100%;
 }
-/*LKW's note: I took out these bits (from sticky footer) but need 
-to do cross-browser testing to make sure they're not needed.*/
-/*body > #container {height: auto; min-height: 100%;} 
-#main {padding-bottom: 100px;}*/  /* must be same height as the footer */
 
 a {
   text-decoration: none;
@@ -47,7 +38,7 @@ p {
 }
 
 h1,h2,h3,h4,h5{
-  color:#333;  
+  color:#333;
   font-weight: normal;
   margin: 0px 10px 10px 0px;
 }
@@ -211,9 +202,10 @@ img {
   width: 845px;
 }
 
-#footnotes_holder{
+/*#footnotes_holder{
   width: 900px;
 }
+*/
 .large-centered-content {
   width: 700px;
   margin: 20px auto;
@@ -284,7 +276,7 @@ img {
     margin:10px 0;
     border-bottom:5px #cccc99 solid;
   }
-  
+
   #nav-tools {
     margin-top:24px;
     padding:6px 0 0 0;
@@ -322,7 +314,7 @@ img {
     text-align:center;
     margin-top:20px;
   }
-  
+
   #sidebar-search input {
     margin:0px 12px 6px 0;
   }
@@ -342,29 +334,29 @@ img {
   top: 160px;
   left: 730px;
 }*/
-  
+
 .project-icon {
-  width:80px; 
+  width:80px;
   float:left;
 }
 
 .project-text {
-  float:left; 
+  float:left;
   width:500px;
 }
 
 #project-remove-link {
   margin-top:12px;
   border-top:1px dotted #888;
-	padding:8px 0 0 0;
+  padding:8px 0 0 0;
 }
 
 #project-show, #model-show {
-	padding:12px 0;
+  padding:12px 0;
 }
 
 #project-show-row td, #model-show-row td {
-	padding:3px 8px;
+  padding:3px 8px;
   border-bottom:1px dotted #888;
   vertical-align:bottom;
 }
@@ -430,7 +422,7 @@ img {
   }
 
   #data-index-table th, #data-show th {
-  	padding:8px;
+    padding:8px;
   }
 
   #data-index-table td, #data-show td {
@@ -442,7 +434,7 @@ img {
   .data-index-table-actions {
     text-align:center;
   }
-  
+
   th.data-index-table-actions {
     min-width: 60px;
   }
@@ -457,7 +449,7 @@ img {
   float:left;
   width:680px;
   padding:20px 10px;
-	/*padding:12px;*/
+  /*padding:12px;*/
 }
 
 #pagination-links strong {
@@ -470,7 +462,7 @@ img {
 }
 
 #upload {
-	margin:20px 0;
+  margin:20px 0;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -525,8 +517,8 @@ form .box label {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~ Tutorial~~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-.wrapper { 
-  border: 1px solid #CCC; 
+.wrapper {
+  border: 1px solid #CCC;
 }
 .ui-tabs, .ui-widget {
   padding: 0px;
@@ -557,7 +549,7 @@ form .box label {
 }
 
 .button-link {
-  border: 1px solid #666;  
+  border: 1px solid #666;
   padding: 5px;
   background-color: #F2F2F2;
   color: #703824;
@@ -578,7 +570,7 @@ form .box label {
   border: 1px solid #ccc;
   float: left;
 }
- 
+
 .textdropdown-btn {
   width: 20px;
   float: right;
@@ -595,14 +587,14 @@ ul.textdropdown {
   list-style: none;
   margin: 0px;
 }
- 
+
 ul.textdropdown li {
   padding: 2px;
   display: block;
   list-style: none;
   margin: 0px;
 }
- 
+
 ul.textdropdown li:hover {
   background-color: #efefef;
   cursor: pointer;

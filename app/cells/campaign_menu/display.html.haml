@@ -1,0 +1,5 @@
+- if @campaigns.count > 0 
+  - @campaigns.each do |project|
+    = link_to(campaign.id, campaign_path(campaign.id), :dojoType => "yogo.ui.MenuLink")
+- else
+  None

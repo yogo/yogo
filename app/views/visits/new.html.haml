@@ -1,0 +1,43 @@
+= content_for(:javascripts) do
+  :javascript
+    dojo.require("dijit.layout.BorderContainer");
+    dojo.require("dijit.layout.ContentPane");
+    dojo.require("dojox.layout.TableContainer");
+    dojo.require("dijit.form.Textarea");
+    dojo.require("dijit.form.DateTextBox");
+    dojo.require("dijit.form.TimeTextBox");
+    dojo.require("dijit.form.MultiSelect");
+    dojo.require("dijit.form.FilteringSelect");
+
+= form_for(:visit, :url => new_visit_path, :builder => YogoFormBuilder, :html => {:dojoType => "dijit.layout.BorderContainer", :gutters => 'false'} ) do |f|
+
+  .VisitFormHeader{:dojoType => "dijit.layout.ContentPane", :region => "top"}
+    %h1 Visit Manager
+    = f.text_field(:campaign, :label => "Campaign", :dojoType => "dijit.form.FilteringSelect")
+
+  .VisitFormBody{:dojoType => "dijit.layout.ContentPane", :region => "center"}
+    .FormInternalLayout{:dojoType => "dijit.layout.BorderContainer"}
+      .FormInternalHeader{:dojoType => "dijit.layout.ContentPane", :region => "top"}
+        = f.text_field(:id, :label => "Visit")
+        = f.text_field(:date, :label => "Date", :dojoType => "dijit.form.DateTextBox", :options =>{:style => "float:right"})
+        = f.text_field(:arrive, :label => "Arrive", :dojoType => "dijit.form.TimeTextBox")
+        = f.text_field(:depart, :label => "Depart", :dojoType => "dijit.form.TimeTextBox")
+        %button View Fieldbook...
+      .FormInternalHeader{:dojoType => "dijit.layout.ContentPane", :region => "center"}
+        .FormInsideLayout{:dojoType => "dijit.layout.BorderContainer", :gutters => 'false'}
+          .FormLeftContent{:dojoType => "dijit.layout.ContentPane", :region => "left"}
+            = f.collection_select(:users, User.all, :id, :login, :dojoType => "dijit.form.MultiSelect")
+            %button Add...
+            %button Remove...
+          .FormCenterContent{:dojoType => "dijit.layout.ContentPane", :region => "center"}
+            = f.collection_select(:projects, Project.all, :id, :name, :dojoType => "dijit.form.MultiSelect")
+            %button Add...
+            %button Remove...
+          .FormRightContent{:dojoType => "dijit.layout.ContentPane", :region => "right"}
+            = f.text_area(:description, :label => "Description", :cols => 45, :rows => 8)
+  
+  .VisitFormFooter{:dojoType => "dijit.layout.ContentPane", :region => "bottom"}
+    = f.submit("Save Visit", :label => "Save")
+    %button New Blank Visit
+    %button Duplicate Visit
+    %button Delete Current Visit

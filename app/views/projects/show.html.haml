@@ -4,7 +4,8 @@
     
 - content_for(:toolbar) do
   #projectButton{:dojoType => "dijit.form.DropDownButton", :iconClass => "project-icon-25"}
-    %span Project
+    %span 
+      = @project.name
     %div{:dojoType => "dijit.Menu"}                    
       -if !current_user.nil? && current_user.projects.include?(@project)
         = link_to("Add Site", new_project_site_path(@project), :dojoType => "yogo.ui.MenuLink")
