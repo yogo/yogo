@@ -162,10 +162,8 @@ class Voeis::ApivsController < Voeis::BaseController
    #   end
    #   
    # end
-
-
   # 
-  # curl -F datafile=@NFork_tail.csv -F data_template_id=4 -F api_key=e79b135dcfeb6699bbaa6c9ba9c1d0fc474d7adb755fa215446c398cae057adf http://voeis.msu.montana.edu/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80//apivs/upload_logger_data.json?
+  # curl -F datafile=@matt1item.csv -F data_template_id=19 -F start_line=1 -F  api_key=e79b135dcfeb6699bbaa6c9ba9c1d0fc474d7adb755fa215446c398cae057adf http://localhost:3000/projects/b6db01d0-e606-11df-863f-6e9ffb75bc80/apivs/upload_logger_data.json?
   # curl -F datafile=@YB_Hill.csv -F data_template_id=26 http://localhost:3000/projects/a459c38c-f288-11df-b176-6e9ffb75bc80/apivs/upload_logger_data.json?api_key=3b62ef7eda48955abc77a7647b4874e543edd7ffc2bb672a40215c8da51f6d09
   
   # 3b62ef7eda48955abc77a7647b4874e543edd7ffc2bb672a40215c8da51f6d09
@@ -186,6 +184,7 @@ class Voeis::ApivsController < Voeis::BaseController
   #
   # @param [File] :datafile csv file to store
   # @param [Integer] :data_template_id the id of the data stream used to parse a file
+  # @param [Integer] :start_line the line which your data begins (if this is not specified the data-templates starting line will be used)
   #
   # @return [String] :success or :error message
   # @return [Integer] :total_records_saved - the total number of records saved to Voeis
@@ -199,31 +198,46 @@ class Voeis::ApivsController < Voeis::BaseController
     parent.managed_repository do
         first_row = Array.new
         flash_error = Hash.new
+        @msg = "There was a problem parsing this file."
         name = Time.now.to_s + params[:datafile].original_filename 
         directory = "temp_data"
         @new_file = File.join(directory,name)
         File.open(@new_file, "wb"){ |f| f.write(params['datafile'].read)}
         begin 
             data_stream_template = Voeis::DataStream.get(params[:data_template_id].to_i)
-            start_line = data_stream_template.start_line
+            if params[:start_line].nil?
+              start_line = data_stream_template.start_line
+            else
+              start_line = params[:start_line].to_i
+            end
+            lines =0
+            File.open(@new_file, 'r') do |file|
+              file.each_line do |line|
+                lines +=1
+              end
+            end
+            if lines < start_line
+              @msg = @msg + " Your start_line: #{start_line} for file parsing is beyond the end of the file."
+            end
             csv = CSV.open(@new_file, "r")
-            (0..start_line).each do
+            (1..start_line).each do
               first_row = csv.readline
             end
             csv.close()
             path = File.dirname(@new_file)
           if first_row.count == data_stream_template.data_stream_columns.count
-            flash_error = flash_error.merge(parent.managed_repository{Voeis::SensorValue.parse_logger_csv(@new_file, data_stream_template.id, data_stream_template.sites.first.id)})
+            flash_error = flash_error.merge(parent.managed_repository{Voeis::SensorValue.parse_logger_csv(@new_file, data_stream_template.id, data_stream_template.sites.first.id, start_line)})
           else
             #the file does not match the data_templates number of columns
-            flash_error[:error] = "File does not match the data_templates number of columns."
+            flash_error[:error] = "File does not match the data_templates number of columns. Columns in First Row:" + first_row.count.to_s +  " Voeis expected:" + data_stream_template.data_stream_columns.count.to_s + " rows."
             logger.info {"File does not match the data_templates number of columns."}
           end
         rescue   Exception => e
             logger.info {e.to_s}
+            logger.info {"YEAH"}
           #problem parsing file
-          flash_error[:error] = "There was a problem parsing this file."
-          logger.info {"There was a problem parsing this file."}
+          flash_error[:error] = @msg
+          logger.info {@msg}
         end
       #parent.publish_his
       respond_to do |format|

@@ -52,8 +52,9 @@ class Voeis::SensorValue
   # @author Yogo Team
   #
   # @api publicsenosr
-  def self.parse_logger_csv(csv_file, data_stream_template_id, site_id)
+  def self.parse_logger_csv(csv_file, data_stream_template_id, site_id, start_line=nil)
     #Determine how the time is stored
+
     if !Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Timestamp").nil?
       data_timestamp_col = Voeis::DataStream.get(data_stream_template_id).data_stream_columns.first(:name => "Timestamp").column_number
       date_col=""
@@ -69,7 +70,9 @@ class Voeis::SensorValue
       vertical_offset_col = ""
     end
     
-    start_line = Voeis::DataStream.get(data_stream_template_id).start_line
+    if start_line.nil?
+      start_line = Voeis::DataStream.get(data_stream_template_id).start_line
+    end
     site = Voeis::Site.get(site_id)
     data_col_array = Array.new
     sensor_cols = Array.new
