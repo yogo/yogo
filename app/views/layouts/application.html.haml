@@ -100,17 +100,48 @@
           %span{:style => "font-weight:bold"}
             DataHub
           %div{:dojoType => "dijit.Menu"}
-            = link_to("Browse Projects", projects_path, :dojoType => "yogo.ui.MenuLink")
-            = link_to("Create Project...", new_project_path, :dojoType => "yogo.ui.MenuLink")
             = link_to("About", page_url(:about), :dojoType => "yogo.ui.MenuLink")
             = link_to("Help", page_url(:help), :dojoType => "yogo.ui.MenuLink")      
-            - if logged_in?
+
+        #projectsButton{:dojoType => "dijit.form.DropDownButton", :iconClass => "project-icon-25"}
+          %span{:style => "font-weight:bold"}
+            Projects
+          %div{:dojoType => "dijit.Menu"}
+            = link_to("Browse", projects_path, :dojoType => "yogo.ui.MenuLink")
+            -if !current_user.nil?
+              = link_to("New...", new_project_path, :dojoType => "yogo.ui.MenuLink")
               %div{:dojoType=>"dijit.MenuSeparator"}
               %div{:dojoType=>"dijit.PopupMenuItem"}
                 %span My Projects
-                %div{:dojoType=>"dijit.Menu", :id=>"submenu1"}
-                  =render_cell(:project_menu, :display, :current_user => current_user)
-            
+                %div{:dojoType=>"dijit.Menu", :id=>"projectSubMenu"}
+                  = render_cell(:project_menu, :display, :current_user => current_user)
+                              
+        #campaignButton{:dojoType => "dijit.form.DropDownButton"}
+          %span{:style => "font-weight:bold"}
+            Campaigns
+          %div{:dojoType => "dijit.Menu"}
+            = link_to("Browse", campaigns_path, :dojoType => "yogo.ui.MenuLink")
+            -if !current_user.nil?
+              = link_to("New...", new_campaign_path, :dojoType => "yogo.ui.MenuLink")
+              %div{:dojoType=>"dijit.MenuSeparator"}
+              %div{:dojoType=>"dijit.PopupMenuItem"}
+                %span My Campaigns
+                %div{:dojoType=>"dijit.Menu", :id=>"campaignSubMenu"}
+                  = render_cell(:campaign_menu, :display, :current_user => current_user)
+
+        #dataButton{:dojoType => "dijit.form.DropDownButton"}
+          %span{:style => "font-weight:bold"}
+            Data
+          %div{:dojoType => "dijit.Menu"}
+            = link_to("Browse", campaigns_path, :dojoType => "yogo.ui.MenuLink")
+            -if !current_user.nil?
+              = link_to("Search", campaigns_path, :dojoType => "yogo.ui.MenuLink")
+              %div{:dojoType=>"dijit.MenuSeparator"}
+              %div{:dojoType=>"dijit.PopupMenuItem"}
+                %span My Saved Searches
+                %div{:dojoType=>"dijit.Menu", :id=>"dataSubMenu"}
+                  = render_cell(:data_menu, :display, :current_user => current_user)
+
         #loginButton{:dojoType => "dijit.form.DropDownButton", :style => "float:right", :iconClass => "user-icon-25"}
           - if logged_in?
             %span
@@ -135,8 +166,6 @@
         = content_for?(:content) ? yield(:content) : yield
 
       #bottom.claro{:dojoType => "dijit.layout.ContentPane", :region => "bottom", :gutters => "false", :style => "padding:0"}
-        -# footnotes_holder
-
         #footer
           #yogo-brand
             = link_to(image_tag("partners/uky.nobox.png", :alt => "University of Kentucky"), 'http://www.uky.edu') 
