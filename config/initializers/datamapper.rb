@@ -13,7 +13,6 @@ require 'dm-rails/rest-storage.rb'
 # Require custom extensions to datamapper.
 # require 'datamapper/model'
 require 'datamapper/search'
-require 'datamapper/dm-userstamp'
 require 'datamapper/property/yogo_file'
 require 'datamapper/property/yogo_image'
 require 'datamapper/property/raw'

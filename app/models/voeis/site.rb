@@ -27,6 +27,7 @@
 class Voeis::Site
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,                  Serial
   property :code,                String,  :required => true
@@ -48,13 +49,9 @@ class Voeis::Site
 
   property :his_id,              Integer, :required => false, :index => true
 
-  timestamps :at
-
-  is_versioned :on => :updated_at
+  yogo_versioned
 
   validates_uniqueness_of :code
-
-  # has n, :projects, :through => Resource
 
   has n, :data_streams,  :model => "Voeis::DataStream",  :through => Resource
   has n, :sensor_types,  :model => "Voeis::SensorType",  :through => Resource
