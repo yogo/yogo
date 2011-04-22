@@ -1024,6 +1024,7 @@ class Voeis::DataValuesController < Voeis::BaseController
     
            @variable = Voeis::Variable.new
            @units = Voeis::Unit.all
+           @time_units = Voeis::Unit.all(:units_type.like=>'%Time%')
            @variable_names = Voeis::VariableNameCV.all
            @sample_mediums= Voeis::SampleMediumCV.all
            @sample_types = Voeis::SampleTypeCV.all

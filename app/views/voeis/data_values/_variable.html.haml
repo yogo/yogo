@@ -92,18 +92,22 @@
     %label Detection Limit: 
     = f.text_field :detection_limit, :class=>"detection_limit"
     =clear_break
-    
-    Optional:
+    =clear_break
+    %b Time Related Meta-Data:
     #optional
-      %label Is Regular: 
-      = f.text_field :is_regular, :disabled=>"disabeled"
+      %label This Is Measurement Regularly: 
+      = f.select :is_regular, options_for_select({"true"=>"true", "false"=>"false"})
       =clear_break
-      %label Time Support: 
-      = f.text_field :time_support, :value => 1.0, :disabled=>"disabeled"
+      %label Time Support:(0 indicates instantaneous time measurement) 
+      = f.text_field :time_support, :value => 0, :size=>5
       =clear_break
-      %label Time Units ID:
-      = f.text_field :time_units_id, :disabled=>"disabeled"
+      %label Time Units:
+      -time_unit_options = Array.new
+      - @time_units.all(:order => [:units_name]).each do |unit|
+        -time_unit_options << [unit.units_name, unit.id.to_s]
+      = f.select :time_units_id, options_for_select(time_unit_options, 103)
       =clear_break
+    =clear_break
     %button{:id=> 'new_variable_button',:dojoType=>"dijit.form.Button", :title=>'Create', :onClick=>"createVariable();"}
       Create Variable
 
