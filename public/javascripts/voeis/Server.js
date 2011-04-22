@@ -38,6 +38,12 @@ dojo.declare("voeis.Server", null, {
     },
     projectSitesDataStore: function(projectId) {
         return new dojo.data.ObjectStore({objectStore:this.projectSites(projectId)});
+    },
+    
+    globalVariablesDataStore: function(){
+        var url = location.href;
+        var baseURL = url.substring(0, url.indexOf('/', 14));
+        return new dojo.data.ObjectStore({objectStore: new dojo.store.JsonRest({target:baseURL + '/variables'})});
     }
 
 });

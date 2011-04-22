@@ -1,6 +1,8 @@
+require 'responders/rql'
+
 class VariablesController < InheritedResources::Base
   rescue_from ActionView::MissingTemplate, :with => :invalid_page
-
+  responders :rql
   defaults  :route_collection_name => 'variables',
             :route_instance_name => 'variable',
             :collection_name => 'variables',
