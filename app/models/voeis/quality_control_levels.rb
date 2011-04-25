@@ -1,6 +1,7 @@
 class Voeis::QualityControlLevel
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,                         Serial
   property :quality_control_level_code, String, :required => true, :format => /[^\t|\n|\r]/
