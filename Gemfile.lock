@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: git://github.com/rheimbuch/rql-ruby.git
-  revision: c9ae8cc3ad2c6ffaeb2ec2357edba57f0865da08
+  revision: 77e659b6df438bf9fae45401e36aa8c647cb7b49
   branch: topic/voeis
   specs:
     rql (0.0.1)
@@ -106,12 +106,15 @@ GEM
     cells (3.5.6)
       actionpack (~> 3.0.0)
       railties (~> 3.0.0)
+    chunky_png (1.1.1)
     columnize (0.3.2)
-    compass (0.10.6)
-      haml (>= 3.0.4)
+    compass (0.11.1)
+      chunky_png (~> 1.1)
+      fssm (>= 0.2.7)
+      sass (~> 3.1)
     configatron (2.7.2)
       yamler (>= 0.1.0)
-    daemons (1.1.2)
+    daemons (1.1.3)
     data_mapper (1.1.0)
       dm-aggregates (= 1.1.0)
       dm-constraints (= 1.1.0)
@@ -188,8 +191,9 @@ GEM
     execjs (0.1.1)
     facets (2.9.1)
     fastercsv (1.5.4)
+    fssm (0.2.7)
     git (1.2.5)
-    haml (3.0.25)
+    haml (3.1.0)
     has_scope (0.5.0)
     highline (1.6.1)
     hoe (2.9.4)
@@ -207,7 +211,7 @@ GEM
     linecache (0.43)
     linecache19 (0.5.12)
       ruby_core_source (>= 0.1.4)
-    mail (2.2.16)
+    mail (2.2.17)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -278,6 +282,7 @@ GEM
     ruby-graphviz (0.9.21)
     ruby_core_source (0.1.5)
       archive-tar-minitar (>= 0.5.2)
+    sass (3.1.0)
     sinatra (1.2.3)
       rack (~> 1.1)
       tilt (< 2.0, >= 1.2.2)
