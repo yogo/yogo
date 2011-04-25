@@ -23,6 +23,6 @@ class His::QualityControlLevel
   property :quality_control_level_code, String, :required => true, :format => /[^\t|\n|\r]/
   property :definition,                 String, :required => true, :format => /[^\t|\n|\r]/
   property :explanation,                String, :required => true
-
+  
   has n,   :data_values,                :model => "His::DataValue"
 end
