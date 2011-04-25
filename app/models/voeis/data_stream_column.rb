@@ -15,6 +15,7 @@
 class Voeis::DataStreamColumn
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,            Serial
   property :name,          String,  :required => true, :length => 512
@@ -23,10 +24,8 @@ class Voeis::DataStreamColumn
   property :original_var,  String,  :required => true
   property :column_number, Integer, :required => true
 
-  timestamps :at
+  yogo_versioned
 
-  is_versioned :on => :updated_at
-  
   has n, :sensor_types, :model => 'Voeis::SensorType', :through => Resource
   has n, :variables,    :model => 'Voeis::Variable', :through => Resource
   has n, :units,        :model => 'Voeis::Unit', :through=> Resource

@@ -123,6 +123,9 @@ begin
   ['brian.mcglynn', 'lucy.marshall', 'geoff.poole', 'ivan.judson', 'sean.cleveland', 'yogo'].each{|login| tcef.memberships.create(:user => User.find_by_login(login), :role => pi)}
   puts 'done.'
 
+  # Adding this so that initial versions of models have a user associated with them.
+  User.current = User.first(:login => "yogo")
+
   print 'Creating Sites...'
   big_sky.prepare_models
   big_sky.managed_repository do
@@ -195,15 +198,15 @@ begin
   print 'Seeding Variables from HIS...'
   Voeis::Variable.load_from_his
   puts 'done.'
-  
+
   print 'Seeding SampleMediumCV from HIS...'
   Voeis::SampleMediumCV.load_from_his
   puts 'done.'
-  
+
   print 'Seeding ValueTypeCV from HIS...'
   Voeis::ValueTypeCV.load_from_his
   puts 'done.'
-  
+
   print 'Seeding SpeciationCV from HIS...'
   Voeis::SpeciationCV.load_from_his
   puts 'done.'
@@ -215,15 +218,15 @@ begin
   print 'Seeding GeneralCategoryCV from HIS...'
   Voeis::GeneralCategoryCV.load_from_his
   puts 'done.'
-  
+
   print 'Seeding SampleTypeCV from HIS...'
   Voeis::SampleTypeCV.load_from_his
   puts 'done.'
-  
+
   print 'Seeding Units from HIS...'
   Voeis::Unit.load_from_his
   puts 'done.'
-  
+
   print 'Seeding LabMethods from HIS...'
   Voeis::LabMethod.load_from_his
   puts 'done.'
@@ -231,15 +234,15 @@ begin
   print 'Seeding Methods from HIS...'
   Voeis::FieldMethod.load_from_his
   puts 'done.'
-  
+
   print "Seeding Sample Materials"
   Voeis::SampleMaterial.create(:material => "Water")
   Voeis::SampleMaterial.create(:material => "Rock")
   Voeis::SampleMaterial.create(:material => "Insect")
   puts 'done.'
-  
+
   print 'Seeding VariableNameCV from HIS...'
   Voeis::VariableNameCV.load_from_his
   puts 'done.'
-   
+
 end

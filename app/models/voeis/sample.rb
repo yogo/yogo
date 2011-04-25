@@ -21,6 +21,7 @@
 class Voeis::Sample
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,               Serial
   property :sample_type,      String,   :required => true, :default => 'Unknown'
@@ -29,12 +30,9 @@ class Voeis::Sample
   property :lab_sample_code,  String,   :required => true,                        :format => /[^\t|\n|\r]/
   property :lab_method_id,    Integer,  :required => true, :default => 0
 
-  timestamps :at
-  
-  is_versioned :on => :updated_at
+  yogo_versioned
   
   has n, :data_values,      :model => "Voeis::DataValue",      :through => Resource
-#  has n, :sample_type_cv,   :model => "Voeis::SampleTypeCV",   :through => Resource
   has n, :lab_methods,      :model => "Voeis::LabMethod",      :through => Resource
   has n, :sample_materials, :model => "Voeis::SampleMaterial", :through => Resource
   has n, :sites,            :model => "Voeis::Site",           :through => Resource

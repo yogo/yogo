@@ -4,6 +4,7 @@
 class Voeis::SensorValue
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,              Serial
   property :value,           Float,    :required => true
@@ -14,9 +15,7 @@ class Voeis::SensorValue
   property :published,       Boolean,  :required => false
   property :sensor_id,       Integer,  :required => true, :default => -1, :index => true
   
-  timestamps :at
-
-  is_versioned :on => :updated_at
+  yogo_versioned
 
   has n, :site,         :model => "Voeis::Site",       :through => Resource
 

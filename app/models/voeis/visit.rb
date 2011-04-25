@@ -1,6 +1,7 @@
 class Voeis::Visit
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,                  Serial
   property :date,                DateTime
@@ -12,6 +13,5 @@ class Voeis::Visit
   has n, :projects, :through => Resource
   has 1, :campaign, :through => Resource
 
-  timestamps :at
-  is_versioned :on => :updated_at
+  yogo_versioned
 end

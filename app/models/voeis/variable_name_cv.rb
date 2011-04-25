@@ -5,14 +5,13 @@
 #
 class Voeis::VariableNameCV
   include DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,         Serial
   property :term,       String, :required => true, :index => true, :format => /[^\t|\n|\r]/
   property :definition, Text
   
-  timestamps :at
-
-  is_versioned :on => :updated_at
+  yogo_versioned
   
   has n, :variables, :model => "Voeis::Variable", :through => Resource
   

@@ -18,18 +18,15 @@
 #
 class Voeis::FieldMethod
   include DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,                 Serial
   property :method_description, Text,   :required => true
   property :method_link,        Text,   :required => false
   
-  timestamps :at
+  yogo_versioned
 
-  is_versioned :on => :updated_at
-
-  # repository(:default) do
-    property :his_id, Integer
-  # end
+  property :his_id, Integer
   
   def self.load_from_his
     his_field_methods = His::FieldMethod.all

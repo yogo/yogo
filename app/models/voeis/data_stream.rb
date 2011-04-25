@@ -14,6 +14,7 @@
 class Voeis::DataStream
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,          Serial
   property :name,        String,  :required => true, :unique => true, :length => 512
@@ -22,10 +23,7 @@ class Voeis::DataStream
   property :start_line,  Integer, :required => true, :default => 0
   property :type,        String,  :required => true, :default => "Sensor"
 
-  timestamps :at
-  is_versioned :on => :updated_at
-  
-  #property :project_id, Integer, :required =>true, :default => 1
+  yogo_versioned
 
   validates_uniqueness_of   :name
 

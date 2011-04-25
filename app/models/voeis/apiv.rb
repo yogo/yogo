@@ -1,11 +1,9 @@
 class Voeis::Apiv
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id, Serial
 
-  timestamps :at
-
-  is_versioned :on => :updated_at
-  
+  yogo_versioned
 end
