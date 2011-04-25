@@ -16,11 +16,17 @@ module Odhelper
         puts project.name
         #DataMapper.auto_upgrade!
         Voeis::DataValue.auto_upgrade!
+        Voeis::DataValueSource.auto_upgrade!
+        #Voeis::Variable.auto_upgrade!
+        Voeis::Source.auto_upgrade!
+        Voeis::QualityControlLevel.auto_upgrade!
         # Voeis::SensorTypeSensorValue.auto_upgrade!
-        # Voeis::SensorValue.auto_upgrade!
+        Voeis::SensorValue.auto_upgrade!
+        Voeis::SensorValueSource.auto_upgrade!
         # Voeis::SensorType.auto_upgrade!
         #Voeis::DataTypeCV.auto_upgrade!
-        # Voeis::Sample.auto_upgrade!
+        Voeis::Sample.auto_upgrade!
+        Voeis::SampleSource.auto_upgrade!
         # Voeis::DataValue.auto_upgrade!
         #Voeis::Variable.auto_upgrade!
         # Voeis::DataStream.auto_upgrade!
