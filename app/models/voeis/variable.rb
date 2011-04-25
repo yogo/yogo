@@ -42,6 +42,7 @@
 class Voeis::Variable
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,                Serial
   property :variable_code,     String,  :required => true, :length => 512
@@ -61,13 +62,9 @@ class Voeis::Variable
   property :detection_limit,   Float,   :required => false
 
   
-  # repository(:default){
-    property :his_id,            Integer, :required => false, :index => true
-  # }
-  
-  timestamps :at
-  
-  is_versioned :on => :updated_at
+  property :his_id,            Integer, :required => false, :index => true
+
+  yogo_versioned
 
   has n, :data_stream_columns, :model => "Voeis::DataStreamColumn", :through => Resource
   has n, :sensor_types,        :model => "Voeis::SensorType",       :through => Resource

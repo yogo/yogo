@@ -5,17 +5,16 @@
 #
 class Voeis::DataTypeCV
   include DataMapper::Resource
-  
+  include Yogo::Versioned::DataMapper::Resource
+
   property :id,         Serial
   property :term,       String, :required => true, :key => true, :format => /[^\t|\n|\r]/
   property :definition, Text
 
-  timestamps :at
-  
-  is_versioned :on => :updated_at
-  
+  yogo_versioned
+
   has n,   :variables, :model => "Voeis::Variable", :through => Resource
-  
+
   def self.load_from_his
     his_data_types = His::DataTypeCV.all
 
@@ -23,7 +22,7 @@ class Voeis::DataTypeCV
         self.first_or_create(
                     :term => his_dt.term,
                     :definition=> his_dt.definition)
-      
+
     end
   end
 

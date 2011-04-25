@@ -6,17 +6,15 @@
 #
 class Voeis::ValueTypeCV
   include DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,         Serial
   property :term,       String, :required => true, :index => true, :format => /[^\t|\n|\r]/
   property :definition, Text
   
-  timestamps :at
+  yogo_versioned
 
-  is_versioned :on => :updated_at
-  
-  has n, :variables, :model => "Voeis::Variable", :through => Resource
-  
+  has n, :variables, :model => "Voeis::Variable", :through => Resource  
   
   def self.load_from_his
     his_value_types = His::ValueTypeCV.all

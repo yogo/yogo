@@ -9,19 +9,16 @@
 class Voeis::Unit
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,         Serial
   property :units_name, String, :required => true, :length => 512
   property :units_type, String, :required => true, :length => 512
   property :units_abbreviation, String, :required => true
 
-  # repository(:default){
-    property :his_id,            Integer, :required => false, :index => true
-  # }
+  property :his_id,            Integer, :required => false, :index => true
 
-  timestamps :at
-  
-  is_versioned :on => :updated_at  
+  yogo_versioned
 
   has n, :data_stream_columns,  :model => "Voeis::DataStreamColumn", :through =>Resource
   has n, :variables,            :model => "Voeis::Variable",         :through => Resource

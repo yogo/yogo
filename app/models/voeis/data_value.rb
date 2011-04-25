@@ -1,6 +1,7 @@
 class Voeis::DataValue
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
 
   property :id,                       Serial
   property :data_value,               Float,    :required => true,  :default => 0
@@ -13,20 +14,7 @@ class Voeis::DataValue
   property :vertical_offset,          Float, :required=>false
   property :string_value, String, :required => true, :default => "Unknown"
 
-  timestamps :at
-  is_versioned :on => :updated_at
-  
-  # property :site_id,                  Integer,  :required => true,  :default => 1
-  # property :variable_id,              Integer,  :required => true,  :default => 1
-  # property :offset_value,             Float
-  # property :offset_type_id,           Integer
-  # property :censor_code,              String,   :required => true,  :default => 'nc'
-  # property :qualifier_id,             Integer
-  # property :method_id,                Integer,  :required => true,  :default => 0
-  # property :source_id,                Integer,  :required => true,  :default => 1
-  # property :sample_id,                Integer
-  # property :derived_from_id,          Integer
-  # property :quality_control_level_id, Integer,  :required => true,  :default => -9999
+  yogo_versioned
   
   has n, :site,       :model => "Voeis::Site",     :through => Resource
   has 1,:source,       :model => "Voeis::Source",       :through => Resource

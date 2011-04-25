@@ -20,6 +20,7 @@
 class Voeis::LabMethod
   include DataMapper::Resource
   include Facet::DataMapper::Resource
+  include Yogo::Versioned::DataMapper::Resource
   
   property :id,                     Serial
   property :lab_name,               Text, :required => true, :default => 'Unknown', :format => /[^\t|\n|\r]/
@@ -28,16 +29,10 @@ class Voeis::LabMethod
   property :lab_method_description, Text, :required => true, :default => 'Unknown'
   property :lab_method_link,        Text
   
-  # repository(:default) do
-    property :his_id,               Integer
-  # end
+  property :his_id,               Integer
   
-  timestamps :at
+  yogo_versioned
   
-  is_versioned :on => :updated_at
-  
-  # has n, :samples, :model => "Voeis::Sample", :through => Resource
-
   def self.load_from_his
     puts "loading lab methods"
     his_lab_methods = His::LabMethod.all
