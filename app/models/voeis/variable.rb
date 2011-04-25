@@ -51,6 +51,7 @@ class Voeis::Variable
 
   property :sample_medium,     String,  :required => true, :default => 'Unknown', :length => 512
   property :value_type,        String,  :required => true, :default =>'Unknown', :length => 512
+  property :quality_control,   Integer, :required => true, :default => 0
   property :is_regular,        Boolean, :required => true, :default => false
   property :time_support,      Float,   :required => true, :default => 1.0
   property :time_units_id,     Integer, :required => true, :default => 103

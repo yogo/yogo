@@ -19,7 +19,7 @@ class Voeis::SensorValue
   is_versioned :on => :updated_at
 
   has n, :site,         :model => "Voeis::Site",       :through => Resource
-
+  has 1,:source,       :model => "Voeis::Source",       :through => Resource
   has n, :sensor_types, :model => "Voeis::SensorType", :through => Resource
   has n, :meta_tags,    :model => "Voeis::MetaTag",    :through => Resource
 

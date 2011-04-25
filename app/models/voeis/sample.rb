@@ -34,6 +34,7 @@ class Voeis::Sample
   is_versioned :on => :updated_at
   
   has n, :data_values,      :model => "Voeis::DataValue",      :through => Resource
+  has 1,:source,       :model => "Voeis::Source",       :through => Resource
 #  has n, :sample_type_cv,   :model => "Voeis::SampleTypeCV",   :through => Resource
   has n, :lab_methods,      :model => "Voeis::LabMethod",      :through => Resource
   has n, :sample_materials, :model => "Voeis::SampleMaterial", :through => Resource
