@@ -1,0 +1,56 @@
+- content_for(:javascripts) do
+  :javascript
+    function  createSource(){ 
+    $.post("#{root_url + "sources"}.json?source[organization]=" +$("#source_organization").val()+"&source[source_description]=" + $("#source_source_description").val()+"&source[source_link]="+$("#source_source_link").val()+"&source[contact_name]="+ $("#source_contact_name").val() + "&source[phone]="+ $("#source_phone").val() + "&source[email]="+$("#source_email").val()+"&source[address]="+$("#source_address").val()+"&source[city]="+$("#source_city").val()+"&source[state]="+$("#source_state").val()+"&source[zip_code]="+$("#source_zip_code").val()+"&source[citation]="+$("#source_citation").val(),
+    function(data) {
+      $('#source').append($("<option></option>").attr("value",data['id']).text($("#source_organization").val() + ':' + $("#source_contact_name").val())); 
+      $('#source').val(data['id']);
+      dijit.byId("new_source").hide();
+    }
+    );
+    }
+    dojo.require("dijit.Tooltip");
+    
+
+#new_source{:dojoType=>"dijit.Dialog", :title=>"New Source"}
+
+  = form_for (:source) do |f|
+    %label Organization:
+    =f.text_field :organization
+    =clear_break      
+    %label Source Description:
+    %br
+    =f.text_area :source_description, :cols=>50, :rows=>3
+    =clear_break
+    %label Source Link:
+    =f.text_field :source_link, :size=> 50
+    =clear_break
+    %label Contact Name:
+    =f.text_field :contact_name, :size => 50
+    =clear_break
+    %label Phone:
+    =f.text_field :phone, :size => 15
+    =clear_break
+    %label Email:
+    =f.text_field :email, :size=> 50
+    =clear_break
+    %label Address:
+    %br
+    =f.text_area :address, :cols=> 50, :rows => 2
+    =clear_break
+    %label City:
+    =f.text_field :city, :size => 50
+    =clear_break
+    %label State:
+    =f.text_field :state, :size=>2
+    =clear_break
+    %label Zipcode:
+    =f.text_field :zip_code, :size=>5
+    =clear_break
+    %label Citation:
+    =f.text_field :citation, :size => 50
+    =clear_break
+    %button{:id=> 'new_source_button',:dojoType=>"dijit.form.Button", :title=>'Create', :onClick=>"createSource();"}
+      Create Source
+
+

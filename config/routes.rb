@@ -95,6 +95,7 @@ Yogo::Application.routes.draw do
       end
       resources :sample_materials
       resources :lab_methods
+      resources :sources
       resources :data_values do
         collection do
           get  :pre_process
@@ -138,6 +139,8 @@ Yogo::Application.routes.draw do
   end
 
   resources :roles
+  resources :sources
+  resources :quality_control_levels
   resources :visits
   resources :campaigns
   resources :system_roles

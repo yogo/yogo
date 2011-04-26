@@ -1,0 +1,32 @@
+- content_for(:javascripts) do
+  :javascript
+    function  createQualityControlLevel(){ 
+    $.post("#{root_url + "quality_control_levels"}.json?quality_control_level[quality_control_level+code]=" +$("#quality_control_level_quality_control_level_code").val()+"&quality_control_level[quality_control_level_definition]=" + $("#quality_control_level_definition").val()+"&quality_control_level[explanation]="+$("#quality_control_level_explanation").val(),
+    function(data) {
+      $('#quality_control_level').append($("<option></option>").attr("value",data['id']).text($("#quality_control_level_quality_control_level_code").val() + ':' + $("#source_contact_name").val())); 
+      $('#quality_control_level').val(data['id']);
+      dijit.byId("new_quality_control_level").hide();
+    }
+    );
+    }
+    dojo.require("dijit.Tooltip");
+    
+
+#new_quality_control_level{:dojoType=>"dijit.Dialog", :title=>"New Quality Control Level"}
+
+  = form_for (:quality_control_level) do |f|
+    %label Quality Control Level Code:
+    =f.text_field :quality_control_level_code, :size => 30
+    =clear_break      
+    %label Definition:
+    %br
+    =f.text_area :definition, :cols=>50, :rows=>3
+    =clear_break
+    %label Explanation:
+    %br
+    =f.text_area :explanation, :cols=> 50, :rows => 2
+    =clear_break\
+    %button{:id=> 'new_quality_control_level_button',:dojoType=>"dijit.form.Button", :title=>'Create', :onClick=>"createQualityControlLevel();"}
+      Create Quality Control Level
+
+
