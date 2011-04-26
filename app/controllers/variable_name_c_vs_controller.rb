@@ -10,7 +10,7 @@ class VariableNameCVsController < ApplicationController
       format.html # new.html.erb
     end
   end
-  
+
   # POST /variables
   def create
     if params[:variable_name_c_v].nil?
@@ -28,7 +28,7 @@ class VariableNameCVsController < ApplicationController
     end
   end
   def show
-    
+
   end
 
   def invalid_page
