@@ -19,8 +19,8 @@ class Voeis::Source
   property :metadata_id,        Integer, :required => true, :default => 0
 
   timestamps :at
-
-  is_versioned :on => :updated_at
+  
+  yogo_versioned
   
   has n, :samples,             :model => "Voeis::Sample",           :through => Resource
   has n, :data_values,             :model => "Voeis::DataValue",           :through => Resource
