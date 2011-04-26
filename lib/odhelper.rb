@@ -14,22 +14,29 @@ module Odhelper
       project.managed_repository do
         # 
         puts project.name
-        #DataMapper.auto_upgrade!
-        Voeis::DataValue.auto_upgrade!
-        Voeis::DataValueSource.auto_upgrade!
-        #Voeis::Variable.auto_upgrade!
-        Voeis::Source.auto_upgrade!
-        Voeis::QualityControlLevel.auto_upgrade!
-        # Voeis::SensorTypeSensorValue.auto_upgrade!
-        Voeis::SensorValue.auto_upgrade!
-        Voeis::SensorValueSource.auto_upgrade!
-        # Voeis::SensorType.auto_upgrade!
-        #Voeis::DataTypeCV.auto_upgrade!
-        Voeis::Sample.auto_upgrade!
-        Voeis::SampleSource.auto_upgrade!
+        # DataMapper.auto_upgrade!
         # Voeis::DataValue.auto_upgrade!
-        #Voeis::Variable.auto_upgrade!
+        # Voeis::DataValueSource.auto_upgrade!
+        # Voeis::Variable.auto_upgrade!
+        # Voeis::Source.auto_upgrade!
+        # Voeis::QualityControlLevel.auto_upgrade!
+        # Voeis::SensorTypeSensorValue.auto_upgrade!
+        # Voeis::SensorValue.auto_upgrade!
+        # Voeis::SensorValueSource.auto_upgrade!
+        # Voeis::SensorType.auto_upgrade!
+        # Voeis::DataTypeCV.auto_upgrade!
+        # Voeis::Sample.auto_upgrade!
+        # Voeis::SampleSource.auto_upgrade!
+        # 
+        # # Voeis::DataValue.auto_upgrade!
+        # #Voeis::Variable.auto_upgrade!
         # Voeis::DataStream.auto_upgrade!
+        DataMapper::Model.descendants.each do |model|
+          begin
+            model.auto_upgrade!
+          rescue
+          end
+        end
         # Voeis::SensorType.all.each do |sensor|
         #   if !sensor.sensor_values.nil?
         #     sensor.sensor_values.all.update!(:sensor_id => sensor.id)

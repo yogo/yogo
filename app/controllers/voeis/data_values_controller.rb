@@ -1012,20 +1012,26 @@ class Voeis::DataValuesController < Voeis::BaseController
            parent.managed_repository{Voeis::Site.all}.each do |s|
              @sites = @sites.merge({s.name => s.id})
            end
-    
+           
+           @sources = {"None"=>"None", "Example:SampleName"=>-1}
+            Voeis::Source.all.each do |s|
+              @sources = @sources.merge({s.organization + ':' + s.contact_name => s.id})
+            end
+           
            @variables = Voeis::Variable.all
            @var_properties = Array.new
            Voeis::Variable.properties.each do |prop|
     
              @var_properties << prop.name
            end
-           @var_properties.delete_if {|x| x.to_s == "id" || x.to_s == "his_id" || x.to_s == "time_units_id" || x.to_s == "is_regular" || x.to_s == "time_support" || x.to_s == "variable_code" || x.to_s == "created_at" || x.to_s == "updated_at"}
+           @var_properties.delete_if {|x| x.to_s == "id" || x.to_s == "his_id" || x.to_s == "time_units_id" || x.to_s == "is_regular" || x.to_s == "time_support" || x.to_s == "variable_code" || x.to_s == "created_at" || x.to_s == "updated_at" || x.to_s == "updated_by" || x.to_s == "updated_comment"}
        
     
            @variable = Voeis::Variable.new
            @units = Voeis::Unit.all
            @time_units = Voeis::Unit.all(:units_type.like=>'%Time%')
            @variable_names = Voeis::VariableNameCV.all
+           @quality_control_levels = Voeis::QualityControlLevel.all
            @sample_mediums= Voeis::SampleMediumCV.all
            @sample_types = Voeis::SampleTypeCV.all
            @value_types= Voeis::ValueTypeCV.all
@@ -1089,6 +1095,37 @@ class Voeis::DataValuesController < Voeis::BaseController
      vertical_offset_col = ""
      site = parent.managed_repository{Voeis::Site.first(:id => params[:site])}
      redirect_path =Hash.new
+     @source = Voeis::Source.get(params[:source])
+     @project_source = nil
+     parent.managed_repository do
+       if Voeis::Source.first(:organization => @source.organization,      
+                              :source_description => @source.source_description,
+                              :source_link => @source.source_link,       
+                              :contact_name => @source.contact_name,      
+                              :phone => @source.phone,             
+                              :email =>@source.email,             
+                              :address => @source.address,           
+                              :city => @source.city,              
+                              :state => @source.state,             
+                              :zip_code => @source.zip_code,          
+                              :citation => @source.citation,          
+                              :metadata_id =>@source.metadata_id).nil?       
+          Voeis::Source.create(@source.attributes)
+        else
+          @project_source = Voeis::Source.first(:organization => @source.organization,      
+                                  :source_description => @source.source_description,
+                                  :source_link => @source.source_link,       
+                                  :contact_name => @source.contact_name,      
+                                  :phone => @source.phone,             
+                                  :email =>@source.email,             
+                                  :address => @source.address,           
+                                  :city => @source.city,              
+                                  :state => @source.state,             
+                                  :zip_code => @source.zip_code,          
+                                  :citation => @source.citation,          
+                                  :metadata_id =>@source.metadata_id)
+        end
+     end
      #put this back in later
        #if params[:no_save] != "no"
      
@@ -1130,7 +1167,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      #store all the Variables in the managed repository
      @col_vars = Array.new
      (0..range).each do |i|
-       if columns_array[i] != nil && i != timestamp_col && i != sample_id_col && i != vertical_offset_col
+       if columns_array[i] != nil && columns_array[i] != "ignore" && i != timestamp_col && i != sample_id_col && i != vertical_offset_col
          @var = Voeis::Variable.get(columns_array[i].to_i)
          parent.managed_repository do
            if !params["ignore"+i.to_s]            
@@ -1182,22 +1219,27 @@ class Voeis::DataValuesController < Voeis::BaseController
                                          :local_date_time => DateTime.civil(sample_datetime.year,sample_datetime.month,sample_datetime.day,sample_datetime.hour,sample_datetime.min, sample_datetime.sec,site.time_zone_offset.to_i/24.to_f))           
              @sample.valid?
              puts @sample.errors.inspect()
+             
              @sample.save
              @sample.sites << site
              @sample.save
              (0..range).each do |i|
-               if sample_id_col != i && timestamp_col != i && @csv_row[row][i] != ""&& !params["ignore"+i.to_s] && columns_array[i] != nil && vertical_offset_col != i
+               if columns_array[i] != "ignore" && sample_id_col != i && timestamp_col != i && @csv_row[row][i] != ""&& !params["ignore"+i.to_s] && columns_array[i] != nil && vertical_offset_col != i
+                  
                    new_data_val = Voeis::DataValue.new(:data_value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(@csv_row[row][i].to_s) ? @csv_row[row][i].to_f : -9999.0, 
                       :local_date_time => @sample.local_date_time,
                       :utc_offset => site.time_zone_offset.to_i,  
                       :date_time_utc => @sample.local_date_time.utc,  
                       :replicate => 0,
+                      :quality_control_level=>@col_vars[i].quality_control.to_i,
                       :string_value =>  @csv_row[row][i].blank? ? "Empty" : @csv_row[row][i],
-                      :vertical_offset =>  vertical_offset_col.nil? ? nil : @csv_row[row][vertical_offset_col]) 
+                      :vertical_offset =>  vertical_offset_col.empty? ? nil : @csv_row[row][vertical_offset_col].to_i) 
                  new_data_val.valid?
                  puts new_data_val.errors.inspect() 
                  new_data_val.save
                  new_data_val.variable << @col_vars[i]
+                 new_data_val.save
+                 new_data_val.source = @project_source
                  new_data_val.save
                  new_data_val.sample << @sample
                  new_data_val.save
