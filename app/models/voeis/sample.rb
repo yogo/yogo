@@ -33,6 +33,7 @@ class Voeis::Sample
   yogo_versioned
   
   has n, :data_values,      :model => "Voeis::DataValue",      :through => Resource
+  has 1,:source,       :model => "Voeis::Source",       :through => Resource
   has n, :lab_methods,      :model => "Voeis::LabMethod",      :through => Resource
   has n, :sample_materials, :model => "Voeis::SampleMaterial", :through => Resource
   has n, :sites,            :model => "Voeis::Site",           :through => Resource
