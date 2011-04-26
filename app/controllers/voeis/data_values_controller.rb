@@ -977,7 +977,7 @@ class Voeis::DataValuesController < Voeis::BaseController
        require 'csv_helper'
         
        @project = parent
-        
+       @current_user = current_user
        #save uploaded file if possible
        if !params[:datafile].nil? && datafile = params[:datafile]
          if ! ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel',
