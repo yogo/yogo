@@ -14,7 +14,7 @@ class Voeis::SensorValue
   property :vertical_offset, Float,    :required => true, :default => 0.0
   property :published,       Boolean,  :required => false
   property :sensor_id,       Integer,  :required => true, :default => -1, :index => true
-  
+  property :quality_control_level,    Integer, :required=>true, :default=>0
   yogo_versioned
 
   has n, :site,         :model => "Voeis::Site",       :through => Resource

@@ -4,7 +4,7 @@ class VariableNameCVsController < ApplicationController
 
   # GET /variables/new
   def new
-    @variable_name = Voesi::VariableNameCV.new
+    @variable_name = Voeis::VariableNameCV.new
 
     respond_to do |format|
       format.html # new.html.erb
