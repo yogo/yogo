@@ -1,8 +1,11 @@
 dojo.provide("voeis.Server");
+dojo.require("yogo.xhr.csrf");
 dojo.require("dojo.store.JsonRest");
 dojo.require("dojo.data.ObjectStore");
 dojo.require("voeis.store.Projects");
 dojo.require("voeis.store.Sites");
+
+yogo.xhr.csrf.load(); // ensure CSRF token is in all xhr requests
 
 dojo.declare("voeis.Server", null, {
     constructor: function(args){

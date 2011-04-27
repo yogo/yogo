@@ -1,7 +1,7 @@
 - content_for(:javascripts) do
   :javascript
     function  createVariable(){ 
-    $.post("#{root_url + "projects/#{@project.id}/variables"}.json?variable[variable_code]=" +$("#variable_variable_code").val()+"&variable[variable_name]=" + $("#variable_variable_name").val()+"&variable[speciation]="+$("#variable_speciation").val()+"&variable[variable_units_id]="+ $("#variable_variable_units_id").val() + "&variable[sample_medium]="+ $("#variable_sample_medium").val() + "&variable[value_type]="+$("#variable_value_type").val(0)+"&variable[is_regular]="+$("#variable_is_regular").val()+"&variable[time_support]="+$("#variable_time_support").val()+"&variable[time_units_id]="+$("#variable_time_units_id").val()+"&variable[data_type]="+$("#variable_data_type").val()+"&variable[general_category]="+$("#variable_general_category").val()+"&variable[no_data_value]="+$("#variable_no_data_value").val()+"&variable[detection_limit]="+$("#variable_detection_limit").val(),
+    $.post("#{root_url + "variables"}.json?variable[variable_code]=" +$("#variable_variable_code").val()+"&variable[variable_name]=" + $("#variable_variable_name").val()+"&variable[speciation]="+$("#variable_speciation").val()+"&variable[variable_units_id]="+ $("#variable_variable_units_id").val() + "&variable[sample_medium]="+ $("#variable_sample_medium").val() + "&variable[quality_control]="+$("#variable_quality_control").val()+"&variable[is_regular]="+$("#variable_is_regular").val()+"&variable[time_support]="+$("#variable_time_support").val()+"&variable[time_units_id]="+$("#variable_time_units_id").val()+"&variable[data_type]="+$("#variable_data_type").val()+"&variable[general_category]="+$("#variable_general_category").val()+"&variable[no_data_value]="+$("#variable_no_data_value").val()+"&variable[detection_limit]="+$("#variable_detection_limit").val(),
     function(data) {
     updated_var = data  
     update_text= data["variable_name"];
@@ -20,6 +20,7 @@
   = render(:partial => "value_type_cv")
   = render(:partial => "speciation_cv")
   = render(:partial => "data_type_cv")
+  = render(:partial => "quality_control_level")
   = render(:partial => "general_category_cv")
   = form_for (:variable) do |f|
 
@@ -60,15 +61,15 @@
     =clear_break
   
 
-    %label{:id => "val_type", :onclick=>"dijit.byId('new_value_type_1').show();", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}QA/QC Classification: 
+    %label{:id => "quality_control", :onclick=>"dijit.byId('new_quality_control_level').show();", :class => "icon icon-add", :onmouseover =>"this.style.cursor='hand'"}Quality Control Level: 
     %div{:dojoType=>"dijit.Tooltip", :connectId=> "val_type", :position=>"above"}
       This is the initial QA/QC classification that should be applied to this incoming data.<br>
       For example: <i>is this value derived from other measurements or is it a raw data measurement.</i>
 
-    -value_type_options = Array.new
-    - value_types.all(:order => [:term.asc]).each do |value_type|
-      -value_type_options <<[value_type.term]
-    = f.select('value_type',  options_for_select(value_type_options), :class => "value_type")
+    -quality_control_level_options = Array.new
+    -quality_control_levels.all(:order => [:quality_control_level_code.asc]).each do |qa|
+      -quality_control_level_options <<[qa.quality_control_level_code+":"+qa.definition, qa.quality_control_level_code]
+    = f.select('quality_control',  options_for_select(quality_control_level_options))
     =clear_break
   
     -data_type_options = Array.new

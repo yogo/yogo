@@ -13,6 +13,7 @@ class Voeis::DataValue
   property :replicate,                String,   :required => true,  :default => "original"
   property :vertical_offset,          Float, :required=>false
   property :string_value, String, :required => true, :default => "Unknown"
+  property :quality_control_level,    Integer, :required=>true, :default=>0
 
   yogo_versioned
   
