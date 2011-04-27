@@ -1,6 +1,9 @@
+require 'responders/rql'
+
 class Voeis::SitesController < Voeis::BaseController
   # Properly override defaults to ensure proper controller behavior
   # @see Voeis::BaseController
+  responders :rql
   defaults  :route_collection_name => 'sites',
             :route_instance_name => 'site',
             :collection_name => 'sites',

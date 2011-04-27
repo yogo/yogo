@@ -1008,11 +1008,20 @@ class Voeis::DataValuesController < Voeis::BaseController
     
              @vars=@vars.merge({v.variable_name => v.id})
            end
+           
+           
+           
+           @site_offset = Hash.new
            @sites = {"None"=>"None"}
            parent.managed_repository{Voeis::Site.all}.each do |s|
              @sites = @sites.merge({s.name => s.id})
+             @site_offset = @site_offset.merge({s.id => s.time_zone_offset})
+             if s.time_zone_offset.to_s == "unknown"
+                 s.fetch_time_zone_offset
+              end
            end
-           
+           @utc_offset_options=Hash.new
+           (-12..12).map{|k| @utc_offset_options = @utc_offset_options.merge({k => k})}           
            @sources = {"None"=>"None", "Example:SampleName"=>-1}
             Voeis::Source.all.each do |s|
               @sources = @sources.merge({s.organization + ':' + s.contact_name => s.id})
@@ -1196,11 +1205,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      csv_size = csv_temp_data.length
      csv_data = CSV.read(params[:datafile])
      
-
      
-     if site.time_zone_offset.to_s == "unkown"
-       site.fetch_time_zone
-     end
      i = params[:start_line].to_i
      csv_data[params[:start_line].to_i-1..-1].each do |row|
        @csv_row[i] = row

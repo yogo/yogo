@@ -538,7 +538,7 @@ class Voeis::ApivsController < Voeis::BaseController
    parent.managed_repository do
      @site= Voeis::Site.get(params[:site_id].to_i)
      if @site.nil?
-        @data_values[:error] = "There is no Site with ID:"+ params[:site_id]
+        @data_values[:error] = "There is no Site with ID:"+ params[:site_id].to_s
      else
        @site.sensor_types.each do |sensor|
          var = sensor.variables.first

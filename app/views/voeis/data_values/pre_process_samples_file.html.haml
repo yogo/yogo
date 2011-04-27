@@ -38,18 +38,33 @@ Form Progress:
       =select_tag("site", options_for_select(@sites, "None"), :onChange=>"updateSite()")
       =clear_break
       =clear_break
-      #selectedSite
-        Currenlty Selected Site:  
-        %span{:id => "selected_site", :class=>"var_spans"}None
-      =clear_break  
+      -#selectedSite
+      -#  Currenlty Selected Site:  
+      -#  %span{:id => "selected_site", :class=>"var_spans"}None
+      -#=clear_break  
       Currently Selected Sample Type:
       = select_tag('sample_type',  options_for_select(@sample_type_options, "Grab"))
       =clear_break
       Currently Selected Sample Medium:
       = select_tag('sample_medium',  options_for_select(@sample_medium_options, "Surface Water"))
       =clear_break
+      
+      %div{:dojoType=>"dijit.layout.TabContainer", :id => "timestamp_selection"}
+        %div{:dojoType=>"dijit.layout.ContentPane", :title => "Time Support"}
+          Indicate which format the timestamp is using:
+          %br
+          %input{:type =>"radio", :id=>"utc", :name=>"time_support", :dojoType=>"dijit.form.RadioButton", :value=>"UTC"}
+            UTC Date Time
+          %input{:type =>"radio", :id=>"local", :name=>"time_support", :dojoType=>"dijit.form.RadioButton", :value=>"Local", :checked=>true}
+            Local Date Time
+          %input{:id=>"DST", :name=>"DST", :dojoType=>"dijit.form.CheckBox", :value=>"DST"}
+            Daylight Savings Time
+          =clear_break
+          UTC Offset:
+          =select_tag("utc_offset", options_for_select(@utc_offset_options), :disabled=>true)
       %button{:dojoType=>"dijit.form.Button", :title=>"Next", :id=>"next0", :disabled=>"disabled", :onclick=>"sampleButtonClick();" }
         Next
+
     - @columns.each do |col|
       =hidden_field_tag "column"+col.to_s, :onChange=>"updateVarSpans(#{col.to_s})";
       %div{:id => "Column"+col.to_s, :dojoType=>"dijit.TitlePane", :title=>"Column"+col.to_s, :open => "false", :class => "column_panes", :toggleable=>"false"}
@@ -249,6 +264,7 @@ Form Progress:
   dojo.require("dojox.grid.enhanced.plugins.NestedSorting");
   dojo.require("dojox.grid.enhanced.plugins.Filter");
   dojo.require("dojox.grid.enhanced.plugins.IndirectSelection");
+  dojo.require("dijit.form.RadioButton");
   dojo.require("voeis.Server");
   
   variableDataStore = voeis.Server.DEFAULT.globalVariablesDataStore();
@@ -297,6 +313,15 @@ Form Progress:
   }
   $("#selected_site").text($("#site option[value ="+$("#site").val()+"]").text());
   $("#site_span").text($("#site option[value ="+$("#site").val()+"]").text());
+  $("#utc_offset").attr("disabled", false);
+  dojo.xhrGet({
+      url:"#{root_url}projects/#{@project.id}/sites.json?id="+$("#site").val(),
+      handleAs:"json",
+      load: function(data){
+          $("#utc_offset").val(data["time_zone_offset"]);
+      }
+  });
+  
   }
 
   function assignIgnore(column){
