@@ -5,6 +5,7 @@
     dojo.require("voeis.Server");
     dojo.require("dijit.layout.TabContainer");
     dojo.require("voeis.ui.SitePane");
+    dojo.require("voeis.ui.ProjectSitesGrid");
     
     projectsDataStore = voeis.Server.DEFAULT.projectsDataStore();
 
@@ -17,6 +18,11 @@
     %thead
       %tr
         %th{:field => "name", :width => "auto"} Project
+    %script{:type => "dojo/method", :event => "onRowDblClick", :args => "evt"}
+      :plain
+        var item = this.getItem(evt.rowIndex);
+        var id = item.id;
+        dojo.publish("voeis/project/browse", [id]);
     %script{:type => "dojo/method", :event => "onSelected", :args => "idx"}
       :plain
         console.log("selected:");
@@ -41,11 +47,34 @@
       tabs.selectChild(sitePane);
     };
 
-  dojo.subscribe("voeis/project/site/selected", function(projectId, siteId) {
-    console.log(arguments);
-    var tab_browser = dijit.byId('tab_browser');    
-    openSiteTab(tab_browser, projectId, siteId);
-  });
+    var openSitesGridTab = function(tabs, projectId) {
+      var sitesGrid = new dojox.grid.EnhancedGrid({
+        title: projectId,
+        closable: true,
+        store: voeis.Server.DEFAULT.projectSitesDataStore(projectId),
+        structure: [
+          {field: 'name', name: "Site", width: "auto"},
+          {field: 'state', name: "State", width: "auto"}
+        ]
+      });    
+      
+      tabs.addChild(sitesGrid);
+      tabs.selectChild(sitesGrid);
+    };
+
+    dojo.subscribe("voeis/project/site/selected", function(projectId, siteId) {
+      console.log(arguments);
+      var tab_browser = dijit.byId('right_tabs');    
+      openSiteTab(tab_browser, projectId, siteId);
+    });
+
+    dojo.subscribe("voeis/project/browse", function(projectId) {
+      var tabs = dijit.byId('tab_browser');
+      //openSitesGridTab(tabs, projectId);
+      var grid = voeis.ui.ProjectSitesGrid(projectId);
+      tabs.addChild(grid);
+      tabs.selectChild(grid);
+    });
   })();
   
 
