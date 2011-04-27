@@ -46,11 +46,11 @@ Yogo::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-  
+
   config.middleware.use ExceptionNotifier,
 
       :email_prefix => "Project: epscor-sensor\nTracker: feedback\n",
       :sender_address => %{"Voeis Management" <voeis.mgmt@gmail.com>},
-      :exception_recipients => %w{ irjudson@gmail.com sean.b.cleveland@gmail.com}
+      :exception_recipients => %w{ irjudson@gmail.com sean.b.cleveland@gmail.com rheimbuch@gmail.com}
 
 end
