@@ -53,9 +53,9 @@ Form Progress:
         %div{:dojoType=>"dijit.layout.ContentPane", :title => "Time Support"}
           Indicate which format the timestamp is using:
           %br
-          %input{:type =>"radio", :id=>"utc", :name=>"time_support", :dojoType=>"dijit.form.RadioButton", :value=>"UTC"}
+          %input{:type =>"radio", :id=>"utc", :name=>"time_support", :dojoType=>"dijit.form.RadioButton", :value=>"UTC", :onClick=>"utcUpdate();", :disabled=>true}
             UTC Date Time
-          %input{:type =>"radio", :id=>"local", :name=>"time_support", :dojoType=>"dijit.form.RadioButton", :value=>"Local", :checked=>true}
+          %input{:type =>"radio", :id=>"local", :name=>"time_support", :dojoType=>"dijit.form.RadioButton", :value=>"Local", :checked=>true, :onClick=>"localUpdate();", :disabled=>true}
             Local Date Time
           %input{:id=>"DST", :name=>"DST", :dojoType=>"dijit.form.CheckBox", :value=>"DST"}
             Daylight Savings Time
@@ -266,7 +266,7 @@ Form Progress:
   dojo.require("dojox.grid.enhanced.plugins.IndirectSelection");
   dojo.require("dijit.form.RadioButton");
   dojo.require("voeis.Server");
-  
+  var current_site_offset ="";
   variableDataStore = voeis.Server.DEFAULT.globalVariablesDataStore();
   var my_store = dojo.data.ItemFileReadStore({data: variable_json_store});
   dojo.addOnLoad( function(){
@@ -274,7 +274,15 @@ Form Progress:
   //dijit.byId("display_grid1")._refresh();
   });
 
-
+  function utcUpdate(){
+      $("#utc_offset").val(0);
+      $("#DST").attr("disabled", true);
+      dijit.byId("DST").set("checked",false)
+  }
+  function localUpdate(){
+      $("#utc_offset").val(parseInt(current_site_offset));
+      $("#DST").attr("disabled", false);
+  }
   function nextButton(column){
   dijit.byId("Column"+column).set('open',false);
   dijit.byId("Column"+column).set('toggleable',true);
@@ -318,10 +326,14 @@ Form Progress:
       url:"#{root_url}projects/#{@project.id}/sites.json?id="+$("#site").val(),
       handleAs:"json",
       load: function(data){
-          $("#utc_offset").val(data["time_zone_offset"]);
+          $("#utc_offset").val(parseInt(data[0]["time_zone_offset"]));
+          current_site_offset = data[0]["time_zone_offset"];
       }
   });
-  
+  dijit.byId("utc").set("disabled",false);
+  dijit.byId("DST").set("disabled",false);
+  dijit.byId("local").set("disabled",false);
+  dijit.byId("local").set("checked",true);
   }
 
   function assignIgnore(column){

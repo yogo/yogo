@@ -1016,9 +1016,9 @@ class Voeis::DataValuesController < Voeis::BaseController
            parent.managed_repository{Voeis::Site.all}.each do |s|
              @sites = @sites.merge({s.name => s.id})
              @site_offset = @site_offset.merge({s.id => s.time_zone_offset})
-             if s.time_zone_offset.to_s == "unknown"
-                 s.fetch_time_zone_offset
-              end
+             # if s.time_zone_offset.to_s == "unknown"
+             #     s.fetch_time_zone_offset
+             #  end
            end
            @utc_offset_options=Hash.new
            (-12..12).map{|k| @utc_offset_options = @utc_offset_options.merge({k => k})}           
