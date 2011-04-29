@@ -276,11 +276,13 @@ Form Progress:
 
   function utcUpdate(){
       $("#utc_offset").val(0);
+      $("#utc_offset").attr("disabled", true);
       $("#DST").attr("disabled", true);
       dijit.byId("DST").set("checked",false)
   }
   function localUpdate(){
       $("#utc_offset").val(parseInt(current_site_offset));
+      $("#utc_offset").attr("disabled", false);
       $("#DST").attr("disabled", false);
   }
   function nextButton(column){
