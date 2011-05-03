@@ -1,7 +1,10 @@
+require 'responders/rql'
+
 class Voeis::DataValuesController < Voeis::BaseController
   
   # Properly override defaults to ensure proper controller behavior
   # @see Voeis::BaseController
+  responders :rql
   defaults  :route_collection_name => 'data_values',
             :route_instance_name => 'data_value',
             :collection_name => 'data_values',

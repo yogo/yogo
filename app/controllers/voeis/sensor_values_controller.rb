@@ -1,7 +1,12 @@
+require 'responders/rql'
+
 class Voeis::SensorValuesController < Voeis::BaseController
   
   # Properly override defaults to ensure proper controller behavior
   # @see Voeis::BaseController
+  # 
+  responders :rql 
+  
   defaults  :route_collection_name => 'sensor_values',
             :route_instance_name => 'sensor_value',
             :collection_name => 'sensor_values',

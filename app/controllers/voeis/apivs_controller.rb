@@ -123,7 +123,10 @@ class Voeis::ApivsController < Voeis::BaseController
      @dts= Voeis::DataStream.get(params[:data_stream_id].to_i)
      if @dts.nil?
        @data_stream_values[:error] = "There is no Data Stream with ID:"+params[:data_stream_id]
+     elsif params[:start_datetime].nil? || params[:end_datetime].nil?
+       @data_stream_values[:error] = "The start and end times must not be null"
      else
+       @data_stream_values[:data_stream] = @dts.as_json
        @dts.data_stream_columns.sensor_types.each do |sensor|
          @var_hash = Hash.new
          @var_hash = sensor.variables.first.as_json
@@ -526,6 +529,7 @@ class Voeis::ApivsController < Voeis::BaseController
   #
   #
   # @param [Integer] :site_id the id of the site to pull data for
+  # 
   #
   #
   # @author Sean Cleveland
@@ -562,7 +566,55 @@ class Voeis::ApivsController < Voeis::BaseController
   end
   
   
-  
+  # pulls data from a within a project's site
+  #
+  # @example
+  # http://localhost:4000/projects/fbf20340-af15-11df-80e4-002500d43ea0/apivs/get_project_site_sensor_data_last_update.json?api_key=d7ef0f4fe901e5dfd136c23a4ddb33303da104ee1903929cf3c1d9bd271ed1a7&site_id=1&start_datetime=12/1/2010 12:23&end_datetime=12/1/2010 24:00:00
+  #
+  #
+  # @param [Integer] :site_id the id of the site to pull data for
+  # @param [Integer] :variable_id the id of the variable to get sensor values for
+  # @param [DateTime] :start_datetime pull data after this datetime
+  # @param [DateTime] :end_datetime pull date before this datetime
+  #
+  #
+  # @author Sean Cleveland
+  #
+  # @api public
+  def get_project_site_sensor_values_by_variable    
+   @site = ""
+   @data_values = Hash.new
+   @values = Array.new
+   parent.managed_repository do
+     @site= Voeis::Site.get(params[:site_id].to_i)
+     @variable = Voeis::Variable.get(params[:variable_id])
+     @data_values[:site] = @site.as_json
+     if @site.nil?
+        @data_values[:error] = "There is no Site with ID:"+ params[:site_id].to_s
+     elsif @variable.nil?
+        @data_values[:error] = "There is no Variable with ID:"+ params[:variable_id].to_s
+     elsif params[:start_datetime].nil? || params[:end_datetime].nil?
+        @data_values[:error] = "The start and end times must not be null"
+     else
+       sensors = @variable.sensor_types & @site.sensor_types
+       sensor=sensors.first
+       if sensor.nil?
+        @data_values[:error] = "There are no Sensor Value for this site and variable combination"
+       else
+         @data_values[:variable] = @variable
+         @data_values[:data] = Voeis::SensorValue.all(:sensor_id=>sensor.id,:timestamp.gte => params[:start_datetime].to_time, :timestamp.lte => params[:end_datetime].to_time, :order => [:timestamp.asc]).as_json 
+       end
+     end
+     respond_to do |format|
+       format.json do
+         render :json => @data_values.as_json, :callback => params[:jsoncallback]
+       end
+       format.xml do
+         render :xml => @data_values.to_xml
+       end
+     end
+    end
+  end
   
   
   # create_project_site
