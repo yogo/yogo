@@ -17,7 +17,7 @@ class Voeis::DataValue
 
   yogo_versioned
   
-  has n, :site,       :model => "Voeis::Site",     :through => Resource
+  has 1, :site,       :model => "Voeis::Site",     :through => Resource
   has 1,:source,       :model => "Voeis::Source",       :through => Resource
 
   has n, :sample,     :model => "Voeis::Sample",   :through => Resource

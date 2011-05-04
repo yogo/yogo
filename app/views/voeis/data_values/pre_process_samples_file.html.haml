@@ -38,18 +38,33 @@ Form Progress:
       =select_tag("site", options_for_select(@sites, "None"), :onChange=>"updateSite()")
       =clear_break
       =clear_break
-      #selectedSite
-        Currenlty Selected Site:  
-        %span{:id => "selected_site", :class=>"var_spans"}None
-      =clear_break  
+      -#selectedSite
+      -#  Currenlty Selected Site:  
+      -#  %span{:id => "selected_site", :class=>"var_spans"}None
+      -#=clear_break  
       Currently Selected Sample Type:
       = select_tag('sample_type',  options_for_select(@sample_type_options, "Grab"))
       =clear_break
       Currently Selected Sample Medium:
       = select_tag('sample_medium',  options_for_select(@sample_medium_options, "Surface Water"))
       =clear_break
+      
+      %div{:dojoType=>"dijit.layout.TabContainer", :id => "timestamp_selection"}
+        %div{:dojoType=>"dijit.layout.ContentPane", :title => "Time Support"}
+          Indicate which format the timestamp is using:
+          %br
+          %input{:type =>"radio", :id=>"utc", :name=>"time_support", :dojoType=>"dijit.form.RadioButton", :value=>"UTC", :onClick=>"utcUpdate();", :disabled=>true}
+            UTC Date Time
+          %input{:type =>"radio", :id=>"local", :name=>"time_support", :dojoType=>"dijit.form.RadioButton", :value=>"Local", :checked=>true, :onClick=>"localUpdate();", :disabled=>true}
+            Local Date Time
+          %input{:id=>"DST", :name=>"DST", :dojoType=>"dijit.form.CheckBox", :value=>"DST"}
+            Daylight Savings Time
+          =clear_break
+          UTC Offset:
+          =select_tag("utc_offset", options_for_select(@utc_offset_options), :disabled=>true)
       %button{:dojoType=>"dijit.form.Button", :title=>"Next", :id=>"next0", :disabled=>"disabled", :onclick=>"sampleButtonClick();" }
         Next
+
     - @columns.each do |col|
       =hidden_field_tag "column"+col.to_s, :onChange=>"updateVarSpans(#{col.to_s})";
       %div{:id => "Column"+col.to_s, :dojoType=>"dijit.TitlePane", :title=>"Column"+col.to_s, :open => "false", :class => "column_panes", :toggleable=>"false"}
@@ -249,8 +264,9 @@ Form Progress:
   dojo.require("dojox.grid.enhanced.plugins.NestedSorting");
   dojo.require("dojox.grid.enhanced.plugins.Filter");
   dojo.require("dojox.grid.enhanced.plugins.IndirectSelection");
+  dojo.require("dijit.form.RadioButton");
   dojo.require("voeis.Server");
-  
+  var current_site_offset ="";
   variableDataStore = voeis.Server.DEFAULT.globalVariablesDataStore();
   var my_store = dojo.data.ItemFileReadStore({data: variable_json_store});
   dojo.addOnLoad( function(){
@@ -258,7 +274,17 @@ Form Progress:
   //dijit.byId("display_grid1")._refresh();
   });
 
-
+  function utcUpdate(){
+      $("#utc_offset").val(0);
+      $("#utc_offset").attr("disabled", true);
+      $("#DST").attr("disabled", true);
+      dijit.byId("DST").set("checked",false)
+  }
+  function localUpdate(){
+      $("#utc_offset").val(parseInt(current_site_offset));
+      $("#utc_offset").attr("disabled", false);
+      $("#DST").attr("disabled", false);
+  }
   function nextButton(column){
   dijit.byId("Column"+column).set('open',false);
   dijit.byId("Column"+column).set('toggleable',true);
@@ -297,6 +323,19 @@ Form Progress:
   }
   $("#selected_site").text($("#site option[value ="+$("#site").val()+"]").text());
   $("#site_span").text($("#site option[value ="+$("#site").val()+"]").text());
+  $("#utc_offset").attr("disabled", false);
+  dojo.xhrGet({
+      url:"#{root_url}projects/#{@project.id}/sites.json?id="+$("#site").val(),
+      handleAs:"json",
+      load: function(data){
+          $("#utc_offset").val(parseInt(data[0]["time_zone_offset"]));
+          current_site_offset = data[0]["time_zone_offset"];
+      }
+  });
+  dijit.byId("utc").set("disabled",false);
+  dijit.byId("DST").set("disabled",false);
+  dijit.byId("local").set("disabled",false);
+  dijit.byId("local").set("checked",true);
   }
 
   function assignIgnore(column){

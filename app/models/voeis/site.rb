@@ -66,7 +66,15 @@ class Voeis::Site
   alias :site_code  :code
   alias :site_code= :code=
 
-  def self.load_from_his
+
+  def fetch_time_zone_offset
+    require "geonames"
+    zone = Geonames::WebService.timezone self.latitude, self.longitude
+    self.time_zone_offset = zone.gmt_offset
+    self.save
+  end
+  
+  def load_from_his
     his_sites = repository(:his){ His::Site.all }
     his_sites.each do |his_s|
       if self.first(:his_id => his_s.id).nil?
@@ -75,7 +83,7 @@ class Voeis::Site
     end
   end
 
-  def self.create_from_his(id)
+  def create_from_his(id)
     his_s = repository(:his){ His::Site.get(id) }
     my_site = Voeis::Site.new(:his_id => his_s.id,
                        :site_code => his_s.site_code,

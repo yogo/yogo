@@ -1,7 +1,10 @@
+require 'responders/rql'
+
 class Voeis::DataValuesController < Voeis::BaseController
   
   # Properly override defaults to ensure proper controller behavior
   # @see Voeis::BaseController
+  responders :rql
   defaults  :route_collection_name => 'data_values',
             :route_instance_name => 'data_value',
             :collection_name => 'data_values',
@@ -1008,11 +1011,20 @@ class Voeis::DataValuesController < Voeis::BaseController
     
              @vars=@vars.merge({v.variable_name => v.id})
            end
+           
+           
+           
+           @site_offset = Hash.new
            @sites = {"None"=>"None"}
            parent.managed_repository{Voeis::Site.all}.each do |s|
              @sites = @sites.merge({s.name => s.id})
+             @site_offset = @site_offset.merge({s.id => s.time_zone_offset})
+             # if s.time_zone_offset.to_s == "unknown"
+             #     s.fetch_time_zone_offset
+             #  end
            end
-           
+           @utc_offset_options=Hash.new
+           (-12..12).map{|k| @utc_offset_options = @utc_offset_options.merge({k => k})}           
            @sources = {"None"=>"None", "Example:SampleName"=>-1}
             Voeis::Source.all.each do |s|
               @sources = @sources.merge({s.organization + ':' + s.contact_name => s.id})
@@ -1093,6 +1105,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      timestamp_col =""
      sample_id_col = ""
      vertical_offset_col = ""
+     
      site = parent.managed_repository{Voeis::Site.first(:id => params[:site])}
      redirect_path =Hash.new
      @source = Voeis::Source.get(params[:source])
@@ -1196,11 +1209,7 @@ class Voeis::DataValuesController < Voeis::BaseController
      csv_size = csv_temp_data.length
      csv_data = CSV.read(params[:datafile])
      
-
      
-     if site.time_zone_offset.to_s == "unkown"
-       site.fetch_time_zone
-     end
      i = params[:start_line].to_i
      csv_data[params[:start_line].to_i-1..-1].each do |row|
        @csv_row[i] = row
@@ -1212,11 +1221,24 @@ class Voeis::DataValuesController < Voeis::BaseController
              #create sample
  
              sample_datetime = @csv_row[row][timestamp_col].to_datetime
+             if !params[:DST].nil?
+               utc_offset = params[:utc_offset].to_i + 1
+               dst = true
+             else
+              utc_offset = params[:utc_offset].to_i
+              dst = false
+             end
+             
+             if params[:time_support] == "UTC"
+              sampletime = DateTime.civil(sample_datetime.year,sample_datetime.month,sample_datetime.day,sample_datetime.hour,sample_datetime.min, sample_datetime.sec, 0)
+             else
+             sampletime = DateTime.civil(sample_datetime.year,sample_datetime.month,sample_datetime.day,sample_datetime.hour,sample_datetime.min, sample_datetime.sec, utc_offset/24.to_f)
+             end
              @sample = Voeis::Sample.new(:sample_type =>   params[:sample_type],
                                          :material => params[:sample_medium],
                                          :lab_sample_code => @csv_row[row][@sample_col],
                                          :lab_method_id => -1,
-                                         :local_date_time => DateTime.civil(sample_datetime.year,sample_datetime.month,sample_datetime.day,sample_datetime.hour,sample_datetime.min, sample_datetime.sec,site.time_zone_offset.to_i/24.to_f))           
+                                         :local_date_time => sampletime)           
              @sample.valid?
              puts @sample.errors.inspect()
              
@@ -1227,9 +1249,10 @@ class Voeis::DataValuesController < Voeis::BaseController
                if columns_array[i] != "ignore" && sample_id_col != i && timestamp_col != i && @csv_row[row][i] != ""&& !params["ignore"+i.to_s] && columns_array[i] != nil && vertical_offset_col != i
                   
                    new_data_val = Voeis::DataValue.new(:data_value => /^[-]?[\d]+(\.?\d*)(e?|E?)(\-?|\+?)\d*$|^[-]?(\.\d+)(e?|E?)(\-?|\+?)\d*$/.match(@csv_row[row][i].to_s) ? @csv_row[row][i].to_f : -9999.0, 
-                      :local_date_time => @sample.local_date_time,
-                      :utc_offset => site.time_zone_offset.to_i,  
-                      :date_time_utc => @sample.local_date_time.utc,  
+                      :local_date_time => sampletime,
+                      :utc_offset => utc_offset,
+                      :observes_daylight_savings => dst,
+                      :date_time_utc => sampletime.utc,  
                       :replicate => 0,
                       :quality_control_level=>@col_vars[i].quality_control.to_i,
                       :string_value =>  @csv_row[row][i].blank? ? "Empty" : @csv_row[row][i],
@@ -1237,6 +1260,8 @@ class Voeis::DataValuesController < Voeis::BaseController
                  new_data_val.valid?
                  puts new_data_val.errors.inspect() 
                  new_data_val.save
+                 site.data_values << new_data_val
+                 site.save
                  new_data_val.variable << @col_vars[i]
                  new_data_val.save
                  new_data_val.source = @project_source

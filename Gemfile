@@ -16,6 +16,7 @@ gem "dm-transactions", DM_VERSION
 gem "dm-aggregates",   DM_VERSION
 gem "dm-timestamps"
 
+gem "geonames"  #geonames wrapper
 
 # We have been bitten many times by not including rails directly.
 gem "rails"                                     # Rails application
