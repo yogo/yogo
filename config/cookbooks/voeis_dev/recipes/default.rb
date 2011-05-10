@@ -12,12 +12,13 @@ group "rvm" do
   action :modify
   append true
   members ['vagrant']
+  only_if 'users | grep -i "vagrant"'
 end
 
-gem_package "bundler" do
-  gem_binary "rvm 1.9.2,1.8.7 gem"
-  only_if "test -e /usr/local/bin/rvm"
-end
+# gem_package "bundler" do
+#   gem_binary "rvm 1.9.2,1.8.7 gem"
+#   only_if "test -e /usr/local/bin/rvm"
+# end
 
 gem_package "ruby-debug19" do
   gem_binary "rvm 1.9.2 gem"
