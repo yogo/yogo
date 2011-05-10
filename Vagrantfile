@@ -19,7 +19,8 @@ Vagrant::Config.run do |config|
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port "http", 3000, 3000
+  config.vm.forward_port "http-dev", 3000, 3000
+  config.vm.forward_port "http", 80, 8080
 
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
@@ -43,13 +44,24 @@ Vagrant::Config.run do |config|
   #   chef.json = { :mysql_password => "foo" }
   # end
 
-  config.vm.provision :chef_solo do |chef|
-    chef.log_level = :debug
-    chef.cookbooks_path = ["config/cookbooks", "vendor/opscode-cookbooks"]
-    chef.add_recipe "apt"
-    chef.add_recipe "rvm"
-    chef.add_recipe "voeis_dev"
-  end
+  # config.vm.provision :chef_solo do |chef|
+  #   chef.log_level = :debug
+  #   chef.cookbooks_path = ["config/cookbooks", "vendor/opscode-cookbooks"]
+  #   chef.add_recipe "apt"
+  #   chef.add_recipe "rvm"
+  #   #chef.add_recipe "voeis_dev"
+  #   chef.json.merge!({ :rvm => {
+  #                        :version => "1.6.5",
+  #                        :default_ruby => "ruby-1.8.7",
+  #                        :rubies => ["ruby-1.9.2"],
+  #                        :global_gems => [
+  #                                         {:name => "bundler"},
+  #                                         {:name => "rake"},
+  #                                         {:name => "chef"}
+  #                                        ]
+  #                      }
+  #                    })
+  # end
 
   # Enable provisioning with chef server, specifying the chef server URL,
   # and the path to the validation key (relative to this Vagrantfile).
@@ -73,4 +85,14 @@ Vagrant::Config.run do |config|
   # chef-validator, unless you changed the configuration.
   #
   #   chef.validation_client_name = "ORGNAME-validator"
+  config.vm.provision :chef_server do |chef|
+    chef.chef_server_url = "http://chef.msu.montana.edu:4000"
+    chef.node_name = "vagrant-voeis"
+    chef.client_key_path = "/vagrant/.chef/client.pem"
+    chef.validation_key_path = "~/.chef/validation.pem"
+    chef.add_recipe("apt")
+    chef.add_role("basic_rvm")
+    chef.add_recipe("voeis")
+    chef.add_recipe("voeis::ruby_debug_19")
+  end
 end
