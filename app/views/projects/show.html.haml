@@ -17,7 +17,7 @@
         = link_to("Add Data Stream", new_project_data_stream_path(@project), :params => {:project_id => @project.id}, :dojoType => "yogo.ui.MenuLink")
         
       - if @project.managed_repository { Voeis::Sample.all.count } > 0
-        = link_to("Add Sample Data", pre_process_project_data_values_path(@project), :dojoType => "yogo.ui.MenuLink")
+        = link_to("Add Sample Data", pre_process_samples_file_upload_project_data_values_path(@project), :dojoType => "yogo.ui.MenuLink")
         = link_to("Add Field Data", new_field_measurement_project_sensor_values_path(@project), :params => {:project_id => @project.id}, :dojoType => "yogo.ui.MenuLink")
       - if @project.managed_repository { Voeis::DataStream.all.count } > 0
         = link_to("Add Data", add_project_data_streams_path(@project), :params => {:project_id => @project.id}, :dojoType => "yogo.ui.MenuLink")
