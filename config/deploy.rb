@@ -17,7 +17,7 @@ task :development do
   set :deploy_via, :remote_cache
   set :copy_exclude, [".git"]
   
-  set  :user, "voeis-dev"
+  set  :user, "voeis-demo"
   role :web, "153.90.178.140"
   role :app, "153.90.178.140"
   set  :deploy_to, "/home/#{user}/voeis"
