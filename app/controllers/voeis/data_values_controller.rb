@@ -1256,7 +1256,7 @@ class Voeis::DataValuesController < Voeis::BaseController
                       :replicate => 0,
                       :quality_control_level=>@col_vars[i].quality_control.to_i,
                       :string_value =>  @csv_row[row][i].blank? ? "Empty" : @csv_row[row][i],
-                      :vertical_offset =>  vertical_offset_col.empty? ? nil : @csv_row[row][vertical_offset_col].to_i) 
+                      :vertical_offset =>  vertical_offset_col.nil? ? nil : @csv_row[row][vertical_offset_col].to_i) 
                  new_data_val.valid?
                  puts new_data_val.errors.inspect() 
                  new_data_val.save
