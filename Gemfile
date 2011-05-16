@@ -11,7 +11,7 @@ gem "dm-validations"                            # We're validating properties
 gem "dm-is-versioned",                          :git => "git://github.com/yogo/dm-is-versioned.git", :branch => "voeis/patches"
 gem "dm-types",        DM_VERSION               # To enable UUID types
 gem "dm-is-list",      DM_VERSION               # RBAC
-gem "dm-migrations",   DM_VERSION
+gem "dm-migrations",   DM_VERSION #:git => "git://github.com/datamapper/dm-migrations.git"
 gem "dm-transactions", DM_VERSION
 gem "dm-aggregates",   DM_VERSION
 gem "dm-timestamps"
@@ -34,7 +34,7 @@ gem "inherited_resources",                      :git => "git://github.com/joseva
                                                 :ref => "5d988cfcfa632cc9c67fff4cb100594ea683482a"
 gem "responders", "~> 0.6.2"
 
-gem "rails_warden"                              # Warden integration with Rails for authentication
+gem "rails_warden", "0.5.2"                              # Warden integration with Rails for authentication
 
 gem "mime-types", :require => "mime/types"      # For uploading data files
 gem "uuidtools"                                 # This is for memberships
