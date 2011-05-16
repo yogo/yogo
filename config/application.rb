@@ -11,6 +11,9 @@ require 'action_mailer/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
+# The YAML Psych engine doesn't merge yaml references correctly
+YAML::ENGINE.yamler = 'syck' if defined?(YAML::ENGINE)
+
 module Yogo
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
