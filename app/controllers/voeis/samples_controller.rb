@@ -188,10 +188,12 @@ class Voeis::SamplesController < Voeis::BaseController
         end
         if !my_sample.nil?
           @column_array << ["Timestamp", 'datetime']
+          @column_array << ["Vertical Offset", 'number']
           @column_array << [variable.variable_name, 'number']
           (variable.samples.data_values(:local_date_time.gte => @start_date, :local_date_time.lte => @end_date) & site.samples.data_values & variable.data_values).each do |data_val|
             temp_array = Array.new
             temp_array << data_val.local_date_time.to_datetime
+            temp_array << data_val.vertical_offset
             temp_array << data_val.data_value
             @row_array << temp_array
           end
