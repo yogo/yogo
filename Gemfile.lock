@@ -32,6 +32,12 @@ GIT
       dm-types (~> 1.1.0)
 
 GIT
+  remote: git://github.com/scleveland/chronic.git
+  revision: 837f2a41f7aa27f22309763be245a90626072ead
+  specs:
+    aaronh-chronic (0.3.9)
+
+GIT
   remote: git://github.com/yogo/dm-is-versioned.git
   revision: 7ae0937ced687881d91b80e6d65e0a5945694f95
   branch: voeis/patches
@@ -336,6 +342,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aaronh-chronic!
   activerecord
   apotomo (~> 1.1)
   capistrano
