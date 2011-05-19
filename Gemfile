@@ -46,6 +46,7 @@ gem 'exception_notification',      :require => 'exception_notifier'
 gem 'delayed_job',                 :git => 'git://github.com/robbielamb/delayed_job.git'
 gem "cells", "~> 3.5.4"
 gem 'apotomo', "~> 1.1"
+gem 'aaronh-chronic',  :git =>"git://github.com/scleveland/chronic.git"
 
 gem 'rql', ">= 0.0.1",        :git => "git://github.com/rheimbuch/rql-ruby.git", :branch => "topic/voeis"
 platforms(:ruby_18, :ruby_19) {
