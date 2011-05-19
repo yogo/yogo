@@ -14,7 +14,8 @@ class Voeis::DataValue
   property :vertical_offset,          Float, :required=>false
   property :string_value, String, :required => true, :default => "Unknown"
   property :quality_control_level,    Integer, :required=>true, :default=>0
-
+  property :published,       Boolean,  :required => false
+  
   yogo_versioned
   
   has 1, :site,       :model => "Voeis::Site",     :through => Resource
@@ -23,6 +24,7 @@ class Voeis::DataValue
   has n, :sample,     :model => "Voeis::Sample",   :through => Resource
   has n, :meta_tags,  :model => "Voeis::MetaTag",  :through => Resource
   has n, :variable,   :model => "Voeis::Variable", :through => Resource
+  has n, :data_streams,  :model => "Voeis::DataStream", :through => Resource
   #has n, :method,     :model => "Voeis::Method", :through => Resource
   
 end

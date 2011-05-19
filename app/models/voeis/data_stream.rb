@@ -29,7 +29,8 @@ class Voeis::DataStream
 
   has n, :sites,               :model => 'Voeis::Site', :through => Resource
   has n, :data_stream_columns, :model => "Voeis::DataStreamColumn", :through => Resource
-
+  has n, :data_values,         :model => "Voeis::DataValue", :through =>Resource
+  has n, :samples,             :model=> "Voeis::Sample", :through=>Resource
 
  # Loads a CSV file into the streaming data model
   #

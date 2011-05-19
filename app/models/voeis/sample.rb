@@ -38,4 +38,5 @@ class Voeis::Sample
   has n, :sample_materials, :model => "Voeis::SampleMaterial", :through => Resource
   has n, :sites,            :model => "Voeis::Site",           :through => Resource
   has n, :variables,        :model => "Voeis::Variable",       :through => Resource
+  has n, :data_streams,  :model => "Voeis::DataStream", :through => Resource
 end
