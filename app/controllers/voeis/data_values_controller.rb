@@ -45,7 +45,7 @@ class Voeis::DataValuesController < Voeis::BaseController
   # @api public
   def pre_process_samples_file_upload
     @project = parent
-    @templates = parent.managed_repository{Voeis::DataStream.all(:type => "Sample")}
+    @data_templates = parent.managed_repository{Voeis::DataStream.all(:type => "Sample")}
     @general_categories = Voeis::GeneralCategoryCV.all
   end
 
@@ -978,7 +978,7 @@ class Voeis::DataValuesController < Voeis::BaseController
   def pre_process_samples_file
     
        require 'csv_helper'
-        
+       @data_template = parent.managed_repository{Voeis::DataStream.get(params[:data_template_id].to_i)}  
        @project = parent
        @current_user = current_user
        #save uploaded file if possible
@@ -1105,6 +1105,7 @@ class Voeis::DataValuesController < Voeis::BaseController
    #
    # @api public
    def store_samples_and_data_from_file
+     require 'chronic'
      data_stream =""
      timestamp_col =""
      sample_id_col = ""
@@ -1164,20 +1165,25 @@ class Voeis::DataValuesController < Voeis::BaseController
      
 
      #use this when we decide to save templates and reuse them
-     #data_stream_id = create_sample_and_data_parsing_template(params[:template_name], timestamp_col, sample_id_col, columns_array, ignore_array, site, params[:datafile], params[:start_line], params[:row_size])
+     if params[:save_template] == "yes"
+       
+       data_stream_id = create_sample_and_data_parsing_template(params[:template_name], timestamp_col, sample_id_col, columns_array, ignore_array, site, params[:datafile], params[:start_line], params[:row_size])
+     end
      @sample_col = params[:sample_id].to_i
        
     
      #put this back in at a later time 
-     # else #use the existing template
-     #        data_stream = parent.managed_repository{Voeis::DataStream.first(:name => params[:template_name])}
-     #        if !data_stream.data_stream_columns.first(:name => "Timestamp").nil?
-     #          @timestamp_col = data_stream.data_stream_columns.first(:name => "Timestamp").column_number
-     #        else
-     #          @timestamp_col = -1
-     #        end
-     #        @sample_col = data_stream.data_stream_columns.first(:name => "SampleID").column_number
-     #      end #end if 'no_save'
+
+     if params[:save_template] == "yes"
+       data_stream = parent.managed_repository{Voeis::DataStream.get(data_stream_id[:data_template_id])}
+
+       if !data_stream.data_stream_columns.first(:name => "Timestamp").nil?
+         @timestamp_col = data_stream.data_stream_columns.first(:name => "Timestamp").column_number
+      else
+        @timestamp_col = -1
+      end
+      @sample_col = data_stream.data_stream_columns.first(:name => "SampleID").column_number
+    end #end if 
       
      
      range = params[:row_size].to_i - 1
@@ -1224,7 +1230,7 @@ class Voeis::DataValuesController < Voeis::BaseController
            parent.managed_repository do
              #create sample
  
-             sample_datetime = @csv_row[row][timestamp_col].to_datetime
+             sample_datetime = Chronic.parse(@csv_row[row][timestamp_col]).to_datetime
              if !params[:DST].nil?
                utc_offset = params[:utc_offset].to_i + 1
                dst = true
@@ -1260,7 +1266,7 @@ class Voeis::DataValuesController < Voeis::BaseController
                       :replicate => 0,
                       :quality_control_level=>@col_vars[i].quality_control.to_i,
                       :string_value =>  @csv_row[row][i].blank? ? "Empty" : @csv_row[row][i],
-                      :vertical_offset =>  vertical_offset_col.nil? ? nil : @csv_row[row][vertical_offset_col].to_i) 
+                      :vertical_offset =>  vertical_offset_col == "" ? nil : @csv_row[row][vertical_offset_col].to_i) 
                  new_data_val.valid?
                  puts new_data_val.errors.inspect() 
                  new_data_val.save
@@ -1272,6 +1278,12 @@ class Voeis::DataValuesController < Voeis::BaseController
                  new_data_val.save
                  new_data_val.sample << @sample
                  new_data_val.save
+                 if params[:save_template] == "yes"
+                   new_data_val.data_streams << data_stream
+                   new_data_val.save
+                   @sample.data_streams << data_stream
+                   @sample.save
+                 end
                  @sample.variables << @col_vars[i]
                  @sample.save
                  samp_site = @sample.sites.first
@@ -1300,7 +1312,7 @@ class Voeis::DataValuesController < Voeis::BaseController
    def create_sample_and_data_parsing_template(template_name, timestamp_col, sample_id_col, columns_array, ignore_array, site, datafile, start_line, row_size)
       @data_stream
       parent.managed_repository do
-        @data_stream = Voeis::DataStream.create(:name => template_name.to_s+Time.now.to_s,
+        @data_stream = Voeis::DataStream.create(:name => template_name.to_s,
           :description => "NA",
           :filename => datafile,
           :start_line => start_line.to_i,
@@ -1343,7 +1355,7 @@ class Voeis::DataValuesController < Voeis::BaseController
            end
         elsif  columns_array[i] != nil#create other data_stream_columns and create sensor_types
           #puts params["column"+i.to_s]
-          var = Variable.get(columns_array[i].to_i)
+          var = Voeis::Variable.get(columns_array[i].to_i)
           parent.managed_repository do
             data_stream_column = Voeis::DataStreamColumn.create(
                                   :column_number => i,

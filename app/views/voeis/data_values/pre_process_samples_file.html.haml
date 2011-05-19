@@ -225,7 +225,12 @@ Form Progress:
           - @columns.each do |col|
             %td
               %span{:id => "var_td_"+prop.to_s+"_"+col.to_s, :onClick=>"editColumn(#{col})", :class=>"column_td"}None
-            
+  =clear_break
+  Data Parsing Template Name:
+  =text_field_tag("template_name")
+  =check_box_tag("save_template", "yes", false)       
+  Save Parsing Template.
+  =clear_break   
   =submit_tag("Save Samples")
   = link_to('Cancel', project_path(@project), :class => 'icon icon-cancel')
 
