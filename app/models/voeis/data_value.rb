@@ -12,6 +12,7 @@ class Voeis::DataValue
   property :observes_daylight_savings, Boolean, :required => true, :default => false
   property :replicate,                String,   :required => true,  :default => "original"
   property :vertical_offset,          Float, :required=>false
+  property :end_vertical_offset,      Float, :required=>false
   property :string_value, String, :required => true, :default => "Unknown"
   property :quality_control_level,    Integer, :required=>true, :default=>0
   property :published,       Boolean,  :required => false

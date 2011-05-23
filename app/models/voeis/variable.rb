@@ -58,7 +58,7 @@ class Voeis::Variable
   property :time_units_id,     Integer, :required => true, :default => 103
   property :data_type,         String,  :required => true, :default => 'Unknown', :length => 512
   property :general_category,  String,  :required => true, :default => 'Unknown', :length => 512
-  property :no_data_value,     Float,   :required => true, :default => -9999
+  property :no_data_value,     String,   :required => true, :default => "-9999"
   property :detection_limit,   Float,   :required => false
 
   
@@ -78,7 +78,9 @@ class Voeis::Variable
   has n, :speciation_cvs,      :model => "Voeis::SpeciationCV",     :through => Resource
   has n, :value_type_cvs,      :model => "Voeis::ValueTypeCV",      :through => Resource
   has n, :variable_name_cvs,   :model => "Voeis::VariableNameCV",   :through => Resource
-    
+  has 1, :lab_method,          :model => "Voeis::LabMethod", :through => Resource
+  has n, :meta_tags, :model => 'Voeis::MetaTag', :through => Resource
+  
   def self.load_from_his
     his_variables = repository(:his){ His::Variable.all }
 

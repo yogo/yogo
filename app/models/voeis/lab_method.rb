@@ -31,6 +31,8 @@ class Voeis::LabMethod
   
   property :his_id,               Integer
   
+  has n, :variables, :model => "Voeis::Variable", :through => Resource
+  
   yogo_versioned
   
   def self.load_from_his
