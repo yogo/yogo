@@ -1,0 +1,47 @@
+#new_lab_method
+  %h3 Create a new Lab Method:
+  = form_for(:lab_method, :url=>{:controller => "lab_methods", :action=>"create"}, :remote => true) do |f|
+    = f.label("Lab Name:")
+    =clear_break
+    = f.text_area("lab_name", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "lab_name")
+    =clear_break
+    = f.label("Lab Organization:")
+    =clear_break
+    = f.text_area("lab_organization", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "lab_organization")
+    =clear_break
+    = f.label("Lab Method Name:")
+    =clear_break
+    = f.text_area("lab_method_name", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "lab_method_name")
+    = clear_break
+    = f.label("Lab Method Description:")
+    = clear_break
+    = f.text_area("lab_method_description", :cols => 45, :rows => 6, :style => {:resize => "none"}, :class => "lab_method_description")
+    =clear_break
+    = f.label("Lab Method Link:")
+    =clear_break
+    = f.text_area("lab_method_link", :cols => 45, :rows => 2, :style => {:resize => "none"}, :class => "lab_method_link")
+    = f.submit("Save Lab Method", :class => "new-lab-method-button")
+  %label{:id => "lab_method_close", :onclick=>"$('#new_lab_method').toggle('explode');", :class => "icon icon-close", :onmouseover =>"this.style.cursor='hand'"}
+
+
+:javascript  
+  $(function() {
+  $(".new-data-type-button").click(function() { 
+    
+  $.post("#{root_url + "data_type_c_vs"}"+"?term=" + $(".data_type_term").val()+"&definition=" + $(".data_type_definition").val(),
+  function(data) {
+  $('#variable_data_type').
+  append($("<option></option>").
+  attr("value",$(".data_type_term").val()).
+  text($(".data_type_term").val())); 
+  $('#variable_data_type').val($(".data_type_term").val());
+  $(".data_type_term").val("");
+  $(".data_type_definition").val("");
+  $("#new_data_type").toggle();
+  dijit.byId('new_data_type_1').hide();
+  return false;
+  }
+  );
+  return false;
+  });
+  });
