@@ -167,4 +167,32 @@ module Odhelper
     
     
   end
+  
+  def create_data_report
+    report = ""
+    
+    Project.all.each do |p|
+      if p.managed_repository{Voeis::SensorValue.count} != 0
+        puts '**************************'
+        puts p.name
+        report = report + "<div><b>Project: " + p.name + "</b><br/><div>"
+        p.managed_repository{Voeis::Site.all}.each do |s|
+          report = report + s.name + "<br/>"
+          report = report + "<table><tr><th>Variable Name</th><th>Variable ID</th><th>Data StartDate</th><th>Data EndDate</th><th>Total Number of Records</tr>"
+          s.sensor_types.all.each do |st|
+            v = st.variables.first
+            if st.sensor_values.count != 0
+              report = report + "<tr><td>"+v.variable_name+"</td><td>"+v.id.to_s+"</td><td>"+st.sensor_values.first(:order => [:timestamp]).timestamp.to_s+"</td><td>"+st.sensor_values.last(:order => [:timestamp]).timestamp.to_s+"</td><td>"+st.sensor_values.count.to_s+"</td></tr>"
+            else
+              report = report + "<tr><td>"+v.variable_name+"</td><td>"+v.id.to_s+"</td><td></td><td></td><td></td></tr>"
+            end  
+          end  
+          report = report + "</table>"
+          puts s.name
+        end
+        report =report + "</div>"
+      end
+      report =report + "</div>"
+    end
+  end
 end
